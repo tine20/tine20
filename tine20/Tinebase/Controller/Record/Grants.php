@@ -25,7 +25,12 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @var string
      */
     protected $_grantsModel;
-    
+
+    /**
+     * @var string acl record property for join with acl table
+     */
+    protected $_aclIdProperty = 'id';
+
     /**
      * get list of records
      *
@@ -104,20 +109,23 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * 
      * @param Tinebase_Record_Interface $record
      * @param string $grant
+     * @param
      * @return boolean
      */
-    public function hasGrant($record, $grant)
+    public function hasGrant($record, $grant, Tinebase_Model_User $account = null)
     {
-        if (empty($record->grants)) {
-            return false;
-        }
+        // always get current grants
+        $recordset = new Tinebase_Record_RecordSet($this->_modelName, array($record));
+        $this->_grantsBackend->getGrantsForRecords($recordset, $this->_aclIdProperty);
 
-        /**
-         * @var Tinebase_Model_Grants $grantRecord
-         */
-        foreach ($record->grants as $grantRecord) {
-            if ($grantRecord->userHasGrant($grant)) {
-                return true;
+        if (! empty($record->grants)) {
+            /**
+             * @var Tinebase_Model_Grants $grantRecord
+             */
+            foreach ($record->grants as $grantRecord) {
+                if ($grantRecord->userHasGrant($grant, $account)) {
+                    return true;
+                }
             }
         }
         
@@ -284,12 +292,14 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      */
     protected function _getGrants($records)
     {
-        $recordset = ($records instanceof Tinebase_Record_Abstract) ? new Tinebase_Record_RecordSet($this->_modelName, array($records)) : $records;
+        $recordset = ($records instanceof Tinebase_Record_Abstract)
+            ? new Tinebase_Record_RecordSet($this->_modelName, array($records))
+            : ($records instanceof Tinebase_Record_RecordSet ? $records : new Tinebase_Record_RecordSet($this->_modelName, $records));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Get grants for ' . count($recordset). ' records.');
         
-        $this->_grantsBackend->getGrantsForRecords($recordset);
+        $this->_grantsBackend->getGrantsForRecords($recordset, $this->_aclIdProperty);
     }
 
     /**
@@ -303,6 +313,10 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      */
     public function getGrantsOfAccount($user, $record)
     {
+        if ($user === null) {
+            $user = Tinebase_Core::getUser();
+        }
+
         if (empty($record->grants)) {
             $this->_getGrants($record);
         }
@@ -311,8 +325,12 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         $accountGrants = new $this->_grantsModel(array(
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             'account_id'   => $user->getId(),
-            'record_id'    => $record->getId(),
+            'record_id'    => ($this->_aclIdProperty === 'id' ? $record->getId() : $record->{$this->_aclIdProperty}),
         ));
+        if (empty($record->grants)) {
+            // grants might still be empty
+            return $accountGrants;
+        }
         foreach ($record->grants as $grantRecord) {
             foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
                 if ($grantRecord->{$grant} &&

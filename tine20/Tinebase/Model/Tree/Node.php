@@ -54,30 +54,30 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
      * if foreign Id fields should be resolved on search and get from json
-     * should have this format: 
+     * should have this format:
      *     array('Calendar_Model_Contact' => 'contact_id', ...)
      * or for more fields:
      *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
      * (e.g. resolves contact_id with the corresponding Model)
-     * 
+     *
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User' => array('created_by', 'last_modified_by')
-    ); 
-    
+    );
+
     /**
      * list of zend validator
-     * 
+     *
      * these validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
      */
     protected $_validators = array(
-    // tine 2.0 generic fields
+        // tine 2.0 generic fields
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -87,23 +87,25 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // model specific fields
+        // model specific fields
         'parent_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'object_id'      => array('presence' => 'required'),
+        // contains id of node with acl info
+        'acl_node'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'           => array('presence' => 'required'),
         'islink'         => array(
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
-        
+
         'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
-    // fields from filemanager_objects table (ro)
-        'type'                  => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
+
+        // fields from filemanager_objects table (ro)
+        'type'           => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::TYPE_FILE, self::TYPE_FOLDER)),
         ),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -123,8 +125,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tempFile'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'stream'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // acl grants
+        'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_grants'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
-    
+
     /**
      * name of fields containing datetime or or an array of datetime information
      *

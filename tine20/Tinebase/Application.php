@@ -487,21 +487,10 @@ class Tinebase_Application
      * 
      * NOTE: if a table with foreign key constraints to applications is added, we need to make sure that the data is deleted here 
      * 
-     * @param Tinebase_Model_Application $_applicationName
-     * @return void
+     * @param Tinebase_Model_Application $_application
      */
     public function removeApplicationAuxiliaryData(Tinebase_Model_Application $_application)
     {
-        try {
-            Tinebase_FileSystem::getInstance()->rmdir($_application->getId(), true);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // nothing to do
-            Tinebase_Exception::log($tenf);
-        } catch (Tinebase_Exception_Backend $teb) {
-            // nothing to do
-            Tinebase_Exception::log($teb);
-        }
-
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
@@ -510,7 +499,8 @@ class Tinebase_Application
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
             'modlog'        => array('tablename' => 'timemachine_modlog'),
-            'import'        => array('tablename' => 'import')
+            'import'        => array('tablename' => 'import'),
+            'rootnode'      => array('tablename' => ''),
         );
         $countMessage = ' Deleted';
         
@@ -528,6 +518,18 @@ class Tinebase_Application
                     break;
                 case 'customfield':
                     $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    break;
+                case 'rootnode':
+                    try {
+                        // note: TFS expects name here, not ID
+                        $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // nothing to do
+                        Tinebase_Exception::log($tenf);
+                    } catch (Tinebase_Exception_Backend $teb) {
+                        // nothing to do
+                        Tinebase_Exception::log($teb);
+                    }
                     break;
                 default:
                     if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
@@ -622,6 +624,10 @@ class Tinebase_Application
      */
     public static function extractAppAndModel($modelOrApplication, $model = null)
     {
+        if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Abstract) {
+            $modelOrApplication = get_class($modelOrApplication);
+        }
+
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
         if (strpos($modelOrApplication, '_') && ! strpos($modelOrApplication, '.')) {
             // got (complete) model name name as first param

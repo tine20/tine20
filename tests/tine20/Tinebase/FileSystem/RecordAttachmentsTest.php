@@ -24,18 +24,6 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
     protected $objects = array();
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filesystem streamwrapper tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -124,9 +112,8 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
         
         $recordAttachments->getMultipleAttachmentsOfRecords($records);
         
-        foreach ($records as $records) {
+        foreach ($records as $record) {
             $this->assertEquals(1, $record->attachments->count(), 'Attachments missing');
         }
-        
     }
 }

@@ -18,7 +18,7 @@
  * @package     Filemanager
  * @subpackage  Controller
  */
-class Filemanager_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class Filemanager_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * holds the default Model of this application
@@ -100,28 +100,20 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
      * creates the initial folder for new accounts
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Tree_Node
      */
     public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation('Filemanager');
-        $account = (! $_account instanceof Tinebase_Model_User)
+         $account = (! $_account instanceof Tinebase_Model_User)
             ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_account)
             : $_account;
-        $containerName = sprintf($translation->_("%s's personal files"), $account->accountFullName);
+        $translation = Tinebase_Translation::getTranslation('Filemanager');
+        $nodeName = sprintf($translation->_("%s's personal files"), $account->accountFullName);
+        $path = '/Filemanager/folders/personal/' . $account->getId() . '/' . $nodeName;
+        $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
 
-        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
-            'Filemanager_Model_Node',
-            'Filemanager',
-            $account,
-            $containerName
-        );
+        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($personalNode));
 
-        mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId()
-            . '/folders/personal/' . $account->getId() . '/' . $personalContainer->getId(), 0777, true);
-        
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
         return $container;
     }
 }

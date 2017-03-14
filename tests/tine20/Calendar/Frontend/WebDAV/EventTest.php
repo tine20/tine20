@@ -658,7 +658,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         // remove agenda.html
         $clone = clone $event;
         $attachments = $clone->getRecord()->attachments;
-        $attachments->removeRecord($attachments->filter('name', 'agenda.html')->getFirstRecord());
+        $firstAttachment = $attachments->filter('name', 'agenda.html')->getFirstRecord();
+        self::assertFalse($firstAttachment === null, 'could not find attachment');
+        $attachments->removeRecord($firstAttachment);
         $event->put($clone->get());
         
         // assert agenda2.html exists

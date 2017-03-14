@@ -131,7 +131,7 @@ class Tinebase_FileSystem_RecordAttachments
                     'operator'  => 'in',
                     'value'     => $recordIds
                 )
-            ));
+            ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
             $recordNodes = $this->_fsController->searchNodes($searchFilter);
             if ($recordNodes->count() === 0) {
                 // nothing to be done 

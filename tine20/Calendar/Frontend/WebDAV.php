@@ -21,7 +21,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
      * (non-PHPdoc)
      * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
      */
-    function createExtendedCollection($name, array $resourceType, array $properties)
+    public function createExtendedCollection($name, array $resourceType, array $properties)
     {
         if (count($this->_getPathParts()) === 2 && isset($properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'])) {
             $componentSet = $properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'];

@@ -6,9 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
+class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilterGroup
 {
     /**
      * @var string class name of this filter group
@@ -35,7 +33,17 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'Tinebase_Model_Tree_Node';
-    
+
+    /**
+     * @var string acl table name
+     */
+    protected $_aclTableName = 'tree_node_acl';
+
+    /**
+     * @var string acl record column for join with acl table
+     */
+    protected $_aclIdColumn = 'acl_node';
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -103,4 +111,39 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
             )
         ),
     );
+
+    /**
+     * append grants acl filter
+     *
+     * @param Zend_Db_Select $select
+     * @param Tinebase_Backend_Sql_Abstract $backend
+     * @param Tinebase_Model_User $user
+     */
+    protected function _appendGrantsFilter($select, $backend, $user = null)
+    {
+        parent::_appendGrantsFilter($select, $backend, $user);
+
+        // TODO do something when acl_node = NULL?
+    }
+
+    /**
+     * return folder + parent_id filter with ignore acl
+     *
+     * @param $folderId
+     * @return Tinebase_Model_Tree_Node_Filter
+     */
+    public static function getFolderParentIdFilterIgnoringAcl($folderId)
+    {
+        return new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'parent_id',
+                'operator'  => $folderId === null ? 'isnull' : 'equals',
+                'value'     => $folderId
+            ), array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+            )
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+    }
 }

@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -153,9 +153,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'default' => '03-15'
         ),
         self::REPORT_TEMPLATES_CONTAINER_ID => array(
-        //_('Report Templates Container ID')
-            'label'                 => 'Report Templates Container ID',
-            'description'           => 'Report Templates Container ID',
+        //_('Report Templates Node ID')
+            'label'                 => 'Report Templates Node ID',
+            'description'           => 'Report Templates Node ID',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -233,7 +233,7 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         if ($expires != 0) {
             $split = explode('-', $expires);
             $date = Tinebase_DateTime::now();
-            $date->setDate($year, intval($split[0]), intval($split[1]));
+            $date->setDate($year, (int) $split[0], (int) $split[1]);
         } else {
             return null;
         }

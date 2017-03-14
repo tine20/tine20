@@ -18,7 +18,7 @@
  * @package     MailFiler
  * @subpackage  Controller
  */
-class MailFiler_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class MailFiler_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * holds the default Model of this application

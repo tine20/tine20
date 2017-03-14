@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -64,9 +64,9 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::VACATION_TEMPLATES_CONTAINER_ID => array(
-        //_('Vacation Templates Container ID')
-            'label'                 => 'Vacation Templates Container ID',
-            'description'           => 'Vacation Templates Container ID',
+        //_('Vacation Templates Node ID')
+            'label'                 => 'Vacation Templates Node ID',
+            'description'           => 'Vacation Templates Node ID',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,

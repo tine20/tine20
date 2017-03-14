@@ -88,15 +88,9 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Creating vacation template in vfs ...');
         
-        $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
-            'Felamimail', 
-            'Vacation Templates', 
-            Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID,
-            null,
-            'Tinebase_Model_Tree_Node'
-        );
         try {
-            Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+            $node = Tinebase_FileSystem::getInstance()->createAclNode('/Felamimail/folders/shared/Vacation Templates');
+            Felamimail_Config::getInstance()->set(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not create vacation template folder: ' . $teb);

@@ -91,7 +91,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.6');
     }
 
-
     /**
      * update to 10.7
      *
@@ -504,5 +503,112 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '10.12');
+    }
+
+    /**
+     * add tree_node_acl
+     */
+    public function update_12()
+    {
+        if (! $this->_backend->columnExists('acl_node', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>acl_node</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+            ');
+            $this->_backend->addCol('tree_nodes', $declaration);
+            $this->setTableVersion('tree_nodes', 2);
+
+            $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>tree_node_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>tree_node_acl::record_id--tree_nodes::id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>');
+            $this->createTable('tree_node_acl', $declaration);
+        }
+
+        // TODO convert container acl to node acl
+        // TODO switch HR and FMAil template config to node id
+        // TODO remove all containers attached to nodes
+
+        $this->setApplicationVersion('Tinebase', '10.13');
     }
 }

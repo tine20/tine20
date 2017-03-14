@@ -33,19 +33,25 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         
         if ($applications->find('name', 'Calendar')) {
             $this->addChild(
-                new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true)
+                new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, array(
+                    'useIdAsName' => true,
+                ))
             );
         }
        
         if ($applications->find('name', 'Tasks')) {
             $this->addChild(
-                new Tasks_Frontend_WebDAV('tasks', true)
+                new Tasks_Frontend_WebDAV('tasks', array(
+                    'useIdAsName' => true,
+                ))
             );
         }
 
         if ($applications->find('name', 'Addressbook')) {
             $this->addChild(
-                new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, true)
+                new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, array(
+                    'useIdAsName' => true,
+                ))
             );
         }
         

@@ -16,7 +16,7 @@
 class Tinebase_Helper
 {
     /**
-     * returns one value of an array, indentified by its key
+     * returns one value of an array, identified by its key
      *
      * @param mixed $_key
      * @param array $_array
@@ -25,6 +25,11 @@ class Tinebase_Helper
     public static function array_value($_key, array $_array)
     {
         return (isset($_array[$_key]) || array_key_exists($_key, $_array)) ? $_array[$_key] : NULL;
+    }
+
+    public static function array_remove_by_value($_value, array $_array)
+    {
+        return array_values(array_diff($_array, array($_value)));
     }
     
     /**
@@ -383,7 +388,7 @@ class Tinebase_Helper
                 // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
                 $client->setHeaders('Accept-encoding', 'identity');
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Fetching content from ' . $filenameOrUrl);
 
                 $requestBody = $client->request()->getBody();

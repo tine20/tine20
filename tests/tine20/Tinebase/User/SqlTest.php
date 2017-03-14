@@ -323,7 +323,6 @@ class Tinebase_User_SqlTest extends TestCase
         // configure removal of data
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
             '_deletePersonalContainers' => true,
-
         )));
 
         // we need a valid group and a contact for this test
@@ -356,16 +355,16 @@ class Tinebase_User_SqlTest extends TestCase
         $adbBackend = new Addressbook_Backend_Sql();
         try {
             $adbBackend->get($contact->getId());
-            $this->fail('contact be deleted');
+            $this->fail('contact should be deleted');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, 'contact should be deleted');
         }
         $calBackend = new Calendar_Backend_Sql();
         try {
             $calBackend->get($event->getId());
             $this->fail('event should be deleted: ' . print_r($event->toArray(), true));
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, 'event should be deleted');
         }
     }
 

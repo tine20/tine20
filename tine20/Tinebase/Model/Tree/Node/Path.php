@@ -6,9 +6,8 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
  */
 
 /**
@@ -20,11 +19,10 @@
  * @property    string                      containerType
  * @property    string                      containerOwner
  * @property    string                      flatpath           "real" name path like /personal/user/containername
- * @property    string                      statpath           id path like /personal/USERID/CONTAINERID
+ * @property    string                      statpath           id path like /personal/USERID/nodeName1/nodeName2/...
  * @property    string                      realpath           path without app/type/container stuff 
  * @property    string                      streamwrapperpath
  * @property    Tinebase_Model_Application  application
- * @property    Tinebase_Model_Container    container
  * @property    Tinebase_Model_FullUser     user
  * @property    string                      name (last part of path)
  * @property    Tinebase_Model_Tree_Node_Path parentrecord
@@ -89,7 +87,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'realpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'streamwrapperpath' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'parentrecord'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -105,7 +102,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
-     * create new path record from given path string
+     * create new path record from given (flat) path string like this:
+     *  /c09439cb1d73e923b31affdecb8f2c8feff90d66/folders/personal/f11458741d0319755a7366c1d782172ecbf1305f
      * 
      * @param string|Tinebase_Model_Tree_Node_Path $_path
      * @return Tinebase_Model_Tree_Node_Path
@@ -142,20 +140,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             $userId = $pathParts[3];
             try {
                 $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
-                $containerType = $user->getId() === Tinebase_Core::getUser()->getId()
-                    ? Tinebase_Model_Container::TYPE_PERSONAL
-                    : Tinebase_Model_Container::TYPE_OTHERUSERS;
+                $containerType = Tinebase_FileSystem::FOLDER_TYPE_PERSONAL;
                 $pathParts[3] = $user->accountLoginName;
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // not a user -> shared
-                $containerType = Tinebase_Model_Container::TYPE_SHARED;
-            }
-
-            // replace container name with id
-            $containerPartIdx = ($containerType === Tinebase_Model_Container::TYPE_SHARED) ? 3 : 4;
-            if (isset($pathParts[$containerPartIdx])) {
-                $container = Tinebase_Container::getInstance()->getContainerById($pathParts[$containerPartIdx]);
-                $pathParts[$containerPartIdx] = $container->name;
+                $containerType = Tinebase_FileSystem::FOLDER_TYPE_SHARED;
             }
         }
 
@@ -164,7 +153,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             'flatpath'      => $flatPath,
             'containerType' => $containerType,
             'statpath'      => $newStatPath,
-            'container'     => $container,
         ));
 
         return $pathRecord;
@@ -251,13 +239,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         $this->name                 = $pathParts[count($pathParts) - 1];
         $this->containerType        = isset($this->containerType) && in_array($this->containerType, array(
-            Tinebase_Model_Container::TYPE_PERSONAL,
-            Tinebase_Model_Container::TYPE_SHARED,
-            Tinebase_Model_Container::TYPE_OTHERUSERS,
+            Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+            Tinebase_FileSystem::FOLDER_TYPE_SHARED
         )) ? $this->containerType : $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
-        $this->container            = $this->container instanceof Tinebase_Model_Container ? $this->container : $this->_getContainer($pathParts);
         $this->statpath             = isset($this->statpath) ? $this->statpath : $this->_getStatPath($pathParts);
         $this->realpath             = $this->_getRealPath($pathParts);
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
@@ -287,7 +273,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
-     * get container type from path
+     * get container type from path:
+     *  - type is ROOT for all paths with 3 or less parts
      * 
      * @param array $_pathParts
      * @return string
@@ -295,11 +282,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerType($_pathParts)
     {
-        $containerType = (isset($_pathParts[2])) ? $_pathParts[2] : self::TYPE_ROOT;
+        $containerType = isset($_pathParts[2])? $_pathParts[2] : self::TYPE_ROOT;
         
         if (! in_array($containerType, array(
-            Tinebase_Model_Container::TYPE_PERSONAL,
-            Tinebase_Model_Container::TYPE_SHARED,
+            Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+            Tinebase_FileSystem::FOLDER_TYPE_SHARED,
             self::TYPE_ROOT
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
@@ -336,73 +323,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
-     * get container from path
-     * 
-     * @param array $_pathParts
-     * @return Tinebase_Model_Container
-     */
-    protected function _getContainer($_pathParts)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
-            ' PATH PARTS: ' . print_r($_pathParts, true));
-        
-        $container = null;
-        $containerName = null;
-
-        try {
-            switch ($this->containerType) {
-                case Tinebase_Model_Container::TYPE_SHARED:
-                    if (!empty($_pathParts[3])) {
-                        $containerName = $_pathParts[3];
-                        $container = Tinebase_Container::getInstance()->getContainerByName(
-                            $this->application->name, $containerName, Tinebase_Model_Container::TYPE_SHARED);
-                    }
-                    break;
-                    
-                case Tinebase_Model_Container::TYPE_PERSONAL:
-                    if (count($_pathParts) > 4) {
-                        $subPathParts = explode('/', $_pathParts[4], 2);
-                        $owner = null;
-                        $containerName = $subPathParts[0];
-                        if ($this->containerOwner) {
-                            try {
-                                $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner, 'Tinebase_Model_FullUser');
-                            } catch (Tinebase_Exception_NotFound $tenf) {
-                                // TODO should be fixed! always assure correct path with names .. we seem to have a statpath here
-                                // find owner by login name not found, try with id
-                                try {
-                                    $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $this->containerOwner, 'Tinebase_Model_FullUser');
-                                } catch (Tinebase_Exception_NotFound $tenf) {
-                                }
-                            }
-                        }
-                        if (! $owner) {
-                            $owner = Tinebase_Core::getUser();
-                        }
-                        $container = Tinebase_Container::getInstance()->getContainerByName(
-                            $this->application->name, $containerName, Tinebase_Model_Container::TYPE_PERSONAL, $owner->getId());
-                    }
-                    break;
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Not found: ' . $tenf->getMessage());
-        }
-
-        if (! $container && $containerName && (int) $containerName !== 0) {
-            // TODO should be fixed! always assure correct path with names .. we seem to have a statpath here
-            try {
-                $container = Tinebase_Container::getInstance()->getContainerById($containerName);
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Could not get container by id: ' . $e->getMessage());
-            }
-        }
-        
-        return $container;
-    }
-    
-    /**
      * do path replacements (container name => container id, account name => account id)
      * 
      * @param array $pathParts
@@ -420,11 +340,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             if ($this->containerOwner) {
                 $pathParts[] = $this->containerOwner;
             }
-            
-            if ($this->container) {
-                $pathParts[] = $this->container->name;
-            }
-            
+
             if ($this->realpath) {
                 $pathParts += explode('/', $this->realpath);
             }
@@ -456,16 +372,14 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     // try again with id
                     $accountId = is_object($this->containerOwner) ? $this->containerOwner->getId() : $this->containerOwner;
-                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, 'Tinebase_Model_FullUser');
+                    try {
+                        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, 'Tinebase_Model_FullUser');
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountDisplayName', $accountId, 'Tinebase_Model_FullUser');
+                    }
                     $pathParts[3] = $user->getId();
                     $this->containerOwner = $user->accountLoginName;
                 }
-            }
-        
-            // replace container name with id
-            $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 3 : 4;
-            if (isset($pathParts[$containerPartIdx]) && $this->container && $pathParts[$containerPartIdx] === $this->container->name) {
-                $pathParts[$containerPartIdx] = $this->container->getId();
             }
         }
         
@@ -482,44 +396,28 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     protected function _getRealPath($pathParts)
     {
         $result = NULL;
-        $firstRealPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 4 : 5;
+        $firstRealPartIdx = ($this->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED) ? 4 : 5;
         if (isset($pathParts[$firstRealPartIdx])) {
             $result = implode('/', array_slice($pathParts, $firstRealPartIdx));
         }
         
         return $result;
     }
-    
+
     /**
-     * check if this path has a matching container (toplevel path) 
-     * 
+     * check if this path is on the top level (last part / name is personal. shared or user id)
+     *
+     * TODO is "records" on top level, too?
+     *
      * @return boolean
      */
     public function isToplevelPath()
     {
-        return (! $this->getParent()->container instanceof Tinebase_Model_Container);
-    }
-    
-    /**
-     * set new container / statpath has to be reset
-     * 
-     * @param Tinebase_Model_Container $container
-     */
-    public function setContainer($container)
-    {
-        $this->container            = $container;
-        $this->containerType        = $container->type;
-        $ownerAccountId             = Tinebase_Container::getInstance()->getContainerOwner($container);
-        if ($ownerAccountId) {
-            $this->containerOwner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $ownerAccountId, 'Tinebase_Model_FullUser')->accountLoginName;
-        } else if ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL) {
-            throw new Tinebase_Exception_InvalidArgument('Personal container needs an owner!');
-        } else {
-            $this->containerOwner = NULL;
-        }
-        
-        $this->statpath             = $this->_getStatPath();
-        $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
+        $parts = $this->_getPathParts();
+        return  (count($parts) == 3 &&
+            (   $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL ||
+                $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED)) ||
+                (count($parts) == 4 && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
     }
 
     /**
@@ -536,14 +434,40 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Validate statpath: ' . $this->statpath);
         
-        $pathParts = $this->_getPathParts();
-        if (! $this->container) {
-            $containerPart = ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL) ? 5 : 4;
-            if (count($pathParts) >= $containerPart) {
-                throw new Tinebase_Exception_NotFound('Container not found');
-            }
-        } else if (! Tinebase_FileSystem::getInstance()->fileExists($this->statpath)) {
-             throw new Tinebase_Exception_NotFound('Node not found');
+        if (! Tinebase_FileSystem::getInstance()->fileExists($this->statpath)) {
+            throw new Tinebase_Exception_NotFound('Node not found');
         }
+    }
+
+    /**
+     * get node of path
+     *
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function getNode()
+    {
+        return Tinebase_FileSystem::getInstance()->stat($this->statpath);
+    }
+
+    /**
+     * return path user
+     *
+     * @return Tinebase_Model_FullUser
+     *
+     * TODO handle IDs or unresolved paths?
+     */
+    public function getUser()
+    {
+        if (! $this->user) {
+            if ($this->containerOwner) {
+                $this->user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend(
+                    'accountLoginName',
+                    $this->containerOwner,
+                    'Tinebase_Model_FullUser'
+                );
+            }
+        }
+
+        return $this->user;
     }
 }

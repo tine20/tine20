@@ -12,6 +12,8 @@
  * sql backend class for tree nodes
  *
  * @package     Tinebase
+ *
+ * TODO refactor to Tinebase_Tree_Backend_Node
  */
 class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 {
@@ -203,7 +205,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'operator'  => 'equals',
                 'value'     => $childName
             )
-        ));
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
         $child = $this->search($searchFilter)->getFirstRecord();
         
         if (!$child) {
@@ -229,7 +231,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'operator'  => 'equals',
                 'value'     => $nodeId
             )
-        ));
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
         $children = $this->search($searchFilter);
         
         return $children;
@@ -266,7 +268,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     'operator'  => 'in',
                     'value'     => $ids
                 )
-            ));
+            ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
             $parents = $this->search($searchFilter);
             $this->getAllFolderNodes($parents, $_result);
         }
@@ -310,7 +312,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'operator'  => 'equals',
                 'value'     => $_objectId
             )
-        ));
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
         return $this->search($searchFilter);
     }
     
@@ -345,7 +347,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     'operator'  => 'equals',
                     'value'     => $pathPart
                 )
-            ));
+            ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
             $node = $this->search($searchFilter)->getFirstRecord();
             
             if (!$node) {
@@ -411,17 +413,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     {
         // no transactions yet
         // get root node ids
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => 'isnull',
-                'value'     => null
-            ), array(
-                'field'     => 'type',
-                'operator'  => 'equals',
-                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
-            )
-        ));
+        $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl(null);
         return $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
     }
 
@@ -499,17 +491,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $subFolderIds = array();
         foreach($_folderIds as $folderId) {
             // children folders
-            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-                array(
-                    'field'     => 'parent_id',
-                    'operator'  => 'equals',
-                    'value'     => $folderId
-                ), array(
-                    'field'     => 'type',
-                    'operator'  => 'equals',
-                    'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
-                )
-            ));
+            $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl($folderId);
             $nodeIds = $this->search($searchFilter, null, true);
             if (empty($nodeIds)) {
                 // no children, this is a result

@@ -6,9 +6,8 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 /**
@@ -17,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  FileSystem
  */
-class Tinebase_FileSystem implements Tinebase_Controller_Interface
+class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Container_Interface
 {
     /**
      * folder name/type for record attachments
@@ -25,7 +24,21 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * @var string
      */
     const FOLDER_TYPE_RECORDS = 'records';
-    
+
+    /**
+     * folder name/type for record attachments
+     *
+     * @var string
+     */
+    const FOLDER_TYPE_SHARED = 'shared';
+
+    /**
+     * folder name/type for record attachments
+     *
+     * @var string
+     */
+    const FOLDER_TYPE_PERSONAL = 'personal';
+
     /**
      * @var Tinebase_Tree_FileObject
      */
@@ -36,8 +49,16 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     protected $_treeNodeBackend = null;
 
+    /**
+     * @var string
+     */
     protected $_treeNodeModel = 'Tinebase_Model_Tree_Node';
-    
+
+    /**
+     * @var Tinebase_Tree_NodeGrants
+     */
+    protected $_nodeAclController = null;
+
     /**
      * path where physical files gets stored
      * 
@@ -73,14 +94,20 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
 
         $config = Tinebase_Core::getConfig();
-        $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
-        $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        $this->_basePath = $config->filesdir;
 
-        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject(null, array(
+        $fsConfig = $config->{Tinebase_Config::FILESYSTEM};
+        // FIXME why is this check needed (setup tests fail without)?
+        if ($fsConfig) {
+            $this->_modLogActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+            $this->_indexingActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        }
+
+        $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
             Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
         ));
 
-        $this->_basePath = $config->{Tinebase_Config::FILESDIR};
+        $this->_nodeAclController = Tinebase_Tree_NodeGrants::getInstance();
     }
     
     /**
@@ -123,12 +150,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             $this->mkdir($appPath);
         }
         
-        $sharedBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_SHARED);
+        $sharedBasePath = $this->getApplicationBasePath($_application, self::FOLDER_TYPE_SHARED);
         if (!$this->fileExists($sharedBasePath)) {
             $this->mkdir($sharedBasePath);
         }
         
-        $personalBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_PERSONAL);
+        $personalBasePath = $this->getApplicationBasePath($_application, self::FOLDER_TYPE_PERSONAL);
         if (!$this->fileExists($personalBasePath)) {
             $this->mkdir($personalBasePath);
         }
@@ -150,7 +177,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $result = '/' . $application->getId();
         
         if ($_type !== NULL) {
-            if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL, self::FOLDER_TYPE_RECORDS))) {
+            if (! in_array($_type, array(self::FOLDER_TYPE_SHARED, self::FOLDER_TYPE_PERSONAL, self::FOLDER_TYPE_RECORDS))) {
                 throw new Tinebase_Exception_UnexpectedValue('Type can only be shared or personal.');
             }
             
@@ -172,7 +199,18 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $node =$this->_getTreeNodeBackend()->get($_id, $_getDeleted);
         $fileObject = $this->_fileObjectBackend->get($node->object_id);
         $node->description = $fileObject->description;
-        
+
+        return $node;
+    }
+
+    /**
+     * @param $user
+     * @param $node
+     * @return mixed
+     */
+    public function resolveAccountGrants($user, $node)
+    {
+        $node->account_grants = $this->_nodeAclController->getGrantsOfAccount($user, $node);
         return $node;
     }
 
@@ -199,35 +237,98 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         return$this->_getTreeNodeBackend()->getMultiple($_id);
     }
-    
+
     /**
-     * create container node
-     * 
-     * @param Tinebase_Model_Container $container
+     * create new node with acl
+     *
+     * @param string $path
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function createContainerNode(Tinebase_Model_Container $container)
+    public function createAclNode($path, $grants = null)
     {
-        $path = $this->getContainerPath($container);
-        
-        if (!$this->fileExists($path)) {
-            $this->mkdir($path);
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
+
+        // create folder node
+        if (! $this->fileExists($pathRecord->statpath)) {
+            $node = $this->mkdir($pathRecord->statpath);
+        } else {
+            // TODO always throw exception?
+            throw new Tinebase_Exception_SystemGeneric('Node already exists');
         }
+
+        if (! $grants) {
+            switch ($pathRecord->containerType) {
+                case self::FOLDER_TYPE_PERSONAL:
+                    $node->grants = Tinebase_Model_Grants::getPersonalGrants($pathRecord->getUser());
+                    break;
+                case self::FOLDER_TYPE_SHARED:
+                    $node->grants = Tinebase_Model_Grants::getDefaultGrants();
+                    break;
+            }
+        } else {
+            $node->grants = $grants;
+        }
+
+        $this->_nodeAclController->setGrants($node);
+        $node->acl_node = $node->getId();
+        $this->update($node);
+
+        // append path for convenience
+        $node->path = $path;
+
+        return $node;
     }
 
     /**
-     * get container path
-     * 
-     * @param Tinebase_Model_Container $container
+     * set grants for node
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @param                          $grants
+     * @return Tinebase_Model_Tree_Node
+     * @throws Timetracker_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_Backend
+     *
+     * TODO check acl here?
+     */
+    public function setGrantsForNode(Tinebase_Model_Tree_Node $node, $grants)
+    {
+        $node->grants = $grants;
+        $this->_nodeAclController->setGrants($node);
+        $node->acl_node = $node->getId();
+        $this->update($node);
+
+        return $node;
+    }
+
+    /**
+     * remove acl from node (inherit acl from parent)
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function removeAclFromNode(Tinebase_Model_Tree_Node $node)
+    {
+        $parentNode = $this->get($node->parent_id);
+        $node->acl_node = $parentNode->acl_node;
+        $this->update($node);
+        return $node;
+    }
+
+    /**
+     * get contents of node
+     *
+     * @param string|Tinebase_Model_Tree_Node $nodeId
      * @return string
      */
-    public function getContainerPath(Tinebase_Model_Container $container)
+    public function getNodeContents($nodeId)
     {
-        $treeNodePath = new Tinebase_Model_Tree_Node_Path(array(
-            'application' => Tinebase_Application::getInstance()->getApplicationById($container->application_id)
-        ));
-        $treeNodePath->setContainer($container);
-        
-        return $treeNodePath->statpath;
+        $path = $this->getPathOfNode($nodeId, /* $getPathAsString */ true);
+        $handle = Tinebase_FileSystem::getInstance()->fopen($path, 'r');
+        $contents = stream_get_contents($handle);
+        Tinebase_FileSystem::getInstance()->fclose($templateHandle);
+
+        return $contents;
     }
     
     /**
@@ -766,6 +867,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * create directory
      * 
      * @param string $path
+     * @return Tinebase_Mode_Tree_Node
      */
     public function mkdir($path)
     {
@@ -779,7 +881,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
 
         foreach ($pathParts as $pathPart) {
             $pathPart = trim($pathPart);
-            $currentPath[]= $pathPart;
+            $currentPath[] = $pathPart;
             
             try {
                 $node = $this->stat('/' . implode('/', $currentPath));
@@ -862,6 +964,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     }
     
     /**
+     * return node for a path, caches found nodes in statcache
+     *
      * @param  string  $path
      * @param  int|null $revision
      * @return Tinebase_Model_Tree_Node
@@ -924,6 +1028,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 $this->_getTreeNodeBackend()->setRevision(null);
             }
         }
+
+        // TODO needed here?
+        $node->path = $path;
 
         return $node;
     }
@@ -1002,13 +1109,16 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * create directory
      * 
-     * @param  string|Tinebase_Model_Tree_Node  $parentId
+     * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $name
      * @return Tinebase_Model_Tree_Node
      */
-    public function createDirectoryTreeNode($parentId, $name)
+    public function createDirectoryTreeNode($_parentId, $name)
     {
-        $parentId = $parentId instanceof Tinebase_Model_Tree_Node ? $parentId->getId() : $parentId;
+        $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
+        $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
+            ? $_parentId
+            : ($_parentId ? $this->get($_parentId) : null);
         
         $directoryObject = new Tinebase_Model_Tree_FileObject(array(
             'type'          => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
@@ -1022,9 +1132,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $treeNode = new Tinebase_Model_Tree_Node(array(
             'name'          => $name,
             'object_id'     => $directoryObject->getId(),
-            'parent_id'     => $parentId
+            'parent_id'     => $parentId,
+            'acl_node'      => $parentNode && ! empty($parentNode->acl_node) ? $parentNode->acl_node : null,
         ));
-        $treeNode =$this->_getTreeNodeBackend()->create($treeNode);
+        $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
         
         return $treeNode;
     }
@@ -1118,6 +1229,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * 
      * @param string|Tinebase_Model_Tree_Node|Tinebase_Record_RecordSet  $nodeId
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     *
+     * TODO always ignore acl here?
      */
     public function getTreeNodeChildren($nodeId)
     {
@@ -1137,7 +1250,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 'operator'  => $operator,
                 'value'     => $nodeId
             )
-        ));
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
         $children = $this->searchNodes($searchFilter);
         
         return $children;
@@ -1152,7 +1265,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function searchNodes(Tinebase_Model_Tree_Node_Filter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
     {
-        $result =$this->_getTreeNodeBackend()->search($_filter, $_pagination);
+        $result = $this->_getTreeNodeBackend()->search($_filter, $_pagination);
         return $result;
     }
 
@@ -1182,25 +1295,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $result =$this->_getTreeNodeBackend()->searchCount($_filter);
         return $result;
     }
-    
-    /**
-     * get nodes by container (or container id)
-     * 
-     * @param int|Tinebase_Model_Container $container
-     * @return Tinebase_Record_RecordSet
-     */
-    public function getNodesByContainer($container)
-    {
-        $nodeContainer = ($container instanceof Tinebase_Model_Container) ? $container : Tinebase_Container::getInstance()->getContainerById($container);
-        $path = $this->getContainerPath($nodeContainer);
-        $parentNode = $this->stat($path);
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(
-            array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
-        ));
-        
-        return $this->searchNodes($filter);
-    }
-    
+
     /**
      * get tree node specified by parent node (or id) and name
      * 
@@ -1271,7 +1366,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_node, 'update', $currentNodeObject);
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'update', $fileObject);
 
-        // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
+        // quick hack for 2014.11 - will be resolved correctly in 2016.11-develop?
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
             Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
@@ -1283,30 +1378,60 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // update file object
         $fileObject->description = $_node->description;
         $this->_updateFileObject($fileObject, $_node->hash);
-        
+
+        if ($currentNodeObject->acl_node !== $_node->acl_node) {
+            // update acl_node of subtree if changed
+            $childIds = $this->getAllChildFolderIds(array($_node->getId()));
+            if (count($childIds) > 0) {
+                $this->_nodeAclController->updateMultiple(new Tinebase_Model_Tree_Node_Filter(array(
+                    array(
+                        'field' => 'id',
+                        'operator' => 'in',
+                        'value' => $childIds
+                    )),  /* $_condition = */ '', /* $_options */ array(
+                        'ignoreAcl' => true,
+                    )), array(
+                        'acl_node' => $_node->acl_node
+                    )
+                );
+            }
+        }
+
         return $this->_getTreeNodeBackend()->update($_node);
     }
-    
+
     /**
-     * get container of node
-     * 
-     * @param Tinebase_Model_Tree_Node|string $node
-     * @return Tinebase_Model_Container
+     * returns all directory nodes up to the root
+     *
+     * @param array $_ids
+     * @return array
      */
-    public function getNodeContainer($node)
+    public function getAllChildFolderIds(array $_ids)
     {
-        $nodesPath = $this->getPathOfNode($node);
-        
-        if (count($nodesPath) < 4) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
-                ' ' . print_r($nodesPath[0], TRUE));
-            throw new Tinebase_Exception_NotFound('Could not find container for node ' . $nodesPath[0]['id']);
+        $result = array();
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'parent_id',
+                'operator'  => 'in',
+                'value'     => $_ids
+            ),
+            array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+            ),
+        ),  /* $_condition = */ '', /* $_options */ array(
+            'ignoreAcl' => true,
+        ));
+        $children = $this->search($searchFilter, null, true);
+        if (count($children) > 0) {
+            $result = array_merge($result, $children);
+            $result = array_merge($result, $this->getAllChildFolderIds($children));
         }
-        
-        $containerNode = ($nodesPath[2]['name'] === Tinebase_Model_Container::TYPE_PERSONAL) ? $nodesPath[4] : $nodesPath[3];
-        return Tinebase_Container::getInstance()->get($containerNode['name']);
+
+        return $result;
     }
-    
+
     /**
      * get path of node
      * 
@@ -1450,11 +1575,19 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             return 0;
         }
 
-        $nodeIdsToDelete =$this->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field'     => 'object_id',
-            'operator'  => 'in',
-            'value'     => $toDeleteIds
-        ))), NULL, Tinebase_Backend_Sql_Abstract::IDCOL);
+        $nodeIdsToDelete = $this->_getTreeNodeBackend()->search(
+            new Tinebase_Model_Tree_Node_Filter(array(array(
+                'field'     => 'object_id',
+                'operator'  => 'in',
+                'value'     => $toDeleteIds
+            )), /* $_condition = */ '',
+                /* $_options */ array(
+                    'ignoreAcl' => true,
+                )
+            ),
+            NULL,
+            Tinebase_Backend_Sql_Abstract::IDCOL
+        );
 
         // hard delete is ok here
         $deleteCount = $this->_getTreeNodeBackend()->delete($nodeIdsToDelete);
@@ -1480,6 +1613,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
          stream                       stream ressource
          NULL                         create empty file
      * @param  string  $path
+     * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_AccessDenied
      */
     public function copyTempfile($tempFile, $path)
@@ -1509,6 +1643,20 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         $this->copyStream($tempStream, $path);
+        $node = $this->setAclFromParent($path);
+
+        return $node;
+    }
+
+    public function setAclFromParent($path)
+    {
+        $node = $this->stat($path);
+        $parent = $this->get($node->parent_id);
+        $node->acl_node = $parent->acl_node;
+        $node->path = $path;
+        $this->update($node);
+
+        return $node;
     }
     
     /**
@@ -1585,5 +1733,315 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
 
         return $success;
+    }
+
+    /**
+     * check acl of path
+     *
+     * @param Tinebase_Model_Tree_Node_Path $_path
+     * @param string $_action
+     * @param boolean $_topLevelAllowed
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = TRUE)
+    {
+        switch ($_path->containerType) {
+            case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
+                if ($_path->containerOwner) {
+                    $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                } else {
+                    $hasPermission = ($_action === 'get');
+                }
+                break;
+            case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
+                if ($_action !== 'get') {
+                    // TODO check if app has MANAGE_SHARED_FOLDERS richt?
+                    $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                        $_path->application->name,
+                        Tinebase_Core::getUser()->getId(),
+                        Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                    );
+                } else {
+                    $hasPermission = TRUE;
+                }
+                break;
+            case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
+                $hasPermission = ($_action === 'get');
+                break;
+            default:
+                $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+        }
+
+        if (! $hasPermission) {
+            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' nodes in path ' . $_path->flatpath);
+        }
+    }
+
+    /**
+     * check if user has the permissions for the node
+     *
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param string $_action get|update|...
+     * @return boolean
+     */
+    public function checkACLNode($_node, $_action = 'get')
+    {
+        if (Tinebase_Core::getUser()->hasGrant($_node, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
+            return TRUE;
+        }
+
+        switch ($_action) {
+            case 'get':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_READ;
+                break;
+            case 'add':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_ADD;
+                break;
+            case 'update':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_EDIT;
+                break;
+            case 'delete':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_DELETE;
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
+        }
+
+        return Tinebase_Core::getUser()->hasGrant($_node, $requiredGrant, 'Tinebase_Model_Tree_Node');
+    }
+
+
+    /**************** container interface *******************/
+
+    /**
+     * check if the given user user has a certain grant
+     *
+     * @param   string|Tinebase_Model_User   $_accountId
+     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   array|string                 $_grant
+     * @return  boolean
+     */
+    public function hasGrant($_accountId, $_containerId, $_grant)
+    {
+        // always refetch node to have current acl_node value
+        $node = $this->get($_containerId);
+        $account = $_accountId instanceof Tinebase_Model_FullUser
+            ? $_accountId
+            : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
+        return $this->_nodeAclController->hasGrant($node, $_grant, $account);
+    }
+
+    /**
+     * return users which made personal containers accessible to given account
+     *
+     * @param   string|Tinebase_Model_User        $_accountId
+     * @param   string|Tinebase_Model_Application $recordClass
+     * @param   array|string                      $_grant
+     * @param   bool                              $_ignoreACL
+     * @param   bool                              $_andGrants
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
+     */
+    public function getOtherUsers($_accountId, $_recordClass, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
+    {
+        $result = $this->_getNodesOfType(self::FOLDER_TYPE_PERSONAL, $_accountId, $_recordClass, /* $_owner = */ null, $_grant, $_ignoreACL);
+        return $result;
+    }
+
+    /**
+     * returns the shared container for a given application accessible by the current user
+     *
+     * @param   string|Tinebase_Model_User        $_accountId
+     * @param   string|Tinebase_Model_Application $recordClass
+     * @param   array|string                      $_grant
+     * @param   bool                              $_ignoreACL
+     * @param   bool                              $_andGrants
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @throws  Tinebase_Exception_NotFound
+     */
+    public function getSharedContainer($_accountId, $_recordClass, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
+    {
+        $result = $this->_getNodesOfType(self::FOLDER_TYPE_SHARED, $_accountId, $_recordClass, /* $_owner = */ null, $_grant, $_ignoreACL);
+        return $result;
+    }
+
+    /**
+     * @param            $_type
+     * @param            $_accountId
+     * @param            $_recordClass
+     * @param null       $_owner
+     * @param string     $_grant
+     * @param bool|false $_ignoreACL
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     *
+     * TODO split this fn
+     */
+    protected function _getNodesOfType($_type, $_accountId, $_recordClass, $_owner = null, $_grant = Tinebase_Model_Grants::GRANT_READ, $_ignoreACL = false)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $appAndModel = Tinebase_Application::extractAppAndModel($_recordClass);
+        $app = Tinebase_Application::getInstance()->getApplicationByName($appAndModel['appName']);
+        $path = $this->getApplicationBasePath($app, $_type);
+
+        if ($_type == self::FOLDER_TYPE_PERSONAL and $_owner == null) {
+            // other users
+            $accountIds = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
+            // remove own id
+            $accountIds = Tinebase_Helper::array_remove_by_value($accountId, $accountIds);
+            $filter = new Tinebase_Model_Tree_Node_Filter(
+                array(
+                    array('field' => 'name', 'operator' => 'in', 'value' => $accountIds),
+                ),
+                /* $_condition = */ '',
+                /* $_options */ array(
+                    'ignoreAcl' => true,
+                )
+            );
+            $result = $this->searchNodes($filter);
+            $filterArray = array(
+                array('field' => 'parent_id', 'operator' => 'in', 'value' => $result->getArrayOfIds()),
+            );
+
+        } else {
+
+            $ownerId = $_owner instanceof Tinebase_Model_FullUser ? $_owner->getId() : $_owner;
+            if ($ownerId) {
+                $path .= '/' . $ownerId;
+            }
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
+
+            try {
+                $parentNode = $this->stat($pathRecord->statpath);
+                $filterArray = array(array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId()));
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if ($accountId === $ownerId) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Creating personal root node for user ' . $accountId);
+                    $this->createAclNode($pathRecord->statpath);
+                }
+
+                return $result;
+            }
+        }
+
+        $filter = new Tinebase_Model_Tree_Node_Filter(
+            $filterArray,
+            /* $_condition = */ '',
+            /* $_options */ array(
+                'ignoreAcl' => $_ignoreACL,
+                'user' => $_accountId instanceof Tinebase_Record_Abstract
+                    ? $_accountId->getId()
+                    : $_accountId
+            ));
+        $filter->setRequiredGrants((array)$_grant);
+        $result = $this->searchNodes($filter);
+
+        foreach ($result as $node) {
+            if ($_type == self::FOLDER_TYPE_PERSONAL and $_owner === null) {
+                // add owner (user id) to path for other users
+                $node->path = $path . '/' . $node->parent_id . '/' . $node->name;
+            } else {
+                $node->path = $path . '/' . $node->name;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * returns the personal containers of a given account accessible by a another given account
+     *
+     * @param   string|Tinebase_Model_User       $_accountId
+     * @param   string|Tinebase_Record_Interface $_recordClass
+     * @param   int|Tinebase_Model_User          $_owner
+     * @param   array|string                     $_grant
+     * @param   bool                             $_ignoreACL
+     * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Tree_Node
+     * @throws  Tinebase_Exception_NotFound
+     */
+    public function getPersonalContainer($_accountId, $_recordClass, $_owner, $_grant = Tinebase_Model_Grants::GRANT_READ, $_ignoreACL = false)
+    {
+        $result = $this->_getNodesOfType(self::FOLDER_TYPE_PERSONAL, $_accountId, $_recordClass, $_owner, $_grant, $_ignoreACL);
+
+        // TODO generalize
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $ownerId = $_owner instanceof Tinebase_Model_FullUser ? $_owner->getId() : $_owner;
+        $appAndModel = Tinebase_Application::extractAppAndModel($_recordClass);
+        $app = Tinebase_Application::getInstance()->getApplicationByName($appAndModel['appName']);
+        $path = $this->getApplicationBasePath($app, self::FOLDER_TYPE_PERSONAL);
+        $path .= '/' . $ownerId;
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
+
+        // no personal node found ... creating one?
+        if (count($result) === 0 && $accountId === $ownerId) {
+            $account = (!$_accountId instanceof Tinebase_Model_User)
+                ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId)
+                : $_accountId;
+
+            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            $nodeName = sprintf($translation->_("%s's personal container"), $account->accountFullName);
+            $nodeName = preg_replace('/\//', '', $nodeName);
+            $path = $pathRecord->statpath . '/' . $nodeName;
+
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Creating personal node with name ' . $nodeName);
+
+            $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
+            $result->addRecord($personalNode);
+        }
+
+        return $result;
+    }
+
+    /**
+     * return all container, which the user has the requested right for
+     *
+     * used to get a list of all containers accesssible by the current user
+     *
+     * @param   string|Tinebase_Model_User        $accountId
+     * @param   string|Tinebase_Model_Application $recordClass
+     * @param   array|string                      $grant
+     * @param   bool                              $onlyIds return only ids
+     * @param   bool                              $ignoreACL
+     * @return  Tinebase_Record_RecordSet|array
+     * @throws  Tinebase_Exception_NotFound
+     */
+    public function getContainerByACL($accountId, $recordClass, $grant, $onlyIds = FALSE, $ignoreACL = FALSE)
+    {
+        throw new Tinebase_Exception('implement me');
+    }
+
+    /**
+     * gets default container of given user for given app
+     *  - did and still does return personal first container by using the application name instead of the recordClass name
+     *  - allows now to use different models with default container in one application
+     *
+     * @param   string|Tinebase_Record_Interface $recordClass
+     * @param   string|Tinebase_Model_User       $accountId use current user if omitted
+     * @param   string                           $defaultContainerPreferenceName
+     * @return  Tinebase_Record_Abstract
+     */
+    public function getDefaultContainer($recordClass, $accountId = NULL, $defaultContainerPreferenceName = NULL)
+    {
+        $account = Tinebase_Core::getUser();
+        return $this->getPersonalContainer($account, $recordClass, $accountId ? $accountId : $account)->getFirstRecord();
+    }
+
+    /**
+     * get grants assigned to one account of one container
+     *
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   int|Tinebase_Record_Abstract        $_containerId
+     * @param   string                              $_grantModel
+     * @return Tinebase_Model_Grants
+     *
+     * TODO add to interface
+     */
+    public function getGrantsOfAccount($_accountId, $_containerId, $_grantModel = 'Tinebase_Model_Grants')
+    {
+        return $this->_nodeAclController->getGrantsOfAccount($_accountId, $_containerId);
     }
 }
