@@ -32,17 +32,23 @@
         $tineBuildPath = '';
         
         $locale = Zend_Registry::get('locale');
+        $fileMap = Tinebase_Frontend_Http::getAssetsMap();
+        $tinebaseJS = $fileMap["Tinebase/js/Tinebase"]['js'];
+        $setupJS = $fileMap["Setup/js/Setup"]['js'];
+
         switch(TINE20_BUILDTYPE) {
             case 'RELEASE':
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='$tinebaseJS'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='$setupJS'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . ".js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . ".js'></script>";
                 break;
                 
             case 'DEBUG':
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.debug.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.debug.js'></script>";
+                $tinebaseJS = substr($tinebaseJS, 0, -3) . '.debug.js';
+                $setupJS = substr($setupJS, 0, -3) . '.debug.js';
+                echo "\n    <script type='text/javascript' language='javascript' src='$tinebaseJS'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='$setupJS'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . "-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . "-debug.js'></script>";
                 break;
@@ -50,8 +56,8 @@
             case 'DEVELOPMENT':
             default:
                 echo "\n    <!-- amd/commonjs loader dependencies -->";
-                echo "\n    <script src='Tinebase/js/Tinebase-FAT.js'></script>";
-                echo "\n    <script src='Setup/js/Setup-FAT.js'></script>";
+                echo "\n    <script src='$tinebaseJS'></script>";
+                echo "\n    <script src='$setupJS'></script>";
                 echo "\n    <script src='webpack-dev-server.js'></script>";
 
                 echo "\n    <!-- translations -->";
