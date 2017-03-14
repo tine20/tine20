@@ -875,13 +875,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             var options = [];
             
-            // the container has changed - force update whole series
-//            if (! oldEvent || event.get('container_id') == oldEvent.get('container_id')) {
-                options.push({text: this.app.i18n._('Update this event only'), name: 'this'});
-                options.push({text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'});
-//            }
-            
+
+            options.push({text: this.app.i18n._('Update this event only'), name: 'this'});
+
+            // if
+            options.push({text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'});
             options.push({text: this.app.i18n._('Update whole series'), name: 'series'});
+            // endif
+
             options.push({text: this.app.i18n._('Update nothing'), name: 'cancel'});
             
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({

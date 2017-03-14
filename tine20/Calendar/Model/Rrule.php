@@ -64,6 +64,16 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         self::WDAY_SATURDAY   => 'sat'
     );
 
+    static $WEEKDAY_MAP_REVERSE = array(
+        'sun' => self::WDAY_SUNDAY,
+        'mon' => self::WDAY_MONDAY,
+        'tue' => self::WDAY_TUESDAY,
+        'wed' => self::WDAY_WEDNESDAY,
+        'thu' => self::WDAY_THURSDAY,
+        'fri' => self::WDAY_FRIDAY,
+        'sat' => self::WDAY_SATURDAY
+    );
+
     const TS_HOUR = 3600;
     const TS_DAY  = 86400;
     
