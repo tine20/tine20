@@ -540,16 +540,17 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 // found our desired body part
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
             }
-            
+
             $multipartTypes = array(self::CONTENT_TYPE_MULTIPART, self::CONTENT_TYPE_MULTIPART_RELATED, self::CONTENT_TYPE_MULTIPART_MIXED);
             foreach ($multipartTypes as $multipartType) {
                 if ((isset($foundParts[$multipartType]) || array_key_exists($multipartType, $foundParts))) {
                     // dig deeper into the structure to find the desired part(s)
                     $partStructure = $_structure['parts'][$foundParts[$multipartType]];
-                    $result = $this->getBodyParts($partStructure, $_preferedMimeType);
+                    /** @noinspection OpAssignShortSyntaxInspection */
+                    $result = $result + $this->getBodyParts($partStructure, $_preferedMimeType);
                 }
             }
-            
+
             $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
                 ? Zend_Mime::TYPE_TEXT 
                 : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
@@ -559,6 +560,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         } else {
             foreach ($_structure['parts'] as $part) {
+                /** @noinspection OpAssignShortSyntaxInspection */
                 $result = $result + $this->getBodyParts($part, $_preferedMimeType);
             }
         }
