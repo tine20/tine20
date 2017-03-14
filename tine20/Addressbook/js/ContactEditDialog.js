@@ -419,8 +419,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.tags.TagPanel({
+                        }), new Ext.Panel({
+                            title: this.app.i18n._('Groups'),
+                            iconCls: 'tinebase-accounttype-group',
+                            layout: 'fit',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;',
+                            items: [
+                                this.groupsPanel
+                            ]
+                        }), new Tine.widgets.tags.TagPanel({
                             app: 'Addressbook',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
@@ -444,7 +452,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         var relatedRecords = {};
 
         this.initToolbar();
-
+        this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
+            frame: false
+        });
         this.supr().initComponent.apply(this, arguments);
     },
 
@@ -564,6 +574,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
                 this.mapPanel.onRecordLoad(this.record);
             }
+        }
+        if (this.record.id) {
+            this.groupsPanel.store.loadData(this.record.get('groups'));
         }
         this.supr().onRecordLoad.apply(this, arguments);
     }

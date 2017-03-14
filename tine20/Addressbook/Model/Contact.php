@@ -123,6 +123,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'Tinebase_Model_User'        => array('created_by', 'last_modified_by'),
         'Addressbook_Model_Industry' => array('industry'),
         'recursive'                  => array('attachments' => 'Tinebase_Model_Tree_Node'),
+        'Addressbook_Model_List' => array('groups'),
     );
     
     /**
@@ -240,6 +241,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'paths'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'industry'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'syncBackendIds'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'groups' => array(
+            'type' => 'virtual'
+        ),
     );
     
     /**
