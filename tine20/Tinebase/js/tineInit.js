@@ -53,9 +53,7 @@ Tine.clientVersion.releaseTime      = 'none';
  */
 Tine.logo = 'images/tine_logo.png';
 Tine.favicon;
-// #ilovefs 2017
-//Tine.title = 'Tine 2.0 \u00ae';
-Tine.title = 'Tine 2.0 \u2764';
+Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
 Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
