@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -737,7 +737,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param array &$_data
      * @return void
      */
-    protected function _convertISO8601ToDateTime(array &$_data)
+    public function _convertISO8601ToDateTime(array &$_data)
     {
         foreach (array($this->_datetimeFields, $this->_dateFields) as $dtFields) {
             foreach ($dtFields as $field) {
@@ -913,6 +913,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function diff($_record, $omitFields = array())
     {
+        /** TODO remove this! why is it here? */
         if (! $_record instanceof Tinebase_Record_Abstract) {
             /** @var Tinebase_Record_Diff $_record  ... really?!? */
             return $_record;
@@ -923,6 +924,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             'model'  => get_class($_record),
         ));
         $diff = array();
+        $oldData = array();
         foreach (array_keys($this->_validators) as $fieldName) {
             if (in_array($fieldName, $omitFields)) {
                 continue;
@@ -973,6 +975,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $subdiff = $ownField->diff($recordField);
                 if (is_object($subdiff) && ! $subdiff->isEmpty()) {
                     $diff[$fieldName] = $subdiff;
+                    $oldData[$fieldName] = $ownField;
                 }
                 continue;
             } else if ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
@@ -996,9 +999,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 ' Found diff for ' . $fieldName .'(this/other):' . print_r($ownField, true) . '/' . print_r($recordField, true) );
             
             $diff[$fieldName] = $recordField;
+            $oldData[$fieldName] = $ownField;
         }
         
         $result->diff = $diff;
+        $result->oldData = $oldData;
         return $result;
     }
     
@@ -1286,5 +1291,37 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $appName = is_string($application) ? $application : $application->name;
         return str_replace($appName . '_Model_', '', $model);
+    }
+
+    /**
+     * undoes the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function undo(Tinebase_Record_Diff $diff)
+    {
+        /* TODO special treatment? for what? how?
+         * TODO FIX IT!
+         */
+
+        if ($this->has('is_deleted')) {
+            $this->is_deleted = 0;
+        }
+
+        foreach($diff->oldData as $property => $oldValue)
+        {
+            $this->$property = $oldValue;
+        }
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return false;
     }
 }

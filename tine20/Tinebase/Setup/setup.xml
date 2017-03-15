@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.5</version>
+    <version>10.7</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1187,13 +1187,31 @@
 
         <table>
             <name>timemachine_modlog</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>instance_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>instance_seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>change_type</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>application_id</name>
@@ -1254,6 +1272,19 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>instance_id</name>
+                    <field>
+                        <name>instance_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>instance_seq</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>instance_seq</name>
                     </field>
                 </index>
                 <index>

@@ -788,7 +788,17 @@ class Felamimail_Controller_MessageTest extends TestCase
         
         $this->assertEquals('2009-03-16 19:51:23', $cachedMessage->sent->toString());
     }
-    
+
+    /**
+     * test adding message with another invalid date
+     */
+    public function testAddMessageToCacheInvalidDate3()
+    {
+        $cachedMessage = $this->messageTestHelper('invaliddate3.eml', 'text/invaliddate3');
+
+        $this->assertEquals('1970-01-01 00:00:00', $cachedMessage->sent->toString());
+    }
+
     /**
      * test adding message with empty date header
      */

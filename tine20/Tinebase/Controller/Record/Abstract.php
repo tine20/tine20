@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -621,6 +621,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
             $this->_setRelatedData($createdRecord, $_record, null, TRUE);
+            $this->_writeModLog($createdRecord, null);
             $this->_setNotes($createdRecord, $_record);
             
             if ($this->sendNotifications()) {
@@ -1099,19 +1100,24 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _writeModLog($_newRecord, $_oldRecord)
     {
-        if (! is_object($_newRecord)) {
+        if (null !== $_newRecord) {
+            $notNullRecord = $_newRecord;
+        } else {
+            $notNullRecord = $_oldRecord;
+        }
+        if (! is_object($notNullRecord)) {
             throw new Tinebase_Exception_InvalidArgument('record object expected');
         }
         
-        if (! $_newRecord->has('created_by') || $this->_omitModLog === TRUE) {
+        if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {
             return NULL;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Writing modlog for ' . get_class($_newRecord));
+            . ' Writing modlog for ' . get_class($notNullRecord));
     
         $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
-                                                                                        $this->_getBackendType(), $_newRecord->getId());
+                                                                                        $this->_getBackendType(), $notNullRecord->getId());
         
         return $currentMods;
     }
@@ -1698,6 +1704,37 @@ abstract class Tinebase_Controller_Record_Abstract
         return $idsToMove;
     }
 
+    /**
+     * undelete one record
+     *
+     * TODO finish implementaion
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function unDelete(Tinebase_Record_Interface $_record)
+    {
+        if ($this->_purgeRecords && !$_record->has('created_by')) {
+            throw new Tinebase_Exception_InvalidArgument('record of type ' . get_class($_record) . ' can\'t be undeleted');
+        }
+        $this->_checkGrant($_record, 'delete');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Undeleting record ' . $_record->getId() . ' of type ' . $this->_modelName);
+
+        $originalRecord = clone $_record;
+
+        //$this->_unDeleteLinkedObjects($_record);
+
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'undelete', $_record);
+        $this->_backend->update($_record);
+
+        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
+        $this->_writeModLog($originalRecord, $_record);
+
+        //$this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+    }
+
     /*********** helper funcs **************/
 
     /**
@@ -1711,6 +1748,10 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_checkGrant($_record, 'delete');
 
         $this->_deleteLinkedObjects($_record);
+
+        // we do this here, before the record MetaData will be set. As we need the unchanged record!
+        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
+        $this->_writeModLog(null, $_record);
 
         if (! $this->_purgeRecords && $_record->has('created_by')) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);

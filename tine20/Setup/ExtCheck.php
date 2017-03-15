@@ -494,23 +494,23 @@ class Setup_ExtCheck
                                 $iniSettings = ini_get_all($extensionArray['NAME']);
                                 //print_r($iniSettings);
                                 $i = 1;
-                                while ($values[($key + $i)]['tag'] == 'INISET') {
-                                    switch ($values[($key + $i)]['attributes']['OPERATOR']) {
+                                while ($this->values[($key + $i)]['tag'] == 'INISET') {
+                                    switch ($this->values[($key + $i)]['attributes']['OPERATOR']) {
                                         case('<='):
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
-                                                    <= $values[($key + $i)]['attributes']['VALUE']) {
+                                            if (!$iniSettings[$this->values[($key + $i)]['attributes']['NAME']][$this->values[($key + $i)]['attributes']['SCOPE']]
+                                                    <= $this->values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;
                                         case('=='):
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
-                                                    == $values[($key + $i)]['attributes']['VALUE']) {
+                                            if (!$iniSettings[$this->values[($key + $i)]['attributes']['NAME']][$this->values[($key + $i)]['attributes']['SCOPE']]
+                                                    == $this->values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;
                                         case('>='):
-                                            if (!$iniSettings[$values[($key + $i)]['attributes']['NAME']][$values[($key + $i)]['attributes']['SCOPE']] 
-                                                    >= $values[($key + $i)]['attributes']['VALUE']) {
+                                            if (!$iniSettings[$this->values[($key + $i)]['attributes']['NAME']][$this->values[($key + $i)]['attributes']['SCOPE']]
+                                                    >= $this->values[($key + $i)]['attributes']['VALUE']) {
                                                 $passed[] = false;
                                             }
                                             break;

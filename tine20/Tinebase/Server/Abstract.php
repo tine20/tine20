@@ -135,7 +135,12 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     protected static function _getModelConfigMethods($frontend)
     {
         // get all apps user has RUN right for
-        $userApplications = Tinebase_Core::getUser() ? Tinebase_Core::getUser()->getApplications() : array();
+        try {
+            $userApplications = Tinebase_Core::getUser() ? Tinebase_Core::getUser()->getApplications() : array();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // session might be invalid, destroy it
+            Tinebase_Session::destroyAndRemoveCookie();
+        }
 
         $definitions = array();
         foreach ($userApplications as $application) {

@@ -286,6 +286,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
      * @private
      */
     getLegacyApp: function(app) {
+        app.hasMainScreen = true;
         var appPanel = Tine[app.appName].getPanel();
         var appObj =  new Tine.Tinebase.Application(app);
         var mainScreen = new Tine.widgets.MainScreen({app: appObj});

@@ -134,6 +134,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $ldapData['objectclass'] = $this->_requiredObjectClass;
 
         foreach ($this->_ldapPlugins as $plugin) {
+            /** @var Tinebase_User_Plugin_LdapInterface $plugin */
             $plugin->inspectAddUser($_user, $ldapData);
         }
 
@@ -148,6 +149,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
         
         // add user to primary group and set primary group
+        /** @noinspection PhpUndefinedMethodInspection */
         Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
         
         // set primary group id
@@ -195,6 +197,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
 
         foreach ($this->_ldapPlugins as $plugin) {
+            /** @var Tinebase_User_LdapPlugin_Interface $plugin */
             $plugin->inspectExpiryDate($_expiryDate, $ldapData);
         }
 
@@ -293,6 +296,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
 
         foreach ($this->_ldapPlugins as $plugin) {
+            /** @var Tinebase_User_LdapPlugin_Interface $plugin */
             $plugin->inspectStatus($_status, $ldapData);
         }
 
@@ -308,14 +312,15 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @todo check required objectclasses?
      *
      * @param  Tinebase_Model_FullUser  $_account
-     * @return Tinebase_Model_FullUser
+     * @return Tinebase_Model_FullUser|null
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
         if ($this->_isReadOnlyBackend) {
-            return;
+            return null;
         }
-        
+
+        /** @noinspection PhpUndefinedMethodInspection */
         Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_account->accountPrimaryGroup, $_account->getId());
         
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
@@ -323,6 +328,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
         
         foreach ($this->_ldapPlugins as $plugin) {
+            /** @var Tinebase_User_Plugin_LdapInterface $plugin */
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
 
@@ -506,11 +512,12 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     {
         return new Tinebase_DateTime(bcsub(bcdiv($timestamp, '10000000'), '11644473600'));
     }
-    
+
     /**
      * returns array of ldap data
      *
      * @param  Tinebase_Model_FullUser $_user
+     * @param array $_ldapEntry
      * @return array
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array $_ldapEntry = array())
@@ -550,8 +557,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
                     
                 case 'accountPrimaryGroup':
+                    /** @noinspection PhpUndefinedMethodInspection */
                     $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
                     if ($this->_options['useRfc2307']) {
+                        /** @noinspection PhpUndefinedMethodInspection */
                         $ldapData['gidNumber'] = Tinebase_Group::getInstance()->resolveGidNumber($value);
                     }
                     break;
@@ -576,6 +585,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             if (empty($_ldapEntry['uidnumber'])) {
                 $ldapData['uidnumber'] = $this->_generateUidNumber();
             }
+            /** @noinspection PhpUndefinedMethodInspection */
             $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
             
             $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $domainConfig['domainName']));

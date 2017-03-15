@@ -25,6 +25,8 @@ class Felamimail_Message extends Zend_Mail_Message
     public static $dateFormats = array(
         'D, j M Y H:i:s O',
         'd-M-Y H:i:s O',
+        // TODO try to handle date format like this:
+        // Wed, 04 Jan 2017 16:02:58 0000
     );
     
     /**

@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -186,12 +186,29 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $type,
                 'Sql',
                 $this->creation_time
-            );
+            )->filter('change_type', Tinebase_Timemachine_ModificationLog::UPDATED);
 
+            /** @var Tinebase_Model_ModificationLog $modification */
             foreach($modifications as $modification) {
-                if (in_array($modification->modified_attribute, array('email', 'email_home'))) {
-                    if ($modification->old_value) {
-                        $emails[] = $modification->old_value;
+                $modified_attribute = $modification->modified_attribute;
+
+                // legacy code
+                if (!empty($modified_attribute)) {
+                    if (in_array($modification->modified_attribute, array('email', 'email_home'))) {
+                        if ($modification->old_value) {
+                            $emails[] = $modification->old_value;
+                        }
+                    }
+
+                // new code modificationLog implementation
+                } else {
+                    /** @var Tinebase_Record_Diff $diff */
+                    $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                    if (isset($diff->oldData['email'])) {
+                        $emails[] = $diff->oldData['email'];
+                    }
+                    if (isset($diff->oldData['email_home'])) {
+                        $emails[] = $diff->oldData['email_home'];
                     }
                 }
             }
@@ -362,6 +379,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to delete " . print_r(array_keys($attendeesToDelete), true));
         
         // delete attendees no longer attending from recordset
+        /** @var Calendar_Model_Attender $attendeeToDelete */
         foreach ($attendeesToDelete as $attendeeToDelete) {
             // NOTE: email of attendee might have changed in the meantime
             //       => get old email adresses from modlog and try to match

@@ -1784,4 +1784,18 @@ class Tinebase_Core
 
         return $httpClient;
     }
+
+    /**
+     * returns the tinebase id
+     *
+     * @return string
+     */
+    public static function getTinebaseId()
+    {
+        if (! isset(self::$appInstanceCache['TinebaseId'])) {
+            self::$appInstanceCache['TinebaseId'] = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        }
+
+        return self::$appInstanceCache['TinebaseId'];
+    }
 }

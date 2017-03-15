@@ -39,8 +39,7 @@ Ext.ux.display.DisplayPanel = Ext.extend(Ext.Panel, {
         Ext.ux.display.DisplayPanel.superclass.initComponent.call(this);
         
         this.fields = new Ext.util.MixedCollection();
-        this.fields.addAll(this.findByType('ux.displayfield'));
-        this.fields.addAll(this.findByType('ux.displaytextarea'));
+        this.fields.addAll(this.findBy(function(c) {return Ext.isFunction(c.setValue)}));
     },
     
     /**

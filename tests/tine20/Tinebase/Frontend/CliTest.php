@@ -57,10 +57,6 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     protected function tearDown()
     {
-        // need to be reset after triggerAsyncEvents run (singleton ...)
-        Tinebase_User::getInstance()->unregisterAllPlugins();
-        Tinebase_User::getInstance()->registerPlugins($this->_userPlugins);
-        
         $currentUser = Tinebase_Core::getUser();
         if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -216,9 +212,6 @@ class Tinebase_Frontend_CliTest extends TestCase
         ob_start();
         $this->_cli->triggerAsyncEvents($opts);
         $out = ob_get_clean();
-        
-        $userPlugins = Tinebase_User::getInstance()->getPlugins();
-        $this->assertEquals(0, count($userPlugins), 'got user plugins: ' . print_r($userPlugins, true));
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');

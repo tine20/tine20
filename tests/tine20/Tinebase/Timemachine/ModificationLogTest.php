@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -138,8 +138,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         
         
         foreach ($this->_logEntries as $logEntry) {
-            $id = $this->_modLogClass->setModification($logEntry);
-            $this->_persistantLogEntries->addRecord($this->_modLogClass->getModification($id));
+            /*$id = */$this->_modLogClass->setModification($logEntry);
+            $this->_persistantLogEntries->addRecord($logEntry/*$this->_modLogClass->getModification($id)*/);
         }
     }
 
@@ -180,17 +180,18 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     public function testComputeDiff()
     {
-        $diffs = $this->_modLogClass->computeDiff($this->_persistantLogEntries)->toArray();
-        $this->assertEquals(2, count($diffs)); // we changed two attributes
-        foreach ($diffs as $diff) {
-            switch ($diff['modified_attribute']) {
+        $diff = $this->_modLogClass->computeDiff($this->_persistantLogEntries);
+        $this->assertEquals(2, count($diff->diff)); // we changed two attributes
+        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($this->_persistantLogEntries);
+        foreach ($changedAttributes as $attrb) {
+            switch ($attrb) {
                case 'FirstTestAttribute':
-                   $this->assertEquals('Hamburg', $diff['old_value']);
-                   $this->assertEquals('Stuttgart', $diff['new_value']);
+                   $this->assertEquals('Hamburg', $diff->oldData[$attrb]);
+                   $this->assertEquals('Stuttgart', $diff->diff[$attrb]);
                    break;
                case 'SecondTestAttribute':
-                   $this->assertEquals('Deutschland', $diff['old_value']);
-                   $this->assertEquals('Italien', $diff['new_value']);
+                   $this->assertEquals('Deutschland', $diff->oldData[$attrb]);
+                   $this->assertEquals('Italien', $diff->diff[$attrb]);
             }
         }
     }
@@ -242,7 +243,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                    $count++;
                 }
             }
-            $this->assertEquals($params['nums'], $count);
+            $this->assertEquals($params['nums'], $diffs->count());
         }
     }
     
@@ -262,22 +263,28 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         // change something using the record controller
         $contact->tel_cell = NULL;
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-        
+
         // fetch modlog and test seq
+        /** @var Tinebase_Model_ModificationLog $modlog */
         $modlog = $this->_modLogClass->getModifications('Addressbook', $contact->getId(), NULL, 'Sql',
-            Tinebase_DateTime::now()->subSecond(5), Tinebase_DateTime::now())->getFirstRecord();
+            Tinebase_DateTime::now()->subSecond(5), Tinebase_DateTime::now())->getLastRecord();
+        $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
         $this->assertTrue($modlog !== NULL);
         $this->assertEquals(2, $modlog->seq);
-        $this->assertContains('1234', $modlog->old_value);
+        $this->assertEquals('+491234', $diff->oldData['tel_cell']);
+
+        // delete
+        Addressbook_Controller_Contact::getInstance()->delete($contact->getId());
         
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
             array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
             array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
+            array('field' => 'change_type',         'operator' => 'not', 'value' => Tinebase_Timemachine_ModificationLog::CREATED)
         ));
+
         $result = $this->_modLogClass->undo($filter, true);
         $this->assertEquals(2, $result['totalcount'], 'did not get 2 undone modlog: ' . print_r($result, TRUE));
-        $this->assertContains('1234', $result['undoneModlogs']->getFirstRecord()->old_value);
         
         // check record after undo
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact);
@@ -324,14 +331,15 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         )));
         
         $task->due = Tinebase_DateTime::now();
-        $updatedTask = Tasks_Controller_Task::getInstance()->update($task);
+        /*$updatedTask = */Tasks_Controller_Task::getInstance()->update($task);
         
         $task->seq = 1;
         $modlog = $this->_modLogClass->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             $task, 2);
-        
+
+        $diff = new Tinebase_Record_Diff(json_decode($modlog->getFirstRecord()->new_value, true));
         $this->assertEquals(1, count($modlog));
-        $this->assertEquals((string) $task->due, (string) $modlog->getFirstRecord()->new_value, 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));
+        $this->assertEquals((string) $task->due, (string)($diff->diff['due']), 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));
     }
 }

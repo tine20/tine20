@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -42,9 +42,13 @@ class Tinebase_Model_ModificationLogFilter extends Tinebase_Model_Filter_FilterG
         'application_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'record_id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'modification_account' => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'instance_id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
         'modification_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'record_type'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'modified_attribute'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'old_value'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'change_type'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'seq'                  => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'instance_seq'         => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 }

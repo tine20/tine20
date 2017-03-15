@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  User
  */
-class Tinebase_User
+class Tinebase_User implements Tinebase_Controller_Interface
 {
     /**
      * backend constants
@@ -50,6 +50,18 @@ class Tinebase_User
      *
      */
     const DEFAULT_ADMIN_GROUP_NAME_KEY = 'defaultAdminGroupName';
+
+    /**
+     * Do the user sync with the options as configured in the config.
+     * see Tinebase_Config:: TODO put key here
+     * for details and default behavior
+     */
+    const SYNC_WITH_CONFIG_OPTIONS = 'sync_with_config_options';
+
+    /**
+     * Key under which the default replication group name setting will be stored/retrieved
+     */
+    const DEFAULT_REPLICATION_GROUP_NAME_KEY = 'defaultReplicationGroupName';
     
     protected static $_contact2UserMapping = array(
         'n_family'      => 'accountLastName',
@@ -83,7 +95,7 @@ class Tinebase_User
      * Holds the accounts backend type (e.g. Ldap or Sql.
      * Property is lazy loaded on first access via getter {@see getConfiguredBackend()}
      * 
-     * @var array | optional
+     * @var array|null
      */
     private static $_backendType;
     
@@ -92,7 +104,7 @@ class Tinebase_User
      * Property is lazy loaded from {@see Tinebase_Config} on first access via
      * getter {@see getBackendConfiguration()}
      * 
-     * @var array | optional
+     * @var array|null
      */
     private static $_backendConfiguration;
     
@@ -101,7 +113,7 @@ class Tinebase_User
      * Property is lazy loaded from {@see Tinebase_Config} on first access via
      * getter {@see getBackendConfiguration()}
      * 
-     * @var array | optional
+     * @var array|null
      */
     private static $_backendConfigurationDefaults = array(
         self::SQL => array(
@@ -266,14 +278,14 @@ class Tinebase_User
         
         return self::$_backendType;
     }
-    
+
     /**
      * setter for {@see $_backendType}
-     * 
+     *
      * @todo persist in db
-     * 
+     *
      * @param string $backendType
-     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function setBackendType($backendType)
     {
@@ -287,19 +299,18 @@ class Tinebase_User
         
         self::$_backendType = $newBackendType;
     }
-    
+
     /**
      * Setter for {@see $_backendConfiguration}
-     * 
+     *
      * NOTE:
      * Setting will not be written to Database or Filesystem.
      * To persist the change call {@see saveBackendConfiguration()}
-     * 
+     *
      * @param mixed $_value
      * @param string $_key
      * @param boolean $_applyDefaults
-     * @return void
-     * 
+     * @throws Tinebase_Exception_InvalidArgument
      * @todo generalize this (see Tinebase_Auth::setBackendConfiguration)
      */
     public static function setBackendConfiguration($_value, $_key = null, $_applyDefaults = false)
@@ -330,7 +341,7 @@ class Tinebase_User
     /**
      * Delete the given config setting or all config settings if {@param $_key} is not specified
      * 
-     * @param string | optional $_key
+     * @param string|null $_key
      * @return void
      */
     public static function deleteBackendConfiguration($_key = null)
@@ -359,7 +370,8 @@ class Tinebase_User
     /**
      * Getter for {@see $_backendConfiguration}
      * 
-     * @param String | optional $_key
+     * @param string|null $_key
+     * @param string|null $_default
      * @return mixed [If {@param $_key} is set then only the specified option is returned, otherwise the whole options hash]
      */
     public static function getBackendConfiguration($_key = null, $_default = null)
@@ -409,7 +421,7 @@ class Tinebase_User
     
     /**
      * Getter for {@see $_backendConfigurationDefaults}
-     * @param String | optional $_backendType
+     * @param string|null $_backendType
      * @return array
      */
     public static function getBackendConfigurationDefaults($_backendType = null) {
@@ -447,6 +459,7 @@ class Tinebase_User
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        /** @var Tinebase_User_Ldap $userBackend */
         $userBackend  = Tinebase_User::getInstance();
         if (isset($options['ldapplugins']) && is_array($options['ldapplugins'])) {
             foreach ($options['ldapplugins'] as $plugin) {
@@ -464,7 +477,6 @@ class Tinebase_User
         if (! $hookResult) {
             return null;
         }
-
 
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
@@ -693,10 +705,30 @@ class Tinebase_User
      * 
      * @param array $options
      */
-    public static function syncUsers($options)
+    public static function syncUsers($options = array())
     {
+        if (isset($options[self::SYNC_WITH_CONFIG_OPTIONS]) && $options[self::SYNC_WITH_CONFIG_OPTIONS]) {
+            $syncOptions = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS};
+            if (!isset($options['deleteUsers'])) {
+                $options['deleteUsers'] = $syncOptions->{Tinebase_Config::SYNC_DELETED_USER};
+            }
+            if (!isset($options['syncContactPhoto'])) {
+                $options['syncContactPhoto'] = $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_PHOTO};
+            }
+            if (!isset($options['syncContactData'])) {
+                $options['syncContactData'] = $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA};
+            }
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            .' Start synchronizing users with options ' . print_r($options, true));
+            . ' Start synchronizing users with options ' . print_r($options, true));
+
+        /** TODO replace this with something more generic, like interface "syncable" */
+        if (! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
+            return;
+        }
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
@@ -854,6 +886,20 @@ class Tinebase_User
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
+
+        // create the replication user
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
+
+        $replicationUser = static::createSystemUser('replicationuser', Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+        if (null !== $replicationUser) {
+            if (!($replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER)) ||
+                    empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                $password = Tinebase_Record_Abstract::generateUID(12);
+            }
+            Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+        }
+
+
         Tinebase_User::getInstance()->registerPlugin($addressBookController);
 
 
@@ -927,5 +973,85 @@ class Tinebase_User
 
         $addressBookController->doContainerACLChecks($oldAcl);
         $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
+    }
+
+    /**
+     * create new system user
+     *
+     * @param string $accountLoginName
+     * @param Tinebase_Group $defaultGroup
+     * @return Tinebase_Model_FullUser|null
+     */
+    static public function createSystemUser($accountLoginName, $defaultGroup = null)
+    {
+        try {
+            $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Use existing system user ' . $accountLoginName);
+            return $systemUser;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue
+        }
+
+        $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+
+        if (null === $defaultGroup) {
+            $defaultGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        }
+        $systemUser = new Tinebase_Model_FullUser(array(
+            'accountLoginName' => $accountLoginName,
+            'accountStatus' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility' => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup' => $defaultGroup->getId(),
+            'accountLastName' => $accountLoginName,
+            'accountDisplayName' => $accountLoginName,
+            'accountExpires' => NULL,
+        ));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Creating new system user ' . print_r($systemUser->toArray(), true));
+
+        try {
+            $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
+            Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+        } catch(Zend_Ldap_Exception $zle) {
+            Tinebase_Exception::log($zle);
+            if (stripos($zle->getMessage(), 'Already exists') !== false) {
+                try {
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSyncBackend(
+                        'accountLoginName',
+                        $accountLoginName,
+                        'Tinebase_Model_FullUser'
+                    );
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
+                    $systemUser->merge($user);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Creating new (sql) system user ' . print_r($systemUser->toArray(), true));
+                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                } catch(Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                        ' no system user could be created');
+                    // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+                    Tinebase_Exception::log($e);
+                    $systemUser = null;
+                }
+            } else {
+                $systemUser = null;
+            }
+
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' no system user could be created');
+            // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+            Tinebase_Exception::log($e);
+            $systemUser = null;
+        }
+
+        if (null !== $plugin) {
+            Tinebase_User::getInstance()->registerPlugin($plugin);
+        }
+
+        return $systemUser;
     }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
@@ -55,6 +55,12 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MAINTENANCE = 'maintenance';
+
+    /**
+     * the right to access the replication data of all applications
+     * @staticvar string
+     */
+    const REPLICATION = 'replication';
     
     /**
      * account type anyone
@@ -130,6 +136,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
                 self::MAINTENANCE,
+                self::REPLICATION,
             );
         } else {
             $addRights = array();
@@ -151,25 +158,29 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Tinebase');
 
         $rightDescriptions = array(
-            self::REPORT_BUGS  => array(
-                'text'          => $translate->_('Report bugs'),
-                'description'   => $translate->_('Report bugs to the software vendor directly when they occur.'),
+            self::REPORT_BUGS        => array(
+                'text'                  => $translate->_('Report bugs'),
+                'description'           => $translate->_('Report bugs to the software vendor directly when they occur.'),
             ),
-            self::CHECK_VERSION  => array(
-                'text'          => $translate->_('Check version'),
-                'description'   => $translate->_('Check for new versions of this software.'),
+            self::CHECK_VERSION      => array(
+                'text'                  => $translate->_('Check version'),
+                'description'           => $translate->_('Check for new versions of this software.'),
             ),
-            self::MANAGE_OWN_PROFILE  => array(
-                'text'          => $translate->_('Manage own profile'),
-                'description'   => $translate->_('The right to manage the own profile (selected contact data).'),
+            self::MANAGE_OWN_PROFILE => array(
+                'text'                  => $translate->_('Manage own profile'),
+                'description'           => $translate->_('The right to manage the own profile (selected contact data).'),
             ),
-            self::MANAGE_OWN_STATE  => array(
-                'text'          => $translate->_('Manage own client state'),
-                'description'   => $translate->_('The right to manage the own client state.'),
+            self::MANAGE_OWN_STATE   => array(
+                'text'                  => $translate->_('Manage own client state'),
+                'description'           => $translate->_('The right to manage the own client state.'),
             ),
-            self::MAINTENANCE       => array(
-                'text'          => $translate->_('Maintenance'),
-                'description'   => $translate->_('The right to use the installation in maintenance mode.'),
+            self::MAINTENANCE        => array(
+                'text'                  => $translate->_('Maintenance'),
+                'description'           => $translate->_('The right to use the installation in maintenance mode.'),
+            ),
+            self::REPLICATION        => array(
+                'text'                  => $translate->_('Replication'),
+                'description'           => $translate->_('The right to access the replication data of all applications.'),
             ),
         );
         

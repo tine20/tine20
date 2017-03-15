@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -298,13 +298,17 @@ class Tasks_ControllerTest extends TestCase
         // change linebreak in db to \r\n
         $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Tasks', $utask->getId(),
             'Tasks_Model_Task', 'Sql', Tinebase_DateTime::now()->subMinute(5), $utask->last_modified_time);
-        $this->assertEquals(1, count($loggedMods));
-        $mod = $loggedMods[0]->toArray();
-        $this->assertEquals('description', $mod['modified_attribute']);
-        $mod['new_value'] = 'description' . "\r\n";
+        $this->assertEquals(2, count($loggedMods));
+        $mod = $loggedMods[1];
+        $diff = new Tinebase_Record_Diff(json_decode($mod->new_value, true));
+        $this->assertTrue(isset($diff->diff['description']), 'description not part of diff');
+        $diffArray = $diff->diff;
+        $diffArray['description'] = 'description' . "\r\n";
+        $diff->diff = $diffArray;
+        $mod->new_value = json_encode($diff);
         
         $modlog = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modlog'));
-        $modlog->update($mod, Tinebase_Core::getDb()->quoteInto('id = ?', $mod['id']));
+        $modlog->update($mod->toArray(), Tinebase_Core::getDb()->quoteInto('id = ?', $mod->id));
         
         // this should still work as we normalize linebreaks in concurrency check
         $resolvableConcurrencyTask = clone $utask;

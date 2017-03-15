@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  */
@@ -44,10 +44,11 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * @var array
      */
     protected $_options = array();
-    
+
     /**
      * the constructor
-     *
+     * @param array $_options
+     * @throws Tinebase_Exception
      */
     public function __construct(array $_options = array())
     {
@@ -73,19 +74,19 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     {
         return array_values($this->_propertyMapping);
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Plugin_LdapAbstract::inspectAddUser()
+     * @param Tinebase_Model_FullUser $_user
+     * @param array $_ldapData
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
         $this->_user2ldap($_user, $_ldapData);
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Plugin_LdapAbstract::inspectGetUserByProperty()
+     * @param Tinebase_Model_User $_user
+     * @param array $_ldapEntry
      */
     public function inspectGetUserByProperty(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
@@ -144,14 +145,16 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on password change.');
     }
-    
+
     /**
      * inspect setStatus
      * 
      * @param string  $_status    the status
      * @param array   $_ldapData  the data to be written to ldap
+     *
      */
-    public function inspectStatus($_status, array &$_ldapData)
+    public function inspectStatus(/** @noinspection PhpUnusedParameterInspection */
+                                    $_status, array &$_ldapData)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on status change.');
     }
@@ -162,23 +165,24 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * @param Tinebase_DateTime  $_expiryDate  the expirydate
      * @param array      $_ldapData    the data to be written to ldap
      */
-    public function inspectExpiryDate($_expiryDate, array &$_ldapData)
+    public function inspectExpiryDate(/** @noinspection PhpUnusedParameterInspection */
+                                        $_expiryDate, array &$_ldapData)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on expiry change.');
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Plugin_LdapAbstract::inspectUpdateUser()
+     * @param Tinebase_Model_FullUser $_user
+     * @param array $_ldapData
+     * @param array $_ldapEntry
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
     {
         $this->_user2ldap($_user, $_ldapData, $_ldapEntry);
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Plugin_LdapInterface::setLdap()
+     * @param Tinebase_Ldap $_ldap
      */
     public function setLdap(Tinebase_Ldap $_ldap)
     {
@@ -204,14 +208,13 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
         
         return $_userName;
     }
-    
+
     /**
      * Returns a user object with raw data from ldap
      *
-     * @param array $_userData
-     * @param string $_accountClass
+     * @param Tinebase_Model_User $_user
+     * @param array $_ldapEntry
      * @return Tinebase_Record_Abstract
-     * 
      * @todo add generic function for this in Tinebase_User_Ldap or Tinebase_Ldap?
      */
     abstract protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry);

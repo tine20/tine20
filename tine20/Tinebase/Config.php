@@ -89,6 +89,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const USERBACKEND = 'Tinebase_User_BackendConfiguration';
+
+    /**
+     * sync options for user backend
+     *
+     * @var string
+     */
+    const SYNCOPTIONS = 'syncOptions';
     
     /**
      * user backend type config
@@ -208,11 +215,25 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
     
     /**
-     * configure if user contact data should be synced from sync backend
+     * configure if user contact data should be synced from sync backend, default yes
      *
-     * @var boolean
+     * @var string
      */
     const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
+
+    /**
+     * configure if user contact photo should be synced from sync backend, default yes
+     *
+     * @var string
+     */
+    const SYNC_USER_CONTACT_PHOTO = 'syncUserContactPhoto';
+
+    /**
+     * configure if deleted users from sync back should be deleted in sql backend, default yes
+     *
+     * @var string
+     */
+    const SYNC_DELETED_USER = 'syncDeletedUser';
     
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
@@ -427,6 +448,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
 
     /**
+     * @var string
+     */
+    const REPLICATION_MASTER = 'replicationMaster';
+
+    /**
+     * @var string
+     */
+    const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -581,6 +612,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::REPLICATION_MASTER => array(
+            //_('Replication master configuration')
+            'label'                 => 'Replication master configuration',
+            //_('Replication master configuration.')
+            'description'           => 'Replication master configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::REPLICATION_USER_PASSWORD     => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING
+                )
+            ),
+        ),
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
@@ -591,6 +638,147 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+            'content'               => array(
+                Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'host'                      => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'port'                      => array(
+                    'type'                      => Tinebase_Config::TYPE_INT,
+                ),
+                'useSsl'                    => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'username'                  => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'password'                  => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'bindRequiresDn'            => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'baseDn'                    => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'accountCanonicalForm'      => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'accountDomainName'         => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'accountDomainNameShort'    => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'accountFilterFormat'       => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'allowEmptyPassword'        => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'useStartTls'               => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'optReferrals'              => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'tryUsernameSplit'          => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'groupUUIDAttribute'        => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'groupsDn'                  => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'useRfc2307bis'             => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'userDn'                    => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'userFilter'                => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'userSearchScope'           => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'groupFilter'               => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'groupSearchScope'          => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'pwEncType'                 => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'minUserId'                 => array(
+                    'type'                      => Tinebase_Config::TYPE_INT,
+                ),
+                'maxUserId'                 => array(
+                    'type'                      => Tinebase_Config::TYPE_INT,
+                ),
+                'minGroupId'                => array(
+                    'type'                      => Tinebase_Config::TYPE_INT,
+                ),
+                'maxGroupId'                => array(
+                    'type'                      => Tinebase_Config::TYPE_INT,
+                ),
+                'userUUIDAttribute'         => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                'readonly'                  => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                'useRfc2307'                => array(
+                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                ),
+                self::SYNCOPTIONS           => array(
+                    'type'                      => 'object',
+                    'class'                     => 'Tinebase_Config_Struct',
+                    'content'                   => array(
+                        self::SYNC_USER_CONTACT_DATA => array(
+                            //_('Sync contact data from sync backend')
+                            'label'                 => 'Sync contact data from sync backend',
+                            //_('Sync user contact data from sync backend')
+                            'description'           => 'Sync user contact data from sync backend',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => FALSE,
+                            'setByAdminModule'      => FALSE,
+                            'setBySetupModule'      => FALSE,
+                            'default'               => TRUE
+                        ),
+                        self::SYNC_USER_CONTACT_PHOTO => array(
+                            //_('Sync contact photo from sync backend')
+                            'label'                 => 'Sync contact photo from sync backend',
+                            //_('Sync user contact photo from sync backend')
+                            'description'           => 'Sync user contact photo from sync backend',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => FALSE,
+                            'setByAdminModule'      => FALSE,
+                            'setBySetupModule'      => FALSE,
+                            'default'               => TRUE
+                        ),
+                        self::SYNC_DELETED_USER => array(
+                            //_('Sync deleted users from sync backend')
+                            'label'                 => 'Sync deleted users from sync backend',
+                            //_('Sync deleted users from sync backend')
+                            'description'           => 'Sync deleted users from sync backend',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => FALSE,
+                            'setByAdminModule'      => FALSE,
+                            'setBySetupModule'      => FALSE,
+                            'default'               => TRUE
+                        ),
+                    ),
+                    'default'                   => array(),
+                ),
+            ),
         ),
         self::ENABLED_FEATURES => array(
             //_('Enabled Features')
@@ -742,17 +930,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
-        ),
-        self::SYNC_USER_CONTACT_DATA => array(
-            //_('Sync contact data from sync backend')
-            'label'                 => 'Sync contact data from sync backend',
-            //_('Sync user contact data from sync backend')
-            'description'           => 'Sync user contact data from sync backend',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
@@ -1205,33 +1382,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     {
         $configClassName = $applicationName . '_Config';
         if (@class_exists($configClassName)) {
+            /** @noinspection PhpUndefinedMethodInspection */
             return $configClassName::getInstance();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Application ' . $applicationName . ' has no config.');
             return NULL;
         }
-    }
-    
-    /**
-     * get option setting string
-     * 
-     * @deprecated
-     * @param Tinebase_Record_Interface $_record
-     * @param string $_id
-     * @param string $_label
-     * @return string
-     */
-    public static function getOptionString($_record, $_label)
-    {
-        $controller = Tinebase_Core::getApplicationInstance($_record->getApplication());
-        $settings = $controller->getConfigSettings();
-        $idField = $_label . '_id';
-        
-        $option = $settings->getOptionById($_record->{$idField}, $_label . 's');
-        
-        $result = (isset($option[$_label])) ? $option[$_label] : '';
-        
-        return $result;
     }
 }
