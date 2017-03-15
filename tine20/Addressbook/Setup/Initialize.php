@@ -35,6 +35,9 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         parent::createInitialRights($_application);
 
         $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
+
+        $groupController = Tinebase_Group::getInstance();
+        $oldValue = $groupController->modlogActive(false);
         
         if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             Tinebase_User::syncUsers(array('syncContactData' => TRUE));
@@ -52,6 +55,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         }
         
         Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
+
+        $groupController->modlogActive($oldValue);
         
         parent::_initialize($_application, $_options);
     }

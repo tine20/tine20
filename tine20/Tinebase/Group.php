@@ -123,7 +123,12 @@ class Tinebase_Group
             default:
                 throw new Tinebase_Exception_InvalidArgument("Groups backend type $_backendType not implemented.");
         }
-        
+
+        if ($result instanceof Tinebase_Group_Interface_SyncAble) {
+            // turn off replicable feature for Tinebase_Model_Group
+            Tinebase_Model_Group::setReplicable(false);
+        }
+
         return $result;
     }
     

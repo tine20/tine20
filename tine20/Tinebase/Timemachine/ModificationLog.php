@@ -1248,27 +1248,32 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     }
                 }
 
-                switch ($modification->change_type) {
-                    case Tinebase_Timemachine_ModificationLog::CREATED:
-                        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                        $model = $modification->record_type;
-                        $record = new $model($diff->diff);
-                        $controller->create($record);
-                        break;
+                if (method_exists($controller, 'applyReplicationModificationLog')) {
+                    $controller->applyReplicationModificationLog($modification);
+                } else {
 
-                    case Tinebase_Timemachine_ModificationLog::UPDATED:
-                        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                        $record = $controller->get($modification->record_id, NULL, true, true);
-                        $record->applyDiff($diff);
-                        $controller->update($record);
-                        break;
+                    switch ($modification->change_type) {
+                        case Tinebase_Timemachine_ModificationLog::CREATED:
+                            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                            $model = $modification->record_type;
+                            $record = new $model($diff->diff);
+                            $controller->create($record);
+                            break;
 
-                    case Tinebase_Timemachine_ModificationLog::DELETED:
-                        $controller->delete($modification->record_id);
-                        break;
+                        case Tinebase_Timemachine_ModificationLog::UPDATED:
+                            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                            $record = $controller->get($modification->record_id, NULL, true, true);
+                            $record->applyDiff($diff);
+                            $controller->update($record);
+                            break;
 
-                    default:
-                        throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+                        case Tinebase_Timemachine_ModificationLog::DELETED:
+                            $controller->delete($modification->record_id);
+                            break;
+
+                        default:
+                            throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+                    }
                 }
 
                 $state = $tinebaseApplication->state;

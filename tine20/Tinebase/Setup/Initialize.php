@@ -138,11 +138,16 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     protected function _setupGroups()
     {
-        if (Tinebase_Group::getInstance() instanceof Tinebase_Group_Interface_SyncAble && ! Tinebase_Group::getInstance()->isDisabledBackend()) {
+        $groupController = Tinebase_Group::getInstance();
+        $oldValue = $groupController->modlogActive(false);
+
+        if ($groupController instanceof Tinebase_Group_Interface_SyncAble && ! $groupController->isDisabledBackend()) {
             Tinebase_Group::syncGroups();
         } else {
             Tinebase_Group::createInitialGroups();
         }
+
+        $groupController->modlogActive($oldValue);
     }
 
     /**

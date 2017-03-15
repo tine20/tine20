@@ -810,6 +810,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     public function createInitialRoles()
     {
         $groupsBackend = Tinebase_Group::getInstance();
+        $oldValue = $groupsBackend->modlogActive(false);
         
         $adminGroup         = $groupsBackend->getDefaultAdminGroup();
         $userGroup          = $groupsBackend->getDefaultGroup();
@@ -857,6 +858,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
                 'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
             )
         ));
+
+        $groupsBackend->modlogActive($oldValue);
 
         $this->_setNotes = $oldSetNotes;
         $this->_omitModLog = $oldOmitModLog;

@@ -420,4 +420,86 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $newRole = $roleController->get($role->getId());
         $this->assertEquals(1, $newRole->members->filter('account_id', 'test3')->count(), 'record set diff modified didn\'t work, test3 not found');
     }
+
+    public function testGroupReplication()
+    {
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
+        $instance_seq = $modifications->getLastRecord()->instance_seq;
+
+        $groupController = Tinebase_Group::getInstance();
+
+        $group = new Tinebase_Model_Group(array('name' => 'unittest test group'));
+        $group = $groupController->addGroup($group);
+
+        $groupController->addGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
+        $groupController->removeGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
+        $group->description = 'test description';
+        $group = $groupController->updateGroup($group);
+        $groupController->deleteGroups($group->getId());
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $groupModifications = $modifications->filter('record_type', 'Tinebase_Model_Group');
+
+        if ($groupController instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->assertEquals(0, $groupModifications->count(), ' for syncables group replication should be turned off!');
+            // syncables should not create any replication logs, we can skip this test as of here
+            return;
+        }
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $notFound = false;
+        try {
+            $groupController->getGroupById($group->getId());
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $notFound =  true;
+        }
+        $this->assertTrue($notFound, 'roll back did not work...');
+
+        // create the group
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $newGroup = $groupController->getGroupById($group->getId());
+        $this->assertEquals($group->name, $newGroup->name);
+        $this->assertEmpty($groupController->getGroupMembers($newGroup->getId()), 'group members not empty');
+
+        // add group members
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $this->assertEquals(1, count($groupController->getGroupMembers($newGroup->getId())), 'group members not created');
+
+        // remove group members
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $this->assertEmpty($groupController->getGroupMembers($newGroup->getId()), 'group members not deleted');
+
+        // update group description
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $newGroup = $groupController->getGroupById($group->getId());
+        $this->assertEquals('test description', $newGroup->description);
+
+        // delete group
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $notFound = false;
+        try {
+            $groupController->getGroupById($group->getId());
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $notFound =  true;
+        }
+        $this->assertTrue($notFound, 'delete group did not work');
+    }
 }
