@@ -255,6 +255,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
         }
 
+        if ($result instanceof Tinebase_User_Interface_SyncAble) {
+            // turn off replicable feature for Tinebase_Model_User
+            Tinebase_Model_User::setReplicable(false);
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Created user backend of type ' . get_class($result));
 

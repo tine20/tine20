@@ -1311,6 +1311,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         foreach((array)($diff->oldData) as $property => $oldValue)
         {
+            if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+                $oldValue = new Tinebase_DateTime($oldValue);
+            }
             $this->$property = $oldValue;
         }
     }
@@ -1344,6 +1347,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
                 $this->$property->applyRecordSetDiff($recordSetDiff);
             } else {
+                if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+                    $oldValue = new Tinebase_DateTime($oldValue);
+                }
                 $this->$property = $oldValue;
             }
         }

@@ -426,6 +426,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Tinebase_Model_Department',
                 'Tinebase_Model_ImportException',
                 'Tinebase_Model_User',
+                'Tinebase_Model_UserPassword',
                 'Tinebase_Model_Role',
                 'Tinebase_Model_RoleRight',
                 'Tinebase_Model_RoleMember',
