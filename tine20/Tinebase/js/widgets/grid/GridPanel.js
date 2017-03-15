@@ -40,6 +40,10 @@ Tine.widgets.grid.GridPanel = function(config) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
     }
 
+    if (this.stateId && Ext.isTouchDevice) {
+        this.stateId = this.stateId + '-Touch';
+    }
+
     Tine.widgets.grid.GridPanel.superclass.constructor.call(this);
 };
 
