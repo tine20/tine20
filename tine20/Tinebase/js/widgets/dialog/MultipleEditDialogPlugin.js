@@ -19,6 +19,9 @@ Ext.ns('Tine.widgets.editDialog');
  */
 Tine.widgets.dialog.MultipleEditDialogPlugin = function(config) {
     Ext.apply(this, config);
+    // uhh, quick hack to circumvent large refactoring
+    // -> limitation: no two multiedit plugins shown at once (seems acceptable)
+    Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.skipItems = [];
 };
 
 Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
