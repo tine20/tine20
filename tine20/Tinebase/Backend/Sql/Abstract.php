@@ -968,7 +968,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
             
-            if ($this->_hasAutoIncrementId()) {
+            if (!isset($recordArray[$identifier]) && $this->_hasAutoIncrementId()) {
                 $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
                 if (!$newId) {
                     throw new Tinebase_Exception_UnexpectedValue("New record auto increment id is empty");

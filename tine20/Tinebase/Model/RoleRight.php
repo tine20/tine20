@@ -47,7 +47,7 @@ class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
         'fields' => array(
             'role_id'           => array(
                 'label'             => 'Name', //_('Name')
-                'type'              => 'string',
+                'type'              => 'integer',
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
             ),

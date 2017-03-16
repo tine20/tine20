@@ -31,7 +31,7 @@ class Tinebase_Model_RoleRightFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'role_id'               => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'                    => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'role_id'               => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 }
