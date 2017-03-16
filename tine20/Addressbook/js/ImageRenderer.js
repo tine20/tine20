@@ -11,11 +11,10 @@ Ext.ns('Tine.Addressbook');
  * Render given image
  *
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.ImageRenderer
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @singleton
  */
-Tine.Addressbook.ImageRenderer = function () {
+Tine.Addressbook.imageRenderer = function (jpegphoto, metadata, record) {
     function getImageUrl(url, width, height, contact) {
         var mtime = contact.last_modified_time || contact.creation_time;
         if (url.match(/&/)) {
@@ -28,12 +27,9 @@ Tine.Addressbook.ImageRenderer = function () {
         return url;
     }
 
-    return {
-        renderer: function(jpegphoto, metadata, record) {
-            var url = getImageUrl(jpegphoto, 90, 113, record.data);
-            return '<img src="' + url + '" />';
-        }
-    };
-}();
+    var url = getImageUrl(jpegphoto, 90, 113, record.data);
 
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'image', Tine.Addressbook.ImageRenderer.renderer, 'displayPanel');
+    return '<img src="' + url + '" />';
+};
+
+Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'image', Tine.Addressbook.imageRenderer, 'displayPanel');

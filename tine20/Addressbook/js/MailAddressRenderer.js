@@ -11,26 +11,21 @@ Ext.ns('Tine.Addressbook');
  * Render given MailAddresss
  *
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.MailAddressRenderer
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @singleton
  */
-Tine.Addressbook.MailAddressRenderer = function () {
-    return {
-        renderer: function (email) {
-            if (!email) {
-                return '';
-            }
+Tine.Addressbook.mailAddressRenderer = function (email) {
+    if (!email) {
+        return '';
+    }
 
-            email = Tine.Tinebase.EncodingHelper.encode(email);
-            var link = (this.felamimail === true) ? '#' : 'mailto:' + email;
-            var id = Ext.id() + ':' + email;
+    email = Tine.Tinebase.EncodingHelper.encode(email);
+    var link = (this.felamimail === true) ? '#' : 'mailto:' + email;
+    var id = Ext.id() + ':' + email;
 
-            return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
-                + Ext.util.Format.ellipsis(email, 18) + '</a>';
-        }
-    };
-}();
+    return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
+        + Ext.util.Format.ellipsis(email, 18) + '</a>';
+};
 
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'email', Tine.Addressbook.MailAddressRenderer.renderer, 'displayPanel');
+Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'email', Tine.Addressbook.mailAddressRenderer, 'displayPanel');
 
