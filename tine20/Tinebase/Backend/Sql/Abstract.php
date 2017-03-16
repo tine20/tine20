@@ -955,7 +955,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $recordArray = $this->_recordToRawData($_record);
             
             // unset id if present and empty
-            if (isset($recordArray[$identifier]) && empty($recordArray[$identifier])) {
+            if (array_key_exists($identifier, $recordArray) && empty($recordArray[$identifier])) {
                 unset($recordArray[$identifier]);
             }
             
