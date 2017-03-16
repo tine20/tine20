@@ -776,12 +776,21 @@ Tine.Tinebase.tineInit = {
                     var metas = document.getElementsByTagName('meta');
                     for (var i = 0; i < metas.length; i++) {
                         if (metas[i].name == "viewport") {
-                            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                            metas[i].content = "width=device-width, maximum-scale=1.0";
+                            // NOTE: if we don't release the max scale here, we get wired layout effects
+                            metas[i].content = "width=device-width, maximum-scale=10, user-scalable=no";
                         }
                     }
-                    Tine.Tinebase.viewport.doLayout();
+                    // NOTE: need to hide soft-keybord before relayouting to preserve layout
+                    document.activeElement.blur();
+                    Tine.Tinebase.viewport.doLayout.defer(500, Tine.Tinebase.viewport);
                 }, this);
 
+                // NOTE: document scroll only happens when soft keybord is displayed and therefore viewport scrolls.
+                //       in this case, content might not be accessable
+                //Ext.getDoc().on('scroll', function() {
+                //
+                //}, this);
 
             }, 'Tinebase/js/hammerjs');
         }
