@@ -58,6 +58,14 @@
         {
           "text": "Filemanager.js",
           "path": "js/"
+        },
+        {
+          "text": "FilePickerDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "FilePicker.js",
+          "path": "js/"
         }
       ]
     },

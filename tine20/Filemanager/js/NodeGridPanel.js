@@ -63,6 +63,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     currentFolderNode : '/',
     
     /**
+     * Prevent download and edit of nodes/files and so on. Only allow the selection of items
+     */
+    selectOnly: false,
+
+    /**
      * inits this cmp
      * @private
      */
@@ -75,34 +80,45 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: '/'}
         ];
-        
-        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
-        this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
-        
+
         this.plugins = this.plugins || [];
+
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
+
+        if (this.hasQuickSearchFilterToolbarPlugin) {
+            this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
+        }
+
         this.plugins.push(this.filterToolbar);
-        this.plugins.push({
-            ptype: 'ux.browseplugin',
-            multiple: true,
-            scope: this,
-            enableFileDialog: false,
-            handler: this.onFilesSelect
-        });
-        
+
+        if (!this.readOnly) {
+            this.plugins.push({
+                ptype: 'ux.browseplugin',
+                multiple: true,
+                scope: this,
+                enableFileDialog: false,
+                handler: this.onFilesSelect
+            });
+        }
+
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad);
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
     },
-    
-    initFilterPanel: function() {},
-    
+
     /**
      * after render handler
      */
-    afterRender: function() {
+    afterRender: function () {
         Tine.Filemanager.NodeGridPanel.superclass.afterRender.call(this);
-        this.action_upload.setDisabled(true);
-        this.initDropTarget();
+
+        if (this.action_upload) {
+            this.action_upload.setDisabled(true);
+        }
+
+        if (!this.readOnly) {
+            this.initDropTarget();
+        }
         this.currentFolderNode = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getRootNode();
     },
     
@@ -251,7 +267,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getFilterToolbar: function(config) {
         config = config || {};
         var plugins = [];
-        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
+
+        if (this.hasQuickSearchFilterToolbarPlugin) {
             this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
             plugins.push(this.quickSearchFilterToolbarPlugin);
         }
@@ -421,18 +438,20 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         date.setDate(date.getDate() + 30);
         
         var record = new Tine.Filemanager.Model.DownloadLink({node_id: selections[0].id, expiry_time: date});
-        Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {success: function(record) {
-            
-            // TODO: add mail-button
-            Ext.MessageBox.show({
-                title: selections[0].data.type == 'folder' ? this.app.i18n._('Folder has been published successfully') : this.app.i18n._('File has been published successfully'), 
-                msg: String.format(this.app.i18n._("Url: {0}") + '<br />' + this.app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')), 
-                minWidth: 900,
-                buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.INFO,
-                scope: this
-            });
-        }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this});
+        Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
+            success: function (record) {
+
+                // TODO: add mail-button
+                Ext.MessageBox.show({
+                    title: selections[0].data.type == 'folder' ? this.app.i18n._('Folder has been published successfully') : this.app.i18n._('File has been published successfully'),
+                    msg: String.format(this.app.i18n._("Url: {0}") + '<br />' + this.app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')),
+                    minWidth: 900,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO,
+                    scope: this
+                });
+            }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this
+        });
     },
     
     /**
@@ -650,7 +669,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
         
-        if(rowRecord.data.type == 'file') {
+        if(rowRecord.data.type == 'file' && !this.readOnly) {
             Tine.Filemanager.downloadFile(rowRecord);
         }
         

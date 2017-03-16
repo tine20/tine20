@@ -33,11 +33,17 @@ Tine.widgets.grid.GridPanel = function(config) {
     this.defaultPaging = this.defaultPaging || {
         start: 0,
         limit: 50
-    };      
+    };
+
+    var stateIdPrefix = '';
+
+    if (config.hasOwnProperty('stateIdPrefix')) {
+        stateIdPrefix = config.stateIdPrefix;
+    }
 
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
-        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
+        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel' + stateIdPrefix;
     }
 
     if (this.stateId && Ext.isTouchDevice) {
@@ -340,6 +346,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     stateful: true,
 
     /**
+     * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
+     */
+    readOnly: false,
+
+    /**
      * extend standard initComponent chain
      * 
      * @private
@@ -380,7 +391,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             containerProperty: this.recordClass.getMeta('containerProperty'), 
             evalGrants: this.evalGrants
         });
-        this.initActions();
+
+        if (!this.readOnly) {
+            this.initActions();
+        }
 
         this.initLayout();
 

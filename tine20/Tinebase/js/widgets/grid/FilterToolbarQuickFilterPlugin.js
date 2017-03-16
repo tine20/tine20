@@ -372,8 +372,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                    '<br />' +
                    '&nbsp;' + criterias.join(', ');
         }
-            
-        this.criteriaText.update(text);
+
+        // If toolbar is hidden, there is no component to update!
+        if(this.criteriaText.getContentTarget()) {
+            this.criteriaText.update(text);
+        }
     },
     
     /**
