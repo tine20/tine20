@@ -43,6 +43,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
                 'update-s'                  => 'Update applications [All] or comma separated list',
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
+                'install_dump'              => 'Install Tine from a backup
+                         Examples:
+                           setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
                     'dbmailldap'            => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
@@ -75,8 +78,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
 
         if (count($opts->toArray()) === 0 || $opts->h || 
             (empty($opts->install) && 
-            empty($opts->update) && 
-            empty($opts->uninstall) && 
+            empty($opts->install_dump) &&
+            empty($opts->update) &&
+            empty($opts->uninstall) &&
             empty($opts->list) && 
             empty($opts->sync_accounts_from_ldap) && 
             empty($opts->sync_passwords_from_ldap) && 
