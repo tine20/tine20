@@ -342,4 +342,9 @@ class Tinebase_Group
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
     }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
+    }
 }
