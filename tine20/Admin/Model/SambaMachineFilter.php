@@ -5,7 +5,7 @@
  * @package     Admin
  * @subpackage  Samba
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -36,5 +36,6 @@ class Admin_Model_SambaMachineFilter extends Tinebase_Model_Filter_FilterGroup
                 'fields' => array('accountLoginName')
             )
         ),
+        'accountLoginName'     => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

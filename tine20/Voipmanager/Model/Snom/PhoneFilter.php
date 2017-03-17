@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -45,7 +45,10 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
                 'fields' => array('macaddress', 'ipaddress', 'description')
             )
         ),
-        'account_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'account_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'macaddress'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'ipaddress'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'   => array('filter' => 'Tinebase_Model_Filter_Text')
     );
     
     /**

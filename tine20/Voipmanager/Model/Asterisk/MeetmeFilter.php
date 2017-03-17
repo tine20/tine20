@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -41,6 +41,8 @@ class Voipmanager_Model_Asterisk_MeetmeFilter extends Tinebase_Model_Filter_Filt
                 'fields' => array('confno', 'pin', 'adminpin')
             )
         ),
-        'confno'    => array('filter' => 'Tinebase_Model_Filter_Text')
+        'confno'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'pin'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adminpin'  => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

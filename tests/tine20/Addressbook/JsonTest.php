@@ -1872,6 +1872,23 @@ Steuernummer 33/111/32212";
     }
 
     /**
+     * @see 0012834: Tinbase_Model_Filter_Query - reimplement using FilterGroup
+     */
+    public function testSearchContactByQueryFilterWithAnd()
+    {
+        /* $contact1 = */ $this->_addContact();
+        /* $contact2 = */ $this->_addContact('aaabbb');
+
+        $filter = array(
+            array('field' => 'query','operator' => 'contains', 'value' => 'aaabbb PHPUNIT')
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount']);
+    }
+
+    /**
      * @see 0011704: PHP 7 can't decode empty JSON-strings
      */
     public function testEmptyPagingParamJsonDecode()

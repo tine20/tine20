@@ -448,7 +448,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 ));
                 
                 if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
-                    $filter->addFilter($filter->createFilter(array(
+                    $filter->addFilterGroup($filter->createFilter(array(
                         'field'     => 'query',
                         'operator'  => 'contains',
                         'value'     => $searchProperties['{http://calendarserver.org/ns/}search-token']
@@ -475,7 +475,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 $filter = $this->_getContactFilterForUserContact();
                 
                 if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
-                    $filter->addFilter($filter->createFilter(array(
+                    $filter->addFilterGroup($filter->createFilter(array(
                         'field'     => 'query',
                         'operator'  => 'contains',
                         'value'     => $searchProperties['{http://calendarserver.org/ns/}search-token']
@@ -483,7 +483,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 }
                 
                 if (!empty($searchProperties['{http://sabredav.org/ns}email-address'])) {
-                    $filter->addFilter($filter->createFilter(array(
+                    $filter->addFilterGroup($filter->createFilter(array(
                         'field'     => 'email_query',
                         'operator'  => 'contains',
                         'value'     => $searchProperties['{http://sabredav.org/ns}email-address']
@@ -491,7 +491,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 }
                 
                 if (!empty($searchProperties['{DAV:}displayname'])) {
-                    $filter->addFilter($filter->createFilter(array(
+                    $filter->addFilterGroup($filter->createFilter(array(
                         'field'     => 'query',
                         'operator'  => 'contains',
                         'value'     => $searchProperties['{DAV:}displayname']
@@ -592,7 +592,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 __METHOD__ . '::' . __LINE__ . ' Converting grants to principals for ' . count($containers) . ' containers.');
         
         $result = array();
-        
+
+        /** @var Tinebase_Model_Container $container */
         foreach ($containers as $container) {
             $cacheId = Tinebase_Helper::convertCacheId('_containerGrantsToPrincipals' . $container->getId() . $container->seq);
             
@@ -614,8 +615,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                             
                         case 'user':
                             // skip if grant belongs to the owner of the calendar
-                            if ($contact->account_id == $grant->account_id) {
-                                continue;
+                            if ($container->owner_id == $grant->account_id) {
+                                continue 2;
                             }
                             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                             if ($user->contact_id) {

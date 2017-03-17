@@ -35,6 +35,7 @@ class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'creation_time'  => array('filter' => 'Tinebase_Model_Filter_Date'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('note'))),
+        'note'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'record_id'      => array('filter' => 'Tinebase_Model_Filter_Text'),
         'record_model'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'record_backend' => array('filter' => 'Tinebase_Model_Filter_Text'),

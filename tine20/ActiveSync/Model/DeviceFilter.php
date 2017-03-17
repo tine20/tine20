@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -40,5 +40,7 @@ class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('deviceid', 'devicetype', 'friendlyname'))),
         'deviceid'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'owner_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'devicetype'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'friendlyname'         => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
