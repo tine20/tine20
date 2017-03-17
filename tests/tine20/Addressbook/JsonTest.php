@@ -1769,7 +1769,7 @@ Steuernummer 33/111/32212";
     /**
      * @see 0011584: allow to set group member roles
      */
-    public function testCeateListWithMemberAndRole($listRoleName = 'my test role')
+    public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
         $contact = $this->_addContact();
         $listRole = $this->_uit->saveListRole(array(
@@ -1797,12 +1797,26 @@ Steuernummer 33/111/32212";
         return $list;
     }
 
+    public function testSearchListsByMember()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        $filter = array(array(
+            'field'    => 'contact',
+            'operator' => 'equals',
+            'value'    => $list['members'][0],
+        ));
+
+        $result = $this->_uit->searchLists($filter, array());
+        self::assertEquals(1, $result['totalcount']);
+        self::assertEquals('my test list', $result['results'][0]['name']);
+    }
+
     /**
      * @see 0011584: allow to set group member roles
      */
     public function testRemoveListMemberRoles()
     {
-        $list = $this->testCeateListWithMemberAndRole();
+        $list = $this->testCreateListWithMemberAndRole();
 
         $list['memberroles'] = array();
         $updatedList = $this->_uit->saveList($list);
@@ -1822,7 +1836,7 @@ Steuernummer 33/111/32212";
      */
     public function testSearchContactByListRole()
     {
-        $list = $this->testCeateListWithMemberAndRole();
+        $list = $this->testCreateListWithMemberAndRole();
 
         $filter = array(
             array('field' => 'list_role_id','operator' => 'in', 'value' => array($list['memberroles'][0]['list_role_id']['id']))

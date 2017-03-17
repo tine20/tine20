@@ -255,7 +255,7 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
     return [
         {label: i18n._('Quick search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
-        {filtertype: 'addressbook.listMember', app: app},
+        {filtertype: 'addressbook.listMember', app: app, field: 'contact'},
         {label: app.i18n._('Name'),                                               field: 'name' },
         {label: app.i18n._('Description'),                                                field: 'description'},
         {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
