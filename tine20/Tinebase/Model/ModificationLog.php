@@ -67,6 +67,7 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
         'old_value'            => array('allowEmpty' => true),
         'new_value'            => array('allowEmpty' => true),
         'seq'                  => array('allowEmpty' => true),
+        'client'               => array('allowEmpty' => true)
     );
     
     /**

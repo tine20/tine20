@@ -79,7 +79,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'FirstTestAttribute',
                 'old_value' => 'Hamburg',
-                'new_value' => 'Bremen'
+                'new_value' => 'Bremen',
+                'client' => 'unittest'
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -90,7 +91,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'FirstTestAttribute',
                 'old_value' => 'Bremen',
-                'new_value' => 'Frankfurt'
+                'new_value' => 'Frankfurt',
+                'client' => 'unittest'
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -101,7 +103,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'FirstTestAttribute',
                 'old_value' => 'Frankfurt',
-                'new_value' => 'Stuttgart'
+                'new_value' => 'Stuttgart',
+                'client' => 'unittest'
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -112,7 +115,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'SecondTestAttribute',
                 'old_value' => 'Deutschland',
-                'new_value' => 'Östereich'
+                'new_value' => 'Östereich',
+                'client' => 'unittest'
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -123,7 +127,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'SecondTestAttribute',
                 'old_value' => 'Östereich',
-                'new_value' => 'Schweitz'
+                'new_value' => 'Schweitz',
+                'client' => 'unittest'
             ),
             array(
                 'application_id' => $tinebaseApp->getId(),
@@ -134,12 +139,11 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
                 'modification_account' => 7,
                 'modified_attribute' => 'SecondTestAttribute',
                 'old_value' => 'Schweitz',
-                'new_value' => 'Italien'
+                'new_value' => 'Italien',
+                'client' => 'unittest'
             )), true, false);
 
-
         foreach ($this->_logEntries as $logEntry) {
-            /*$id = */
             $this->_modLogClass->setModification($logEntry);
             $this->_persistantLogEntries->addRecord($logEntry/*$this->_modLogClass->getModification($id)*/);
         }
@@ -279,10 +283,10 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         Addressbook_Controller_Contact::getInstance()->delete($contact->getId());
 
         $filter = new Tinebase_Model_ModificationLogFilter(array(
-            array('field' => 'record_type', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
-            array('field' => 'record_id', 'operator' => 'equals', 'value' => $contact->getId()),
-            array('field' => 'modification_time', 'operator' => 'within', 'value' => 'weekThis'),
-            array('field' => 'change_type', 'operator' => 'not', 'value' => Tinebase_Timemachine_ModificationLog::CREATED)
+            array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
+            array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
+            array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
+            array('field' => 'change_type',         'operator' => 'not',    'value' => Tinebase_Timemachine_ModificationLog::CREATED)
         ));
 
         $result = $this->_modLogClass->undo($filter, true);
@@ -333,7 +337,6 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         )));
 
         $task->due = Tinebase_DateTime::now();
-        /*$updatedTask = */
         Tasks_Controller_Task::getInstance()->update($task);
 
         $task->seq = 1;

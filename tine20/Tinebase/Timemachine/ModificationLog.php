@@ -828,6 +828,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $currentAccountId = $_updateMetaData['last_modified_by'];
             $currentTime      = $_updateMetaData['last_modified_time'];
         }
+
+        $client = Tinebase_Core::get('serverclassname');
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $client .= ' - ' . $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $client .= ' - no http user agent present';
+        }
         
         list($appName/*, $i, $modelName*/) = explode('_', $_model);
         $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
@@ -838,6 +845,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             'modification_time'    => $currentTime,
             'modification_account' => $currentAccountId,
             'seq'                  => (isset($_updateMetaData['seq'])) ? $_updateMetaData['seq'] : 0,
+            'client'               => $client
         ), TRUE);
         
         return $commonModLogEntry;
