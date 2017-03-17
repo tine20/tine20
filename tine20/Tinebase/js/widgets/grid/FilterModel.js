@@ -93,6 +93,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * used by combo valueType
      */
     valueField: null,
+
+    /**
+     * @cfg filterValueWidth
+     * @type Integer
+     */
     filterValueWidth: 200,
     
     /**

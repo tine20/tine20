@@ -914,6 +914,10 @@
           "path": "js/"
         },
         {
+          "text": "layoutFixes.js",
+          "path": "js/touch/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }

@@ -50,7 +50,7 @@ Tine.Addressbook.ListMemberFilterModel = Ext.extend(Tine.widgets.grid.FilterMode
             recordClass: Tine.Addressbook.Model.List,
             //app: this.app,
             filter: filter,
-            width: 200,
+            width: this.filterValueWidth,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el

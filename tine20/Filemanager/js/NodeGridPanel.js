@@ -443,6 +443,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
                     columns: 8,
                     defaults: {minWidth: 60},
                     items: [
@@ -502,7 +504,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                  ]
                 }, this.getActionToolbarItems()]
             });
-            
+
+            this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }

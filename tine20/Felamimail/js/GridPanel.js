@@ -422,6 +422,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
                     columns: 8,
                     items: [
                         Ext.apply(new Ext.SplitButton(this.action_write), {
@@ -468,7 +470,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     ]
                 }, this.getActionToolbarItems()]
             });
-            
+
+            this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }

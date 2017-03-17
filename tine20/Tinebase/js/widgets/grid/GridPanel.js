@@ -1522,6 +1522,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 canonicalName: [this.recordClass.getMeta('modelName'), 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
+                    enableOverflow: true,
                     plugins: [{
                         ptype: 'ux.itemregistry',
                         key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ActionToolbar-leftbtngrp'
@@ -1530,12 +1533,33 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
             });
 
+            this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             } 
         }
 
         return this.actionToolbar;
+    },
+
+    onActionToolbarResize: function(tb) {
+        var actionGrp = tb.items.get(0),
+            availableWidth = tb.getBox()['width'] - 5,
+            maxNeededWidth = Ext.layout.ToolbarLayout.prototype.triggerWidth + 10;
+
+        tb.items.each(function(c, idx) {
+            if (idx > 0 && !c.isFill) {
+                availableWidth -= c.getPositionEl().dom.parentNode.offsetWidth;
+            }
+        }, this);
+
+        actionGrp.items.each(function(c) {
+            maxNeededWidth += Ext.layout.ToolbarLayout.prototype.getItemWidth(c);
+        });
+
+        actionGrp.setWidth(Math.min(availableWidth, maxNeededWidth));
+
     },
 
     /**

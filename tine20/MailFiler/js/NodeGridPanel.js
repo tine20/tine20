@@ -653,6 +653,8 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
                     columns: 8,
                     defaults: {minWidth: 60},
                     items: [
@@ -704,12 +706,15 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                  ]
                 }, this.getActionToolbarItems()]
             });
-            
+
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
         }
-        
+
+        this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
         return this.actionToolbar;
     },
     
