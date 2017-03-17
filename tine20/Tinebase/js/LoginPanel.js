@@ -493,6 +493,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
                         window.document.title = this.originalTitle;
+                        response.responseData = responseData;
                         this.onLogin.call(this.scope, response);
                     } else {
                         var modSsl = Tine.Tinebase.registry.get('modSsl');

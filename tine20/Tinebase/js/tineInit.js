@@ -239,6 +239,10 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
+                    if (Ext.isWebApp) {
+                        Tine.Tinebase.registry.set('sessionId', response.responseData.sessionId);
+                        Tine.Tinebase.registry.set('usercredentialcache', Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('usercredentialcache'));
+                    }
                     Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
                     Tine.Tinebase.tineInit.checkClientVersion();
@@ -656,6 +660,12 @@ Tine.Tinebase.tineInit = {
         Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
         Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
+
+        if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
+            // restore session cookie
+            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('TINE20SESSID', Tine.Tinebase.registry.get('sessionId'));
+            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('usercredentialcache', Tine.Tinebase.registry.get('usercredentialcache'));
+        }
 
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
