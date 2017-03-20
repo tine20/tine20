@@ -547,7 +547,19 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
 
         this.onFilterSelect(persistentFilter);
     },
-    
+
+    /**
+     * select default favorite
+     *
+     * NOTE: a lot modules/models don't have a default favorite preference
+     */
+    selectDefault: function() {
+        var appName = this.recordClass.getMeta('appName'),
+            modelName = this.recordClass.getMeta('modelName'),
+            defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(appName, modelName);
+
+        this.selectFilter(defaultFavorite);
+    },
     
     getNewEmptyRecord: function() {
         var model = this.filterModel,
