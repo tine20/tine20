@@ -1298,6 +1298,21 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 $transactionManager->rollBack();
 
+                // notify configured email addresses about replication failure
+                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
+                if ($config && is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
+                        count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
+
+                    $recipients = array();
+                    foreach($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
+                        $recipients[] = new Addressbook_Model_Contact(array('email' => $recipient), true);
+                    }
+
+                    $plain = $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
+
+                    Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, 'replication client error', $plain);
+                }
+
                 // must not happen, continuing pointless!
                 return false;
             }
@@ -1306,5 +1321,27 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $this->_externalInstanceId = null;
 
         return true;
+    }
+
+    /**
+     * @param int $count
+     */
+    public function increaseReplicationMasterId($count = 1)
+    {
+        $applicationController = Tinebase_Application::getInstance();
+        $tinebase = $applicationController->getApplicationByName('Tinebase');
+
+        $state = $tinebase->state;
+        if (!is_array($state)) {
+            $state = array();
+        }
+        if (!isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
+            $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = 0;
+        }
+
+        $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] += intval($count);
+        $tinebase->state = $state;
+
+        $applicationController->updateApplication($tinebase);
     }
 }

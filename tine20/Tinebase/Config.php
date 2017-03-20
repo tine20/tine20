@@ -471,6 +471,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MASTER_PASSWORD = 'masterPassword';
 
     /**
+     * @var string
+     */
+    const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -652,14 +657,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'content'               => array(
-                self::MASTER_URL            => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                self::MASTER_URL                => array(
+                    'type'                          => Tinebase_Config::TYPE_STRING,
                 ),
-                self::MASTER_USERNAME       => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                self::MASTER_USERNAME           => array(
+                    'type'                          => Tinebase_Config::TYPE_STRING,
                 ),
-                self::MASTER_PASSWORD       => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                self::MASTER_PASSWORD           => array(
+                    'type'                          => Tinebase_Config::TYPE_STRING,
+                ),
+                self::ERROR_NOTIFICATION_LIST   => array(
+                    'type'                          => Tinebase_Config::TYPE_ARRAY,
                 )
             )
         ),
