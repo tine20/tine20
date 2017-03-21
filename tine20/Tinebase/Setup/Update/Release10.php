@@ -102,6 +102,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         if (!$this->_backend->columnExists('instance_id', 'timemachine_modlog')) {
 
             $this->_backend->renameTable('timemachine_modlog', 'timemachine_modlog_bkp');
+            $db = Tinebase_Core::getDb();
+            if ($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey_bkp');
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq_bkp');
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key" RENAME TO "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key_bkp"');
+            }
 
             $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
                 <name>timemachine_modlog</name>
@@ -245,21 +251,27 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </declaration>
             </table>'));
 
+
+
             $appIds[] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
             if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
                 $appIds[] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
             }
 
-            $db = Tinebase_Core::getDb();
-            $select = $db->select()->from('timemachine_modlog_bkp')->order('modification_time ASC')
-                ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' IN ?', $appIds))
-                ->where($db->quoteInto($db->quoteIdentifier('record_type') . ' IN ?', array('Addressbook_Model_Contact', 'Calendar_Model_Resource')))
-                ->where($db->quoteInto($db->quoteIdentifier('modified_attribute') . ' IN ?', array('email', 'email_home')));
+            $select = $db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog_bkp')->order('modification_time ASC')
+                ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' IN (?)', $appIds))
+                ->where($db->quoteInto($db->quoteIdentifier('record_type') . ' IN (?)', array('Addressbook_Model_Contact', 'Calendar_Model_Resource')))
+                ->where($db->quoteInto($db->quoteIdentifier('modified_attribute') . ' IN (?)', array('email', 'email_home')));
 
             $stmt = $db->query($select);
             $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-            $db->insert('timemachine_modlog', $resultArray);
+            if (count($resultArray) > 0) {
+                foreach($resultArray as $row) {
+                    $row['client'] = 'update script';
+                    $db->insert(SQL_TABLE_PREFIX . 'timemachine_modlog', $row);
+                }
+            }
 
             $this->setTableVersion('timemachine_modlog', '5');
         }
