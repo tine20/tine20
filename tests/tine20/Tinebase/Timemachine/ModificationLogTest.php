@@ -351,12 +351,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
     public function testGetReplicationModificationsByInstanceSeq()
     {
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
-        if ($modifications->count() > 0) {
-            $instance_seq = $modifications->getLastRecord()->instance_seq;
-        } else {
-            $instance_seq = -1;
-        }
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         /** @var Tinebase_Acl_Roles $roleController */
         $roleController = Tinebase_Core::getApplicationInstance('Tinebase_Model_Role');
@@ -432,12 +427,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
     public function testGroupReplication()
     {
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
-        if ($modifications->count() > 0) {
-            $instance_seq = $modifications->getLastRecord()->instance_seq;
-        } else {
-            $instance_seq = -1;
-        }
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $groupController = Tinebase_Group::getInstance();
 

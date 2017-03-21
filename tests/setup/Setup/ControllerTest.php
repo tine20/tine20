@@ -279,7 +279,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $options = array(
             'backupDir' => dirname(__DIR__) . '/files/2017-02-27-11-42-25',
             'db' => 1,
-            'files' => 1,
         );
         $result = $this->_uit->getInstance()->installFromDump($options);
         $this->assertTrue($result);
@@ -323,6 +322,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         $this->_uit->uninstallApplications($installedApplications->name);
+        Tinebase_Core::unsetTinebaseId();
+        Tinebase_Group::unsetInstance();
     }
     
     /**
@@ -336,7 +337,10 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         if (! $this->_uit) {
             throw new Setup_Exception('could not run test, Setup_Controller init failed');
         }
-        
+
+        Tinebase_Core::unsetTinebaseId();
+        Tinebase_Group::unsetInstance();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
         $installableApplications = $this->_uit->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
         $this->_uit->installApplications($installableApplications, $_options);

@@ -1443,6 +1443,17 @@ class Setup_Controller
 
         $this->_replaceTinebaseidInDump($mysqlBackupFile);
         $this->restore($options);
+
+        // set the replication master id
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $state = $tinebase->state;
+        if (!is_array($state)) {
+            $state = array();
+        }
+        $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $tinebase->state = $state;
+        Tinebase_Application::getInstance()->updateApplication($tinebase);
+
         $this->updateApplications();
 
         return true;

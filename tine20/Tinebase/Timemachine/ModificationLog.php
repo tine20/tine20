@@ -339,6 +339,26 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         return $this->_backend->search($filter, $paging);
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxInstanceSeq()
+    {
+        $db = $this->_table->getAdapter();
+        $select = $db->select()
+            ->from($this->_tablename, new Zend_Db_Expr('MAX(' . $db->quoteIdentifier('instance_seq') . ')'))
+            ->where($db->quoteInto($db->quoteIdentifier('instance_id') . ' = ?', Tinebase_Core::getTinebaseId()));
+
+        $stmt = $db->query($select);
+        $resultArray = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+
+        if (count($resultArray) === 0) {
+            return 0;
+        }
+
+        return intval($resultArray[0][0]);
+    }
     
     /**
      * Computes effective difference from a set of modifications

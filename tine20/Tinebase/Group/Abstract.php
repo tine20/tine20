@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        add search count function
@@ -91,7 +91,7 @@ abstract class Tinebase_Group_Abstract
      * create a new group
      *
      * @param string $_groupName
-     * @return unknown
+     * @return Tinebase_Model_Group
      */
     abstract public function addGroup(Tinebase_Model_Group $_group);
     
