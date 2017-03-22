@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
@@ -13,13 +13,13 @@ Ext.ns('Tine.Filemanager');
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.NodeTreePanel
  * @extends Tine.widgets.container.TreePanel
- * 
+ *
  * @author Martin Jatho <m.jatho@metaways.de>
  */
 
 Tine.Filemanager.NodeTreePanel = function(config) {
     Ext.apply(this, config);
-    
+
     this.addEvents(
         /**
          * @event containeradd
@@ -40,39 +40,63 @@ Tine.Filemanager.NodeTreePanel = function(config) {
          */
         'containerrename'
     );
-    
+
     Tine.Filemanager.NodeTreePanel.superclass.constructor.call(this);
 };
 
 Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
-    
+
     filterMode : 'filterToolbar',
-    
+
     recordClass : Tine.Filemanager.Model.Node,
-    
-    allowMultiSelection : false, 
-    
+
+    allowMultiSelection : false,
+
     defaultContainerPath: '/personal',
-    
+
     ddGroup: 'fileDDGroup',
-    
+
     enableDD: true,
-       
+
     initComponent: function() {
-        
-        this.on('containeradd', this.onFolderAdd, this);
-        this.on('containerrename', this.onFolderRename, this);
-        this.on('containerdelete', this.onFolderDelete, this);
-        this.on('nodedragover', this.onNodeDragOver, this);
+        if (!this.readOnly) {
+            this.on('containeradd', this.onFolderAdd, this);
+            this.on('containerrename', this.onFolderRename, this);
+            this.on('containerdelete', this.onFolderDelete, this);
+            this.on('nodedragover', this.onNodeDragOver, this);
+        }
 
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
-        
-        Tine.Tinebase.uploadManager.on('update', this.onUpdate);
-        
+
+        if (!this.readOnly) {
+            Tine.Tinebase.uploadManager.on('update', this.onUpdate);
+        }
+
+        if (this.readOnly) {
+            this.hasContextMenu = false;
+            this.enableDD = false;
+        }
+
         Tine.Filemanager.NodeTreePanel.superclass.initComponent.call(this);
 
+        this.plugins = this.plugins || [];
+
+        if (!this.readOnly) {
+            this.plugins.push({
+                ptype : 'ux.browseplugin',
+                enableFileDialog: false,
+                multiple : true,
+                handler : this.dropIntoTree
+            });
+        }
+    },
+
+    /**
+     * Setups drop zone
+     */
+    initDrop: function() {
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'fileDDGroup',
@@ -84,7 +108,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             onNodeOver : function(n, dd, e, data) {
                 var preventDrop = false,
                     selectionContainsFiles = false;
-                
+
                 if (dd.dragData.selections) {
                     for (var i=0; i<dd.dragData.selections.length; i++) {
                         if (n.node.id == dd.dragData.selections[i].id) {
@@ -97,36 +121,36 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 }
                 else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
                     preventDrop = true;
-                } 
-                
+                }
+
                 if(selectionContainsFiles && !n.node.attributes.account_grants) {
                     preventDrop = true;
                 }
-                
+
                 if(n.node.isAncestor(dd.dragData.node)) {
                     preventDrop = true;
                 }
-                
-                return n.node.attributes.nodeRecord.isCreateFolderAllowed() 
+
+                return n.node.attributes.nodeRecord.isCreateFolderAllowed()
                     && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                     && !preventDrop ? 'x-dd-drop-ok' : false;
             },
-            
+
             /**
              * this is called on drop
-             * 
+             *
              * @TODO: combine with repeated code from onNodeOver. DRY!
              */
             isValidDropPoint: function(n, op, dd, e){
                 var preventDrop = false,
                     selectionContainsFiles = false;
-                    
+
                 if (dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if (n.node.id == dd.dragData.selections[i].id) {
                             preventDrop = true;
                         }
-    
+
                         if(dd.dragData.selections[i].data.type == 'file') {
                             selectionContainsFiles = true;
                         }
@@ -134,21 +158,21 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 }
                 else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
                     preventDrop = true;
-                } 
-                
+                }
+
                 if(selectionContainsFiles && !n.node.attributes.account_grants) {
                     preventDrop = true;
                 }
-                
+
                 if(n.node.isAncestor(dd.dragData.node)) {
                     preventDrop = true;
                 }
-                
+
                 return n.node.attributes.nodeRecord.isCreateFolderAllowed()
                         && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                         && !preventDrop;
             },
-            
+
             completeDrop: function(de) {
                 var ns = de.dropNode, p = de.point, t = de.target;
                 t.ui.endDrop();
@@ -161,7 +185,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             scroll: this.ddScroll,
             /**
              * tree node dragzone modified, dragged node doesn't get selected
-             * 
+             *
              * @param e
              */
             onInitDrag: function(e) {
@@ -172,7 +196,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 this.tree.fireEvent("startdrag", this.tree, data.node, e);
             }
         };
-        
+
         this.plugins = this.plugins || [];
         this.plugins.push({
             ptype : 'ux.browseplugin',
@@ -201,7 +225,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             }]
         };
     },
-    
+
     /**
      * Tine.widgets.tree.FilterPlugin
      * returns a filter plugin to be used in a grid
@@ -216,7 +240,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 nodeAttributeField: 'path'
             });
         }
-        
+
         return this.filterPlugin;
     },
 
@@ -230,23 +254,23 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
 
     /**
      * returns params for async request
-     * 
+     *
      * @param {Ext.tree.TreeNode} node
      * @return {Object}
      */
     onBeforeLoad: function(node) {
-        
+
         var path = node.attributes.path;
         var type = Tine.Tinebase.container.path2type(path);
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
         var loginName = Tine.Tinebase.registry.get('currentAccount').accountLoginName;
-        
+
         if (type === 'personal' && owner != loginName) {
             type = 'otherUsers';
         }
-        
+
         var newPath = path;
-        
+
         if (type === 'personal' && owner) {
             var pathParts = path.toString().split('/');
             newPath = '/' + pathParts[1] + '/' + loginName;
@@ -254,7 +278,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 newPath += '/' + pathParts[3];
             }
         }
-        
+
         var params = {
             method: 'Filemanager.searchNodes',
             application: this.app.appName,
@@ -265,22 +289,22 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                      ],
             paging: {dir: 'ASC', limit: 50, sort: 'name', start: 0}
         };
-        
+
         return params;
     },
-    
+
     onBeforeCreateNode: function(attr) {
         Tine.Filemanager.NodeTreePanel.superclass.onBeforeCreateNode.apply(this, arguments);
-        
+
         attr.leaf = false;
-        
+
         if(attr.name && typeof attr.name == 'object') {
             Ext.apply(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
                 qtip: Tine.Tinebase.common.doubleEncode(attr.name.name)
             });
         }
-        
+
         // copy 'real' data to a node record NOTE: not a full record as we have no record reader here
         var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
         attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
@@ -288,11 +312,11 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
 
     /**
      * initiates tree context menues
-     * 
+     *
      * @private
      */
     initContextMenu: function() {
-        
+
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['add', 'reload', 'delete', 'rename', 'properties'],
@@ -300,7 +324,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
-            
+
         this.contextMenuRootFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['add', 'reload'],
@@ -308,7 +332,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
-        
+
         this.contextMenuOtherUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['reload'],
@@ -316,7 +340,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
-        
+
         this.contextMenuContainerFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['add', 'reload', 'delete', 'rename', 'grants', 'properties'],
@@ -324,7 +348,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
-        
+
         this.contextMenuReloadFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['reload', 'properties'],
@@ -333,7 +357,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             backendModel: 'Node'
         });
     },
-    
+
     /**
      * @private
      * - select default path
@@ -341,34 +365,34 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
     afterRender: function() {
         Tine.Filemanager.NodeTreePanel.superclass.afterRender.call(this);
     },
-    
+
     /**
      * show context menu
-     * 
+     *
      * @param {Ext.tree.TreeNode} node
      * @param {Ext.EventObject} event
      */
     onContextMenu: function(node, event) {
-        
+
         var currentAccount = Tine.Tinebase.registry.get('currentAccount');
-        
+
         this.ctxNode = node;
         var container = node.attributes.nodeRecord.data,
             path = container.path;
-        
+
         if (! Ext.isString(path) || node.isRoot) {
             return;
         }
-        
+
         Tine.log.debug('Tine.Filemanager.NodeTreePanel::onContextMenu - context node:');
         Tine.log.debug(node);
-        
+
         if (node.id == 'otherUsers' || (node.parentNode && node.parentNode.id == 'otherUsers')) {
             this.contextMenuOtherUserFolder.showAt(event.getXY());
         } else if (node.id == 'personal' || node.id == 'shared') {
             this.contextMenuRootFolder.showAt(event.getXY());
-        } else if (path.match(/^\/shared/) 
-                && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
+        } else if (path.match(/^\/shared/)
+                && (Tine.Tinebase.common.hasRight('admin', this.app.appName)
                     || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))
                     || container.account_grants && container.account_grants.adminGrant
                 )
@@ -390,57 +414,54 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             this.contextMenuUserFolder.showAt(event.getXY());
         }
     },
-    
+
     /**
      * updates grid actions
      * @todo move to grid / actionUpdater
-     * 
+     *
      * @param {} sm     SelectionModel
      * @param {Ext.tree.TreeNode} node
      */
     updateActions: function(sm, node) {
         var grid = this.app.getMainScreen().getCenterPanel();
-        
+
         grid.action_deleteRecord.disable();
         grid.action_upload.disable();
-        
-        if(!!node && !!node.isRoot) {
+
+        if (!!node && !!node.isRoot) {
             grid.action_goUpFolder.disable();
-        }
-        else {
+        } else {
             grid.action_goUpFolder.enable();
         }
-                
-        if(node && node.attributes && node.attributes.nodeRecord.isCreateFolderAllowed()) {
+
+        if (node && node.attributes && node.attributes.nodeRecord.isCreateFolderAllowed()) {
             grid.action_createFolder.enable();
-        }
-        else {
+        } else {
             grid.action_createFolder.disable();
         }
-        
-        if(node && node.attributes && node.attributes.nodeRecord.isDropFilesAllowed()) {
+
+        if (node && node.attributes && node.attributes.nodeRecord.isDropFilesAllowed()) {
             grid.action_upload.enable();
-        }
-        else {
+        } else {
             grid.action_upload.disable();
         }
     },
-    
+
     /**
      * called when tree selection changes
-     * 
+     *
      * @param {} sm     SelectionModel
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
         this.updateActions(sm, node);
         var grid = this.app.getMainScreen().getCenterPanel();
-        
+
         grid.currentFolderNode = node;
         Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, sm, node);
-    
+
     },
-    
+
     /**
      * convert filesystem path to treePath
      *
@@ -465,12 +486,12 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
 
         return treePath;
     },
-    
+
     /**
      * Expands a specified path in this TreePanel. A path can be retrieved from a node with {@link Ext.data.Node#getPath}
-     * 
+     *
      * NOTE: path does not consist of id's starting from the second depth
-     * 
+     *
      * @param {String} path
      * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
      * @param {Function} callback (optional) The callback to call when the expand is complete. The callback will be called with
@@ -488,7 +509,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 }
                 return;
             }
-            
+
             if (index > 2) {
                 var c = curNode.findChild('path', curPath + '/' + keys[index]);
             } else {
@@ -506,45 +527,45 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         };
         curNode.expand(false, false, f);
     },
-    
+
     /**
      * files/folder got dropped on node
-     * 
+     *
      * @param {Object} dropEvent
      * @private
      */
     onBeforeNodeDrop: function(dropEvent) {
         var nodes, target = dropEvent.target;
-        
+
         if(dropEvent.data.selections) {
             nodes = dropEvent.data.grid.selModel.selections.items;
-        }    
-            
+        }
+
         if(!nodes && dropEvent.data.node) {
             nodes = [dropEvent.data.node];
         }
-        
+
         Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !dropEvent.rawEvent.ctrlKey);
-        
+
         dropEvent.dropStatus = true;
         return true;
     },
-    
+
     /**
      * folder delete handler
      */
     onFolderDelete: function(node) {
         var grid = this.app.getMainScreen().getCenterPanel();
-        if(grid.currentFolderNode.isAncestor && typeof grid.currentFolderNode.isAncestor == 'function' 
+        if(grid.currentFolderNode.isAncestor && typeof grid.currentFolderNode.isAncestor == 'function'
             && grid.currentFolderNode.isAncestor(node)) {
             node.parentNode.select();
         }
         grid.getStore().reload();
     },
-    
+
     /**
      * clone a tree node / create a node from grid node
-     * 
+     *
      * @param node
      * @returns {Ext.tree.AsyncTreeNode}
      */
@@ -552,14 +573,14 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         var targetPath = target.attributes.path,
             newPath = '',
             copy;
-        
+
         if(node.attributes) {
             var nodeName = node.attributes.name;
             if(typeof nodeName == 'object') {
                 nodeName = nodeName.name;
             }
             newPath = targetPath + '/' + nodeName;
-            
+
             copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
                 , nodeRecord: node.attributes.nodeRecord, account_grants: node.attributes.account_grants});
         }
@@ -568,26 +589,26 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             if(typeof nodeName == 'object') {
                 nodeName = nodeName.name;
             }
-            
+
             var nodeData = Ext.copyTo({}, node.data, Tine.Filemanager.Model.Node.getFieldNames());
             var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
-             
+
             newPath = targetPath + '/' + nodeName;
             copy = new Ext.tree.AsyncTreeNode({text: nodeName, path: newPath, name: node.data.name
                 , nodeRecord: newNodeRecord, account_grants: node.data.account_grants});
         }
-                
+
         copy.attributes.nodeRecord.beginEdit();
         copy.attributes.nodeRecord.set('path', newPath);
         copy.attributes.nodeRecord.endEdit();
-        
+
         copy.parentNode = target;
         return copy;
     },
-    
+
     /**
      * create Tree node by given node data
-     * 
+     *
      * @param nodeData
      * @param target
      * @returns {Ext.tree.AsyncTreeNode}
@@ -597,9 +618,9 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         if(typeof nodeName == 'object') {
             nodeName = nodeName.name;
         }
-        
+
         var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
-        
+
         var newNode = new Ext.tree.AsyncTreeNode({
             text: nodeName,
             path: nodeData.path,
@@ -608,31 +629,31 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             account_grants: nodeData.account_grants,
             id: nodeData.id
         })
-        
+
         newNode.attributes.nodeRecord.beginEdit();
         newNode.attributes.nodeRecord.set('path', nodeData.path);
         newNode.attributes.nodeRecord.endEdit();
-        
+
         newNode.parentNode = target;
         return newNode;
-        
+
     },
-    
+
     /**
      * TODO: move to Upload class or elsewhere??
      * updating fileRecord after creating node
-     * 
+     *
      * @param response
      * @param request
      * @param upload
      */
     onNodeCreated: function(response, request, upload) {
-       
+
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
         grid = app.getMainScreen().getCenterPanel();
-        
+
         var record = Ext.util.JSON.decode(response.responseText);
-        
+
         var fileRecord = upload.fileRecord;
         fileRecord.beginEdit();
         fileRecord.set('contenttype', record.contenttype);
@@ -646,26 +667,30 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
-        
+
         upload.fireEvent('update', 'uploadfinished', upload, fileRecord);
-        
+
         grid.pagingToolbar.refresh.enable();
-        
+
     },
-    
+
     /**
      * copies uploaded temporary file to target location
-     * 
+     *
      * @param upload    {Ext.ux.file.Upload}
-     * @param file  {Ext.ux.file.Upload.file} 
+     * @param file  {Ext.ux.file.Upload.file}
      */
     onUploadComplete: function(upload, file) {
+        if (this.readOnly) {
+            return;
+        }
+
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
-        
+
      // check if we are responsible for the upload
         if (upload.fmDirector != treePanel) return;
-        
+
         // $filename, $type, $tempFileId, $forceOverwrite
         Ext.Ajax.request({
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
@@ -676,15 +701,15 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 tempFileId: file.get('id'),
                 forceOverwrite: true
             },
-            success: treePanel.onNodeCreated.createDelegate(this, [upload], true), 
+            success: treePanel.onNodeCreated.createDelegate(this, [upload], true),
             failure: treePanel.onNodeCreated.createDelegate(this, [upload], true)
         });
-        
+
     },
-    
+
     /**
      * on upload failure
-     * 
+     *
      * @private
      */
     onUploadFail: function () {
@@ -693,32 +718,32 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator.')
         ).setIcon(Ext.MessageBox.ERROR);
     },
-    
+
     /**
      * add folder handler
      */
     onFolderAdd: function(nodeData) {
-        
+
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel();
-        
+
         grid.getStore().reload();
         if(nodeData.error) {
             Tine.log.debug(nodeData);
         }
     },
-    
+
     /**
      * handles renaming of a tree node / aka folder
      */
     onFolderRename: function(nodeData, node, newName) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel();
-        
+
         if(nodeData[0]) {
             nodeData = nodeData[0];
-        };
-        
+        }
+
         node.attributes.nodeRecord.beginEdit();
         if (typeof node.attributes.name == 'object') {
             node.attributes.name.name = newName;
@@ -732,33 +757,33 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         node.attributes.nodeRecord.commit(false);
 
         grid.currenFolderNode = node;
-        
+
         Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);
-        
+
     },
-    
+
     /**
      * upload update handler
-     * 
+     *
      * @param change {String} kind of change
      * @param upload {Ext.ux.file.Upload} upload
      * @param fileRecord {file} fileRecord
-     * 
+     *
      */
     onUpdate: function(change, upload, fileRecord) {
-        
+
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
             treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
             rowsToUpdate = grid.getStore().query('name', fileRecord.get('name'));
-        
+
         if(change == 'uploadstart') {
             Tine.Tinebase.uploadManager.onUploadStart();
         }
         else if(change == 'uploadfailure') {
             treePanel.onUploadFail();
         }
-        
+
         if(rowsToUpdate.get(0)) {
             if(change == 'uploadcomplete') {
                 treePanel.onUploadComplete(upload, fileRecord);
@@ -769,68 +794,68 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             }
             rowsToUpdate.get(0).afterEdit();
             rowsToUpdate.get(0).commit(false);
-        }       
+        }
     },
-    
+
     /**
      * handels tree drop of object from outside the browser
-     * 
+     *
      * @param fileSelector
      * @param targetNodeId
      */
     dropIntoTree: function(fileSelector, event) {
-              
+
         var treePanel = fileSelector.component,
             app = treePanel.app,
             grid = app.getMainScreen().getCenterPanel(),
             targetNode,
             targetNodePath;
-            
-        
+
+
         var targetNodeId;
         var treeNodeAttribute = event.getTarget('div').attributes['ext:tree-node-id'];
         if(treeNodeAttribute) {
             targetNodeId = treeNodeAttribute.nodeValue;
             targetNode = treePanel.getNodeById(targetNodeId);
             targetNodePath = targetNode.attributes.path;
-            
-        };
-        
+
+        }
+
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('Putting files in this folder is not allowed!')
                 ).setIcon(Ext.MessageBox.ERROR);
-            
+
             return;
-        };
-      
+        }
+
         var files = fileSelector.getFileList(),
             filePathsArray = [],
             uploadKeyArray = [],
             addToGridStore = false;
-        
+
         Ext.each(files, function (file) {
-            
+
             var fileName = file.name || file.fileName,
                 filePath = targetNodePath + '/' + fileName;
-            
+
             var upload = new Ext.ux.file.Upload({
                 fmDirector: treePanel,
                 file: file,
                 fileSelector: fileSelector,
                 id: filePath
             });
-            
+
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-            
+
             filePathsArray.push(filePath);
             uploadKeyArray.push(uploadKey);
-            
+
             addToGridStore = grid.currentFolderNode.id === targetNodeId;
-            
+
         }, this);
-        
+
         var params = {
                 filenames: filePathsArray,
                 type: "file",

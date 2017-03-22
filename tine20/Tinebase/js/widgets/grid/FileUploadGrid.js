@@ -106,6 +106,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.readOnly = readOnly;
         this.action_add.setDisabled(readOnly);
         this.action_remove.setDisabled(readOnly);
+        this.action_add_from_filemanager.setDisabled(readOnly);
     },
 
     /**
@@ -116,7 +117,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         var dataSize;
         if (fileRecord.html5upload) {
-            dataSize = dataSize = Tine.Tinebase.registry.get('maxPostSize');
+            dataSize = Tine.Tinebase.registry.get('maxPostSize');
         }
         else {
             dataSize = Tine.Tinebase.registry.get('maxFileUploadSize');
@@ -186,8 +187,27 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initToolbarAndContextMenu: function () {
-        
+        var me = this;
+
         this.action_add = new Ext.Action(this.getAddAction());
+        this.action_add_from_filemanager = new Ext.Action({
+            text: String.format(i18n._('Add {0} from Filemanager'), this.i18nFileString),
+            iconCls: 'action_add',
+            scope: this,
+            handler: function () {
+                var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                    title: this.app.i18n._('Select a file'),
+                    singleSelect: true,
+                    constraint: 'file'
+                });
+
+                filePickerDialog.openWindow();
+
+                filePickerDialog.on('selected', function(node) {
+                    me.onFileSelectFromFilemanager.call(me, node);
+                });
+            }
+        });
 
         this.action_remove = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.i18nFileString),
@@ -215,6 +235,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.tbar = [
             this.action_add,
+            this.action_add_from_filemanager,
             this.action_remove
         ];
         
@@ -437,9 +458,32 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         }, this);
         
     },
+
+    /**
+     * Add one or more files from filemanager
+     *
+     * @param nodes
+     */
+    onFileSelectFromFilemanager: function (nodes) {
+        var me = this;
+
+        Ext.each(nodes, function(node) {
+            var record = new Tine.Filemanager.Model.Node(node);
+
+            if (me.store.find('name', record.get('name')) === -1) {
+                me.store.add(record);
+            } else {
+                Ext.MessageBox.show({
+                    title: i18n._('Failure'),
+                    msg: i18n._('This file is already attached to this record.'),
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            }
+        });
+    },
     
     onUploadComplete: function(upload, fileRecord) {
-    
         fileRecord.beginEdit();
         fileRecord.set('status', 'complete');
         fileRecord.set('progress', 100);

@@ -19,12 +19,58 @@ Ext.ns('Tine.Filemanager');
 Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
     layout: 'fit',
     border: false,
+    frame: false,
+
+    /**
+     * ok button action held here
+     */
     okAction: null,
 
-    node: null,
+    /**
+     * Dialog window
+     */
+    window: null,
 
+    /**
+     * Window title
+     */
+    title: null,
+
+    /**
+     * Hide panel header by default
+     */
+    header: false,
+
+    /**
+     * The validated and choosen node
+     */
+    nodes: null,
+
+    /**
+     * @todo: maybe remove
+     */
     windowNamePrefix: 'test',
 
+    /**
+     * Allow to select one or more node
+     */
+    singleSelect: true,
+
+    /**
+     * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
+     *
+     * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
+     *
+     * Valids constraints:
+     *  - file
+     *  - folder
+     *  - null (take all)
+     */
+    constraint: null,
+
+    /**
+     * Constructor.
+     */
     initComponent: function () {
         this.addEvents(
             /**
@@ -52,6 +98,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
         });
 
         this.bbar = [
+            '->',
             this.okAction
         ];
 
@@ -62,7 +109,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      * button handler
      */
     onOk: function () {
-        this.fireEvent('selected', this.node);
+        this.fireEvent('selected', this.nodes);
         this.window.close();
     },
 
@@ -72,11 +119,12 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      */
     getFilePicker: function () {
         var picker = new Tine.Filemanager.FilePicker({
-            constraint: 'file'
+            constraint: this.constraint,
+            singleSelect: this.singleSelect
         });
 
-        picker.on('nodeSelected', this.onNodeSelected.createDelegate(this));
-        picker.on('invalidNodeSelected', this.onInvalidNodeSelected.createDelegate(this));
+        picker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
+        picker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
 
         return picker;
     },
@@ -85,26 +133,39 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      * If a node was selected
      * @param node
      */
-    onNodeSelected: function (node) {
-        this.node = node;
+    onNodesSelected: function (nodes) {
+        this.nodes = nodes;
         this.okAction.setDisabled(false);
     },
 
     /**
      * If an invalid node was selected
      */
-    onInvalidNodeSelected: function () {
+    onInvalidNodesSelected: function () {
         this.okAction.setDisabled(true);
+    },
+
+    /**
+     * Creates a new pop up dialog/window (acc. configuration)
+     *
+     * @returns {null}
+     */
+    openWindow: function () {
+        this.window = Tine.WindowFactory.getWindow({
+            title: this.title,
+            closeAction: 'close',
+            modal: true,
+            width: 550,
+            height: 500,
+            layout: 'fit',
+            plain: true,
+            bodyStyle: 'padding:5px;',
+
+            items: [
+                this
+            ]
+        });
+
+        return this.window;
     }
 });
-
-Tine.Filemanager.FilePickerDialog.openWindow = function (config) {
-    return Tine.WindowFactory.getWindow({
-        width: 480,
-        height: 400,
-        modal: true,
-        name: Tine.Filemanager.FilePickerDialog.windowNamePrefix + Ext.id(),
-        contentPanelConstructor: 'Tine.Filemanager.FilePickerDialog',
-        contentPanelConstructorConfig: config
-    });
-};

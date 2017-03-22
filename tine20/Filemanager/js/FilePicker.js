@@ -16,23 +16,48 @@ Ext.ns('Tine.Filemanager');
  * The filepicker offers two events:
  *  - nodeSelected
  *  - invalidNodeSelected
- *
- *  @todo: remove border
  */
 Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
+    /**
+     * Filemanager app
+     * @private
+     */
     app: null,
 
+    /**
+     * Layout.
+     * @private
+     */
     layout: 'fit',
 
+    /**
+     * NodeTreePanel instance
+     * @private
+     */
     treePanel: null,
+
+    /**
+     * NodeGridPanel instance
+     * @private
+     */
     gridPanel: null,
 
     /**
-     * Selected node
+     * Selected nodes
+     * @private
      */
-    selection: null,
+    selection: [],
 
+    /**
+     * Last clicked node
+     * @private
+     */
     lastClickedNode: null,
+
+    /**
+     * Allow to select one or more node
+     */
+    singleSelect: true,
 
     /**
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
@@ -103,16 +128,22 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     /**
      * Updates selected element and triggers an event
      */
-    updateSelection: function (node) {
+    updateSelection: function (nodes) {
         // If selection doesn't fullfil constraint, we don't throw a selectionChange event
-        if (!this.checkConstraint(node)) {
+        if (!this.checkConstraint(nodes)) {
             this.fireEvent('invalidNodeSelected');
             return false;
         }
 
-        this.selection = node.data || node;
+        //  Clear previous selection
+        this.selection = [];
 
-        this.fireEvent('nodeSelected', this, this.selection);
+        var me = this;
+        Ext.each(nodes, function (node) {
+            me.selection.push(node.data || node);
+        });
+
+        this.fireEvent('nodeSelected', this.selection);
     },
 
     /**
@@ -131,9 +162,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             filterMode: 'filterToolbar'
         });
 
-        treePanel.getSelectionModel().on('selectionchange', function (selectionModel, treeNode) {
+        treePanel.getSelectionModel().on('selectionchange', function (selectionModel) {
             var treeNode = selectionModel.getSelectedNode();
-            me.updateSelection(treeNode.attributes);
+            me.updateSelection([
+                treeNode.attributes
+            ]);
         });
 
         return treePanel;
@@ -154,14 +187,19 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             height: 200,
             width: 200,
             readOnly: true,
+            enableDD: false,
+            enableDrag: false,
+            treePanel: this.getTreePanel(),
             hasQuickSearchFilterToolbarPlugin: false,
             stateIdPrefix: '-FilePicker',
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
+
         gridPanel.getGrid().reconfigure(gridPanel.getStore(), this.getColumnModel());
+        gridPanel.getGrid().getSelectionModel().singleSelect = this.singleSelect;
         gridPanel.getGrid().getSelectionModel().on('rowselect', function (selModel) {
-            var record = selModel.getSelected();
-            me.updateSelection(record.data);
+            var record = selModel.getSelections();
+            me.updateSelection(record);
         });
 
         return gridPanel;
@@ -169,8 +207,29 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
 
     /**
      * Check if selection fits current constraint
+     * @returns {boolean}
      */
-    checkConstraint: function (node) {
+    checkConstraint: function (nodes) {
+        var me = this;
+        var valid = true;
+
+        Ext.each(nodes, function (node) {
+            if (!me.checkNodeConstraint(node.data || node)) {
+                valid = false;
+                return false;
+            }
+        });
+
+        return valid;
+    },
+
+    /**
+     * Checks if a single node matches the constraints
+     *
+     * @param node
+     * @returns {boolean}
+     */
+    checkNodeConstraint: function (node) {
         // Minimum information to proceed here
         if (!node.path || !node.id) {
             return false;

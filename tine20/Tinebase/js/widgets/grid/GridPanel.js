@@ -138,6 +138,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
+    /**
+     * Tree panel referenced to this gridpanel
+     */
+    treePanel: null,
 
     /**
      * if this resides in a editDialog, this property holds it
@@ -345,6 +349,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     border: false,
     stateful: true,
 
+    stateIdPrefix: null,
+
     /**
      * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
      */
@@ -408,7 +414,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
-        this.on('resize', this.onContentResize, this, {buffer: 100});
+        if (this.detailsPanel) {
+            this.on('resize', this.onContentResize, this, {buffer: 100});
+        }
 
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
@@ -813,10 +821,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
+            defaultImportContainer: treePanel.getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
             listeners: {
                 scope: this,
                 'finish': function() {
@@ -1220,12 +1229,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
         Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.appName,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
                 ? this.getDefaultContainer()
-                : this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
+                : treePanel.getDefaultContainer(),
             // update grid after import
             listeners: {
                 scope: this,
@@ -1627,7 +1637,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-New'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-New' + this.stateIdPrefix
                 }]
             });
 
@@ -1646,7 +1656,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-Add'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-Add' + this.stateIdPrefix
                 }]
             });
 
@@ -1664,7 +1674,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: items,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu' + this.stateIdPrefix
                 }, {
                     ptype: 'ux.itemregistry',
                     key:   'Tinebase-MainContextMenu'
@@ -1894,7 +1904,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.EventObject} e
      */
     onRowContextMenu: function(grid, row, e) {
-        console.log(e);
         e.stopEvent();
         var selModel = grid.getSelectionModel();
         if (!selModel.isSelected(row)) {
@@ -1903,7 +1912,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             selModel.selectRow(row);
         }
 
-        this.getContextMenu(grid, row, e).showAt(e.getXY());
+        var contextMenu = this.getContextMenu(grid, row, e);
+
+        if (contextMenu) {
+            contextMenu.showAt(e.getXY());
+        }
+
         // reset preview update
         this.updateOnSelectionChange = true;
     },

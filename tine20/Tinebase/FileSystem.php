@@ -48,7 +48,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     protected $_modLogActive = false;
 
     protected $_indexingActive = false;
-    
+
     /**
      * stat cache
      * 
@@ -109,7 +109,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
         ));
     }
-    
+
     /**
      * init application base paths
      * 
@@ -776,7 +776,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $parentNode  = null;
         $pathParts   = $this->_splitPath($path);
         $node = null;
-        
+
         foreach ($pathParts as $pathPart) {
             $pathPart = trim($pathPart);
             $currentPath[]= $pathPart;
@@ -924,7 +924,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 $this->_getTreeNodeBackend()->setRevision(null);
             }
         }
-        
+
         return $node;
     }
 
@@ -1242,7 +1242,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         $pathParts = is_array($path) ? $path : $this->_splitPath($path);
         array_unshift($pathParts, '@' . $revision);
-        
+
         return sha1(implode(null, $pathParts));
     }
     
@@ -1449,7 +1449,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (count($toDeleteIds) === 0) {
             return 0;
         }
-        
+
         $nodeIdsToDelete =$this->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'     => 'object_id',
             'operator'  => 'in',
@@ -1465,7 +1465,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (false === $this->_modLogActive && true === $this->_indexingActive) {
             Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($toDeleteIds);
         }
-        
+
         return $deleteCount;
     }
 
