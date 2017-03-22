@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * TODO         add 'one of / in' operator?
  */
@@ -24,7 +24,7 @@ Tine.Addressbook.ListMemberFilterModel = Ext.extend(Tine.widgets.grid.FilterMode
     
     field: 'list',
     defaultOperator: 'equals',
-    
+
     /**
      * @private
      */
@@ -44,11 +44,9 @@ Tine.Addressbook.ListMemberFilterModel = Ext.extend(Tine.widgets.grid.FilterMode
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        //var value = new Tine.Addressbook.ListMemberFilterModelValueField({
         var value = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
             blurOnSelect: true,
-            recordClass: Tine.Addressbook.Model.List,
-            //app: this.app,
+            recordClass: this.field == 'list' ? Tine.Addressbook.Model.List : Tine.Addressbook.Model.Contact,
             filter: filter,
             width: this.filterValueWidth,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
@@ -61,6 +59,3 @@ Tine.Addressbook.ListMemberFilterModel = Ext.extend(Tine.widgets.grid.FilterMode
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['addressbook.listMember'] = Tine.Addressbook.ListMemberFilterModel;
-
-//Tine.Addressbook.ListMemberFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
-//});

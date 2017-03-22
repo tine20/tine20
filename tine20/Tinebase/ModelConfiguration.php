@@ -1157,12 +1157,14 @@ class Tinebase_ModelConfiguration {
     public static function getFrontendConfigForModels($models, $appname = null)
     {
         $modelconfig = array();
-        foreach ($models as $modelName) {
-            $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
-            $modelName = preg_replace('/^.+_Model_/', '', $modelName);
-            $config = $recordClass::getConfiguration();
-            if ($config) {
-                $modelconfig[$modelName] = $config->getFrontendConfiguration();
+        if (is_array($models)) {
+            foreach ($models as $modelName) {
+                $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
+                $modelName = preg_replace('/^.+_Model_/', '', $modelName);
+                $config = $recordClass::getConfiguration();
+                if ($config) {
+                    $modelconfig[$modelName] = $config->getFrontendConfiguration();
+                }
             }
         }
 

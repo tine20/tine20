@@ -419,7 +419,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             ), 'AND'
         );
         
-        $filter->addFilter(new Addressbook_Model_ContactDisabledFilter(1));
+        $filter->addFilter(new Addressbook_Model_ContactHiddenFilter(1));
         $accounts = Addressbook_Controller_Contact::getInstance()->search($filter);
         $nextNumber = $lastNumber + 1;
         
