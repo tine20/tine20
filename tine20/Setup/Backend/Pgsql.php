@@ -349,7 +349,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
-        $query = $this->addAddCol(null, $_tableName, $_declaration, $_oldName);
+        $query = $this->addAlterCol(null, $_tableName, $_declaration, $_oldName);
         if (null !== $query) {
             $this->execQueryVoid($query);
         }
@@ -609,6 +609,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         }
         
         $fieldDeclarations = preg_replace('/ smallint\(\d*\)/', ' smallint', $fieldDeclarations);
+
+        if(strpos($fieldDeclarations, 'auto_increment') !== false) {
+            $fieldDeclarations = str_replace('integer NOT NULL auto_increment', 'SERIAL NOT NULL', $fieldDeclarations);
+        }
         
         return $fieldDeclarations;
     }

@@ -109,7 +109,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
      */
     cfValueRenderer: function(filter, el) {        
         var valueType   = this.getValueType(filter),
-            fieldWidth  = 200;
+            fieldWidth  = this.filterValueWidth;
                     
         filter.valueFields = {};
         

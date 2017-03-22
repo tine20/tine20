@@ -281,6 +281,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
+
         this.action_upload = new Ext.Action(this.getAddAction());
         
         this.action_editFile = new Ext.Action({
@@ -293,6 +294,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'edit',
             scope: this
         });
+
         this.action_createFolder = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'reply',
@@ -329,16 +331,24 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.app.i18n._('Delete'),
-            pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
             scope: this
         });
-        
+
+        this.action_moveRecord = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('Move'),
+            disabled: true,
+            actionType: 'edit',
+            handler: this.onMoveRecords,
+            scope: this,
+            iconCls: 'action_move'
+        });
+
         this.action_publish = new Ext.Action({
             allowMultiple: false,
             singularText: this.app.i18n._('Publish'),
@@ -360,7 +370,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.contextMenu = Tine.Filemanager.GridContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
-            actions: ['delete', 'rename', 'download', 'resume', 'pause', 'edit', 'publish'],
+            actions: ['delete', 'rename', this.action_moveRecord, 'download', 'resume', 'pause', this.action_editFile, 'publish'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -368,7 +378,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.folderContextMenu = Tine.Filemanager.GridContextMenu.getMenu({
             nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
-            actions: ['delete', 'rename', 'edit', 'publish'],
+            actions: ['delete', 'rename', this.action_moveRecord, this.action_editFile, 'publish'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -378,13 +388,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions(this.folderContextMenu.items);
         
         this.actionUpdater.addActions([
-           this.action_createFolder,
-           this.action_goUpFolder,
-           this.action_download,
-           this.action_deleteRecord,
-           this.action_editFile,
-           this.action_publish
-       ]);
+            this.action_createFolder,
+            this.action_goUpFolder,
+            this.action_download,
+            this.action_deleteRecord,
+            this.action_editFile,
+            this.action_publish
+        ]);
     },
     
     onPublishFile: function() {
@@ -433,6 +443,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
                     columns: 8,
                     defaults: {minWidth: 60},
                     items: [
@@ -492,7 +504,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                  ]
                 }, this.getActionToolbarItems()]
             });
-            
+
+            this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
@@ -1054,5 +1068,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return this.dropAllowed;
             }
         });
+    },
+
+    onMoveRecords: function() {
+        var sm = this.grid.getSelectionModel(),
+            records = sm.getSelections();
+
+        var containerSelectDialog = new Tine.widgets.container.SelectionDialog({
+            title: this.app.i18n._('Move Items'),
+            recordClass: this.recordClass
+        });
+        containerSelectDialog.on('select', function(dlg, node) {
+            this.pagingToolbar.refresh.disable();
+            Tine.Filemanager.fileRecordBackend.copyNodes(records, node.attributes.path, true);
+        }, this);
     }
 });

@@ -734,7 +734,11 @@
           "path": "js/widgets/account/"
         },
         {
-          "text": "ContainerSelect.js",
+          "text": "SelectionComboBox.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "SelectionDialog.js",
           "path": "js/widgets/container/"
         },
         {
@@ -908,6 +912,10 @@
         {
           "text": "CanonicalPath.js",
           "path": "js/"
+        },
+        {
+          "text": "layoutFixes.js",
+          "path": "js/touch/"
         },
         {
           "text": "tineInit.js",

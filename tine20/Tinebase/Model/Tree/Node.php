@@ -107,8 +107,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'hash'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'size'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // not persistent
+
+        // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
         // this is needed should be sent by / delivered to client (not persistent in db atm)
         'path'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -138,6 +140,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = TRUE)
     {
         $this->_filters['size'] = new Zend_Filter_Empty(0);
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 }

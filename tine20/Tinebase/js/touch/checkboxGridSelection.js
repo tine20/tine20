@@ -15,9 +15,16 @@ if (Ext.isTouchDevice) {
     Ext.grid.GridPanel.prototype.initComponent = Ext.grid.GridPanel.prototype.initComponent.createSequence(function() {
         var cm = this.getColumnModel(),
             sm = this.getSelectionModel(),
-            cols = cm.columns || cm.config || [];
+            cols = cm.columns || cm.config || [],
+            hasCheckboxSelModel = false;
 
-        cols.unshift(sm);
+        Ext.each(cols, function (col) {
+            hasCheckboxSelModel = hasCheckboxSelModel || col.dataIndex == 'checked' || col.id == 'checked';
+        });
+
+        if (!hasCheckboxSelModel) {
+            cols.unshift(sm);
+        }
 
         this.enableDragDrop = false;
         this.enableDrag = false;

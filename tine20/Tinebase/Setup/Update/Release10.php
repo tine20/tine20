@@ -101,50 +101,262 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         if (!$this->_backend->columnExists('instance_id', 'timemachine_modlog')) {
 
-            $this->_backend->truncateTable('timemachine_modlog');
+            $this->_backend->renameTable('timemachine_modlog', 'timemachine_modlog_bkp');
+            $db = Tinebase_Core::getDb();
+            if ($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey_bkp');
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq_bkp');
+                $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key" RENAME TO "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key_bkp"');
+            }
 
-            $query = $this->_backend->addAddCol(null, 'timemachine_modlog',
-                new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>instance_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>'), 'id'
-            );
-            $query = $this->_backend->addAddCol($query, 'timemachine_modlog',
-                new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>instance_seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <autoincrement>true</autoincrement>
-                </field>'), 'instance_id'
-            );
-            $query = $this->_backend->addAddCol($query, 'timemachine_modlog',
-                new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>change_type</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>'), 'instance_seq'
-            );
-            $query = $this->_backend->addAddIndex($query, 'timemachine_modlog', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>instance_id</name>
+            $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
+                <name>timemachine_modlog</name>
+                <version>5</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
                     <field>
                         <name>instance_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>false</notnull>
                     </field>
-                </index>'));
-            $query = $this->_backend->addAddIndex($query, 'timemachine_modlog', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>instance_seq</name>
-                    <unique>true</unique>
                     <field>
                         <name>instance_seq</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <autoincrement>true</autoincrement>
                     </field>
-                </index>'));
-            $this->_backend->execQueryVoid($query);
+                    <field>
+                        <name>change_type</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>record_type</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>record_backend</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>modification_time</name>
+                        <type>datetime</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>modification_account</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>modified_attribute</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>old_value</name>
+                        <type>clob</type>
+                    </field>
+                    <field>
+                        <name>new_value</name>
+                        <type>clob</type>
+                    </field>
+                    <field>
+                        <name>seq</name>
+                        <type>integer</type>
+                        <length>64</length>
+                    </field>
+                    <field>
+                        <name>client</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>instance_id</name>
+                        <field>
+                            <name>instance_id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>instance_seq</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>instance_seq</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>seq</name>
+                        <field>
+                            <name>seq</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>unique-fields</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <field>
+                            <name>record_id</name>
+                        </field>
+                        <field>
+                            <name>record_type</name>
+                        </field>
+                        <field>
+                            <name>modification_time</name>
+                        </field>
+                        <field>
+                            <name>modification_account</name>
+                        </field>
+                        <field>
+                            <name>modified_attribute</name>
+                        </field>
+                        <field>
+                            <name>seq</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>'));
 
-            $this->setTableVersion('timemachine_modlog', '4');
+
+
+            $appIds[] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+            if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+                $appIds[] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
+            }
+
+            $select = $db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog_bkp')->order('modification_time ASC')
+                ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' IN (?)', $appIds))
+                ->where($db->quoteInto($db->quoteIdentifier('record_type') . ' IN (?)', array('Addressbook_Model_Contact', 'Calendar_Model_Resource')))
+                ->where($db->quoteInto($db->quoteIdentifier('modified_attribute') . ' IN (?)', array('email', 'email_home')));
+
+            $stmt = $db->query($select);
+            $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+            if (count($resultArray) > 0) {
+                foreach($resultArray as $row) {
+                    $row['client'] = 'update script';
+                    $db->insert(SQL_TABLE_PREFIX . 'timemachine_modlog', $row);
+                }
+            }
+
+            $this->setTableVersion('timemachine_modlog', '5');
         }
 
         $this->setApplicationVersion('Tinebase', '10.7');
+    }
+
+    /**
+     * update to 10.8
+     *
+     * update roles and application table
+     */
+    public function update_7()
+    {
+        if (!$this->_backend->columnExists('is_deleted', 'roles')) {
+            $query = $this->_backend->addAddCol(null, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>'), 'last_modified_time'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'), 'is_deleted'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>'), 'deleted_by'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'), 'deleted_time'
+            );
+            $this->_backend->execQueryVoid($query);
+            $this->setTableVersion('roles', '2');
+        }
+
+        if (!$this->_backend->columnExists('state', 'applications')) {
+
+            $this->_backend->addCol('applications',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>state</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>false</notnull>
+                </field>')
+            );
+
+            $this->setTableVersion('applications', '4');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.8');
+    }
+
+    /**
+     * update to 10.9
+     *
+     * add client row to timemachine_modlog
+     *
+     * @see 0012830: add client user agent to modlog
+     */
+    public function update_8()
+    {
+        if (! $this->_backend->columnExists('client', 'timemachine_modlog')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>client</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>');
+            $this->_backend->addCol('timemachine_modlog', $declaration);
+
+            $this->setTableVersion('timemachine_modlog', '5');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.9');
     }
 }

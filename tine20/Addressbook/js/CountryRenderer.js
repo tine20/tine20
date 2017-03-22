@@ -11,16 +11,11 @@ Ext.ns('Tine.Addressbook');
  * Render country name by it's iso code
  *
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.CountryRenderer
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @singleton
  */
-Tine.Addressbook.CountryRenderer = function () {
-    return {
-        renderer: function (v) {
-            return Locale.getTranslationData('CountryList', v);
-        }
-    };
-}();
+Tine.Addressbook.countryRenderer = function (v) {
+    return Locale.getTranslationData('CountryList', v);
+};
 
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'country', Tine.Addressbook.CountryRenderer.renderer, 'displayPanel');
+Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'country', Tine.Addressbook.countryRenderer, 'displayPanel');

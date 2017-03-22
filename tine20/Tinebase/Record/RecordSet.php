@@ -680,6 +680,49 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $result;
     }
+
+    public function applyRecordSetDiff(Tinebase_Record_RecordSetDiff $diff)
+    {
+        $model = $diff->model;
+        if ($this->getRecordClassName() !== $model) {
+            throw new Tinebase_Exception_InvalidArgument('try to apply record set diff on a record set of different model!' .
+                'record set model: ' . $this->getRecordClassName() . ', record set diff model: ' . $model);
+        }
+
+        /** @var Tinebase_Record_Abstract $modelInstance */
+        $modelInstance = new $model(array(), true);
+        $idProperty = $modelInstance->getIdProperty();
+
+        foreach($diff->added as $data) {
+            $newRecord = new $model($data);
+            $this->addRecord($newRecord);
+        }
+
+        foreach($diff->removed as $data) {
+            if (!isset($data[$idProperty])) {
+                throw new Tinebase_Exception_InvalidArgument('failed to apply record set diff because removed data contained bad data, id property missing (' . $idProperty . '): ' . print_r($data, true));
+            }
+            if (false === ($record = $this->getById($data[$idProperty]))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Did not find the record supposed to be removed with id: ' . $data[$idProperty]);
+            } else {
+                $this->removeRecord($record);
+            }
+        }
+
+        foreach($diff->modified as $data) {
+            $diff = new Tinebase_Record_Diff();
+            $diff->id = $data[$idProperty];
+            $diff->diff = $data;
+            if (false === ($record = $this->getById($diff->getId()))) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+                throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+            } else {
+                $record->applyDiff($diff);
+            }
+        }
+    }
     
     /**
      * merges records from given record set

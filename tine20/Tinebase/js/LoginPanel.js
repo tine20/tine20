@@ -93,16 +93,26 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     tabindex: 2,
                     width: 170,
                     fieldLabel: i18n._('Username'),
-                    id: 'username',
                     name: 'username',
+
                     allowBlank: modSsl ? false : true,
                     validateOnBlur: false,
                     selectOnFocus: true,
                     value: this.defaultUsername ? this.defaultUsername : undefined,
                     disabled: modSsl ? true : false,
                     listeners: {
+                        scope: this,
                         render: function (field) {
-                            field.focus(false, 250);
+                            field.el.dom.setAttribute('autocapitalize', 'none');
+                            field.el.dom.setAttribute('autocorrect', 'off');
+                            if (Ext.supportsUserFocus) {
+                                field.focus(false, 250);
+                            }
+                        },
+                        focus: function(field) {
+                            if (Ext.isTouchDevice) {
+                                Ext.getBody().dom.scrollTop = this.loginPanel.getBox()['y'] - 10;
+                            }
                         }
                     }
                 }, {
@@ -111,7 +121,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     width: 170,
                     inputType: 'password',
                     fieldLabel: i18n._('Password'),
-                    id: 'password',
                     name: 'password',
                     selectOnFocus: true,
                     value: this.defaultPassword,
@@ -484,6 +493,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
                         window.document.title = this.originalTitle;
+                        response.responseData = responseData;
                         this.onLogin.call(this.scope, response);
                     } else {
                         var modSsl = Tine.Tinebase.registry.get('modSsl');

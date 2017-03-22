@@ -283,6 +283,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
     {
         $group = $this->testAddGroup();
         $this->_groupLDAP->deleteGroups($group->getId());
+        $this->objects['groups']->removeRecord($group);
 
         $this->setExpectedException('Exception');
 

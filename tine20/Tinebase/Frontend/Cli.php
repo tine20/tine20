@@ -33,6 +33,36 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_applicationsToWorkOn = array();
 
     /**
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean success
+     */
+    public function increaseReplicationMasterId($opts)
+    {
+        if (!$this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->increaseReplicationMasterId();
+
+        return true;
+    }
+
+    /**
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean success
+     */
+    public function readModifictionLogFromMaster($opts)
+    {
+        if (!$this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster();
+
+        return true;
+    }
+
+    /**
     * @param Zend_Console_Getopt $_opts
     * @return boolean success
     */

@@ -954,9 +954,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $recordArray = $this->_recordToRawData($_record);
             
-            // unset id if autoincrement & still empty
-            if ($this->_hasAutoIncrementId() || $_record->$identifier == 'NULL' ) {
-                unset($recordArray['id']);
+            // unset id if present and empty
+            if (array_key_exists($identifier, $recordArray) && empty($recordArray[$identifier])) {
+                unset($recordArray[$identifier]);
             }
             
             $recordArray = array_intersect_key($recordArray, $this->getSchema());
@@ -968,7 +968,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
             
-            if ($this->_hasAutoIncrementId()) {
+            if (!isset($recordArray[$identifier]) && $this->_hasAutoIncrementId()) {
                 $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
                 if (!$newId) {
                     throw new Tinebase_Exception_UnexpectedValue("New record auto increment id is empty");

@@ -79,6 +79,9 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/edit.png) !important;
 }
 
+.action_move {
+    background-image:url(../../images/edit-move.png) !important;
+}
 
 .action_editcopy {
     background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;

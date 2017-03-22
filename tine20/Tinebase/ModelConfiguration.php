@@ -1157,12 +1157,14 @@ class Tinebase_ModelConfiguration {
     public static function getFrontendConfigForModels($models, $appname = null)
     {
         $modelconfig = array();
-        foreach ($models as $modelName) {
-            $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
-            $modelName = preg_replace('/^.+_Model_/', '', $modelName);
-            $config = $recordClass::getConfiguration();
-            if ($config) {
-                $modelconfig[$modelName] = $config->getFrontendConfiguration();
+        if (is_array($models)) {
+            foreach ($models as $modelName) {
+                $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
+                $modelName = preg_replace('/^.+_Model_/', '', $modelName);
+                $config = $recordClass::getConfiguration();
+                if ($config) {
+                    $modelconfig[$modelName] = $config->getFrontendConfiguration();
+                }
             }
         }
 
@@ -1426,5 +1428,95 @@ class Tinebase_ModelConfiguration {
             throw new Tinebase_Exception_UnexpectedValue('Property does not exist: ' . $_property);
         }
         return $this->{'_' . $_property};
+    }
+
+    public static function resolveRecordsPropertiesForRecordSet(Tinebase_Record_RecordSet $_records, $modelConfiguration, $isSearch = false)
+    {
+        if (0 === $_records->count() || ! ($resolveFields = $modelConfiguration->recordsFields)) {
+            return;
+        }
+
+        $ownIds = $_records->{$modelConfiguration->idProperty};
+
+        // iterate fields to resolve
+        foreach ($resolveFields as $fieldKey => $c) {
+            $config = $c['config'];
+
+            // resolve records, if omitOnSearch is definitively set to FALSE (by default they won't be resolved on search)
+            if ($isSearch && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
+                continue;
+            }
+
+            if (! isset($config['controllerClassName'])) {
+                throw new Tinebase_Exception_UnexpectedValue('Controller class name needed');
+            }
+
+            // fetch the fields by the refIfField
+            /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+            /** @noinspection PhpUndefinedMethodInspection */
+            $controller = $config['controllerClassName']::getInstance();
+            $filterName = $config['filterClassName'];
+
+            $filterArray = array();
+
+            // addFilters can be added and must be added if the same model resides in more than one records fields
+            if (isset($config['addFilters']) && is_array($config['addFilters'])) {
+                $filterArray = $config['addFilters'];
+            }
+
+            /** @var Tinebase_Model_Filter_FilterGroup $filter */
+            $filter = new $filterName($filterArray);
+            $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
+
+            $paging = NULL;
+            if (isset($config['paging']) && is_array($config['paging'])) {
+                $paging = new Tinebase_Model_Pagination($config['paging']);
+            }
+
+            $foreignRecords = $controller->search($filter, $paging);
+            /** @var Tinebase_Record_Interface $foreignRecordClass */
+            $foreignRecordClass = $foreignRecords->getRecordClassName();
+            $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
+
+            $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
+            $foreignRecords->convertDates = true;
+
+            if ($foreignRecords->count() > 0) {
+
+                // @todo: resolve alarms?
+                // @todo: use parts parameter?
+                if ($foreignRecordModelConfiguration->resolveRelated) {
+                    $fr = $foreignRecords->getFirstRecord();
+                    if ($fr->has('notes')) {
+                        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+                    }
+                    if ($fr->has('tags')) {
+                        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($foreignRecords);
+                    }
+                    if ($fr->has('relations')) {
+                        $relations = Tinebase_Relations::getInstance()->getMultipleRelations($foreignRecordClass, 'Sql', $foreignRecords->{$fr->getIdProperty()} );
+                        $foreignRecords->setByIndices('relations', $relations);
+                    }
+                    if ($fr->has('customfields')) {
+                        Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($foreignRecords);
+                    }
+                    if ($fr->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
+                        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($foreignRecords);
+                    }
+                }
+
+                /** @var Tinebase_Record_Interface $record */
+                foreach ($_records as $record) {
+                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
+                    $record->{$fieldKey} = $filtered;
+                }
+            }
+
+            foreach ($_records as $record) {
+                if (null === $record->{$fieldKey}) {
+                    $record->{$fieldKey} = new Tinebase_Record_RecordSet($foreignRecordClass);
+                }
+            }
+        }
     }
 }

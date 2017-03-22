@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
-Ext.ns('Tine.Felamimail')
+Ext.ns('Tine.Felamimail');
 
 
 Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPanel ,{

@@ -56,6 +56,8 @@ class Setup_Frontend_Cli
             $result = $this->_update($_opts);
         } elseif(isset($_opts->uninstall)) {
             $this->_uninstall($_opts);
+        } elseif(isset($_opts->install_dump)) {
+            $this->_installDump($_opts);
         } elseif(isset($_opts->list)) {
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
@@ -332,15 +334,14 @@ class Setup_Frontend_Cli
         }
         
         //set rights
-        foreach ($applications as &$application) {
-            $newApplicationId = Tinebase_Application::getInstance()->getApplicationByName($application->name)->getId();
+        foreach ($applications as $app) {
+            $newApplicationId = Tinebase_Application::getInstance()->getApplicationByName($app->name)->getId();
             
             foreach ($rights as &$right) {
-                if ($right['application_id'] == $application->id) {
+                if ($right['application_id'] == $app->id) {
                     $right['application_id'] = $newApplicationId;
                 }
             }
-            
         }
         
         Tinebase_Acl_Roles::getInstance()->setRoleRights($users->getId(), $rights);
@@ -710,16 +711,34 @@ class Setup_Frontend_Cli
         return $adminRole;
     }
 
+    /**
+     * @param Zend_Console_Getopt $_opts
+     * @throws Exception
+     */
     protected function _backup(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->backup($options);
     }
 
+    /**
+     * @param Zend_Console_Getopt $_opts
+     * @throws Exception
+     */
     protected function _restore(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->restore($options);
+    }
+
+    /**
+     * @param Zend_Console_Getopt $_opts
+     * @throws Exception
+     */
+    protected function _installDump(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        Setup_Controller::getInstance()->installFromDump($options);
     }
 
     /**

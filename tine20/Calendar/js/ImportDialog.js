@@ -295,7 +295,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     flex: 1,
                     height: 20,
                     width: 200,
-                    items: [new Tine.widgets.container.selectionComboBox({
+                    items: [new Tine.widgets.container.SelectionComboBox({
                         id: this.app.appName + 'EditDialogContainerSelector',
                         ref: '../../../../containerCombo',
                         stateful: false,

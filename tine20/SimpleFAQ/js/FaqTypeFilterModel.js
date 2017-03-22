@@ -42,7 +42,7 @@ Tine.SimpleFAQ.FaqTypeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
        var value = new Tine.SimpleFAQ.FaqTypeFilterModelValueField({
            app: this.app,
            filter: filter,
-           width: 180,
+           width: this.filterValueWidth,
            id: 'tw-ftb-frow-valuefield-' + filter.id,
            //@todo pr: add default value
            //value: filter.data.value ? filter.data.value : this.defaultValue,

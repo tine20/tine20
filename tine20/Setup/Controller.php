@@ -409,14 +409,21 @@ class Setup_Controller
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
      */
-    public function updateApplications(Tinebase_Record_RecordSet $_applications)
+    public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
+        if ($_applications === null) {
+            $_applications = Tinebase_Application::getInstance()->getApplications();
+        }
+
+        // we need to clone here because we would taint the app cache otherwise
+        $applications = clone($_applications);
+
         $this->_updatedApplications = 0;
         $smallestMajorVersion = NULL;
         $biggestMajorVersion = NULL;
         
         //find smallest major version
-        foreach ($_applications as $application) {
+        foreach ($applications as $application) {
             if ($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
                 $smallestMajorVersion = $application->getMajorVersion();
             }
@@ -428,23 +435,23 @@ class Setup_Controller
         $messages = array();
         
         // update tinebase first (to biggest major version)
-        $tinebase = $_applications->filter('name', 'Tinebase')->getFirstRecord();
+        $tinebase = $applications->filter('name', 'Tinebase')->getFirstRecord();
         if (! empty($tinebase)) {
-            unset($_applications[$_applications->getIndexById($tinebase->getId())]);
+            unset($applications[$applications->getIndexById($tinebase->getId())]);
         
             list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
             
             for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
-                $messages += $this->updateApplication($tinebase, $majorVersion);
+                $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
             }
         }
             
         // update the rest
         for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
-            foreach ($_applications as $application) {
+            foreach ($applications as $application) {
                 if ($application->getMajorVersion() <= $majorVersion) {
-                    $messages += $this->updateApplication($application, $majorVersion);
+                    $messages = array_merge($messages, $this->updateApplication($application, $majorVersion));
                 }
             }
         }
@@ -1413,6 +1420,76 @@ class Setup_Controller
     }
 
     /**
+     * install tine from dump file
+     *
+     * @param $options
+     * @throws Setup_Exception
+     * @return boolean
+     */
+    public function installFromDump($options)
+    {
+        $this->_clearCache();
+
+        if ($this->isInstalled('Tinebase')) {
+            throw new Setup_Exception('Tinebase already installed!');
+        }
+
+        $mysqlBackupFile = $options['backupDir'] . '/tine20_mysql.sql.bz2';
+        if (! file_exists($mysqlBackupFile)) {
+            throw new Setup_Exception("$mysqlBackupFile not found");
+        }
+
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
+
+        $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        $this->restore($options);
+
+        // set the replication master id
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $state = $tinebase->state;
+        if (!is_array($state)) {
+            $state = array();
+        }
+        $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $tinebase->state = $state;
+        Tinebase_Application::getInstance()->updateApplication($tinebase);
+
+        $this->updateApplications();
+
+        return true;
+    }
+
+    /**
+     * replace old Tinebase ID in dump to make sure we have a unique installation ID
+     *
+     * TODO: think about moving the Tinebase ID (and more info) to a metadata.json file in the backup zip
+     *
+     * @param $mysqlBackupFile
+     * @throws Setup_Exception
+     */
+    protected function _replaceTinebaseidInDump($mysqlBackupFile)
+    {
+        // fetch old Tinebase ID
+        $cmd = "bzcat $mysqlBackupFile | grep \",'Tinebase',\"";
+        $result = exec($cmd);
+        if (! preg_match("/'([0-9a-f]+)','Tinebase'/", $result, $matches)) {
+            throw new Setup_Exception('could not find Tinebase ID in dump');
+        }
+        $oldTinebaseId = $matches[1];
+
+        $cmd = "bzcat $mysqlBackupFile | sed s/"
+            . $oldTinebaseId . '/'
+            . Tinebase_Record_Abstract::generateUID() . "/g | " // g for global!
+            . "bzip2 > " . $mysqlBackupFile . '.tmp';
+
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $cmd);
+
+        exec($cmd);
+        copy($mysqlBackupFile . '.tmp', $mysqlBackupFile);
+        unlink($mysqlBackupFile . '.tmp');
+    }
+
+    /**
      * delete list of applications
      *
      * @param array $_applications list of application names
@@ -1878,6 +1955,8 @@ class Setup_Controller
         
         // clear cache
         $cache = Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+
+        Tinebase_Application::getInstance()->resetClassCache();
         
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
@@ -2013,25 +2092,25 @@ class Setup_Controller
      *    )
      *
      * @param $options
-     * @throws Exception
+     * @throws Setup_Exception
      */
     public function restore($options)
     {
         if (! isset($options['backupDir'])) {
-            throw new Exception("you need to specify the backupDir");
+            throw new Setup_Exception("you need to specify the backupDir");
         }
 
         if (isset($options['config']) && $options['config']) {
             $configBackupFile = $options['backupDir']. '/tine20_config.tar.bz2';
             if (! file_exists($configBackupFile)) {
-                throw new Exception("$configBackupFile not found");
+                throw new Setup_Exception("$configBackupFile not found");
             }
 
             $configDir = isset($options['configDir']) ? $options['configDir'] : false;
             if (!$configDir) {
                 $configFile = stream_resolve_include_path('config.inc.php');
                 if (!$configFile) {
-                    throw new Exception("can't detect configDir, please use configDir option");
+                    throw new Setup_Exception("can't detect configDir, please use configDir option");
                 }
                 $configDir = dirname($configFile);
             }
@@ -2048,9 +2127,10 @@ class Setup_Controller
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
         if (isset($options['files']) && $options['files']) {
-            $filesBackupFile = $options['backupDir'] . '/tine20_files.tar.bz2';
+            $dir = $options['backupDir'];
+            $filesBackupFile = $dir . '/tine20_files.tar.bz2';
             if (! file_exists($filesBackupFile)) {
-                throw new Exception("$filesBackupFile not found");
+                throw new Setup_Exception("$filesBackupFile not found");
             }
 
             `cd $filesDir; tar xf $filesBackupFile`;

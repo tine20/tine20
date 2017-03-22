@@ -6,12 +6,14 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * filters for contacts that are members of given list(s)
- * 
+ * filters for contacts that are members of given list(s) and vice versa (lists that have given contact as member)
+ * - field = list => search in contacts for members
+ * - field = contact => search in lists for list with member contact
+ *
  * @package     Addressbook
  * @subpackage  Model
  */
@@ -34,16 +36,27 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
     public function appendFilterSql($_select, $_backend)
     {
         $correlationName = Tinebase_Record_Abstract::generateUID(30);
+
+        // make filter work for lists and contacts
+        if ($this->_field === 'contact') {
+            $myField = 'list_id';
+            $foreignField = 'contact_id';
+        } else {
+            $myField = 'contact_id';
+            $foreignField = 'list_id';
+        }
+
         $db = $_backend->getAdapter();
         $_select->joinLeft(
             /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'), 
-            /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
+            /* on     */ $db->quoteIdentifier($correlationName . '.' . $myField)
+                        . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id'),
             /* select */ array()
         );
         if (null === $this->_value) {
-            $_select->where($db->quoteIdentifier($correlationName . '.list_id') . ' IS NULL');
+            $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
         } else {
-            $_select->where($db->quoteIdentifier($correlationName . '.list_id') . ' IN (?)', (array)$this->_value);
+            $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$this->_value);
         }
     }
     
@@ -56,7 +69,15 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
     public function toArray($_valueToJson = false)
     {
         if (is_string($this->_value)) {
-            $this->_value = Addressbook_Controller_List::getInstance()->get($this->_value)->toArray();
+            try {
+                if ($this->_field === 'list') {
+                    $this->_value = Addressbook_Controller_List::getInstance()->get($this->_value)->toArray();
+                } else {
+                    $this->_value = Addressbook_Controller_Contact::getInstance()->get($this->_value)->toArray();
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Exception::log($tenf);
+            }
         }
         
         return parent::toArray($_valueToJson);

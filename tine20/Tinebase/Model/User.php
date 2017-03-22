@@ -130,6 +130,8 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'deleted_by'            => array('allowEmpty' => true),
         'seq'                   => array('allowEmpty' => true),
     );
+
+    protected static $_replicable = true;
     
     /**
      * (non-PHPdoc)
@@ -402,5 +404,23 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         }
         
         return $this->accountPrimaryGroup;
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return static::$_replicable;
+    }
+
+    /**
+     * @param boolean $isReplicable
+     */
+    public static function setReplicable($isReplicable)
+    {
+        static::$_replicable = (bool)$isReplicable;
     }
 }

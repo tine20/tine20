@@ -572,6 +572,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $response = array(
                 'success'        => true,
                 'account'        => Tinebase_Core::getUser()->getPublicUser()->toArray(),
+                'sessionId'      => Tinebase_Core::getSessionId(),
                 'jsonKey'        => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
             );

@@ -26,8 +26,11 @@ class Admin_Setup_Initialize extends Setup_Initialize
     public static function createInitialRights(Tinebase_Model_Application $_application)
     {
         //do not call parent::createInitialRights(); because this app is for admins only
-        
+
         $roles = Tinebase_Acl_Roles::getInstance();
+        $oldNotesValue = $roles->useNotes(false);
+        $oldModLogValue = $roles->modlogActive(false);
+
         $adminRole = $roles->getRoleByName('admin role');
         $allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
         foreach ( $allRights as $right ) {
@@ -36,6 +39,9 @@ class Admin_Setup_Initialize extends Setup_Initialize
                 $_application->getId(), 
                 $right
             );
-        }     
+        }
+
+        $roles->useNotes($oldNotesValue);
+        $roles->modlogActive($oldModLogValue);
     }
 }

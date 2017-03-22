@@ -1798,4 +1798,11 @@ class Tinebase_Core
 
         return self::$appInstanceCache['TinebaseId'];
     }
+
+    public static function unsetTinebaseId()
+    {
+        if (isset(self::$appInstanceCache['TinebaseId'])) {
+            unset(self::$appInstanceCache['TinebaseId']);
+        }
+    }
 }

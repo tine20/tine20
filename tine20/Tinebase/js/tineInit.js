@@ -241,6 +241,10 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
+                    if (Ext.isWebApp) {
+                        Tine.Tinebase.registry.set('sessionId', response.responseData.sessionId);
+                        Tine.Tinebase.registry.set('usercredentialcache', Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('usercredentialcache'));
+                    }
                     Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
                     Tine.Tinebase.tineInit.checkClientVersion();
@@ -659,6 +663,12 @@ Tine.Tinebase.tineInit = {
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
         Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
 
+        if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
+            // restore session cookie
+            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('TINE20SESSID', Tine.Tinebase.registry.get('sessionId'));
+            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('usercredentialcache', Tine.Tinebase.registry.get('usercredentialcache'));
+        }
+
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
@@ -778,12 +788,21 @@ Tine.Tinebase.tineInit = {
                     var metas = document.getElementsByTagName('meta');
                     for (var i = 0; i < metas.length; i++) {
                         if (metas[i].name == "viewport") {
-                            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                            metas[i].content = "width=device-width, maximum-scale=1.0";
+                            // NOTE: if we don't release the max scale here, we get wired layout effects
+                            metas[i].content = "width=device-width, maximum-scale=10, user-scalable=no";
                         }
                     }
-                    Tine.Tinebase.viewport.doLayout();
+                    // NOTE: need to hide soft-keybord before relayouting to preserve layout
+                    document.activeElement.blur();
+                    Tine.Tinebase.viewport.doLayout.defer(500, Tine.Tinebase.viewport);
                 }, this);
 
+                // NOTE: document scroll only happens when soft keybord is displayed and therefore viewport scrolls.
+                //       in this case, content might not be accessable
+                //Ext.getDoc().on('scroll', function() {
+                //
+                //}, this);
 
             }, 'Tinebase/js/hammerjs');
         }

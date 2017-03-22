@@ -14,7 +14,10 @@
         isWebApp =
             // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
             (window.navigator.standalone == true)                           // iOS safari
-            || (window.matchMedia('(display-mode: standalone)').matches);   // android chrome
+            || (window.matchMedia('(display-mode: standalone)').matches),   // android chrome
+        // NOTE: some browsers require user interaction (like click events)
+        //       for focus to work (e.g. iOS dosn't show keyborad)
+        supportsUserFocus = ! (isTouchDevice && !isWebApp);
 
     Ext.apply(Ext, {
         isIE10 : isIE10,
@@ -22,7 +25,8 @@
         
         isNewIE : isNewIE,
         isTouchDevice: isTouchDevice,
-        isWebApp: isWebApp
+        isWebApp: isWebApp,
+        supportsUserFocus: supportsUserFocus
     })
 })();
 

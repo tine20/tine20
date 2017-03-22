@@ -295,13 +295,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
 
-        if (! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT') {
-            // cache mainscreen for one day
-            $maxAge = 86400;
-            header('Cache-Control: private, max-age=' . $maxAge);
-            header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-            header_remove('Pragma');
-        }
+        // cache mainscreen for one day in production
+        $maxAge = ! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT' ? 86400 : -10000;
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        header_remove('Pragma');
     }
     
     /**
@@ -465,12 +463,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * returns javascript of translations for the currently configured locale
      * 
-     * Note: This function is only used in development mode. In debug/release mode
-     * we can include the static build files in the view. With this we avoid the 
-     * need to start a php process and stream static js files through it.
-     * 
-     * @return javascript
-     *
+     * @return string (javascript)
      */
     public function getJsTranslations()
     {

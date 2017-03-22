@@ -234,10 +234,15 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     contentTypes: this.contentTypes,
                     contentType: this.getActiveContentType()
                 });
+                var me = this;
                 this.moduleTreePanel.on('click', function (node, event) {
                     if(node != this.lastClickedNode) {
                         this.lastClickedNode = node;
                         this.fireEvent('selectionchange');
+                    } else {
+                        // select default favorite
+                        // NOTE: a lot of models don't have a default favorite defined...
+                        me.getWestPanel().getFavoritesPanel().selectDefault();
                     }
                 });
             } else {

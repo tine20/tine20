@@ -162,7 +162,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     
     /**
-     * @property containerSelectCombo {Tine.widgets.container.selectionComboBox}
+     * @property containerSelectCombo {Tine.widgets.container.SelectionComboBox}
      */
     containerSelectCombo: null,
     
@@ -625,7 +625,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initContainerSelector: function() {
         if (this.showContainerSelector) {
-            this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
+            this.containerSelectCombo = new Tine.widgets.container.SelectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector-' + Ext.id(),
                 fieldLabel: i18n._('Saved in'),
                 width: 300,

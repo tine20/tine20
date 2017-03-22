@@ -40,6 +40,10 @@ Tine.widgets.grid.GridPanel = function(config) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
     }
 
+    if (this.stateId && Ext.isTouchDevice) {
+        this.stateId = this.stateId + '-Touch';
+    }
+
     Tine.widgets.grid.GridPanel.superclass.constructor.call(this);
 };
 
@@ -118,6 +122,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * specialised strings for edit action button
      */
     i18nEditActionText: null,
+    /**
+     * @cfg {String} i18nMoveActionText
+     * specialised strings for move action button
+     */
+    i18nMoveActionText: null,
     /**
      * @cfg {Array} i18nDeleteRecordAction 
      * specialised strings for delete action button
@@ -663,6 +672,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.initDeleteAction(services);
 
+        this.action_move = new Ext.Action({
+            requiredGrant: 'editGrant',
+            requiredMultipleGrant: 'editGrant',
+            requiredMultipleRight: this.multipleEditRequiredRight,
+            singularText: this.i18nMoveActionText ? this.i18nMoveActionText[0] : String.format(i18n.ngettext('Move {0}', 'Move {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nMoveActionText ? this.i18nMoveActionText[1] : String.format(i18n.ngettext('Move {0}', 'Move {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nMoveActionText ? this.app.i18n : i18n,
+            text: this.i18nMoveActionText ? this.i18nMoveActionText[0] : String.format(i18n.ngettext('Move {0}', 'Move {0}', 1), this.i18nRecordName),
+            disabled: true,
+            actionType: 'edit',
+            handler: this.onMoveRecords,
+            scope: this,
+            iconCls: 'action_move',
+            allowMultiple: this.multipleEdit
+        });
+
+
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
@@ -698,6 +724,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.actionUpdater.addActions([
             this.action_addInNewWindow,
             this.action_editInNewWindow,
+            this.action_move,
             this.action_editCopyInNewWindow,
             this.action_deleteRecord,
             this.action_tagsMassAttach,
@@ -1495,6 +1522,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 canonicalName: [this.recordClass.getMeta('modelName'), 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
                 items: [{
                     xtype: 'buttongroup',
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
+                    enableOverflow: true,
                     plugins: [{
                         ptype: 'ux.itemregistry',
                         key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ActionToolbar-leftbtngrp'
@@ -1503,12 +1533,33 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
             });
 
+            this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             } 
         }
 
         return this.actionToolbar;
+    },
+
+    onActionToolbarResize: function(tb) {
+        var actionGrp = tb.items.get(0),
+            availableWidth = tb.getBox()['width'] - 5,
+            maxNeededWidth = Ext.layout.ToolbarLayout.prototype.triggerWidth + 10;
+
+        tb.items.each(function(c, idx) {
+            if (idx > 0 && !c.isFill) {
+                availableWidth -= c.getPositionEl().dom.parentNode.offsetWidth;
+            }
+        }, this);
+
+        actionGrp.items.each(function(c) {
+            maxNeededWidth += Ext.layout.ToolbarLayout.prototype.getItemWidth(c);
+        });
+
+        actionGrp.setWidth(Math.min(availableWidth, maxNeededWidth));
+
     },
 
     /**
@@ -1541,8 +1592,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             var items = [];
             
             if (this.action_addInNewWindow) items.push(this.action_addInNewWindow);
-            if (this.action_editCopyInNewWindow) items.push(this.action_editCopyInNewWindow);
             if (this.action_editInNewWindow) items.push(this.action_editInNewWindow);
+            if (this.action_editCopyInNewWindow) items.push(this.action_editCopyInNewWindow);
+            if (this.action_move) items.push(this.action_move);
             if (this.action_deleteRecord) items.push(this.action_deleteRecord);
 
             if (this.duplicateResolvable) {
@@ -1987,7 +2039,48 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
     },
 
-    
+    onMoveRecords: function() {
+        var containerSelectDialog = new Tine.widgets.container.SelectionDialog({
+            recordClass: this.recordClass
+        });
+        containerSelectDialog.on('select', function(dlg, node) {
+            var sm = this.grid.getSelectionModel(),
+                records = sm.getSelections(),
+                recordIds = [].concat(records).map(function(v){ return v.id; }),
+                filter = sm.getSelectionFilter(),
+                containerId = node.attributes.id,
+                i18nItems = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
+
+            if (! this.moveMask) {
+                this.moveMask = new Ext.LoadMask(this.grid.getEl(), {
+                    msg: String.format(i18n._('Moving {0}'), i18nItems)
+                });
+            }
+            this.moveMask.show();
+
+            // move records to folder
+            Ext.Ajax.request({
+                params: {
+                    method: 'Tinebase_Container.moveRecordsToContainer',
+                    targetContainerId: containerId,
+                    filterData: filter,
+                    model: this.recordClass.getMeta('modelName'),
+                    applicationName: this.recordClass.getMeta('appName')
+                },
+                scope: this,
+                success: function() {
+                    this.refreshAfterEdit(recordIds);
+                    this.onAfterEdit(recordIds);
+                },
+                failure: function (exception) {
+                    this.refreshAfterEdit(recordIds);
+                    this.loadGridData();
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                }
+            });
+        }, this);
+    },
+
     /**
      * is called to resolve conflicts from 2 records
      */
@@ -2152,6 +2245,37 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Array} [ids]
      */
     onAfterDelete: function(ids) {
+        this.editBuffer = this.editBuffer.diff(ids);
+
+        this.loadGridData({
+            removeStrategy: 'keepBuffered'
+        });
+    },
+
+    /**
+     * refresh after edit/move
+     */
+    refreshAfterEdit: function(ids) {
+        this.editBuffer = this.editBuffer.diff(ids);
+
+        if (this.moveMask) {
+            this.moveMask.hide();
+        }
+        if (this.editMask) {
+            this.editMask.hide();
+        }
+
+        if (this.usePagingToolbar) {
+            this.pagingToolbar.refresh.show();
+        }
+    },
+
+    /**
+     * do something after edit of records
+     *
+     * @param {Array} [ids]
+     */
+    onAfterEdit: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
 
         this.loadGridData({

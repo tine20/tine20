@@ -900,7 +900,20 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertTrue(is_array($result[0]['name']), 'array with container data expected: ' . print_r($result[0], TRUE));
         $this->_objects['containerids'][] = $result[0]['name']['id'];
     }
-    
+
+    /**
+     * Test if notes are correctly decorated with path field
+     */
+    public function testGetNode()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+
+        $result = Filemanager_Controller_Node::getInstance()->get($node['id']);
+
+        $this->assertTrue($result->path != "");
+        $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer', $result->path);
+    }
+
     /**
      * testDeleteContainerNode
      */

@@ -31,4 +31,14 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
      * @var string
      */
     protected $_application = 'Filemanager';
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return static::TYPE_FOLDER === $this->type;
+    }
 }

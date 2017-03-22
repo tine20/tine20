@@ -48,12 +48,6 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
     label: '',
 
     /**
-     * @cfg filterValueWidth
-     * @type Integer
-     */
-    filterValueWidth: 200,
-
-    /**
      * @cfg multiselectField
      */
     multiselectFieldConfig: null,

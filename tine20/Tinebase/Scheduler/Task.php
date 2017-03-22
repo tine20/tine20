@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -331,6 +331,27 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_User/Group::syncUsers/Groups in scheduler.');
+    }
+
+    /**
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addReplicationTask(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_Timemachine_ModificationLog::readModificationLogFromMaster')) {
+            return;
+        }
+
+        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY, array(
+            'controller'    => 'Tinebase_Timemachine_ModificationLog',
+            'action'        => 'readModificationLogFromMaster'
+        ));
+
+        $_scheduler->addTask('Tinebase_Timemachine_ModificationLog::readModificationLogFromMaster', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_Timemachine_ModificationLog::readModificationLogFromMaster in scheduler.');
     }
     
     /**

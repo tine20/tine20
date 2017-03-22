@@ -47,7 +47,7 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
         var value = new Tine.Tinebase.widgets.keyfield.FilterValueField({
             app: this.app,
             filter: filter,
-            width: 200,
+            width: this.filterValueWidth,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
