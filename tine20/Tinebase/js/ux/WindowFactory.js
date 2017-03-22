@@ -111,12 +111,12 @@ Ext.ux.WindowFactory.prototype = {
      */
      getCenterPanel: function (config) {
         var items;
-        
+
         // (re-) create applicationstarter apps on BrowserWindows
         if (this.windowType == 'Browser') {
             Tine.Tinebase.ApplicationStarter.init();
         }
-        
+
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
@@ -194,15 +194,19 @@ Ext.ux.WindowFactory.prototype = {
         config.title = config.contentPanelConstructorConfig.title;
             delete config.contentPanelConstructorConfig.title;
         }
-
+        
         switch (windowType) {
-            case 'Browser' :
+        case 'Browser' :
+            try {
                 return this.getBrowserWindow(config);
-            case 'Ext' :
-                return this.getExtWindow(config);
-            default :
-                console.error('No such windowType: ' + this.windowType);
-                break;
+            } catch (e) {
+                // fallthrough to Ext Window
+            }
+        case 'Ext' :
+            return this.getExtWindow(config);
+        default :
+            console.error('No such windowType: ' + this.windowType);
+            break;
         }
     }
 };

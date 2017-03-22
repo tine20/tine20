@@ -238,7 +238,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.initTimeScale();
         this.initTemplates();
 
-        this.mon(Tine.Tinebase.appMgr, 'activate', this.onAppActivate, this);
+        this.mon(Tine.Tinebase.MainScreen, 'appactivate', this.onAppActivate, this);
         
         if (! this.selModel) {
             this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();

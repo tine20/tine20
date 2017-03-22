@@ -86,9 +86,9 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         }].concat(this.getDefaultTabItems());
         
         // set states last active app to the sessions default app
-        Tine.Tinebase.appMgr.setDefault(this.id2appName(this.activeTab));
-        
-        Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
+        //Tine.Tinebase.appMgr.setDefault(this.id2appName(this.activeTab));
+
+        Tine.Tinebase.MainScreen.on('appactivate', this.onActivateApp, this);
         this.on('beforetabchange', this.onBeforeTabChange, this);
         this.on('tabsort', this.onTabChange, this);
         this.on('add', this.onTabChange, this);
@@ -101,6 +101,20 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
             this.stack.add(this.items.get(i));
         }
     },
+
+    onStripMouseDown: function(e) {
+        var t = this.findTargets(e);
+        if(t.item && t.item != this.activeTab){
+            var appName = this.id2appName(t.item);
+            var app = Tine.Tinebase.appMgr.get(appName);
+
+            Tine.Tinebase.MainScreen.activate(app);
+        }
+
+        this.supr().onStripMouseDown.apply(this, arguments);
+    },
+
+
 
     /**
      * init the combined appchooser/tine menu
@@ -248,8 +262,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
             closable: true,
             listeners: {
                 scope: this,
-                beforeclose: this.onBeforeTabClose,
-                activate: this.onTabActivate
+                beforeclose: this.onBeforeTabClose
             }
         };
     },
@@ -271,7 +284,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      * @param {Tine.Application} app
      */
     onAppItemClick: function(app) {
-        Tine.Tinebase.appMgr.activate(app);
+        Tine.Tinebase.MainScreen.activate(app);
         
         this.menu.hide();
     },
@@ -303,18 +316,6 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         
         // don't close last app panel
         return this.items.getCount() > 2;
-    },
-    
-    /**
-     * executed when a tab gets activated
-     * 
-     * @param {Ext.Panel} tab
-     */
-    onTabActivate: function(tab) {
-        var appName = this.id2appName(tab);
-        var app = Tine.Tinebase.appMgr.get(appName);
-        
-        Tine.Tinebase.appMgr.activate(app);
     },
     
     /**

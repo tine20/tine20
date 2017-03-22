@@ -24,41 +24,7 @@ Tine.Tinebase.AppManager = function() {
      * enabled apps
      */
     this.apps = new Ext.util.MixedCollection({});
-    
-    this.addEvents(
-        /**
-         * @event beforeactivate
-         * fired before an application gets activated. Retrun false to stop activation
-         * @param {Tine.Aplication} app about to activate
-         */
-        'beforeactivate',
-        /**
-         * @event activate
-         * fired when an application gets activated
-         * @param {Tine.Aplication} activated app
-         */
-        'activate',
-        /**
-         * @event beforedeactivate
-         * fired before an application gets deactivated. Retrun false to stop deactivation
-         * @param {Tine.Aplication} app about to deactivate
-         */
-        'beforedeactivate',
-        /**
-         * @event deactivate
-         * fired when an application gets deactivated
-         * @param {Tine.Aplication} deactivated app
-         */
-        'deactivate',
-        /**
-         * @event windowopenexception
-         * windowopenexceptionated 
-         * @param {} Exception
-         */
-        'windowopenexception'
-    );
-    
-    
+
     // fill this.apps with registry data 
     // do it the other way round because add() always adds records at the beginning of the MixedCollection
     var enabledApps = Tine.Tinebase.registry.get('userApplications'),
@@ -80,63 +46,12 @@ Tine.Tinebase.AppManager = function() {
     }
 };
 
-Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
+Ext.apply(Tine.Tinebase.AppManager.prototype, {
     /**
      * @cfg {Tine.Application}
      */
     defaultApp: null,
-    
-    /**
-     * @property activeApp
-     * @type Tine.Application
-     * 
-     * currently active app
-     */
-    activeApp: null,
-    
-    /**
-     * activate application
-     * 
-     * @param {Tine.Application} app
-     * @return {Boolean}
-     * 
-     * TODO think about adding a fallback app if app mainscreen could not be fetched 
-     */
-    activate: function(app) {
-        if (app || (app = this.getDefault()) ) {
-            if (app == this.getActive()) {
-                // app is already active, nothing to do
-                return true;
-            }
-            
-            if (this.activeApp) {
-                if ((this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
-                    return false;
-                }
-                
-                this.activeApp.onDeActivate();
-                this.fireEvent('deactivate', this.activeApp);
-                this.activeApp = null;
-            }
-            
-            if (this.fireEvent('beforeactivate', app) === false || app.onBeforeActivate() === false) {
-                return false;
-            }
-            
-            var mainscreen = app.getMainScreen();
-            if (mainscreen) {
-                mainscreen.activate();
-            } else {
-                // app has no mainscreen / perhaps it has been disabled
-                return false;
-            }
-            
-            this.activeApp = app;
-            app.onActivate();
-            this.fireEvent('activate', app);
-        }
-    },
-    
+
     /**
      * returns an appObject
      * 
@@ -161,7 +76,18 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         
         return this.apps.get(appName);
     },
-    
+
+
+    /**
+     * helper as consumer might not know if we are in maincreen or dialog
+     * @depricated
+     */
+    getActive: function() {
+        if (Tine.Tinebase.MainScreen) {
+            return Tine.Tinebase.MainScreen.getActiveApp();
+        }
+    },
+
     /**
      * returns appObject
      * 
@@ -178,14 +104,6 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         }, this);
         
         return appObj;
-    },
-    
-    /**
-     * returns currently activated app
-     * @return {Tine.Application}
-     */
-    getActive: function() {
-        return this.activeApp;
     },
     
     /**
@@ -303,7 +221,9 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             getWestPanel: function() {
                 return this.appPanel;
             },
-            activate: function() {
+            afterRender: function() {
+                Tine.widgets.MainScreen.superclass.afterRender.call(this);
+
                 Tine.Tinebase.MainScreen.setActiveCenterPanel(mainScreen, true);
                 Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
 

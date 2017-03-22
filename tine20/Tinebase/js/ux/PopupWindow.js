@@ -201,14 +201,12 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         try {
             popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
                 ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-
-            return popup;
         }
         catch(e) {
             Tine.log.info('window.open Exception: ');
             Tine.log.info(e);
 
-            popup = false;
+            popup = null;
 
         }
 
@@ -221,8 +219,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                 popup: null
             };
 
-            Tine.log.debug('openCode: ' + openCode);
-            popup = openCode;
+            Tine.log.error('could not open popup window. openCode: ' + openCode);
+            throw exception;
         }
 
         return popup;

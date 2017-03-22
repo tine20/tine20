@@ -429,8 +429,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             var root = '/' + this.getRootNode().id;
 
             this.expand();
+
             // @TODO use getTreePath() when filemanager is fixed
-            this.selectPath.defer(100, this, [root + defaultContainerPath]);
+            (function() {
+                // no initial load triggering here
+                this.getSelectionModel().suspendEvents();
+                this.selectPath(root + defaultContainerPath);
+                this.getSelectionModel().resumeEvents();
+            }).defer(100, this);
         }
 
         if (this.filterMode == 'filterToolbar' && this.filterPlugin && this.filterPlugin.getGridPanel()) {

@@ -22,6 +22,46 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     getTitle : function() {
         return this.i18n.gettext('Filemanager');
+    },
+
+    routes: {
+        'showNode(.*)': 'showNode'
+    },
+
+    /**
+     * display file/directory in mainscreen
+     * /#/Filemanager/showNode/shared/someFolder/someFile
+     */
+    showNode: function(path) {
+        this.getMainScreen().getCenterPanel().initialLoadAfterRender = false;
+        Tine.Tinebase.MainScreenPanel.show(this);
+
+        // if file, show directory file is in
+        var dirPath = path;
+        if (String(path).match(/\/.*\.[a-zA-Z0-9]+$/)) {
+            var pathParts = path.split('/');
+            pathParts.pop();
+            dirPath = pathParts.join('/');
+        }
+
+        (function() {
+            var cp = this.getMainScreen().getCenterPanel(),
+                grid = cp.getGrid(),
+                store = cp.getStore(),
+                ftb = cp.filterToolbar,
+                highlight = function() {
+                    store.un('load', highlight);
+                    var sm = grid.getSelectionModel(),
+                        idx = store.find('path', path);
+                    if (idx) {
+                        sm.selectRow(idx);
+                    }
+                };
+
+            store.on('load', highlight);
+            ftb.setValue([{field: 'path', operator: 'equals', value: dirPath}]);
+            ftb.onFiltertrigger();
+        }).defer(500, this);
     }
 });
 

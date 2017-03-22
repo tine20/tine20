@@ -145,7 +145,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     storeOnBeforeload: Tine.widgets.grid.FilterToolbar.prototype.storeOnBeforeload,
     
     manageHeight: function() {
-        if (this.rendered) {
+        if (this.rendered && this.activeFilterPanel.rendered) {
             var tbHeight = this.activeFilterPanel.getHeight(),
                 northHeight = this.layout.north ? this.layout.north.panel.getHeight() + 1 : 0,
                 eastHeight = this.layout.east && this.layout.east.panel.getEl().child('ul') ? ((this.layout.east.panel.getEl().child('ul').getHeight()) + 29) : 0,
@@ -369,7 +369,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             this.quickFilter.setValue('');
             // find quickfilterrow
             this.activeFilterPanel.filterStore.each(function(filter) {
-                if (filter.get('field') == this.quickFilterField) {
+                if (filter.formFields && filter.get('field') == this.quickFilterField) {
                     quickFilter = filter;
                     quickFilter.set('value', val);
                     quickFilter.formFields.value.setValue(val);
@@ -382,7 +382,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         } else {
             this.activeFilterPanel.filterStore.each(function(filter) {
-                if (filter.get('field') == this.quickFilterField) {
+                if (filter.formFields && filter.get('field') == this.quickFilterField) {
                     this.quickFilter.setValue(filter.formFields.value.getValue());
                     filter.set('value', '');
                     return false;
