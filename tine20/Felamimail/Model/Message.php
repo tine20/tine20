@@ -672,6 +672,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         // explode email addresses if multiple
         $recipientType = array('to', 'cc', 'bcc');
         $delimiter = ';';
+
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
                 $recipients = array();
@@ -683,19 +684,20 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));
                     } else {
                         // single recipient
-                        $recipients[] = \trim($addresses);
+                        $recipients[] =  $this->sanitizeMailAddress($addresses);
                     }
                 }
                 
                 foreach ($recipients as $key => &$recipient) {
                     // extract email address if name and address given
                     if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
-                        $recipient = \trim($matches[2]);
+                        $recipient = $this->sanitizeMailAddress($matches[2]);
                     }
                     if (empty($recipient)) {
                         unset($recipients[$key]);
                     }
                 }
+                unset($recipient);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
@@ -703,7 +705,28 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
     }
-    
+
+    /**
+     * Mails often copied from word and so on and contain problematic characters, non printable characters and whitespaces.
+     *
+     * @param $mail
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    protected function sanitizeMailAddress($mail)
+    {
+        // Ensure encoding
+        $mail = Tinebase_Helper::mbConvertTo($mail);
+
+        // Remove non printable
+        $mail = \preg_replace('/[[:^print:]]/u', '', $mail);
+
+        // Remove whitespaces
+        $mail = \trim($mail);
+
+        return $mail;
+    }
+
     /**
      * get body as plain text
      * 
