@@ -424,7 +424,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     xtype: 'buttongroup',
                     layout: 'toolbar',
                     buttonAlign: 'left',
-                    columns: 8,
+                    columns: 6,
                     items: [
                         Ext.apply(new Ext.SplitButton(this.action_write), {
                             scale: 'medium',
@@ -462,11 +462,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        this.action_print,
-                        this.action_markUnread,
-                        this.action_addAccount,
-                        this.action_fileRecord,
-                        this.action_flag
+                        {
+                            xtype: 'buttongroup',
+                            buttonAlign: 'left',
+                            columns: 3,
+                            frame: false,
+                            items: [
+                                this.action_print,
+                                this.action_markUnread,
+                                this.action_addAccount,
+                                this.action_fileRecord,
+                                this.action_flag
+                            ]
+                        }
                     ]
                 }, this.getActionToolbarItems()]
             });

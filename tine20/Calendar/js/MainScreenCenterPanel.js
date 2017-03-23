@@ -384,6 +384,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
         
     getActionToolbar: Tine.widgets.grid.GridPanel.prototype.getActionToolbar,
+    onActionToolbarResize: Tine.widgets.grid.GridPanel.prototype.onActionToolbarResize,
     
     getActionToolbarItems: function() {
         return [{
@@ -395,8 +396,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.action_import,
                 this.action_export
             ]
-        }, {
+        }, {xtype: 'tbseparator'}, {
             xtype: 'buttongroup',
+            frame: false,
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key:   'Calendar-MainScreenPanel-ViewBtnGrp'
