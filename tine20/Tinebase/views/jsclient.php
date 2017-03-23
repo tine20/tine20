@@ -35,11 +35,11 @@
     {
         echo "\n".' <span id="useCaptcha" />'."\n";
     }
-    ?>    
+    ?>
     <!-- EXT JS -->
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
-    
+
     <?php require 'Tinebase/views/includeJsAndCss.php'; ?>
         
     <?php 
