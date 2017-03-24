@@ -105,6 +105,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'paths'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
