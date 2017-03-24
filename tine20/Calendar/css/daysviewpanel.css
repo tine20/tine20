@@ -1,3 +1,7 @@
+.cal-print-marker { /* NOTE: this has to be the first line here. @see js/Printer/DaysView.js */
+    top:0;
+}
+
 /********************************* Header *********************************/
 .cal-daysviewpanel-header {
     position: relative;
