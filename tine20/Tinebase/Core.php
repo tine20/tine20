@@ -207,6 +207,13 @@ class Tinebase_Core
      */
     protected static $_serverPlugins = array();
 
+    /**
+     * contains the decorators fetched from configuration
+     *
+     * @var array
+     */
+    protected static $_decoratorCache = array();
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -1805,5 +1812,28 @@ class Tinebase_Core
         if (isset(self::$appInstanceCache['TinebaseId'])) {
             unset(self::$appInstanceCache['TinebaseId']);
         }
+    }
+
+    public static function getDecorator($calledClass, $applicationName, $configKey, $interfaceName)
+    {
+        $cacheKey = $configKey . '_' . $calledClass;
+
+        if (!isset(static::$_decoratorCache[$cacheKey])) {
+            $config = Tinebase_Config_Abstract::factory($applicationName);
+            $decorator = $config->get($cacheKey);
+            if (null === $decorator || ! class_exists($decorator) || ! in_array($interfaceName, class_implements($decorator))) {
+                $decorator = false;
+            } else {
+                $decorator = new $decorator();
+            }
+            static::$_decoratorCache[$cacheKey] = $decorator;
+        }
+
+        return static::$_decoratorCache[$cacheKey];
+    }
+
+    public static function clearDecoratorCache()
+    {
+        static::$_decoratorCache = array();
     }
 }

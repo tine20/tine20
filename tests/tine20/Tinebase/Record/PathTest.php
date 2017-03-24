@@ -355,4 +355,21 @@ class Tinebase_Record_PathTest extends TestCase
                 . print_r($recordPaths->toArray(), true));
         }
     }
+
+    public function testPathPartDecorator()
+    {
+        $contact = new Addressbook_Model_Contact(array('n_family' => 'test'), true);
+        $this->assertEquals('/test', $contact->getPathPart(), 'default behaviour of getPathPart for Addressbook_Model_Contact not as expected');
+
+        $adbConfig = Addressbook_Config::getInstance();
+        $oldDecorator = $adbConfig->get('getPathPartDecorator_Addressbook_Model_Contact');
+        $adbConfig->set('getPathPartDecorator_Addressbook_Model_Contact', 'Tinebase_Record_GetPathPartDecorator');
+        Tinebase_Core::clearDecoratorCache();
+
+        $this->assertEquals('shooShoo', $contact->getPathPart(), 'decorator logic did not work!');
+
+        $adbConfig->set('getPathPartDecorator_Addressbook_Model_Contact', $oldDecorator);
+        Tinebase_Core::clearDecoratorCache();
+        $this->assertEquals('/test', $contact->getPathPart(), 'resetting decorator did not work!');
+    }
 }

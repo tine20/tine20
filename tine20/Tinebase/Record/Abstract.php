@@ -214,6 +214,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * right, user must have to see the module for this model
      */
     protected static $_requiredRight = NULL;
+
     
     /******************************** functions ****************************************/
     
@@ -1369,11 +1370,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param Tinebase_Record_Interface|null $_parent
      * @param Tinebase_Record_Interface|null $_child
      * @return string
-     *
-     * TODO use decorators? or overwrite
      */
     public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
     {
+        /** @var Tinebase_Record_Abstract_GetPathPartDecorator $decorator */
+        $decorator = Tinebase_Core::getDecorator(get_called_class(), $this->_application, 'getPathPartDecorator',
+                                                'Tinebase_Record_Abstract_GetPathPartDecorator');
+        if (false !== $decorator) {
+            return $decorator->getPathPart($this, $_parent, $_child);
+        }
+
+
         $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
         $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
 
