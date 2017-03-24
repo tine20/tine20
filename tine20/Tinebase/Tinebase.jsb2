@@ -322,6 +322,10 @@
           "path": "js/ux/display/"
         },
         {
+          "text": "DisplayTextArea.js",
+          "path": "js/ux/display/"
+        },
+        {
           "text": "Display.js",
           "path": "js/ux/layout/"
         },

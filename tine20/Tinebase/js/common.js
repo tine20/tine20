@@ -754,6 +754,26 @@ Tine.Tinebase.common = {
     },
 
     /**
+     * linkify text
+     *
+     * @param {String} text
+     * @param {Ext.Element|Function} cb
+     */
+    linkifyText: function(text, cb, scope) {
+        require.ensure(["linkifyjs", "linkifyjs/html"], function() {
+            var linkify = require('linkifyjs');
+            var linkifyHtml = require('linkifyjs/html');
+            var linkifyed = linkifyHtml(text);
+
+            if (Ext.isFunction(cb)) {
+                cb.call(scope || window, linkifyed);
+            } else {
+                cb.update(linkifyed);
+            }
+        }, 'Tinebase/js/linkify');
+    },
+
+    /**
      * resolves an appName to applicationInstance or vice versa
      * returns applicationinstance if getInstance is true
      * @param {String/Tine.Tinebase.Application}    app 

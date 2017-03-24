@@ -313,7 +313,12 @@ Ext.ns('Tine.Felamimail');
                             // sometimes the height is negative, fix this here
                             height = 500;
                         }
-                        
+
+                        Tine.Tinebase.common.linkifyText(body, function(linkified) {
+                            var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                            Ext.fly(bodyEl).update(linkified);
+                        }, this.panel);
+
                         body = '<textarea ' +
                             'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +

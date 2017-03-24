@@ -18,7 +18,6 @@ require('postal.federation');
 require('postal.xwindow');
 require('postal.request-response');
 
-
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
 
