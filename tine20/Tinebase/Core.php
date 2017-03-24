@@ -1245,6 +1245,7 @@ class Tinebase_Core
                 }
                 
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
+                Tinebase_Log_Formatter::resetUsername();
             }
         }
         
