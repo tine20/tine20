@@ -999,9 +999,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue...
         }
-        
+
         $select = $this->_db->select()
-            ->from(array('container' => SQL_TABLE_PREFIX . 'container'), array('owner_id'))
+            ->from(array('container' => SQL_TABLE_PREFIX . 'container'))
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'),
                 /* on     */ "{$this->_db->quoteIdentifier('container.id')} = {$this->_db->quoteIdentifier('container_acl.container_id')}",
@@ -1015,18 +1015,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
+            ->where("{$this->_db->quoteIdentifier('container.owner_id')} != ?", $accountId)
             ->where("{$this->_db->quoteIdentifier('accounts.status')} = ?", 'enabled')
             
-            ->order('accounts.display_name')
-            ->group('owner_id');
-        
+            ->order('accounts.display_name');
+
         $this->addGrantsSql($select, $accountId, $grant);
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
-        
-        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
+
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $result, TRUE);
 
         $this->saveInClassCache(__FUNCTION__, $classCacheId, $containers);
         
