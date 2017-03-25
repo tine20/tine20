@@ -521,4 +521,55 @@ class Tinebase_Frontend_Cli_Abstract
             $logger->ERR(__METHOD__ . '::' . __LINE__ . " import for {$this->_applicationName} failed ". $e->getMessage());
         }
     }
+
+    /**
+     * try to get user for cronjob from config
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getCronuserFromConfigOrCreateOnTheFly()
+    {
+        try {
+            $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $cronuserId . ' as cronuser.');
+            $cronuser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $cronuserId, 'Tinebase_Model_FullUser');
+            try {
+                Tinebase_User::getInstance()->assertAdminGroupMembership($cronuser);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+
+            $cronuser = $this->_createCronuser();
+            Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+        }
+
+        return $cronuser;
+    }
+
+    /**
+     * create new cronuser
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _createCronuser()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Creating new cronuser.');
+
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $cronuser = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'cronuser',
+            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility'            => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup'   => $adminGroup->getId(),
+            'accountLastName'       => 'cronuser',
+            'accountDisplayName'    => 'cronuser',
+            'accountExpires'        => NULL,
+        ));
+        $cronuser = Tinebase_User::getInstance()->addUser($cronuser);
+        Tinebase_Group::getInstance()->addGroupMember($cronuser->accountPrimaryGroup, $cronuser->getId());
+
+        return $cronuser;
+    }
 }
