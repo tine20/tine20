@@ -333,8 +333,13 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      */
     protected function _getModelsFromAppDir()
     {
+        $modelsDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+        if (! file_exists($modelsDir)) {
+            return null;
+        }
+        
         try {
-            $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
+            $dir = new DirectoryIterator($modelsDir);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             return null;
