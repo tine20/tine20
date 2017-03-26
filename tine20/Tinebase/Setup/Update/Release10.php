@@ -428,4 +428,23 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.10');
     }
+
+    /**
+     * update to 10.11
+     */
+    public function update_10()
+    {
+        if (!$this->_backend->columnExists('is_deleted', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>');
+            $this->_backend->addCol('tree_nodes', $declaration);
+
+            $this->setTableVersion('tree_nodes', '2');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.11');
+    }
 }

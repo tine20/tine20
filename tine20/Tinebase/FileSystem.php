@@ -64,13 +64,17 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function __construct() 
     {
-        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject();
-
         if (! Tinebase_Core::isFilesystemAvailable()) {
             throw new Tinebase_Exception_Backend('No base path (filesdir) configured or path not writeable');
         }
-        
-        $this->_basePath = Tinebase_Core::getConfig()->filesdir;
+
+        $config = Tinebase_Core::getConfig();
+
+        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject(null, array(
+            Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}
+        ));
+
+        $this->_basePath = $config->{Tinebase_Config::FILESDIR};
     }
     
     /**
@@ -156,8 +160,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     protected function _getTreeNodeBackend()
     {
         if ($this->_treeNodeBackend === null) {
+            $config = Tinebase_Core::getConfig();
             $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
-                'modelName' => $this->_treeNodeModel
+                'modelName' => $this->_treeNodeModel,
+                Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}
             ));
         }
 
@@ -698,12 +704,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             }
         }
         
-       $this->_getTreeNodeBackend()->delete($node->getId());
+       $this->_getTreeNodeBackend()->softDelete($node->getId());
         $this->clearStatCache($path);
 
         // delete object only, if no other tree node refers to it
         if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
-            $this->_fileObjectBackend->delete($node->object_id);
+            $this->_fileObjectBackend->softDelete($node->object_id);
         }
         
         return true;
@@ -820,11 +826,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             throw new Tinebase_Exception_InvalidArgument('can not unlink directories');
         }
         
-       $this->_getTreeNodeBackend()->delete($node->getId());
+       $this->_getTreeNodeBackend()->softDelete($node->getId());
         
         // delete object only, if no one uses it anymore
         if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
-            $this->_fileObjectBackend->delete($node->object_id);
+            $this->_fileObjectBackend->softDelete($node->object_id);
         }
     }
     
@@ -1275,8 +1281,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             'operator'  => 'in',
             'value'     => $toDeleteIds
         ))), NULL, Tinebase_Backend_Sql_Abstract::IDCOL);
-        
-        $deleteCount =$this->_getTreeNodeBackend()->delete($nodeIdsToDelete);
+
+        // hard delete is ok here
+        $deleteCount = $this->_getTreeNodeBackend()->delete($nodeIdsToDelete);
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
         

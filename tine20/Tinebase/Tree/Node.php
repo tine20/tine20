@@ -35,7 +35,29 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = false;
-    
+
+    /**
+     * the constructor
+     *
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
+     * @param array $_options (optional)
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function __construct($_dbAdapter = NULL, $_options = array())
+    {
+        if (isset($_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) && true === $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) {
+            $this->_modlogActive = true;
+        }
+
+        parent::__construct($_dbAdapter, $_options);
+    }
+
     /**
      * get the basic select object to fetch records from the database
      *  

@@ -483,6 +483,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
 
     /**
+     * @var string
+     */
+    const FILESYSTEM_MODLOGACTIVE = 'fileSystemModLogActive';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -1306,6 +1311,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Use login name instead of full name for webdav.',
             'type'                  => 'bool',
             'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => FALSE,
+        ),
+        self::FILESYSTEM_MODLOGACTIVE => array(
+        //_('Filesystem history')
+            'label'                 => 'Filesystem history',
+        //_('Filesystem keeps history, default is false.')
+            'description'           => 'Filesystem keeps history, default is false.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,

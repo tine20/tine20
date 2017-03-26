@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -50,7 +50,30 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      * 
      * @var boolean
      */
-    protected $_keepOldRevisions = FALSE;
+    protected $_keepOldRevisions = false;
+
+    /**
+     * the constructor
+     *
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
+     * @param array $_options (optional)
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function __construct($_dbAdapter = NULL, $_options = array())
+    {
+        if (isset($_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) && true === $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) {
+            $this->_modlogActive = true;
+            $this->_keepOldRevisions = true;
+        }
+
+        parent::__construct($_dbAdapter, $_options);
+    }
     
     /**
      * get the basic select object to fetch records from the database
@@ -133,18 +156,23 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     protected function _updateForeignKeys($_mode, Tinebase_Record_Interface $_record)
     {
+        /** @var Tinebase_Model_Tree_FileObject $_record */
         if (empty($_record->hash)) {
             return;
         }
         
         $createRevision = $this->_keepOldRevisions || $_mode === 'create';
         $updateRevision = FALSE;
-        
+
+        // do not create a revision if the hash did not change! What point in creating a revision if the file in the filesystem is still the same?
         if ($_mode !== 'create') {
-            // select latest hash of id and compare with new hash
+            /** @var Tinebase_Model_Tree_FileObject $currentRecord */
             $currentRecord = $this->get($_record);
             if ($currentRecord->hash !== NULL) {
-                $updateRevision = ($currentRecord->hash !== $_record->hash);
+                if ($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) {
+                    return;
+                }
+                $updateRevision = TRUE;
             } else {
                 $createRevision = TRUE;
             }

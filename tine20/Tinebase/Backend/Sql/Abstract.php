@@ -1337,6 +1337,33 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
     }
+
+    /**
+     * Soft deletes entries if modlog is active, otherwise executes hard delete
+     *
+     * @param string|integer|Tinebase_Record_Interface|array $_id
+     * @return int The number of affected rows.
+     */
+    public function softDelete($_id)
+    {
+        if (empty($_id)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');
+            return 0;
+        }
+
+        if (true !== $this->_modlogActive) {
+            return $this->delete($_id);
+        }
+
+        $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
+        $identifier = $this->_getRecordIdentifier();
+
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
+        );
+
+        return $this->_db->update($this->_tablePrefix . $this->_tableName, array('is_deleted' => 1), $where);
+    }
     
     /**
       * Deletes entries

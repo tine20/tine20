@@ -581,6 +581,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $path = ($_path instanceof Tinebase_Model_Tree_Node_Path) 
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
+        $existingNode = null;
         
         // we need to check the parent record existance before commencing node creation
         $parentPathRecord->validateExistance();
@@ -590,15 +591,21 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->_checkPathACL($parentPathRecord, 'add');
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite) {
+
+                // race condition for concurrent delete, try catch Tinebase_Exception_NotFound ... but throwing the exception in that rare case doesn't hurt so much
                 $existingNode = $this->_backend->stat($path->statpath);
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Existing node: ' . print_r($existingNode->toArray(), TRUE));
-                
+
                 if (! $_tempFileId) {
                     // just return the exisiting node and do not overwrite existing file if no tempfile id was given
                     $this->_checkPathACL($path, 'get');
                     $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
                     return $existingNode;
+
+                } elseif ($existingNode->type !== $_type) {
+                    throw new Tinebase_Exception_SystemGeneric('Can not overwrite a folder with a file');
+
                 } else {
                     // check if a new (size 0) file is overwritten
                     // @todo check revision here?
@@ -634,6 +641,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->_omitModLog = false;
             $this->_writeModLog($modlogNode, null);
             $this->_omitModLog = true;
+        } elseif (Tinebase_Model_Tree_Node::TYPE_FILE === $_type) {
+            $this->_omitModLog = false;
+            $this->_writeModLog($newNode, $existingNode);
+            $this->_omitModLog = true;
         }
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
@@ -652,7 +663,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
-        
+
         $node = NULL;
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
@@ -662,8 +673,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $node = $this->_backend->mkdir($_statpath);
                 break;
         }
-        
-        return $node ? $node : $this->_backend->stat($_statpath);
+
+        return $node !== null ? $node : $this->_backend->stat($_statpath);
     }
     
     /**
