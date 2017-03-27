@@ -578,6 +578,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         $backend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_User',
             'tableName' => 'accounts',
+            'modlogActive' => true,
         ));
 
         // TODO allow to set this as param

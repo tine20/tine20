@@ -612,7 +612,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
             ->where("{$this->_db->quoteIdentifier('container.owner_id')} = ?", $ownerId)
 
-            ->order('container.name');
+            ->order('container.creation_time');
             
         $this->addGrantsSql($select, $accountId, $grant);
         
@@ -1051,25 +1051,32 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         $this->checkSystemContainer($containerId);
-        
-        $tm = Tinebase_TransactionManager::getInstance();   
-        $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Deleting container id ' . $containerId . ' ...');
 
         $deletedContainer = NULL;
-        
-        try {
-            if($_ignoreAcl !== TRUE) {
-                if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                    throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
-                }
-                
-                if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
-                    throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
-                }
+
+        if($_ignoreAcl !== TRUE) {
+            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
             }
+
+            if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
+                throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
+            }
+
+            // get personal container
+            $personalContainer = $this->getDefaultContainer($container->model, Tinebase_Core::getUser());
+            if ((string)($personalContainer->getId()) === (string)$containerId) {
+                throw new Tinebase_Exception_SystemGeneric('You are not allowed to delete your default container!');
+            }
+        }
+
+        $tm = Tinebase_TransactionManager::getInstance();
+        $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
+
+        try {
             $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
             
@@ -1121,46 +1128,28 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
 
         $controller = Tinebase_Core::getApplicationInstance($model);
-        $filterName = $model . 'Filter';
 
-        if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
-            $acl = $controller->doContainerACLChecks(FALSE);
-        }
-        if ($controller && class_exists($filterName)) {
-
-            // workaround to fix Filemanager as Tinebase_Filesystem does not implement search
-            $backend = $controller::getInstance()->getBackend();
-            if (method_exists($backend, 'search')) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Delete ' . $model . ' records in container ' . $container->getId());
-
-                $filter = new $filterName(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND
-                    , array('ignoreAcl' => $_ignoreAcl));
-                $filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $container->id));
-
-                if ($_ignoreAcl) {
-
-                    $idsToDelete = $backend->search($filter, null, /* $_onlyIds */
-                        true);
-                    $controller::getInstance()->delete($idsToDelete);
-                } else {
-                    $controller::getInstance()->deleteByFilter($filter);
-                }
+        if ($controller) {
+            if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+                $acl = $controller->doContainerACLChecks(FALSE);
             }
-        }
 
-        if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
-            $controller->doContainerACLChecks($acl);
+            $controller->deleteContainerContents($container, $_ignoreAcl);
+
+            if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+                $controller->doContainerACLChecks($acl);
+            }
         }
     }
     
     /**
-     * delete container by application id
+     * drop container by application id, this is a straight and hard DB deletion
+     * ATTENTION this does not follow deleteContainer() cleanup logic, this JUST deletes the containers, nothing more
      * 
      * @param string $_applicationId
-     * @return integer numer of deleted containers 
+     * @return integer number of deleted containers
      */
-    public function deleteContainerByApplicationId($_applicationId)
+    public function dropContainerByApplicationId($_applicationId)
     {
         $this->resetClassCache();
         
