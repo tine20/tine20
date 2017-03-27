@@ -1740,7 +1740,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * reset class cache
      * 
      * @param string $key
-     * @return Tinebase_Model_Filter_Abstract
+     * @return Tinebase_Backend_Sql_Abstract
      */
     public function resetClassCache($method = null)
     {

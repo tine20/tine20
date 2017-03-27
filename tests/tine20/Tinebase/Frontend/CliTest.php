@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -137,8 +137,12 @@ class Tinebase_Frontend_CliTest extends TestCase
         $deletedContact = $this->_addAndDeleteContact();
         $deletedLead = $this->_addAndDeleteLead();
 
-        // delete personal adb container and tag, too
-        Tinebase_Container::getInstance()->deleteContainer($this->_getPersonalContainer('Addressbook')->getId());
+        // test deleted contact is still there
+        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
+        $this->assertEquals(1, count($contacts));
+
+        // delete tag too
         Tinebase_Tags::getInstance()->deleteTags($deletedContact->tags->getFirstRecord()->getId());
         
         ob_start();
@@ -150,7 +154,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
         $this->assertNotContains('Failed to purge', $out);
 
-        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        // test deleted contact is gone
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
         $this->assertEquals(0, count($contacts));
 

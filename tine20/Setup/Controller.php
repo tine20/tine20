@@ -1647,7 +1647,7 @@ class Setup_Controller
                 Tinebase_Timemachine_ModificationLog::getInstance()->removeApplication($_application);
 
                 // delete containers, config options and other data for app
-                Tinebase_Application::getInstance()->removeApplicationData($_application);
+                Tinebase_Application::getInstance()->removeApplicationAuxiliaryData($_application);
             }
             
             // remove application from table of installed applications
