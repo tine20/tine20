@@ -436,8 +436,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->createTable('path', $declaration, 'Tinebase', 2);
 
-        $frontend = new Tinebase_Frontend_Cli();
-        $frontend->rebuildPaths(null);
+        Tinebase_Controller::getInstance()->rebuildPaths();
 
         $this->setApplicationVersion('Tinebase', '10.10');
     }
