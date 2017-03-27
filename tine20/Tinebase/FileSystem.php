@@ -90,6 +90,16 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         return self::$_instance;
     }
+
+    public function resetBackends()
+    {
+        $this->_treeNodeBackend = null;
+        $config = Tinebase_Core::getConfig();
+
+        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject(null, array(
+            Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}
+        ));
+    }
     
     /**
      * init application base paths
@@ -1121,7 +1131,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $fileObject->description = $_node->description;
         $this->_updateFileObject($fileObject, $_node->hash);
         
-        return$this->_getTreeNodeBackend()->update($_node);
+        return $this->_getTreeNodeBackend()->update($_node);
     }
     
     /**

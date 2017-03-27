@@ -495,4 +495,28 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.12');
     }
+
+    /**
+     * update to 10.13
+     *
+     * add revision_size to tree_fileobjects
+     */
+    public function update_12()
+    {
+
+        if (!$this->_backend->columnExists('total_size', 'tree_fileobjects')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>revision_size</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>');
+
+            $this->_backend->addCol('tree_fileobjects', $declaration);
+
+            $this->setTableVersion('tree_fileobjects', '4');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.13');
+    }
 }

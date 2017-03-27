@@ -34,6 +34,8 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      * @var Filemanager_Backend_Node
      */
     protected $_backend;
+
+    protected $_oldModLog;
     
     /**
      * Runs the test methods of this class.
@@ -58,6 +60,8 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }
+
+        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
@@ -78,6 +82,8 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM_MODLOGACTIVE, $this->_oldModLog);
+        Tinebase_FileSystem::getInstance()->resetBackends();
     }
     
     public function testMkdir()
@@ -274,6 +280,27 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($testDir)->hash);
         
         return $testPath;
+    }
+
+    public function testRevisionSizeFile()
+    {
+        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM_MODLOGACTIVE, true);
+        $this->_controller->resetBackends();
+
+        $testPath = $this->testCreateFile();
+
+        $node = $this->_controller->stat($testPath);
+        $this->assertEquals(7, $node->size);
+        $this->assertEquals(7, $node->revision_size);
+
+        $handle = $this->_controller->fopen($testPath, 'w');
+        $written = fwrite($handle, '12345');
+        $this->assertEquals(5, $written);
+        $this->_controller->fclose($handle);
+
+        $node = $this->_controller->stat($testPath);
+        $this->assertEquals(5, $node->size);
+        $this->assertEquals(12, $node->revision_size);
     }
     
     /**

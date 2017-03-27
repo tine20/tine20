@@ -36,8 +36,9 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         ));
         $tempFile = $this->_getTempFile();
         $event->attachments = array(array('tempFile' => array('id' => $tempFile->getId())));
+
         $savedEvent = Calendar_Controller_Event::getInstance()->create($event);
-        
+
         $this->assertTrue(isset($savedEvent->attachments) && count($savedEvent->attachments) === 1);
         
         // try to fetch attachment of event

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -193,11 +193,22 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($createRevision) {
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
+
+            // update total size
+            $this->_db->update($this->_tablePrefix . $this->_tableName,
+                array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
+                $this->_db->quoteInto( $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()) );
+
         } elseif ($updateRevision) {
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_record->getId()),
             );
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
+
+            // update total size
+            $this->_db->update($this->_tablePrefix . $this->_tableName,
+                array('revision_size' => $_record->size),
+                $this->_db->quoteInto( $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()) );
         }
     }
 

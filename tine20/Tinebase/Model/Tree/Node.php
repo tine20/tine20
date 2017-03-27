@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,6 +23,7 @@
  * @property    string             object_id
  * @property    string             parent_id
  * @property    string             size
+ * @property    string             revision_size
  * @property    string             type
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
@@ -109,6 +110,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'hash'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'size'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'revision_size'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
