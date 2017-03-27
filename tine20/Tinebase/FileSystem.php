@@ -907,7 +907,13 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
 
         return $treeNode;
     }
-    
+
+    public function getRealPathForNode(Tinebase_Model_Tree_Node $_node)
+    {
+        $hashDirectory = $this->_basePath . '/' . substr($_node->hash, 0, 3);
+        return $hashDirectory . '/' . substr($_node->hash, 3);
+    }
+
     /**
      * places contents into a file blob
      * 
@@ -1327,7 +1333,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             throw new Tinebase_Exception_UnexpectedValue('unexpected tempfile value');
         }
         
-        return $this->copyStream($tempStream, $path);
+        $this->copyStream($tempStream, $path);
     }
     
     /**

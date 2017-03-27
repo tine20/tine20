@@ -39,7 +39,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 255 => 'varchar',
                 65535 => 'text',
                 16777215 => 'mediumtext',
-                4294967295 => 'longtext'),
+                2147483647 => 'longtext'),
             'defaultType' => 'text',
             'defaultLength' => null,
             'lengthLessTypes' => array(
@@ -93,7 +93,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
         }
 
-        $statement .= implode(",\n", $statementSnippets) . "\n)";
+        $statement .= implode(",\n", array_filter($statementSnippets)) . "\n)";
 
         if (isset($_table->engine)) {
             $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
@@ -309,13 +309,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     public function addAddIndex($_query, $_tableName ,  Setup_Backend_Schema_Index_Abstract $_declaration)
     {
+        if (empty($indexDeclaration = $this->getIndexDeclarations($_declaration))) {
+            return $_query;
+        }
+
         if (empty($_query)) {
             $_query = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`";
         } else {
             $_query .= ',';
         }
 
-        $_query .= " ADD " . $this->getIndexDeclarations($_declaration);
+        $_query .= " ADD " . $indexDeclaration;
 
         return $_query;
     }
@@ -338,6 +342,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         } elseif (!empty($_key->unique)) {
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         } elseif (!empty($_key->fulltext)) {
+            if (!$this->supports('mysql >= 5.6.4')) {
+                if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
+                return '';
+            }
             $snippet = " FULLTEXT KEY `" . $_key->name . "`" ;
         }
         

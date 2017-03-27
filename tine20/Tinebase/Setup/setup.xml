@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.11</version>
+    <version>10.12</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3425,7 +3425,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3457,9 +3457,9 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -3594,6 +3594,38 @@
                     </field>
                     <field>
                         <name>number</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>external_fulltext</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>text_data</name>
+                    <type>text</type>
+                    <length>2147483647</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>text_data</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>text_data</name>
                     </field>
                 </index>
             </declaration>

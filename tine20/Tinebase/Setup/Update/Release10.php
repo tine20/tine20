@@ -398,15 +398,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <name>creation_time</name>
                     <type>datetime</type>
                 </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>path</name>
+                <name>path</name>
                     <fulltext>true</fulltext>
                     <field>
                         <name>path</name>
@@ -440,11 +432,67 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>boolean</type>
                     <default>false</default>
                 </field>');
+
             $this->_backend->addCol('tree_nodes', $declaration);
 
             $this->setTableVersion('tree_nodes', '2');
         }
 
         $this->setApplicationVersion('Tinebase', '10.11');
+    }
+
+    /**
+     * update to 10.12
+     *
+     * create external_fulltext table
+     */
+    public function update_11()
+    {
+        $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
+            <name>external_fulltext</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>text_data</name>
+                    <type>text</type>
+                    <length>2147483647</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>text_data</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>text_data</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>'), 'Tinebase', 'external_fulltext');
+
+        if (!$this->_backend->columnExists('tree_nodes', 'indexed_hash')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+
+            $this->_backend->addCol('tree_nodes', $declaration);
+
+            $this->setTableVersion('tree_nodes', '3');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.12');
     }
 }

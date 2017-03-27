@@ -17,6 +17,7 @@
  * @property    string             contenttype
  * @property    Tinebase_DateTime  creation_time
  * @property    string             hash
+ * @property    string             indexed_hash
  * @property    string             name
  * @property    Tinebase_DateTime  last_modified_time
  * @property    string             object_id
@@ -91,6 +92,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
+        'indexed_hash'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

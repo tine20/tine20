@@ -38,10 +38,10 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         $db = $_select->getAdapter();
 
         // mysql supports full text for InnoDB as of 5.6
-        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6') ) {
+        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4') ) {
 
             if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                ' full text search is only supported on mysql/mariadb 5.6+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
+                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
 
             $filterGroup = new Tinebase_Model_Filter_FilterGroup();
 
@@ -56,7 +56,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
                 $value = preg_replace('# +#u', ' ', trim($value));
                 $values = explode(' ', $value);
                 foreach($values as $value) {
-                    $filter = new Tinebase_Model_Filter_Text($this->_field, 'contains', $value);
+                    $filter = new Tinebase_Model_Filter_Text($this->_field, 'contains', $value, isset($this->_options['tablename']) ? array('tablename' => $this->_options['tablename']) : array());
                     $filterGroup->addFilter($filter);
                 }
             }

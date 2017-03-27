@@ -88,12 +88,19 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
             'options' => array('tablename' => 'tree_filerevisions')
         ),
     // recursive search
-        'recursive' => array(
+        'recursive'            => array(
             'filter' => 'Tinebase_Model_Filter_Bool'
         ),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'tree_nodes.id',
             'applicationName' => 'Tinebase',
         )),
+    // fulltext search
+        'content'              => array(
+            'filter'            => 'Tinebase_Model_Filter_ExternalFullText',
+            'options'           => array(
+                'idProperty' => 'id',
+            )
+        ),
     );
 }

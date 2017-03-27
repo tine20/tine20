@@ -119,7 +119,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             }
         }
 
-        $statement .= implode(",\n", $statementSnippets) . "\n)";
+        $statement .= implode(",\n", array_filter($statementSnippets)) . "\n)";
         
         return array('table' => $statement, 'index' => $createIndexStatement, 'primary' => $primaryKey);
     }
@@ -377,7 +377,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             throw new Zend_Db_Statement_Exception('index does exist already');
         }
 
-        $indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName);
+        if (empty($indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName))) {
+            return $_query;
+        }
 
         if (strpos($indexSnippet, 'CREATE INDEX') !== false) {
             $this->execQueryVoid($_query);
@@ -423,6 +425,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         } elseif (!empty($_key->unique)) {
             $identifier  = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name . '_key');
             $snippet = "CONSTRAINT $identifier UNIQUE";
+        } elseif (!empty($_key->fulltext)) {
+            if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
+            return '';
         } else {
             $identifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name);
             $snippet = "CREATE INDEX $identifier ON " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);

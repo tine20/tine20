@@ -482,6 +482,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
 
+    const FULLTEXT = 'fulltext';
+    const FULLTEXT_BACKEND = 'backend';
+    const FULLTEXT_JAVABIN = 'javaBin';
+    const FULLTEXT_TIKAJAR = 'tikaJar';
+
     /**
      * @var string
      */
@@ -682,6 +687,31 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                          => Tinebase_Config::TYPE_ARRAY,
                 )
             )
+        ),
+        self::FULLTEXT => array(
+            //_('Full text configuration')
+            'label'                 => 'Full text configuration',
+            //_('Full text configuration.')
+            'description'           => 'Full text configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::FULLTEXT_BACKEND          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'Sql'
+                ),
+                self::FULLTEXT_JAVABIN          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'java'
+                ),
+                self::FULLTEXT_TIKAJAR          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                ),
+            ),
+            'default'                           => array()
         ),
         self::USERBACKEND => array(
                                    //_('User Configuration')

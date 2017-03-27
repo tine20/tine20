@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,8 @@ class Filemanager_Config extends Tinebase_Config_Abstract
 {
     const PUBLIC_DOWNLOAD_URL = 'publicDownloadUrl';
 
+    const INDEX_CONTENT = 'indexContent';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -28,6 +30,16 @@ class Filemanager_Config extends Tinebase_Config_Abstract
                                    //_('Possible status. Please note that additional status might impact other Filemanager systems on export or syncronisation.')
             'description'           => 'Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules',
             'type'                  => 'string',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+        ),
+        self::INDEX_CONTENT => array(
+            //_('Index Content')
+            'label'                 => 'Index Content',
+            //_('Possible status. Please note that additional status might impact other Filemanager systems on export or syncronisation.')
+            'description'           => 'index content of all files using a text extraction tool and a full text index',
+            'type'                  => 'boolean',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
