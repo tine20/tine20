@@ -16,6 +16,8 @@ use Sabre\DAV;
  */
 class Felamimail_Frontend_JsonTest extends TestCase
 {
+    use GetProtectedMethodTrait;
+
     /**
      * @var Felamimail_Frontend_Json
      */
@@ -558,6 +560,20 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+    }
+
+    /**
+     * test mail sanitize
+     */
+    public function testSanitizeMail()
+    {
+        $expected = 'info@testest.de';
+        $obfuscatedMail = '  info@testest.de  ';
+
+        $reflectionMethod = $this->getProtectedMethod(Felamimail_Model_Message::class, 'sanitizeMailAddress');
+        $result = $reflectionMethod->invokeArgs(new Felamimail_Model_Message(), [$obfuscatedMail]);
+
+        $this->assertEquals($expected, $result);
     }
 
     /**

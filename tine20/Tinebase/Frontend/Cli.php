@@ -372,7 +372,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         $userController = Tinebase_User::getInstance();
-        
+
         try {
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -389,35 +389,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
         
         return true;
-    }
-    
-    /**
-     * try to get user for cronjob from config
-     * 
-     * @return Tinebase_Model_FullUser
-     */
-    protected function _getCronuserFromConfigOrCreateOnTheFly()
-    {
-        try {
-            $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $cronuserId . ' as cronuser.');
-            $cronuser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $cronuserId, 'Tinebase_Model_FullUser');
-            try {
-                Tinebase_User::getInstance()->assertAdminGroupMembership($cronuser);
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' ' . $tenf->getMessage());
-            
-            $cronuser = Tinebase_User::createSystemUser('cronuser');
-            if ($cronuser) {
-                Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
-            }
-        }
-        
-        return $cronuser;
     }
 
     /**

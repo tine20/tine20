@@ -404,18 +404,21 @@ class Tinebase_Translation
         $poFiles = [];
         foreach ($translationDirs as $appName => $translationDir) {
             if ($applicationName != 'all' && $applicationName != $appName) continue;
-            $poPaths = array(
-                "$translationDir/$localeString.po",
-                "$translationDir/extra/$appName/$localeString.po",
-            );
+            // applications own translation
+            $poPaths = ["$translationDir/$localeString.po"];
 
+            // collect extra from other app
+            foreach(self::getTranslationDirs() as $extraApp => $extraTranslationDir) {
+                $poPaths[] = "$extraTranslationDir/extra/$appName/$localeString.po";
+            }
+            // check for existance
             foreach($poPaths as $poPath) {
                 if (file_exists($poPath)) {
                     $poFiles[$appName][] = $poPath;
                 }
             }
         }
-        
+
         return $poFiles;
     }
     

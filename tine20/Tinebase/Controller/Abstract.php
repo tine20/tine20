@@ -336,6 +336,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected function _getModelsFromAppDir()
     {
+        $modelsDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+        if (! file_exists($modelsDir)) {
+            return null;
+        }
+        
         try {
             $modelDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
             if (! file_exists($modelDir)) {

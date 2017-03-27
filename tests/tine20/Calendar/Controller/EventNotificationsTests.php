@@ -624,6 +624,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     
     /**
      * testRecuringAlarm
+     *
+     * TODO 0012858: fix event notification tests on daylight saving boundaries
      */
     public function testRecuringAlarm()
     {
@@ -660,7 +662,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
         $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
         
-        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now()->addDay(1), 'alarmtime is not adjusted');
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now()->addDay(1), 'alarmtime is not adjusted: '
+            . $nextAlarmEventStart->toString() . ' should be greater than '
+            . Tinebase_DateTime::now()->addDay(1)->toString());
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
         
         // update series @see #7430: Calendar sends too much alarms for recurring events
@@ -674,6 +678,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     /**
      * if an event with an alarm gets an exception instance, also the alarm gets an exception instance
      * @see #6328
+     *
+     * TODO 0012858: fix event notification tests on daylight saving boundaries
      */
     public function testRecuringAlarmException()
     {

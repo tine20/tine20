@@ -206,7 +206,7 @@ class Tinebase_TranslationTest extends TestCase
     {
 
         $tinebaseTranslationsDir = realpath(__DIR__ . '/../../../tine20/Tinebase/translations');
-        $extraTranslationsDir = $tinebaseTranslationsDir . '/extra/Tinebase';
+        $extraTranslationsDir = $tinebaseTranslationsDir . '/extra/Addressbook';
         @mkdir($extraTranslationsDir, 0777, true);
 
         if (! is_dir($extraTranslationsDir)) {
@@ -242,10 +242,10 @@ msgstr "изпълни"
         Tinebase_Core::getCache()->clean();
 
         // test the translation
-        $translation = Tinebase_Translation::getTranslation('Tinebase', new Zend_Locale('de_DE'));
+        $translation = Tinebase_Translation::getTranslation('Addressbook', new Zend_Locale('de_DE'));
         $this->assertEquals("изпълни", $translation->_('run'));
 
-        $jsTranslations = Tinebase_Translation::getJsTranslations('de_DE', 'Tinebase');
+        $jsTranslations = Tinebase_Translation::getJsTranslations('de_DE', 'Addressbook');
         $this->assertEquals(1, preg_match('/изпълни/', $jsTranslations));
 
         // cleanup

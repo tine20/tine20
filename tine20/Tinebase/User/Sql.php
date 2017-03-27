@@ -188,7 +188,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         $select->where($this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . 'is_deleted') . ' = 0');
-        
+
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -225,7 +225,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         $select->where($this->_db->table_prefix . $this->_tableName . '.' . $this->_db->quoteIdentifier('is_deleted') . ' = 0');
-        
+
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
@@ -654,7 +654,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId), true);
         $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountStatus' => $_status), true);
         $this->_writeModLog($newUser, $oldUser);
-        
+
         return $result;
     }
 
@@ -689,7 +689,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId), true);
         $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountExpires' => $accountData['expires_at']), true);
         $this->_writeModLog($newUser, $oldUser);
-        
+
         return $result;
     }
     
@@ -828,7 +828,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $updatedUser = $this->updateUserInSqlBackend($updatedUser);
             $this->updatePluginUser($updatedUser, $_user);
         }
-        
+
         return $updatedUser;
     }
     
@@ -934,7 +934,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $addedUser = $this->updateUserInSqlBackend($addedUser);
             $this->updatePluginUser($addedUser, $_user);
         }
-        
+
         return $addedUser;
     }
     
@@ -983,7 +983,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable->insert($accountData);
 
         $this->_writeModLog($_user, null);
-            
+
         return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
     }
     
@@ -1126,7 +1126,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             . ' Deleting user' . $user->accountLoginName);
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-        
+
         try {
 
             $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
@@ -1161,10 +1161,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
-        
+
         return $user;
     }
-    
+
     /**
      * delete users
      * 

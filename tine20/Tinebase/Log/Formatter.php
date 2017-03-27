@@ -86,7 +86,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      *
      * @param string $format
      */
-    function __construct(string $format = null)
+    public function __construct($format = null)
     {
         parent::__construct($format);
         
@@ -183,6 +183,17 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         
         return (self::$_username) ? self::$_username : '-- none --';
     }
+
+    /**
+     * reset current username
+     *
+     * @return string
+     */
+    public static function resetUsername()
+    {
+        self::$_username = NULL;
+    }
+
     
     /**
      * set/append prefix

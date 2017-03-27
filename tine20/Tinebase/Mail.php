@@ -291,7 +291,7 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'message-id':
-                        $this->setMessageId($value);
+                        $this->setMessageId(trim($value,"<>"));
                         break;
                         
                     case 'return-path':
@@ -395,7 +395,9 @@ class Tinebase_Mail extends Zend_Mail
         if ($appendCharsetFilter) {
             $charset = self::_appendCharsetFilter($zmp, $charset);
         }
-        $encoding = ($_partStructure && ! empty($_partStructure['encoding'])) ? $_partStructure['encoding'] : $zmp->encoding;
+        $encoding = (is_array($_partStructure) && ! empty($_partStructure['encoding']))
+            ? $_partStructure['encoding']
+            : $zmp->encoding;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Trying to decode mime part content. Encoding/charset: " . $encoding . ' / ' . $charset);
