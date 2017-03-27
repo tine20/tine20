@@ -253,14 +253,17 @@ class Addressbook_JsonTest extends TestCase
 
     /**
      * try to get other people contacts
-     *
      */
     public function testGetOtherPeopleContacts()
     {
         $paging = $this->objects['paging'];
 
         $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'otherUsers'),
+            array('field' => 'container_id', 'operator' => 'in',   'value' => array(
+                'id'    => 'otherUsers',
+                'name'  => 'Adressbücher anderer Benutzer',
+                'path'  => '/personal'
+            )),
         );
         $contacts = $this->_uit->searchContacts($filter, $paging);
 

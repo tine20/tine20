@@ -2244,6 +2244,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+<<<<<<< HEAD
      * returns path of record
      *
      * @param Tinebase_Record_Interface     $record
