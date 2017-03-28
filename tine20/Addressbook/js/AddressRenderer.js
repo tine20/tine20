@@ -29,7 +29,7 @@ Tine.Addressbook.addressRenderer = function (v, metadata, record, store, a, b, c
         '</tpl>');
     template.compile();
 
-    var local = Object.assign({}, config);
+    var local = Ext.apply({}, config);
     var keys = Object.keys(local);
 
     // According to config, resolve the given fields from record
