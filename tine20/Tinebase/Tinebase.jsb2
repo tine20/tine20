@@ -918,6 +918,10 @@
           "path": "js/touch/"
         },
         {
+          "text": "PresenceObserver.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }
