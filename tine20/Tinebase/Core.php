@@ -349,6 +349,7 @@ class Tinebase_Core
      * returns an instance of the controller of an application
      *
      * ATTENTION if ever refactored, this is called via ActionQueue with the single parameter 'Tinebase_FOO_User' to get Tinebase_User (triggered in Tinebase_User_Sql::deleteUserInSqlBackend()
+     * Tinebase_FOO_Filesystem
      *
      * @param   string $_applicationName appname / modelname
      * @param   string $_modelName

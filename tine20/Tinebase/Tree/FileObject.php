@@ -52,6 +52,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     protected $_keepOldRevisions = false;
 
+    protected $_getSelectHook = array();
+
     /**
      * the constructor
      *
@@ -92,6 +94,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision'),
             /* select */ array('hash', 'size')
         );
+
+        if (count($this->_getSelectHook) > 0) {
+            foreach($this->_getSelectHook as $hook) {
+                call_user_func_array($hook, array($select));
+            }
+        }
             
         return $select;
     }        
@@ -113,7 +121,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         
         // lock row
         $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
+        $stmt->fetchAll();
         
         // increase revision
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
@@ -168,11 +176,14 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($_mode !== 'create') {
             /** @var Tinebase_Model_Tree_FileObject $currentRecord */
             $currentRecord = $this->get($_record);
-            if ($currentRecord->hash !== NULL) {
+            if ($currentRecord->hash !== NULL && !empty($currentRecord->revision)) {
                 if ($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) {
                     return;
                 }
                 $updateRevision = TRUE;
+                if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
+                    $createRevision = FALSE;
+                }
             } else {
                 $createRevision = TRUE;
             }
@@ -187,17 +198,19 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             'created_by'    => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
             'hash'          => $_record->hash,
             'size'          => $_record->size,
-            'revision'      => $this->_getNextRevision($_record),
+            'revision'      => false === $createRevision && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type ? 1 : $this->_getNextRevision($_record),
         );
             
         if ($createRevision) {
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
-            // update total size
-            $this->_db->update($this->_tablePrefix . $this->_tableName,
-                array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
-                $this->_db->quoteInto( $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()) );
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type) {
+                // update total size
+                $this->_db->update($this->_tablePrefix . $this->_tableName,
+                    array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
+                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()));
+            }
 
         } elseif ($updateRevision) {
             $where = array(
@@ -205,10 +218,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             );
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
 
-            // update total size
-            $this->_db->update($this->_tablePrefix . $this->_tableName,
-                array('revision_size' => $_record->size),
-                $this->_db->quoteInto( $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()) );
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type && (int)$_record->revision_size !== (int) $_record->size) {
+                // update total size
+                $this->_db->update($this->_tablePrefix . $this->_tableName,
+                    array('revision_size' => $_record->size),
+                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()));
+            }
         }
     }
 
@@ -266,5 +281,82 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
         
         return $this->getMultiple($nodes->object_id);
+    }
+
+    /**
+     * recalculates all revision sizes of file objects of type file only
+     *
+     * on error it still continues and tries to calculate as many revision sizes as possible, but returns false
+     *
+     * @return bool
+     */
+    public function recalculateRevisionSize()
+    {
+        $success = true;
+
+        // fetch ids only, no transaction
+        $ids = $this->search(new Tinebase_Model_Tree_FileObjectFilter(array(
+                array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE)
+            )), null, true);
+        $transactionManager = Tinebase_TransactionManager::getInstance();
+        $dbExpr = new Zend_Db_Expr('sum(size)');
+
+        foreach($ids as $id) {
+            $transactionId = $transactionManager->startTransaction($this->_db);
+            try {
+                try {
+                    /** @var Tinebase_Model_Tree_FileObject $record */
+                    $record = $this->get($id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $transactionManager->commitTransaction($transactionId);
+                    continue;
+                }
+
+                $stmt = $this->_db->query($this->_db->select()->from($this->_tablePrefix . $this->_revisionsTableName, array($dbExpr))
+                    ->where('id = ?', $id));
+                if (($row = $stmt->fetch(Zend_Db::FETCH_NUM)) && ((int)$row[0]) !== ((int)$record->revision_size)) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' revision size mismatch on ' . $id . ': ' . $row[0] .' != ' . $record->revision_size);
+
+                    $record->revision_size = $row[0];
+                    $this->update($record);
+                }
+
+                $transactionManager->commitTransaction($transactionId);
+
+            // this shouldn't happen
+            } catch (Exception $e) {
+                $transactionManager->rollBack();
+                Tinebase_Exception::log($e);
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * @param Zend_Db_Select $_select
+     */
+    protected function addNotIndexedWhere(Zend_Db_Select $_select)
+    {
+        $_select->where($this->_db->quoteIdentifier($this->_tableName . '.indexedHash') . ' <> ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.hash'));
+    }
+
+    /**
+     * @return array
+     */
+    public function getNotIndexedObjectIds()
+    {
+        $this->_getSelectHook = array(array($this, 'addNotIndexedWhere'));
+
+        $fileObjects = $this->search(new Tinebase_Model_Tree_FileObjectFilter(
+                array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE)
+            ), null, true);
+
+        $this->_getSelectHook = array();
+
+        return $fileObjects;
     }
 }

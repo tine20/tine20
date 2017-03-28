@@ -60,6 +60,9 @@ class Tinebase_Fulltext_Indexer
 
     /**
      * constructor
+     *
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_NotImplemented
      */
     private function __construct()
     {
@@ -72,14 +75,32 @@ class Tinebase_Fulltext_Indexer
         }
     }
 
+    /**
+     * @param string $_id
+     * @param string $_fileName
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function addFileContentsToIndex($_id, $_fileName)
     {
         if (false === ($blob = file_get_contents($_fileName))) {
-            throw new Tinebase_Exception_UnexpectedValue('could not get file contents of: ' . $_fileName);
+            throw new Tinebase_Exception_InvalidArgument('could not get file contents of: ' . $_fileName);
         }
 
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id));
         $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));
+    }
+
+    /**
+     * @param string|array $_ids
+     */
+    public function removeFileContentsFromIndex($_ids)
+    {
+        if (empty($_ids)) {
+            return;
+        }
+        $db = Tinebase_Core::getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' IN (?)', (array)$_ids));
     }
 }

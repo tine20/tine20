@@ -224,6 +224,18 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         ));
         
         $this->_saveConfig($configRecord);
+
+        if (null !== $this->getConfigFileSection($_name)) {
+            if (is_object($_value)) {
+                if ($_value instanceof Tinebase_Config_Struct) {
+                    $_value = $_value->toArray();
+                } else {
+                    return;
+                }
+            }
+            (isset(self::$_configFileData[$this->_appName]) || array_key_exists($this->_appName, self::$_configFileData)) && (isset(self::$_configFileData[$this->_appName][$_name]) || array_key_exists($_name, self::$_configFileData[$this->_appName])) ? self::$_configFileData[$this->_appName][$_name] = $_value :
+                ((isset(self::$_configFileData[$_name]) || array_key_exists($_name, self::$_configFileData)) ? self::$_configFileData[$_name] = $_value : NULL);
+        }
     }
     
     /**

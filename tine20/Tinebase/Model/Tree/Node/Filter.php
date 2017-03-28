@@ -99,7 +99,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
         'content'              => array(
             'filter'            => 'Tinebase_Model_Filter_ExternalFullText',
             'options'           => array(
-                'idProperty' => 'id',
+                'idProperty' => 'object_id',
             )
         ),
     );

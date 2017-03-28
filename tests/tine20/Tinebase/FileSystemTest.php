@@ -36,7 +36,12 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     protected $_backend;
 
     protected $_oldModLog;
-    
+    protected $_oldIndexContent;
+
+    protected $_rmDir = array();
+
+    protected $_transactionId = null;
+
     /**
      * Runs the test methods of this class.
      *
@@ -61,9 +66,11 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('filesystem base path not found');
         }
 
-        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
-        
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->_rmDir = array();
+        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+        $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_controller = new Tinebase_FileSystem();
         $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
@@ -79,11 +86,26 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $fsConfig = Tinebase_Core::getConfig()->get(Tinebase_Config::FILESYSTEM);
+        $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
+        $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = $this->_oldIndexContent;
+        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM, $fsConfig);
+        Tinebase_FileSystem::getInstance()->resetBackends();
+
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
+
+        if (!empty($this->_rmDir)) {
+            try {
+                foreach($this->_rmDir as $rmDir) {
+                    Tinebase_FileSystem::getInstance()->rmdir($rmDir, true);
+                }
+            } catch (Exception $e) {
+            }
+            Tinebase_FileSystem::getInstance()->clearStatCache();
+        }
+
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM_MODLOGACTIVE, $this->_oldModLog);
-        Tinebase_FileSystem::getInstance()->resetBackends();
     }
     
     public function testMkdir()
@@ -261,9 +283,10 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $testDir  = $this->testMkdir();
         $testFile = 'phpunit.txt';
         $testPath = $testDir . '/' . $testFile;
-        
+
         $basePathNode = $this->_controller->stat($testDir);
-        
+        $this->assertEquals(1, $basePathNode->revision);
+
         $handle = $this->_controller->fopen($testPath, 'x');
         
         $this->assertEquals('resource', gettype($handle), 'opening file failed');
@@ -273,18 +296,26 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(7, $written);
         
         $this->_controller->fclose($handle);
-        
+
         $children = $this->_controller->scanDir($testDir)->name;
-        
+
+        $updatedBasePathNode = $this->_controller->stat($testDir);
+
         $this->assertContains($testFile, $children);
-        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($testDir)->hash);
+        $this->assertEquals(1, $updatedBasePathNode->revision);
+        $this->assertNotEquals($basePathNode->hash, $updatedBasePathNode->hash);
         
         return $testPath;
     }
 
-    public function testRevisionSizeFile()
+    public function testModLogAndIndexContent()
     {
-        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM_MODLOGACTIVE, true);
+        $this->_rmDir[] = $this->_basePath . '/PHPUNIT';
+
+        $fsConfig = Tinebase_Core::getConfig()->get(Tinebase_Config::FILESYSTEM);
+        $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+        $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = true;
+        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM, $fsConfig);
         $this->_controller->resetBackends();
 
         $testPath = $this->testCreateFile();
@@ -293,14 +324,52 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(7, $node->size);
         $this->assertEquals(7, $node->revision_size);
 
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'id',          'operator' => 'equals',     'value' => $node->getId()),
+            array('field' => 'content',     'operator' => 'contains',   'value' => 'phpunit'),
+        ));
+        $result = $this->_controller->search($filter);
+        $this->assertEquals(1, $result->count(), 'didn\'t find file');
+
+
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'id',          'operator' => 'equals',     'value' => $node->getId()),
+            array('field' => 'content',     'operator' => 'contains',   'value' => 'shooo'),
+        ));
+        $result = $this->_controller->search($filter);
+        $this->assertEquals(0, $result->count(), 'did find file where non should be found');
+
+
         $handle = $this->_controller->fopen($testPath, 'w');
-        $written = fwrite($handle, '12345');
+        $written = fwrite($handle, 'abcde');
         $this->assertEquals(5, $written);
         $this->_controller->fclose($handle);
 
         $node = $this->_controller->stat($testPath);
         $this->assertEquals(5, $node->size);
         $this->assertEquals(12, $node->revision_size);
+
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'id',          'operator' => 'equals',     'value' => $node->getId()),
+            array('field' => 'content',     'operator' => 'contains',   'value' => 'abcde'),
+        ));
+        $result = $this->_controller->search($filter);
+        $this->assertEquals(1, $result->count(), 'didn\'t find file');
+
+
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'id',          'operator' => 'equals',     'value' => $node->getId()),
+            array('field' => 'content',     'operator' => 'contains',   'value' => 'phpunit'),
+        ));
+        $result = $this->_controller->search($filter);
+        $this->assertEquals(0, $result->count(), 'did find file where non should be found');
     }
     
     /**

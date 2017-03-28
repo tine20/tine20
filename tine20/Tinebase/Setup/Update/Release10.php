@@ -398,6 +398,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <name>creation_time</name>
                     <type>datetime</type>
                 </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
                 <name>path</name>
                     <fulltext>true</fulltext>
                     <field>
@@ -423,30 +431,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
     /**
      * update to 10.11
-     */
-    public function update_10()
-    {
-        if (!$this->_backend->columnExists('is_deleted', 'tree_nodes')) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>');
-
-            $this->_backend->addCol('tree_nodes', $declaration);
-
-            $this->setTableVersion('tree_nodes', '2');
-        }
-
-        $this->setApplicationVersion('Tinebase', '10.11');
-    }
-
-    /**
-     * update to 10.12
      *
      * create external_fulltext table
      */
-    public function update_11()
+    public function update_10()
     {
         $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
             <name>external_fulltext</name>
@@ -481,27 +469,15 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             </declaration>
         </table>'), 'Tinebase', 'external_fulltext');
 
-        if (!$this->_backend->columnExists('tree_nodes', 'indexed_hash')) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>indexed_hash</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>');
-
-            $this->_backend->addCol('tree_nodes', $declaration);
-
-            $this->setTableVersion('tree_nodes', '3');
-        }
-
-        $this->setApplicationVersion('Tinebase', '10.12');
+        $this->setApplicationVersion('Tinebase', '10.11');
     }
 
     /**
-     * update to 10.13
+     * update to 10.12
      *
      * add revision_size to tree_fileobjects
      */
-    public function update_12()
+    public function update_11()
     {
 
         if (!$this->_backend->columnExists('total_size', 'tree_fileobjects')) {
@@ -512,11 +488,21 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <default>0</default>
                 </field>');
 
-            $this->_backend->addCol('tree_fileobjects', $declaration);
+            $query = $this->_backend->addAddCol('', 'tree_fileobjects', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+
+            $query = $this->_backend->addAddCol($query, 'tree_fileobjects', $declaration);
+
+            $this->_backend->execQueryVoid($query);
 
             $this->setTableVersion('tree_fileobjects', '4');
         }
 
-        $this->setApplicationVersion('Tinebase', '10.13');
+        $this->setApplicationVersion('Tinebase', '10.12');
     }
 }

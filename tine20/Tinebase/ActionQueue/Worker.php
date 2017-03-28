@@ -153,24 +153,25 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      * execute the action
      *
      * @param  string  $job
+     * //@ throws Exception
      * @todo make self::EXECUTION_METHOD_EXEC_CLI working
      */
     protected function _executeAction($job)
     {
         // execute in subprocess
-        if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
+        /*if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
             $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($job), $exitCode );
-            if (exitCode != 0) {
+            if ($exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . $output);
             }
 
         // execute in same process
-        } else {
+        } else { */
             Tinebase_Core::initFramework();
     
             Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
             
             Tinebase_ActionQueue::getInstance()->executeAction($job);
-        }
+        //}
     }
 }

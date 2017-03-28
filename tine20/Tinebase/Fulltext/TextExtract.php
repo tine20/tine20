@@ -57,6 +57,8 @@ class Tinebase_Fulltext_TextExtract
 
     /**
      * constructor
+     *
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     private function __construct()
     {
@@ -68,12 +70,29 @@ class Tinebase_Fulltext_TextExtract
         $this->_tikaJar = escapeshellarg($fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR});
     }
 
-    public function nodeToTempFile(Tinebase_Model_Tree_Node $_node)
+    /**
+     * @param Tinebase_Model_Tree_FileObject $_fileObject
+     * @return bool|string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function fileObjectToTempFile(Tinebase_Model_Tree_FileObject $_fileObject)
     {
-        $tempFileName = Tinebase_TempFile::getTempPath();
-        $blobFileName = Tinebase_FileSystem::getInstance()->getRealPathForNode($_node);
+        if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_fileObject->type) {
+            throw new Tinebase_Exception_InvalidArgument('$_fileObject needs to be of type file only!');
+        }
 
-        exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 ' . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName));
+        $tempFileName = Tinebase_TempFile::getTempPath();
+        $blobFileName = $_fileObject->getFilesystemPath();
+
+        exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
+            . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName), $output, $result);
+
+        if ($result !== 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' tika did not return status 0: ' . print_r($output, true) . ' ' . print_r($result, true));
+            unlink($tempFileName);
+            return false;
+        }
 
         return $tempFileName;
     }

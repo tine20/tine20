@@ -25,6 +25,7 @@
  * @property    string             size
  * @property    string             revision_size
  * @property    string             type
+ * @property    string             revision
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -93,7 +94,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
-        'indexed_hash'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -109,6 +109,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'contenttype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'hash'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'indexed_hash'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'size'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'revision_size'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 

@@ -487,10 +487,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FULLTEXT_JAVABIN = 'javaBin';
     const FULLTEXT_TIKAJAR = 'tikaJar';
 
-    /**
-     * @var string
-     */
-    const FILESYSTEM_MODLOGACTIVE = 'fileSystemModLogActive';
+    const FILESYSTEM = 'filesystem';
+    const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
+    const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
+    const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
+    const FILESYSTEM_INDEX_CONTENT = 'index_content';
 
     /**
      * (non-PHPdoc)
@@ -1345,17 +1346,65 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,
         ),
-        self::FILESYSTEM_MODLOGACTIVE => array(
-        //_('Filesystem history')
-            'label'                 => 'Filesystem history',
-        //_('Filesystem keeps history, default is false.')
-            'description'           => 'Filesystem keeps history, default is false.',
-            'type'                  => 'bool',
+        self::FILESYSTEM => array(
+            //_('Filesystem settings')
+            'label'                 => 'Filesystem settings',
+            //_('Filesystem settings.')
+            'description'           => 'Filesystem settings.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
-            'default'               => FALSE,
+            'content'               => array(
+                self::FILESYSTEM_MODLOGACTIVE => array(
+                    //_('Filesystem history')
+                    'label'                 => 'Filesystem history',
+                    //_('Filesystem keeps history, default is false.')
+                    'description'           => 'Filesystem keeps history, default is false.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+                self::FILESYSTEM_NUMKEEPREVISIONS => array(
+                    //_('Filesystem number of revisions')
+                    'label'                 => 'Filesystem number of revisions',
+                    //_('Filesystem number of revisions being kept before they are automatically deleted.')
+                    'description'           => 'Filesystem number of revisions being kept before they are automatically deleted.',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 100,
+                ),
+                self::FILESYSTEM_MONTHKEEPREVISIONS => array(
+                    //_('Filesystem months of revisions')
+                    'label'                 => 'Filesystem months of revisions',
+                    //_('Filesystem number of months revisions being kept before they are automatically deleted.')
+                    'description'           => 'Filesystem number of months revisions being kept before they are automatically deleted.',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 60,
+                ),
+                self::FILESYSTEM_INDEX_CONTENT => array(
+                    //_('Filesystem index content')
+                    'label'                 => 'Filesystem index content',
+                    //_('Filesystem index content.')
+                    'description'           => 'Filesystem index content.',
+                    'type'                  => 'boolean',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+            ),
+            'default'               => array(),
         ),
+
     );
     
     /**

@@ -668,48 +668,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
                 $this->_backend->copyTempfile($_tempFileId, $_statpath);
-
-                // fulltext indexing
-                if (true === Filemanager_Config::getInstance()->get(Filemanager_Config::INDEX_CONTENT)) {
-                    $node = $this->_backend->stat($_statpath);
-                    Tinebase_ActionQueue::getInstance()->queueAction('Filemanager_Controller_Node.indexNode', $node->getId());
-                }
-
                 break;
+
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
                 $node = $this->_backend->mkdir($_statpath);
                 break;
         }
 
         return $node !== null ? $node : $this->_backend->stat($_statpath);
-    }
-
-    public function indexNode($_nodeId)
-    {
-        /** @var Tinebase_Model_Tree_Node $node */
-        try {
-            $node = $this->_backend->get($_nodeId);
-        } catch(Tinebase_Exception_NotFound $tenf) {
-            // TODO log
-            return;
-        }
-        if (Tinebase_Model_Tree_Node::TYPE_FILE !== $node->type) {
-            // TODO log
-            return;
-        }
-        if ($node->hash === $node->indexed_hash) {
-            // nothing to do
-            return true;
-        }
-
-        $tmpFile = Tinebase_Fulltext_TextExtract::getInstance()->nodeToTempFile($node);
-        Tinebase_Fulltext_Indexer::getInstance()->addFileContentsToIndex($node->getId(), $tmpFile);
-        unlink($tmpFile);
-
-        $node->indexed_hash = $node->hash;
-        Tinebase_FileSystem::getInstance()->update($node);
-
-        return true;
     }
     
     /**

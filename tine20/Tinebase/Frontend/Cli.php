@@ -1118,12 +1118,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * clears deleted files from filesystem + database
-     * @return boolean
+     *
+     * @return int
      */
     public function clearDeletedFiles()
     {
         if (! $this->_checkAdminRight()) {
-            return FALSE;
+            return -1;
         }
         
         $this->_addOutputLogWriter();
@@ -1131,6 +1132,40 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
 
         return 0;
+    }
+
+    /**
+     * recalculates the revision sizes and then the folder sizes
+     *
+     * @return int
+     */
+    public function fileSystemSizeRecalculation()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->recalculateRevisionSize();
+
+        Tinebase_FileSystem::getInstance()->recalculateFolderSize();
+
+        return 0;
+    }
+
+    /**
+     * checks if there are not yet indexed file objects and adds them to the index synchronously
+     * that means this can be very time consuming
+     *
+     * @return int
+     */
+    public function fileSystemCheckIndexing()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->checkIndexing();
     }
     
     /**
