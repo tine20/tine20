@@ -30,4 +30,48 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_8();
         $this->setApplicationVersion('Calendar', '10.2');
     }
+
+    /**
+     * fix displaycontainer in organizers attendee records
+     */
+    public function update_2()
+    {
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>max_number_of_people</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+                <default>null</default>
+            </field>');
+        $this->_backend->addCol('cal_resources', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>type</name>
+                <type>text</type>
+                <length>32</length>
+                <default>RESOURCE</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->addCol('cal_resources', $declaration);
+
+        $resourceController =  Calendar_Controller_Resource::getInstance();
+        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        $resources = $resourceController->getAll();
+        foreach ($resources as $resource) {
+            if ($resource->is_location) {
+                $resource->type = 'ROOM';
+
+                $resourceController->update($resource);
+            }
+        }
+
+        $this->setTableVersion('cal_resources', 5);
+
+
+        $this->setApplicationVersion('Calendar', '10.3');
+    }
 }

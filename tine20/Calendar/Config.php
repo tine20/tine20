@@ -37,6 +37,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const ATTENDEE_ROLES = 'attendeeRoles';
 
     /**
+     * Resource Types Available
+     *
+     * @var string
+     */
+    const RESOURCE_TYPES = 'resourceTypes';
+
+    /**
      * FreeBusy Types Available
      *
      * @var string
@@ -254,6 +261,22 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
                 ),
                 'default' => 'REQ'
+            )
+        ),
+        self::RESOURCE_TYPES => array(
+            //_('Resource Types Available')
+            'label'                 => 'Resource Types Available',
+            //_('Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'RESOURCE', 'value' => 'Resource', 'system' => true), //_('Resource')
+                    array('id' => 'ROOM', 'value' => 'Room', 'system' => true), //_('Room')
+                ),
+                'default' => 'RESOURCE'
             )
         ),
         self::FREEBUSY_TYPES => array(

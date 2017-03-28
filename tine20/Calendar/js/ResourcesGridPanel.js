@@ -51,11 +51,20 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'email'
-        }, new Ext.ux.grid.CheckColumn({
-            header: this.app.i18n._('Location'),
-            dataIndex: 'is_location',
-            width: 55
-        }), {
+        }, {
+            id: 'type',
+            header: this.app.i18n._("Type"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'type',
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'resourceTypes')
+        }, {
+            id: 'max_number_of_people',
+            header: this.app.i18n._("Maximum number of attendee"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'max_number_of_people'
+        }, {
             id: 'status',
             dataIndex: 'status',
             width: 140,
