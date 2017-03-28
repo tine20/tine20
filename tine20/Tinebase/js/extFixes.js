@@ -353,7 +353,12 @@ Ext.ButtonToggleMgr = function(){
  * add beforeloadrecords event
  */
 Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
-    return this.fireEvent('beforeloadrecords', o, options, success, this);
+    var pass = this.fireEvent('beforeloadrecords', o, options, success, this);
+    if (pass === false) {
+        // fire load event so loading indicator stops
+        this.fireEvent('load', this, this.data.items, options);
+        return false;
+    }
 });
 
 /**
@@ -472,13 +477,6 @@ Ext.override(Ext.state.Provider, {
         }
         return escape(enc);
     }
-});
-
-/**
- * add beforeloadrecords event
- */
-Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
-    return this.fireEvent('beforeloadrecords', o, options, success, this);
 });
 
 /**

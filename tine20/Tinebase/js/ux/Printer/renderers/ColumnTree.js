@@ -35,33 +35,36 @@ Ext.ux.Printer.ColumnTreeRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
    * @return {Array} Data suitable for use in the body XTemplate
    */
   prepareData: function(tree) {
-    var root = tree.root,
-        data = [],
-        cols = this.getColumns(tree),
-        padding = this.indentPadding;
-        
-    var f = function(node) {
-      if (node.hidden === true || node.isHiddenRoot() === true) return;
-      
-      var row = Ext.apply({depth: node.getDepth() * padding}, node.attributes);
-      
-      Ext.iterate(row, function(key, value) {
-        Ext.each(cols, function(column) {
-          if (column.dataIndex == key) {
-            row[key] = column.renderer ? column.renderer(value) : value;
-          }
-        }, this);
+      var me = this;
+      return new Promise(function (fulfill, reject) {
+          var root = tree.root,
+              data = [],
+              cols = this.getColumns(tree),
+              padding = me.indentPadding;
+
+          var f = function (node) {
+              if (node.hidden === true || node.isHiddenRoot() === true) return;
+
+              var row = Ext.apply({depth: node.getDepth() * padding}, node.attributes);
+
+              Ext.iterate(row, function (key, value) {
+                  Ext.each(cols, function (column) {
+                      if (column.dataIndex == key) {
+                          row[key] = column.renderer ? column.renderer(value) : value;
+                      }
+                  }, me);
+              });
+
+              //the property used in the first column is renamed to 'text' in node.attributes, so reassign it here
+              row[me.getColumns(tree)[0].dataIndex] = node.attributes.text;
+
+              data.push(row);
+          };
+
+          root.cascade(f, me);
+
+          fulfill(data);
       });
-      
-      //the property used in the first column is renamed to 'text' in node.attributes, so reassign it here
-      row[this.getColumns(tree)[0].dataIndex] = node.attributes.text;
-      
-      data.push(row);
-    };
-    
-    root.cascade(f, this);
-    
-    return data;
   },
   
   /**
