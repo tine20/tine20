@@ -62,6 +62,7 @@
  * @property    string $type                       type of contact
  * @property    string $url                        url of the contact
  * @property    string $url_home                   private url of the contact
+ * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
@@ -215,6 +216,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_prefer_normalized'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'geo'                           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'preferred_address'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog fields
         'created_by'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),

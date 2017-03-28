@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -35,5 +36,25 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $this->setTableVersion('addressbook', 22);
         $this->setApplicationVersion('Addressbook', '10.2');
+    }
+
+    /**
+     * Adds a flag to toggle between private and business as preferred address
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>preferred_address</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+            </field>');
+
+        $this->_backend->addCol('addressbook', $declaration);
+
+        $this->setTableVersion('addressbook', 23);
+        $this->setApplicationVersion('Addressbook', '10.3');
     }
 }

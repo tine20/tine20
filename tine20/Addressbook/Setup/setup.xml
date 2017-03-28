@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>10.2</version>
+    <version>10.3</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,13 +11,18 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>22</version>
+            <version>23</version>
             <declaration>
                 <field>
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>preferred_address</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>

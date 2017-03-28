@@ -268,6 +268,24 @@ Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
 };
 
 /**
+ * Column renderer adb preferred_address field
+ * @param value
+ * @return {*}
+ */
+Tine.Addressbook.ContactGridPanel.preferredAddressRenderer = function(value) {
+    var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+
+    switch (value) {
+        case '0':
+            return i18n._('Business');
+        case '1':
+            return i18n._('Private');
+        default:
+            return i18n._('Not set');
+    }
+};
+
+/**
  * Statically constructs the columns used to represent a contact. Reused by ListMemberGridPanel + ListMemberRoleGridPanel
  */
 Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
@@ -303,6 +321,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'adr_two_region', header: i18n._('Region (private)'), dataIndex: 'adr_two_region' },
         { id: 'adr_two_postalcode', header: i18n._('Postalcode (private)'), dataIndex: 'adr_two_postalcode' },
         { id: 'adr_two_countryname', header: i18n._('Country (private)'), dataIndex: 'adr_two_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
+        { id: 'preferred_address', header: i18n._('Preferred Address'), dataIndex: 'preferred_address', renderer: Tine.Addressbook.ContactGridPanel.preferredAddressRenderer },
         { id: 'email', header: i18n._('Email'), dataIndex: 'email', width: 150, hidden: false },
         { id: 'tel_work', header: i18n._('Phone'), dataIndex: 'tel_work', hidden: false },
         { id: 'tel_cell', header: i18n._('Mobile'), dataIndex: 'tel_cell', hidden: false },
