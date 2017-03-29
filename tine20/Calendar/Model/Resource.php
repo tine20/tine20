@@ -77,4 +77,10 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'last_modified_time', 
         'deleted_time', 
     );
+
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'STANDORT', 'degree' => 'child', 'text' => 'Standort', 'max' => '0:0'),
+        )),
+    );
 }

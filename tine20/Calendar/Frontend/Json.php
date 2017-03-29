@@ -355,7 +355,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchResources($filter, $paging)
     {
-        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter');
+        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter', true);
     }
     
     /**

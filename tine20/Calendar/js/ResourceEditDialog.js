@@ -98,6 +98,16 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             allowBlank: true,
                             name: 'max_number_of_people'
                         }], [{
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Location'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'STANDORT',
+                            relationDegree: 'child',
+                            modelUnique: true,
+                        }, {
                             xtype: 'checkbox',
                             fieldLabel: this.app.i18n._('Suppress notification'),
                             name: 'suppress_notification'
