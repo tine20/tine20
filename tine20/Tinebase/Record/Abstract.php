@@ -215,7 +215,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static $_requiredRight = NULL;
 
-    
+
     /******************************** functions ****************************************/
     
     /**
@@ -671,7 +671,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function __get($name)
     {
         return (isset($this->_properties[$name]) || array_key_exists($name, $this->_properties))
-            ? $this->_properties[$name] 
+            ? $this->_properties[$name]
             : NULL;
     }
     
@@ -1429,5 +1429,19 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         $this->relations = $oldRelations;
         return $result;
+    }
+
+    /**
+     * extended properties getter
+     */
+    public function &xprops()
+    {
+        if (!isset($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = array();
+        } else if (is_string($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        }
+
+        return $this->_properties['xprops'];
     }
 }

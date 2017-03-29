@@ -22,7 +22,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     recordClass: Tine.Calendar.Model.Resource,
     windowNamePrefix: 'ResourceEditWindow_',
-    evalGrants: false,
+    evalGrants: true,
     showContainerSelector: false,
     tbarItems: [],
     //mode: 'local',

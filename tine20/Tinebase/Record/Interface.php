@@ -280,4 +280,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return string
      */
     public function getTypeForPathPart();
+
+    /**
+     * @return &array
+     */
+    public function xprops();
 }

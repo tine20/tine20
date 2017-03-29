@@ -239,6 +239,13 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_hasAttachments = NULL;
+
+    /**
+     * If this is true, the record has extended properties
+     *
+     * @var boolean
+     */
+    protected $_hasXProps = NULL;
     
     /**
      * If this is true, a modlog will be created
@@ -904,7 +911,14 @@ class Tinebase_ModelConfiguration {
                 'type'  => 'attachments'
             );
         }
-        
+
+        if ($this->_hasXProps) {
+            $this->_fields['xprops'] = array(
+                'label' => NULL,
+                'type'  => 'json',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+            );
+        }
         
         if ($this->_modlogActive) {
             // notes are needed if modlog is active
@@ -935,6 +949,10 @@ class Tinebase_ModelConfiguration {
         
         foreach ($this->_fields as $fieldKey => &$fieldDef) {
             $fieldDef['fieldName'] = $fieldKey;
+
+            if (isset($fieldDef['readOnly'])) {
+                $this->_readOnlyFields[] = $fieldKey;
+            }
 
             // set default type to string, if no type is given
             if (! (isset($fieldDef['type']) || array_key_exists('type', $fieldDef))) {

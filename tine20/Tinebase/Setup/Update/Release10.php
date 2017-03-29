@@ -723,4 +723,27 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.15');
     }
+
+    /**
+     * update to 10.16
+     *
+     * add container xprops column
+     */
+    public function update_15()
+    {
+        if (! $this->_backend->columnExists('xprops', 'container')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
+                </field>
+            ');
+            $this->_backend->addCol('container', $declaration);
+            $this->setTableVersion('container', 12);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.16');
+    }
 }

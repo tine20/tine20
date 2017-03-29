@@ -99,6 +99,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         $_record->container_id = $container->getId();
         $createdRecord = parent::create($_record);
 
+        $container->xprops()['Calendar']['Resource']['resource_id'] = $createdRecord->getId();
+        Tinebase_Container::getInstance()->update($container);
+
         $updateObserver = new Tinebase_Model_PersistentObserver(array(
             'observable_model'      => 'Tinebase_Model_Container',
             'observable_identifier' => $createdRecord->container_id,

@@ -63,6 +63,7 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
         'inarray'         => array(array('InArray', array('value1', 'value2')), 'allowEmpty' => true),
         'set1'            => array('allowEmpty' => true),
         'set2'            => array('allowEmpty' => true),
+        'xprops'          => array('allowEmpty' => true),
     );
 
     /**
