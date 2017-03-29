@@ -32,6 +32,8 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
         if (empty($config['name'])) {
             unset($config['name']);
         }
+
+        $config['connectionOptions'] = Tinebase_Mail::getConnectionOptions();
         parent::__construct($host, $config);
     }
     

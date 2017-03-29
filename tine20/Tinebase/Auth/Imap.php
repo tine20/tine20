@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -29,6 +29,9 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
             __METHOD__ . '::' . __LINE__ . ' ' . print_r($options, true));
         
         parent::__construct($options, $username, $password);
+
+        $connectionOptions = Tinebase_Mail::getConnectionOptions(10);
+        $this->getImap()->setConnectionOptions($connectionOptions);
     }
     
     /**
