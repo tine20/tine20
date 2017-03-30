@@ -1433,6 +1433,50 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Tests if path info in query breaks backend
+     */
+    public function testSearchContactsWithPathFilterIfPathDisabled()
+    {
+        if (Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->markTestSkipped('Test does not apply if path feature is enabled');
+        }
+
+        $filter = [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'condition' => 'AND',
+                        'filters' => [
+                            [
+                                'field' => 'query',
+                                'operator' => 'contains',
+                                'value' => '',
+                            ],
+                        ],
+                    ],
+                    [
+                        'field' => 'path',
+                        'operator' => 'contains',
+                        'value' => '',
+                    ],
+                ],
+            ]
+        ];
+
+        $paging = [
+            'sort' => 'n_fn',
+            'dir' => 'ASC',
+            'start' => 0,
+            'limit' => 10
+        ];
+
+        $result = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertEquals(6, $result['totalcount']);
+    }
+
+    /**
      * testOrganizerForeignIdFilterWithOrCondition
      */
     public function testOrganizerForeignIdFilterWithOrCondition()
