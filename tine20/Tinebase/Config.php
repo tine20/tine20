@@ -522,6 +522,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
 
+    const ACTIONQUEUE = 'actionqueue';
+    const ACTIONQUEUE_BACKEND = 'backend';
+
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -757,6 +761,27 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'                           => array()
         ),
+        self::ACTIONQUEUE => array(
+            //_('Action queue configuration')
+            'label'                 => 'Action queue configuration',
+            //_('Action queue configuration.')
+            'description'           => 'Action queue configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::ACTIONQUEUE_BACKEND       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'Direct'
+                ),
+            ),
+            'default'                           => array()
+        ),
+        /*const ACTIONQUEUE = 'actionqueue';
+    const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_BACKEND = 'backend';*/
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',

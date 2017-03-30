@@ -80,14 +80,15 @@
     {
         $options = null;
         $backend = self::BACKEND_DIRECT;
+        $config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
 
         /** @noinspection PhpUndefinedFieldInspection */
-        if (isset(Tinebase_Core::getConfig()->actionqueue) && Tinebase_Core::getConfig()->actionqueue->active) {
+        if ($config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND})) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $options = Tinebase_Core::getConfig()->actionqueue->toArray();
+            $options = $config->toArray();
             
-            $backend = (isset($options['backend']) || array_key_exists('backend', $options)) ? ucfirst(strtolower($options['backend'])) : $backend;
-            unset($options['backend']);
+            $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower($options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
+            unset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]);
         }
         
         $className = 'Tinebase_ActionQueue_Backend_' . $backend;
