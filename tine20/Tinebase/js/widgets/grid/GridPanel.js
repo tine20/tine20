@@ -251,6 +251,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     copyEditAction: false,
 
     /**
+     * @cfg {Boolean} moveAction
+     * activate moveAction
+     */
+    moveAction: true,
+
+    /**
      * disable delete confirmation by default
      *
      * @type Boolean
@@ -703,6 +709,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             translationObject: this.i18nMoveActionText ? this.app.i18n : i18n,
             text: this.i18nMoveActionText ? this.i18nMoveActionText[0] : String.format(i18n.ngettext('Move {0}', 'Move {0}', 1), this.i18nRecordName),
             disabled: true,
+            hidden: !this.moveAction || !this.recordClass.getMeta('containerProperty'),
             actionType: 'edit',
             handler: this.onMoveRecords,
             scope: this,
