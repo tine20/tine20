@@ -436,7 +436,22 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 }));
             }
-            
+
+            if (attender.get('user_type') == 'resource') {
+                Tine.log.debug('Adding resource hook for attender');
+                var resourceId = attender.get('user_id').id;
+
+                items = items.concat(new Ext.Action({
+                    text: this.app.i18n._('Edit Resource'),
+                    iconCls: 'cal-resource',
+                    scope: this,
+                    handler: function() {
+                        var resource = new Tine.Calendar.Model.Resource({id: resourceId}, resourceId);
+                        Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
+                    }
+                }));
+            }
+
             var plugins = [];
             if (this.phoneHook && attender.get('user_type') == 'user') {
                 var contact = new Tine.Addressbook.Model.Contact(attender.get('user_id'));
