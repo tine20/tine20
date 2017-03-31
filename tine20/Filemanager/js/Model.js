@@ -27,7 +27,8 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'account_grants' },
     { name: 'description' },
     { name: 'object_id'},
-    
+    { name: 'revision_size' },
+
     { name: 'relations' },
     { name: 'customfields' },
     { name: 'notes' },

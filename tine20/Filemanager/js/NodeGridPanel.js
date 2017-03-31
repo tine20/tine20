@@ -183,6 +183,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.usernameRenderer 
             }
         ];
+
+        if (Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
+            columns.push({
+                id: 'revision_size',
+                header: this.app.i18n._("Revision Size"),
+                tooltip: this.app.i18n._("Total size of all available revisions"),
+                width: 40,
+                sortable: true,
+                dataIndex: 'revision_size',
+                hidden: true,
+                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3)
+            });
+        }
         
         return new Ext.grid.ColumnModel({
             defaults: {
