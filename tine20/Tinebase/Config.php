@@ -1395,7 +1395,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'label'                 => 'Filesystem index content',
                     //_('Filesystem index content.')
                     'description'           => 'Filesystem index content.',
-                    'type'                  => 'boolean',
+                    'type'                  => 'bool',
                     'clientRegistryInclude' => TRUE,
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,

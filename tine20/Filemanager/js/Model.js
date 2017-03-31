@@ -530,7 +530,9 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
         {label: app.i18n._('Description'), field: 'description'},
         {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
         {filtertype : 'tinebase.tag', app : app} 
-    ];
+    ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
+        {label : i18n._('File Contents'), field : 'content', operators : [ 'contains' ]}
+    ] : []);
 };
 
 /**
