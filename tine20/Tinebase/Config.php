@@ -1496,6 +1496,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             $configRegistryItem = new Tinebase_Config_Struct(array(
                                 'value' => $config->{$name},
                                 'definition' => new Tinebase_Config_Struct($definition),
+                            ), null, null, array(
+                                'value' => array('type' => $definition['type']),
+                                'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
                             ));
                             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                                 . ' ' . print_r($configRegistryItem->toArray(), TRUE));

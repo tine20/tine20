@@ -18,9 +18,6 @@
  */
 class Tinebase_Fulltext_Indexer
 {
-    protected $_javaBin;
-    protected $_tikaJar;
-
     /**
      * holds the instance of the singleton
      *
@@ -66,10 +63,7 @@ class Tinebase_Fulltext_Indexer
      */
     private function __construct()
     {
-        if (null === ($fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)) || ! $fulltextConfig instanceof Tinebase_Config_Struct) {
-            throw new Tinebase_Exception_UnexpectedValue('no fulltext configuration found');
-        }
-
+        $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
         if ('Sql' !== $fulltextConfig->{Tinebase_Config::FULLTEXT_BACKEND}) {
             throw new Tinebase_Exception_NotImplemented('only Sql backend is implemented currently');
         }

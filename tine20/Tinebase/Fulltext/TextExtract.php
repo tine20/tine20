@@ -18,6 +18,9 @@
  */
 class Tinebase_Fulltext_TextExtract
 {
+    protected $_javaBin;
+    protected $_tikaJar;
+
     /**
      * holds the instance of the singleton
      *
@@ -62,9 +65,7 @@ class Tinebase_Fulltext_TextExtract
      */
     private function __construct()
     {
-        if (null === ($fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)) || ! $fulltextConfig instanceof Tinebase_Config_Struct) {
-            throw new Tinebase_Exception_UnexpectedValue('no fulltext configuration found');
-        }
+        $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
 
         $this->_javaBin = escapeshellcmd($fulltextConfig->{Tinebase_Config::FULLTEXT_JAVABIN});
         $this->_tikaJar = escapeshellarg($fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR});

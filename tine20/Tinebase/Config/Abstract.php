@@ -118,6 +118,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected $_cachedApplicationConfig = NULL;
 
+    protected $_mergedConfigCache = array();
+
     /**
      * server classes
      *
@@ -162,25 +164,65 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     public function get($name, $default = NULL)
     {
-        // NOTE: we check config file data here to prevent db lookup when db is not yet setup
+        if (isset($this->_mergedConfigCache[$name]) || array_key_exists($name, $this->_mergedConfigCache)) {
+            if (!isset($this->_mergedConfigCache[$name]) && null !== $default) {
+                return $default;
+            }
+            return $this->_mergedConfigCache[$name];
+        }
+
+        $fileConfigArray = null;
+        $dbConfigArray = null;
+        $dbAvailable = Tinebase_Core::hasDb();
+
+        // NOTE: we return here (or in the default handling) if db is not available. That is to prevent db lookup when db is not yet setup
         $configFileSection = $this->getConfigFileSection($name);
-        if ($configFileSection) {
-            return $this->_rawToConfig($configFileSection[$name], $name);
+        if (null !== $configFileSection) {
+            $fileConfigArray = $configFileSection[$name];
+            if (false === $dbAvailable) {
+                return $this->_rawToConfig($fileConfigArray, $name);
+            }
         }
         
-        if (Tinebase_Core::getDb() && $config = $this->_loadConfig($name)) {
-            $decodedConfigData = json_decode($config->value, TRUE);
+        if (true === $dbAvailable && null !== ($config = $this->_loadConfig($name))) {
+            $dbConfigArray = json_decode($config->value, TRUE);
             // @todo JSON encode all config data via update script!
-            return $this->_rawToConfig(($decodedConfigData || is_array($decodedConfigData)) ? $decodedConfigData : $config->value, $name);
+            if (null === $dbConfigArray && strtolower($config->value) !== '{null}') $dbConfigArray = $config->value;
         }
-        
-       // get default from definition if needed
-       if ($default === null) {
-           $default = $this->_getDefault($name);
-           return $this->_rawToConfig($default, $name);
-       }
-        
-        return $default;
+
+        $data = null;
+        if (null === $fileConfigArray && null === $dbConfigArray) {
+            if ($default !== null) {
+                return $default;
+            }
+
+            $data = $this->_getDefault($name);
+        } else {
+
+            if (null === $fileConfigArray) {
+                $fileConfigArray = array();
+            } elseif(!is_array($fileConfigArray)) {
+                $data = $fileConfigArray;
+            }
+
+            if (null === $dbConfigArray) {
+                $dbConfigArray = array();
+            } elseif(!is_array($dbConfigArray) && null === $data) {
+                if (count($fileConfigArray) > 0) {
+                    $dbConfigArray = array();
+                } else {
+                    $data = $dbConfigArray;
+                }
+            }
+
+            if (null === $data) {
+                $data = array_replace_recursive($dbConfigArray, $fileConfigArray);
+            }
+        }
+
+        $this->_mergedConfigCache[$name] = $this->_rawToConfig($data, $name);
+
+        return $this->_mergedConfigCache[$name];
     }
     
     /**
@@ -199,8 +241,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $appDefaultConfig = $this->_getAppDefaultsConfigFileData();
         if (isset($appDefaultConfig[$name])) {
             $default = $appDefaultConfig[$name];
-        } else if ($definition && (isset($definition['default']) || array_key_exists('default', $definition))) {
-            $default = $definition['default'];
+        } else if (null !== $definition) {
+            if (isset($definition['default']) || array_key_exists('default', $definition)) {
+                $default = $definition['default'];
+            } elseif (isset($definition['type']) && isset($definition['class']) && $definition['type'] === self::TYPE_OBJECT) {
+                $default = array();
+            }
         }
 
         return $default;
@@ -208,6 +254,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     
     /**
      * store a config value
+     *
+     * if you store a value here, it will be valid for the current process and be persisted in the db, BUT
+     * it maybe overwritten by a config file entry. So other process that merge the config from db and config
+     * file again may not get the value you set here.
      *
      * @TODO validate config (rawToString?)
      *
@@ -217,6 +267,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     public function set($_name, $_value)
     {
+        if (null === $_value) {
+            $this->delete($_name);
+            if (isset($this->_mergedConfigCache[$_name]) || array_key_exists($_name, $this->_mergedConfigCache)) {
+                unset($this->_mergedConfigCache[$_name]);
+            }
+            return;
+        }
+
         $configRecord = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
             "name"              => $_name,
@@ -225,17 +283,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         $this->_saveConfig($configRecord);
 
-        if (null !== $this->getConfigFileSection($_name)) {
-            if (is_object($_value)) {
-                if ($_value instanceof Tinebase_Config_Struct) {
-                    $_value = $_value->toArray();
-                } else {
-                    return;
-                }
-            }
-            (isset(self::$_configFileData[$this->_appName]) || array_key_exists($this->_appName, self::$_configFileData)) && (isset(self::$_configFileData[$this->_appName][$_name]) || array_key_exists($_name, self::$_configFileData[$this->_appName])) ? self::$_configFileData[$this->_appName][$_name] = $_value :
-                ((isset(self::$_configFileData[$_name]) || array_key_exists($_name, self::$_configFileData)) ? self::$_configFileData[$_name] = $_value : NULL);
-        }
+        $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
     }
     
     /**
@@ -249,7 +297,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $config = $this->_loadConfig($_name);
         if ($config) {
             $this->_getBackend()->delete($config->getId());
-            $this->clearCache(array("name" => $_name));
+            $this->clearCache();
         }
     }
     
@@ -621,6 +669,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         // reset class caches last because they would be filled again by Tinebase_Core::guessTempDir()
         self::$_configFileData = null;
         $this->_cachedApplicationConfig = null;
+        $this->_mergedConfigCache = array();
     }
     
     /**
@@ -649,7 +698,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _rawToConfig($_rawData, $_name)
     {
-        return static::rawToConfig($_rawData, self::getDefinition($_name), $this->_appName);
+        return static::rawToConfig($_rawData, $this, $_name, self::getDefinition($_name), $this->_appName);
     }
 
     /**
@@ -659,13 +708,15 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @TODO support interceptors
      * 
      * @param   mixed     $_rawData
+     * @param   object    $parent
+     * @param   string    $parentKey
      * @param   array     $definition
      * @param   string    $appName
      * @return  mixed
      */
-    public static function rawToConfig($_rawData, $definition, $appName)
+    public static function rawToConfig($_rawData, $parent, $parentKey, $definition, $appName)
     {
-        if ($_rawData === null) {
+        if (null === $_rawData) {
             return $_rawData;
         }
 
@@ -674,7 +725,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
         if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
-            return new $definition['class'](is_array($_rawData) ? $_rawData : array(),
+            if (is_object($_rawData) && $_rawData instanceof $definition['class']) {
+                return $_rawData;
+            }
+            return new $definition['class'](is_array($_rawData) ? $_rawData : array(), $parent, $parentKey,
                 isset($definition['content']) ? $definition['content'] : null, $appName);
         }
 
@@ -686,12 +740,15 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             case self::TYPE_ARRAY:      return (array) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
             case self::TYPE_KEYFIELD_CONFIG:
+                if (is_object($_rawData) && $_rawData instanceof Tinebase_Config_KeyField) {
+                    return $_rawData;
+                }
                 $options = (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array();
                 $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
 
             // TODO this should be an error
-            default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
+            default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData, $parent, $parentKey) : $_rawData;
         }
     }
     

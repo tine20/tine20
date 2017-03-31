@@ -291,18 +291,15 @@ class Tinebase_User_LdapTest extends TestCase
         $user = $this->_backend->addUserToSyncBackend($testRecord);
         $this->_usernamesToDelete[] = $user->accountLoginName;
 
-        /** @var Tinebase_Config_Struct $syncConfig */
-        $userBackendConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND);
-        $syncOptions = $userBackendConfig->{Tinebase_Config::SYNCOPTIONS};
-        $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
-        $userBackendConfig->{Tinebase_Config::SYNCOPTIONS} = $syncOptions;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, $userBackendConfig);
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
 
         $syncedUser = Tinebase_User::syncUser($user);
 
-        $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
-        $userBackendConfig->{Tinebase_Config::SYNCOPTIONS} = $syncOptions;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, $userBackendConfig);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
+
 
         // check if user is synced
         $this->assertEquals(Tinebase_Model_User::VISIBILITY_DISPLAYED, $syncedUser->visibility,
@@ -326,15 +323,13 @@ class Tinebase_User_LdapTest extends TestCase
             'jpegphoto'       => $jpegImage,
         ));
 
-        $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
-        $userBackendConfig->{Tinebase_Config::SYNCOPTIONS} = $syncOptions;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, $userBackendConfig);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
 
         $syncedUser = Tinebase_User::syncUser($user, $syncOpt);
 
-        $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
-        $userBackendConfig->{Tinebase_Config::SYNCOPTIONS} = $syncOptions;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, $userBackendConfig);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
 
         $contact = Addressbook_Controller_Contact::getInstance()->get($syncedUser->contact_id);
         $this->assertFalse(isset($contact->tel_work), 'tel_work is set');

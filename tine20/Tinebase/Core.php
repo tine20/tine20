@@ -852,6 +852,9 @@ class Tinebase_Core
         if (self::get(self::DB) instanceof Zend_Db_Adapter_Abstract) {
             return self::get(self::DB);
         }
+
+        // make sure cache is setup or we get in trouble in config_abstract. after db is available, cache needs to be present too!
+        self::getCache();
         
         $config = self::getConfig();
         
@@ -1295,7 +1298,7 @@ class Tinebase_Core
     /**
      * get config from the registry
      *
-     * @return Zend_Config|Zend_Config_Ini|Tinebase_Config
+     * @return Tinebase_Config
      */
     public static function getConfig()
     {
@@ -1469,6 +1472,16 @@ class Tinebase_Core
         }
         
         return self::get(self::DB);
+    }
+
+    /**
+     * checks if the DB is registered already
+     *
+     * @return bool
+     */
+    public static function hasDb()
+    {
+        return self::isRegistered(self::DB);
     }
 
     /**

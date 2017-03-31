@@ -42,9 +42,7 @@ class Tinebase_Model_Filter_ExternalFullText extends Tinebase_Model_Filter_FullT
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (null === ($fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)) || ! $fulltextConfig instanceof Tinebase_Config_Struct) {
-            throw new Tinebase_Exception_UnexpectedValue('no fulltext configuration found');
-        }
+        $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
 
         if ('Sql' !== $fulltextConfig->{Tinebase_Config::FULLTEXT_BACKEND}) {
             throw new Tinebase_Exception_NotImplemented('only Sql backend is implemented currently');
