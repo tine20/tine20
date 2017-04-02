@@ -15,6 +15,8 @@
  */
 class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
     /**
      * Table name without prefix
      *
@@ -35,6 +37,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = false;
+
+    protected $_revision = null;
 
     /**
      * the constructor
@@ -59,6 +63,17 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
+     * if set to an integer value, only revisions of that number will be selected
+     * if set to null value, regular revision will be selected
+     *
+     * @param int|null $_revision
+     */
+    public function setRevision($_revision)
+    {
+        $this->_revision = null !== $_revision ? (int)$_revision : null;
+    }
+
+    /**
      * get the basic select object to fetch records from the database
      *  
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
@@ -77,11 +92,47 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
-                /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' . $this->_db->quoteIdentifier('tree_fileobjects.revision') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.revision'),
+                /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' .
+                $this->_db->quoteIdentifier('tree_filerevisions.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier('tree_fileobjects.revision')),
                 /* select */ array('hash', 'size')
-            );
+            )->joinLeft(
+            /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
+                /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
+                /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
+            )->group($this->_tableName . '.object_id');
             
         return $select;
+    }
+
+    /**
+     * do something after creation of record
+     *
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_recordToCreate
+     * @return void
+     */
+    protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
+    {
+        $this->_writeModLog($_newRecord, null);
+        Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
+    }
+
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $oldRecord = $this->get($_record->getId());
+        $newRecord = parent::update($_record);
+
+        $currentMods = $this->_writeModLog($newRecord, $oldRecord);
+        Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+
+        return $newRecord;
     }
     
     /**

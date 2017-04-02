@@ -641,10 +641,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->_omitModLog = false;
             $this->_writeModLog($modlogNode, null);
             $this->_omitModLog = true;
-        } elseif (Tinebase_Model_Tree_Node::TYPE_FILE === $_type) {
-            $this->_omitModLog = false;
-            $this->_writeModLog($newNode, $existingNode);
-            $this->_omitModLog = true;
         }
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);

@@ -54,6 +54,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
     protected $_getSelectHook = array();
 
+    protected $_revision = null;
+
     /**
      * the constructor
      *
@@ -76,7 +78,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         parent::__construct($_dbAdapter, $_options);
     }
-    
+
+    public function setRevision($_revision)
+    {
+        $this->_revision = null !== $_revision ? (int)$_revision : null;
+    }
+
     /**
      * get the basic select object to fetch records from the database
      *  
@@ -91,9 +98,13 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $select->joinLeft(
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
-                . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision'),
+                . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier($this->_tableName . '.revision')),
             /* select */ array('hash', 'size')
-        );
+        )->joinLeft(
+            /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
+            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
+            /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
+        )->group($this->_tableName . '.id');
 
         if (count($this->_getSelectHook) > 0) {
             foreach($this->_getSelectHook as $hook) {

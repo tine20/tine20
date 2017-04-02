@@ -556,10 +556,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             $directoryObject = $updatedNodes->getById($node->object_id);
             
             if ($directoryObject) {
-                $node->revision      = $directoryObject->revision;
-                $node->hash          = $directoryObject->hash;
-                $node->size          = $directoryObject->size;
-                $node->revision_size = $directoryObject->revision_size;
+                $node->revision             = $directoryObject->revision;
+                $node->hash                 = $directoryObject->hash;
+                $node->size                 = $directoryObject->size;
+                $node->revision_size        = $directoryObject->revision_size;
+                $node->available_revisions  = $directoryObject->available_revisions;
             }
             
             $subPath .= "/" . $node->name;
@@ -572,9 +573,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * 
      * @param string $_path
      * @param string $_mode
+     * @param int|null $_revision
      * @return resource|boolean
      */
-    public function fopen($_path, $_mode)
+    public function fopen($_path, $_mode, $_revision = null)
     {
         $dirName = dirname($_path);
         $fileName = basename($_path);
@@ -604,7 +606,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                     return false;
                 }
                 
-                $node = $this->stat($_path);
+                $node = $this->stat($_path, $_revision);
                 $hashFile = $this->_basePath . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
                 
                 $handle = fopen($hashFile, $_mode);
@@ -623,7 +625,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                     $parent = $this->stat($dirName);
                     $node = $this->createFileTreeNode($parent, $fileName);
                 } else {
-                    $node = $this->stat($_path);
+                    $node = $this->stat($_path, $_revision);
                 }
                 
                 $handle = Tinebase_TempFile::getInstance()->openTempFile();
@@ -861,22 +863,26 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     
     /**
      * @param  string  $path
+     * @param  int|null $revision
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_NotFound
      */
-    public function stat($path)
+    public function stat($path, $revision = null)
     {
         $pathParts = $this->_splitPath($path);
-        $cacheId = $this->_getCacheId($pathParts);
+        $cacheId = $this->_getCacheId($pathParts, $revision);
         
         // let's see if the path is cached in statCache
         if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
             try {
                 // let's try to get the node from backend, to make sure it still exists
-                return$this->_getTreeNodeBackend()->get($this->_statCache[$cacheId]);
+                $this->_getTreeNodeBackend()->setRevision($revision);
+                return $this->_checkRevision($this->_getTreeNodeBackend()->get($this->_statCache[$cacheId]), $revision);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // something went wrong. let's clear the whole statCache
                 $this->clearStatCache();
+            } finally {
+                $this->_getTreeNodeBackend()->setRevision(null);
             }
         }
         
@@ -884,19 +890,19 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $node       = null;
         
         // find out if we have cached any node up in the path
-        while (($pathPart = array_pop($pathParts) !== null)) {
+        do {
             $cacheId = $this->_getCacheId($pathParts);
             
             if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
-                $parentNode = $this->_statCache[$cacheId];
+                $node = $parentNode = $this->_statCache[$cacheId];
                 break;
             }
-        }
+        } while (($pathPart = array_pop($pathParts) !== null));
         
         $missingPathParts = array_diff_assoc($this->_splitPath($path), $pathParts);
         
         foreach ($missingPathParts as $pathPart) {
-            $node =$this->_getTreeNodeBackend()->getChild($parentNode, $pathPart);
+            $node = $this->_getTreeNodeBackend()->getChild($parentNode, $pathPart);
             
             // keep track of current path position
             array_push($pathParts, $pathPart);
@@ -906,10 +912,37 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             
             $parentNode = $node;
         }
+
+        if (null !== $revision) {
+            try {
+                $this->_getTreeNodeBackend()->setRevision($revision);
+                $node = $this->_checkRevision($this->_getTreeNodeBackend()->get($node->getId()), $revision);
+
+                // add found path to statCache
+                $this->_addStatCache($pathParts, $node, $revision);
+            } finally {
+                $this->_getTreeNodeBackend()->setRevision(null);
+            }
+        }
         
         return $node;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param int|null $_revision
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _checkRevision(Tinebase_Model_Tree_Node $_node, $_revision)
+    {
+        if (null !== $_revision && empty($_node->hash)) {
+            throw new Tinebase_Exception_NotFound('file does not have revision: ' . $_revision);
+        }
+
+        return $_node;
+    }
+
     /**
      * get filesize
      * 
@@ -1191,21 +1224,24 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * 
      * @param string|array              $path
      * @param Tinebase_Model_Tree_Node  $node
+     * @param int|null                  $revision
      */
-    protected function _addStatCache($path, Tinebase_Model_Tree_Node $node)
+    protected function _addStatCache($path, Tinebase_Model_Tree_Node $node, $revision = null)
     {
-        $this->_statCache[$this->_getCacheId($path)] = $node;
+        $this->_statCache[$this->_getCacheId($path, $revision)] = $node;
     }
     
     /**
      * generate cache id
      * 
      * @param  string|array  $path
+     * @param  int|null $revision
      * @return string
      */
-    protected function _getCacheId($path) 
+    protected function _getCacheId($path, $revision = null)
     {
         $pathParts = is_array($path) ? $path : $this->_splitPath($path);
+        array_unshift($pathParts, '@' . $revision);
         
         return sha1(implode(null, $pathParts));
     }

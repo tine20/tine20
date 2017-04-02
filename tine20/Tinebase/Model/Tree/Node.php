@@ -26,6 +26,7 @@
  * @property    string             revision_size
  * @property    string             type
  * @property    string             revision
+ * @property    string             available_revisions
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -101,17 +102,18 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'customfields' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
     // fields from filemanager_objects table (ro)
-        'type'           => array(
+        'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             array('InArray', array(self::TYPE_FILE, self::TYPE_FOLDER)),
         ),
-        'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contenttype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'hash'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'indexed_hash'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'size'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'revision_size'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'revision'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'available_revisions'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -146,5 +148,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     {
         $this->_filters['size'] = new Zend_Filter_Empty(0);
         parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+
+    public function runConvertToRecord()
+    {
+        if(isset($this->_properties['available_revisions'])) {
+            $this->_properties['available_revisions'] = explode(',', ltrim(rtrim($this->_properties['available_revisions'], '}'), '{'));
+        }
+
+        parent::runConvertToRecord();
     }
 }

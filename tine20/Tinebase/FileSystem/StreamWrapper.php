@@ -63,6 +63,8 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function dir_opendir($_path, $_options) 
     {
+        $quiet    = !(bool)($_options & STREAM_REPORT_ERRORS);
+
         try {
             $node = Tinebase_FileSystem::getInstance()->stat(substr($_path, 9));
         } catch (Tinebase_Exception_NotFound $teia) {
@@ -185,8 +187,15 @@ class Tinebase_FileSystem_StreamWrapper
     public function stream_open($_path, $_mode, $_options, &$_opened_path)
     {
         $quiet    = !(bool)($_options & STREAM_REPORT_ERRORS);
+
+        $context = stream_context_get_options($this->context);
+        if (isset($context[__CLASS__]) && isset($context[__CLASS__]['revision'])) {
+            $revision = $context[__CLASS__]['revision'];
+        } else {
+            $revision = null;
+        }
         
-        $stream = Tinebase_FileSystem::getInstance()->fopen(substr($_path, 9), $_mode);
+        $stream = Tinebase_FileSystem::getInstance()->fopen(substr($_path, 9), $_mode, $revision);
         
         if (!is_resource($stream)) {
             if (!$quiet) {

@@ -13,6 +13,7 @@
  * 
  * @property  string   name
  * @property  string   revision
+ * @property  string   available_revisions
  * @property  string   description
  * @property  string   contenttype
  * @property  integer  size
@@ -81,6 +82,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         
         // model specific fields
         'revision'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'available_revisions'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
@@ -148,5 +150,14 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         }
         
         return $baseDir . DIRECTORY_SEPARATOR . substr($this->hash, 0, 3) . DIRECTORY_SEPARATOR . substr($this->hash, 3);
+    }
+
+    public function runConvertToRecord()
+    {
+        if(isset($this->_properties['available_revisions'])) {
+            $this->_properties['available_revisions'] = explode(',', ltrim(rtrim($this->_properties['available_revisions'], '}'), '{'));
+        }
+
+        parent::runConvertToRecord();
     }
 }

@@ -323,6 +323,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $node = $this->_controller->stat($testPath);
         $this->assertEquals(7, $node->size);
         $this->assertEquals(7, $node->revision_size);
+        $this->assertEquals(array(1), $node->available_revisions);
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
 
@@ -352,6 +353,8 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $node = $this->_controller->stat($testPath);
         $this->assertEquals(5, $node->size);
         $this->assertEquals(12, $node->revision_size);
+        $this->assertEquals(array(1,2), $node->available_revisions);
+        $this->assertEquals(2, $node->revision);
 
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
@@ -370,6 +373,15 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         ));
         $result = $this->_controller->search($filter);
         $this->assertEquals(0, $result->count(), 'did find file where non should be found');
+
+        $streamContext = stream_context_create(array(
+            'Tinebase_FileSystem_StreamWrapper' => array(
+                'revision' => 1
+            )
+        ));
+        $handle = fopen(Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . $testPath, 'r', false, $streamContext);
+        $oldContent = fread($handle, 1024);
+        $this->assertEquals('phpunit', $oldContent, 'could not properly read revision 1');
     }
     
     /**

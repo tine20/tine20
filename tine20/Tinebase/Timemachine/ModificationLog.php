@@ -168,6 +168,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             }
 
             foreach($models as $model => &$ids) {
+
+                if ('Tinebase_Model_Tree_Node' === $model) {
+                    continue;
+                }
+
                 $app = null;
                 $appNotFound = false;
 
