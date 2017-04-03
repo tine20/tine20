@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -52,10 +52,11 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
      */
     protected function _appendRecordPaths($_records, $_filter)
     {
-        if ($_filter && $_filter->getFilter('path', /* $_getAll = */ false, /* $_recursive = */ true) !== null) {
-            $recordPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($_records);
+        if ($_filter && $_filter->getFilter('path', /* $_getAll = */ false, /* $_recursive = */ true) !== null &&
+                true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $pathController = Tinebase_Record_Path::getInstance();
             foreach ($_records as $record) {
-                $record->paths = $recordPaths->filter('record_id', $record->getId());
+                $record->paths = $pathController->getPathsForRecord($record);
             }
         }
     }

@@ -163,6 +163,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             flex: 1,
             layout: 'ux.display',
             labelWidth: 150,
+            autoScroll: true,
             layoutConfig: {
                 background: 'solid'
             },

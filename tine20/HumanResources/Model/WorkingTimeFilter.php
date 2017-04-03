@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,7 +37,7 @@ class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_Filte
         'id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'title'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'working_hours' => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'query'         => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
+        'query'         => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title'))),
         'created_by'    => array('filter' => 'Tinebase_Model_Filter_User')
     );
 }

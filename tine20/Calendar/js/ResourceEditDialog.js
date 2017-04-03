@@ -74,12 +74,12 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false,
                         name: 'email',
                         vtype: 'email'
-                    }, {
-                        xtype: 'checkbox',
-                        fieldLabel: this.app.i18n._('Is a location'),
-                        //boxLabel: this.app.i18n._('Is a location'),
-                        name: 'is_location'
-                    }], [
+                    },  new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Calendar',
+                        keyFieldName: 'resourceTypes',
+                        fieldLabel: this.app.i18n._('Type'),
+                        name: 'type'
+                    })], [
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Calendar',
                             keyFieldName: 'attendeeStatus',
@@ -91,11 +91,28 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             keyFieldName: 'freebusyTypes',
                             fieldLabel: this.app.i18n._('Busy Type'),
                             name: 'busy_type'
-                        }),{
-                        xtype: 'checkbox',
-                        fieldLabel: this.app.i18n._('Suppress notification'),
-                        name: 'suppress_notification'
-                    }], [{
+                        }), {
+                            xtype: 'numberfield',
+                            fieldLabel: this.app.i18n._('Maximum number of attendee'),
+                            allowNegative: false,
+                            allowBlank: true,
+                            name: 'max_number_of_people'
+                        }], [{
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Location'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'STANDORT',
+                            relationDegree: 'child',
+                            modelUnique: true,
+                        }, {
+                            xtype: 'checkbox',
+                            fieldLabel: this.app.i18n._('Suppress notification'),
+                            name: 'suppress_notification'
+                        }],
+                        [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),

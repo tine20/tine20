@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -23,141 +23,162 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
 {
+    use Tinebase_Model_Filter_AdvancedSearchTrait;
+
+    protected $_field;
+    protected $_value;
+    protected $_operator;
+
     /**
-     * @var array list of allowed operators
+     * constructs a new filter group
+     *
+     * @param  array $_data
+     * @param  string $_condition {AND|OR}
+     * @param  array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    protected $_operators = array(
-        0 => 'contains',
-        1 => 'in',
-        2 => 'equals',
-        3 => 'startswith',
-        4 => 'endswith',
-        5 => 'not',
-        6 => 'notcontains',
-        7 => 'notin',
-    );
+    public function __construct(array $_data = array(), $_condition = '', $_options = array())
+    {
+        $condition = (0 === strpos($_data['operator'], 'not')) ? Tinebase_Model_Filter_FilterGroup::CONDITION_AND : Tinebase_Model_Filter_FilterGroup::CONDITION_OR;
+
+        parent::__construct(array(),
+            $condition,
+            $_data['options']);
+
+        $this->_field = $_data['field'];
+        $this->_value = $_data['value'];
+        $this->_operator = $_data['operator'];
+
+        if (!empty($this->_value)) {
+            $queries = explode(' ', $this->_value);
+
+            /** @var Tinebase_Model_Filter_FilterGroup $parentFilterGroup */
+            $parentFilterGroup = $this->_options['parentFilter'];
+            /** @var Tinebase_Model_Filter_FilterGroup $innerGroup */
+            $innerGroup = new Tinebase_Model_Filter_FilterGroup(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
+
+            switch ($this->_operator) {
+                case 'contains':
+                case 'notcontains':
+                case 'equals':
+                case 'not':
+                case 'startswith':
+                case 'endswith':
+                    foreach ($queries as $query) {
+                        /** @var Tinebase_Model_Filter_FilterGroup $subGroup */
+                        $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
+                        foreach ($this->_options['fields'] as $field) {
+                            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $query);
+                            if (in_array($this->_operator, $filter->getOperators())) {
+                                $subGroup->addFilter($filter);
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                    ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                            }
+                        }
+                        $innerGroup->addFilterGroup($subGroup);
+                    }
+                    break;
+
+                case 'notin':
+                case 'in':
+                    foreach ($this->_options['fields'] as $field) {
+                        $filter = $parentFilterGroup->createFilter($field, $this->_operator, $queries);
+                        if (in_array($this->_operator, $filter->getOperators())) {
+                            $innerGroup->addFilter($filter);
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                        }
+                    }
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
+            }
+
+            $this->addFilterGroup($innerGroup);
+        }
+
+        if (isset($this->_options['relatedModels']) && isset($this->_options['modelName'])) {
+            $relationFilter = $this->_getAdvancedSearchFilter($this->_options['modelName'], $this->_options['relatedModels']);
+            if (null !== $relationFilter) {
+                $this->addFilter($relationFilter);
+            }
+        }
+    }
+
+    /**
+     * returns fieldname of this filter
+     *
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->_field;
+    }
+
+    /**
+     * gets value
+     *
+     * @return  mixed
+     */
+    public function getValue()
+    {
+        return $this->_value;
+    }
+
+    /**
+     * gets operator
+     *
+     * @return string
+     */
+    public function getOperator()
+    {
+        return $this->_operator;
+    }
 
     /**
      * set options 
      *
      * @param  array $_options
      * @throws Tinebase_Exception_Record_NotDefined
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _setOptions(array $_options)
     {
         if (empty($_options['fields'])) {
             throw new Tinebase_Exception_Record_NotDefined('Fields must be defined in the options of a query filter');
         }
+        if (!isset($_options['parentFilter']) || !is_object($_options['parentFilter'])) {
+            throw new Tinebase_Exception_UnexpectedValue('parentFilter needs to be set in options (should be done by parent filter group)');
+        }
         
-        $this->_options = $_options;
+        parent::_setOptions($_options);
     }
 
     /**
-     * appends sql to given select statement
+     * returns array with the filter settings of this filter
      *
-     * @param Zend_Db_Select $_select
-     * @param Tinebase_Backend_Sql_Abstract $_backend
-     * @throws Tinebase_Exception_InvalidArgument
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
      */
-    public function appendFilterSql($_select, $_backend)
+    public function toArray($_valueToJson = false)
     {
-        if (empty($this->_value)) {
-            $_select->where('1=1/* empty query */');
-            return;
+        $result = array(
+            'field'     => $this->_field,
+            'operator'  => $this->_operator,
+            'value'     => $this->_value
+        );
+
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        if ($this->_label) {
+            $result['label'] = $this->_label;
         }
 
-        $db = $_backend->getAdapter();
-
-        $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
-        if (0 === strpos($this->_operator, 'not')) {
-            $not = true;
-        } else {
-            $not = false;
-        }
-
-        switch ($this->_operator) {
-            case 'contains':
-            case 'notcontains':
-            case 'equals':
-            case 'not':
-            case 'startswith':
-            case 'endswith':
-                $queries = explode(' ', $this->_value);
-
-                foreach ($queries as $query) {
-                    $whereParts = array();
-                    foreach ($this->_options['fields'] as $qField) {
-                        // if field has . in name, then we already have tablename
-                        if (strpos($qField, '.') !== FALSE) {
-                            $whereParts[] = $sqlCommand->prepareForILike($sqlCommand->getUnaccent($db->quoteIdentifier($qField))) . ' ' . ($not?'NOT ':'') . $sqlCommand->getLike() . $sqlCommand->prepareForILike($sqlCommand->getUnaccent('(?)'));
-                        }
-                        else {
-                            $whereParts[] = $sqlCommand->prepareForILike($sqlCommand->getUnaccent($db->quoteIdentifier($_backend->getTableName() . '.' . $qField))) . ' ' . ($not?'NOT ':'') . $sqlCommand->getLike() . $sqlCommand->prepareForILike($sqlCommand->getUnaccent('(?)'));
-                        }
-                    }
-                    $whereClause = '';
-                    if (!empty($whereParts)) {
-                        if ($not) {
-                            $whereClause = implode(' AND ', $whereParts);
-                        } else {
-                            $whereClause = implode(' OR ', $whereParts);
-                        }
-                    }
-
-                    if (!empty($whereClause)) {
-                        $query = trim($query);
-                        if ($this->_operator === 'startswith') {
-                            $query .= '%';
-                        } else if ($this->_operator === 'contains' || $this->_operator === 'notcontains'){
-                            $query = '%' . $query . '%';
-                        } else if ($this->_operator === 'endswith') {
-                            $query = '%' . $query;
-                        }
-
-                        $_select->where($db->quoteInto($whereClause, $query));
-                    }
-                }
-                break;
-
-            case 'notin':
-            case 'in':
-                foreach ($this->_options['fields'] as $qField) {
-                    // if field has . in name, then we already have tablename
-                    if (strpos($qField, '.') !== FALSE) {
-                        $whereParts[] = $db->quoteInto($db->quoteIdentifier($qField) . ($not?' NOT':'') . ' IN (?)', (array) $this->_value);
-                    }
-                    else {
-                         $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ($not?' NOT':'') . ' IN (?)', (array) $this->_value);
-                    }
-                }
-                if (! empty($whereParts)) {
-                    if ($not) {
-                        $whereClause = implode(' AND ', $whereParts);
-                    } else {
-                        $whereClause = implode(' OR ', $whereParts);
-                    }
-                }
-                if (! empty($whereClause)) {
-                    $_select->where($whereClause);
-                }
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
-        }
-
-        // append advanced search filter if configured
-        if (isset($this->_options['relatedModels']) && isset($this->_options['modelName'])) {
-            $relationFilter = $this->_getAdvancedSearchFilter($this->_options['modelName'], $this->_options['relatedModels']);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Got relation filter: '
-                . ($relationFilter instanceof Tinebase_Model_Filter_Abstract ? print_r($relationFilter->toArray(), true) : ''));
-            if ($relationFilter) {
-                $relationSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-                $relationFilter->appendFilterSql($relationSelect, $_backend);
-                $relationSelect->appendWhere($not?Zend_Db_Select::SQL_AND:Zend_Db_Select::SQL_OR);
-            }
-        }
+        return $result;
     }
 }

@@ -359,4 +359,150 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.9');
     }
+
+    /**
+     * update to 10.10
+     *
+     * adding path filter feature switch & structure update
+     */
+    public function update_9()
+    {
+        $this->dropTable('path');
+
+        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>path</name>
+            <version>2</version>
+            <requirements>
+                <required>mysql >= 5.6.4</required>
+            </requirements>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>path</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>shadow_path</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                <name>path</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>shadow_path</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>shadow_path</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        $this->createTable('path', $declaration, 'Tinebase', 2);
+
+        Tinebase_Controller::getInstance()->rebuildPaths();
+
+        $this->setApplicationVersion('Tinebase', '10.10');
+    }
+
+    /**
+     * update to 10.11
+     *
+     * create external_fulltext table
+     */
+    public function update_10()
+    {
+        $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
+            <name>external_fulltext</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>text_data</name>
+                    <type>text</type>
+                    <length>2147483647</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>text_data</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>text_data</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>'), 'Tinebase', 'external_fulltext');
+
+        $this->setApplicationVersion('Tinebase', '10.11');
+    }
+
+    /**
+     * update to 10.12
+     *
+     * add revision_size to tree_fileobjects
+     */
+    public function update_11()
+    {
+
+        if (!$this->_backend->columnExists('total_size', 'tree_fileobjects')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>revision_size</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>');
+
+            $query = $this->_backend->addAddCol('', 'tree_fileobjects', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+
+            $query = $this->_backend->addAddCol($query, 'tree_fileobjects', $declaration);
+
+            $this->_backend->execQueryVoid($query);
+
+            $this->setTableVersion('tree_fileobjects', '4');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.12');
+    }
 }

@@ -51,11 +51,20 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'email'
-        }, new Ext.ux.grid.CheckColumn({
-            header: this.app.i18n._('Location'),
-            dataIndex: 'is_location',
-            width: 55
-        }), {
+        }, {
+            id: 'type',
+            header: this.app.i18n._("Type"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'type',
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'resourceTypes')
+        }, {
+            id: 'max_number_of_people',
+            header: this.app.i18n._("Maximum number of attendee"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'max_number_of_people'
+        }, {
             id: 'status',
             dataIndex: 'status',
             width: 140,
@@ -67,6 +76,13 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 140,
             header: this.app.i18n._('Busy Type'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'freebusyTypes')
+        }, {
+            id: 'location',
+            header: this.app.i18n._('Location'),
+            width: 150,
+            dataIndex: 'relations',
+            renderer: Tine.Calendar.ResourcesGridPanel.locationRenderer,
+            sortable: false
         }];
         
         this.supr().initComponent.call(this);
@@ -92,3 +108,25 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.autoLoad : undefined]);
     }
 });
+
+/**
+ * render location relation
+ *
+ * @param data
+ * @param cell
+ * @param record
+ * @returns {*|String}
+ */
+Tine.Calendar.ResourcesGridPanel.locationRenderer = function(data, cell, record) {
+    if (Ext.isArray(data) && data.length > 0) {
+        var index = 0;
+
+        while (index < data.length && data[index].type != 'STANDORT') {
+            index++;
+        }
+        if (data[index]) {
+            var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
+            return Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+        }
+    }
+};

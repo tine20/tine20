@@ -36,6 +36,17 @@ class Tinebase_TransactionManager
      * @var array list of all open (not commited) transactions
      */
     protected $_openTransactions = array();
+
+    /**
+     * @var array list of callbacks to call just before really committing
+     */
+    protected $_onCommitCallbacks = array();
+
+    /**
+     * @var array list of callbacks to call just before rollback
+     */
+    protected $_onRollbackCallbacks = array();
+
     /**
      * @var Tinebase_TransactionManager
      */
@@ -114,6 +125,16 @@ class Tinebase_TransactionManager
          $numOpenTransactions = count($this->_openTransactions);
          if ($numOpenTransactions === 0) {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
+
+             // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+             $callbacks = $this->_onCommitCallbacks;
+             $this->_onCommitCallbacks = array();
+             $this->_onRollbackCallbacks = array();
+
+             foreach($callbacks as $callable) {
+                 call_user_func_array($callable[0], $callable[1]);
+             }
+
              foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
                  if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                      $transactionable->commit();
@@ -134,12 +155,44 @@ class Tinebase_TransactionManager
     public function rollBack()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
+
+        // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+        $callbacks = $this->_onRollbackCallbacks;
+        $this->_onCommitCallbacks = array();
+        $this->_onRollbackCallbacks = array();
+        foreach ($callbacks as $callable) {
+            call_user_func_array($callable[0], $callable[1]);
+        }
+
         foreach ($this->_openTransactionables as $transactionable) {
             if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                 $transactionable->rollBack();
             }
         }
+
         $this->_openTransactionables = array();
         $this->_openTransactions = array();
+    }
+
+    /**
+     * register a callable to call just before the real commit happens
+     *
+     * @param array $callable
+     * @param array $param
+     */
+    public function registerOnCommitCallback(array $callable, array $param = array())
+    {
+        $this->_onCommitCallbacks[] = array($callable, $param);
+    }
+
+    /**
+     * register a callable to call just before the rollback happens
+     *
+     * @param array $callable
+     * @param array $param
+     */
+    public function registerOnRollbackCallback(array $callable, array $param = array())
+    {
+        $this->_onRollbackCallbacks[] = array($callable, $param);
     }
 }

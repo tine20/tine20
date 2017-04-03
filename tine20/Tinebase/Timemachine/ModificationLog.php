@@ -1173,9 +1173,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public function readModificationLogFromMaster()
     {
+        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
         // check if we are a replication slave
-        if (!($slaveConfiguration = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE)) ||
-            !($slaveConfiguration instanceof Tinebase_Config_Struct)) {
+        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
             return true;
         }
 
@@ -1192,10 +1196,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 ' failed to aquire DB lock, the DB backend doesn\'t support locks. You should not run a replication on this type of DB backend!');
             return false;
         }
-
-        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
-        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
-        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' trying to connect to master host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
@@ -1320,7 +1320,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 // notify configured email addresses about replication failure
                 $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
-                if ($config && is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
+                if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
                         count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
 
                     $recipients = array();

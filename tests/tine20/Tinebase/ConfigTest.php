@@ -155,7 +155,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_instance->set("sieve", null);
 
         // If key is null it throws an exception, so return empty array if it's null.
-        $this->assertTrue($this->_instance->get("sieve") instanceof Tinebase_Config_Struct);
+        $this->assertTrue($this->_instance->get("sieve") instanceof Tinebase_Config_Struct, 'sieve is: ' . print_r($this->_instance->get("sieve"), true));
 
         // Check common function of the getFunction
         $this->assertTrue(is_numeric($this->_instance->get("acceptedTermsVersion")));

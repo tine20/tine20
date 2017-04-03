@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -44,5 +44,6 @@ class Addressbook_Model_ListRoleFilter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('name'))
         ),
+        'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

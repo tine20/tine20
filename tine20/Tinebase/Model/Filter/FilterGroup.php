@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        finish implementation of to/from json functions
@@ -195,6 +195,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @param  array $_data
      * @param  string $_condition {AND|OR}
+     * @param  array $_options
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
@@ -395,7 +396,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData['value']) || array_key_exists('value', $_filterData))) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
-            $this->addFilter($filter, TRUE);
+            if ($filter instanceof Tinebase_Model_Filter_Abstract) {
+                $this->addFilter($filter, TRUE);
+            } else {
+                $this->addFilterGroup($filter);
+            }
         
         } elseif ((isset($fieldModel['custom']) || array_key_exists('custom', $fieldModel)) && $fieldModel['custom'] == true) {
             // silently skip data, as they will be evaluated by the concrete filtergroup
@@ -434,6 +439,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function addFilter(Tinebase_Model_Filter_Abstract $_filter, $_setFromArray = FALSE)
     {
         if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
+            if ($_filter instanceof Tinebase_Model_Filter_Group) {
+                return $this->addFilterGroup($_filter);
+            }
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
         }
         
@@ -457,6 +465,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function addFilterGroup($_filtergroup)
     {
         if (! $_filtergroup instanceof Tinebase_Model_Filter_FilterGroup) {
+            if ($_filtergroup instanceof Tinebase_Model_Filter_Abstract) {
+                return $this->addFilter($_filtergroup);
+            }
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_FilterGroup');
         }
         
@@ -510,7 +521,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             );
             $filter = NULL;
         } else {
-            $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
+            $self = $this;
+            $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array(), array('parentFilter' => $self));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
             $filter = new $definition['filter']($data);
@@ -720,7 +732,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         $result = array();
         foreach ($this->_filterObjects as $filter) {
-            if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+            if ($filter instanceof Tinebase_Model_Filter_FilterGroup && ! $filter instanceof Tinebase_Model_Filter_Query) {
                 $result[] = array(
                     'condition' => $filter->getCondition(),
                     'filters'   => $filter->toArray($_valueToJson),

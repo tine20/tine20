@@ -173,7 +173,7 @@ Tine.Tinebase.common = {
      * @return {String}
      */
     byteRenderer: function (value, metadata, record, decimals, useDecimalValues) {
-        if (record && record.get('type') == 'folder') {
+        if (isNaN(parseInt(value, 10))) {
             return '';
         }
         return Tine.Tinebase.common.byteFormatter(value, null, decimals, useDecimalValues);

@@ -256,4 +256,28 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return boolean
      */
     public function isReplicable();
+
+    /**
+     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+
+    /**
+     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+
+    /**
+     * @return array
+     */
+    public function getPathNeighbours();
+
+    /**
+     * @return string
+     */
+    public function getTypeForPathPart();
 }

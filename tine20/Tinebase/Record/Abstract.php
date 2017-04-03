@@ -214,6 +214,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * right, user must have to see the module for this model
      */
     protected static $_requiredRight = NULL;
+
     
     /******************************** functions ****************************************/
     
@@ -1363,5 +1364,70 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function isReplicable()
     {
         return false;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        /** @var Tinebase_Record_Abstract_GetPathPartDecorator $decorator */
+        $decorator = Tinebase_Core::getDecorator(get_called_class(), $this->_application, 'getPathPartDecorator',
+                                                'Tinebase_Record_Abstract_GetPathPartDecorator');
+        if (false !== $decorator) {
+            return $decorator->getPathPart($this, $_parent, $_child);
+        }
+
+
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($this->getTitle())), 0, 1024) . $childType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeForPathPart()
+    {
+        return '';
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     *
+     * TODO use decorators ? or overwrite
+     */
+    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/{' . get_class($this) . '}' . $this->getId() . $childType;
+    }
+
+    /**
+     * returns an array containing the parent neighbours relation objects or record(s) (ids) in the key 'parents'
+     * and containing the children neighbours in the key 'children'
+     *
+     * @return array
+     */
+    public function getPathNeighbours()
+    {
+        $oldRelations = $this->relations;
+        $this->relations = null;
+
+        $relations = Tinebase_Relations::getInstance();
+        $result = array(
+            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->asArray(),
+            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->asArray()
+        );
+
+        $this->relations = $oldRelations;
+        return $result;
     }
 }

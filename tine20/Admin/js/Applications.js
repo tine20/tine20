@@ -150,7 +150,7 @@ Tine.Admin.Applications.Main = {
         });
         ApplicationsAdminQuickSearchField.on('change', function() {
             this.gridPanel.getStore().load({params:{start:0, limit:50}});
-        });
+        }, this);
         
         this.actionToolbar = new Ext.Toolbar({
             canonicalName: ['Application', 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),

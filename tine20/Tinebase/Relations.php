@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -183,8 +183,8 @@ class Tinebase_Relations
     /**
      * appends missing relation ids if related records + type match
      *
-     * @param $relations
-     * @param $currentRelations
+     * @param Tinebase_Record_RecordSet $relations
+     * @param Tinebase_Record_RecordSet $currentRelations
      * @return mixed
      */
     protected function _getRelationIds($relations, $currentRelations)
@@ -299,13 +299,15 @@ class Tinebase_Relations
         
         return $ret;
     }
-    
+
     /**
      * validate constraints from the own and the other side.
      * this may be very expensive, if there are many constraints to check.
-     * 
+     *
      * @param string $ownModel
      * @param Tinebase_Record_RecordSet $relations
+     * @param array $toDelete
+     * @param array $toUpdate
      * @throws Tinebase_Exception_InvalidRelationConstraints
      */
     protected function _validateConstraintsConfig($ownModel, $relations, $toDelete = array(), $toUpdate = array())
@@ -444,13 +446,13 @@ class Tinebase_Relations
         
         return $result;
     }
-    
+
     /**
      * converts related_records into their appropriate record objects
      * @todo move to model->setFromJson
-     * 
+     *
      * @param  Tinebase_Model_Relation|Tinebase_Record_RecordSet
-     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _relatedRecordToObject($_relations)
     {
@@ -476,7 +478,7 @@ class Tinebase_Relations
     /**
      * creates/updates application records
      * 
-     * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @param   Tinebase_Record_RecordSet $_relation of Tinebase_Model_Relation
      * @param   bool $_doCreateUpdateCheck
      * @throws  Tinebase_Exception_UnexpectedValue
      */
@@ -501,6 +503,7 @@ class Tinebase_Relations
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Relation: ' . print_r($_relation->toArray(), TRUE));
 
+        /** @var Tinebase_Record_Interface $record */
         $record = $appController->$method($_relation->related_record, $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
         $_relation->related_id = $record->getId();
         
@@ -523,6 +526,7 @@ class Tinebase_Relations
      * @param $relation
      *
      * TODO relatable config should be an object with functions to get the needed information...
+     * @return bool
      */
     protected function _doCreateUpdateCheck($relation)
     {
@@ -558,6 +562,8 @@ class Tinebase_Relations
             }
             $modelMap[$relation->related_model]->addRecord($relation);
         }
+
+        /** @var Tinebase_Record_RecordSet $records */
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
@@ -614,6 +620,7 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Resolving " . count($relations) . " relations");
 
+            /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
                 $relationIndex  = $_relations->getIndexById($relation->getId());
@@ -680,15 +687,15 @@ class Tinebase_Relations
         
         return $this->_backend->updateRelation($_relation);
     }
-    
+
     /**
      * replaces all relations to or from a record with $sourceId to a record with $destinationId
-     * 
+     *
      * @param string $sourceId
      * @param string $destinationId
      * @param string $model
-     * 
      * @return array
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function transferRelations($sourceId, $destinationId, $model)
     {
@@ -703,7 +710,6 @@ class Tinebase_Relations
      * Deletes entries
      *
      * @param string|integer|Tinebase_Record_Interface|array $_id
-     * @return void
      * @return int The number of affected rows.
      */
     public function delete($_id)
@@ -723,13 +729,19 @@ class Tinebase_Relations
         $this->_backend->removeApplication($applicationName);
     }
 
-    public function getRelationsOfRecordByDegree($record, $degree)
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param string $degree
+     * @param bool $ignoreACL
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getRelationsOfRecordByDegree(Tinebase_Record_Interface $record, $degree, $ignoreACL = FALSE)
     {
         // get relations if not yet present OR use relation search here
         if (empty($record->relations)) {
             $backendType = 'Sql';
             $modelName = get_class($record);
-            $record->relations = Tinebase_Relations::getInstance()->getRelations($modelName, $backendType, $record->getId());
+            $record->relations = $this->getRelations($modelName, $backendType, $record->getId(), NULL, array(), $ignoreACL);
         }
 
 

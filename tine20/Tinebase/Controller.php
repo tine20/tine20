@@ -761,4 +761,61 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 ? $session->userAccountChanged
                 : false;
     }
+
+    /**
+     * rebuild paths
+     *
+     * @return bool
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function rebuildPaths()
+    {
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' search paths are not enabled');
+            return false;
+        }
+
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        foreach($applications as $application) {
+            try {
+                $app = Tinebase_Core::getApplicationInstance($application, '', true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            if (! $app instanceof Tinebase_Controller_Abstract) {
+                continue;
+            }
+
+            $pathModels = $app->getModelsUsingPaths();
+            if (!is_array($pathModels)) {
+                $pathModels = array();
+            }
+            foreach($pathModels as $pathModel) {
+                $controller = Tinebase_Core::getApplicationInstance($pathModel, '', true);
+
+                $_filter = $pathModel . 'Filter';
+                $_filter = new $_filter();
+
+                $iterator = new Tinebase_Record_Iterator(array(
+                    'iteratable' => $this,
+                    'controller' => $controller,
+                    'filter' => $_filter,
+                    'options' => array('getRelations' => true),
+                    'function' => 'rebuildPathsIteration',
+                ));
+                $result = $iterator->iterate($controller);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    if (false === $result) {
+                        $result['totalcount'] = 0;
+                    }
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Build paths for ' . $result['totalcount'] . ' records of ' . $pathModel);
+                }
+            }
+        }
+
+        return true;
+    }
 }

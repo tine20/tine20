@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -44,6 +44,10 @@ class Voipmanager_Model_Asterisk_VoicemailFilter extends Tinebase_Model_Filter_F
                 'fields' => array('mailbox', 'fullname', 'email', 'pager')
             )
         ),
-        'context_id'    => array('filter' => 'Tinebase_Model_Filter_Text')
+        'context_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'mailbox'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'fullname'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'email'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'pager'         => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

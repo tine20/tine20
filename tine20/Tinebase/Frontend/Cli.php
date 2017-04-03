@@ -63,8 +63,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * rebuildPaths
+     *
     * @param Zend_Console_Getopt $_opts
-    * @return boolean success
+    * @return integer success
     */
     public function rebuildPaths($opts)
     {
@@ -72,45 +74,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return -1;
         }
 
-        $applications = Tinebase_Application::getInstance()->getApplications();
-        foreach($applications as $application) {
-            try {
-                $app = Tinebase_Core::getApplicationInstance($application, '', true);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                continue;
-            }
+        $result = Tinebase_Controller::getInstance()->rebuildPaths();
 
-            if (! $app instanceof Tinebase_Controller_Abstract) {
-                continue;
-            }
-
-            $pathModels = $app->getModelsUsingPaths();
-            if (!is_array($pathModels)) {
-                $pathModels = array();
-            }
-            foreach($pathModels as $pathModel) {
-                $controller = Tinebase_Core::getApplicationInstance($pathModel, '', true);
-
-                $_filter = $pathModel . 'Filter';
-                $_filter = new $_filter();
-
-                $iterator = new Tinebase_Record_Iterator(array(
-                    'iteratable' => $this,
-                    'controller' => $controller,
-                    'filter' => $_filter,
-                    'options' => array('getRelations' => true),
-                    'function' => 'rebuildPathsIteration',
-                ));
-                $result = $iterator->iterate($controller);
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    if (false === $result) {
-                        $result['totalcount'] = 0;
-                    }
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Build paths for ' . $result['totalcount'] . ' records of ' . $pathModel);
-                }
-            }
-        }
+        return $result ? true : -1;
     }
 
     /**
@@ -1152,12 +1118,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * clears deleted files from filesystem + database
-     * @return boolean
+     *
+     * @return int
      */
     public function clearDeletedFiles()
     {
         if (! $this->_checkAdminRight()) {
-            return FALSE;
+            return -1;
         }
         
         $this->_addOutputLogWriter();
@@ -1165,6 +1132,40 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
 
         return 0;
+    }
+
+    /**
+     * recalculates the revision sizes and then the folder sizes
+     *
+     * @return int
+     */
+    public function fileSystemSizeRecalculation()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->recalculateRevisionSize();
+
+        Tinebase_FileSystem::getInstance()->recalculateFolderSize();
+
+        return 0;
+    }
+
+    /**
+     * checks if there are not yet indexed file objects and adds them to the index synchronously
+     * that means this can be very time consuming
+     *
+     * @return int
+     */
+    public function fileSystemCheckIndexing()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->checkIndexing();
     }
     
     /**

@@ -973,7 +973,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         // TODO get this from app controller / modelconfig
         foreach ($applicationJson->getRelatableModels() as $relModel) {
-            $registryData[$relModel['ownApp']]['relatableModels'][] = $relModel;
+            $registryData['relatableModels'][] = $relModel;
         }
         $registryData['models'] = $applicationJson->getModelsConfiguration();
         $registryData['defaultModel'] = $applicationJson->getDefaultModel();

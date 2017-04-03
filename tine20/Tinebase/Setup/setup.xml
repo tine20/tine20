@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.9</version>
+    <version>10.12</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3251,7 +3251,7 @@
         
         <table>
             <name>tree_fileobjects</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3318,6 +3318,17 @@
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>
+                </field>
+                <field>
+                    <name>revision_size</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -3456,6 +3467,11 @@
                     <default>false</default>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>indexed_hash</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -3503,7 +3519,10 @@
         </table>
         <table>
             <name>path</name>
-            <version>1</version>
+            <version>2</version>
+            <requirements>
+                <required>mysql >= 5.6.4</required>
+            </requirements>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3512,21 +3531,15 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>record_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
                     <name>path</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>65535</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>shadow_path</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>65535</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -3542,21 +3555,16 @@
                 </index>
                 <index>
                     <name>path</name>
+                    <fulltext>true</fulltext>
                     <field>
                         <name>path</name>
                     </field>
                 </index>
                 <index>
                     <name>shadow_path</name>
-                    <unique>true</unique>
+                    <fulltext>true</fulltext>
                     <field>
                         <name>shadow_path</name>
-                    </field>
-                </index>
-                <index>
-                    <name>record_id</name>
-                    <field>
-                        <name>record_id</name>
                     </field>
                 </index>
             </declaration>
@@ -3597,6 +3605,38 @@
                     </field>
                     <field>
                         <name>number</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>external_fulltext</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>text_data</name>
+                    <type>text</type>
+                    <length>2147483647</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>text_data</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>text_data</name>
                     </field>
                 </index>
             </declaration>

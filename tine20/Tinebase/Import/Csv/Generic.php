@@ -84,6 +84,9 @@ class Tinebase_Import_Csv_Generic extends Tinebase_Import_Csv_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Fields to import: ' . print_r($fields, true));
 
+        if (!isset($this->_options['mapping']) || !is_array($this->_options['mapping'])) {
+            $this->_options['mapping'] = array();
+        }
         $this->_options['mapping']['field'] = $fields;
     }
 }

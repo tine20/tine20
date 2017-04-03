@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -145,6 +145,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
+
+    /**
+     * FEATURE_PATH
+     *
+     * @var string
+     */
+    const FEATURE_SEARCH_PATH = 'featureSearchPath';
 
     /**
      * user defined page title postfix for browser page title
@@ -482,6 +489,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
 
+    const FULLTEXT = 'fulltext';
+    const FULLTEXT_BACKEND = 'backend';
+    const FULLTEXT_JAVABIN = 'javaBin';
+    const FULLTEXT_TIKAJAR = 'tikaJar';
+
+    const FILESYSTEM = 'filesystem';
+    const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
+    const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
+    const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
+    const FILESYSTEM_INDEX_CONTENT = 'index_content';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -678,6 +696,31 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 )
             )
         ),
+        self::FULLTEXT => array(
+            //_('Full text configuration')
+            'label'                 => 'Full text configuration',
+            //_('Full text configuration.')
+            'description'           => 'Full text configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::FULLTEXT_BACKEND          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'Sql'
+                ),
+                self::FULLTEXT_JAVABIN          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'java'
+                ),
+                self::FULLTEXT_TIKAJAR          => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                ),
+            ),
+            'default'                           => array()
+        ),
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
@@ -858,12 +901,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'description'   => 'Save edit dialog size in state',
                     //_('Save edit dialog size in state')
                 ),
+                self::FEATURE_SEARCH_PATH => array(
+                    'label'         => 'Search Paths',
+                    'description'   => 'Search Paths'
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
                 self::FEATURE_CONTAINER_CUSTOM_SORT => true,
                 self::FEATURE_SHOW_ACCOUNT_EMAIL    => true,
                 self::FEATURE_REMEMBER_POPUP_SIZE   => true,
+                self::FEATURE_SEARCH_PATH           => true,
+
             ),
         ),
         self::CRONUSERID => array(
@@ -1315,6 +1364,65 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => TRUE,
         ),
+        self::FILESYSTEM => array(
+            //_('Filesystem settings')
+            'label'                 => 'Filesystem settings',
+            //_('Filesystem settings.')
+            'description'           => 'Filesystem settings.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'content'               => array(
+                self::FILESYSTEM_MODLOGACTIVE => array(
+                    //_('Filesystem history')
+                    'label'                 => 'Filesystem history',
+                    //_('Filesystem keeps history, default is false.')
+                    'description'           => 'Filesystem keeps history, default is false.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+                self::FILESYSTEM_NUMKEEPREVISIONS => array(
+                    //_('Filesystem number of revisions')
+                    'label'                 => 'Filesystem number of revisions',
+                    //_('Filesystem number of revisions being kept before they are automatically deleted.')
+                    'description'           => 'Filesystem number of revisions being kept before they are automatically deleted.',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 100,
+                ),
+                self::FILESYSTEM_MONTHKEEPREVISIONS => array(
+                    //_('Filesystem months of revisions')
+                    'label'                 => 'Filesystem months of revisions',
+                    //_('Filesystem number of months revisions being kept before they are automatically deleted.')
+                    'description'           => 'Filesystem number of months revisions being kept before they are automatically deleted.',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 60,
+                ),
+                self::FILESYSTEM_INDEX_CONTENT => array(
+                    //_('Filesystem index content')
+                    'label'                 => 'Filesystem index content',
+                    //_('Filesystem index content.')
+                    'description'           => 'Filesystem index content.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+            ),
+            'default'               => array(),
+        ),
+
     );
     
     /**
@@ -1406,6 +1514,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             $configRegistryItem = new Tinebase_Config_Struct(array(
                                 'value' => $config->{$name},
                                 'definition' => new Tinebase_Config_Struct($definition),
+                            ), null, null, array(
+                                'value' => array('type' => $definition['type']),
+                                'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
                             ));
                             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                                 . ' ' . print_r($configRegistryItem->toArray(), TRUE));

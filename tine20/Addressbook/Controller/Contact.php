@@ -57,7 +57,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
-        $this->_useRecordPaths = true;
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->_useRecordPaths = true;
+        }
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -95,6 +97,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
     
     /**
@@ -870,6 +877,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      *      - lists contact is member of
      *      - we add list role memberships
      *
+     * TODO ACLs?!?
+     * * Addressbook_Controller_List::getInstance()->get() will check for ACLs
+     * * Addressbook_Controller_ListRole::getInstance()->get() will check for ACLs
+     *
      * @param Tinebase_Record_Abstract $record
      * @return Tinebase_Record_RecordSet
      */
@@ -882,6 +893,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         foreach ($listIds as $listId) {
             /** @var Addressbook_Model_List $list */
             $list = Addressbook_Controller_List::getInstance()->get($listId);
+
+            /**
+             * TODO
+             * what if this would return the $list->memberroles paths too? we would double create them!
+             */
             $listPaths = $this->_getPathsOfRecord($list);
             if (count($listPaths) === 0) {
                 // add self

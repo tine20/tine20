@@ -897,8 +897,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         $replicationUser = static::createSystemUser('replicationuser', Tinebase_Group::getInstance()->getDefaultReplicationGroup());
         if (null !== $replicationUser) {
-            if (!($replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER)) ||
-                    empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+            $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+            if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
                 $password = Tinebase_Record_Abstract::generateUID(12);
             }
             Tinebase_User::getInstance()->setPassword($replicationUser, $password);

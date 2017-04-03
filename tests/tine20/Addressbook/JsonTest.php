@@ -1433,6 +1433,50 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Tests if path info in query breaks backend
+     */
+    public function testSearchContactsWithPathFilterIfPathDisabled()
+    {
+        if (Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->markTestSkipped('Test does not apply if path feature is enabled');
+        }
+
+        $filter = [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'condition' => 'AND',
+                        'filters' => [
+                            [
+                                'field' => 'query',
+                                'operator' => 'contains',
+                                'value' => '',
+                            ],
+                        ],
+                    ],
+                    [
+                        'field' => 'path',
+                        'operator' => 'contains',
+                        'value' => '',
+                    ],
+                ],
+            ]
+        ];
+
+        $paging = [
+            'sort' => 'n_fn',
+            'dir' => 'ASC',
+            'start' => 0,
+            'limit' => 10
+        ];
+
+        $result = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertEquals(6, $result['totalcount']);
+    }
+
+    /**
      * testOrganizerForeignIdFilterWithOrCondition
      */
     public function testOrganizerForeignIdFilterWithOrCondition()
@@ -1864,6 +1908,23 @@ Steuernummer 33/111/32212";
 
         $filter = array(
             array('field' => 'list_role_id','operator' => 'in', 'value' => array($list['memberroles'][0]['list_role_id']['id']))
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount']);
+    }
+
+    /**
+     * @see 0012834: Tinbase_Model_Filter_Query - reimplement using FilterGroup
+     */
+    public function testSearchContactByQueryFilterWithAnd()
+    {
+        /* $contact1 = */ $this->_addContact();
+        /* $contact2 = */ $this->_addContact('aaabbb');
+
+        $filter = array(
+            array('field' => 'query','operator' => 'contains', 'value' => 'aaabbb PHPUNIT')
         );
 
         $result = $this->_uit->searchContacts($filter, array());

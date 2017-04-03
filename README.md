@@ -10,7 +10,6 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 * [Package Downloads](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/releases)
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20:matrix.org](https://riot.im/app/#/room/#tine20:matrix.org)
-* [Slack (send us a message for invitation)](https://tine20.slack.com)
 
 ## Free Software without compromise
 In contrast to the so called "open core" approach, where only a subset of the software is released as open source, 
@@ -63,4 +62,4 @@ legal fraught from other parties.
 
 ## Contributors Guide
 To start developing with tine20 and GIT please visit
-* [Tine2.0 Contributors Guide](https://wiki.tine20.org/Developers/Getting_Started/Contributors_Guide)
+* [Tine2.0 Contributors Guide](https://www.tine20.org/wiki/index.php/Developers/Getting_Started/Contributors_Guide)
