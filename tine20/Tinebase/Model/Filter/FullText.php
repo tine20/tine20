@@ -76,7 +76,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
                 $value = preg_replace('#\W#u', ' ', $value);
                 // replace multiple spaces with just one
                 $value = preg_replace('# +#u', ' +', trim($value));
-                $searchTerm .= ($searchTerm === '' ? '+' : ' +') . $value;
+                $searchTerm .= ($searchTerm === '' ? '+' : ' +') . $value . '*';
             }
 
             $_select->where('MATCH (' . $field . $db->quoteInto(') AGAINST (? IN BOOLEAN MODE)', $searchTerm));
