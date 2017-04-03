@@ -761,7 +761,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onSearchContacts: function() {
         Tine.Felamimail.RecipientPickerDialog.openWindow({
-            record: new this.recordClass(Ext.copyTo({}, this.record.data, ['subject', 'to', 'cc', 'bcc']), Ext.id()),
+            record: Ext.encode(Ext.copyTo({}, this.record.data, ['subject', 'to', 'cc', 'bcc'])),
             listeners: {
                 scope: this,
                 'update': function(record) {
