@@ -1085,7 +1085,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $skipOption = $_alarm->getOption('skip');
         
         if ($attendeeOption) {
-            return (bool) self::getAttendee(new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($_attendee)), new Calendar_Model_Attender($attendeeOption));
+            $isAttendeeCondition = (bool) self::getAttendee(new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($_attendee)), new Calendar_Model_Attender($attendeeOption));
+            return ($isAttendeeCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
         }
         
         if (is_array($skipOption)) {
@@ -1097,7 +1098,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         $isOrganizerCondition = $_event ? $_event->isOrganizer($_attendee) : TRUE;
         $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
-        return ($isAttendeeCondition || $isOrganizerCondition)&& $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
+        return ($isAttendeeCondition || $isOrganizerCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
     }
 
     /**
