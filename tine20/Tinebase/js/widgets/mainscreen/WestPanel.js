@@ -381,6 +381,10 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         var panelEls = cmp.getEl().child('div[class^=' + this.defaults.baseCls + '-body]');
         if (panelEls) {
             panelEls.applyStyles('overflow-x: hidden');
+            // IE 11 dosn't respect the style :-(
+            panelEls.on('scroll', function(e) {
+                panelEls.dom.scrollLeft = 0;
+            });
         }
     }
 });
