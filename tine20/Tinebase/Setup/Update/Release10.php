@@ -617,7 +617,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.13');
     }
 
-
     /**
      * update to 10.14
      *
@@ -854,9 +853,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
     }
 
-
-
-
     /**
      * update to 10.18
      *
@@ -878,5 +874,57 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setTableVersion('tree_fileobjects', '5');
         $this->setApplicationVersion('Tinebase', '10.18');
+    }
+
+    /**
+     * update to 10.19
+     *
+     * Add fulltext search index for tags description
+     */
+    public function update_18()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        try {
+            $this->_backend->dropIndex('tags', 'description');
+        } catch (Exception $e) {
+            // Ignore, if there is no index, we can just go on and create one.
+        }
+
+        $this->_backend->addIndex('tags', $declaration);
+
+        $this->setTableVersion('tags', 8);
+        $this->setApplicationVersion('Tinebase', '10.19');
+    }
+
+    /**
+     * update to 10.20
+     *
+     * Make tags description a longtext field
+     */
+    public function update_19()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <!--Long text!-->
+                <length>2147483647</length>
+                <type>text</type>
+                <default>NULL</default>
+            </field>
+        ');
+
+        $this->_backend->alterCol('tags', $declaration);
+
+        $this->setTableVersion('tags', 9);
+        $this->setApplicationVersion('Tinebase', '10.20');
     }
 }
