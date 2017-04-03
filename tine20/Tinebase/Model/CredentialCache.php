@@ -48,7 +48,7 @@ class Tinebase_Model_CredentialCache extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                     => array('Alnum', 'allowEmpty' => true),
-        'key'                    => array('Alnum', 'allowEmpty' => true),
+        'key'                    => array('allowEmpty' => true),
         'cache'                  => array('allowEmpty' => true),
         'username'               => array('allowEmpty' => true),
         'password'               => array('allowEmpty' => true),
