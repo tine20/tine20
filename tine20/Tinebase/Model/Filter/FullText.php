@@ -51,7 +51,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             foreach ($this->_value as $value) {
                 //replace full text meta characters
                 //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-                $value = preg_replace('#[^\w\d ]|_#u', ' ', $value);
+                $value = preg_replace('#\W#u', ' ', $value);
                 // replace multiple spaces with just one
                 $value = preg_replace('# +#u', ' ', trim($value));
                 $values = explode(' ', $value);
@@ -73,7 +73,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             foreach ($this->_value as $value) {
                 //replace full text meta characters
                 //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-                $value = preg_replace('#[^\w\d ]|_#u', ' ', $value);
+                $value = preg_replace('#\W#u', ' ', $value);
                 // replace multiple spaces with just one
                 $value = preg_replace('# +#u', ' +', trim($value));
                 $searchTerm .= ($searchTerm === '' ? '+' : ' +') . $value;

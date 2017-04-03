@@ -81,12 +81,81 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
     protected function _resolvePathIds($_model)
     {
         if (! is_array($this->_pathRecordIds)) {
-            // TODO this should be improved if it turns out to be a performance issue:
-            //  we only need the record_ids here and not complete records, so we could directly use the path sql backend
-            //  and just request the property we need
-            $this->_pathRecordIds = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
+             $paths = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
                 array('field' => 'query', 'operator' => $this->_operator, 'value' => $this->_value)
-            )))->__call('getRecordIdsOfModel', array($_model));
+            )));
+
+            $this->_pathRecordIds = array();
+            if ($paths->count() > 0) {
+                if (!is_array($this->_value)) {
+                    $this->_value = array($this->_value);
+                }
+                $searchTerms = array();
+                foreach ($this->_value as $value) {
+                    //replace full text meta characters
+                    //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
+                    $value = preg_replace('#[^\w\d ]|_#u', ' ', $value);
+                    // replace multiple spaces with just one
+                    $searchTerms = array_merge($searchTerms, explode(' ', preg_replace('# +#u', ' ', trim($value))));
+                }
+
+                if (count($searchTerms) < 1) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                        ' found paths, but search terms array is empty. value: ' . print_r($this->_value, true));
+                    return;
+                }
+
+                $searchTerms = array_filter($searchTerms, 'mb_strtolower');
+                $hitNeighbours = array();
+                $hitIds = array();
+
+                /** @var Tinebase_Model_Path $path */
+                foreach($paths as $path) {
+                    $pathParts = explode('/', trim($path->path, '/'));
+                    $shadowPathParts = explode('/', trim($path->shadow_path, '/'));
+                    $offset = 0;
+                    $hit = false;
+                    foreach($pathParts as $pathPart) {
+                        $pathPart = mb_strtolower($pathPart);
+
+                        $shadowPathPart = $shadowPathParts[$offset++];
+                        $model = substr($shadowPathPart, 1, strpos($shadowPathPart, '}') - 1);
+                        $id = substr($shadowPathPart, strpos($shadowPathPart, '}') + 1);
+                        if (false !== ($pos = strpos($id, '{'))) {
+                            $id = substr($id, 0, $pos - 1);
+                        }
+
+                        $newHit = true;
+                        foreach($searchTerms as $searchTerm) {
+                            if (false === strpos($pathPart, $searchTerm)) {
+                                $newHit = false;
+                                break;
+                            }
+                        }
+                        if (true === $newHit) {
+                            $hitIds[] = $id;
+                            $hit = true;
+                            continue;
+                        }
+                        if (false === $hit) {
+                            continue;
+                        }
+
+                        if ($model !== $_model) {
+                            continue;
+                        }
+
+                        $hitNeighbours[] = $id;
+                        $hit = false;
+                    }
+                }
+
+                if (count($hitNeighbours) > 0) {
+                    $this->_pathRecordIds = $hitNeighbours;
+                } else {
+                    $this->_pathRecordIds = $hitIds;
+                }
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign ids: ' 
