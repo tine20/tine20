@@ -15,25 +15,7 @@ Ext.ns('Tine.Filemanager.Model');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'id' },
-    { name: 'name' },
-    { name: 'path' },
-    { name: 'size' },
-    { name: 'revision' },
-    { name: 'type' },
-    { name: 'contenttype' },
-    { name: 'description' },
-    { name: 'account_grants' },
-    { name: 'description' },
-    { name: 'object_id'},
-    { name: 'revision_size' },
-
-    { name: 'relations' },
-    { name: 'customfields' },
-    { name: 'notes' },
-    { name: 'tags' }
-]), {
+Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.NodeArray, {
     appName: 'Filemanager',
     modelName: 'Node',
     idProperty: 'id',

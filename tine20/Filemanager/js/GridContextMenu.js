@@ -262,16 +262,7 @@ Tine.Filemanager.GridContextMenu = {
         var selectedRows = grid.selectionModel.getSelections();
         
         var fileRow = selectedRows[0];
-               
-        var downloadPath = fileRow.data.path;
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Filemanager.downloadFile',
-                requestType: 'HTTP',
-                id: '',
-                path: downloadPath
-            }
-        }).start();
+        Tine.Filemanager.downloadFile(fileRow);
     },
     
     /**

@@ -651,15 +651,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var rowRecord = grid.getStore().getAt(row);
         
         if(rowRecord.data.type == 'file') {
-            var downloadPath = rowRecord.data.path;
-            var downloader = new Ext.ux.file.Download({
-                params: {
-                    method: 'Filemanager.downloadFile',
-                    requestType: 'HTTP',
-                    id: '',
-                    path: downloadPath
-                }
-            }).start();
+            Tine.Filemanager.downloadFile(rowRecord);
         }
         
         else if (rowRecord.data.type == 'folder'){
@@ -916,18 +908,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
             selectedRows = grid.selectionModel.getSelections();
-        
-        var fileRow = selectedRows[0];
-               
-        var downloadPath = fileRow.data.path;
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Filemanager.downloadFile',
-                requestType: 'HTTP',
-                id: '',
-                path: downloadPath
-            }
-        }).start();
+
+        Tine.Filemanager.downloadFile(selectedRows[0]);
     },
     
     /**

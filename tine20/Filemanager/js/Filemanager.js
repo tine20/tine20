@@ -36,15 +36,7 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     allowMultiple: false,
     handler: function(action) {
         var node = action.grid.store.getAt(action.gridIndex).get('related_record');
-        var downloadPath = node.path;
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Filemanager.downloadFile',
-                requestType: 'HTTP',
-                id: '',
-                path: downloadPath
-            }
-        }).start();
+        Tine.Filemanager.downloadFile(node);
     }
 });
 
@@ -56,3 +48,24 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Node'
 });
+
+/**
+ * download file into browser
+ *
+ * @param {String|Tine.Filemanager.Model.Node}
+ * @param revision
+ * @returns {Ext.ux.file.Download}
+ */
+Tine.Filemanager.downloadFile = function(path, revision) {
+    path = lodash.get(path, 'data.path') || lodash.get(path, 'path') || path;
+
+    return downloader = new Ext.ux.file.Download({
+        params: {
+            method: 'Filemanager.downloadFile',
+            requestType: 'HTTP',
+            id: '',
+            path: path,
+            revision: revision
+        }
+    }).start();
+};

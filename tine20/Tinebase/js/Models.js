@@ -479,25 +479,32 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     recordsName: 'Configs'
 });
 
-
-/**
- * @namespace   Tine.Tinebase.Model
- * @class       Tine.Tinebase.Model.Node
- * @extends     Tine.Tinebase.data.Record
- */
-Tine.Tinebase.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
+Tine.Tinebase.Model.NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'name' },
     { name: 'path' },
     { name: 'size' },
     { name: 'revision' },
+    { name: 'available_revisions' },
     { name: 'type' },
     { name: 'contenttype' },
     { name: 'description' },
     { name: 'account_grants' },
     { name: 'description' },
-    { name: 'object_id'}
-]), {
+    { name: 'object_id'},
+    { name: 'revision_size' },
+
+    { name: 'relations' },
+    { name: 'customfields' },
+    { name: 'notes' },
+    { name: 'tags' }
+]);
+/**
+ * @namespace   Tine.Tinebase.Model
+ * @class       Tine.Tinebase.Model.Node
+ * @extends     Tine.Tinebase.data.Record
+ */
+Tine.Tinebase.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.NodeArray, {
     appName: 'Tinebase',
     modelName: 'Node',
     idProperty: 'id',

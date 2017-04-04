@@ -69,6 +69,8 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             url: this.url,
             timeout: this.timeout
         });
+
+        return this;
     },
     
     /**
