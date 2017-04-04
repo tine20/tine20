@@ -326,7 +326,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         $path = $this->getPathOfNode($nodeId, /* $getPathAsString */ true);
         $handle = Tinebase_FileSystem::getInstance()->fopen($path, 'r');
         $contents = stream_get_contents($handle);
-        Tinebase_FileSystem::getInstance()->fclose($templateHandle);
+        Tinebase_FileSystem::getInstance()->fclose($handle);
 
         return $contents;
     }
@@ -2043,5 +2043,52 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
     public function getGrantsOfAccount($_accountId, $_containerId, $_grantModel = 'Tinebase_Model_Grants')
     {
         return $this->_nodeAclController->getGrantsOfAccount($_accountId, $_containerId);
+    }
+
+
+    /**
+     * remove file revisions based on settings:
+     * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
+     * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS
+     */
+    public function clearFileRevisions()
+    {
+        $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
+
+        $numRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS};
+        $monthRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS};
+
+        if (0 === $numRevisions && 0 === $monthRevisions) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' nothing to do as settings are to keep file revisions infinitely!');
+        }
+
+        if ($monthRevisions > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' clearing file revisions older than ' . $monthRevisions . ' months');
+
+            $result = $this->_fileObjectBackend->clearOldRevisions($monthRevisions);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' cleared ' . $result . ' file revisions older than ' . $monthRevisions . ' months');
+        }
+
+        if ($numRevisions > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' clearing file revisions exceeding max count ' . $numRevisions);
+
+            $count = 0;
+            foreach($this->_fileObjectBackend->search(null, null, true) as $id) {
+                try {
+                    /** @var Tinebase_Model_Tree_FileObject $fileObject */
+                    $fileObject = $this->_fileObjectBackend->get($id, true);
+                    if (is_array($fileObject->available_revisions) && count($fileObject->available_revisions) > $numRevisions) {
+                        $revisions = $fileObject->available_revisions;
+                        sort($revisions, SORT_NUMERIC);
+                        $count += $this->_fileObjectBackend->deleteRevisions($id, array_slice($revisions, 0, count($revisions) - $numRevisions));
+                    }
+                } catch(Tinebase_Exception_NotFound $tenf) {}
+            }
+        }
     }
 }

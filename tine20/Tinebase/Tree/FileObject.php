@@ -329,11 +329,15 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                     ->where('id = ?', $id));
                 if (($row = $stmt->fetch(Zend_Db::FETCH_NUM)) && ((int)$row[0]) !== ((int)$record->revision_size)) {
 
+                    $stmt->closeCursor();
+
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' revision size mismatch on ' . $id . ': ' . $row[0] .' != ' . $record->revision_size);
 
                     $record->revision_size = $row[0];
                     $this->update($record);
+                } else {
+                    $stmt->closeCursor();
                 }
 
                 $transactionManager->commitTransaction($transactionId);
@@ -371,5 +375,51 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $this->_getSelectHook = array();
 
         return $fileObjects;
+    }
+
+    /**
+     * delete old file revisions that are older than $_months months
+     * @param $_months
+     * @return int number of deleted revisions
+     */
+    public function clearOldRevisions($_months)
+    {
+        $months = (int)$_months;
+        if ($months < 1) {
+            return 0;
+        }
+
+        // TODO PGSQL =>  this is only supported by MySQL
+        // pgsql -> subquery with ids?
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            throw new Tinebase_Exception_NotImplemented('only mysql supported');
+        }
+
+        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+            'objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
+
+        return $stmt->rowCount();
+    }
+
+    /**
+     * @param string $_id
+     * @param array $_revisions
+     * @return int
+     */
+    public function deleteRevisions($_id, array $_revisions)
+    {
+        // TODO PGSQL =>  this is only supported by MySQL
+        // pgsql -> subquery with ids?
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            throw new Tinebase_Exception_NotImplemented('only mysql supported');
+        }
+
+        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.revision IN ' .
+            $this->_db->quoteInto('(?)', $_revisions));
+
+        return $stmt->rowCount();
     }
 }

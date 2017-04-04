@@ -353,6 +353,29 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_Timemachine_ModificationLog::readModificationLogFromMaster in scheduler.');
     }
+
+    /**
+     * add file revision cleanup task to scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addFileRevisionCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileRevisionCleanup')) {
+            return;
+        }
+
+        $task = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'clearFileRevisions',
+        ));
+
+        $_scheduler->addTask('Tinebase_FileRevisionCleanup', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::clearFileRevisions in scheduler.');
+    }
     
     /**
      * run requests

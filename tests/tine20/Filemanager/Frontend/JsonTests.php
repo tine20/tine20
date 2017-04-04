@@ -1504,11 +1504,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->searchNodes($filter, array());
         self::assertEquals(2, $result['totalcount'], 'no files found in path: ' . print_r($result, true));
         $file1Node = $result['results'][0];
-        self::assertEquals('/shared/testcontainer/file1', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
+        self::assertContains('/shared/testcontainer/file', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
         $this->_assertGrantsInNode($file1Node);
 
         $file2Node = $this->_json->getNode($result['results'][1]['id']);
-        self::assertEquals('/shared/testcontainer/file2', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
+        self::assertContains('/shared/testcontainer/file', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
         $this->_assertGrantsInNode($file2Node);
     }
 

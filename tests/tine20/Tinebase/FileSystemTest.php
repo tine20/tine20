@@ -264,10 +264,10 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertFalse($result);
     }
     
-    public function testCreateFile()
+    public function testCreateFile($_name = 'phpunit.txt')
     {
         $testDir  = $this->testMkdir();
-        $testFile = 'phpunit.txt';
+        $testFile = $_name;
         $testPath = $testDir . '/' . $testFile;
 
         $basePathNode = $this->_controller->stat($testDir);
@@ -308,7 +308,8 @@ class Tinebase_FileSystemTest extends TestCase
         $fsConfig = Tinebase_Core::getConfig()->get(Tinebase_Config::FILESYSTEM);
         $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = true;
-        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM, $fsConfig);
+        $fsConfig->{Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS} = 1;
+        $fsConfig->{Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS} = 1;
         $this->_controller->resetBackends();
 
         $testPath = $this->testCreateFile();
@@ -351,6 +352,7 @@ class Tinebase_FileSystemTest extends TestCase
 
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $filter = new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'id',          'operator' => 'equals',     'value' => $node->getId()),
@@ -375,6 +377,37 @@ class Tinebase_FileSystemTest extends TestCase
         $handle = fopen(Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . $testPath, 'r', false, $streamContext);
         $oldContent = fread($handle, 1024);
         $this->assertEquals('phpunit', $oldContent, 'could not properly read revision 1');
+
+        $testPath2 = $this->testCreateFile('phpunittest2.txt');
+
+        $handle = $this->_controller->fopen($testPath2, 'w');
+        $written = fwrite($handle, 'abcdef');
+        $this->assertEquals(6, $written);
+        $this->_controller->fclose($handle);
+
+        $node = $this->_controller->stat($testPath2);
+        $this->assertEquals(6, $node->size);
+        $this->assertEquals(13, $node->revision_size);
+        $this->assertEquals(array(1,2), $node->available_revisions);
+        $this->assertEquals(2, $node->revision);
+
+        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'tree_filerevisions SET creation_time = "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * 3) . '" WHERE id = "' . $node->object_id .'" and revision = 1')->closeCursor();
+
+        $this->_controller->clearFileRevisions();
+        $this->_controller->recalculateRevisionSize();
+        $this->_controller->clearStatCache();
+
+        $node = $this->_controller->stat($testPath);
+        $this->assertEquals(5, $node->size);
+        $this->assertEquals(5, $node->revision_size);
+        $this->assertEquals(array(2), $node->available_revisions);
+        $this->assertEquals(2, $node->revision);
+
+        $node = $this->_controller->stat($testPath2);
+        $this->assertEquals(6, $node->size);
+        $this->assertEquals(6, $node->revision_size);
+        $this->assertEquals(array(2), $node->available_revisions);
+        $this->assertEquals(2, $node->revision);
     }
 
     /**

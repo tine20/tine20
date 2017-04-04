@@ -510,7 +510,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_12()
     {
-        if (! $this->_backend->columnExists('acl_node', 'tree_nodes')) {
+        if (!$this->_backend->columnExists('acl_node', 'tree_nodes')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>acl_node</name>
@@ -610,5 +610,19 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         // TODO remove all containers attached to nodes
 
         $this->setApplicationVersion('Tinebase', '10.13');
+    }
+
+
+    /**
+     * update to 10.14
+     *
+     * add file revision cleanup task to scheduler
+     */
+    public function update_13()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.14');
     }
 }
