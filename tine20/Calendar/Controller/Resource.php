@@ -97,7 +97,55 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
         
         $_record->container_id = $container->getId();
-        return parent::create($_record);
+        $createdRecord = parent::create($_record);
+
+        $updateObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => 'Tinebase_Model_Container',
+            'observable_identifier' => $createdRecord->container_id,
+            'observer_model'        => $this->_modelName,
+            'observer_identifier'   => $createdRecord->getId(),
+            'observed_event'        => 'Tinebase_Event_Record_Update'
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($updateObserver);
+
+        $deleteObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => 'Tinebase_Model_Container',
+            'observable_identifier' => $createdRecord->container_id,
+            'observer_model'        => $this->_modelName,
+            'observer_identifier'   => $createdRecord->getId(),
+            'observed_event'        => 'Tinebase_Event_Record_Delete'
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($deleteObserver);
+
+        return $createdRecord;
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        if ($_eventObject instanceof Tinebase_Event_Observer_Abstract && $_eventObject->persistentObserver->observable_model === 'Tinebase_Model_Container') {
+            switch (get_class($_eventObject)) {
+                case 'Tinebase_Event_Record_Update':
+                    try {
+                        $resource = $this->get($_eventObject->persistentObserver->observer_identifier);
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        return;
+                    }
+                    if ($resource->name !== $_eventObject->observable->name) {
+                        $resource->name = $_eventObject->observable->name;
+                        $this->update($resource);
+                    }
+                    break;
+
+                case 'Tinebase_Event_Record_Delete':
+                    $this->delete($_eventObject->persistentObserver->observer_identifier);
+                    break;
+            }
+        }
     }
     
     /**

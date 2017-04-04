@@ -1015,7 +1015,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         return $containers;
     }
-    
+
+    /**
+     * Deletes entries
+     *
+     * @param string|integer|Tinebase_Record_Interface|array $_id
+     * @return int The number of affected rows.
+     */
+    public function delete($_id)
+    {
+        if (empty($_id)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');
+            return 0;
+        }
+
+        $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
+
+        foreach($idArray as $id) {
+            $this->deleteContainer($id);
+        }
+    }
+
     /**
      * delete container if user has the required right
      *
@@ -1062,7 +1082,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         try {
             $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
-            
+
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($deletedContainer, 'Tinebase_Event_Record_Delete');
         } catch (Exception $e) {
             $tm->rollBack();
             throw $e;
@@ -1875,8 +1896,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function update(Tinebase_Record_Interface $_record)
     {
         $this->_clearCache($_record);
-        
-        return parent::update($_record);
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $result = parent::update($_record);
+
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($result, 'Tinebase_Event_Record_Update');
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+        return $result;
     }
 
     public function setContainerOwners()

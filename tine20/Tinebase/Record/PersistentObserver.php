@@ -35,6 +35,16 @@ class Tinebase_Record_PersistentObserver
      * @var array
      */
     protected $_controllerCache = array();
+
+    /**
+     * @var array
+     */
+    protected $_eventRecursionPrevention = array();
+
+    /**
+     * @var bool
+     */
+    protected $_outerCall = true;
     
     /* holds the instance of the singleton
      *
@@ -80,26 +90,45 @@ class Tinebase_Record_PersistentObserver
             throw new Tinebase_Exception_InvalidArgument('Event ' . $_event . ' doesn\'t exist');
         }
 
-        $observers = $this->getObserversByEvent($_observable, $_event);
-        /** @var Tinebase_Event_Observer_Abstract $eventObject */
-        $eventObject = new $_event();
-        $eventObject->observable = $_observable;
+        $setOuterCall = false;
+        if (true === $this->_outerCall) {
+            $this->_eventRecursionPrevention = array();
+            $this->_outerCall = false;
+            $setOuterCall = true;
+        }
 
-        /** @var Tinebase_Model_PersistentObserver $observer */
-        foreach ($observers as $observer) {
+        try {
+            $observers = $this->getObserversByEvent($_observable, $_event);
+            /** @var Tinebase_Event_Observer_Abstract $eventObject */
+            $eventObject = new $_event();
+            $eventObject->observable = $_observable;
 
-            /** @var Tinebase_Controller_Record_Abstract $controller */
+            /** @var Tinebase_Model_PersistentObserver $observer */
+            foreach ($observers as $observer) {
 
-            if (!isset($this->_controllerCache[$observer->observer_model])) {
-                $controller = Tinebase_Core::getApplicationInstance($observer->observable_model);
-                $this->_controllerCache[$observer->observer_model] = $controller;
-            } else {
-                $controller = $this->_controllerCache[$observer->observer_model];
+                $observerId = $observer->getId();
+                if (isset($this->_eventRecursionPrevention[$observerId])) {
+                    continue;
+                }
+                $this->_eventRecursionPrevention[$observerId] = true;
+
+                /** @var Tinebase_Controller_Record_Abstract $controller */
+                if (!isset($this->_controllerCache[$observer->observer_model])) {
+                    $controller = Tinebase_Core::getApplicationInstance($observer->observer_model);
+                    $this->_controllerCache[$observer->observer_model] = $controller;
+                } else {
+                    $controller = $this->_controllerCache[$observer->observer_model];
+                }
+
+                $eventObject->persistentObserver = $observer;
+
+                $controller->handleEvent($eventObject);
             }
-
-            $eventObject->persistentObserver = $observer;
-            
-            $controller->handleEvent($eventObject);
+        } finally {
+            $this->_outerCall = $setOuterCall;
+            if (true === $this->_outerCall) {
+                $this->_eventRecursionPrevention = array();
+            }
         }
     }
 
