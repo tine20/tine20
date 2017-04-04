@@ -41,6 +41,17 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected $_revision = null;
 
     /**
+     * NOTE: returns fake tree controller
+     *       needed by Tinebase_Core::getApplicationInstance('Tinebase_Model_Tree_Node')
+     *
+     * @return Tinebase_Tree
+     */
+    public static function getInstance()
+    {
+        return Tinebase_Tree::getInstance();
+    }
+
+    /**
      * the constructor
      *
      * allowed options:
