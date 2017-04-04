@@ -101,7 +101,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype', 'revision_size', 'indexed_hash')
+                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype', 'revision_size', 'indexed_hash', 'description')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
@@ -137,15 +137,33 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_doModLog = false)
     {
         $oldRecord = $this->get($_record->getId());
         $newRecord = parent::update($_record);
 
-        $currentMods = $this->_writeModLog($newRecord, $oldRecord);
-        Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+        if (true === $_doModLog) {
+            $currentMods = $this->_writeModLog($newRecord, $oldRecord);
+            if ($currentMods->count() > 0) {
+                Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            }
+        }
 
         return $newRecord;
+    }
+
+    /**
+     * writes mod log and system notes
+     *
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_oldRecord
+     */
+    public function updated(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_oldRecord)
+    {
+        $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
+        if ($currentMods->count() > 0) {
+            Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+        }
     }
     
     /**

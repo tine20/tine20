@@ -196,7 +196,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      */
     public function get($_id, $_getDeleted = FALSE)
     {
-        $node =$this->_getTreeNodeBackend()->get($_id, $_getDeleted);
+        $node = $this->_getTreeNodeBackend()->get($_id, $_getDeleted);
         $fileObject = $this->_fileObjectBackend->get($node->object_id);
         $node->description = $fileObject->description;
 
@@ -460,7 +460,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                 $this->_updateFileObject($options['tine20']['node']->object_id, $hash, $hashFile);
                 
                 $this->clearStatCache($options['tine20']['path']);
-                
+
+                $newNode = $this->stat($options['tine20']['path']);
+
+                // write modlog and system notes
+                $this->_getTreeNodeBackend()->updated($newNode, $options['tine20']['node']);
+
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Writing to file : ' . $options['tine20']['path'] . ' successful.');
                 
                 break;
@@ -854,7 +859,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             $node->name = basename($newPath);
         }
     
-        $node =$this->_getTreeNodeBackend()->update($node);
+        $node =$this->_getTreeNodeBackend()->update($node, true);
         
         $this->clearStatCache($oldPath);
         
@@ -1397,7 +1402,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             }
         }
 
-        return $this->_getTreeNodeBackend()->update($_node);
+        $newNode = $this->_getTreeNodeBackend()->update($_node);
+
+        $this->_getTreeNodeBackend()->updated($newNode, $currentNodeObject);
+
+        return $newNode;
     }
 
     /**

@@ -772,7 +772,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     {
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         if (null !== $_curRecord && null !== $_newRecord) {
-            $diff = $_curRecord->diff($_newRecord, $this->_metaProperties);
+            $diff = $_curRecord->diff($_newRecord, array_merge($this->_metaProperties, $_newRecord->getModlogOmitFields()));
             $notNullRecord = $_newRecord;
         } else {
             if (null !== $_newRecord) {

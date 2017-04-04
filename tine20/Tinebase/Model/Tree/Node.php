@@ -27,6 +27,7 @@
  * @property    string             type
  * @property    string             revision
  * @property    string             available_revisions
+ * @property    string             description
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -54,6 +55,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
+
+    /**
+     * name of fields that should be omitted from modlog
+     *
+     * @var array list of modlog omit fields
+     */
+    protected $_modlogOmitFields = array('hash', 'available_revisions', 'revision_size', 'path', 'indexed_hash');
 
     /**
      * if foreign Id fields should be resolved on search and get from json
