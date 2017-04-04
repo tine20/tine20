@@ -129,6 +129,12 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
+            var target = e.getTarget('a',1 ,true);
+            if (target) {
+                // allow native context menu for links
+                return;
+            }
+
             e.stopPropagation();
             e.preventDefault();
 
