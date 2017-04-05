@@ -826,7 +826,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'advancedSearch'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
             'persistentFilters'  => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
-            'sessionLifeTime'    => ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400,
+            'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

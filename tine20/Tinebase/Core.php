@@ -208,11 +208,11 @@ class Tinebase_Core
     protected static $_serverPlugins = array();
 
     /**
-     * contains the decorators fetched from configuration
+     * contains the delegates fetched from configuration
      *
      * @var array
      */
-    protected static $_decoratorCache = array();
+    protected static $_delegatorCache = array();
 
     /******************************* DISPATCH *********************************/
     
@@ -1834,26 +1834,24 @@ class Tinebase_Core
         }
     }
 
-    public static function getDecorator($calledClass, $applicationName, $configKey, $interfaceName)
+    public static function getDelegate($applicationName, $configKey, $interfaceName)
     {
-        $cacheKey = $configKey . '_' . $calledClass;
-
-        if (!isset(static::$_decoratorCache[$cacheKey])) {
+        if (!isset(static::$_delegatorCache[$configKey])) {
             $config = Tinebase_Config_Abstract::factory($applicationName);
-            $decorator = $config->get($cacheKey);
-            if (null === $decorator || ! class_exists($decorator) || ! in_array($interfaceName, class_implements($decorator))) {
-                $decorator = false;
+            $delegate = $config->get($configKey);
+            if (null === $delegate || ! class_exists($delegate) || ! in_array($interfaceName, class_implements($delegate))) {
+                $delegate = false;
             } else {
-                $decorator = new $decorator();
+                $delegate = new $delegate();
             }
-            static::$_decoratorCache[$cacheKey] = $decorator;
+            static::$_delegatorCache[$configKey] = $delegate;
         }
 
-        return static::$_decoratorCache[$cacheKey];
+        return static::$_delegatorCache[$configKey];
     }
 
-    public static function clearDecoratorCache()
+    public static function clearDelegatorCache()
     {
-        static::$_decoratorCache = array();
+        static::$_delegatorCache = array();
     }
 }
