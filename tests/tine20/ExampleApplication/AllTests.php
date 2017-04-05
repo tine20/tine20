@@ -4,7 +4,7 @@
  * 
  * @package     ExampleApplication
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  * 
  */
@@ -27,6 +27,7 @@ class ExampleApplication_AllTests
         
         $suite->addTestSuite('ExampleApplication_JsonTest');
         $suite->addTestSuite('ExampleApplication_ImportTest');
+        $suite->addTestSuite('ExampleApplication_ControllerTest');
         return $suite;
     }
 }

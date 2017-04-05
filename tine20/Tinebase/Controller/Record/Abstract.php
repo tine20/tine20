@@ -18,7 +18,7 @@
  * @subpackage  Controller
  */
 abstract class Tinebase_Controller_Record_Abstract
-    extends Tinebase_Controller_Abstract
+    extends Tinebase_Controller_Event
     implements Tinebase_Controller_Record_Interface, Tinebase_Controller_SearchInterface
 {
     use Tinebase_Controller_Record_ModlogTrait;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.14</version>
+    <version>10.15</version>
     <tables>
         <table>
             <name>applications</name>
@@ -908,7 +908,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -916,28 +916,34 @@
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
-                    <name>observable_application</name>
-                    <type>integer</type>
+                    <name>observable_model</name>
+                    <type>text</type>
+                    <length>100</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observable_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>observer_application</name>
-                    <type>integer</type>
+                    <name>observer_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observer_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observed_event</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
+                    <length>100</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -949,39 +955,6 @@
                     <type>datetime</type>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <notnull>true</notnull>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
-                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -990,13 +963,16 @@
                     </field>
                 </index>
                 <index>
-                    <name>observable_id-observer_id-application_id</name>
+                    <name>observable-observer-event</name>
                     <unique>true</unique>
                     <field>
-                        <name>observable_application</name>
+                        <name>observable_model</name>
                     </field>
                     <field>
                         <name>observable_identifier</name>
+                    </field>
+                    <field>
+                        <name>observer_model</name>
                     </field>
                     <field>
                         <name>observer_identifier</name>
@@ -1006,18 +982,14 @@
                     </field>
                 </index>
                 <index>
-                    <name>observer_application</name>
+                    <name>observer</name>
                     <field>
-                        <name>observer_application</name>
+                        <name>observer_model</name>
                     </field>
-                </index>
-                <index>
-                    <name>observer_identifier</name>
                     <field>
                         <name>observer_identifier</name>
                     </field>
                 </index>
-
             </declaration>
         </table>
 

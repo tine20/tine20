@@ -54,6 +54,21 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Re
         return self::$_instance;
     }        
 
-    /****************************** overwritten functions ************************/    
-    
+    /****************************** overwritten functions ************************/
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch(get_class($_eventObject))
+        {
+            case 'Tinebase_Event_Record_Update':
+                /** @var Tinebase_Event_Record_Update $_eventObject*/
+                echo 'catched record update for observing id: ' . $_eventObject->persistentObserver->observer_identifier;
+                break;
+        }
+    }
 }

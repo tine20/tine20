@@ -510,7 +510,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_12()
     {
-        if (!$this->_backend->columnExists('acl_node', 'tree_nodes')) {
+        if (! $this->_backend->columnExists('acl_node', 'tree_nodes')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>acl_node</name>
@@ -612,7 +612,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.13');
     }
 
-
     /**
      * update to 10.14
      *
@@ -624,5 +623,104 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
 
         $this->setApplicationVersion('Tinebase', '10.14');
+    }
+
+    /**
+     * update to 10.15
+     *
+     * update record_observer
+     */
+    public function update_14()
+    {
+        $this->dropTable('record_observer', 'Tinebase');
+
+        $this->createTable('record_observer', new Setup_Backend_Schema_Table_Xml('<table>
+            <name>record_observer</name>
+            <version>4</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>observable_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observable_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observer_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observer_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observed_event</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>observable-observer-event</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>observable_model</name>
+                    </field>
+                    <field>
+                        <name>observable_identifier</name>
+                    </field>
+                    <field>
+                        <name>observer_model</name>
+                    </field>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                    <field>
+                        <name>observed_event</name>
+                    </field>
+                </index>
+                <index>
+                    <name>observer</name>
+                    <field>
+                        <name>observer_model</name>
+                    </field>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>'), 'Tinebase', 3);
+
+        $this->setApplicationVersion('Tinebase', '10.15');
     }
 }
