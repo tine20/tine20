@@ -38,7 +38,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title', 'number'))),
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title', 'number', 'description'))),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Projects')),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Projects_Model_Project')),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
@@ -48,7 +48,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
 
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'    => array('filter' => 'Tinebase_Model_Filter_FullText'),
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
     
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(

@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Timetracker_JsonTest extends Timetracker_AbstractTest
 {
     protected $_testUser = NULL;
-    
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -122,6 +122,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccount = $this->_getTimeaccount();
         $timeaccount->is_open = 0;
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->_deleteTimeAccounts = array($timeaccountData['id']);
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         // search & check
         $timeaccountFilter = $this->_getTimeaccountFilter();
@@ -277,6 +281,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
             'field'     => 'customfield',
@@ -302,20 +311,20 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ts = $this->_json->saveTimesheet($timesheetArray);
 
         // test with default grants
-        $this->assertTrue((isset($ts['customfields'][$cf->name]) || array_key_exists($cf->name, $ts['customfields'])), 'customfield should be readable');
+        $this->assertTrue((isset($ts['customfields'][$cf->name])), 'customfield should be readable');
         $this->assertEquals($value, $ts['customfields'][$cf->name]);
 
         // remove all grants
         Tinebase_CustomField::getInstance()->setGrants($cf, array());
         $ts = $this->_json->getTimesheet($ts['id']);
 
-        $this->assertTrue(! (isset($ts['customfields']) || array_key_exists('customfields', $ts)), 'customfields should not be readable');
+        $this->assertTrue(!isset($ts['customfields']), 'customfields should not be readable');
         $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
 
         // only read allowed
         Tinebase_CustomField::getInstance()->setGrants($cf, array(Tinebase_Model_CustomField_Grant::GRANT_READ));
         $ts = $this->_json->getTimesheet($ts['id']);
-        $this->assertTrue((isset($ts['customfields'][$cf->name]) || array_key_exists($cf->name, $ts['customfields'])), 'customfield should be readable again');
+        $this->assertTrue(isset($ts['customfields'][$cf->name]), 'customfield should be readable again');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should not have changed');
         $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should still not have changed');
@@ -474,6 +483,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheet = $this->_getTimesheet();
 
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         // search & check
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
@@ -552,6 +566,12 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         //$timesheet = $this->_getTimesheet(NULL, $_startDate);
         $timesheet = $this->_getTimesheet(array('timeaccount_id' => null, 'start_date' => $_startDate));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
 
         $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
 
@@ -569,11 +589,16 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
 
         // update timeaccount -> is_billable = false
         $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
         $ta->is_billable = 0;
-        Timetracker_Controller_Timeaccount::getInstance()->update($ta);
+        Timetracker_Controller_Timeaccount::getInstance()->update($ta);;
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         // search & check
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
@@ -613,9 +638,16 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
         $timesheet = $this->_getTimesheet();
         $timesheet->is_billable = false;
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // search & check
         $search = $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
@@ -708,7 +740,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // create
         $filterName = Tinebase_Record_Abstract::generateUID();
-        $persistentFiltersJson->savePersistentFilter(array(
+        $persistentFilterData = $persistentFiltersJson->savePersistentFilter(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationById('Timetracker')->getId(),
             'filters'           => $tsFilter,
             'name'              => $filterName,
@@ -716,6 +748,12 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         ));
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+        $this->_deletePersistentFilters[] = $persistentFilterData['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         // search persistent filter
         $persistentFilters = $persistentFiltersJson->searchPersistentFilter($this->_getPersistentFilterFilter($filterName), NULL);
@@ -857,11 +895,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         // create 100+ timesheets
         $first = $this->_getTimesheet(array(), TRUE);
+        $this->_deleteTimeSheets[] = $first->getId();
+        $this->_deleteTimeAccounts[] = $first->timeaccount_id;
         for ($i = 0; $i < 122; $i++) {
-            $this->_getTimesheet(array(
+            $next = $this->_getTimesheet(array(
                 'timeaccount_id' => $first->timeaccount_id
             ), TRUE);
+
+            $this->_deleteTimeSheets[] = $next->getId();
         }
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // update multi with filter
         $filterArray = $this->_getTimesheetDateFilter();

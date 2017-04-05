@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.17</version>
+    <version>10.18</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3229,7 +3229,7 @@
         
         <table>
             <name>tree_fileobjects</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3327,6 +3327,13 @@
                         <name>is_deleted</name>
                     </field>
                 </index>
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
             </declaration>
         </table>
 
@@ -3411,6 +3418,7 @@
                 </index>
             </declaration>
         </table>
+
         <table>
             <name>tree_nodes</name>
             <version>2</version>

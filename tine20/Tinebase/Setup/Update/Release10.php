@@ -617,6 +617,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.13');
     }
 
+
     /**
      * update to 10.14
      *
@@ -851,5 +852,31 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Removed old container ' . $container->name);
         }
+    }
+
+
+
+
+    /**
+     * update to 10.18
+     *
+     * Add fulltext index for description field
+     */
+    public function update_17()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('tree_fileobjects', $declaration);
+
+        $this->setTableVersion('tree_fileobjects', '5');
+        $this->setApplicationVersion('Tinebase', '10.18');
     }
 }

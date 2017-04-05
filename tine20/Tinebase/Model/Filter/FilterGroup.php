@@ -570,6 +570,14 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         return $this->_concatenationCondition;
     }
+
+    /**
+     * @param string $_condition
+     */
+    public function setCondition($_condition)
+    {
+        $this->_concatenationCondition = $_condition === self::CONDITION_OR ? self::CONDITION_OR : ($_condition === self::CONDITION_AND ? self::CONDITION_AND : ($this->_concatenationCondition !== NULL ? $this->_concatenationCondition : self::CONDITION_AND));
+    }
     
     /**
      * set id

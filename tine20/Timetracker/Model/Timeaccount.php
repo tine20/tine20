@@ -115,8 +115,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             ),
             'description'       => array(
                 'label'                 => 'Description', // _('Description')
-                'type'                  => 'text',
+                'type'                  => 'fulltext',
                 'showInDetailsPanel'    => TRUE,
+                'queryFilter'           => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'budget'            => array(

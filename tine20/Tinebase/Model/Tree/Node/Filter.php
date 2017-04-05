@@ -50,7 +50,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     protected $_filterModel = array(
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('name', 'content'))
+            'options' => array('fields' => array('name', 'content', 'description'))
         ),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
@@ -87,7 +87,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
             'options' => array('tablename' => 'tree_fileobjects')
         ),
         'description'          => array(
-            'filter' => 'Tinebase_Model_Filter_Text',
+            'filter' => 'Tinebase_Model_Filter_FullText',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
     // tree_filerevisions table

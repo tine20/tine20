@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Cache
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO refactor persistent cache visiblity handling as this is not quite easy to read/understand
@@ -183,7 +183,7 @@ class Tinebase_Cache_PerRequest
         // lookup in in-memory cache
         if (isset($this->_inMemoryCache[$class]) &&
             isset($this->_inMemoryCache[$class][$method]) &&
-            (isset($this->_inMemoryCache[$class][$method][$cacheId]) || array_key_exists($cacheId, $this->_inMemoryCache[$class][$method]))
+            isset($this->_inMemoryCache[$class][$method][$cacheId])
         ) {
             return $this->_inMemoryCache[$class][$method][$cacheId]['value'];
         };

@@ -57,4 +57,28 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', 23);
         $this->setApplicationVersion('Addressbook', '10.3');
     }
+
+
+    /**
+     * update to 10.4
+     *
+     * Add fulltext index for note field
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>note</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>note</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('addressbook', $declaration);
+
+        $this->setTableVersion('addressbook', 24);
+        $this->setApplicationVersion('Addressbook', '10.4');
+    }
 }

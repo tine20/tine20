@@ -66,7 +66,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'rrule_constraints'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
         'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),

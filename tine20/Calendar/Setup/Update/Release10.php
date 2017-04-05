@@ -117,4 +117,27 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '10.4');
     }
+
+    /**
+     * update to 10.5
+     *
+     * Add fulltext index for description field
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('cal_events', $declaration);
+
+        $this->setTableVersion('cal_events', 13);
+        $this->setApplicationVersion('Calendar', '10.5');
+    }
 }
