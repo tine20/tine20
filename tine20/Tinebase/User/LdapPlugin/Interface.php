@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-16 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -21,7 +21,7 @@ interface Tinebase_User_LdapPlugin_Interface
      * the constructor
      *
      * @param  Tinebase_Ldap  $_ldap    the ldap resource
-     * @param  array          $options  options used in connecting, binding, etc.
+     * @param  array          $_options  options used in connecting, binding, etc.
      */
     public function __construct(Tinebase_Ldap $_ldap, $_options = null);
     

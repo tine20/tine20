@@ -355,7 +355,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchResources($filter, $paging)
     {
-        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter');
+        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter', true);
     }
     
     /**
@@ -380,6 +380,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveResource($recordData)
     {
         $recordData['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $recordData['grants']);
+        if(array_key_exists ('max_number_of_people', $recordData) && $recordData['max_number_of_people'] == '') {
+           $recordData['max_number_of_people'] = null;
+        }
         
         return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }

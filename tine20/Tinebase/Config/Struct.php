@@ -15,16 +15,20 @@
  */
 class Tinebase_Config_Struct extends ArrayObject
 {
+    protected $_parent;
+    protected $_parentKey;
     protected $_struct;
     protected $_appName;
 
     /** TODO struct should be mandatory at some point */
-    public function __construct($data = array(), $struct = null, $appName = null)
+    public function __construct($data = array(), $parent = null, $parentKey = null, $struct = null, $appName = null)
     {
         parent::__construct($data);
 
         $this->_struct = $struct;
         $this->_appName = $appName;
+        $this->_parent = $parent;
+        $this->_parentKey = $parentKey;
     }
 
     /**
@@ -46,9 +50,9 @@ class Tinebase_Config_Struct extends ArrayObject
             /** TODO struct should be mandatory at some point, remove null check */
             if (null === $_default && null !== $this->_struct && isset($this->_struct[$_name]['default'])) {
 
-                return Tinebase_Config_Abstract::rawToConfig($this->_struct[$_name]['default'], $this->_struct[$_name], $this->_appName);
+                return Tinebase_Config_Abstract::rawToConfig($this->_struct[$_name]['default'], $this, $_name, $this->_struct[$_name], $this->_appName);
             }
-            return Tinebase_Config_Abstract::rawToConfig($_default, (null!==$this->_struct?$this->_struct[$_name]:null), $this->_appName);
+            return Tinebase_Config_Abstract::rawToConfig($_default, $this, $_name, (null!==$this->_struct?$this->_struct[$_name]:null), $this->_appName);
         }
 
         $return = $this[$_name];
@@ -62,13 +66,12 @@ class Tinebase_Config_Struct extends ArrayObject
         if (null !== $this->_struct) {
 
             // type convert
-            $return = Tinebase_Config_Abstract::rawToConfig($return, $this->_struct[$_name], $this->_appName);
+            $return = Tinebase_Config_Abstract::rawToConfig($return, $this, $_name, $this->_struct[$_name], $this->_appName);
             $this[$_name] = $return;
 
         /** TODO struct should be mandatory at some point, remove this elseif */
         } elseif (is_array($return)) {
-            $return = new Tinebase_Config_Struct($return, (null !== $this->_struct && isset($this->_struct[$_name]['content']) ?
-                $this->_struct[$_name]['content'] : null));
+            $return = new Tinebase_Config_Struct($return, $this, $_name);
             $this[$_name] = $return;
         }
 
@@ -91,7 +94,7 @@ class Tinebase_Config_Struct extends ArrayObject
                         $array[$key] = $array[$key]->toArray();
                     }
                 } elseif(isset($this->_struct[$key]['default'])) {
-                    $array[$key] = Tinebase_Config_Abstract::rawToConfig($this->_struct[$key]['default'], $this->_struct[$key], $this->_appName);
+                    $array[$key] = Tinebase_Config_Abstract::rawToConfig($this->_struct[$key]['default'], $this, $key, $this->_struct[$key], $this->_appName);
                 }
             }
         } else {
@@ -114,6 +117,14 @@ class Tinebase_Config_Struct extends ArrayObject
     public function __get($_name)
     {
         return $this->get($_name);
+    }
+
+    public function __set($_name, $_value)
+    {
+        $this[$_name] = $_value;
+        if (null !== $this->_parent && null !== $this->_parentKey) {
+            $this->_parent->{$this->_parentKey} = $this;
+        }
     }
     
     /**

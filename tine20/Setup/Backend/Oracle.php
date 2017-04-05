@@ -195,7 +195,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             //Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
         }
         
-        $statement .= implode(",\n", $statementSnippets) . "\n)";
+        $statement .= implode(",\n", array_filter($statementSnippets)) . "\n)";
         // remove ON DELETE RESTRICT, which is on default
         $statement = str_replace('ON DELETE RESTRICT', '', $statement);
         // auto shutup by cweiss: echo "<pre>$statement</pre>";
@@ -474,7 +474,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
        $statement = $this->getIndexDeclarations($_declaration, $_tableName);
        if (!empty($_declaration->primary) || !empty($_declaration->unique)) {
             $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " . $statement;
-        }
+        } else {
+           return;
+       }
         
         $this->execQueryVoid($statement);
     }
@@ -621,6 +623,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         } else if (!empty($_key->unique)) {
             $name = $this->_sanititzeName(SQL_TABLE_PREFIX . "uni_" . $_tableName . "_" . $_key->name);
             $snippet = '  CONSTRAINT ' . $this->_db->quoteIdentifier($name) . " UNIQUE";
+        } elseif (!empty($_key->fulltext)) {
+            if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
+            return '';
         } else {
             $name = $this->_sanititzeName(SQL_TABLE_PREFIX . 'idx_' . $_tableName . "_" . $_key->name);
             $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);

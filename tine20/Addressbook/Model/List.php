@@ -105,6 +105,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'paths'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -150,5 +151,53 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         }
         
         return $id;
+    }
+
+    /**
+     * returns an array containing the parent neighbours relation objects or record(s) (ids) in the key 'parents'
+     * and containing the children neighbours in the key 'children'
+     *
+     * @return array
+     */
+    public function getPathNeighbours()
+    {
+        if (!empty($this->members)) {
+            foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
+                $members[$member->getId()] = $member;
+            }
+        } else {
+            $members = array();
+        }
+
+        if (!empty($this->memberroles)) {
+
+            $listRoles = array();
+            /** @var Addressbook_Model_ListMemberRole $role */
+            foreach($this->memberroles as $role)
+            {
+                $listRoles[$role->list_role_id] = $role->list_role_id;
+                if (isset($members[$role->contact_id])) {
+                    unset($members[$role->contact_id]);
+                }
+            }
+
+            $pathController = Tinebase_Record_Path::getInstance();
+            $pathController->addAfterRebuildQueueHook(array(array('Addressbook_Model_ListRole', 'setParent')));
+            Addressbook_Model_ListRole::setParent($this);
+
+            $memberRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
+            foreach($memberRoles as $memberRole) {
+                $pathController->addToRebuildQueue(array($memberRole));
+                $members[] = $memberRole;
+            }
+
+        }
+
+        $result = array(
+            'parents' => array(),
+            'children' => $members
+        );
+
+        return $result;
     }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract implements Tinebase_Controller_Interface
+abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Interface
 {
     /**
      * default settings
@@ -336,6 +336,11 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      */
     protected function _getModelsFromAppDir()
     {
+        $modelsDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+        if (! file_exists($modelsDir)) {
+            return null;
+        }
+        
         try {
             $modelDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
             if (! file_exists($modelDir)) {

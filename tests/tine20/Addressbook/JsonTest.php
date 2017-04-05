@@ -253,14 +253,17 @@ class Addressbook_JsonTest extends TestCase
 
     /**
      * try to get other people contacts
-     *
      */
     public function testGetOtherPeopleContacts()
     {
         $paging = $this->objects['paging'];
 
         $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'otherUsers'),
+            array('field' => 'container_id', 'operator' => 'in',   'value' => array(
+                'id'    => 'otherUsers',
+                'name'  => 'Adressbücher anderer Benutzer',
+                'path'  => '/personal'
+            )),
         );
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
@@ -380,9 +383,10 @@ class Addressbook_JsonTest extends TestCase
 
         // check if other default field value was updated properly
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
-        
+
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 hinzugefügt) customfields ( -> {');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 '. $translate->_('added') .') customfields ( ->  ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);
@@ -411,7 +415,7 @@ class Addressbook_JsonTest extends TestCase
         $result = $this->_uit->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
-        $this->_checkChangedNote($result['id'], ' -> {"' . $cf->name . '":"changed value"})');
+        $this->_checkChangedNote($result['id'], ' ->  ' . $cf->name . ': changed value)');
     }
     
     /**
@@ -485,8 +489,8 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'equals',
             'value'    =>  $contact['id']
         )));
-        $sharedTagName = $this->_createAndAttachTag($filter, $type);
-        $this->_checkChangedNote($contact['id'], array(',"name":"' . $sharedTagName . '","description":"testTagDescription"', 'tags ([] -> [{'));
+        list(,$sharedTagId) = $this->_createAndAttachTag($filter, $type);
+        $this->_checkChangedNote($contact['id'], array('tags ( ->  0: ' . $sharedTagId));
     }
     
     /**
@@ -676,8 +680,8 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'equals',
             'value'    =>  Tinebase_Core::getUser()->accountDisplayName
         )));
-        $sharedTagName = $this->_createAndAttachTag($filter);
-        $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
+        list($sharedTagName) = $this->_createAndAttachTag($filter);
+        list($personalTagName) = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
@@ -705,7 +709,7 @@ class Addressbook_JsonTest extends TestCase
         $tag = $this->_getTag($_tagType);
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($_filter, $tag);
         
-        return $tag->name;
+        return array($tag->name, $tag->id);
     }
     
     /**
@@ -1429,6 +1433,50 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Tests if path info in query breaks backend
+     */
+    public function testSearchContactsWithPathFilterIfPathDisabled()
+    {
+        if (Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->markTestSkipped('Test does not apply if path feature is enabled');
+        }
+
+        $filter = [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'condition' => 'AND',
+                        'filters' => [
+                            [
+                                'field' => 'query',
+                                'operator' => 'contains',
+                                'value' => '',
+                            ],
+                        ],
+                    ],
+                    [
+                        'field' => 'path',
+                        'operator' => 'contains',
+                        'value' => '',
+                    ],
+                ],
+            ]
+        ];
+
+        $paging = [
+            'sort' => 'n_fn',
+            'dir' => 'ASC',
+            'start' => 0,
+            'limit' => 10
+        ];
+
+        $result = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertEquals(6, $result['totalcount']);
+    }
+
+    /**
      * testOrganizerForeignIdFilterWithOrCondition
      */
     public function testOrganizerForeignIdFilterWithOrCondition()
@@ -1789,7 +1837,7 @@ Steuernummer 33/111/32212";
     /**
      * @see 0011584: allow to set group member roles
      */
-    public function testCeateListWithMemberAndRole($listRoleName = 'my test role')
+    public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
         $contact = $this->_addContact();
         $listRole = $this->_uit->saveListRole(array(
@@ -1817,12 +1865,26 @@ Steuernummer 33/111/32212";
         return $list;
     }
 
+    public function testSearchListsByMember()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        $filter = array(array(
+            'field'    => 'contact',
+            'operator' => 'equals',
+            'value'    => $list['members'][0],
+        ));
+
+        $result = $this->_uit->searchLists($filter, array());
+        self::assertEquals(1, $result['totalcount']);
+        self::assertEquals('my test list', $result['results'][0]['name']);
+    }
+
     /**
      * @see 0011584: allow to set group member roles
      */
     public function testRemoveListMemberRoles()
     {
-        $list = $this->testCeateListWithMemberAndRole();
+        $list = $this->testCreateListWithMemberAndRole();
 
         $list['memberroles'] = array();
         $updatedList = $this->_uit->saveList($list);
@@ -1842,10 +1904,27 @@ Steuernummer 33/111/32212";
      */
     public function testSearchContactByListRole()
     {
-        $list = $this->testCeateListWithMemberAndRole();
+        $list = $this->testCreateListWithMemberAndRole();
 
         $filter = array(
             array('field' => 'list_role_id','operator' => 'in', 'value' => array($list['memberroles'][0]['list_role_id']['id']))
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount']);
+    }
+
+    /**
+     * @see 0012834: Tinbase_Model_Filter_Query - reimplement using FilterGroup
+     */
+    public function testSearchContactByQueryFilterWithAnd()
+    {
+        /* $contact1 = */ $this->_addContact();
+        /* $contact2 = */ $this->_addContact('aaabbb');
+
+        $filter = array(
+            array('field' => 'query','operator' => 'contains', 'value' => 'aaabbb PHPUNIT')
         );
 
         $result = $this->_uit->searchContacts($filter, array());

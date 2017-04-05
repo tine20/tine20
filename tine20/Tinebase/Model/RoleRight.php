@@ -1,16 +1,16 @@
 <?php
 /**
- * model to handle rights
+ * model to handle role rights
  * 
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * defines the datatype for rights
+ * defines the datatype for role rights
  * 
  * @package     Tinebase
  * @subpackage  Acl
@@ -18,55 +18,51 @@
 class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'Tinebase';
-    
+    protected static $_configurationObject = NULL;
+
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Filter_Input
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_filters = array(
-        //'*'      => 'StringTrim'
-    );
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'RoleRight',
+        'recordsName'       => 'RoleRights', // ngettext('RoleRight', 'RoleRights', n)
+        'hasRelations'      => FALSE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'createModule'      => FALSE,
 
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Filter_Input
-     *
-     * @var array
-     */
-    protected $_validators = array();
+        'titleProperty'     => 'id',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'RoleRight',
 
-    /**
-     * @see Tinebase_Record_Abstract
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = NULL)
-    {
-        $this->_validators = array(
-            'id'                => array('allowEmpty' => TRUE),
-            'application_id'    => array('Alnum', 'presence' => 'required'),
-            'account_id'        => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
-            'account_type'      => array(
-                new Zend_Validate_InArray(array(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)) 
+        'fields' => array(
+            'role_id'           => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'integer',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
             ),
-            'right'             => array('presence' => 'required'),
-        );
-        
-        return parent::__construct($_data, $_bypassFilters);
-    }
+            'application_id'    => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+            ),
+            'right'             => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+            ),
+        )
+    );
 }

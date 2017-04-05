@@ -37,6 +37,6 @@ class Calendar_Model_ResourceFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'  ),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'is_location'           => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'max_number_of_people'  => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 }

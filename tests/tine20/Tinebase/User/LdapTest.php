@@ -280,13 +280,26 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testSyncUsersNoContactData()
     {
+        $testRecord = self::getTestRecord();
+        try {
+            // cleanup if required
+            $user = $this->_backend->getUserByPropertyFromSyncBackend('accountLoginName', $testRecord->accountLoginName);
+            $this->_backend->deleteUserInSyncBackend($user->getId());
+        } catch (Exception $e) {}
+
         // add user in LDAP
-        $user = $this->_backend->addUserToSyncBackend(self::getTestRecord());
+        $user = $this->_backend->addUserToSyncBackend($testRecord);
         $this->_usernamesToDelete[] = $user->accountLoginName;
 
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, false);
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
+
         $syncedUser = Tinebase_User::syncUser($user);
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, true);
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
+
 
         // check if user is synced
         $this->assertEquals(Tinebase_Model_User::VISIBILITY_DISPLAYED, $syncedUser->visibility,
@@ -296,7 +309,7 @@ class Tinebase_User_LdapTest extends TestCase
         $this->assertFalse(isset($contact->tel_work), 'tel_work is set');
 
         // add phone data in ldap and check that it did not reach adb
-        $syncOptions = array(
+        $syncOpt = array(
             'syncContactData' => true,
             'syncContactPhoto' => true,
         );
@@ -310,9 +323,13 @@ class Tinebase_User_LdapTest extends TestCase
             'jpegphoto'       => $jpegImage,
         ));
 
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, false);
-        $syncedUser = Tinebase_User::syncUser($user, $syncOptions);
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, true);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
+
+        $syncedUser = Tinebase_User::syncUser($user, $syncOpt);
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
+            ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
 
         $contact = Addressbook_Controller_Contact::getInstance()->get($syncedUser->contact_id);
         $this->assertFalse(isset($contact->tel_work), 'tel_work is set');
@@ -421,5 +438,43 @@ class Tinebase_User_LdapTest extends TestCase
             $syncedUser = Tinebase_User::syncUser($user, array('syncAccountStatus' => true));
             $this->assertEquals($status, $syncedUser->accountStatus, print_r($syncedUser->toArray(), true));
         }
+    }
+
+    /**
+     * testSyncUsersWithSchedulerTask
+     */
+    public function testSyncUsersWithSchedulerTask()
+    {
+
+        $scheduler = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY, array(
+            'controller'    => 'Tinebase_User',
+            'action'        => 'syncUsers',
+            'params'        => array(
+                'options'       => array(Tinebase_User::SYNC_WITH_CONFIG_OPTIONS => true),
+                'static'        => true
+            )
+        ));
+
+        $result = $scheduler->run();
+        self::assertTrue($result !== false, 'scheduler run failed');
+    }
+
+    /**
+     * testSyncGroupsWithSchedulerTask
+     *
+     * TODO move to group tests
+     */
+    public function testSyncGroupsWithSchedulerTask()
+    {
+        $scheduler = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY, array(
+            'controller'    => 'Tinebase_Group',
+            'action'        => 'syncGroups',
+            'params'        => array(
+                'static'        => true
+            )
+        ));
+
+        $result = $scheduler->run();
+        self::assertTrue($result !== false, 'scheduler run failed');
     }
 }

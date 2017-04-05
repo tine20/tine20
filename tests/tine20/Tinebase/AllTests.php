@@ -70,7 +70,6 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_TagsTest');
         $suite->addTestSuite('Tinebase_Log_AllTests');
         $suite->addTestSuite('Tinebase_Redis_QueueTest');
-        $suite->addTestSuite('Tinebase_Pluggable_ConcreteTest');
         $suite->addTestSuite('Tinebase_TempFileTest');
         $suite->addTestSuite('Tinebase_Server_AllTests');
         $suite->addTestSuite('Tinebase_LockTest');

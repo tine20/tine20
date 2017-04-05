@@ -535,6 +535,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         $this->assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
         $this->assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
+        $this->assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
+
         $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
             . print_r($registryData['Inventory']['models']['InventoryItem'], true));
         $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));

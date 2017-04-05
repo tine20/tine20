@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,8 +20,9 @@ interface Tinebase_User_Interface_SyncAble
     /**
      * get user by login name
      *
-     * @param   string  $_property
-     * @param   string  $_accountId
+     * @param   string $_property
+     * @param   string $_accountId
+     * @param   string $_accountClass
      * @return Tinebase_Model_User the user object
      */
     public function getUserByPropertyFromSyncBackend($_property, $_accountId, $_accountClass = 'Tinebase_Model_User');
@@ -93,7 +94,7 @@ interface Tinebase_User_Interface_SyncAble
     /**
      * update contact data(first name, last name, ...) of user
      * 
-     * @param Addressbook_Model_Contact $contact
+     * @param Addressbook_Model_Contact $_contact
      */
     public function updateContactInSyncBackend($_contact);
 }

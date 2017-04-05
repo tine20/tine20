@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -121,9 +121,21 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'tel_fax'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_fax_home'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_home'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_other'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_pager'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_work'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_prefer'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_assistent_normalized'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_car_normalized'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_cell_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_cell_private_normalized'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_fax_normalized'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_fax_home_normalized'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_home_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_other_normalized'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_pager_normalized'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_prefer_normalized'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_work_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'note'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -141,7 +153,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
-        'showDisabled'         => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
+        'showDisabled'         => array('filter' => 'Addressbook_Model_ContactHiddenFilter', 'options' => array(
             'requiredCols'  => array('account_id' => 'accounts.id')
         )),
         'salutation'           => array('filter' => 'Tinebase_Model_Filter_Text'),

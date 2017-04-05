@@ -45,12 +45,6 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     label: '',
 
     /**
-     * @cfg filterValueWidth
-     * @type Integer
-     */
-    filterValueWidth: 200,
-
-    /**
      * @cfg multiselectField
      */
     multiselectFieldConfig: null,

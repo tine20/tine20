@@ -295,13 +295,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
 
-        if (! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT') {
-            // cache mainscreen for one day
-            $maxAge = 86400;
-            header('Cache-Control: private, max-age=' . $maxAge);
-            header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-            header_remove('Pragma');
-        }
+        // cache mainscreen for one day in production
+        $maxAge = ! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT' ? 86400 : -10000;
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        header_remove('Pragma');
     }
     
     /**
@@ -465,12 +463,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * returns javascript of translations for the currently configured locale
      * 
-     * Note: This function is only used in development mode. In debug/release mode
-     * we can include the static build files in the view. With this we avoid the 
-     * need to start a php process and stream static js files through it.
-     * 
-     * @return javascript
-     *
+     * @return string (javascript)
      */
     public function getJsTranslations()
     {
@@ -512,7 +505,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
 
         // cache for one day
@@ -523,15 +516,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // remove Pragma header from session
         header_remove('Pragma');
 
-        $clientETag = isset($_SERVER['If_None_Match']) ? $_SERVER['If_None_Match'] :
-            isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] :
-                '';
+        $clientETag = isset($_SERVER['If_None_Match'])
+            ? $_SERVER['If_None_Match']
+            : (isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : '');
 
         if (preg_match('/[a-f0-9]{40}/', $clientETag, $matches)) {
             $clientETag = $matches[0];
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
         $serverETag = $this->getAssetHash();
@@ -545,6 +538,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             // send files to client
             foreach ($filesToWatch as $file) {
                 readfile($file);
+            }
+            if ($_fileType != 'lang') {
+                // adds new server version etag for client version check
                 echo "Tine.clientVersion.filesHash = '$serverETag';";
             }
         }
@@ -578,9 +574,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         return sha1(self::getAssetsMap(true) . TINE20_BUILDTYPE);
     }
+
     /**
      * @param string $_fileType
      * @return array
+     * @throws Exception
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getFilesToWatch($_fileType)
     {

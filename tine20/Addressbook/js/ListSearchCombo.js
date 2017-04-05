@@ -67,7 +67,7 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
                         '<table>',
                             '<tr>',
                                 '<td style="min-width: 20px;">{[Tine.Addressbook.ListGridPanel.listTypeRenderer(null, null, values)]}</td>',
-                                '<td width="100%">{[this.encode(values.name)]}</td>',
+                                '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
                             '</tr>',
                         '</table>',
                         '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',

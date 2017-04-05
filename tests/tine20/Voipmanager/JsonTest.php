@@ -4,7 +4,7 @@
  * 
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        add more tests
@@ -142,7 +142,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field'    => 'description', 
+                'field'    => 'name',
                 'operator' => 'contains', 
                 'value'    => $_name
             )

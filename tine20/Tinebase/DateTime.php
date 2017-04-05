@@ -108,9 +108,18 @@ class Tinebase_DateTime extends DateTime
             parent::__construct($time);
         }
 
+        if ($this->format('Y') === '0000') {
+            throw new Exception('invalid year');
+        }
+
         // Normalize Timezonename, as sometimes +00:00 is taken
         if (is_numeric($_time)) {
             $this->setTimezone('UTC');
+        }
+
+        if (PHP_VERSION_ID >= 70100) {
+            list ($h, $m, $i) = explode(' ', $this->format('H i s'));
+            parent::setTime($h, $m, $i, 0);
         }
     }
     

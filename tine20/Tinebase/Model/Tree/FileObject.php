@@ -5,13 +5,20 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
  * @property  string   name
+ * @property  string   revision
+ * @property  string   description
+ * @property  string   contenttype
+ * @property  integer  size
+ * @property  integer  revision_size
+ * @property  string   hash
+ * @property  string   type
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
@@ -77,7 +84,9 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
+        'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             'presence' => 'required',
             array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE))

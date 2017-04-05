@@ -21,61 +21,82 @@
  * @property    string  $version
  * @property    array   $tables
  * @property    string  $order
+ * @property    array   $state
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
      * @var string
      */
-    protected $_application = 'Tinebase';
-    
-    /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        'name'      => 'StringTrim',
-        'version'   => 'StringTrim'
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array();
+    const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
 
     /**
-     * @see Tinebase_Record_Abstract
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array(
-            'id'        => array('allowEmpty' => true),
-            'name'      => array('presence' => 'required'),
-            'status'    => array(array('InArray', array('enabled', 'disabled'))),
-            'order'     => array('Digits', 'presence' => 'required'),
-            'tables'    => array('allowEmpty' => true),
-            'version'   => array('presence' => 'required')
-        );
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'RoleMember',
+        'recordsName'       => 'RoleMembers', // ngettext('RoleMember', 'RoleMembers', n)
+        'hasRelations'      => FALSE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'createModule'      => FALSE,
+
+        'titleProperty'     => 'name',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'RoleMember',
+
+        'fields' => array(
+            'name'              => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            'version'           => array(
+                'label'             => 'Version', //_('Version')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            'status'            => array(
+                'label'             => 'Status', //_('Status')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(array('InArray', array('enabled', 'disabled'))),
+            ),
+            'order'             => array(
+                'label'             => 'Order', //_('Order')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array('Digits', 'presence' => 'required'),
+            ),
+            'tables'            => array(
+                'label'             => 'Tables', //_('Tables')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+            ),
+            'state'             => array(
+                'label'             => 'State', //_('State')
+                'type'              => 'json',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+            ),
+        )
+    );
     
     /**
      * converts a int, string or Tinebase_Model_Application to an accountid

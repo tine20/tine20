@@ -641,31 +641,35 @@ class Crm_JsonTest extends Crm_AbstractTest
         $updatedLead = $this->_getUit()->saveLead($savedLead);
         
         // check modlog + history
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Crm', $updatedLead['id']);
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        $modifications->addRecord(Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Crm', $updatedLead['id'])->getLastRecord());
+        $diff = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
+        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($modifications);
         
         //print_r($updatedLead);
-        $this->assertEquals(3, count($modifications), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
-        foreach ($modifications as $modification) {
-            switch ($modification->modified_attribute) {
+        $this->assertEquals(3, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
+        foreach ($changedAttributes as $attribute) {
+            switch ($attribute) {
                 case 'customfields':
-                    $this->assertEquals('{"' . $this->_cfcName . '":"5678"}', $modification->new_value);
+                    $this->assertTrue(isset($diff->diff['customfields']) && is_array($diff->diff['customfields']) && isset($diff->diff['customfields'][$this->_cfcName]));
+                    $this->assertEquals('5678', $diff->diff['customfields'][$this->_cfcName]);
                     break;
                 case 'relations':
-                    $diff = new Tinebase_Record_RecordSetDiff(Zend_Json::decode($modification->new_value));
-                    $this->assertEquals(0, count($diff->added));
-                    $this->assertEquals(1, count($diff->removed));
-                    $this->assertEquals(1, count($diff->modified), 'relations modified mismatch: ' . print_r($diff->toArray(), TRUE));
-                    $this->assertTrue(isset($diff->modified[0]['diff']['type']));
-                    $this->assertEquals('CUSTOMER', $diff->modified[0]['diff']['type'], 'type diff is not correct: ' . print_r($diff->toArray(), TRUE));
+                    $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['relations']);
+                    $this->assertEquals(0, count($diffSet->added));
+                    $this->assertEquals(1, count($diffSet->removed));
+                    $this->assertEquals(1, count($diffSet->modified), 'relations modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
+                    $this->assertTrue(isset($diffSet->modified[0]['diff']['type']));
+                    $this->assertEquals('CUSTOMER', $diffSet->modified[0]['diff']['type'], 'type diff is not correct: ' . print_r($diffSet->toArray(), TRUE));
                     break;
                 case 'tags':
-                    $diff = new Tinebase_Record_RecordSetDiff(Zend_Json::decode($modification->new_value));
-                    $this->assertEquals(1, count($diff->added));
-                    $this->assertEquals(0, count($diff->removed));
-                    $this->assertEquals(0, count($diff->modified), 'tags modified mismatch: ' . print_r($diff->toArray(), TRUE));
+                    $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['tags']);
+                    $this->assertEquals(1, count($diffSet->added));
+                    $this->assertEquals(0, count($diffSet->removed));
+                    $this->assertEquals(0, count($diffSet->modified), 'tags modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
                     break;
                 default:
-                    $this->fail('Invalid modification: ' . print_r($modification->toArray(), TRUE));
+                    $this->fail('Invalid modification: ' . print_r($diff->toArray(), TRUE));
             }
         }
     }

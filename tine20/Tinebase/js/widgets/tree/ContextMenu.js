@@ -135,53 +135,38 @@ Tine.widgets.tree.ContextMenu = {
             actionUpdater: true,
             scope: this.config
         });
-        
-        var items = [];
+
+        var items = [],
+            method = '',
+            action;
+
         for (var i=0; i < config.actions.length; i++) {
-            switch(config.actions[i]) {
-                case 'add':
-                    items.push(this.action_add);
-                    break;
-                case 'delete':
-                    items.push(this.action_delete);
-                    break;
-                case 'rename':
-                    items.push(this.action_rename);
-                    break;
-                case 'properties':
-                    items.push(this.action_properties);
-                    break;
-                case 'changecolor':
-                    items.push(this.action_changecolor);
-                    break;
-                case 'grants':
-                    items.push(this.action_grants);
-                    break;
-                case 'reload':
-                    items.push(this.action_reload);
-                    break;
-                case 'resume':
-                    items.push(this.action_resume);
-                    break;
-                case 'pause':
-                    items.push(this.action_pause);
-                    break;
-                case 'download':
-                    items.push(this.action_download);
-                    break;
-                case 'edit':
-                    items.push(this.action_editFile);
-                    break;
-                case 'publish':
-                    items.push(this.action_publish);
-                    break;
-                default:
-                    // add custom actions
-                    items.push(new Ext.Action(config.actions[i]));
+            action = config.actions[i];
+
+            if (Ext.isString(action)) {
+                method = 'action_' + action;
+                if (! this[method]) {
+                    Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: action "' + method + '" is not definded');
+                    continue;
+                }
+                items.push(this[method]);
             }
+
+            else if (action && action.isAction) {
+                items.push(action);
+            }
+
+            else if (Ext.isObject(action)) {
+                items.push(new Ext.Action(action));
+            }
+
+            else {
+                Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: can\'t cope with action :');
+                Tine.log.warn(action);
+            }
+
         }
 
-             
         /******************* return menu **********************/
         
         return new Ext.menu.Menu({

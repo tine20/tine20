@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -214,6 +214,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * right, user must have to see the module for this model
      */
     protected static $_requiredRight = NULL;
+
     
     /******************************** functions ****************************************/
     
@@ -737,7 +738,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param array &$_data
      * @return void
      */
-    protected function _convertISO8601ToDateTime(array &$_data)
+    public function _convertISO8601ToDateTime(array &$_data)
     {
         foreach (array($this->_datetimeFields, $this->_dateFields) as $dtFields) {
             foreach ($dtFields as $field) {
@@ -913,6 +914,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function diff($_record, $omitFields = array())
     {
+        /** TODO remove this! why is it here? */
         if (! $_record instanceof Tinebase_Record_Abstract) {
             /** @var Tinebase_Record_Diff $_record  ... really?!? */
             return $_record;
@@ -923,6 +925,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             'model'  => get_class($_record),
         ));
         $diff = array();
+        $oldData = array();
         foreach (array_keys($this->_validators) as $fieldName) {
             if (in_array($fieldName, $omitFields)) {
                 continue;
@@ -973,6 +976,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $subdiff = $ownField->diff($recordField);
                 if (is_object($subdiff) && ! $subdiff->isEmpty()) {
                     $diff[$fieldName] = $subdiff;
+                    $oldData[$fieldName] = $ownField;
                 }
                 continue;
             } else if ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
@@ -996,9 +1000,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 ' Found diff for ' . $fieldName .'(this/other):' . print_r($ownField, true) . '/' . print_r($recordField, true) );
             
             $diff[$fieldName] = $recordField;
+            $oldData[$fieldName] = $ownField;
         }
         
         $result->diff = $diff;
+        $result->oldData = $oldData;
         return $result;
     }
     
@@ -1286,5 +1292,142 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $appName = is_string($application) ? $application : $application->name;
         return str_replace($appName . '_Model_', '', $model);
+    }
+
+    /**
+     * undoes the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function undo(Tinebase_Record_Diff $diff)
+    {
+        /* TODO special treatment? for what? how?
+         * oldData does not contain RecordSetDiffs. It plainly contains the old data present in the property before it was changed.
+         */
+
+        if ($this->has('is_deleted')) {
+            $this->is_deleted = 0;
+        }
+
+        foreach((array)($diff->oldData) as $property => $oldValue)
+        {
+            if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+                $oldValue = new Tinebase_DateTime($oldValue);
+            }
+            $this->$property = $oldValue;
+        }
+    }
+
+    /**
+     * applies the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function applyDiff(Tinebase_Record_Diff $diff)
+    {
+        /* TODO special treatment? for what? how? */
+
+        if ($this->has('is_deleted')) {
+            $this->is_deleted = 0;
+        }
+
+        foreach((array)($diff->diff) as $property => $oldValue)
+        {
+            if (is_array($oldValue) && count($oldValue) === 4 &&
+                    isset($oldValue['model']) && isset($oldValue['added']) &&
+                    isset($oldValue['removed']) && isset($oldValue['modified'])) {
+                // RecordSetDiff
+                $recordSetDiff = new Tinebase_Record_RecordSetDiff($oldValue);
+
+                if (! $this->$property instanceof Tinebase_Record_RecordSet) {
+                    $this->$property = new Tinebase_Record_RecordSet($oldValue['model'],
+                        is_array($this->$property)?$this->$property:array());
+                }
+
+                $this->$property->applyRecordSetDiff($recordSetDiff);
+            } else {
+                if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+                    $oldValue = new Tinebase_DateTime($oldValue);
+                }
+                $this->$property = $oldValue;
+            }
+        }
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return false;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        /** @var Tinebase_Record_Abstract_GetPathPartDecorator $decorator */
+        $decorator = Tinebase_Core::getDecorator(get_called_class(), $this->_application, 'getPathPartDecorator',
+                                                'Tinebase_Record_Abstract_GetPathPartDecorator');
+        if (false !== $decorator) {
+            return $decorator->getPathPart($this, $_parent, $_child);
+        }
+
+
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($this->getTitle())), 0, 1024) . $childType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeForPathPart()
+    {
+        return '';
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     *
+     * TODO use decorators ? or overwrite
+     */
+    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/{' . get_class($this) . '}' . $this->getId() . $childType;
+    }
+
+    /**
+     * returns an array containing the parent neighbours relation objects or record(s) (ids) in the key 'parents'
+     * and containing the children neighbours in the key 'children'
+     *
+     * @return array
+     */
+    public function getPathNeighbours()
+    {
+        $oldRelations = $this->relations;
+        $this->relations = null;
+
+        $relations = Tinebase_Relations::getInstance();
+        $result = array(
+            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->asArray(),
+            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->asArray()
+        );
+
+        $this->relations = $oldRelations;
+        return $result;
     }
 }

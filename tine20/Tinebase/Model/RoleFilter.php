@@ -6,10 +6,7 @@
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        add role members and rights
- * @todo        extend Tinebase_Model_Filter_FilterGroup
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,60 +15,28 @@
  * @subpackage  Acl
  * 
  */
-class Tinebase_Model_RoleFilter extends Tinebase_Record_Abstract
+class Tinebase_Model_RoleFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * key in $_validators/$_properties array for the field which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     * 
-     * @todo    is this needed?
+     * @var string application of this filter group
      */
-    protected $_application = 'Tinebase';
-    
-    /**
-     * filter validators
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,  'Alnum'),
+    protected $_applicationName = 'Tinebase';
 
-        //'name'                 => array('presence'   => 'required'),
-        'name'                 => array('allowEmpty' => true),
-        'description'          => array('allowEmpty' => true),
-    );
-    
     /**
-     * Returns a select object according to this filter
-     * 
-     * @return Zend_Db_Select
+     * @var string name of model this filter group is designed for
      */
-    public function getSelect()
-    {
-        $db = Tinebase_Core::getDb();
-        $select = $db->select()
-            ->from(array('roles' => SQL_TABLE_PREFIX . 'roles'));
-        
-        $orWhere = array();
-        if (!empty($this->name)) {
-            $orWhere[] = $db->quoteInto($db->quoteIdentifier('roles.name') . ' LIKE ?', $this->name);
-        }
-        if (!empty($this->description)) {
-            $orWhere[] = $db->quoteInto($db->quoteIdentifier('roles.description') . ' LIKE ?', $this->description);
-        }
-        if (! empty($orWhere)) {
-            $select->where(implode(' OR ', $orWhere));
-        }
-        return $select;
-    }
-    
+    protected $_modelName = 'Tinebase_Model_Role';
+
+    /**
+     * @var array filter model fieldName => definition
+     */
+    protected $_filterModel = array(
+        'id'                    => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'query'                 => array(
+            'filter' => 'Tinebase_Model_Filter_Query',
+            'options' => array('fields' => array('name', 'description'))
+        ),
+        'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+    );
 }

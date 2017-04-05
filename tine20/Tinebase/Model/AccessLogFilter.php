@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -40,6 +40,7 @@ class Tinebase_Model_AccessLogFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'query'         => array('filter' => 'Tinebase_Model_Filter_Query',        'options' => array('fields' => array('login_name', 'ip', 'clienttype'))),
+        'login_name'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'sessionid'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'ip'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'clienttype'    => array('filter' => 'Tinebase_Model_Filter_Text'),

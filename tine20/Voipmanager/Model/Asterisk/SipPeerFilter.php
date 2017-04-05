@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add name/context/username filters to javascript?
  */
@@ -46,6 +46,8 @@ class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Model_Filter_Fil
         'context'      => array('filter' => 'Tinebase_Model_Filter_Text'),        
         'name'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'defaultuser'  => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'type'         => array('filter' => 'Tinebase_Model_Filter_Text')
+        'type'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'callerid'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'ipaddr'       => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

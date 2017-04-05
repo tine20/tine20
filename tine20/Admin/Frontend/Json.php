@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -873,8 +873,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRoles($query, $sort, $dir, $start, $limit)
     {
         $filter = new Tinebase_Model_RoleFilter(array(
-            'name'        => '%' . $query . '%',
-            'description' => '%' . $query . '%'
+            array('field' => 'query', 'operator' => 'contains', 'value' => $query),
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'start' => $start,

@@ -207,6 +207,13 @@ class Tinebase_Core
      */
     protected static $_serverPlugins = array();
 
+    /**
+     * contains the decorators fetched from configuration
+     *
+     * @var array
+     */
+    protected static $_decoratorCache = array();
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -342,6 +349,7 @@ class Tinebase_Core
      * returns an instance of the controller of an application
      *
      * ATTENTION if ever refactored, this is called via ActionQueue with the single parameter 'Tinebase_FOO_User' to get Tinebase_User (triggered in Tinebase_User_Sql::deleteUserInSqlBackend()
+     * Tinebase_FOO_Filesystem
      *
      * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
@@ -844,6 +852,9 @@ class Tinebase_Core
         if (self::get(self::DB) instanceof Zend_Db_Adapter_Abstract) {
             return self::get(self::DB);
         }
+
+        // make sure cache is setup or we get in trouble in config_abstract. after db is available, cache needs to be present too!
+        self::getCache();
         
         $config = self::getConfig();
         
@@ -1250,6 +1261,7 @@ class Tinebase_Core
                 }
                 
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
+                Tinebase_Log_Formatter::resetUsername();
             }
         }
         
@@ -1286,7 +1298,7 @@ class Tinebase_Core
     /**
      * get config from the registry
      *
-     * @return Zend_Config|Zend_Config_Ini|Tinebase_Config
+     * @return Tinebase_Config
      */
     public static function getConfig()
     {
@@ -1460,6 +1472,16 @@ class Tinebase_Core
         }
         
         return self::get(self::DB);
+    }
+
+    /**
+     * checks if the DB is registered already
+     *
+     * @return bool
+     */
+    public static function hasDb()
+    {
+        return self::isRegistered(self::DB);
     }
 
     /**
@@ -1783,5 +1805,49 @@ class Tinebase_Core
         $httpClient = new Zend_Http_Client($uri, $config);
 
         return $httpClient;
+    }
+
+    /**
+     * returns the tinebase id
+     *
+     * @return string
+     */
+    public static function getTinebaseId()
+    {
+        if (! isset(self::$appInstanceCache['TinebaseId'])) {
+            self::$appInstanceCache['TinebaseId'] = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        }
+
+        return self::$appInstanceCache['TinebaseId'];
+    }
+
+    public static function unsetTinebaseId()
+    {
+        if (isset(self::$appInstanceCache['TinebaseId'])) {
+            unset(self::$appInstanceCache['TinebaseId']);
+        }
+    }
+
+    public static function getDecorator($calledClass, $applicationName, $configKey, $interfaceName)
+    {
+        $cacheKey = $configKey . '_' . $calledClass;
+
+        if (!isset(static::$_decoratorCache[$cacheKey])) {
+            $config = Tinebase_Config_Abstract::factory($applicationName);
+            $decorator = $config->get($cacheKey);
+            if (null === $decorator || ! class_exists($decorator) || ! in_array($interfaceName, class_implements($decorator))) {
+                $decorator = false;
+            } else {
+                $decorator = new $decorator();
+            }
+            static::$_decoratorCache[$cacheKey] = $decorator;
+        }
+
+        return static::$_decoratorCache[$cacheKey];
+    }
+
+    public static function clearDecoratorCache()
+    {
+        static::$_decoratorCache = array();
     }
 }

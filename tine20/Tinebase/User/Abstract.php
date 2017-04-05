@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @deprecated  user backends should be refactored
@@ -89,9 +89,10 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @var integer
      */
     protected $_blockTime        = 15;
-    
+
     /**
      * the constructor
+     * @param array $_options
      */
     public function __construct(array $_options = array())
     {
@@ -111,10 +112,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $this->registerPlugin($plugin);
         }
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Interface::registerPlugin()
+     * @param Tinebase_User_Plugin_Interface $_plugin
      */
     public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
     {
@@ -173,15 +173,18 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             self::ENCRYPT_NTPASSWORD
         );
     }
-    
+
     /**
      * encryptes password
      *
      * @param string $_password
      * @param string $_method
+     * @return string
+     * @throws Tinebase_Exception_NotImplemented
      */
     public static function encryptPassword($_password, $_method)
     {
+        $password = null;
         switch (strtolower($_method)) {
             case self::ENCRYPT_BLOWFISH_CRYPT:
                 if(@defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH == 1) {
@@ -249,7 +252,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             
         }
         
-        if (! $password) {
+        if (null === $password) {
             throw new Tinebase_Exception_NotImplemented("$_method is not supported by your php version");
         }
         
@@ -264,19 +267,21 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     {
        return $this->_plugins;
     }
-    
+
     /**
      * generates a randomstrings of given length
      *
      * @param int $_length
+     * @return string
      */
     public static function getRandomString($_length)
     {
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charsLength = strlen($chars);
         
         $randomString = '';
         for ($i=0; $i<(int)$_length; $i++) {
-            $randomString .= $chars[mt_rand(1, strlen($chars)) -1];
+            $randomString .= $chars[mt_rand(1, $charsLength) -1];
         }
         
         return $randomString;
@@ -305,6 +310,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function getFullUserByLoginName($_loginName)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getUserByLoginName($_loginName, 'Tinebase_Model_FullUser');
     }
     
@@ -316,6 +322,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function getFullUserById($_accountId)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
     }
     
@@ -386,7 +393,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function generateAccountFullName($_account)
     {
-        return $this->_addSuffixToNameIfExists('accountFullName', $_account->accountFullName, NULL);
+        return $this->_addSuffixToNameIfExists('accountFullName', $_account->accountFullName);
     }
     
     /**
@@ -669,7 +676,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * update contact data(first name, last name, ...) of user
      * 
-     * @param Addressbook_Model_Contact $contact
+     * @param Addressbook_Model_Contact $_contact
      */
     abstract public function updateContact(Addressbook_Model_Contact $_contact);
     

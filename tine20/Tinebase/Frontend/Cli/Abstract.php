@@ -393,19 +393,7 @@ class Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
-            // TODO use a loop here
-            if (isset($result[$filename]['totalcount']) && ! empty($result[$filename]['totalcount'])) {
-                echo "Imported " . $result[$filename]['totalcount'] . " records.\n";
-            }
-            if (isset($result[$filename]['failcount']) && ! empty($result[$filename]['failcount'])) {
-                echo "Import failed for " . $result[$filename]['failcount'] . " records.\n";
-            }
-            if (isset($result[$filename]['duplicatecount']) && ! empty($result[$filename]['duplicatecount'])) {
-                echo "Found " . $result[$filename]['duplicatecount'] . " duplicates.\n";
-            }
-            if (isset($result[$filename]['updatecount']) && ! empty($result[$filename]['updatecount'])) {
-                echo "Updated " . $result[$filename]['updatecount'] . " records.\n";
-            }
+            $this->_echoImportResult($result[$filename]);
 
             // import (check if dry run)
             if ($_opts->d && $_opts->v) {
@@ -418,6 +406,28 @@ class Tinebase_Frontend_Cli_Abstract
         }
         
         return $result;
+    }
+
+    /**
+     * echos import result
+     *
+     * @param array $result
+     */
+    protected function _echoImportResult($result)
+    {
+        // TODO use a loop here
+        if (isset($result['totalcount']) && ! empty($result['totalcount'])) {
+            echo "Imported " . $result['totalcount'] . " records.\n";
+        }
+        if (isset($result['failcount']) && ! empty($result['failcount'])) {
+            echo "Import failed for " . $result['failcount'] . " records.\n";
+        }
+        if (isset($result['duplicatecount']) && ! empty($result['duplicatecount'])) {
+            echo "Found " . $result['duplicatecount'] . " duplicates.\n";
+        }
+        if (isset($result['updatecount']) && ! empty($result['updatecount'])) {
+            echo "Updated " . $result['updatecount'] . " records.\n";
+        }
     }
 
     /**
@@ -514,5 +524,35 @@ class Tinebase_Frontend_Cli_Abstract
         } catch (Exception $e) {
             $logger->ERR(__METHOD__ . '::' . __LINE__ . " import for {$this->_applicationName} failed ". $e->getMessage());
         }
+    }
+
+    /**
+     * try to get user for cronjob from config
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getCronuserFromConfigOrCreateOnTheFly()
+    {
+        try {
+            $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Setting user with id ' . $cronuserId . ' as cronuser.');
+            $cronuser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $cronuserId, 'Tinebase_Model_FullUser');
+            try {
+                Tinebase_User::getInstance()->assertAdminGroupMembership($cronuser);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+
+            $cronuser = Tinebase_User::createSystemUser('cronuser');
+            if ($cronuser) {
+                Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+            }
+        }
+
+        return $cronuser;
     }
 }

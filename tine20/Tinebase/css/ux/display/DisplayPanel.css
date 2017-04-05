@@ -5,10 +5,10 @@
 
 .x-ux-display label.x-form-item-label {
     color:#A0A0A0;
-    padding-right:5px;
     text-align:right;
     font-size:11px;
-    padding: 0;
+    padding-left: 5px;
+    padding-bottom: 1px;
 }
 
 .x-ux-display .x-form-element {
@@ -36,7 +36,14 @@
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     -khtml-border-radius: 8px;
-    padding-left: 2px;
+}
+
+.x-ux-display .x-ux-display-background-inner {
+    border: 0;
+    background-color: #e5e6fe;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -khtml-border-radius: 0px;
 }
 
 .x-ux-display .x-ux-display-background-border {
@@ -66,6 +73,14 @@
     position: absolute;
     left:5px;
     bottom:6px;
+}
+
+.x-ux-display .x-form-item {
+    padding-left: 2px;
+}
+
+.x-ux-display .x-form-element {
+    padding-left: 5px !important;
 }
 
 .tw-editdialog .x-form-item .x-form-display-field {

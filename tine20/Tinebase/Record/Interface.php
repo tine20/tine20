@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -163,9 +163,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * returns an array with differences to the given record
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
+     * @param array $omitFields omit fields (for example modlog fields)
      * @return Tinebase_Record_Diff with differences field => different value
      */
-    public function diff($_record);
+    public function diff($_record, $omitFields = array());
     
     /**
      * check if two records are equal
@@ -221,13 +222,62 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
 
     /**
      * returns the foreignId fields (used in Tinebase_Convert_Json)
+     *
      * @return array
      */
     public static function getResolveForeignIdFields();
 
-    /** convert this to string
+    /**
+     * convert this to string
      *
      * @return string
      */
     public function __toString();
+
+    /**
+     * undoes the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function undo(Tinebase_Record_Diff $diff);
+
+    /**
+     * applies the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function applyDiff(Tinebase_Record_Diff $diff);
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable();
+
+    /**
+     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+
+    /**
+     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+
+    /**
+     * @return array
+     */
+    public function getPathNeighbours();
+
+    /**
+     * @return string
+     */
+    public function getTypeForPathPart();
 }

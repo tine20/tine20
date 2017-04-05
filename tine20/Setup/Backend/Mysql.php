@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -39,7 +39,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 255 => 'varchar',
                 65535 => 'text',
                 16777215 => 'mediumtext',
-                4294967295 => 'longtext'),
+                2147483647 => 'longtext'),
             'defaultType' => 'text',
             'defaultLength' => null,
             'lengthLessTypes' => array(
@@ -93,7 +93,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
         }
 
-        $statement .= implode(",\n", $statementSnippets) . "\n)";
+        $statement .= implode(",\n", array_filter($statementSnippets)) . "\n)";
 
         if (isset($_table->engine)) {
             $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
@@ -109,10 +109,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         return $statement;
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Setup_Backend_Interface::getExistingForeignKeys()
+     * return list of all foreign key names for given table
+     *
+     * @param string $tableName
+     * @return array list of foreignkey names
      */
     public function getExistingForeignKeys($tableName)
     {
@@ -201,70 +203,132 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * add column/field to database table
      * 
-     * @param string tableName
-     * @param Setup_Backend_Schema_Field_Abstract declaration
-     * @param int position of future column
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param int $_position of future column
      */    
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
+    {
+        $this->execQueryVoid($this->addAddCol(null, $_tableName, $_declaration, $_position));
+    }
+
+    /**
+     * add column/field to database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param int $_position of future column
+     * @return string
+     */
+    public function addAddCol($_query, $_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Add new column to table ' . $_tableName);
 
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
-        
-        $statement .= $this->getFieldDeclarations($_declaration);
-        
+        if (empty($_query)) {
+            $_query = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`";
+        } else {
+            $_query .= ',';
+        }
+
+        $_query .= " ADD COLUMN " . $this->getFieldDeclarations($_declaration);
+
         if ($_position !== NULL) {
             if ($_position == 0) {
-                $statement .= ' FIRST ';
+                $_query .= ' FIRST ';
             } else {
                 $before = $this->execQuery('DESCRIBE `' . SQL_TABLE_PREFIX . $_tableName . '` ');
-                $statement .= ' AFTER `' . $before[$_position]['Field'] . '`';
+                $_query .= ' AFTER `' . $before[$_position]['Field'] . '`';
             }
         }
 
-        $this->execQueryVoid($statement);
+        return $_query;
     }
     
     /**
      * rename or redefines column/field in database table
      * 
-     * @param string tableName
-     * @param Setup_Backend_Schema_Field_Abstract declaration
-     * @param string old column/field name 
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param string $_oldName column/field name
      */    
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` CHANGE COLUMN " ;
-        
+        $this->execQueryVoid($this->addAlterCol(null, $_tableName, $_declaration, $_oldName));
+    }
+
+    /**
+     * rename or redefines column/field in database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param string $_oldName column/field name
+     * @return string
+     */
+    public function addAlterCol($_query, $_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
+    {
+        if (empty($_query)) {
+            $_query = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`";
+        } else {
+            $_query .= ',';
+        }
+
+        $_query .= " CHANGE COLUMN " ;
+
         if ($_oldName === NULL) {
             $oldName = $_declaration->name;
         } else {
             $oldName = $_oldName;
         }
-        
-        $statement .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
-        $this->execQueryVoid($statement);
+
+        $_query .= " `" . $oldName .  "` " . $this->getFieldDeclarations($_declaration);
+
+        return $_query;
     }
  
     /**
      * add a key to database table
      * 
-     * @param string tableName 
-     * @param Setup_Backend_Schema_Index_Abstract declaration
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Index_Abstract $_declaration
      */     
     public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract $_declaration)
     {
-        $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
-                    . $this->getIndexDeclarations($_declaration);
-        $this->execQueryVoid($statement);
+        $this->execQueryVoid($this->addAddIndex(null, $_tableName, $_declaration));
+    }
+
+    /**
+     * add a key to database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Index_Abstract $_declaration
+     * @return string
+     */
+    public function addAddIndex($_query, $_tableName ,  Setup_Backend_Schema_Index_Abstract $_declaration)
+    {
+        if (empty($indexDeclaration = $this->getIndexDeclarations($_declaration))) {
+            return $_query;
+        }
+
+        if (empty($_query)) {
+            $_query = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "`";
+        } else {
+            $_query .= ',';
+        }
+
+        $_query .= " ADD " . $indexDeclaration;
+
+        return $_query;
     }
 
     /**
      * create the right mysql-statement-snippet for keys
      *
      * @param   Setup_Backend_Schema_Index_Abstract $_key
-     * @param String | optional $_tableName [is not used in this Backend (MySQL)]
+     * @param String $_tableName [is not used in this Backend (MySQL)]
      * @return  string
      * @throws  Setup_Exception_NotFound
      */
@@ -278,6 +342,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         } elseif (!empty($_key->unique)) {
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         } elseif (!empty($_key->fulltext)) {
+            if (!$this->supports('mysql >= 5.6.4')) {
+                if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
+                return '';
+            }
             $snippet = " FULLTEXT KEY `" . $_key->name . "`" ;
         }
         
@@ -304,7 +373,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      *  create the right mysql-statement-snippet for foreign keys
      *
-     * @param object $_key the xml index definition
+     * @param Setup_Backend_Schema_Index_Abstract $_key the xml index definition
      * @return string
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
@@ -378,6 +447,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * Restore Database
      *
      * @param $backupDir
+     * @throws Exception
      */
     public function restore($backupDir)
     {

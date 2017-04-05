@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
@@ -11,11 +11,11 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
  * Container select ComboBox widget
  * 
  * @namespace   Tine.widgets.container
- * @class       Tine.widgets.container.selectionComboBox
+ * @class       Tine.widgets.container.SelectionComboBox
  * @extends     Ext.form.ComboBox
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
+Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      */
@@ -176,7 +176,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 
         this.recents = {};
 
-        Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
+        Tine.widgets.container.SelectionComboBox.superclass.initComponent.call(this);
         
         if (this.defaultContainer) {
             this.selectedContainer = this.defaultContainer;
@@ -229,7 +229,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             
             
         } else {
-            Tine.widgets.container.selectionComboBox.superclass.initTrigger.call(this);
+            Tine.widgets.container.SelectionComboBox.superclass.initTrigger.call(this);
         }
     },
     
@@ -349,7 +349,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     // private: only blur if dialog is closed
     onBlur: function() {
         if (!this.dlg) {
-            return Tine.widgets.container.selectionComboBox.superclass.onBlur.apply(this, arguments);
+            return Tine.widgets.container.SelectionComboBox.superclass.onBlur.apply(this, arguments);
         }
     },
     
@@ -359,7 +359,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.onChoseOther();
         } else {
             this.manageRecents(record);
-            Tine.widgets.container.selectionComboBox.superclass.onSelect.apply(this, arguments);
+            Tine.widgets.container.SelectionComboBox.superclass.onSelect.apply(this, arguments);
         }
     },
     
@@ -368,16 +368,24 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     onChoseOther: function() {
         this.collapse();
-        this.dlg = new Tine.widgets.container.selectionDialog({
+        this.dlg = new Tine.widgets.container.SelectionDialog({
             recordClass: this.recordClass,
             allowNodeSelect: this.allowNodeSelect,
             allowToplevelNodeSelect: this.allowToplevelNodeSelect,
-            containerName: this.containerName,
-            containersName: this.containersName,
             requiredGrants: this.requiredGrants,
-            TriggerField: this,
             treePanelClass: this.treePanelClass
         });
+
+        this.dlg.on('select', function(d, node) {
+            this.hasFocusedSubPanels = false;
+            var container = this.setValue(node.attributes.container);
+            this.manageRecents(container);
+            this.fireEvent('select', this, node.attributes.container);
+
+            if (this.blurOnSelect) {
+                this.fireEvent('blur', this);
+            }
+        }, this);
     },
     
     /**
@@ -435,7 +443,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         this.store.remove(this.otherRecord);
         this.store.add(this.otherRecord);
 
-        Tine.widgets.container.selectionComboBox.superclass.setValue.call(this, container.id);
+        Tine.widgets.container.SelectionComboBox.superclass.setValue.call(this, container.id);
         
         if (container.account_grants) {
             this.setDisabled(! container.account_grants.deleteGrant);
@@ -480,201 +488,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         };
     }
 });
-Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
+Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.SelectionComboBox);
 
-Tine.widgets.form.RecordPickerManager.register('Tinebase', 'Container', Tine.widgets.container.selectionComboBox);
-/**
- * @namespace Tine.widgets.container
- * @class Tine.widgets.container.selectionDialog
- * @extends Ext.Component
- * 
- * This widget shows a modal container selection dialog
- */
-Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
-    /**
-     * @cfg {Boolean} allowNodeSelect
-     */
-    allowNodeSelect: false,
-    allowToplevelNodeSelect: true,
-    /**
-     * @cfg {Tine.data.Record} recordClass
-     */
-    recordClass: false,
-    /**
-     * @cfg {string} containerName
-     * name of container (singular)
-     */
-    containerName: 'container',
-    /**
-     * @cfg {string} containerName
-     * name of container (plural)
-     */
-    containersName: 'containers',
-    /**
-     * @cfg {string}
-     * title of dialog
-     */
-    title: null,
-    /**
-     * @cfg {Number}
-     */
-    windowHeight: 400,
-    /**
-     * @property {Ext.Window}
-     */
-    win: null,
-    /**
-     * @property {Ext.tree.TreePanel}
-     */
-    tree: null,
-    /**
-     * @cfg {Array} requiredGrants
-     * grants which are required to select leaf node(s)
-     */
-    requiredGrants: ['readGrant'],
-
-    treePanelClass: null,
-
-    allowNonLeafSelection: false,
-
-    /**
-     * @private
-     */
-    initComponent: function(){
-        Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
-        
-        this.title = this.title ? this.title : String.format(i18n._('please select a {0}'), this.containerName);
-        
-        this.cancelAction = new Ext.Action({
-            text: i18n._('Cancel'),
-            iconCls: 'action_cancel',
-            minWidth: 70,
-            handler: this.onCancel,
-            scope: this
-        });
-        
-        this.okAction = new Ext.Action({
-            disabled: true,
-            text: i18n._('Ok'),
-            iconCls: 'action_saveAndClose',
-            minWidth: 70,
-            handler: this.onOk,
-            scope: this
-        });
-        
-        // adjust window height
-        if (Ext.getBody().getHeight(true) * 0.7 < this.windowHeight) {
-            this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
-        }
-
-        if (! this.treePanelClass) {
-            this.treePanelClass = Tine.widgets.container.TreePanel;
-        }
-        this.initTree();
-
-        this.win = Tine.WindowFactory.getWindow({
-            title: this.title,
-            closeAction: 'close',
-            modal: true,
-            width: 375,
-            height: this.windowHeight,
-            minWidth: 375,
-            minHeight: this.windowHeight,
-            layout: 'fit',
-            plain: true,
-            bodyStyle: 'padding:5px;',
-            buttonAlign: 'right',
-            
-            buttons: [
-                this.cancelAction,
-                this.okAction
-            ],
-            
-            items: [ this.tree ]
-        });
-    },
-
-    initTree: function() {
-        this.tree = new this.treePanelClass({
-            recordClass: this.recordClass,
-            allowMultiSelection: false,
-            containerName: this.TriggerField.containerName,
-            containersName: this.TriggerField.containersName,
-            appName: this.TriggerField.appName,
-            defaultContainer: this.TriggerField.defaultContainer,
-            requiredGrants: this.requiredGrants,
-            // TODO find a better way for this. currently the Filemanager container tree subfolder creation works differently...
-            // this disables context menu for *Node' containers...
-            hasContextMenu: this.recordClass ? (this.recordClass.getMeta('modelName') != 'Node') : true
-        });
-
-        this.tree.on('click', this.onTreeNodeClick, this);
-        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
-    },
-
-    /**
-     * @private
-     */
-    onTreeNodeClick: function(node) {
-        this.okAction.setDisabled(
-            ! (node.leaf
-                || (this.allowNodeSelect
-                    // TODO create isTopLevelNode() in Tine.Tinebase.container
-                    && (this.allowToplevelNodeSelect
-                        || node.attributes
-                            && (
-                                   (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
-                                || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
-                                || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2)
-                        )
-                    )
-                )
-            )
-        );
-        
-        if (! node.leaf ) {
-            node.expand();
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onTreeNoceDblClick: function(node) {
-        if (! this.okAction.isDisabled()) {
-            this.onOk();
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onCancel: function() {
-        this.onClose();
-    },
-    
-    /**
-     * @private
-     */
-    onClose: function() {
-        this.win.close();
-    },
-    
-    /**
-     * @private
-     */
-    onOk: function() {
-        var  node = this.tree.getSelectionModel().getSelectedNode();
-        if (node) {
-            this.TriggerField.hasFocusedSubPanels = false;
-            var container = this.TriggerField.setValue(node.attributes.container);
-            this.TriggerField.manageRecents(container);
-            this.TriggerField.fireEvent('select', this.TriggerField, node.attributes.container);
-            
-            if (this.TriggerField.blurOnSelect) {
-                this.TriggerField.fireEvent('blur', this.TriggerField);
-            }
-            this.onClose();
-        }
-    }
-});
+Tine.widgets.form.RecordPickerManager.register('Tinebase', 'Container', Tine.widgets.container.SelectionComboBox);

@@ -15,12 +15,10 @@ Tine.Tinebase.configManager = function(){
         get: function(name, appName) {
             var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,
                 config = registry ? registry.get('config') : false,
-                struct = config ? config[name] : false,
-                // TODO get default from definition?
-                // def = struct ? struct.definition : false,
-                value = struct ? struct.value : null;
-                
-            return value;
+                pathParts = String(name).split('.'),
+                path = pathParts.join('.value.') + (pathParts.length == 1 ? '.value' : '');
+
+            return lodash.get(config, path);
         }
     }
 }();

@@ -123,7 +123,12 @@ class Tinebase_Group
             default:
                 throw new Tinebase_Exception_InvalidArgument("Groups backend type $_backendType not implemented.");
         }
-        
+
+        if ($result instanceof Tinebase_Group_Interface_SyncAble) {
+            // turn off replicable feature for Tinebase_Model_Group
+            Tinebase_Model_Group::setReplicable(false);
+        }
+
         return $result;
     }
     
@@ -251,6 +256,12 @@ class Tinebase_Group
     public static function syncGroups()
     {
         $groupBackend = Tinebase_Group::getInstance();
+
+        if (! $groupBackend instanceof Tinebase_Group_Interface_SyncAble) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' No syncable group backend found - skipping syncGroups.');
+            return;
+        }
         
         if (!$groupBackend->isDisabledBackend()) {
             $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);
@@ -330,5 +341,10 @@ class Tinebase_Group
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
+    }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
     }
 }

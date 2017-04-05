@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -573,6 +573,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = str_replace("lars@kneschke.de", "l.kneschke@metaways.de", $vcalendar);
         $event->put($vcalendar);
 
+        /** @var Calendar_Model_Event $record */
         $record = $event->getRecord();
 
         $this->assertEquals($contact->getId(), $record->organizer->getId(), 'organizer must not change');

@@ -797,5 +797,12 @@ class Sales_JsonTest extends TestCase
 
         $this->assertEquals($contract2->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
+
+        // search with notcontains
+        $search = $this->_instance->searchContracts(array(
+            array('field' => 'query', 'operator' => 'notcontains', 'value' => 'sheeeeep'),
+        ), $this->_getPaging());
+        
+        $this->assertEquals(2, $search['totalcount']);
     }
 }

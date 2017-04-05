@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -21,12 +21,8 @@ abstract class Tinebase_Controller_Record_Abstract
     extends Tinebase_Controller_Abstract
     implements Tinebase_Controller_Record_Interface, Tinebase_Controller_SearchInterface
 {
-   /**
-     * application backend class
-     *
-     * @var Tinebase_Backend_Sql_Interface
-     */
-    protected $_backend;
+    use Tinebase_Controller_Record_ModlogTrait;
+
 
     /**
      * Model name
@@ -67,13 +63,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @var boolean
      */
     protected $_purgeRecords = TRUE;
-
-    /**
-     * omit mod log for this records
-     *
-     * @var boolean
-     */
-    protected $_omitModLog = FALSE;
 
     /**
      * resolve customfields in search()
@@ -347,30 +336,6 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * set/get modlog active
-     *
-     * @param  boolean $setTo
-     * @return bool
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function modlogActive($setTo = NULL)
-    {
-        if (! $this->_backend) {
-            throw new Tinebase_Exception_NotFound('Backend not defined');
-        }
-
-        $currValue = $this->_backend->getModlogActive();
-        if (NULL !== $setTo) {
-            $setTo = (bool)$setTo;
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $setTo);
-            $this->_backend->setModlogActive($setTo);
-            $this->_omitModLog = ! $setTo;
-        }
-
-        return $currValue;
-    }
-
-    /**
      * set/get relation update
      *
      * @param  boolean $setTo
@@ -621,6 +586,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
             $this->_setRelatedData($createdRecord, $_record, null, TRUE);
+            $this->_writeModLog($createdRecord, null);
             $this->_setNotes($createdRecord, $_record);
             
             if ($this->sendNotifications()) {
@@ -1079,44 +1045,6 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * get backend type
-     * 
-     * @return string
-     */
-    protected function _getBackendType()
-    {
-        $type = (method_exists( $this->_backend, 'getType')) ? $this->_backend->getType() : 'Sql';
-        return $type;
-    }
-
-    /**
-     * write modlog
-     * 
-     * @param Tinebase_Record_Interface $_newRecord
-     * @param Tinebase_Record_Interface $_oldRecord
-     * @return NULL|Tinebase_Record_RecordSet
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _writeModLog($_newRecord, $_oldRecord)
-    {
-        if (! is_object($_newRecord)) {
-            throw new Tinebase_Exception_InvalidArgument('record object expected');
-        }
-        
-        if (! $_newRecord->has('created_by') || $this->_omitModLog === TRUE) {
-            return NULL;
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Writing modlog for ' . get_class($_newRecord));
-    
-        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
-                                                                                        $this->_getBackendType(), $_newRecord->getId());
-        
-        return $currentMods;
-    }
-    
-    /**
      * set relations / tags / alarms
      * 
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
@@ -1130,9 +1058,6 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
 
-        $pathPartChanged = false;
-        $relationsTouched = false;
-
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
@@ -1145,16 +1070,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 FALSE,
                 $this->_inspectRelatedRecords,
                 $this->_doRelatedCreateUpdateCheck);
-
-            $relationsTouched = true;
-
-        } elseif (null === $currentRecord || $this->_getPathPart($currentRecord) !== $this->_getPathPart($updatedRecord)) {
-            $pathPartChanged = true;
-        }
-
-        // rebuild paths if relations where set or if pathPart changed
-        if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
-            $this->_rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched);
         }
 
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
@@ -1173,47 +1088,14 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_getRelatedData($updatedRecord);
         }
 
+        // rebuild paths
+        if (true === $this->_useRecordPaths) {
+            Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
+        }
+
         return $updatedRecord;
     }
 
-    /**
-     * @param Tinebase_Record_Interface $updatedRecord
-     * @param Tinebase_Record_Interface $record
-     * @param Tinebase_Record_Interface $currentRecord
-     * @param boolean $relationsTouched
-     */
-    protected function _rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched)
-    {
-        // rebuild own paths
-        $this->buildPath($updatedRecord);
-
-        // rebuild paths of children that have been added or removed
-        if ($relationsTouched) {
-            //we need to do this to reload the relations in the next line...
-            $record->relations = null;
-            $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-            if (null === $currentRecord) {
-                $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-            } else {
-                $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-            }
-
-            foreach ($newChildRelations as $relation) {
-                $oldOffset = $oldChildRelations->getIndexById($relation->id);
-                // new child
-                if (false === $oldOffset) {
-                    $this->buildPath($relation->related_record);
-                } else {
-                    $oldChildRelations->offsetUnset($oldOffset);
-                }
-            }
-
-            //removed children
-            foreach ($oldChildRelations as $relation) {
-                $this->buildPath($relation->related_record);
-            }
-        }
-    }
 
     /**
      * set notes
@@ -1588,6 +1470,16 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_deleteRecord($record);
             }
 
+            if (true === $this->_useRecordPaths) {
+                $pathController = Tinebase_Record_Path::getInstance();
+                $shadowPathParts = array();
+                /** @var Tinebase_Record_Interface $record */
+                foreach ($records as $record) {
+                    $shadowPathParts[] = $record->getShadowPathPart();
+                }
+                $pathController->deleteShadowPathParts($shadowPathParts);
+            }
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
             // send notifications
@@ -1698,6 +1590,37 @@ abstract class Tinebase_Controller_Record_Abstract
         return $idsToMove;
     }
 
+    /**
+     * undelete one record
+     *
+     * TODO finish implementaion
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function unDelete(Tinebase_Record_Interface $_record)
+    {
+        if ($this->_purgeRecords && !$_record->has('created_by')) {
+            throw new Tinebase_Exception_InvalidArgument('record of type ' . get_class($_record) . ' can\'t be undeleted');
+        }
+        $this->_checkGrant($_record, 'delete');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Undeleting record ' . $_record->getId() . ' of type ' . $this->_modelName);
+
+        $originalRecord = clone $_record;
+
+        //$this->_unDeleteLinkedObjects($_record);
+
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'undelete', $_record);
+        $this->_backend->update($_record);
+
+        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
+        $this->_writeModLog($originalRecord, $_record);
+
+        //$this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+    }
+
     /*********** helper funcs **************/
 
     /**
@@ -1711,6 +1634,10 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_checkGrant($_record, 'delete');
 
         $this->_deleteLinkedObjects($_record);
+
+        // we do this here, before the record MetaData will be set. As we need the unchanged record!
+        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
+        $this->_writeModLog(null, $_record);
 
         if (! $this->_purgeRecords && $_record->has('created_by')) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);
@@ -2172,76 +2099,61 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($_record->{$_property}, TRUE));
-        
-        if (! empty($_record->{$_property}) && $_record->{$_property}) {
-            
-            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
-            if (is_array($_record->{$_property})) {
-                $rs = new Tinebase_Record_RecordSet($recordClassName);
-                foreach ($_record->{$_property} as $recordArray) {
-                    /** @var Tinebase_Record_Interface $rec */
-                    $rec = new $recordClassName(array(),true);
-                    $rec->setFromJsonInUsersTimezone($recordArray);
-                    $rs->addRecord($rec);
-                }
-                $_record->{$_property} = $rs;
+
+        // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+        if (is_array($_record->{$_property})) {
+            $rs = new Tinebase_Record_RecordSet($recordClassName);
+            foreach ($_record->{$_property} as $recordArray) {
+                /** @var Tinebase_Record_Interface $rec */
+                $rec = new $recordClassName(array(),true);
+                $rec->setFromJsonInUsersTimezone($recordArray);
+                $rs->addRecord($rec);
             }
-            
+            $_record->{$_property} = $rs;
+        }
+        
+        if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
+
             $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
             
             // legacy end
             $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
             $oldRecords = $controller->search($oldFilter);
-            
+
+            /** @var Tinebase_Record_Abstract $record */
             foreach ($_record->{$_property} as $record) {
                 
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
-                
-                // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
-                if ($record->getId() && strlen($record->getId()) == 40) {
-                    
-                    // do not try to update if the record hasn't changed
-                    $oldRecord = $oldRecords->getById($record->getId());
-                    
-                    if ($oldRecord && ! empty($oldRecord->diff($record)->diff)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-                        }
-                        $existing->addRecord($controller->update($record));
-                    } else {
-                        $existing->addRecord($record);
-                    }
-                    // create if is not existing already
-                } else {
-                    // try to find if it already exists (with corrupted id)
-                    if ($record->getId() == NULL) {
-                        $crc = $controller->create($record);
-                        $existing->addRecord($crc);
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-                        }
-                    } else {
-                        
-                        try {
-                            
-                            $prevRecord = $controller->get($record->getId());
-    
-                            if (! empty($prevRecord->diff($record)->diff)) {
-                                $existing->addRecord($controller->update($record));
-                            } else {
-                                $existing->addRecord($record);
-                            }
-                            
-                        } catch (Tinebase_Exception_NotFound $e) {
-                            $record->id = NULL;
-                            $crc = $controller->create($record);
-                            $existing->addRecord($crc);
-                            
+
+                $create = false;
+                if (!empty($record->getId())) {
+                    try {
+
+                        $prevRecord = $controller->get($record->getId());
+
+                        if (!empty($prevRecord->diff($record)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                             }
+                            $existing->addRecord($controller->update($record));
+                        } else {
+                            $existing->addRecord($record);
                         }
+
+                    } catch (Tinebase_Exception_NotFound $e) {
+                        $create = true;
+                    }
+                } else {
+                    $create = true;
+                    $record->{$record->getIdProperty()} = NULL;
+                }
+
+                if (true === $create) {
+                    $crc = $controller->create($record);
+                    $existing->addRecord($crc);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                     }
                 }
             }
@@ -2249,11 +2161,34 @@ abstract class Tinebase_Controller_Record_Abstract
 
         /** @var Tinebase_Model_Filter_FilterGroup $filter */
         $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        try {
+            $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+
+            // TODO fix this:
+            // bad work around. Fields of type record return ForeignId Filter, but that filter can not do equals.
+            // remove try  catch and look for
+            /*     Sales_ControllerTest.testAddDeleteProducts
+    Sales_JsonTest.testSearchContracts
+    Sales_JsonTest.testSearchContractsByProduct
+    Sales_JsonTest.testSearchEmptyDateTimeFilter
+    Sales_JsonTest.testAdvancedContractsSearch
+    Sales_InvoiceJsonTests.testCRUD
+    Sales_InvoiceJsonTests.testSanitizingProductId
+    HumanResources_JsonTests.testEmployee
+    HumanResources_JsonTests.testDateTimeConversion
+    HumanResources_JsonTests.testContractDates
+    HumanResources_JsonTests.testAddContract
+    HumanResources_JsonTests.testSavingRelatedRecord
+    HumanResources_JsonTests.testSavingRelatedRecordWithCorruptId
+    HumanResources_CliTests.testSetContractsEndDate */
+
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        }
         
         // an empty array will remove all records on this property
         if (! empty($_record->{$_property})) {
-            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
+            $filter->addFilter($filter->createFilter('id', 'notin', $existing->getId()));
         }
 
         $deleteIds = $controller->search($filter, NULL, FALSE, TRUE);
@@ -2273,7 +2208,9 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * returns path of record
+     * returns paths of record
+     *
+     * ACL check will be disabled in this function to really take all relations into account
      *
      * @param Tinebase_Record_Interface     $record
      * @param boolean|int                   $depth
@@ -2289,7 +2226,13 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
 
-        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
+        // we want all relations / ignoreACL, so we need to force a reload of relations
+        $oldRelations = $record->relations;
+        $record->relations = null;
+        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT, true);
+        // restore normal relations again
+        $record->relations = $oldRelations;
+
         foreach ($parentRelations as $parent) {
 
             if (!is_object($parent->related_record)) {
@@ -2330,51 +2273,6 @@ abstract class Tinebase_Controller_Record_Abstract
         return $result;
     }
 
-    /**
-     * @param Tinebase_Record_Interface $record
-     * @param $relation
-     * @return string
-     *
-     * TODO use decorators
-     */
-    protected function _getPathPart(Tinebase_Record_Interface $record, $relation = null)
-    {
-        $type = $this->_getTypeForPathPart($relation);
-
-        return $type . '/' . mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 32);
-    }
-
-    protected function _getTypeForPathPart($relation)
-    {
-        return ($relation && ! empty($relation->type)) ? '{' . $relation->type . '}' : '';
-    }
-
-    /**
-     * @param Tinebase_Record_Interface $record
-     * @param $relation
-     * @return string
-     *
-     * TODO use decorators
-     */
-    protected function _getShadowPathPart(Tinebase_Record_Interface $record, $relation = null)
-    {
-        $type = $this->_getTypeForPathPart($relation);
-
-        return $type . '/' . $record->getId();
-    }
-
-    /**
-     * shortcut to Tinebase_Record_Path::generatePathForRecord
-     *
-     * @param $record
-     * @param $rebuildRecursively
-     */
-    public function buildPath($record, $rebuildRecursively = false)
-    {
-        if ($this->_useRecordPaths) {
-            Tinebase_Record_Path::getInstance()->generatePathForRecord($record, $rebuildRecursively);
-        }
-    }
 
     // we dont want to mention the throw there, or it would be reflected everywhere
     /** @noinspection PhpDocMissingThrowsInspection */

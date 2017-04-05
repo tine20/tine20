@@ -111,4 +111,21 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('UTC', $dt->getTimezone()->getName(), 'original timzone changed');
         $this->assertEquals('2012-01-16 15:30:00', $tdt->toString());
     }
+
+    /**
+     * 7.1 screw ups
+     */
+    public function test71MicrosecondScrewUp()
+    {
+        $dt = new DateTime();
+        $tineTime = new Tinebase_DateTime($dt);
+
+        $this->assertTrue($tineTime->compare($dt) === 0, '$dt->format("c"): ' . $dt->format('c') . ' $tineTime->format("c"): ' . $tineTime->format('c'));
+
+        $now = Tinebase_DateTime::now();
+
+        $noMS = new Tinebase_DateTime($now->format('Y-m-d H:i:s'));
+
+        $this->assertEquals($now, $noMS, 'now contains ms, that should not be the case');
+    }
 }

@@ -21,6 +21,13 @@ class Calendar_JsonTests extends Calendar_TestCase
      * @var Calendar_Frontend_Json
      */
     protected $_uit = null;
+
+    /**
+     * Calendar Controller Event Object
+     *
+     * @var Calendar_Controller_Event
+     */
+    protected $_eventController = null;
     
     /**
      * (non-PHPdoc)
@@ -33,6 +40,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
         
         $this->_uit = new Calendar_Frontend_Json();
+        $this->_eventController = Calendar_Controller_Event::getInstance();
     }
     
     /**
@@ -504,7 +512,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateRecurEventWithConstrains()
     {
-        $conflictEventData = $this->testCreateEvent();
+        /* $conflictEventData = */$this->testCreateEvent();
 
         $eventData = $this->testCreateEvent();
         $eventData['rrule'] = array(
@@ -725,6 +733,304 @@ class Calendar_JsonTests extends Calendar_TestCase
             $this->assertEquals('10:00:00', substr($dtstart, -8), 'all fishing events should start at 10:00');
         }
     }
+    
+    /**
+     * testUpdateRecurSeriesRruleWeekly
+     * 
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleWeekly()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend'] = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=4WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly1
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly1()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=4WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-03-26 12:00:00';
+        $updatedEvent['dtend']   = '2009-03-26 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('4TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly2
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly2()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=-1WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-03-26 12:00:00';
+        $updatedEvent['dtend']   = '2009-03-26 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('-1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly3
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly3()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=-1WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly4
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly4()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=-1WE';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-03-24 12:00:00';
+        $updatedEvent['dtend']   = '2009-03-24 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('4TU', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly5
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly5()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYDAY=-1TU'; // <- this is a mismatch! so nothing should happen
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-03-24 12:00:00';
+        $updatedEvent['dtend']   = '2009-03-24 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('-1TU', $newBaseEvent['rrule']['byday'], 'Rrule should not have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly6
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly6()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=25';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleMonthly7
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleMonthly7()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=26'; // this is a mismatch, so nothing should happen
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleYearly
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleYearly()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=3;BYMONTHDAY=26'; // this is a mismatch, so nothing should happen
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
+        $this->assertEquals('3', $newBaseEvent['rrule']['bymonth'], 'Rrule should not have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+
+    /**
+     * testUpdateRecurSeriesRruleYearly1
+     *
+     * Changing the weekday for a whole series should change the rrule as well
+     */
+    public function testUpdateRecurSeriesRruleYearly1()
+    {
+        // dtstart = 2009-03-25 => WE
+        $eventToCreate = $this->_getEvent();
+        $eventToCreate->rrule = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=3;BYMONTHDAY=25';
+        $createdEvent = $this->_eventController->create($eventToCreate);
+
+        $updatedEvent = $this->_uit->getEvent($createdEvent->getId());
+        // change day => 1TH
+        $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
+        $updatedEvent['dtend']   = '2009-04-02 13:00:00';
+
+        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
+
+        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+
+        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
+        $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
+        $this->assertEquals('4', $newBaseEvent['rrule']['bymonth'], 'Rrule should have changed');
+
+        $this->_eventController->delete(array($createdEvent->getId()));
+    }
+    
     
     /**
      * search updated recur set
@@ -1426,8 +1732,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         // check recent changes (needs to contain attendee change)
         $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
         $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $this->assertGreaterThan(2, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
-        $this->assertTrue(in_array('attendee', $recentChanges->modified_attribute), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
+        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
+        $this->assertGreaterThan(2, count($changedAttributes), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
+        $this->assertTrue(in_array('attendee', $changedAttributes), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
         
         $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
         $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);

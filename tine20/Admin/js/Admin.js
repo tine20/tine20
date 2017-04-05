@@ -209,13 +209,11 @@ Tine.Admin = function () {
         var initialTree = getInitialTree(translation);
         
         for (var i = 0; i < initialTree.length; i += 1) {
-            var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
-            
             // check view right
-            if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view', 'Admin', initialTree[i].viewRight)) {
-                node.disabled = true;
+            if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view_' + initialTree[i].viewRight, 'Admin')) {
+                initialTree[i].hidden = true;
             }
-            
+            var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
             treeRoot.appendChild(node);
         }
         

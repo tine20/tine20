@@ -35,7 +35,29 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = false;
-    
+
+    /**
+     * the constructor
+     *
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
+     * @param array $_options (optional)
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function __construct($_dbAdapter = NULL, $_options = array())
+    {
+        /*if (isset($_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) && true === $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) {
+            $this->_modlogActive = true;
+        }*/
+
+        parent::__construct($_dbAdapter, $_options);
+    }
+
     /**
      * get the basic select object to fetch records from the database
      *  
@@ -51,7 +73,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype')
+                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype', 'revision_size', 'indexed_hash')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
@@ -100,6 +122,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * 
      * @param  string|Tinebase_Model_Tree_Node  $parentId   the id of the parent node
      * @param  string|Tinebase_Model_Tree_Node  $childName  the name of the child node
+     * @throws Tinebase_Exception_NotFound
      * @return Tinebase_Model_Tree_Node
      */
     public function getChild($parentId, $childName)
@@ -149,6 +172,45 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         
         return $children;
     }
+
+    /**
+     * returns all directory nodes up to the root
+     *
+     * @param Tinebase_Record_RecordSet $_nodes
+     * @param Tinebase_Record_RecordSet $_result
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAllFolderNodes(Tinebase_Record_RecordSet $_nodes, Tinebase_Record_RecordSet $_result = null)
+    {
+        if (null === $_result) {
+            $_result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        }
+
+        $ids = array();
+        /** @var Tinebase_Model_Tree_Node $node */
+        foreach($_nodes as $node) {
+            if (Tinebase_Model_Tree_Node::TYPE_FOLDER === $node->type) {
+                $_result->addRecord($node);
+            }
+            if (!empty($node->parent_id)) {
+                $ids[] = $node->parent_id;
+            }
+        }
+
+        if (!empty($ids)) {
+            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+                array(
+                    'field'     => 'id',
+                    'operator'  => 'in',
+                    'value'     => $ids
+                )
+            ));
+            $parents = $this->search($searchFilter);
+            $this->getAllFolderNodes($parents, $_result);
+        }
+
+        return $_result;
+    }
     
     /**
      * @param  string  $path
@@ -169,6 +231,17 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function getObjectCount($_objectId)
     {
+        return $this->getObjectUsage($_objectId)->count();
+    }
+
+    /**
+     * get object usage
+     *
+     * @param string $_objectId
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getObjectUsage($_objectId)
+    {
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'object_id',
@@ -176,9 +249,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'value'     => $_objectId
             )
         ));
-        $result = $this->search($searchFilter);
-        
-        return $result->count();
+        return $this->search($searchFilter);
     }
     
     /**
@@ -186,10 +257,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * 
      * @param string $_path
      * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getPathNodes($path)
+    public function getPathNodes($_path)
     {
-        $pathParts = $this->splitPath($path);
+        $pathParts = $this->splitPath($_path);
         
         if (empty($pathParts)) {
             throw new Tinebase_Exception_InvalidArgument('empty path provided');
@@ -214,7 +287,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             $node = $this->search($searchFilter)->getFirstRecord();
             
             if (!$node) {
-                throw new Tinebase_Exception_NotFound('path: ' . $path . ' not found!');
+                throw new Tinebase_Exception_NotFound('path: ' . $_path . ' not found!');
             }
             
             $pathNodes->addRecord($node);
@@ -259,8 +332,135 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param  string  $_path
      * @return array
      */
-    public function splitPath($path)
+    public function splitPath($_path)
     {
-        return explode('/', $this->sanitizePath($path));
+        return explode('/', $this->sanitizePath($_path));
+    }
+
+    /**
+     * recalculates all folder sizes
+     *
+     * on error it still continues and tries to calculate as many folder sizes as possible, but returns false
+     *
+     * @param Tinebase_Tree_FileObject $_fileObjectBackend
+     * @return bool
+     */
+    public function recalculateFolderSize(Tinebase_Tree_FileObject $_fileObjectBackend)
+    {
+        // no transactions yet
+        // get root node ids
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'parent_id',
+                'operator'  => 'isnull',
+                'value'     => null
+            ), array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+            )
+        ));
+        return $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
+    }
+
+    /**
+     * @param Tinebase_Tree_FileObject $_fileObjectBackend
+     * @param array $_folderIds
+     * @param bool
+     */
+    protected function _recalculateFolderSize(Tinebase_Tree_FileObject $_fileObjectBackend, array $_folderIds)
+    {
+        $success = true;
+        $parentIds = array();
+        $transactionManager = Tinebase_TransactionManager::getInstance();
+
+        foreach($_folderIds as $id) {
+            $transactionId = $transactionManager->startTransaction($this->_db);
+
+            try {
+                try {
+                    /** @var Tinebase_Model_Tree_Node $record */
+                    $record = $this->get($id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $transactionManager->commitTransaction($transactionId);
+                    continue;
+                }
+
+                if (!empty($record->parent_id) && !isset($parentIds[$record->parent_id])) {
+                    $parentIds[$record->parent_id] = $record->parent_id;
+                }
+
+                $childrenNodes = $this->getChildren($id);
+                $size = 0;
+                $revision_size = 0;
+
+                /** @var Tinebase_Model_Tree_Node $child */
+                foreach($childrenNodes as $child) {
+                    $size += ((int)$child->size);
+                    $revision_size += ((int)$child->revision_size);
+                }
+
+                if ($size !== ((int)$record->size) || $revision_size !== ((int)$record->revision_size)) {
+                    /** @var Tinebase_Model_Tree_FileObject $fileObject */
+                    $fileObject = $_fileObjectBackend->get($record->object_id);
+                    $fileObject->size = $size;
+                    $fileObject->revision_size = $revision_size;
+                    $_fileObjectBackend->update($fileObject);
+                }
+
+                $transactionManager->commitTransaction($transactionId);
+
+            // this shouldn't happen
+            } catch (Exception $e) {
+                $transactionManager->rollBack();
+                Tinebase_Exception::log($e);
+                $success = false;
+            }
+        }
+
+        if (!empty($parentIds)) {
+            $success = $this->_recalculateFolderSize($_fileObjectBackend, $parentIds) && $success;
+        }
+
+        return $success;
+    }
+
+    /**
+     * returns ids of folders that do not have any sub folders
+     *
+     * @param array $_folderIds
+     * @return array
+     */
+    protected function _getIdsOfDeepestFolders(array $_folderIds)
+    {
+        $result = array();
+        $subFolderIds = array();
+        foreach($_folderIds as $folderId) {
+            // children folders
+            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+                array(
+                    'field'     => 'parent_id',
+                    'operator'  => 'equals',
+                    'value'     => $folderId
+                ), array(
+                    'field'     => 'type',
+                    'operator'  => 'equals',
+                    'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+                )
+            ));
+            $nodeIds = $this->search($searchFilter, null, true);
+            if (empty($nodeIds)) {
+                // no children, this is a result
+                $result[] = $folderId;
+            } else {
+                $subFolderIds = array_merge($subFolderIds, $nodeIds);
+            }
+        }
+
+        if (!empty($subFolderIds)) {
+            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds));
+        }
+
+        return $result;
     }
 }

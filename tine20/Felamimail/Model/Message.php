@@ -548,16 +548,17 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 // found our desired body part
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
             }
-            
+
             $multipartTypes = array(self::CONTENT_TYPE_MULTIPART, self::CONTENT_TYPE_MULTIPART_RELATED, self::CONTENT_TYPE_MULTIPART_MIXED);
             foreach ($multipartTypes as $multipartType) {
                 if ((isset($foundParts[$multipartType]) || array_key_exists($multipartType, $foundParts))) {
                     // dig deeper into the structure to find the desired part(s)
                     $partStructure = $_structure['parts'][$foundParts[$multipartType]];
-                    $result = $this->getBodyParts($partStructure, $_preferedMimeType);
+                    /** @noinspection OpAssignShortSyntaxInspection */
+                    $result = $result + $this->getBodyParts($partStructure, $_preferedMimeType);
                 }
             }
-            
+
             $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
                 ? Zend_Mime::TYPE_TEXT 
                 : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
@@ -567,6 +568,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         } else {
             foreach ($_structure['parts'] as $part) {
+                /** @noinspection OpAssignShortSyntaxInspection */
                 $result = $result + $this->getBodyParts($part, $_preferedMimeType);
             }
         }
@@ -670,6 +672,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         // explode email addresses if multiple
         $recipientType = array('to', 'cc', 'bcc');
         $delimiter = ';';
+
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
                 $recipients = array();
@@ -681,19 +684,20 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));
                     } else {
                         // single recipient
-                        $recipients[] = $addresses;
+                        $recipients[] =  $this->sanitizeMailAddress($addresses);
                     }
                 }
                 
                 foreach ($recipients as $key => &$recipient) {
                     // extract email address if name and address given
                     if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
-                        $recipient = $matches[2];
+                        $recipient = $this->sanitizeMailAddress($matches[2]);
                     }
                     if (empty($recipient)) {
                         unset($recipients[$key]);
                     }
                 }
+                unset($recipient);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
@@ -701,7 +705,28 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
     }
-    
+
+    /**
+     * Mails often copied from word and so on and contain problematic characters, non printable characters and whitespaces.
+     *
+     * @param $mail
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    protected function sanitizeMailAddress($mail)
+    {
+        // Ensure encoding
+        $mail = Tinebase_Helper::mbConvertTo($mail);
+
+        // Remove non printable
+        $mail = \preg_replace('/[[:^print:]]/u', '', $mail);
+
+        // Remove whitespaces
+        $mail = \trim($mail);
+
+        return $mail;
+    }
+
     /**
      * get body as plain text
      * 

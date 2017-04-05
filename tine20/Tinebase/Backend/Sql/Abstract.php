@@ -954,9 +954,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $recordArray = $this->_recordToRawData($_record);
             
-            // unset id if autoincrement & still empty
-            if ($this->_hasAutoIncrementId() || $_record->$identifier == 'NULL' ) {
-                unset($recordArray['id']);
+            // unset id if present and empty
+            if (array_key_exists($identifier, $recordArray) && empty($recordArray[$identifier])) {
+                unset($recordArray[$identifier]);
             }
             
             $recordArray = array_intersect_key($recordArray, $this->getSchema());
@@ -968,7 +968,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
             
-            if ($this->_hasAutoIncrementId()) {
+            if (!isset($recordArray[$identifier]) && $this->_hasAutoIncrementId()) {
                 $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
                 if (!$newId) {
                     throw new Tinebase_Exception_UnexpectedValue("New record auto increment id is empty");
@@ -1336,6 +1336,33 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
+    }
+
+    /**
+     * Soft deletes entries if modlog is active, otherwise executes hard delete
+     *
+     * @param string|integer|Tinebase_Record_Interface|array $_id
+     * @return int The number of affected rows.
+     */
+    public function softDelete($_id)
+    {
+        if (empty($_id)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');
+            return 0;
+        }
+
+        if (true !== $this->_modlogActive) {
+            return $this->delete($_id);
+        }
+
+        $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
+        $identifier = $this->_getRecordIdentifier();
+
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
+        );
+
+        return $this->_db->update($this->_tablePrefix . $this->_tableName, array('is_deleted' => 1), $where);
     }
     
     /**

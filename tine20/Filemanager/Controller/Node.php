@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -41,15 +41,25 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     
     /**
      * TODO handle modlog
+     *
+     * attention, this NEEDS to be off / true for replication!
+     *
      * @var boolean
      */
-    protected $_omitModLog = TRUE;
+    protected $_omitModLog = true;
     
     /**
      * holds the total count of the last recursive search
      * @var integer
      */
     protected $_recursiveSearchTotalCount = 0;
+
+    /**
+     * recursion check for create modlog inside copy / move
+     *
+     * @var bool
+     */
+    protected $_inCopyOrMoveNode = false;
     
     /**
      * holds the instance of the singleton
@@ -170,6 +180,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if ($record) {
             $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
         }
+
+        $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
+        $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
+
         return $record;
     }
     
@@ -423,6 +437,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return $result;
     }
+
+    public function removeBasePath($_path)
+    {
+        $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+        $basePath .= '/folders';
+
+        return preg_replace('@^' . preg_quote($basePath) . '@', '', $_path);
+    }
     
     /**
      * check if user has the permissions for the container
@@ -559,6 +581,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $path = ($_path instanceof Tinebase_Model_Tree_Node_Path) 
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
+        $existingNode = null;
         
         // we need to check the parent record existance before commencing node creation
         $parentPathRecord->validateExistance();
@@ -568,15 +591,21 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->_checkPathACL($parentPathRecord, 'add');
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite) {
+
+                // race condition for concurrent delete, try catch Tinebase_Exception_NotFound ... but throwing the exception in that rare case doesn't hurt so much
                 $existingNode = $this->_backend->stat($path->statpath);
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Existing node: ' . print_r($existingNode->toArray(), TRUE));
-                
+
                 if (! $_tempFileId) {
                     // just return the exisiting node and do not overwrite existing file if no tempfile id was given
                     $this->_checkPathACL($path, 'get');
                     $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
                     return $existingNode;
+
+                } elseif ($existingNode->type !== $_type) {
+                    throw new Tinebase_Exception_SystemGeneric('Can not overwrite a folder with a file');
+
                 } else {
                     // check if a new (size 0) file is overwritten
                     // @todo check revision here?
@@ -602,6 +631,21 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
+
+        if (Tinebase_Model_Tree_Node::TYPE_FOLDER === $_type && false === $this->_inCopyOrMoveNode) {
+            $modlogNode = new Filemanager_Model_Node(array(
+                'id' => $newNode->getId(),
+                'path' => ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $this->removeBasePath($_path->flatpath) : $_path,
+                'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER
+            ), true);
+            $this->_omitModLog = false;
+            $this->_writeModLog($modlogNode, null);
+            $this->_omitModLog = true;
+        } elseif (Tinebase_Model_Tree_Node::TYPE_FILE === $_type) {
+            $this->_omitModLog = false;
+            $this->_writeModLog($newNode, $existingNode);
+            $this->_omitModLog = true;
+        }
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         return $newNode;
@@ -619,18 +663,19 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
-        
+
         $node = NULL;
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                 $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                $this->_backend->copyTempfile($_tempFileId, $_statpath);
                 break;
+
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
                 $node = $this->_backend->mkdir($_statpath);
                 break;
         }
-        
-        return $node ? $node : $this->_backend->stat($_statpath);
+
+        return $node !== null ? $node : $this->_backend->stat($_statpath);
     }
     
     /**
@@ -729,7 +774,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
     /**
      * resolve node container and path
-     * 
+     *
+     * if a single record is given, use the resulting record set, because the referenced record is no longer updated!
+     *
      * (1) add path to records 
      * (2) replace name with container record, if node name is a container id 
      *     / path is toplevel (shared/personal with useraccount
@@ -787,6 +834,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        return $records;
     }
     
     /**
@@ -815,6 +864,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $nodeExistsException = NULL;
+
+        $this->_inCopyOrMoveNode = true;
         
         foreach ($_sourceFilenames as $idx => $source) {
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
@@ -853,6 +904,23 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
                 if ($node instanceof Tinebase_Record_Abstract) {
                     $result->addRecord($node);
+
+                    if (Tinebase_Model_Tree_Node::TYPE_FOLDER === $node->type) {
+                        $modlogNode = new Filemanager_Model_Node(array(
+                            'id' => $node->getId(),
+                            'path' => is_array($_destinationFilenames) ? array($_destinationFilenames[$idx]) : $_destinationFilenames,
+                            'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+                            'name' => $_action
+                        ), true);
+                        $modlogOldNode = new Filemanager_Model_Node(array(
+                            'id' => $node->getId(),
+                            'path' => $_sourceFilenames[$idx],
+                        ), true);
+                        $this->_omitModLog = false;
+                        $this->_writeModLog($modlogNode, $modlogOldNode);
+                        $this->_omitModLog = true;
+                    }
+
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' Could not copy or move node to destination ' . $destinationPathRecord->flatpath);
@@ -868,6 +936,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             // @todo add correctly moved/copied files here?
             throw $nodeExistsException;
         }
+
+        $this->_inCopyOrMoveNode = false;
         
         return $result;
     }
@@ -1197,7 +1267,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->_checkPathACL($pathRecord, 'delete');
         }
         
-        $success = $this->_deleteNodeInBackend($pathRecord);
+        $success = $this->_deleteNodeInBackend($pathRecord, $_flatpath);
         
         if ($success && ! $parentPathRecord->container) {
             
@@ -1217,9 +1287,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * delete node in backend
      * 
      * @param Tinebase_Model_Tree_Node_Path $_path
+     * @param string $_flatpath
      * @return boolean
      */
-    protected function _deleteNodeInBackend(Tinebase_Model_Tree_Node_Path $_path)
+    protected function _deleteNodeInBackend(Tinebase_Model_Tree_Node_Path $_path, $_flatpath)
     {
         $success = FALSE;
         
@@ -1234,6 +1305,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
                 $success = $this->_backend->rmdir($_path->statpath, TRUE);
+
+                if (FALSE !== $success && false === $this->_inCopyOrMoveNode) {
+                    $modlogNode = new Filemanager_Model_Node(array(
+                        'id' => $node->getId(),
+                        'path' => $_flatpath,
+                        'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER
+                    ), true);
+                    $this->_omitModLog = false;
+                    $this->_writeModLog(null, $modlogNode);
+                    $this->_omitModLog = true;
+                }
                 break;
         }
         
@@ -1245,12 +1327,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *
      * If one of the records could not be deleted, no record is deleted
      *
+     * NOTE: it is not possible to delete folders like this, it would lead to
+     * Tinebase_Exception_InvalidArgument: can not unlink directories
+     *
      * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids)
     {
         $nodes = $this->getMultiple($_ids);
+        /** @var Tinebase_Model_Tree_Node $node */
         foreach ($nodes as $node) {
             if ($this->_checkACLContainer($this->_backend->getNodeContainer($node->getId()), 'delete')) {
                 $this->_backend->deleteFileNode($node);
@@ -1378,5 +1464,35 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             . ' Description: ' . $description);
 
         return $description;
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $modification
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $modification)
+    {
+        switch ($modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                $this->createNodes(array($diff->diff['path']), $diff->diff['type']);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                if (isset($diff->diff['name'])) {
+                    $this->_copyOrMoveNodes(array($diff->oldData['path']), $diff->diff['path'], $diff->diff['name']);
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('update modlogs need the property name containing copy or move');
+                }
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                $this->deleteNodes(array($diff->oldData['path']));
+                break;
+
+            default:
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+        }
     }
 }

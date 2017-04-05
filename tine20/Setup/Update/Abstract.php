@@ -424,71 +424,10 @@ class Setup_Update_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
 
-            $setupUser = static::createSetupuser();
+            $setupUser = Tinebase_User::createSystemUser('setupuser');
             if ($setupUser) {
                 Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
             }
-        }
-
-        return $setupUser;
-    }
-
-    /**
-     * create new setupuser
-     *
-     * @return Tinebase_Model_FullUser|null
-     */
-    static public function createSetupuser()
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new setupuser.');
-
-        $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
-
-        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
-        $setupUser = new Tinebase_Model_FullUser(array(
-            'accountLoginName' => 'setupuser',
-            'accountStatus' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-            'visibility' => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
-            'accountPrimaryGroup' => $adminGroup->getId(),
-            'accountLastName' => 'setupuser',
-            'accountDisplayName' => 'setupuser',
-            'accountExpires' => NULL,
-        ));
-        try {
-            $setupUser = Tinebase_User::getInstance()->addUser($setupUser);
-            Tinebase_Group::getInstance()->addGroupMember($setupUser->accountPrimaryGroup, $setupUser->getId());
-        } catch(Zend_Ldap_Exception $zle) {
-            Tinebase_Exception::log($zle);
-            $setupUser = null;
-            if (stripos($zle->getMessage(), 'Already exists') !== false) {
-                try {
-                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSyncBackend('accountLoginName', 'setupuser', 'Tinebase_Model_FullUser');
-                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
-                    $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
-                    $user->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
-                    $user->accountPrimaryGroup = $adminGroup->getId();
-                    $user->accountLastName = 'setupuser';
-                    $user->accountDisplayName = 'setupuser';
-                    $user->accountExpires = NULL;
-                    $setupUser = Tinebase_User::getInstance()->addUserInSqlBackend($user);
-                    Tinebase_Group::getInstance()->addGroupMember($setupUser->accountPrimaryGroup, $setupUser->getId());
-                } catch(Exception $e) {
-                    // no setup user could be created
-                    // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-                    Tinebase_Exception::log($e);
-                    $setupUser = null;
-                }
-            }
-
-        } catch (Exception $e) {
-            // no setup user could be created
-            // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-            Tinebase_Exception::log($e);
-            $setupUser = null;
-        }
-
-        if (null !== $plugin) {
-            Tinebase_User::getInstance()->registerPlugin($plugin);
         }
 
         return $setupUser;

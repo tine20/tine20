@@ -106,7 +106,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
     
     getAttendeeContainerField: function() {
         if (! this.attendeeContainerField) {
-            this.attendeeContainerField = new Tine.widgets.container.selectionComboBox({
+            this.attendeeContainerField = new Tine.widgets.container.SelectionComboBox({
                 fieldLabel: this.app.i18n._('Displayed in'),
                 name: 'attendeeContainer',
                 recordClass: this.editDialog.recordClass,

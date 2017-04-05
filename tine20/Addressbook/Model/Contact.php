@@ -551,4 +551,42 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     {
         return $this->n_fn;
     }
+
+    /**
+     * returns an array containing the parent neighbours relation objects or record(s) (ids) in the key 'parents'
+     * and containing the children neighbours in the key 'children'
+     *
+     * @return array
+     */
+    public function getPathNeighbours()
+    {
+        $listController = Addressbook_Controller_List::getInstance();
+        $oldAclCheck = $listController->doContainerACLChecks(false);
+
+        $lists = $listController->search(new Addressbook_Model_ListFilter(array(
+            array('field' => 'contact',     'operator' => 'equals', 'value' => $this->getId())
+        )));
+
+        $listMemberRoles = $listController->getMemberRolesBackend()->search(new Addressbook_Model_ListMemberRoleFilter(array(
+            array('field' => 'contact_id',  'operator' => 'equals', 'value' => $this->getId())
+        )));
+
+        $listRoles = array();
+        /** @var Addressbook_Model_ListMemberRole $listMemberRole */
+        foreach($listMemberRoles as $listMemberRole) {
+            $listRoles[$listMemberRole->list_role_id] = $listMemberRole->list_role_id;
+            $lists->removeById($listMemberRole->list_id);
+        }
+
+        if (count($listRoles) > 0) {
+            $listRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
+        }
+
+        $result = parent::getPathNeighbours();
+        $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listRoles);
+
+        $listController->doContainerACLChecks($oldAclCheck);
+
+        return $result;
+    }
 }

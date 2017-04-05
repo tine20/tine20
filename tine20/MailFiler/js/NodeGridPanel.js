@@ -460,6 +460,16 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
 
+        this.action_printmessage = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Message'),
+            handler: this.onPrint.createDelegate(this, []),
+            disabled: true,
+            iconCls:'action_print',
+            actionUpdater: this.updateMessageAction,
+            scope:this
+        });
+
         this.contextMenu = Tine.MailFiler.GridContextMenu.getMenu({
             nodeName: Tine.MailFiler.Model.Node.getRecordName(),
             actions: ['delete',  'download', 'edit'],
@@ -490,7 +500,8 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_goUpFolder,
             this.action_download,
             this.action_deleteRecord,
-            this.action_editFile
+            this.action_editFile,
+            this.action_printmessage
        ]);
     },
 
@@ -534,28 +545,66 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionUpdater: this.updateMessageAction,
             disabled: true
         });
+    },
 
-        //this.action_printPreview = new Ext.Action({
-        //    requiredGrant: 'readGrant',
-        //    text: this.app.i18n._('Print Preview'),
-        //    handler: this.onPrintPreview.createDelegate(this, []),
-        //    disabled:true,
-        //    iconCls:'action_printPreview',
-        //    scope:this
-        //});
-        //this.action_print = new Ext.Action({
-        //    requiredGrant: 'readGrant',
-        //    text: this.app.i18n._('Print Message'),
-        //    handler: this.onPrint.createDelegate(this, []),
-        //    disabled:true,
-        //    iconCls:'action_print',
-        //    scope:this,
-        //    menu:{
-        //        items:[
-        //            this.action_printPreview
-        //        ]
-        //    }
-        //});
+    /**
+     * Ripped off felamimail
+     *
+     * @param detailsPanel
+     */
+    onPrint: function(detailsPanel) {
+        var id = Ext.id(),
+            doc = document,
+            frame = doc.createElement('iframe');
+
+        Ext.fly(frame).set({
+            id: id,
+            name: id,
+            style: {
+                position: 'absolute',
+                width: '210mm',
+                height: '297mm',
+                top: '-10000px',
+                left: '-10000px'
+            }
+        });
+
+        doc.body.appendChild(frame);
+
+        Ext.fly(frame).set({
+            src : Ext.SSL_SECURE_URL
+        });
+
+        var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document,
+            content = this.getDetailsPanelContentForPrinting(detailsPanel || this.detailsPanel);
+
+        doc.open();
+        doc.write(content);
+        doc.close();
+
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+    },
+
+    /**
+     * get detail panel content
+     *
+     * @param {Tine.Felamimail.GridDetailsPanel} details panel
+     * @return {String}
+     */
+    getDetailsPanelContentForPrinting: function(detailsPanel) {
+        // TODO somehow we have two <div class="preview-panel-felamimail"> -> we need to fix that and get the first element found
+        var detailsPanels = detailsPanel.getEl().query('.preview-panel-felamimail');
+
+        var detailsPanelContent = (detailsPanels.length > 1) ? detailsPanels[1].innerHTML : detailsPanels[0].innerHTML;
+
+        var buffer = '<html><head>';
+        buffer += '<title>' + this.app.i18n._('Print Preview') + '</title>';
+        buffer += '</head><body>';
+        buffer += detailsPanelContent;
+        buffer += '</body></html>';
+
+        return buffer;
     },
 
     onMessageReplyTo: function(toAll) {
@@ -653,7 +702,9 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 8,
+                    layout: 'toolbar',
+                    buttonAlign: 'left',
+                    columns: 9,
                     defaults: {minWidth: 60},
                     items: [
                         Ext.apply(new Ext.Button(this.action_write), {
@@ -672,6 +723,11 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             iconAlign: 'top'
                         }),
                         Ext.apply(new Ext.Button(this.action_forward), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_printmessage), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
@@ -704,12 +760,15 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                  ]
                 }, this.getActionToolbarItems()]
             });
-            
+
+
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
         }
-        
+
+        this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+
         return this.actionToolbar;
     },
     
@@ -717,20 +776,20 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * opens the edit dialog
      */
     onEditFile: function() {
-        var sel = this.getGrid().getSelectionModel().getSelections();
+        var selectionModel = this.getGrid().getSelectionModel();
 
-        if(sel.length == 1) {
-            var record = new Tine.MailFiler.Model.Node(sel[0].data);
+        if (selectionModel.getCount() === 1) {
+            var record = selectionModel.getSelected();
             var window = Tine.MailFiler.NodeEditDialog.openWindow({record: record});
+
+            window.on('saveAndClose', function() {
+                this.getGrid().store.reload();
+            }, this);
         }
-        
-        window.on('saveAndClose', function() {
-            this.getGrid().store.reload();
-        }, this);
     },
     
     /**
-     * create folder in current position
+     * create folder in current positionc
      * 
      * @param {Ext.Component} button
      * @param {Ext.EventObject} event
@@ -1002,7 +1061,7 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     if(nodes[i].id == target.id) {
                         return false;
                     }
-                }
+                        }
                 
                 var targetNode = treePanel.getNodeById(target.id);
                 if(targetNode && targetNode.isAncestor(nodes[0])) {

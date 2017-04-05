@@ -71,6 +71,8 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time',
     );
+
+    protected static $_replicable = true;
     
     /**
      * @see Tinebase_Record_Abstract
@@ -132,5 +134,23 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             }
             $this->members = $memberIds;
         }
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return static::$_replicable;
+    }
+
+    /**
+     * @param boolean $isReplicable
+     */
+    public static function setReplicable($isReplicable)
+    {
+        static::$_replicable = (bool)$isReplicable;
     }
 }

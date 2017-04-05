@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -121,9 +121,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract imple
             $this->_propertyMapping['emailGID']    = 'tine20_clientid';
         }
         
-        $this->_clientId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        $this->_clientId = Tinebase_Core::getTinebaseId();
         
-        $this->_config['emailGID'] = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        $this->_config['emailGID'] = $this->_clientId;
     }
     
     /**

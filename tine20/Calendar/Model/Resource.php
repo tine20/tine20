@@ -53,6 +53,8 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'name'                 => array('allowEmpty' => true          ),
         'description'          => array('allowEmpty' => true          ),
         'email'                => array('allowEmpty' => true          ),
+        'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'type'                 => array('allowEmpty' => false         ),
         'is_location'          => array('allowEmpty' => true          ),
         'status'               => array('allowEmpty' => true          ),
         'busy_type'            => array('allowEmpty' => true          ),
@@ -60,6 +62,7 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'tags'                 => array('allowEmpty' => true          ),
         'notes'                => array('allowEmpty' => true          ),
         'grants'               => array('allowEmpty' => true          ),
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'customfields'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     );
@@ -73,5 +76,11 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'creation_time', 
         'last_modified_time', 
         'deleted_time', 
+    );
+
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'STANDORT', 'degree' => 'child', 'text' => 'Standort', 'max' => '0:0'),
+        )),
     );
 }

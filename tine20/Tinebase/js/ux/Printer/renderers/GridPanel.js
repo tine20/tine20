@@ -29,30 +29,48 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
    * @return {Array} Data suitable for use in the XTemplate
    */
   prepareData: function(grid) {
-    //We generate an XTemplate here by using 2 intermediary XTemplates - one to create the header,
-    //the other to create the body (see the escaped {} below)
-    var columns = this.getColumns(grid);
-  
-    //build a useable array of store data for the XTemplate
-    var data = [];
-    grid.store.data.each(function(item) {
-      var convertedData = {};
-      
-      //apply renderers from column model
-      Ext.iterate(item.data, function(key, value) {
-        Ext.each(columns, function(column) {
-          if (column.dataIndex == key) {
-            convertedData[key] = column.renderer ? column.renderer(value, null, item) : value;
-            convertedData[key] = convertedData[key] || '';
+    var me = this;
+    return new Promise(function (fulfill, reject) {
+        //We generate an XTemplate here by using 2 intermediary XTemplates - one to create the header,
+        //the other to create the body (see the escaped {} below)
+        var columns = me.getColumns(grid);
+
+        //build a useable array of store data for the XTemplate
+        var data = [];
+
+        //refetch data without paging
+        grid.store.on('beforeload', function(store, options) {
+            options.params = options.params || {};
+            delete options.params.start;
+            delete options.params.limit;
+        }, me, {'single': true});
+        grid.store.on('beforeloadrecords', function(o, options, success, store) {
+            Ext.each(o.records, function (item) {
+                var convertedData = {};
+
+                //apply renderers from column model
+                Ext.iterate(item.data, function (key, value) {
+                    Ext.each(columns, function (column) {
+                        if (column.dataIndex == key) {
+                            convertedData[key] = column.renderer ? column.renderer(value, null, item) : value;
+                            convertedData[key] = convertedData[key] || '';
+                            return false;
+                        }
+                    });
+                });
+
+                data.push(convertedData);
+            });
+
+            fulfill(data);
+
+            // don't touch original store!
             return false;
-          }
-        }, this);
-      });
-    
-      data.push(convertedData);
+        }, me, {'single': true});
+
+        grid.store.load();
+        return;
     });
-    
-    return data;
   },
   
   /**

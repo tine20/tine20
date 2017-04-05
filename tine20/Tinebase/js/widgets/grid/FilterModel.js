@@ -93,6 +93,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * used by combo valueType
      */
     valueField: null,
+
+    /**
+     * @cfg filterValueWidth
+     * @type Integer
+     */
     filterValueWidth: 200,
     
     /**
@@ -473,7 +478,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             case 'string':
             case 'number':
             default:
-                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
+                value = new Ext.form.TextField(Ext.apply(commonOptions, {
                     emptyText: this.emptyText,
                     listeners: {
                         scope: this,

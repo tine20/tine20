@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="5.3.9"/>
+    <enviroment name="PHP" version="5.5"/>
     <extensions>
         <extension name="json" />
         <extension name="gd" />
@@ -9,7 +9,7 @@
         <extension name="SimpleXML" />
         <extension name="ctype" />
         <extension name="dom" />
-        <extension name="mcrypt" />
+        <extension name="openssl" />
         <extension name="iconv" />
         <extension name="zip" />
         <extension name="xml" />

@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -42,6 +42,10 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('name', 'email'))
         ),
+        'path'                => array(
+            'filter' => 'Tinebase_Model_Filter_Path',
+            'options' => array()
+        ),
         'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
@@ -57,5 +61,6 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'list_type'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'showHidden'           => array('filter' => 'Addressbook_Model_ListHiddenFilter'),
+        'contact'              => array('filter' => 'Addressbook_Model_ListMemberFilter'),
     );
 }

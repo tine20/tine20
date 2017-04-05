@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,19 +11,19 @@ Ext.ns('Tine.MailFiler');
  * @namespace   Tine.MailFiler
  * @class       Tine.MailFiler.NodeEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
- * 
+ *
  * <p>Node Compose Dialog</p>
  * <p></p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.MailFiler.NodeEditDialog
  */
 Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
+
     /**
      * @private
      */
@@ -35,11 +35,12 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     displayNotes: true,
-    
+    mailDetailsPanel: null,
+
     /**
      * @type Tine.MailFiler.DownloadLinkGridPanel
      */
-    initComponent: function() {
+    initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('MailFiler');
         this.downloadAction = new Ext.Action({
             requiredGrant: 'readGrant',
@@ -51,9 +52,9 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: false,
             scope: this
         });
-        
+
         this.tbarItems = [this.downloadAction];
-        
+
         Tine.MailFiler.NodeEditDialog.superclass.initComponent.call(this);
     },
     /**
@@ -66,21 +67,23 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return this.record.data.type == 'folder' ? this.app.i18n._('Folder') : this.app.i18n._('File');
         }
     },
-    
+
     /**
      * executed when record is loaded
      * @private
      */
-    onRecordLoad: function() {
+    onRecordLoad: function () {
         Tine.MailFiler.NodeEditDialog.superclass.onRecordLoad.apply(this, arguments);
-        
+
         this.window.setTitle(this.getFittingTypeTranslation(true));
+
+        this.mailDetailsPanel.loadRecord(this.record);
     },
-    
+
     /**
      * download file
      */
-    onDownload: function() {
+    onDownload: function () {
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: 'MailFiler.downloadFile',
@@ -90,62 +93,70 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }).start();
     },
-    
+
     /**
      * returns dialog
      * @return {Object}
      * @private
      */
-    getFormItems: function() {
+    getFormItems: function () {
         var formFieldDefaults = {
-            xtype:'textfield',
+            xtype: 'textfield',
             anchor: '100%',
             labelSeparator: '',
             columnWidth: .5,
             readOnly: true,
             disabled: true
         };
-        
+
+        this.mailDetailsPanel = new Tine.MailFiler.MailDetailsPanel({
+            appName: this.appName
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
-            plain:true,
+            plain: true,
             plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
+                ptype: 'ux.tabpanelkeyplugin'
             }],
             activeTab: 0,
             border: false,
-            items:[{
+            items: [{
                 title: this.getFittingTypeTranslation(false),
-                autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    layout: 'hfit',
+                    layout: 'vbox',
+                    layoutConfig: {
+                        align : 'stretch',
+                        pack  : 'start'
+                    },
                     border: false,
                     items: [{
                         xtype: 'fieldset',
                         layout: 'hfit',
-                        autoHeight: true,
+                        height: 155,
+                        // flex: 1,
                         title: this.getFittingTypeTranslation(false),
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'top',
                             formDefaults: formFieldDefaults,
                             items: [[{
-                                    fieldLabel: this.app.i18n._('Name'),
-                                    name: 'name',
-                                    allowBlank: false,
-                                    readOnly: false,
-                                    columnWidth: .75,
-                                    disabled: false
-                                }, {
-                                    fieldLabel: this.app.i18n._('Type'),
-                                    name: 'contenttype',
-                                    columnWidth: .25
-                                }],[
+                                fieldLabel: this.app.i18n._('Name'),
+                                name: 'name',
+                                allowBlank: false,
+                                readOnly: false,
+                                columnWidth: .75,
+                                disabled: false
+                            }, {
+                                fieldLabel: this.app.i18n._('Type'),
+                                name: 'contenttype',
+                                columnWidth: .25
+                            }], [
                                 Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     userOnly: true,
                                     useAccountRecord: true,
@@ -157,7 +168,7 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     name: 'creation_time',
                                     xtype: 'datefield'
                                 }
-                                ],[
+                            ], [
                                 Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     userOnly: true,
                                     useAccountRecord: true,
@@ -169,11 +180,16 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     name: 'last_modified_time',
                                     xtype: 'datefield'
                                 }
-                                ]]
+                            ]]
                         }]
-                    }
-                    
-                    ]
+                    }, {
+                        layout: 'hfit',
+                        autoScroll: true,
+                        flex: 1,
+                        items: [
+                            this.mailDetailsPanel
+                        ]
+                    }]
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -213,21 +229,17 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, 
-            new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-                }),
+            },
+                new Tine.widgets.activities.ActivitiesTabPanel()
             ]
         };
     }
-    
+
 });
 
 /**
  * MailFiler Edit Popup
- * 
+ *
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
@@ -240,6 +252,6 @@ Tine.MailFiler.NodeEditDialog.openWindow = function (config) {
         contentPanelConstructor: 'Tine.MailFiler.NodeEditDialog',
         contentPanelConstructorConfig: config
     });
-    
+
     return window;
 };

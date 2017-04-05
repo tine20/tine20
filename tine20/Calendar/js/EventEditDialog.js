@@ -158,7 +158,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     disabled: true,
                                     name: 'originator_tz',
                                     requiredGrant: 'editGrant'
-                                }], [ this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
+                                }], [ this.containerSelectCombo = new Tine.widgets.container.SelectionComboBox({
                                     columnWidth: 1,
                                     id: this.app.appName + 'EditDialogContainerSelector' + Ext.id(),
                                     fieldLabel: i18n._('Saved in'),
@@ -357,7 +357,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (o.field == 'user_id'
                 && o.record.get('user_type') == 'resource'
                 && o.record.get('user_id')
-                && o.record.get('user_id').is_location
+                && o.record.get('user_id').type == 'ROOM'
             ) {
                 this.getForm().findField('location').setValue(
                     this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
