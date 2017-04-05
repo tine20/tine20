@@ -94,7 +94,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
                 foreach ($this->_value as $value) {
                     //replace full text meta characters
                     //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-                    $value = preg_replace('#[^\w\d ]|_#u', ' ', $value);
+                    $value = preg_replace('#\W#u', ' ', $value);
                     // replace multiple spaces with just one
                     $searchTerms = array_merge($searchTerms, explode(' ', preg_replace('# +#u', ' ', trim($value))));
                 }
@@ -105,7 +105,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
                     return;
                 }
 
-                $searchTerms = array_filter($searchTerms, 'mb_strtolower');
+                array_walk($searchTerms, function(&$val) {$val = mb_strtolower($val);});
                 $hitNeighbours = array();
                 $hitIds = array();
 

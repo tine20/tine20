@@ -1945,4 +1945,27 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchContacts($filter, '');
         $this->assertEquals(0, $result['totalcount']);
     }
+
+    public function testSearchListWithPathFilter()
+    {
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->markTestSkipped('Path feature not actiavted');
+        }
+
+        $filter = array(
+            array(
+                'field'    => 'query',
+                'operator' => 'contains',
+                'value'    => 'User'
+            ), array(
+                'field'    => 'path',
+                'operator' => 'contains',
+                'value'    => 'User'
+            )
+        );
+
+        $result = $this->_uit->searchLists($filter, '');
+
+        $this->assertTrue($result['totalcount'] > 0, 'Did not find list User with path filter');
+    }
 }
