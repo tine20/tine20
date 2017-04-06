@@ -835,37 +835,56 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      */
     public function rename($oldPath, $newPath)
     {
+        $transactionManager = Tinebase_TransactionManager::getInstance();
+        $transactionId = $transactionManager->startTransaction(Tinebase_Core::getDb());
+
         try {
-            $node = $this->stat($oldPath);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
-            return false;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            return false;
-        }
-    
-        if (dirname($oldPath) != dirname($newPath)) {
             try {
-                $newParent = $this->stat(dirname($newPath));
+                $node = $this->stat($oldPath);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
                 return false;
             } catch (Tinebase_Exception_NotFound $tenf) {
                 return false;
             }
-    
-            $node->parent_id = $newParent->getId();
+
+            if (dirname($oldPath) != dirname($newPath)) {
+                try {
+                    $newParent = $this->stat(dirname($newPath));
+                    $oldParent = $this->stat(dirname($oldPath));
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    return false;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    return false;
+                }
+
+                if (Tinebase_Model_Tree_Node::TYPE_FILE === $node->type && $node->acl_node === $oldParent->acl_node &&
+                        $newParent->acl_node !== $node->acl_node) {
+                    $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                }
+
+                $node->parent_id = $newParent->getId();
+            }
+
+            if (basename($oldPath) != basename($newPath)) {
+                $node->name = basename($newPath);
+            }
+
+            $node = $this->_getTreeNodeBackend()->update($node, true);
+
+            $transactionManager->commitTransaction($transactionId);
+            $transactionId = null;
+
+            $this->clearStatCache($oldPath);
+
+            $this->_addStatCache($newPath, $node);
+
+            return $node;
+
+        } finally {
+            if (null !== $transactionId) {
+                $transactionManager->rollBack();
+            }
         }
-    
-        if (basename($oldPath) != basename($newPath)) {
-            $node->name = basename($newPath);
-        }
-    
-        $node =$this->_getTreeNodeBackend()->update($node, true);
-        
-        $this->clearStatCache($oldPath);
-        
-        $this->_addStatCache($newPath, $node);
-        
-        return $node;
     }
     
     /**
@@ -1386,20 +1405,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
         if ($currentNodeObject->acl_node !== $_node->acl_node) {
             // update acl_node of subtree if changed
-            $childIds = $this->getAllChildFolderIds(array($_node->getId()));
-            if (count($childIds) > 0) {
-                $this->_nodeAclController->updateMultiple(new Tinebase_Model_Tree_Node_Filter(array(
-                    array(
-                        'field' => 'id',
-                        'operator' => 'in',
-                        'value' => $childIds
-                    )),  /* $_condition = */ '', /* $_options */ array(
-                        'ignoreAcl' => true,
-                    )), array(
-                        'acl_node' => $_node->acl_node
-                    )
-                );
-            }
+            $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
         }
 
         $newNode = $this->_getTreeNodeBackend()->update($_node);
@@ -1409,16 +1415,29 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         return $newNode;
     }
 
+    protected function _recursiveInheritPropertyUpdate($_node, $_property, $_newValue, $_oldValue)
+    {
+        $childIds = $this->getAllChildFolderIds(array($_node->getId()), array(
+            'field'     => $_property,
+            'operator'  => 'equals',
+            'value'     => $_oldValue
+        ));
+        if (count($childIds) > 0) {
+            $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
+        }
+    }
+
     /**
      * returns all directory nodes up to the root
      *
      * @param array $_ids
+     * @param array $_additionalFilters
      * @return array
      */
-    public function getAllChildFolderIds(array $_ids)
+    public function getAllChildFolderIds(array $_ids, array $_additionalFilters = array())
     {
         $result = array();
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+        $filter = array(
             array(
                 'field'     => 'parent_id',
                 'operator'  => 'in',
@@ -1429,13 +1448,16 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                 'operator'  => 'equals',
                 'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
             ),
-        ),  /* $_condition = */ '', /* $_options */ array(
+        );
+        foreach($_additionalFilters as $aF) {
+            $filter[] = $aF;
+        }
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter($filter,  /* $_condition = */ '', /* $_options */ array(
             'ignoreAcl' => true,
         ));
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
-            $result = array_merge($result, $children);
-            $result = array_merge($result, $this->getAllChildFolderIds($children));
+            $result = array_merge($result, $children, $this->getAllChildFolderIds($children, $_additionalFilters));
         }
 
         return $result;

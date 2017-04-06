@@ -28,6 +28,7 @@
  * @property    string             revision
  * @property    string             available_revisions
  * @property    string             description
+ * @property    string             acl_node
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
