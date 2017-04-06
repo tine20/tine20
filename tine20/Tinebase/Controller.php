@@ -805,7 +805,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                     'options' => array('getRelations' => true),
                     'function' => 'rebuildPathsIteration',
                 ));
-                $result = $iterator->iterate($controller);
+                $result = $iterator->iterate();
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                     if (false === $result) {
@@ -817,5 +817,26 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         return true;
+    }
+
+    /**
+     * rebuild paths for multiple records in an iteration
+     * @see Tinebase_Record_Iterator / self::rebuildPaths()
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    public function rebuildPathsIteration(Tinebase_Record_RecordSet $records)
+    {
+        /** @var Tinebase_Record_Interface $record */
+        foreach ($records as $record) {
+            try {
+                Tinebase_Record_Path::getInstance()->rebuildPaths($record);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' record path building failed: '
+                    . $e->getMessage() . PHP_EOL
+                    . $e->getTraceAsString() . PHP_EOL
+                    . $record->toArray());
+            }
+        }
     }
 }

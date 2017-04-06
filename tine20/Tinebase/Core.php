@@ -1411,6 +1411,12 @@ class Tinebase_Core
         return self::get(self::USER);
     }
 
+    public static function unsetUser()
+    {
+        Zend_Registry::set(self::USER, null);
+        Tinebase_Log_Formatter::resetUsername();
+    }
+
     /**
      * get current users timezone
      *

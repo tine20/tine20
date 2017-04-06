@@ -426,6 +426,7 @@ class Setup_Update_Abstract
 
             $setupUser = Tinebase_User::createSystemUser('setupuser');
             if ($setupUser) {
+                Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
                 Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
             }
         }

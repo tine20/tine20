@@ -80,27 +80,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * rebuild paths for multiple records in an iteration
-     * @see Tinebase_Record_Iterator / self::rebuildPaths()
-     *
-     * @param Tinebase_Record_RecordSet $records
-     * @param Tinebase_Controller_Abstract $controller
-     */
-    public function rebuildPathsIteration(Tinebase_Record_RecordSet $records, Tinebase_Controller_Record_Abstract $controller)
-    {
-        foreach ($records as $record) {
-            try {
-                $controller->buildPath($record, true);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' record path building failed: '
-                    . $e->getMessage() . PHP_EOL
-                    . $e->getTraceAsString() . PHP_EOL
-                    . $record->toArray());
-            }
-        }
-    }
-
-    /**
      * forces containers that support sync token to resync via WebDAV sync tokens
      *
      * this will cause 2 BadRequest responses to sync token requests
