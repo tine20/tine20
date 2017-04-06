@@ -15,7 +15,7 @@ Ext.ns('Tine.Filemanager.Model');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.NodeArray, {
+Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray, {
     appName: 'Filemanager',
     modelName: 'Node',
     idProperty: 'id',
@@ -87,6 +87,18 @@ Tine.Filemanager.Model.Node.createFromFile = function(file) {
         revision: 0
     });
 };
+
+// NOTE: atm the activity records are stored as Tinebase_Model_Tree_Node records
+Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', function(revision, metadata, record) {
+    revision = parseInt(revision, 10);
+    var revisionString = Tine.Tinebase.appMgr.get('Filemanager').i18n._('Revision') + " " + revision,
+        availableRevisions = record.get('available_revisions');
+
+    return Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0 ?
+        '<a href="#"; onclick="Tine.Filemanager.downloadFile(\'' + record.get('path')+ '\',' + revision + '); return false;">' + revisionString + '</a>' :
+        revisionString;
+});
+
 
 /**
  * default ExampleRecord backend

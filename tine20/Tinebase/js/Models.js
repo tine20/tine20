@@ -484,20 +484,19 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     recordsName: 'Configs'
 });
 
-Tine.Tinebase.Model.NodeArray = Tine.Tinebase.Model.modlogFields.concat([
+Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
-    { name: 'name' },
-    { name: 'path' },
-    { name: 'size' },
-    { name: 'revision' },
-    { name: 'available_revisions' },
-    { name: 'type' },
-    { name: 'contenttype' },
-    { name: 'description' },
+    { name: 'name', label: 'Name' }, // _('Name')
+    { name: 'path', label: 'Path' }, // _('Path')
+    { name: 'size', label: 'Size' }, // _('Size')
+    { name: 'revision', label: 'Revision' }, // _('Revision')
+    { name: 'available_revisions', label: 'Available Revision' }, // _('Available Revision')
+    { name: 'type', label: 'Type' }, // _('Type')
+    { name: 'contenttype', label: 'Content Type' }, // _('Content Type')
+    { name: 'description', label: 'Description' }, // _('Description')
     { name: 'account_grants' },
-    { name: 'description' },
     { name: 'object_id'},
-    { name: 'revision_size' },
+    { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
 
     { name: 'relations' },
     { name: 'customfields' },
@@ -506,18 +505,21 @@ Tine.Tinebase.Model.NodeArray = Tine.Tinebase.Model.modlogFields.concat([
 ]);
 /**
  * @namespace   Tine.Tinebase.Model
- * @class       Tine.Tinebase.Model.Node
+ * @class       Tine.Tinebase.Model.Tree_Node
  * @extends     Tine.Tinebase.data.Record
  */
-Tine.Tinebase.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.NodeArray, {
+Tine.Tinebase.Model.Tree_Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray, {
     appName: 'Tinebase',
-    modelName: 'Node',
+    modelName: 'Tree_Node',
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('File', 'Files', n); gettext('File');
     recordName: 'File',
     recordsName: 'Files'
 });
+
+Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'size', Tine.Tinebase.common.byteRenderer);
+Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision_size', Tine.Tinebase.common.byteRenderer);
 
 Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
     { name: 'id' },

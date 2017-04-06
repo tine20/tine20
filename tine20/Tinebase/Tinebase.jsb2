@@ -430,6 +430,10 @@
           "path": "js/"
         },
         {
+          "text": "RendererManager.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "Models.js",
           "path": "js/"
         },
@@ -556,10 +560,6 @@
         {
           "text": "DuplicateResolveGridPanel.js",
           "path": "js/widgets/dialog/"
-        },
-        {
-          "text": "RendererManager.js",
-          "path": "js/widgets/grid/"
         },
         {
           "text": "DetailsPanel.js",
