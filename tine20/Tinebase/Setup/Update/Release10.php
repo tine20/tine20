@@ -518,7 +518,16 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <length>40</length>
                 </field>
             ');
-            $this->_backend->addCol('tree_nodes', $declaration);
+            $query = $this->_backend->addAddCol('', 'tree_nodes', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>revisionProps</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>');
+            $query = $this->_backend->addAddCol($query, 'tree_nodes', $declaration);
+            $this->_backend->execQueryVoid($query);
+
             $this->setTableVersion('tree_nodes', 2);
 
             $declaration = new Setup_Backend_Schema_Table_Xml('<table>

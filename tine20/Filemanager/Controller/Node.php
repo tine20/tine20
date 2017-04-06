@@ -111,9 +111,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
         }
 
-        // TODO should use TFS::update()
-        // TODO allow to set grants here
-
         return parent::update($_record);
     }
     
@@ -128,7 +125,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes'))) {
+            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'revisionProps', 'acl_node', 'grants'))) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }

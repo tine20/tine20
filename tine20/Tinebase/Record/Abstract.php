@@ -1432,15 +1432,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
     /**
      * extended properties getter
+     *
+     * @param string $_property
+     * @return &array
      */
-    public function &xprops()
+    public function &xprops($_property = 'xprops')
     {
-        if (!isset($this->_properties['xprops'])) {
-            $this->_properties['xprops'] = array();
-        } else if (is_string($this->_properties['xprops'])) {
-            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        if (!isset($this->_properties[$_property])) {
+            $this->_properties[$_property] = array();
+        } else if (is_string($this->_properties[$_property])) {
+            $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
         }
 
-        return $this->_properties['xprops'];
+        return $this->_properties[$_property];
     }
 }

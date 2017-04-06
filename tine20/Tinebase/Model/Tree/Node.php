@@ -29,6 +29,7 @@
  * @property    string             available_revisions
  * @property    string             description
  * @property    string             acl_node
+ * @property    string             revisionProps
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -41,6 +42,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * type for personal containers
      */
     const TYPE_FOLDER = 'folder';
+
+    const XPROPS_REVISION = 'revisionProps';
+    const XPROPS_REVISION_ON = 'keep';
+    const XPROPS_REVISION_NUM = 'keepNum';
+    const XPROPS_REVISION_MONTH = 'keepMonth';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -99,6 +105,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         // model specific fields
         'parent_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'object_id'      => array('presence' => 'required'),
+        'revisionProps'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // contains id of node with acl info
         'acl_node'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'           => array('presence' => 'required'),
@@ -171,5 +178,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         }
 
         parent::runConvertToRecord();
+    }
+
+    public function runConvertToData()
+    {
+        if(isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
+            $this->_properties[self::XPROPS_REVISION] = json_encode($this->_properties[self::XPROPS_REVISION]);
+        }
+        parent::runConvertToData();
     }
 }

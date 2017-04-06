@@ -449,6 +449,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         }
         
         $options = stream_context_get_options($handle);
+        $parentPath = dirname($options['tine20']['path']);
         
         switch ($options['tine20']['mode']) {
             case 'w':
@@ -456,8 +457,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             case 'x':
             case 'xb':
                 list ($hash, $hashFile) = $this->createFileBlob($handle);
+
+                $parentFolder = $this->stat($parentPath);
                 
-                $this->_updateFileObject($options['tine20']['node']->object_id, $hash, $hashFile);
+                $this->_updateFileObject($parentFolder, $options['tine20']['node']->object_id, $hash, $hashFile);
                 
                 $this->clearStatCache($options['tine20']['path']);
 
@@ -477,20 +480,21 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         fclose($handle);
         
         // update hash of all parent folders
-        $this->_updateDirectoryNodesHash(dirname($options['tine20']['path']));
+        $this->_updateDirectoryNodesHash($parentPath);
         
         return true;
     }
     
     /**
      * update file object with hash file info
-     * 
+     *
+     * @param Tinebase_Model_Tree_Node $_parentNode
      * @param string|Tinebase_Model_Tree_FileObject $_id file object (or id)
      * @param string $_hash
      * @param string $_hashFile
      * @return Tinebase_Model_Tree_FileObject
      */
-    protected function _updateFileObject($_id, $_hash, $_hashFile = null)
+    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, $_id, $_hash, $_hashFile = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
         $currentFileObject = $_id instanceof Tinebase_Record_Abstract ? $_id : $this->_fileObjectBackend->get($_id);
@@ -542,8 +546,16 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             $updatedFileObject->size = 0;
         }
 
-        /** @var Tinebase_Model_Tree_FileObject $newFileObject */
-        $newFileObject = $this->_fileObjectBackend->update($updatedFileObject);
+        $oldKeepRevisionValue = $this->_fileObjectBackend->getKeepOldRevision();
+        try {
+            if (isset($_parentNode->xprops()[Tinebase_Model_Tree_Node::XPROPS_REVISION]) && isset($_parentNode->xprops()[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_ON])) {
+                $this->_fileObjectBackend->setKeepOldRevision($_parentNode->xprops()[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]);
+            }
+            /** @var Tinebase_Model_Tree_FileObject $newFileObject */
+            $newFileObject = $this->_fileObjectBackend->update($updatedFileObject);
+        } finally {
+            $this->_fileObjectBackend->setKeepOldRevision($oldKeepRevisionValue);
+        }
 
         $sizeDiff = ((int)$newFileObject->size) - ((int)$currentFileObject->size);
         $revisionSizeDiff = (((int)$currentFileObject->revision) === ((int)$newFileObject->revision) ? 0 : $newFileObject->revision_size);
@@ -861,6 +873,20 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_Node::TYPE_FILE !== $node->type) {
                         $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                    }
+                }
+
+                if (Tinebase_Model_Tree_Node::TYPE_FOLDER === $node->type) {
+                    if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
+                        $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
+                    ) {
+                        $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $newParent->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
+                        $oldValue = $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                        $newValue = $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                        $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
+                        $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                        // update revisionProps of subtree if changed
+                        $this->_recursiveInheritFolderPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue);
                     }
                 }
 
@@ -1403,11 +1429,22 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
         // update file object
         $fileObject->description = $_node->description;
-        $this->_updateFileObject($fileObject, $_node->hash);
+        $this->_updateFileObject($this->get($_node->parent_id), $fileObject, $_node->hash);
 
         if ($currentNodeObject->acl_node !== $_node->acl_node) {
             // update acl_node of subtree if changed
             $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
+        }
+
+        $oldValue = $currentNodeObject->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+        $newValue = $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+
+        if ($oldValue != $newValue) {
+            $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
+            $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+
+            // update revisionProps of subtree if changed
+            $this->_recursiveInheritFolderPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue);
         }
 
         $newNode = $this->_getTreeNodeBackend()->update($_node);
@@ -2097,45 +2134,70 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      * remove file revisions based on settings:
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS
+     * or folder specific settings
      */
     public function clearFileRevisions()
     {
         $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
-
         $numRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS};
         $monthRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS};
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+        $parents = array();
+        $count = 0;
 
-        if (0 === $numRevisions && 0 === $monthRevisions) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' nothing to do as settings are to keep file revisions infinitely!');
-        }
+        foreach($treeNodeBackend->search(
+                new Tinebase_Model_Tree_Node_Filter(array(
+                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_Node::TYPE_FILE)
+                ), '', array('ignoreAcl' => true))
+                , null, true) as $id) {
+            try {
+                /** @var Tinebase_Model_Tree_Node $fileNode */
+                $fileNode = $treeNodeBackend->get($id, true);
+                if (isset($parents[$fileNode->parent_id])) {
+                    $parentXProps = $parents[$fileNode->parent_id];
+                } else {
+                    $parentNode = $treeNodeBackend->get($fileNode->parent_id, true);
+                    $parentXProps = $parents[$fileNode->parent_id] = $parentNode->xprops();
+                }
 
-        if ($monthRevisions > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' clearing file revisions older than ' . $monthRevisions . ' months');
-
-            $result = $this->_fileObjectBackend->clearOldRevisions($monthRevisions);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' cleared ' . $result . ' file revisions older than ' . $monthRevisions . ' months');
-        }
-
-        if ($numRevisions > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' clearing file revisions exceeding max count ' . $numRevisions);
-
-            $count = 0;
-            foreach($this->_fileObjectBackend->search(null, null, true) as $id) {
-                try {
-                    /** @var Tinebase_Model_Tree_FileObject $fileObject */
-                    $fileObject = $this->_fileObjectBackend->get($id, true);
-                    if (is_array($fileObject->available_revisions) && count($fileObject->available_revisions) > $numRevisions) {
-                        $revisions = $fileObject->available_revisions;
-                        sort($revisions, SORT_NUMERIC);
-                        $count += $this->_fileObjectBackend->deleteRevisions($id, array_slice($revisions, 0, count($revisions) - $numRevisions));
+                if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION])) {
+                    if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_ON])
+                        && false === $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]) {
+                        $numRev = 1;
+                        $monthRev = 0;
+                    } else {
+                        if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM])) {
+                            $numRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM];
+                        } else {
+                            $numRev = $numRevisions;
+                        }
+                        if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH])) {
+                            $monthRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION][Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH];
+                        } else {
+                            $monthRev = $monthRevisions;
+                        }
                     }
-                } catch(Tinebase_Exception_NotFound $tenf) {}
-            }
+                } else {
+                    $numRev = $numRevisions;
+                    $monthRev = $monthRevisions;
+                }
+
+                if ($numRev > 0) {
+                    if (is_array($fileNode->available_revisions) && count($fileNode->available_revisions) > $numRev) {
+                        $revisions = $fileNode->available_revisions;
+                        sort($revisions, SORT_NUMERIC);
+                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRevisions));
+                    }
+                }
+
+                if (1 !== $numRev && $monthRev > 0) {
+                    $count += $this->_fileObjectBackend->clearOldRevisions($fileNode->object_id, $monthRev);
+                }
+
+            } catch(Tinebase_Exception_NotFound $tenf) {}
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' cleared ' . $count . ' file revisions');
     }
 }

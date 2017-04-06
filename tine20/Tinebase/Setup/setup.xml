@@ -3454,6 +3454,11 @@
                     <type>text</type>
                     <length>40</length>
                 </field>
+                <field>
+                    <name>revisionProps</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>

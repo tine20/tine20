@@ -87,6 +87,22 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
+     * @return boolean
+     */
+    public function getKeepOldRevision()
+    {
+        return $this->_keepOldRevisions;
+    }
+
+    /**
+     * @param boolean $_value
+     */
+    public function setKeepOldRevision($_value)
+    {
+        $this->_keepOldRevisions = true === $_value;
+    }
+
+    /**
      * get the basic select object to fetch records from the database
      *  
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
@@ -379,10 +395,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
     /**
      * delete old file revisions that are older than $_months months
-     * @param $_months
+     *
+     * @param string $_id
+     * @param int $_months
      * @return int number of deleted revisions
      */
-    public function clearOldRevisions($_months)
+    public function clearOldRevisions($_id, $_months)
     {
         $months = (int)$_months;
         if ($months < 1) {
@@ -397,7 +415,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
             SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
-            'objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
+            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
 
         return $stmt->rowCount();
     }

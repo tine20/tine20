@@ -251,7 +251,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED
         ));
-        $result = $this->_searchHelper($filter, $this->_getSharedContainer()->name, TRUE);
+        $this->_searchHelper($filter, $this->_getSharedContainer()->name, TRUE);
     }
 
     /**
@@ -1574,5 +1574,159 @@ class Filemanager_Frontend_JsonTests extends TestCase
         foreach($result['results'] as $result) {
             $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true));
         }
+    }
+
+    protected function _statPaths($_paths)
+    {
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $result = array();
+
+        /**
+         * @var  string $key
+         * @var  Tinebase_Model_Tree_Node_Path $path
+         */
+        foreach($_paths as $key => $path) {
+            $result[$key] = $fileSystem->stat($path->statpath);
+        }
+
+        return $result;
+    }
+
+    protected function _assertRevisionProperties(array $_nodes, array $_defaultResult, array $_resultMap = array())
+    {
+        /**
+         * @var string $key
+         * @var Tinebase_Model_Tree_Node $node
+         */
+        foreach($_nodes as $key => $node) {
+            $expected = isset($_resultMap[$key]) ? $_resultMap[$key] : $_defaultResult;
+            static::assertTrue($expected == $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION), 'node revisions don\'t match for node: ' . $node->name . ' expected: ' . print_r($expected, true) . ' actual: ' . print_r($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION), true));
+        }
+    }
+
+    protected function _setRevisionProperties(Tinebase_Model_Tree_Node $_node, array $_properties)
+    {
+        foreach($_properties as $key => $value) {
+            $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[$key] = $value;
+        }
+    }
+
+    public function testSetRevisionSettings()
+    {
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $prefix = $fileSystem->getApplicationBasePath('Filemanager') . '/folders';
+
+        $this->testCreateDirectoryNodesInPersonal();
+        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $this->_json->createNodes(array($path . '/dir1/subdir11', $path . '/dir1/subdir12'), Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $this->_json->createNodes(array($path . '/dir2/subdir21', $path . '/dir2/subdir22'), Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+
+
+        // NONE of them have revision properties
+        $paths = array(
+            'dir1'          => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir1'),
+            'subDir11'      => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir1/subdir11'),
+            'subDir12'      => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir1/subdir12'),
+            'dir2'          => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2'),
+            'subDir21'      => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21'),
+            'subDir22'      => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22'),
+            'testContainer' => Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path),
+        );
+
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, array());
+
+
+
+        // ADD revision properties to the DIR1 subtree
+        $dir1TreeRevisionProperties = array(
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH => 1,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM   => 2,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_ON    => true
+        );
+        $this->_setRevisionProperties($nodes['dir1'], $dir1TreeRevisionProperties);
+
+        $this->_json->saveNode($nodes['dir1']->toArray());
+
+        $fileSystem->clearStatCache();
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, array(), array(
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir11'  => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
+
+
+
+        // MOVE DIR1 subtree below SUBDIR21 => nothing should change
+        $fileSystem->rename($paths['dir1']->statpath, $paths['subDir21']->statpath . '/tmp');
+
+        $fileSystem->clearStatCache();
+        $paths['dir1']     = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp');
+        $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir11');
+        $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir12');
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, array(), array(
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir11'  => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
+
+
+
+        // ADD revision properties to the SUBDIR22 subtree
+        $subdir22TreeRevisionProperties = array(
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH => 2,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM   => 3,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_ON    => true
+        );
+        $this->_setRevisionProperties($nodes['subDir22'], $subdir22TreeRevisionProperties);
+
+        $this->_json->saveNode($nodes['subDir22']->toArray());
+
+        // MOVE DIR1 from SUBDIR21 to SUBDIR22 => they should still not change!
+        $fileSystem->rename($paths['dir1']->statpath, $paths['subDir22']->statpath . '/tmp');
+
+        $fileSystem->clearStatCache();
+        $paths['dir1']     = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp');
+        $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir11');
+        $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir12');
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, array(), array(
+            'subDir22'  => $subdir22TreeRevisionProperties,
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir11'  => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
+
+
+
+        // MOVE subDir11 to subDir21 => should change to empty
+        $fileSystem->rename($paths['subDir11']->statpath, $paths['subDir21']->statpath . '/tmp');
+
+        $fileSystem->clearStatCache();
+        $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp');
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, array(), array(
+            'subDir22'  => $subdir22TreeRevisionProperties,
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
+
+
+
+        // reset properties for whole tree
+        $testContainerRevisionProperties = array(
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH => 6,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM   => 5,
+            Tinebase_Model_Tree_Node::XPROPS_REVISION_ON    => false
+        );
+        $this->_setRevisionProperties($nodes['testContainer'], $testContainerRevisionProperties);
+
+        $this->_json->saveNode($nodes['testContainer']->toArray());
+
+        $fileSystem->clearStatCache();
+        $nodes = $this->_statPaths($paths);
+        $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties);
     }
 }
