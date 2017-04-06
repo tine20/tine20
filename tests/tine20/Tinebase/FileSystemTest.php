@@ -507,14 +507,14 @@ class Tinebase_FileSystemTest extends TestCase
      *
      * @see 0012788: allow acl for all folder nodes
      */
-    public function testGetAllChildFolderIds()
+    public function testGetAllChildIds()
     {
         $scleverPath = $this->_getPersonalPath();
         $node = $this->_createAclNode($scleverPath);
         $subdir = $node->path . '/sub';
         $childNode = $this->_controller->mkdir($subdir);
 
-        $result = $this->_controller->getAllChildFolderIds(array($node->getId()));
+        $result = $this->_controller->getAllChildIds(array($node->getId()));
         self::assertEquals(1, count($result));
         self::assertEquals($childNode->getId(), $result[0]);
     }

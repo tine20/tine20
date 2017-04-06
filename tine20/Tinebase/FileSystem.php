@@ -857,9 +857,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                     return false;
                 }
 
-                if (Tinebase_Model_Tree_Node::TYPE_FILE === $node->type && $node->acl_node === $oldParent->acl_node &&
-                        $newParent->acl_node !== $node->acl_node) {
-                    $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                if ($node->acl_node === $oldParent->acl_node && $newParent->acl_node !== $node->acl_node) {
+                    $node->acl_node = $newParent->acl_node;
+                    if (Tinebase_Model_Tree_Node::TYPE_FILE !== $node->type) {
+                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                    }
                 }
 
                 $node->parent_id = $newParent->getId();
@@ -1316,7 +1318,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
     */
     public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = NULL)
     {
-        $result =$this->_getTreeNodeBackend()->searchCount($_filter);
+        $result = $this->_getTreeNodeBackend()->searchCount($_filter);
         return $result;
     }
 
@@ -1417,10 +1419,29 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
     protected function _recursiveInheritPropertyUpdate($_node, $_property, $_newValue, $_oldValue)
     {
-        $childIds = $this->getAllChildFolderIds(array($_node->getId()), array(
+        $childIds = $this->getAllChildIds(array($_node->getId()), array(array(
             'field'     => $_property,
             'operator'  => 'equals',
             'value'     => $_oldValue
+        )));
+        if (count($childIds) > 0) {
+            $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
+        }
+    }
+
+    protected function _recursiveInheritFolderPropertyUpdate($_node, $_property, $_newValue, $_oldValue)
+    {
+        $childIds = $this->getAllChildIds(array($_node->getId()), array(
+            array(
+                'field'     => $_property,
+                'operator'  => 'equals',
+                'value'     => $_oldValue
+            ),
+            array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+            )
         ));
         if (count($childIds) > 0) {
             $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
@@ -1428,13 +1449,13 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
     }
 
     /**
-     * returns all directory nodes up to the root
+     * returns all children nodes, allows to set addition filters
      *
      * @param array $_ids
      * @param array $_additionalFilters
      * @return array
      */
-    public function getAllChildFolderIds(array $_ids, array $_additionalFilters = array())
+    public function getAllChildIds(array $_ids, array $_additionalFilters = array())
     {
         $result = array();
         $filter = array(
@@ -1442,12 +1463,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                 'field'     => 'parent_id',
                 'operator'  => 'in',
                 'value'     => $_ids
-            ),
-            array(
-                'field'     => 'type',
-                'operator'  => 'equals',
-                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
-            ),
+            )
         );
         foreach($_additionalFilters as $aF) {
             $filter[] = $aF;
@@ -1457,7 +1473,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         ));
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
-            $result = array_merge($result, $children, $this->getAllChildFolderIds($children, $_additionalFilters));
+            $result = array_merge($result, $children, $this->getAllChildIds($children, $_additionalFilters));
         }
 
         return $result;

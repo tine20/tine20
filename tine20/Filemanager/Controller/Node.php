@@ -258,6 +258,32 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
+        $_filter->removeFilter('path');
+        $_filter->removeFilter('recursive');
+        $_filter->removeFilter('type');
+        $_filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_Node::TYPE_FILE));
+
+        $result = $this->_backend->searchNodes($_filter, $_pagination);
+
+        $_filter->addFilter($_filter->createFilter('recursive', 'equals', 'true'));
+
+        // resolve path
+        $parents = array();
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        /** @var Tinebase_Model_Tree_Node $fileNode */
+        foreach($result as $fileNode) {
+            if (!isset($parents[$fileNode->parent_id])) {
+                $parents[$fileNode->parent_id] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath(
+                    $this->_backend->getPathOfNode($this->_backend->get($fileNode->parent_id), true), $app);
+            }
+
+            $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+        }
+        
+        return $result;
+
+/*
         $files = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $ret = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $folders = $this->_getRootNodes();
@@ -281,7 +307,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         $this->_recursiveSearchTotalCount = $files->count();
         $ret = $files->sortByPagination($_pagination)->limitByPagination($_pagination);
-        return $ret;
+        return $ret;*/
     }
     
     /**
@@ -463,16 +489,19 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-        $path = $this->_checkFilterACL($_filter, $_action);
-        
-        if($_filter->getFilter('recursive') && $_filter->getFilter('recursive')->getValue()) {
-            $result = $this->_recursiveSearchTotalCount;
-        } else if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
-            $result = count($this->_getRootNodes());
-        } else if ($path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && ! $path->containerOwner) {
-            $result = count($this->_getOtherUserNodes());
-        } else {
+        if ($_filter->getFilter('recursive')) {
+            $_filter->removeFilter('recursive');
             $result = $this->_backend->searchNodesCount($_filter);
+            $_filter->addFilter($_filter->createFilter('recursive', 'equals', 'true'));
+        } else {
+            $path = $this->_checkFilterACL($_filter, $_action);
+            if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+                $result = count($this->_getRootNodes());
+            } else if ($path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && !$path->containerOwner) {
+                $result = count($this->_getOtherUserNodes());
+            } else {
+                $result = $this->_backend->searchNodesCount($_filter);
+            }
         }
         
         return $result;

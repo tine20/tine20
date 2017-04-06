@@ -62,6 +62,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @var Tinebase_Model_Container
      */
     protected $_otherUserContainer;
+
+    /**
+     * folder paths to be deleted
+     *
+     * @var array
+     */
+    protected $_rmDir = array();
     
     /**
      * Sets up the fixture.
@@ -76,6 +83,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
+        $this->_rmDir = array();
 
         // make sure account root node exists
         $this->_getPersonalFilemanagerContainer();
@@ -90,6 +98,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
+
+        if (count($this->_rmDir) > 0) {
+            foreach($this->_rmDir as $dir) {
+                $this->_json->deleteNodes($dir);
+            }
+        }
         
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
@@ -1517,5 +1531,48 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals(2, count($nodeArray['grants']));
         self::assertEquals(true, count($nodeArray['grants'][0]['adminGrant']));
         self::assertEquals(true, count($nodeArray['account_grants']['adminGrant']));
+    }
+
+    public function testRecursiveFilter()
+    {
+        $folders = $this->testCreateDirectoryNodesInPersonal();
+        $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
+
+        $i = 0;
+        foreach($folders as $folder) {
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $folder . '/test.txt');
+            $handle = Tinebase_FileSystem::getInstance()->fopen($path->statpath, 'w');
+            $this->assertTrue(is_resource($handle), 'fopen did not return resource');
+
+            $written = fwrite($handle, 'RecursiveTest' . (++$i));
+            $this->assertEquals(14, $written, 'failed to write 14 bytes to ' . $folder . '/test.txt');
+
+            $result = Tinebase_FileSystem::getInstance()->fclose($handle);
+            $this->assertTrue($result, 'fclose did not return true');
+        }
+
+        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $this->_rmDir[] = $path;
+        $paths = array($path . '/dir1/test.txt', $path . '/dir2/test.txt');
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $result = $this->_json->searchNodes(array(
+            array(
+                'field'    => 'recursive',
+                'operator' => 'equals',
+                'value'    => 'true'
+            ),
+            array(
+                'field'    => 'query',
+                'operator' => 'contains',
+                'value'    => 'RecursiveTe'
+            ),
+        ), null);
+
+        $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files: ' . print_r($result, true));
+        foreach($result['results'] as $result) {
+            $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true));
+        }
     }
 }
