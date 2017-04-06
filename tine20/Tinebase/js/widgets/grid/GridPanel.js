@@ -1565,6 +1565,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+            this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
@@ -1575,6 +1576,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     onActionToolbarResize: function(tb) {
+        if (! tb.rendered) return;
         var actionGrp = tb.items.get(0),
             availableWidth = tb.getBox()['width'] - 5,
             maxNeededWidth = Ext.layout.ToolbarLayout.prototype.triggerWidth + 10;

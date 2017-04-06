@@ -480,6 +480,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
 
             this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+            this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());

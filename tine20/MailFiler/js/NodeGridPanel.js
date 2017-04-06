@@ -768,6 +768,7 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+        this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
         return this.actionToolbar;
     },
