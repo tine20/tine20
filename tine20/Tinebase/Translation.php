@@ -69,7 +69,12 @@ class Tinebase_Translation
             $cache = new Zend_Cache_Frontend_File(array(
                 'master_files' => $filesToWatch
             ));
-            $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+            $tineCache = Tinebase_Core::get(Tinebase_Core::CACHE);
+            if ($tineCache) {
+                $cache->setBackend($tineCache->getBackend());
+            } else {
+                $cache = null;
+            }
         } else {
             $cache = null;
         }
