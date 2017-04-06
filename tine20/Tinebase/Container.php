@@ -1138,7 +1138,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $acl = $controller->doContainerACLChecks(FALSE);
             }
 
-            $controller->deleteContainerContents($container, $_ignoreAcl);
+            if (method_exists($controller, 'deleteContainerContents')) {
+                $controller->deleteContainerContents($container, $_ignoreAcl);
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' No deleteContainerContents defined in controller ' . get_class($controller));
+            }
 
             if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
                 $controller->doContainerACLChecks($acl);

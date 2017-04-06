@@ -614,10 +614,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->createTable('tree_node_acl', $declaration);
         }
 
-        // TODO convert container acl to node acl
-        // TODO switch HR and FMAil template config to node id
-        // TODO remove all containers attached to nodes
-
         $this->setApplicationVersion('Tinebase', '10.13');
     }
 
@@ -754,5 +750,106 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '10.16');
+    }
+
+    /**
+     * update node acl: find all nodes that have containers, copy acl to node and remove container
+     *
+     * TODO allow to call from cli?
+     */
+    public function update_16()
+    {
+        //
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if ($setupUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+        foreach ($applications as $application) {
+            $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
+            $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.17');
+    }
+
+    /**
+     * @param $application
+     * @param $type
+     */
+    protected function _migrateAclForApplication($application, $type)
+    {
+        $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            $application->name,
+            $type
+        );
+        try {
+            $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return;
+        }
+
+        $childNodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($parentNode);
+
+        if (count($childNodes) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " No container nodes found for application " . $application->name);
+            return;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' ' . count($childNodes) . " nodes found for application " . $application->name);
+
+        if ($type === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) {
+            foreach ($childNodes as $accountNode) {
+                $personalNodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($accountNode);
+                $this->_moveAclFromContainersToNodes($personalNodes);
+            }
+        } else {
+            // shared
+            $this->_moveAclFromContainersToNodes($childNodes);
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $nodes
+     *
+     * TODO move to TFS?
+     */
+    protected function _moveAclFromContainersToNodes(Tinebase_Record_RecordSet $nodes)
+    {
+        foreach ($nodes as $node) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($node->name);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // already converted
+                continue;
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                // already converted
+                continue;
+            }
+            //print_r($container->toArray());
+            if ($container->model === 'HumanResources_Model_Employee') {
+                // fix broken HR template container to prevent problems when removing data
+                $container->model = 'Tinebase_Model_Tree_Node';
+                Tinebase_Container::getInstance()->update($container);
+            }
+
+            // set container acl in node
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, /* ignore acl */ true);
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
+
+            // set container name in node
+            $node->name = $container->name;
+            $node->acl_node = $node->getId();
+            Tinebase_FileSystem::getInstance()->update($node);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Updated node acl for ' . $node->name .' (container id: ' . $container->getId() . ')');
+
+            // remove old acl container
+            Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */ true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Removed old container ' . $container->name);
+        }
     }
 }

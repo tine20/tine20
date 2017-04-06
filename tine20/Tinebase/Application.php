@@ -618,7 +618,7 @@ class Tinebase_Application
     /**
      * extract model and app name from model name
      *
-     * @param      $modelOrApplication
+     * @param mixed $modelOrApplication
      * @param null $model
      * @return array
      */
