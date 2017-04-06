@@ -89,10 +89,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
 
-        if (this.hasQuickSearchFilterToolbarPlugin) {
-            this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
-        }
-
         this.plugins.push(this.filterToolbar);
 
         if (!this.readOnly) {
@@ -101,8 +97,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 multiple: true,
                 scope: this,
                 enableFileDialog: false,
-                handler: this.onFilesSelect
+                handler: this.onFilesSelect.createDelegate(this)
             });
+        }
+
+        if (this.hasQuickSearchFilterToolbarPlugin) {
+            this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
         }
 
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
