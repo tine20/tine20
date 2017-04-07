@@ -10,9 +10,9 @@
  */
 
 /**
- * get path part decorator test class
+ * get path part delegator test class
  */
-class Tinebase_Record_GetPathPartDecorator implements Tinebase_Record_Abstract_GetPathPartDelegatorInterface
+class Tinebase_Record_GetPathPartDelegator implements Tinebase_Record_Abstract_GetPathPartDelegatorInterface
 {
     /**
      * @param Tinebase_Record_Interface $_record

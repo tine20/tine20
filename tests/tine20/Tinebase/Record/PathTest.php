@@ -362,14 +362,14 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals('/test', $contact->getPathPart(), 'default behaviour of getPathPart for Addressbook_Model_Contact not as expected');
 
         $adbConfig = Addressbook_Config::getInstance();
-        $oldDecorator = $adbConfig->get('getPathPartDecorator_Addressbook_Model_Contact');
-        $adbConfig->set('getPathPartDecorator_Addressbook_Model_Contact', 'Tinebase_Record_GetPathPartDecorator');
+        $oldDelegator = $adbConfig->get('getPathPartDelegate_Addressbook_Model_Contact');
+        $adbConfig->set('getPathPartDelegate_Addressbook_Model_Contact', 'Tinebase_Record_GetPathPartDelegator');
         Tinebase_Core::clearDelegatorCache();
 
-        $this->assertEquals('shooShoo', $contact->getPathPart(), 'decorator logic did not work!');
+        $this->assertEquals('shooShoo', $contact->getPathPart(), 'delegator logic did not work!');
 
-        $adbConfig->set('getPathPartDecorator_Addressbook_Model_Contact', $oldDecorator);
+        $adbConfig->set('getPathPartDelegate_Addressbook_Model_Contact', $oldDelegator);
         Tinebase_Core::clearDelegatorCache();
-        $this->assertEquals('/test', $contact->getPathPart(), 'resetting decorator did not work!');
+        $this->assertEquals('/test', $contact->getPathPart(), 'resetting delegator did not work!');
     }
 }
