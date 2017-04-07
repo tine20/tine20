@@ -88,7 +88,7 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
      */
     public function testAddUser()
     {
-        $user = Tinebase_User_LdapTest::getTestRecord();
+        $user = TestCase::getTestUser();
         $user->sambaSAM = new Tinebase_Model_SAMUser(array(
             'homeDrive' => 'H:',
             'homePath'  => '\\\\smbserver\\homes'

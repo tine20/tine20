@@ -74,8 +74,6 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
      * all events get routed through this function
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventObject
-     * 
-     * @todo    write test
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
@@ -90,7 +88,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, '', 'Tinebase_Model_Tree_Node');
                 }
                 break;
         }
@@ -99,21 +97,11 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Tree_Node
      */
     public function createPersonalFolder($_account)
     {
-         $account = (! $_account instanceof Tinebase_Model_User)
-            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_account)
-            : $_account;
-        $translation = Tinebase_Translation::getTranslation('Filemanager');
-        $nodeName = sprintf($translation->_("%s's personal files"), $account->accountFullName);
-        $path = '/Filemanager/folders/personal/' . $account->getId() . '/' . $nodeName;
-        $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
-
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($personalNode));
-
-        return $container;
+        return $this->createPersonalFileFolder($_account, $this->_applicationName);
     }
 }

@@ -626,4 +626,46 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return $result;
     }
+
+    /**
+     * returns a test user object
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    public static function getTestUser()
+    {
+        $emailDomain = TestServer::getPrimaryMailDomain();
+
+        $user  = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'tine20phpunituser',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit User',
+            'accountEmailAddress'   => 'phpunit@' . $emailDomain,
+        ));
+
+        return $user;
+    }
+
+    /**
+     * return persona/testuser (stat)path
+     *
+     * @param string|Tinebase_Model_User $persona
+     * @param string $appName
+     * @return string
+     */
+    protected function _getPersonalPath($persona = 'sclever', $appName = 'Filemanager')
+    {
+        if ($persona instanceof Tinebase_Model_User) {
+            $userId = $persona->getId();
+        } else if (is_string($persona)) {
+            $userId = $this->_personas[$persona]->getId();
+        }
+        return Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            $appName,
+            Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+        ) . '/' . $userId;
+    }
 }

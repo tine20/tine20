@@ -533,15 +533,6 @@ class Tinebase_FileSystemTest extends TestCase
     }
 
     /**
-     * return persona (stat)path
-     */
-    protected function _getPersonalPath($persona = 'sclever')
-    {
-        return $this->_controller->getApplicationBasePath('Felamimail', Tinebase_FileSystem::FOLDER_TYPE_PERSONAL)
-            . '/' . $this->_personas[$persona]->getId();
-    }
-
-    /**
      * @param $parentPath
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_SystemGeneric

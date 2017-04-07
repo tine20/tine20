@@ -25,7 +25,8 @@ class Filemanager_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Filemanager All Tests');
         $suite->addTestSuite('Filemanager_Frontend_AllTests');
         $suite->addTestSuite('Filemanager_Controller_DownloadLinkTests');
-        
+        $suite->addTestSuite('Filemanager_ControllerTests');
+
         return $suite;
     }
 }

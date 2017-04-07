@@ -84,7 +84,7 @@ class Tinebase_User_EmailUser_Smtp_LdapMailSchemaTest extends PHPUnit_Framework_
      */
     public function testAddUser()
     {
-        $user = Tinebase_User_LdapTest::getTestRecord();
+        $user = TestCase::getTestUser();
         $user->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $user->accountEmailAddress,
             'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')

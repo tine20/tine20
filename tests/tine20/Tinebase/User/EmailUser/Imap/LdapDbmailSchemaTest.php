@@ -92,7 +92,7 @@ class Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest extends PHPUnit_Framewor
      */
     public function testAddUser()
     {
-        $user = Tinebase_User_LdapTest::getTestRecord();
+        $user = TestCase::getTestUser();
         $user->imapUser = new Tinebase_Model_EmailUser(array(
             'emailMailQuota' => 1000
         ));
