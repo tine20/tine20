@@ -637,10 +637,34 @@ class Tinebase_FileSystemTest extends TestCase
         // remove acl from middle child
         // check acl in third child again
         list($node, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
 
         $this->_controller->removeAclFromNode($middleChildNode);
 
         $middleChildNodePath = $this->_getPersonalPath('pwulf'). '/test/sub';
         $this->_testNodeAcl($childChildNode, $middleChildNodePath, 'pwulf');
+    }
+
+    /**
+     * testMoveNodeAclUpdate
+     *
+     * @see 0012788: allow acl for all folder nodes
+     */
+    public function testMoveNodeAclUpdate()
+    {
+        list($node, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+        // create folder for sclever and move middlechild there
+        $path = $this->_getPersonalPath('sclever');
+        $node = $this->_createAclNode($path);
+        $this->_controller->rename($this->_getPersonalPath('pwulf') . '/test/sub', $node->path . '/sub');
+
+        // check sclever acl in middle and third child
+        $this->_testNodeAcl($middleChildNode, $path . '/test');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $middleChildNodePath = $path . '/test/sub';
+        $this->_testNodeAcl($childChildNode, $middleChildNodePath);
     }
 }
