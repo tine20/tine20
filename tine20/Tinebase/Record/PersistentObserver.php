@@ -187,7 +187,7 @@ class Tinebase_Record_PersistentObserver
     {
         $where = array(
             $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
-            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote($_observer->getId())
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
         );
 
         $this->_table->delete($where);
@@ -203,7 +203,7 @@ class Tinebase_Record_PersistentObserver
     {
         $where = array(
             $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
-            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote($_observer->getId())
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
         );
 
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
@@ -220,8 +220,8 @@ class Tinebase_Record_PersistentObserver
     {
         $where = array(
             $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
-            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote($_observer->getId()),
-            $this->_db->quoteIdentifier('observed_event') .       ' = ' . $this->_db->quote($_event)
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId()),
+            $this->_db->quoteIdentifier('observed_event') .       ' = ' . $this->_db->quote((string)$_event)
         );
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
@@ -239,8 +239,8 @@ class Tinebase_Record_PersistentObserver
     {
         $where = array(
             $this->_db->quoteIdentifier('observable_model') .       ' = ' . $this->_db->quote(get_class($_observable)),
-            $this->_db->quoteIdentifier('observable_identifier') .  ' = ' . $this->_db->quote($_observable->getId()),
-            $this->_db->quoteIdentifier('observed_event') .         ' = ' . $this->_db->quote($_event)
+            $this->_db->quoteIdentifier('observable_identifier') .  ' = ' . $this->_db->quote((string)$_observable->getId()),
+            $this->_db->quoteIdentifier('observed_event') .         ' = ' . $this->_db->quote((string)$_event)
         );
 
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
