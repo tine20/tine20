@@ -190,6 +190,38 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_get($id, Filemanager_Controller_DownloadLink::getInstance());
     }
+
+    /**
+     * Return usage array of a folder
+     *
+     * @param $_id
+     * @return array of folder usage
+     */
+    public function getFolderUsage($_id)
+    {
+        $_id = is_array($_id) ?: array($_id);
+        $folderUsage = Filemanager_Controller_Node::getInstance()->getFolderUsage($_id);
+
+        $createdBy = $folderUsage['createdBy'];
+        $newCreatedBy = array();
+
+        if (count($createdBy) > 0) {
+            $accountIds = array_keys($createdBy);
+            $accounts = Tinebase_User::getInstance()->getMultiple($accountIds);
+
+            /** @var Tinebase_Model_User $account */
+            foreach($accounts as $account) {
+                $newCreatedBy[$account->contact_id] = $createdBy[$account->accountId];
+            }
+            $folderUsage['createdBy'] = $newCreatedBy;
+
+            $folderUsage['contacts'] = Addressbook_Controller_Contact::getInstance()->getMultiple($accounts->contact_id)->toArray();
+        } else {
+            $folderUsage['contacts'] = array();
+        }
+
+        return $folderUsage;
+    }
     
     /**
      * creates/updates a record

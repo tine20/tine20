@@ -66,6 +66,10 @@
         {
           "text": "FilePicker.js",
           "path": "js/"
+        },
+        {
+          "text": "UsagePanel.js",
+          "path": "js/"
         }
       ]
     },

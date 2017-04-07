@@ -1490,9 +1490,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      *
      * @param array $_ids
      * @param array $_additionalFilters
+     * @param bool  $_ignoreAcl
      * @return array
      */
-    public function getAllChildIds(array $_ids, array $_additionalFilters = array())
+    public function getAllChildIds(array $_ids, array $_additionalFilters = array(), $_ignoreAcl = true)
     {
         $result = array();
         $filter = array(
@@ -1506,11 +1507,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             $filter[] = $aF;
         }
         $searchFilter = new Tinebase_Model_Tree_Node_Filter($filter,  /* $_condition = */ '', /* $_options */ array(
-            'ignoreAcl' => true,
+            'ignoreAcl' => $_ignoreAcl,
         ));
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
-            $result = array_merge($result, $children, $this->getAllChildIds($children, $_additionalFilters));
+            $result = array_merge($result, $children, $this->getAllChildIds($children, $_additionalFilters, $_ignoreAcl));
         }
 
         return $result;

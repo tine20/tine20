@@ -1729,4 +1729,18 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $nodes = $this->_statPaths($paths);
         $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties);
     }
+
+    public function testGetFolderUsage()
+    {
+        $result = $this->testCreateFileNodeWithTempfile();
+
+        $usageInfo = $this->_json->getFolderUsage($result['parent_id']);
+        $userId = Tinebase_Core::getUser()->contact_id;
+
+        $this->assertEquals(17, $usageInfo['type']['txt']['size']);
+        $this->assertEquals(17, $usageInfo['type']['txt']['revision_size']);
+        $this->assertEquals(17, $usageInfo['createdBy'][$userId]['size']);
+        $this->assertEquals(17, $usageInfo['createdBy'][$userId]['revision_size']);
+        $this->assertEquals($userId, $usageInfo['contacts'][0]['id']);
+    }
 }

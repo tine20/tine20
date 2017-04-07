@@ -221,7 +221,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_id: this.record.id,
                 record_model: 'Tinebase_Model_Tree_Node'
                 }),
-                this.downloadLinkGrid
+                this.downloadLinkGrid,
+                {xtype: 'Tine.Filemanager.UsagePanel'}
             ]
         };
     }

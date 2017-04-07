@@ -1356,4 +1356,53 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
         }
     }
+
+    /**
+     * Return usage array of a folder
+     *
+     * @param $_id
+     * @return array of folder usage
+     */
+    public function getFolderUsage($_id)
+    {
+        $childIds = $this->_backend->getAllChildIds($_id, array(
+            'field'     => 'type',
+            'operator'  => 'equals',
+            'value'     => Tinebase_Model_Tree_Node::TYPE_FILE
+        ), false);
+
+        $createdBy = array();;
+        $type = array();
+        foreach($childIds as $id) {
+            try {
+                $fileNode = $this->_backend->get($id);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            if (!isset($createdBy[$fileNode->created_by])) {
+                $createdBy[$fileNode->created_by] = array(
+                    'size'          => $fileNode->size,
+                    'revision_size' => $fileNode->revision_size
+                );
+            } else {
+                $createdBy[$fileNode->created_by]['size']           += $fileNode->size;
+                $createdBy[$fileNode->created_by]['revision_size']  += $fileNode->revision_size;
+            }
+
+            $ext = pathinfo($fileNode->name, PATHINFO_EXTENSION);
+
+            if (!isset($type[$ext])) {
+                $type[$ext] = array(
+                    'size'          => $fileNode->size,
+                    'revision_size' => $fileNode->revision_size
+                );
+            } else {
+                $type[$ext]['size']           += $fileNode->size;
+                $type[$ext]['revision_size']  += $fileNode->revision_size;
+            }
+        }
+
+        return array('createdBy' => $createdBy, 'type' => $type);
+    }
 }
