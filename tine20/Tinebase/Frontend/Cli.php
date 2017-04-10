@@ -749,11 +749,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * add new customfield config
-     * 
-     * needs args like this:
-     * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datefield"
-     * @see Tinebase_Model_CustomField_Config for full list 
-     * 
+     *
+     * example:
+     * $ php tine20.php --method=Tinebase.addCustomfield -- \
+         application="Addressbook" model="Addressbook_Model_Contact" name="datefield" \
+         definition='{"label":"Date","type":"datetime", "uiconfig": {"group":"Dates", "order": 30}}'
+     * @see Tinebase_Model_CustomField_Config for full list
+     *
      * @param $_opts
      * @return boolean success
      */
