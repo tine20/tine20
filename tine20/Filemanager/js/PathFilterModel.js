@@ -59,6 +59,17 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
+        var setValue = function(value) {
+            if (value && value.path) {
+                value = value.path;
+            }
+            else if(Ext.isString(value) && (!value.charAt(0) || value.charAt(0) != '/')) {
+                value = '/' + value;
+            }
+
+            return Ext.ux.form.ClearableTextField.prototype.setValue.call(this, value);
+        };
+
         var value = new Ext.ux.form.ClearableTextField({
             filter: filter,
             width: this.filterValueWidth,
@@ -66,7 +77,7 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             renderTo: el,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             emptyText: this.emptyText,
-            value: filter.data.value
+            setValue: setValue
         });
         
         value.on('specialkey', function(field, e){
@@ -74,19 +85,7 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 this.onFiltertrigger();
             }
         }, this);
-                
-        value.origSetValue = value.setValue.createDelegate(value);
-        value.setValue = function(value) {
-            if (value && value.path) {
-                value = value.path;
-            }
-            else if(Ext.isString(value) && (!value.charAt(0) || value.charAt(0) != '/')) {
-                value = '/' + value;
-            }
-            
-            return this.origSetValue(value);
-        };
-        
+
         return value;
     }
 });
