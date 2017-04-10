@@ -312,6 +312,16 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         };
     },
 
+    initLayout: function() {
+        this.supr().initLayout.call(this);
+
+        var northPanel = lodash.find(this.items, function (i) {
+            return i.region == 'north'
+        });
+
+        northPanel.tbar = new Tine.Filemanager.RecursiveFilter({gridPanel: this});
+    },
+
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * @private

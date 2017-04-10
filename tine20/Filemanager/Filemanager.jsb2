@@ -68,6 +68,10 @@
           "path": "js/"
         },
         {
+          "text": "RecursiveFilter.js",
+          "path": "js/"
+        },
+        {
           "text": "UsagePanel.js",
           "path": "js/"
         }
