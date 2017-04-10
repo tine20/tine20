@@ -52,11 +52,80 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: false,
             scope: this
         });
+        this.printAction = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Message'),
+            handler: this.onPrint.createDelegate(this, []),
+            disabled: false,
+            iconCls:'action_print',
+            scope:this
+        });
 
-        this.tbarItems = [this.downloadAction];
+        this.tbarItems = [this.downloadAction, this.printAction];
 
         Tine.MailFiler.NodeEditDialog.superclass.initComponent.call(this);
     },
+
+    /**
+     * Ripped of felamimail
+     *
+     * @param detailsPanel
+     */
+    onPrint: function() {
+        var id = Ext.id(),
+            doc = document,
+            frame = doc.createElement('iframe');
+
+        Ext.fly(frame).set({
+            id: id,
+            name: id,
+            style: {
+                position: 'absolute',
+                width: '210mm',
+                height: '297mm',
+                top: '-10000px',
+                left: '-10000px'
+            }
+        });
+
+        doc.body.appendChild(frame);
+
+        Ext.fly(frame).set({
+            src : Ext.SSL_SECURE_URL
+        });
+
+        var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document,
+            content = this.getDetailsPanelContentForPrinting(this.mailDetailsPanel);
+
+        doc.open();
+        doc.write(content);
+        doc.close();
+
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+    },
+
+
+    /**
+     * get detail panel content
+     *
+     * @param {Tine.Felamimail.GridDetailsPanel} details panel
+     * @return {String}
+     */
+    getDetailsPanelContentForPrinting: function(detailsPanel) {
+        var detailsPanels = detailsPanel.getEl().query('.preview-panel-mail');
+
+        var detailsPanelContent = (detailsPanels.length > 1) ? detailsPanels[1].innerHTML : detailsPanels[0].innerHTML;
+
+        var buffer = '<html><head>';
+        buffer += '<title>' + this.app.i18n._('Print Preview') + '</title>';
+        buffer += '</head><body>';
+        buffer += detailsPanelContent;
+        buffer += '</body></html>';
+
+        return buffer;
+    },
+
     /**
      * folder or file?
      */
