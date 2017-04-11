@@ -407,8 +407,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     /**
      * check if this path is on the top level (last part / name is personal. shared or user id)
      *
-     * TODO is "records" on top level, too?
-     *
      * @return boolean
      */
     public function isToplevelPath()
@@ -418,6 +416,18 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             (   $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL ||
                 $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED)) ||
                 (count($parts) == 4 && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
+    }
+
+    /**
+     * check if this path is above the top level (/application|records|folders)
+     *
+     * @return boolean
+     */
+    public function isSystemPath()
+    {
+        $parts = $this->_getPathParts();
+        return  (count($parts) < 3) ||
+            (count($parts) == 3 && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
     }
 
     /**

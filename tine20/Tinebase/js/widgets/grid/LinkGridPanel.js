@@ -77,48 +77,56 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
      * @private
      */
     getColumnModel: function () {
-        
-        this.typeEditor = (this.relationTypesKeyfieldName) 
-            ? new Tine.Tinebase.widgets.keyfield.ComboBox({
-                app: this.app.appName,
-                keyFieldName: this.relationTypesKeyfieldName
-            }) 
-            : (this.relationTypes) 
-                ? new Ext.form.ComboBox({
-                    displayField: 'label',
-                    valueField: 'relation_type',
-                    mode: 'local',
-                    triggerAction: 'all',
-                    lazyInit: false,
-                    autoExpand: true,
-                    blurOnSelect: true,
-                    listClass: 'x-combo-list-small',
-                    store: new Ext.data.SimpleStore({
-                        fields: ['label', 'relation_type'],
-                        data: this.relationTypes
+        if (! this.colModel) {
+            this.typeEditor = (this.relationTypesKeyfieldName)
+                ? new Tine.Tinebase.widgets.keyfield.ComboBox({
+                    app: this.app.appName,
+                    keyFieldName: this.relationTypesKeyfieldName
+                })
+                : (this.relationTypes)
+                    ? new Ext.form.ComboBox({
+                        displayField: 'label',
+                        valueField: 'relation_type',
+                        mode: 'local',
+                        triggerAction: 'all',
+                        lazyInit: false,
+                        autoExpand: true,
+                        blurOnSelect: true,
+                        listClass: 'x-combo-list-small',
+                        store: new Ext.data.SimpleStore({
+                            fields: ['label', 'relation_type'],
+                            data: this.relationTypes
+                        })
                     })
-                }) 
-                : null;
-        
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true
-            },
-            columns:  [
-                {   id: 'name', header: i18n._('Name'), dataIndex: 'related_record', renderer: this.relatedRecordRender, scope: this}, {
-                    id: 'type', 
-                    header: (this.typeColumnHeader) ? this.typeColumnHeader : i18n._('Type'),
-                    dataIndex: 'type', 
-                    width: 100, 
-                    sortable: true,
-                    renderer: (this.relationTypesKeyfieldName) 
-                        ? Tine.Tinebase.widgets.keyfield.Renderer.get(this.app.appName, this.relationTypesKeyfieldName) 
-                        : this.relationTypeRenderer,
-                    scope: this,
-                    editor: this.typeEditor
-                }
-            ].concat(this.configColumns)
-        });
+                    : null;
+
+            this.colModel = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: true
+                },
+                columns: [
+                    {
+                        id: 'name',
+                        header: i18n._('Name'),
+                        dataIndex: 'related_record',
+                        renderer: this.relatedRecordRender,
+                        scope: this
+                    }, {
+                        id: 'type',
+                        header: (this.typeColumnHeader) ? this.typeColumnHeader : i18n._('Type'),
+                        dataIndex: 'type',
+                        width: 100,
+                        sortable: true,
+                        renderer: (this.relationTypesKeyfieldName)
+                            ? Tine.Tinebase.widgets.keyfield.Renderer.get(this.app.appName, this.relationTypesKeyfieldName)
+                            : this.relationTypeRenderer,
+                        scope: this,
+                        editor: this.typeEditor
+                    }
+                ].concat(this.configColumns)
+            });
+        }
+        return this.colModel;
     },
     
     /**

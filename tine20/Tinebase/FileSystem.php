@@ -1974,12 +1974,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
         // TODO revision properties need to be inherited
 
-        $node = $this->_setAclFromParent($path);
+        $node = $this->setAclFromParent($path);
 
         return $node;
     }
 
-    protected function _setAclFromParent($path)
+    public function setAclFromParent($path)
     {
         $node = $this->stat($path);
         $parent = $this->get($node->parent_id);

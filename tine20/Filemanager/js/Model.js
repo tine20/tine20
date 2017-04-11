@@ -72,7 +72,15 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         return true;
     }
 });
-    
+
+// register grants for nodes
+Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function(container) {
+    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
+    grants.push('download', 'publish');
+
+    return grants;
+});
+
 /**
  * create Node from File
  * 

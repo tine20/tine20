@@ -107,7 +107,13 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             title: this.app.i18n._('Public Links'),
             editDialog: this
         });
-        
+
+        // require('./GrantsPanel');
+        var grantsPanel = new Tine.Filemanager.GrantsPanel({
+            app: this.app,
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -222,7 +228,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: 'Tinebase_Model_Tree_Node'
                 }),
                 this.downloadLinkGrid,
-                {xtype: 'Tine.Filemanager.UsagePanel'}
+                {xtype: 'Tine.Filemanager.UsagePanel'},
+                grantsPanel
             ]
         };
     }

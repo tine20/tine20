@@ -129,6 +129,29 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
+
+        // update node acl
+        $aclNode = $_oldRecord->acl_node;
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type
+            && Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')
+        ) {
+            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
+            if (! $nodePath->isSystemPath()) {
+
+                if ($_record->acl_node === null && ! $nodePath->isToplevelPath()) {
+                    // acl_node === null -> remove acl
+                    $node = $this->_backend->setAclFromParent($nodePath->statpath);
+                    $aclNode = $node->acl_node;
+
+                } else if ($_record->acl_node === $_record->getId()) {
+                    $this->_backend->setGrantsForNode($_record, $_record->grants);
+                    $aclNode = $_record->acl_node;
+                    // TODO only update if grants differ from old grants
+                }
+            }
+        }
+        // reset node acl value to prevent spoofing
+        $_record->acl_node = $aclNode;
     }
     
     /**

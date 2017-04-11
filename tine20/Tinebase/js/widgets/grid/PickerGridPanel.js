@@ -119,8 +119,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initStore();
         this.initActionsAndToolbars();
         this.initGrid();
-        
+
+        this.on('afterrender', this.onAfterRender, this);
+
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
+    },
+
+    onAfterRender: function() {
+        this.setReadOnly(this.readOnly);
     },
 
     setReadOnly: function(readOnly) {
@@ -131,6 +137,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this);
         this.actionRemove.setDisabled(readOnly);
+        if (this.rendered) {
+            this.getEl()[(readOnly ? '' : 'un') + 'mask']();
+        }
+
     },
 
     /**
@@ -240,7 +250,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init grid (column/selection model, ctx menu, ...)
      */
     initGrid: function() {
-        this.cm = this.getColumnModel();
+        this.colModel = this.getColumnModel();
         
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
         
@@ -274,27 +284,31 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @return {}
      */
     getColumnModel: function() {
-        if (! this.columns) {
-            var labelColumn = {
-                id: this.labelField,
-                // TODO use translated records name here
-                //header: String.format(i18n._('Selected {0}'),
-                //    this.recordClass.getMeta('recordsName')),
-                header: i18n._('Records'),
-                dataIndex: this.labelField
-            };
-            if (this.labelRenderer != Ext.emptyFn) {
-                labelColumn.renderer = this.labelRenderer;
+        if (! this.colModel) {
+            if (!this.columns) {
+                var labelColumn = {
+                    id: this.labelField,
+                    // TODO use translated records name here
+                    //header: String.format(i18n._('Selected {0}'),
+                    //    this.recordClass.getMeta('recordsName')),
+                    header: i18n._('Records'),
+                    dataIndex: this.labelField
+                };
+                if (this.labelRenderer != Ext.emptyFn) {
+                    labelColumn.renderer = this.labelRenderer;
+                }
+                this.columns = [labelColumn];
             }
-            this.columns = [ labelColumn ];
+
+            this.colModel = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: false
+                },
+                columns: this.columns
+            });
         }
-        
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: false
-            },
-            columns: this.columns
-        });
+
+        return this.colModel;
     },
     
     /**

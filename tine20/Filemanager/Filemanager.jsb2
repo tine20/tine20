@@ -74,6 +74,10 @@
         {
           "text": "UsagePanel.js",
           "path": "js/"
+        },
+        {
+          "text": "GrantsPanel.js",
+          "path": "js/"
         }
       ]
     },

@@ -46,6 +46,17 @@ Ext.ux.grid.CheckColumn = function(config){
     if(!this.id){
         this.id = Ext.id();
     }
+    // this.addEvents(
+    //     /**
+    //      * @event beforecheck
+    //      * is fired when user clicks the checkbox
+    //      * return false to abort checking
+    //      * @param {Ext.ux.grid.CheckColumn}
+    //      * @param {record} row record
+    //      * @param {bool} current Value
+    //      */
+    //     'beforecheck'
+    // );
     this.renderer = this.renderer.createDelegate(this);
 };
 
@@ -63,7 +74,9 @@ Ext.ux.grid.CheckColumn.prototype ={
             e.stopEvent();
             var index = this.grid.getView().findRowIndex(t);
             var record = this.grid.store.getAt(index);
-            record.set(this.dataIndex, !record.data[this.dataIndex]);
+            // if (this.fireEvent('beforecheck', this, record, record.data[this.dataIndex]) !== false) {
+                record.set(this.dataIndex, !record.data[this.dataIndex]);
+            // }
         }
     },
 

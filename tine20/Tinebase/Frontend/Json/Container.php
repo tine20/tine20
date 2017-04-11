@@ -17,7 +17,6 @@
  */
 class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
 {
-
     /**
      * Search for Container matching given arguments
      *
@@ -190,6 +189,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @throws Tinebase_Exception_InvalidArgument
      * 
      * @todo think about resolving before converting to array
+     * TODO move to Tinebase_Model_Grants
      */
     public static function resolveAccounts($_grants)
     {

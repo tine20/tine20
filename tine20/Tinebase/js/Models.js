@@ -495,6 +495,8 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'contenttype', label: 'Content Type' }, // _('Content Type')
     { name: 'description', label: 'Description' }, // _('Description')
     { name: 'account_grants' },
+    { name: 'grants' },
+    { name: 'acl_node' },
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
 

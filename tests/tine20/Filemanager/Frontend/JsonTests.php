@@ -1569,11 +1569,59 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_assertGrantsInNode($file2Node);
     }
 
+    /**
+     * check if account grants are resolved correctly
+     *
+     * @param $nodeArray
+     */
     protected function _assertGrantsInNode($nodeArray)
     {
         self::assertEquals(2, count($nodeArray['grants']));
-        self::assertEquals(true, count($nodeArray['grants'][0]['adminGrant']));
+        self::assertTrue(is_array($nodeArray['grants'][0]['account_name']), 'account_name is not resolved');
         self::assertEquals(true, count($nodeArray['account_grants']['adminGrant']));
+    }
+
+    public function testSetNodeAcl()
+    {
+        $node = $this->testCreateContainerNodeInSharedFolder();
+        $node['grants'] = Tinebase_Model_Grants::getPersonalGrants(Tinebase_Core::getUser())->toArray();
+        $result = $this->_json->saveNode($node);
+
+        self::assertEquals(1, count($result['grants']), print_r($result['grants'], true));
+        self::assertEquals(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $result['grants'][0]['account_type']);
+
+        return $node;
+    }
+
+    public function testRemoveNodeAclTopLevel()
+    {
+        $node = $this->testSetNodeAcl();
+        $node['grants'] = null;
+        $result = $this->_json->saveNode($node);
+
+        self::assertEquals(1, count($result['grants']), 'it is not allowed to remove top level node grants - '
+            . print_r($result['grants'], true));
+    }
+
+    public function testRemoveNodeAclChildLevel()
+    {
+        $node = $this->testCreateContainerNodeInSharedFolder();
+        // create child folder node
+        $testPath = $node['path'] . '/child';
+        $child = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
+
+        $child['grants'] = Tinebase_Model_Grants::getPersonalGrants(Tinebase_Core::getUser())->toArray();
+        $child['acl_node'] = $child['id'];
+        $child = $this->_json->saveNode($child);
+
+        self::assertEquals(1, count($child['grants']), 'node should have only personal grants - '
+            . print_r($child['grants'], true));
+
+        $child['acl_node'] = null;
+        $childWithoutPersonalGrants = $this->_json->saveNode($child);
+
+        self::assertEquals(2, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
+            . print_r($childWithoutPersonalGrants['grants'], true));
     }
 
     public function testRecursiveFilter()
