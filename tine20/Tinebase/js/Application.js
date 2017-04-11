@@ -31,7 +31,8 @@ Tine.Tinebase.Application = function(config) {
 
     this.init();
     if (Tine.CoreData && Tine.CoreData.Manager) {
-        this.registerCoreData();
+        Tine.log.debug('Tine.Tinebase.Application - register core data for ' + this.appName)
+        this.registerCoreData.defer(500, this);
     }
     this.initAutoHooks();
     this.initRoutes();
