@@ -70,10 +70,6 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
-        if (!this.readOnly) {
-            Tine.Tinebase.uploadManager.on('update', this.onUpdate);
-        }
-
         if (this.readOnly) {
             this.hasContextMenu = false;
             this.enableDD = false;
@@ -628,7 +624,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             nodeRecord: newNodeRecord,
             account_grants: nodeData.account_grants,
             id: nodeData.id
-        })
+        });
 
         newNode.attributes.nodeRecord.beginEdit();
         newNode.attributes.nodeRecord.set('path', nodeData.path);
@@ -637,86 +633,6 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         newNode.parentNode = target;
         return newNode;
 
-    },
-
-    /**
-     * TODO: move to Upload class or elsewhere??
-     * updating fileRecord after creating node
-     *
-     * @param response
-     * @param request
-     * @param upload
-     */
-    onNodeCreated: function(response, request, upload) {
-
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
-        grid = app.getMainScreen().getCenterPanel();
-
-        var record = Ext.util.JSON.decode(response.responseText);
-
-        var fileRecord = upload.fileRecord;
-        fileRecord.beginEdit();
-        fileRecord.set('contenttype', record.contenttype);
-        fileRecord.set('created_by', Tine.Tinebase.registry.get('currentAccount'));
-        fileRecord.set('creation_time', record.creation_time);
-        fileRecord.set('revision', record.revision);
-        fileRecord.set('last_modified_by', record.last_modified_by);
-        fileRecord.set('last_modified_time', record.last_modified_time);
-        fileRecord.set('status', 'complete');
-        fileRecord.set('progress', 100);
-        fileRecord.set('name', record.name);
-        fileRecord.set('path', record.path);
-        fileRecord.commit(false);
-
-        upload.fireEvent('update', 'uploadfinished', upload, fileRecord);
-
-        grid.pagingToolbar.refresh.enable();
-
-    },
-
-    /**
-     * copies uploaded temporary file to target location
-     *
-     * @param upload    {Ext.ux.file.Upload}
-     * @param file  {Ext.ux.file.Upload.file}
-     */
-    onUploadComplete: function(upload, file) {
-        if (this.readOnly) {
-            return;
-        }
-
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
-            treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
-
-     // check if we are responsible for the upload
-        if (upload.fmDirector != treePanel) return;
-
-        // $filename, $type, $tempFileId, $forceOverwrite
-        Ext.Ajax.request({
-            timeout: 10*60*1000, // Overriding Ajax timeout - important!
-            params: {
-                method: 'Filemanager.createNode',
-                filename: upload.id,
-                type: 'file',
-                tempFileId: file.get('id'),
-                forceOverwrite: true
-            },
-            success: treePanel.onNodeCreated.createDelegate(this, [upload], true),
-            failure: treePanel.onNodeCreated.createDelegate(this, [upload], true)
-        });
-
-    },
-
-    /**
-     * on upload failure
-     *
-     * @private
-     */
-    onUploadFail: function () {
-        Ext.MessageBox.alert(
-            i18n._('Upload Failed'),
-            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator.')
-        ).setIcon(Ext.MessageBox.ERROR);
     },
 
     /**
@@ -760,41 +676,6 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
 
         Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);
 
-    },
-
-    /**
-     * upload update handler
-     *
-     * @param change {String} kind of change
-     * @param upload {Ext.ux.file.Upload} upload
-     * @param fileRecord {file} fileRecord
-     *
-     */
-    onUpdate: function(change, upload, fileRecord) {
-
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
-            grid = app.getMainScreen().getCenterPanel(),
-            treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-            rowsToUpdate = grid.getStore().query('name', fileRecord.get('name'));
-
-        if(change == 'uploadstart') {
-            Tine.Tinebase.uploadManager.onUploadStart();
-        }
-        else if(change == 'uploadfailure') {
-            treePanel.onUploadFail();
-        }
-
-        if(rowsToUpdate.get(0)) {
-            if(change == 'uploadcomplete') {
-                treePanel.onUploadComplete(upload, fileRecord);
-            }
-            else if(change == 'uploadfinished') {
-                rowsToUpdate.get(0).set('size', upload.fileSize);
-                rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));
-            }
-            rowsToUpdate.get(0).afterEdit();
-            rowsToUpdate.get(0).commit(false);
-        }
     },
 
     /**
