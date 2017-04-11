@@ -22,16 +22,10 @@ class Tinebase_FileSystemTest extends TestCase
      * @var Tinebase_FileSystem
      */
     protected $_controller;
-    
-    /**
-     * Backend
-     *
-     * @var Filemanager_Backend_Node
-     */
-    protected $_backend;
 
     protected $_oldModLog;
     protected $_oldIndexContent;
+    protected $_oldCreatePreview;
 
     protected $_rmDir = array();
 
@@ -54,6 +48,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_rmDir = array();
         $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        $this->_oldCreatePreview = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
 
         $this->_controller = new Tinebase_FileSystem();
         $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
@@ -72,7 +67,8 @@ class Tinebase_FileSystemTest extends TestCase
         $fsConfig = Tinebase_Core::getConfig()->get(Tinebase_Config::FILESYSTEM);
         $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
         $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = $this->_oldIndexContent;
-        Tinebase_Core::getConfig()->set(Tinebase_Config::FILESYSTEM, $fsConfig);
+        $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = $this->_oldCreatePreview;
+
         Tinebase_FileSystem::getInstance()->resetBackends();
 
         parent::tearDown();
@@ -136,7 +132,7 @@ class Tinebase_FileSystemTest extends TestCase
         $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
         
         $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FOLDER, $createdNode->type);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FOLDER, $createdNode->type);
         $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
         $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/PHPUNIT'));
     }
@@ -153,7 +149,7 @@ class Tinebase_FileSystemTest extends TestCase
         $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
         
         $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $createdNode->type);
         $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
         $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($sourcePath)));
     }
@@ -171,7 +167,7 @@ class Tinebase_FileSystemTest extends TestCase
         $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
         
         $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $createdNode->type);
         $this->assertEquals(basename($destinationPath), $createdNode->name);
         $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($destinationPath)));
     }
@@ -186,7 +182,7 @@ class Tinebase_FileSystemTest extends TestCase
         
         $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
 
-        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        $this->_controller->copy($sourcePath, $destinationPath);
     }
     
     public function testRename()
@@ -199,10 +195,10 @@ class Tinebase_FileSystemTest extends TestCase
     
         Tinebase_FileSystem::getInstance()->rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt');
     
-        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath)->name;
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scanDir($testPath)->name;
         $this->assertFalse(in_array('phpunit.txt', $nameOfChildren));
 
-        $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath2)->name;
+        $nameOfChildren = Tinebase_FileSystem::getInstance()->scanDir($testPath2)->name;
         $this->assertTrue(in_array('phpunit2.txt', $nameOfChildren));
     }
     
@@ -455,7 +451,8 @@ class Tinebase_FileSystemTest extends TestCase
     public function testGetFileSize()
     {
         $this->testCreateFile();
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $filesize = $this->_controller->filesize($this->_basePath . '/PHPUNIT/phpunit.txt');
         
         $this->assertEquals(7, $filesize);
@@ -467,7 +464,8 @@ class Tinebase_FileSystemTest extends TestCase
     public function testGetContentType()
     {
         $this->testCreateFile();
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $contentType = $this->_controller->getContentType($this->_basePath . '/PHPUNIT/phpunit.txt');
         
         // finfo_open() for content type detection is only available in php versions >= 5.3.0'
@@ -492,14 +490,15 @@ class Tinebase_FileSystemTest extends TestCase
         $this->testCreateFile();
         
         $node = $this->_controller->stat($this->_basePath . '/PHPUNIT/phpunit.txt');
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $etag = $this->_controller->getETag($this->_basePath . '/PHPUNIT/phpunit.txt');
         
         $this->assertEquals($node->hash, $etag);
     }
     
     /**
-     * @return Filemanager_Model_Directory
+     * @return Tinebase_Model_Tree_Node
      */
     public static function getTestRecord()
     {
@@ -552,8 +551,9 @@ class Tinebase_FileSystemTest extends TestCase
     }
 
     /**
-     * @param $node
-     * @param $parentPath
+     * @param Tinebase_Model_Tree_Node $node
+     * @param string $parentPath
+     * @param string $persona
      * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _testNodeAcl($node, $parentPath, $persona = 'sclever')
@@ -563,6 +563,7 @@ class Tinebase_FileSystemTest extends TestCase
             'unittest user should not have access to ' . $node->name . ' node');
 
         // try sclever
+        /** @noinspection PhpUndefinedMethodInspection */
         self::assertTrue($this->_personas[$persona]->hasGrant($node, Tinebase_Model_Grants::GRANT_READ),
             $persona . ' user should have access to ' . $node->name . ' node');
 
@@ -635,7 +636,7 @@ class Tinebase_FileSystemTest extends TestCase
         // check acl in third child
         // remove acl from middle child
         // check acl in third child again
-        list($node, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
+        list(, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
 
         $this->_controller->removeAclFromNode($middleChildNode);
@@ -651,7 +652,7 @@ class Tinebase_FileSystemTest extends TestCase
      */
     public function testMoveNodeAclUpdate()
     {
-        list($node, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
+        list(, $middleChildNode, $childChildNode) = $this->testMakeExistingNodeAclNode();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
 
         // create folder for sclever and move middlechild there
@@ -665,6 +666,28 @@ class Tinebase_FileSystemTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         $middleChildNodePath = $path . '/test/sub';
         $this->_testNodeAcl($childChildNode, $middleChildNodePath);
+    }
+
+    public function testPreviewImageGeneration()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = true;
+        $previewController = Tinebase_FileSystem_Previews::getInstance();
+        try {
+            $oldService = $previewController->setPreviewService(new Tinebase_FileSystem_TestPreviewService());
+
+            $path = $this->testCreateFile('test.pdf');
+            $fileNode = $this->_controller->stat($path);
+
+            static::assertEquals(3, $fileNode->preview_count, 'preview count wrong');
+
+            $previewController->getPreviewForNode($fileNode, 'thumbnail', 0);
+            $previewController->getPreviewForNode($fileNode, 'previews', 0);
+            $previewController->getPreviewForNode($fileNode, 'previews', 1);
+            $previewController->getPreviewForNode($fileNode, 'previews', 2);
+
+        } finally {
+            $previewController->setPreviewService($oldService);
+        }
     }
 
     /**

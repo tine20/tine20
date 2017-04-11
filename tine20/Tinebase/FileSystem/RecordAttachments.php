@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -35,7 +35,7 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * the constructor
      */
-    public function __construct() 
+    protected function __construct()
     {
         $this->_fsController  = Tinebase_FileSystem::getInstance();
     }

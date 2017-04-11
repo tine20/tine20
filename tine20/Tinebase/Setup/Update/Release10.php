@@ -998,4 +998,28 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.22');
     }
+
+    /**
+     * update to 10.23
+     *
+     * add preview_count column to tree_filerevisions
+     */
+    public function update_22()
+    {
+        if (! $this->_backend->columnExists('preview_count', 'tree_filerevisions')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>preview_count</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>');
+            $this->_backend->addCol('tree_filerevisions', $declaration);
+            $this->setTableVersion('tree_filerevisions', 2);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.23');
+    }
+
+
 }

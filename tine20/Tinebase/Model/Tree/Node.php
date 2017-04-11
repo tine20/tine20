@@ -30,19 +30,10 @@
  * @property    string             description
  * @property    string             acl_node
  * @property    string             revisionProps
+ * @property    string             preview_count
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
-    /**
-     * type for personal containers
-     */
-    const TYPE_FILE = 'file';
-    
-    /**
-     * type for personal containers
-     */
-    const TYPE_FOLDER = 'folder';
-
     const XPROPS_REVISION = 'revisionProps';
     const XPROPS_REVISION_ON = 'keep';
     const XPROPS_REVISION_NUM = 'keepNum';
@@ -122,7 +113,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         // fields from filemanager_objects table (ro)
         'type'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
-            array('InArray', array(self::TYPE_FILE, self::TYPE_FOLDER)),
+            array('InArray', array(Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, Tinebase_Model_Tree_FileObject::TYPE_PREVIEW)),
         ),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -132,6 +123,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

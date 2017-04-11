@@ -1223,7 +1223,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $nodeController = Tinebase_Core::getApplicationInstance($appName . '_Model_Node');
         $emlNode = $nodeController->search($filter)->getFirstRecord();
         $this->assertTrue($emlNode !== null, 'could not find eml file node');
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $emlNode->type);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
         $this->assertEquals('message/rfc822', $emlNode->contenttype);
         $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
 

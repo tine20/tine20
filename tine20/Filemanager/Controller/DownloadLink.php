@@ -217,8 +217,8 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             
             $files->addRecord($parent);
         }
-        $files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FOLDER)->sort('name'));
-        $files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE)->sort('name'));
+        $files->merge($children->filter('type', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->sort('name'));
+        $files->merge($children->filter('type', Tinebase_Model_Tree_FileObject::TYPE_FILE)->sort('name'));
         
         return $files;
     }

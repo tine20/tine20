@@ -640,7 +640,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $filesystem = Tinebase_FileSystem::getInstance();
 
         // create two folders
-        $fmController->createNodes(array($testPath, $testPath . '/subfolder'), Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        $fmController->createNodes(array($testPath, $testPath . '/subfolder'), Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath))->statpath);
         // move subfolder to new name
         /*$newSubFolderNode = */$fmController->moveNodes(array($testPath . '/subfolder'), array($testPath . '/newsubfolder'))->getFirstRecord();

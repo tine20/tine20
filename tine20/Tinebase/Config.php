@@ -506,6 +506,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
     const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
     const FILESYSTEM_INDEX_CONTENT = 'index_content';
+    const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
+    const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
 
     /**
      * (non-PHPdoc)
@@ -1440,6 +1442,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => FALSE,
+                ),
+                self::FILESYSTEM_CREATE_PREVIEWS => array(
+                    //_('Filesystem create previews')
+                    'label'                 => 'Filesystem create previews',
+                    //_('Filesystem create previews.')
+                    'description'           => 'Filesystem create previews.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+                self::FILESYSTEM_PREVIEW_SERVICE_URL => array(
+                    //_('URL of preview service')
+                    'label'                 => 'URL of preview service',
+                    //_('URL of preview service.')
+                    'description'           => 'URL of preview service.',
+                    'type'                  => 'string',
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => NULL,
                 ),
             ),
             'default'               => array(),

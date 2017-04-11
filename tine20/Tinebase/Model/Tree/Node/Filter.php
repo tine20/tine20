@@ -142,7 +142,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
             ), array(
                 'field'     => 'type',
                 'operator'  => 'equals',
-                'value'     => Tinebase_Model_Tree_Node::TYPE_FOLDER
+                'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
             )
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
     }

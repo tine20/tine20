@@ -107,7 +107,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' .
                 $this->_db->quoteIdentifier('tree_filerevisions.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier('tree_fileobjects.revision')),
-                /* select */ array('hash', 'size')
+                /* select */ array('hash', 'size', 'preview_count')
             )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
@@ -128,6 +128,9 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     {
         $this->_writeModLog($_newRecord, null);
         Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
+
+        /** @var Tinebase_Model_Tree_Node $_newRecord */
+        $this->_inspectForPreviewCreation($_newRecord);
     }
 
     /**
@@ -149,6 +152,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             }
         }
 
+        /** @var Tinebase_Model_Tree_Node $newRecord */
+        /** @var Tinebase_Model_Tree_Node $oldRecord */
+        $this->_inspectForPreviewCreation($newRecord, $newRecord);
+
         return $newRecord;
     }
 
@@ -164,6 +171,30 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         if ($currentMods->count() > 0) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
         }
+
+        /** @var Tinebase_Model_Tree_Node $_newRecord */
+        /** @var Tinebase_Model_Tree_Node $_oldRecord */
+        $this->_inspectForPreviewCreation($_newRecord, $_oldRecord);
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_newRecord
+     * @param Tinebase_Model_Tree_Node|null $_oldRecord
+     */
+    protected function _inspectForPreviewCreation(Tinebase_Model_Tree_Node $_newRecord, Tinebase_Model_Tree_Node $_oldRecord = null)
+    {
+        if (true !== Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}
+                || ($_oldRecord !== null && $_oldRecord->hash === $_newRecord->hash) || (int)$_newRecord->revision < 1 ||
+                empty($_newRecord->hash) || Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_newRecord->type) {
+            return;
+        }
+
+        $fileExtension = pathinfo($_newRecord->name, PATHINFO_EXTENSION);
+        if (false === Tinebase_FileSystem_Previews::getInstance()->isSupportedFileExtension($fileExtension)) {
+            return;
+        }
+
+        Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
     }
     
     /**
@@ -271,7 +302,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $ids = array();
         /** @var Tinebase_Model_Tree_Node $node */
         foreach($_nodes as $node) {
-            if (Tinebase_Model_Tree_Node::TYPE_FOLDER === $node->type) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                 $_result->addRecord($node);
             }
             if (!empty($node->parent_id)) {

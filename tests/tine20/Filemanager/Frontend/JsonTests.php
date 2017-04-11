@@ -405,7 +405,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testCreateContainerNodeInPersonalFolder($containerName = 'testcontainer')
     {
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $containerName;
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
         
         $this->assertTrue(isset($createdNode['name']));
@@ -425,7 +425,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
     }
 
     /**
@@ -437,7 +437,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testCreateContainerNodeInSharedFolder($_name = 'testcontainer')
     {
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $_name;
-        $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
+        $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, NULL, FALSE);
         $createdNode = $result;
         
         $this->assertEquals($_name, $createdNode['name']);
@@ -472,13 +472,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
             }
         }
 
-        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFileIds, FALSE);
+        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, FALSE);
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
         $this->assertEquals('file2', $result[1]['name']);
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[1]['type']);
         
         return $filepaths;
     }
@@ -517,12 +517,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
         
         $testPaths = array($personalContainerNode['path'] . '/ütest.eml', $personalContainerNode['path'] . '/Безимени.txt');
-        $result = $this->_json->createNodes($testPaths, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+        $result = $this->_json->createNodes($testPaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), FALSE);
     
         $this->assertEquals(2, count($result));
         $this->assertEquals('ütest.eml', $result[0]['name']);
         $this->assertEquals('Безимени.txt', $result[1]['name']);
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
         
         return $result[0];
     }
@@ -540,11 +540,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $filepath = $sharedContainerNode['path'] . '/test.txt';
         // create empty file first (like the js frontend does)
-        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), FALSE);
 
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/test.txt');
-        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), TRUE);
+        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFile->getId(), TRUE);
         
         $this->assertEquals('text/plain', $result['contenttype'], print_r($result, TRUE));
         $this->assertEquals(17, $result['size']);
@@ -585,7 +585,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $sharedContainerNode['path'] . '/dir1',
             $sharedContainerNode['path'] . '/dir2',
         );
-        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('dir1', $result[0]['name']);
@@ -598,7 +598,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array('sort' => 'creation_time'));
         $this->assertEquals(2, $result['totalcount']);
@@ -621,7 +621,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $personalContainerNode['path'] . '/dir1',
             $personalContainerNode['path'] . '/dir2',
         );
-        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('dir1', $result[0]['name']);
@@ -634,7 +634,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array('sort' => 'contenttype'));
         $this->assertEquals(2, $result['totalcount']);
@@ -766,7 +766,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FILE,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FILE,
         ));
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(2, $result['totalcount']);
@@ -838,7 +838,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         ));
 
         $result = $this->_json->searchNodes($filter, array());
@@ -877,7 +877,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer2';
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
 
         try {
@@ -927,7 +927,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array());
         foreach ($result['results'] as $node) {
@@ -955,7 +955,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(2, $result['totalcount']);
@@ -982,7 +982,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), array(
             'field'    => 'type', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node::TYPE_FILE,
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FILE,
         ));
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(0, $result['totalcount']);
@@ -1266,7 +1266,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $tempFileBackend = new Tinebase_TempFile();
         
         foreach($fixtures as $path) {
-            $node = $this->_json->createNode($path[0], Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
+            $node = $this->_json->createNode($path[0], Tinebase_Model_Tree_FileObject::TYPE_FOLDER, NULL, FALSE);
             
             $this->assertEquals(str_replace('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/', '', $path[0]), $node['name']);
             $this->assertEquals($path[0], $node['path']);
@@ -1275,9 +1275,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
     
             $filepath = $node['path'] . '/' . $path[1];
             // create empty file first (like the js frontend does)
-            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), FALSE);
             $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/' . $path[1]);
-            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), TRUE);
+            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFile->getId(), TRUE);
         }
         
         $filter = array(
@@ -1547,12 +1547,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getDownloadLinkData($nodeType = Tinebase_Model_Tree_Node::TYPE_FILE)
+    protected function _getDownloadLinkData($nodeType = Tinebase_Model_Tree_FileObject::TYPE_FILE)
     {
         // create node first
-        if ($nodeType === Tinebase_Model_Tree_Node::TYPE_FILE) {
+        if ($nodeType === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
             $node = $this->testCreateFileNodeWithTempfile();
-        } else if ($nodeType === Tinebase_Model_Tree_Node::TYPE_FOLDER) {
+        } else if ($nodeType === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             $node = $this->testCreateContainerNodeInPersonalFolder();
         } else {
             throw new Tinebase_Exception_InvalidArgument('only file and folder nodes are supported');
@@ -1684,7 +1684,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testCreateContainerNodeInSharedFolder();
         // create child folder node
         $testPath = $node['path'] . '/child';
-        $child = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
+        $child = $this->_json->createNode($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, NULL, FALSE);
 
         $child['grants'] = Tinebase_Model_Grants::getPersonalGrants(Tinebase_Core::getUser())->toArray();
         $child['acl_node'] = $child['id'];
@@ -1785,8 +1785,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $this->testCreateDirectoryNodesInPersonal();
         $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
-        $this->_json->createNodes(array($path . '/dir1/subdir11', $path . '/dir1/subdir12'), Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
-        $this->_json->createNodes(array($path . '/dir2/subdir21', $path . '/dir2/subdir22'), Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $this->_json->createNodes(array($path . '/dir1/subdir11', $path . '/dir1/subdir12'), Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
+        $this->_json->createNodes(array($path . '/dir2/subdir21', $path . '/dir2/subdir22'), Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
 
 
         // NONE of them have revision properties
