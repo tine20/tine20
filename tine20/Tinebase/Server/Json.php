@@ -238,8 +238,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected static function _getServer($classes = null)
     {
-        // setup cache if available
-        if (is_array($classes) && Tinebase_Core::getCache()) {
+        // setup cache if available and we are in production mode
+        if (
+            is_array($classes)
+            && Tinebase_Core::getCache()
+            && defined('TINE20_BUILDTYPE')
+            && TINE20_BUILDTYPE !== 'DEVELOPMENT'
+        ) {
             $masterFiles = array();
             
             $dirname = dirname(__FILE__) . '/../../';
@@ -260,7 +265,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
                     (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon'));
-                
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " Get server from cache");
+
                 $server = $cache->load($cacheId);
                 if ($server instanceof Zend_Json_Server) {
                     return $server;
