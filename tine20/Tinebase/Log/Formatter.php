@@ -41,7 +41,14 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * @var boolean
      */
     protected static $_logruntime = NULL;
-    
+
+    /**
+     * should log output be colorized (depending on loglevel)
+     *
+     * @var boolean
+     */
+    protected static $_colorize = false;
+
     /**
      * session id
      * 
@@ -113,6 +120,9 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             } else {
                 self::$_logdifftime = false;
             }
+            if ($config->logger->colorize) {
+                self::$_colorize = $config->logger->colorize;
+            }
         }
     }
     
@@ -152,9 +162,49 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             }
         }
         
-        return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $output;
+        return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $this->_getFormattedOutput($output, $event);
     }
-    
+
+    protected function _getFormattedOutput($output, array $event)
+    {
+        if (self::$_colorize) {
+            $color = $this->_getColorByPrio($event['priority']);
+            $output = "\e[1m\e[$color" . $output . "\e[0m";
+        }
+
+        return $output;
+    }
+
+    protected function _getColorByPrio($logPrio)
+    {
+        switch ($logPrio) {
+            case 0:
+            case 1:
+            case 2:
+                $color = "31m"; // red
+                break;
+            case 3:
+                $color = "35m"; // magenta
+                break;
+            case 4:
+                $color = "33m"; // yellow
+                break;
+            case 5:
+                $color = "36m"; // cyan
+                break;
+            case 6:
+                $color = "32m"; // green
+                break;
+            case 8:
+                $color = "34m"; // blue
+                break;
+            default:
+                $color = "37m"; // white
+        }
+
+        return $color;
+    }
+
     /**
      * get current prefix
      * 
@@ -180,8 +230,15 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
                     : (isset($user->accountDisplayName) ? $user->accountDisplayName : NULL)) 
                 : NULL;
         }
-        
-        return (self::$_username) ? self::$_username : '-- none --';
+
+        $result = (self::$_username) ? self::$_username : '-- none --';
+
+        if (self::$_colorize) {
+            // TODO use different background here?
+            $result = "\e[1m\e[32m" . $result . "\e[0m";
+        }
+
+        return $result;
     }
 
     /**
@@ -194,7 +251,6 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         self::$_username = NULL;
     }
 
-    
     /**
      * set/append prefix
      * 
@@ -208,5 +264,17 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         }
         
         self::$_prefix = $prefix;
+    }
+
+    /**
+     * @param array $options
+     *
+     * TODO allow to set more options
+     */
+    public function setOptions(array $options)
+    {
+        if (isset($options['colorize'])) {
+            self::$_colorize = $options['colorize'];
+        }
     }
 }
