@@ -190,24 +190,29 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         var me = this;
 
         this.action_add = new Ext.Action(this.getAddAction());
-        this.action_add_from_filemanager = new Ext.Action({
-            text: String.format(i18n._('Add {0} from Filemanager'), this.i18nFileString),
-            iconCls: 'action_add',
-            scope: this,
-            handler: function () {
-                var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                    title: this.app.i18n._('Select a file'),
-                    singleSelect: true,
-                    constraint: 'file'
-                });
 
-                filePickerDialog.openWindow();
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            var filemanager = Tine.Tinebase.appMgr.get('Filemanager');
 
-                filePickerDialog.on('selected', function(node) {
-                    me.onFileSelectFromFilemanager.call(me, node);
-                });
-            }
-        });
+            this.action_add_from_filemanager = new Ext.Action({
+                text: String.format(filemanager.i18n._('Add {0} from Filemanager'), this.i18nFileString),
+                iconCls: 'action_add',
+                scope: this,
+                handler: function () {
+                    var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                        title: filemanager.i18n._('Select a file'),
+                        singleSelect: true,
+                        constraint: 'file'
+                    });
+
+                    filePickerDialog.openWindow();
+
+                    filePickerDialog.on('selected', function(node) {
+                        me.onFileSelectFromFilemanager.call(me, node);
+                    });
+                }
+            });
+        }
 
         this.action_remove = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.i18nFileString),
@@ -234,10 +239,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         
         this.tbar = [
-            this.action_add,
-            this.action_add_from_filemanager,
-            this.action_remove
+            this.action_add
         ];
+
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.tbar.push(this.action_add_from_filemanager)
+        }
+
+        this.tbar.push(this.action_remove);
         
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{

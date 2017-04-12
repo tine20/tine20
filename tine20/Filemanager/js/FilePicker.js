@@ -106,6 +106,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 border: false,
                 split: true,
                 collapsible: true,
+                header: false,
                 collapseMode: 'mini',
                 items: [
                     this.treePanel
