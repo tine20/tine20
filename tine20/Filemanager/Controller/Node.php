@@ -271,8 +271,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Model_Tree_Node $fileNode */
         foreach($result as $fileNode) {
             if (!isset($parents[$fileNode->parent_id])) {
-                $parents[$fileNode->parent_id] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath(
-                    $this->_backend->getPathOfNode($this->_backend->get($fileNode->parent_id), true), $app);
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($this->_backend->get($fileNode->parent_id), true));
+                $parents[$fileNode->parent_id] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($path, $app);
             }
 
             $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
@@ -670,7 +670,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $node = NULL;
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                if (null === $_tempFileId) {
+                    $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)), basename($_statpath));
+                } else {
+                    $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                }
                 break;
 
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:

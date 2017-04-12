@@ -126,7 +126,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     public static function createFromStatPath($statPath, $appName = null)
     {
-        $statPath = preg_replace('@^/@', '', $statPath);
+        $statPath = trim($statPath, '/');
         $pathParts = explode('/', $statPath);
         if ($appName !== null) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
@@ -189,7 +189,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     public static function removeAppIdFromPath($_flatpath, $_application)
     {
         $appId = (is_string($_application)) ? Tinebase_Application::getInstance()->getApplicationById($_application)->getId() : $_application->getId();
-        return preg_replace('@^/' . $appId . '/folders@', '', $_flatpath);
+        return preg_replace('@^/' . $appId . '/' . self::FOLDERS_PART . '@', '', $_flatpath);
     }
     
     /**

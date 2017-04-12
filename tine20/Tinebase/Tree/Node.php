@@ -256,7 +256,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
-     * returns all directory nodes up to the root
+     * returns all directory nodes up to the root(s), ignores ACL!
      *
      * @param Tinebase_Record_RecordSet $_nodes
      * @param Tinebase_Record_RecordSet $_result

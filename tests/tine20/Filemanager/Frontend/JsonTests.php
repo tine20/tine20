@@ -354,16 +354,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     /**
      * create container in shared folder
-     * 
+     *
+     * @param string $_name
      * @return array created node
      */
-    public function testCreateContainerNodeInSharedFolder()
+    public function testCreateContainerNodeInSharedFolder($_name = 'testcontainer')
     {
-        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/testcontainer';
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $_name;
         $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
         $createdNode = $result;
         
-        $this->assertEquals('testcontainer', $createdNode['name']);
+        $this->assertEquals($_name, $createdNode['name']);
         $this->assertEquals($testPath, $createdNode['path']);
         
         return $createdNode;
@@ -371,10 +372,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     /**
      * testCreateFileNodes
-     * 
+     *
+     * @param bool $_addData
      * @return array file paths
      */
-    public function testCreateFileNodes()
+    public function testCreateFileNodes($_addData = false)
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
@@ -384,7 +386,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $sharedContainerNode['path'] . '/file1',
             $sharedContainerNode['path'] . '/file2',
         );
-        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+
+        $tempFileIds = array();
+        if (true === $_addData) {
+            for ($i = 0; $i < 2; ++$i) {
+                $tempPath = Tinebase_TempFile::getTempPath();
+                $tempFileIds[] = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+                file_put_contents($tempPath, 'someData');
+            }
+        }
+
+        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFileIds, FALSE);
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
@@ -393,6 +405,27 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
         
         return $filepaths;
+    }
+
+    public function testMoveFileNode()
+    {
+        $filePaths = $this->testCreateFileNodes(true);
+        $secondFolderNode = $this->testCreateContainerNodeInSharedFolder('fooContainer');
+
+        $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
+        $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
+
+        $parentFolder = $this->_fsController->stat(dirname($file0Path));
+        static::assertEquals(16, $parentFolder->size, 'two files with 8 bytes each created, excpected 16 bytes folder size');
+        static::assertEquals(0, $secondFolderNode['size'], 'expect new folder to be empty');
+
+        $this->_json->moveNodes($file0Path, $targetPath, false);
+
+        $parentFolder = $this->_fsController->stat(dirname($file0Path));
+        static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
+        $secondFolderNode = $this->_fsController->stat($targetPath);
+        static::assertEquals(8, $secondFolderNode->size, 'one file with 8 bytes expected');
+
     }
 
     /**
@@ -458,7 +491,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // check if tempfile has been created in tine20 tempdir
         $filecountInTmpAfter = count(scandir($tmp));
         
-        $this->assertEquals($filecountInTmpBefore + 2, $filecountInTmpAfter, '2 tempfiles should have been created');
+        $this->assertEquals($filecountInTmpBefore + 1, $filecountInTmpAfter, '1 tempfiles should have been created');
     }
 
     /**
@@ -939,11 +972,21 @@ class Filemanager_Frontend_JsonTests extends TestCase
     /**
      * testDeleteFileNodes
      */
-    public function testDeleteFileNodes()
+    public function testDeleteFileNodes($_addData = false)
     {
-        $filepaths = $this->testCreateFileNodes();
+        $filepaths = $this->testCreateFileNodes($_addData);
+
+        if (true === $_addData) {
+            $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
+            static::assertEquals(16, $parentFolder->size, 'two files with 8 bytes each created, excpected 16 bytes folder size');
+        }
         
-        $result = $this->_json->deleteNodes($filepaths);
+        $this->_json->deleteNodes($filepaths);
+
+        if (true === $_addData) {
+            $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
+            static::assertEquals(0, $parentFolder->size, 'after deletion expected 0 byte folder size');
+        }
 
         // check if node is deleted
         try {
@@ -1187,11 +1230,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
+        $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
         $this->tearDown();
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $this->testDeleteFileNodes();
+        $this->testDeleteFileNodes(true);
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
     }
@@ -1572,7 +1615,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files: ' . print_r($result, true));
         foreach($result['results'] as $result) {
-            $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true));
+            $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true) . print_r($paths, true));
         }
     }
 

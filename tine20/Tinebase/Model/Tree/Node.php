@@ -183,7 +183,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public function runConvertToData()
     {
         if(isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
-            $this->_properties[self::XPROPS_REVISION] = json_encode($this->_properties[self::XPROPS_REVISION]);
+            if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
+                $this->_properties[self::XPROPS_REVISION] = json_encode($this->_properties[self::XPROPS_REVISION]);
+            } else {
+                $this->_properties[self::XPROPS_REVISION] = null;
+            }
         }
         parent::runConvertToData();
     }
