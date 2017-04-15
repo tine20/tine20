@@ -34,6 +34,7 @@ class Filemanager_ControllerTests extends TestCase
         // create user
         $pw = Tinebase_Record_Abstract::generateUID();
         $user = Admin_Controller_User::getInstance()->create($this->getTestUser(), $pw, $pw);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
 
         // check if personal folder exists
         $personalFolderPath = $this->_getPersonalPath($user);
