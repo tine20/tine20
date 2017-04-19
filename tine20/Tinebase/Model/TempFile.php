@@ -16,6 +16,11 @@
  * @subpackage  Record
  * @property    string  name
  * @property    string  path
+ * @property    string  id
+ * @property    string  session_id
+ * @property    int     size
+ * @property    string  type
+ * @property    string  time
  */
 class Tinebase_Model_TempFile extends Tinebase_Record_Abstract 
 {

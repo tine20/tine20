@@ -115,6 +115,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 layout: 'fit',
                 split: true,
                 frame: false,
+                border: false,
                 region: 'center',
                 width: 300,
                 items: [
@@ -189,6 +190,8 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             app: me.app,
             height: 200,
             width: 200,
+            border: false,
+            frame: false,
             readOnly: true,
             enableDD: false,
             enableDrag: false,
@@ -204,6 +207,9 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             var record = selModel.getSelections();
             me.updateSelection(record);
         });
+
+        // Hide filter toolbar
+        gridPanel.filterToolbar.hide();
 
         return gridPanel;
     },

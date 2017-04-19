@@ -143,6 +143,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
+
     /**
      * init buttons
      */
@@ -993,7 +994,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.attachmentGrid.store.each(function(attachment) {
-            this.record.data.attachments.push(Ext.ux.file.Upload.file.getFileData(attachment));
+            var fileData = Ext.copyTo({}, attachment.data, ['tempFile', 'name', 'path', 'size', 'type', 'id', 'attachment_type', 'password']);
+            this.record.data.attachments.push(fileData);
         }, this);
         
         var accountId = this.accountCombo.getValue(),
@@ -1015,7 +1017,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initAttachmentGrid: function() {
         if (! this.attachmentGrid) {
-            this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
+            this.attachmentGrid = new Tine.Felamimail.AttachmentUploadGrid({
                 fieldLabel: this.app.i18n._('Attachments'),
                 hideLabel: true,
                 filesProperty: 'attachments',
@@ -1053,7 +1055,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var aliasAccount = null,
             aliases = null,
-            id = null
+            id = null;
             
         accountStore.each(function(account) {
             aliases = [ account.get('email') ];
@@ -1267,10 +1269,33 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * TODO add note editing textfield here
      */
-    onApplyChanges: function(closeWindow, emptySubject) {
+    onApplyChanges: function(closeWindow, emptySubject, passwordSet) {
+        var me = this;
+
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
         
         this.loadMask.show();
+
+        // If filemanager attachments are possible check if passwords are required to enter
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && passwordSet !== true) {
+            var attachmentStore = this.attachmentGrid.getStore();
+
+            if (attachmentStore.find('attachment_type', 'download_protected_fm') !== -1) {
+                var dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog();
+                dialog.openWindow();
+
+                dialog.on('passwordEntered', function (password) {
+                    attachmentStore.each(function (attachment) {
+                        if (attachment.get('attachment_type') === 'download_protected_fm') {
+                            attachment.data.password = password;
+                        }
+                    });
+
+                    me.onApplyChanges(closeWindow, emptySubject, true);
+                });
+                return;
+            }
+        }
 
         if (! emptySubject && this.getForm().findField('subject').getValue() == '') {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
@@ -1280,37 +1305,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 function (button) {
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - button: ' + button);
                     if (button == 'yes') {
-                        this.onApplyChanges(closeWindow, true);
+                        this.onApplyChanges(closeWindow, true, true);
                     } else {
                         this.loadMask.hide();
                     }
                 },
                 this
-            )
+            );
+            
             return;
         }
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - call parent');
         this.doApplyChanges(closeWindow);
-
-        /*
-        if (this.record.data.note) {
-            // show message box with note editing textfield
-            //console.log(this.record.data.note);
-            Ext.Msg.prompt(
-                this.app.i18n._('Add Note'),
-                this.app.i18n._('Edit Email Note Text:'), 
-                function(btn, text) {
-                    if (btn == 'ok'){
-                        record.data.note = text;
-                    }
-                }, 
-                this,
-                100, // height of input area
-                this.record.data.body 
-            );
-        }
-        */
     },
     
     /**
@@ -1318,7 +1325,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Boolean}
      */
-        validateRecipients: function() {
+    validateRecipients: function() {
         var me = this;
         return new Promise(function (fulfill, reject) {
             var to = me.record.get('to'),

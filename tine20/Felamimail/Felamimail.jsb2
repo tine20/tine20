@@ -18,6 +18,9 @@
         {
           "text": "GridPanelHook.js",
           "path": "js/"
+        }, {
+          "text": "AttachmentUploadGrid.js",
+          "path": "js/"
         },
         {
           "text": "FolderStore.js",

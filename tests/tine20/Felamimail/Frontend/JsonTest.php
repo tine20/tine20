@@ -1072,10 +1072,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $subject = 'attachment test';
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
         $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
-        $messageToSend['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        $tempFile = $this->_createTempFile($tempfileName);
+        $messageToSend['attachments'] = array(
+            array('tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type))
+        );
         $this->_json->saveMessage($messageToSend);
         $forwardMessage = $this->_searchForMessageBySubject($subject);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -2100,5 +2100,184 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $complete = $this->_json->getMessage($message['id']);
         $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
         $this->assertEquals('"Tine 2.0 Admin Account" <noreply@tine20.org>', $complete['headers']['reply-to']);
+    }
+
+    /**
+     * Its possible to choice the kind of attachment when adding it.
+     *
+     * type = tempfile: uploaded from harddisk, supposed to be a regular attachment
+     *
+     * @see 0012950: More attachment methods for mail
+     */
+    public function testAttachmentMethodAttachment()
+    {
+        $message = $this->_testAttachmentType('tempfile');
+
+        self::assertTrue(isset($message['attachments']), 'no attachment set: ' . print_r($message, true));
+        self::assertEquals(1, count($message['attachments']), 'no attachment set: ' . print_r($message, true));
+        self::assertEquals('foobar1.txt', $message['attachments'][0]['filename']);
+        self::assertEquals(16, $message['attachments'][0]['size']);
+    }
+
+    /**
+     * Its possible to choice the kind of attachment when adding it.
+     *
+     * type = download_public: uploaded from harddisk, supposed to be a public download link
+     *
+     * @see 0012950: More attachment methods for mail
+     */
+    public function testAttachmentMethodPublicDownloadLinkUpload()
+    {
+        $message = $this->_testAttachmentType('download_public');
+
+        self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+    }
+
+    /**
+     * Its possible to choice the kind of attachment when adding it.
+     *
+     * type = download_public_fm: chosen from fm, supposed to be a public download link
+     *
+     * @see 0012950: More attachment methods for mail
+     */
+    public function testAttachmentMethodPublicDownloadLinkFromFilemanager()
+    {
+        $message = $this->_testAttachmentType('download_public_fm');
+
+        self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+    }
+
+    /**
+     * Its possible to choice the kind of attachment when adding it.
+     *
+     * type = download_protected: uploaded from harddisk, supposed to be a protected download link
+     *
+     * @see 0012950: More attachment methods for mail
+     */
+    public function testAttachmentMethodProtectedDownloadLink()
+    {
+        $message = $this->_testAttachmentType('download_protected');
+
+        self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
+        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+
+        // download link id is at the end of message body
+        $downloadLinkId = trim(substr($message['body'], -46, 40));
+        $dl = Filemanager_Controller_DownloadLink::getInstance()->get($downloadLinkId);
+        self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
+    }
+
+    /**
+     * Its possible to choice the kind of attachment when adding it.
+     *
+     * type = filenode: chosen from fm, thats why type -> file, but the filemanager file is supposed to be used as a regular attachment
+     *
+     * @see 0012950: More attachment methods for mail
+     */
+    public function testAttachmentMethodFilemanagerNode()
+    {
+        $message = $this->_testAttachmentType('filenode');
+
+        self::assertTrue(isset($message['attachments']), 'no attachment set: ' . print_r($message, true));
+        self::assertEquals(1, count($message['attachments']), 'no attachment set: ' . print_r($message, true));
+        self::assertEquals('test.txt', $message['attachments'][0]['filename']);
+        self::assertEquals(16, $message['attachments'][0]['size']);
+    }
+
+    /**
+     * @param $type
+     * @return array
+     *
+     * @throws Filemanager_Exception_NodeExists
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _testAttachmentType($type)
+    {
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        $tempfile = $this->_createTempFile('foobar1.txt');
+
+        if (in_array($type, array('tempfile', 'download_public', 'download_protected'))) {
+            // attach uploaded tempfile
+            $attachment = array(
+                'tempFile' => $tempfile->toArray(),
+                'name' => 'foobar1.txt',
+                'size' => $tempfile->size,
+                'type' => 'text/plain',
+                'id' => 'eeabe57fd3712a9fe27a34df07cb44cab9e9afb3',
+                'attachment_type' => $type,
+            );
+
+        } elseif (in_array($type, array('filenode', 'download_public_fm', 'download_protected_fm'))) {
+            // attach existing file from filemanager
+            $nodeController = Filemanager_Controller_Node::getInstance();
+            $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+            $result = $nodeController->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
+            $personalNode = $result[0];
+            $filepath = $personalNode->path . '/test.txt';
+
+            // create empty file first (like the js frontend does)
+            $nodeController->createNodes($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), FALSE);
+            $fmFile = $nodeController->createNodes(
+                $filepath,
+                Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                (array)$tempfile->getId(), TRUE
+            )->getFirstRecord();
+
+            $attachment = [ // chosen from fm, thats why type -> file, but the filemanager file is supposed to be used as a regular attachment
+                'name' => $fmFile->name,
+                'path' => $fmFile->path,
+                'size' => $fmFile->size,
+                'type' => $fmFile->contenttype,
+                'id' => $fmFile->getId(),
+                'attachment_type' => $type,
+            ];
+
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('invalid type given');
+        }
+
+        if (in_array($type, array('download_protected_fm', 'download_protected'))) {
+            $attachment['password'] = 'test';
+        }
+
+        $messageToSend = [
+            'note' => null,
+            'content_type' => 'text/html',
+            'account_id' => $this->_account->id,
+            'to' => [
+                $this->_account->email
+            ],
+            'cc' => [],
+            'bcc' => [],
+            'subject' => 'attachment test [' . $type . ']',
+            'body' => 'foobar',
+
+            'attachments' => [ $attachment ],
+            'from_email' => 'vagrant@example.org',
+            'customfields' => [],
+            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
+        ];
+
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($messageToSend['subject']);
+        $complete = $this->_json->getMessage($message['id']);
+
+        return $complete;
+    }
+
+    /**
+     * @param string $tempfileName
+     * @return Tinebase_Model_TempFile
+     */
+    protected function _createTempFile($tempfileName = 'test.txt')
+    {
+        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
+        file_put_contents($tempfilePath, 'some content');
+        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
     }
 }
