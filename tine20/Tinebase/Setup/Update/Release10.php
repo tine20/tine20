@@ -1063,4 +1063,26 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.24');
     }
+
+    /**
+     * update to 10.25
+     *
+     * add notification props
+     */
+    public function update_24()
+    {
+        if (! $this->_backend->columnExists('notificationProps', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>notificationProps</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+            ');
+            $this->_backend->addCol('tree_nodes', $declaration);
+            $this->setTableVersion('tree_nodes', 3);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.21');
+    }
 }

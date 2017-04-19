@@ -144,7 +144,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $groupId);
         $members = Tinebase_Core::getCache()->load($cacheId);
 
-        if (! $members) {
+        if (false === $members) {
             $members = array();
 
             $select = $this->groupMembersTable->select();
