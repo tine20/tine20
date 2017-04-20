@@ -467,10 +467,23 @@ class Setup_Update_Abstract
      *
      * @param string $appName
      * @param array $modelNames
+     * @return boolean success
      * @throws Setup_Exception_NotFound
      */
     public function updateSchema($appName, $modelNames)
     {
+        if (! Setup_Core::isDoctrineAvailable()) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                ' No doctrine ORM available -> disabling app ' . $appName);
+
+            Tinebase_Application::getInstance()->setApplicationState(
+                array(Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()),
+                Tinebase_Application::DISABLED
+            );
+            return false;
+        }
+
         $updateRequired = false;
         $setNewVersions = array();
         foreach($modelNames as $modelName) {
@@ -491,5 +504,7 @@ class Setup_Update_Abstract
                 $this->setTableVersion($table, $version);
             }
         }
+
+        return true;
     }
 }
