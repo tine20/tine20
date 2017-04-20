@@ -841,6 +841,13 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
             // set container name in node
             $node->name = $container->name;
+            // check if node exists and if yes: attach uid
+            $parentNode = Tinebase_FileSystem::getInstance()->get($node->parent_id);
+            $parentPath = Tinebase_FileSystem::getInstance()->getPathOfNode($parentNode, true);
+            if (Tinebase_FileSystem::getInstance()->fileExists($parentPath . '/' . $node->name)) {
+                $node->name .= ' ' . Tinebase_Record_Abstract::generateUID(8);
+            }
+
             $node->acl_node = $node->getId();
             Tinebase_FileSystem::getInstance()->update($node);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
