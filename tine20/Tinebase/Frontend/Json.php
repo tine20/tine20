@@ -810,8 +810,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
-        $config = Tinebase_Core::getConfig();
-
         $userRegistryData = array(
             'timeZone'           => Tinebase_Core::getUserTimezone(),
             'currentAccount'     => $user->toArray(),
