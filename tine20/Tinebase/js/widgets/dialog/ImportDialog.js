@@ -376,6 +376,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 containerName: this.recordClass.getContainerName(),
                 containersName: this.recordClass.getContainersName(),
                 appName: this.appName,
+                recordClass: this.recordClass,
                 value: this.defaultImportContainer,
                 listeners: {
                     scope: this,
