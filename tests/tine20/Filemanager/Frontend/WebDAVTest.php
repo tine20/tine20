@@ -189,6 +189,29 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         return $node;
     }
+
+    /**
+     * get child folders of shared dir
+     */
+    public function testgetFoldersInShared()
+    {
+        // create folder in shared
+        $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Filemanager', Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            ) . '/myshared';
+        Tinebase_FileSystem::getInstance()->createAclNode($path);
+
+        $sharedNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $nodes = $sharedNode->getChildren();
+        self::assertGreaterThanOrEqual(1, count($nodes));
+        $found = false;
+        foreach ($nodes as $node) {
+            if ($node->getName() === 'myshared') {
+                $found = true;
+            }
+        }
+        self::assertTrue($found);
+    }
     
     /**
      * @return Filemanager_Frontend_WebDAV_File

@@ -394,8 +394,6 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      * @param $accountId
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_NotFound
-     *
-     * TODO is path correct here or do we need to add account?
      */
     protected function _getPersonalNode($name, $accountId)
     {
@@ -406,9 +404,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $path = $this->_getTreeNodePath($type);
         $statpath = $path->statpath;
-        //if (count($this->_pathParts) > 2) {
         $statpath .= '/' . $name;
-        //}
         $node = Tinebase_FileSystem::getInstance()->stat($statpath);
         if (Tinebase_Core::getUser()->hasGrant($node,Tinebase_Model_Grants::GRANT_READ)) {
             return $node;
@@ -418,16 +414,31 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         }
     }
 
+    /**
+     * get tree node path for this collection
+     *
+     * @param $containerType
+     * @return Tinebase_Model_Tree_Node_Path
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     protected function _getTreeNodePath($containerType)
     {
         // remove app from path parts
         $pathParts = $this->_pathParts;
         $pathPartsWithoutApp = array_splice($pathParts, 1);
+        if (in_array($pathPartsWithoutApp[0], array(
+                // NOTE: personal should never be send by an WebDAV client...
+                Tinebase_FileSystem::FOLDER_TYPE_PERSONAL, Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            )))
+        {
+            $pathPartsWithoutApp = array_splice($pathPartsWithoutApp, 1);
+        }
         $path = Tinebase_Model_Tree_Node_Path::createFromPath(
             Tinebase_FileSystem::getInstance()->getApplicationBasePath(
                 $this->_getApplication(),
                 $containerType
             ) . '/' . implode('/', $pathPartsWithoutApp));
+
         return $path;
     }
 
@@ -561,6 +572,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         return $children;
     }
 
+    /**
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _getSharedDirectories()
     {
         $containers = $this->_containerController->getSharedContainer(
@@ -902,10 +916,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 $path = $this->_getTreeNodePath($containerType);
                 Tinebase_FileSystem::getInstance()->checkPathACL($path, 'add');
                 $statpath = $path->statpath . '/' . $properties['name'];
-                if ($path->getParent()->isToplevelPath()) {
+                if ($path->isToplevelPath()) {
                     $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath);
                 } else {
                     $container = Tinebase_FileSystem::getInstance()->mkdir($statpath);
+                    Tinebase_FileSystem::getInstance()->setAclFromParent($statpath);
                 }
 
             } else {
