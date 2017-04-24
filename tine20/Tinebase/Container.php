@@ -470,7 +470,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
 
         /** @var Tinebase_Model_Container $result */
-        $result = $this->get($containerId, $_getDeleted);
+        $result = $this->get((string)$containerId, $_getDeleted);
         
         $this->saveInClassCache(__FUNCTION__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         

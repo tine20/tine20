@@ -387,7 +387,8 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals(array(1,2), $node->available_revisions);
         $this->assertEquals(2, $node->revision);
 
-        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'tree_filerevisions SET creation_time = "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * 3) . '" WHERE id = "' . $node->object_id .'" and revision = 1')->closeCursor();
+        $db = Tinebase_Core::getDb();
+        $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'tree_filerevisions') . ' SET ' . $db->quoteIdentifier('creation_time') . ' = \'' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * 3) . '\' WHERE ' . $db->quoteIdentifier('id') . ' = \'' . $node->object_id .'\' and ' . $db->quoteIdentifier('revision') . ' = 1')->closeCursor();
 
         $this->_controller->clearFileRevisions();
         $this->_controller->recalculateRevisionSize();
@@ -404,6 +405,13 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals(6, $node->revision_size);
         $this->assertEquals(array(2), $node->available_revisions);
         $this->assertEquals(2, $node->revision);
+
+        // test queries with dummy content:
+        $fileObject = new Tinebase_Tree_FileObject(null, array(
+            Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true
+        ));
+        $fileObject->deleteRevisions('shooBiDuBiDu', array(1,2,3));
+        $fileObject->clearOldRevisions('shooBiDuBiDu', 5);
     }
 
     /**
