@@ -26,6 +26,12 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // export & check
         $csvExportClass = new Timetracker_Export_Csv(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
@@ -78,6 +84,11 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         // create
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+
+        $this->_deleteTimeAccounts[] = $timeaccountData['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // export & check
         $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimeaccountFilter($this->_getTimeaccountFilter()), 'ods');
@@ -105,6 +116,12 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // export & check
         $options = ($_definitionId === NULL) ? array('format' => 'ods') : array('definitionId' => $_definitionId);

@@ -52,85 +52,99 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * type for shared container
      */
     const TYPE_OTHERUSERS = 'otherUsers';
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Tinebase';
 
     /**
-     * list of zend inputfilter
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_filters = array(
-        'name'              => 'StringTrim'
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Container',
+        'recordsName'       => 'Containers', // ngettext('Container', 'Containers', n)
+        'hasRelations'      => FALSE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'hasXProps'         => TRUE,
+        'createModule'      => FALSE,
+
+        'titleProperty'     => 'name',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Container',
+
+        'fields' => array(
+            'name'              => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            'type'              => array(
+                'label'             => 'Type', //_('Type')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
+            ),
+            'backend'            => array(
+                'type'              => 'string',
+                'validators'        => array('presence' => 'required'),
+            ),
+            'order'              => array(
+                'label'             => 'Order', // _('Order')
+                'type'              => 'integer',
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'color'              => array(
+                'label'             => 'Color', // _('Color')
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
+            ),
+            'application_id'     => array(
+                'label'             => 'Application', // _('Application')
+                'type'              => 'string',
+                'validators'        => array('Alnum', 'presence' => 'required'),
+            ),
+            'owner_id'           => array(
+                'label'             => 'Owner', // _('Owner')
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'model'              => array(
+                'label'             => 'Model', // _('Model')
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'uuid'               => array(
+                'label'             => 'UUID', // _('UUID')
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true),
+            ),
+            // only gets updated in increaseContentSequence() + readonly in normal record context
+            'content_seq'        => array(
+                'type'              => 'integer',
+                'readOnly'          => true,
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'account_grants'     => array(
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'path'               => array(
+                'type'              => 'string',
+                'validators'        => array('allowEmpty' => true),
+            ),
+        )
     );
-
-    /**
-     * list of zend validator
-     *
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                => array('Digits', 'allowEmpty' => true),
-        'name'              => array('presence' => 'required'),
-        'type'              => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
-        'backend'           => array('presence' => 'required'),
-        'order'             => array('allowEmpty' => true),
-        'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
-        'application_id'    => array('Alnum', 'presence' => 'required'),
-        'account_grants'    => array('allowEmpty' => true), // non persistent
-        'owner_id'          => array('allowEmpty' => true),
-        'path'              => array('allowEmpty' => true), // non persistent
-        'model'             => array('allowEmpty' => true),
-        'uuid'              => array('allowEmpty' => true),
-
-    // only gets updated in increaseContentSequence() + readonly in normal record context
-        'content_seq'       => array('allowEmpty' => true),
-
-    // modlog fields
-        'created_by'             => array('allowEmpty' => true),
-        'creation_time'          => array('allowEmpty' => true),
-        'last_modified_by'       => array('allowEmpty' => true),
-        'last_modified_time'     => array('allowEmpty' => true),
-        'is_deleted'             => array('allowEmpty' => true),
-        'deleted_time'           => array('allowEmpty' => true),
-        'deleted_by'             => array('allowEmpty' => true),
-        'seq'                    => array('allowEmpty' => true),
-    );
-
-    /**
-     * datetime fields
-     *
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
-    
-    /**
-    * name of fields that should not be persisted during create/update in backend
-    *
-    * @var array
-    */
-    protected $_readOnlyFields = array('content_seq');
     
     /**
      * converts a int, string or Tinebase_Model_Container to a containerid

@@ -33,6 +33,15 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
     protected $_application = 'Filemanager';
 
     /**
+     * name of fields that should be omitted from modlog
+     *
+     * TODO what about hash? if it is in here, it will not be replicated.
+     * 
+     * @var array list of modlog omit fields
+     */
+    protected $_modlogOmitFields = array('hash', 'available_revisions', 'revision_size', 'indexed_hash');
+
+    /**
      * returns true if this record should be replicated
      *
      * @return boolean

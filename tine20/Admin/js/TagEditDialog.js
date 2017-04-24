@@ -218,22 +218,23 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 border: false,
                 autoHeight: true,
                 items: [[{
-                    columnWidth: 0.3,
+                    columnWidth: 0.8,
                     fieldLabel: this.translation.gettext('Tag Name'), 
                     name: 'name',
                     allowBlank: false,
                     maxLength: 40
                 }, {
-                    columnWidth: 0.6,
+                    xtype: 'colorfield',
+                    columnWidth: 0.2,
+                    fieldLabel: this.translation.gettext('Color'),
+                    name: 'color'
+                }], [{
+                    columnWidth: 1,
                     name: 'description',
                     fieldLabel: this.translation.gettext('Description'),
                     anchor: '100%',
-                    maxLength: 256
-                }, {
-                    xtype: 'colorfield',
-                    columnWidth: 0.1,
-                    fieldLabel: this.translation.gettext('Color'),
-                    name: 'color'
+                    xtype: 'textarea',
+                    height: 150
                 }]]
             }, {
                 region: 'center',

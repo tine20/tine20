@@ -161,6 +161,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
                     width: 300,
                     ref: '../../containerCombo',
                     stateful: false,
+                    recordClass: this.recordClass,
                     containerName: this.recordClass.getContainerName(),
                     containersName: this.recordClass.getContainersName(),
                     appName: this.appName,

@@ -24,6 +24,10 @@ abstract class Timetracker_AbstractTest extends TestCase
      */
     protected $_lastCreatedRecord = null;
 
+    protected $_deleteTimeAccounts = array();
+    protected $_deleteTimeSheets = array();
+    protected $_deletePersistentFilters = array();
+
     /**
      * Runs the test methods of this class.
      *
@@ -45,7 +49,10 @@ abstract class Timetracker_AbstractTest extends TestCase
     protected function setUp()
     {
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->_deleteTimeAccounts = array();
+        $this->_deleteTimeSheets = array();
+        $this->_deletePersistentFilters = array();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Timetracker_Frontend_Json();
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
@@ -62,6 +69,16 @@ abstract class Timetracker_AbstractTest extends TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        if (count($this->_deleteTimeAccounts) > 0) {
+            Timetracker_Controller_Timeaccount::getInstance()->delete($this->_deleteTimeAccounts);
+        }
+        if (count($this->_deleteTimeSheets) > 0) {
+            Timetracker_Controller_Timesheet::getInstance()->delete($this->_deleteTimeSheets);
+        }
+        if (count($this->_deletePersistentFilters) > 0) {
+            Tinebase_PersistentFilter::getInstance()->delete($this->_deleteTimeSheets);
+        }
     }
 
     /************ protected helper funcs *************/
@@ -369,6 +386,11 @@ abstract class Timetracker_AbstractTest extends TestCase
         $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
 
         $timesheetData = $this->_json->saveTimesheet($timesheetArray);
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // checks
         $this->assertTrue((isset($timesheetData['customfields'][$_customField1->name]) || array_key_exists($_customField1->name, $timesheetData['customfields'])), 'cf 1 not found');

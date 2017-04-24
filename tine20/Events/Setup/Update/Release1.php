@@ -12,7 +12,7 @@
 class Events_Setup_Update_Release1 extends Setup_Update_Abstract
 {
     /**
-     * update to 3.0
+     * update to 10.0
      * @return void
      */
     public function update_0()

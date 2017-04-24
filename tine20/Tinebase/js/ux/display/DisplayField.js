@@ -60,39 +60,3 @@ Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
 });
 
 Ext.reg('ux.displayfield', Ext.ux.display.DisplayField);
-
-
-/**
- * @class Ext.ux.display.DisplayTextArea
- * @namespace Ext.ux.display
- * @extends Ext.form.TextArea
- * @author Cornelius Weiss <c.weiss@metaways.de>
- * 
- * <b>Textarea for displaying a text in a displaypanel</b>
- */
-Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
-    readOnly: true,
-    cls: 'x-ux-display-textarea',
-
-    // don't enumerate as form field
-    markInvalid: null,
-    
-    renderer: Ext.ux.display.DisplayField.prototype.renderer,
-    applyRenderer: Ext.ux.display.DisplayField.prototype.applyRenderer,
-
-    setValue : function(value) {
-        var v = this.renderer(value);
-
-        if(this.htmlEncode){
-            v = Ext.util.Format.htmlEncode(v);
-        }
-
-        if (this.nl2br) {
-            v = Ext.util.Format.nl2br(v);
-        }
-
-        return this.supr().setValue.call(this, v);
-    }
-});
-
-Ext.reg('ux.displaytextarea', Ext.ux.display.DisplayTextArea);

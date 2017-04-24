@@ -26,7 +26,7 @@ var taskPanel =  new Tine.containerTreePanel({
  */
 Tine.widgets.container.TreePanel = function(config) {
     Ext.apply(this, config);
-    
+
     this.addEvents(
         /**
          * @event containeradded
@@ -59,7 +59,7 @@ Tine.widgets.container.TreePanel = function(config) {
          */
         'containercolorset'
     );
-        
+
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
 };
 
@@ -95,7 +95,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * grants which are required to select leaf node(s)
      */
     requiredGrants: null,
-    
+
     /**
      * @cfg {Boolean} useContainerColor
      * use container colors
@@ -119,6 +119,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     canonicalName: 'ContainerTree',
 
+    /**
+     * Referenced grid panel
+     */
+    gridPanel: null,
+
     useArrows: true,
     border: false,
     autoScroll: true,
@@ -129,12 +134,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
     /**
      * @fixme not needed => all events hand their events over!!!
-     * 
+     *
      * @property ctxNode holds treenode which got a contextmenu
      * @type Ext.tree.TreeNode
      */
     ctxNode: null,
-    
+
+    /**
+     * No user interactions, menus etc. allowed except for browsing
+     */
+    readOnly: false,
+
     /**
      * init this treePanel
      */
@@ -145,7 +155,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
-        
+
         if (this.allowMultiSelection) {
             this.selModel = new Ext.tree.MultiSelectionModel({});
         }
@@ -157,14 +167,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.modelConfiguration) {
             this.hasPersonalContainer = this.modelConfiguration.hasPersonalContainer !== false;
         }
-        
+
         var containerName = this.recordClass ? this.recordClass.getContainerName() : 'container';
         var containersName = this.recordClass ? this.recordClass.getContainersName() : 'containers';
 
         //ngettext('container', 'containers', n);
         this.containerName = this.containerName || this.app.i18n.n_hidden(containerName, containersName, 1);
         this.containersName = this.containersName || this.app.i18n._hidden(containersName);
-        
+
         this.loader = this.loader || new Tine.widgets.tree.Loader({
             getParams: this.onBeforeLoad.createDelegate(this),
             inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
@@ -176,44 +186,48 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.rootVisible = false;
         }
 
-        // init drop zone
-        this.dropConfig = {
-            ddGroup: this.ddGroup || 'TreeDD',
-            appendOnly: this.ddAppendOnly === true,
-            /**
-             * @todo check acl!
-             */
-            onNodeOver : function(n, dd, e, data) {
-                var node = n.node;
-                
-                // auto node expand check
-                if(node.hasChildNodes() && !node.isExpanded()){
-                    this.queueExpand(node);
-                }
-                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
-            },
-            isValidDropPoint: function(n, dd, e, data){
-                return n.node.attributes.allowDrop;
-            },
-            completeDrop: Ext.emptyFn
-        };
+        if (!this.readOnly) {
+            // init drop zone
+            this.dropConfig = {
+                ddGroup: this.ddGroup || 'TreeDD',
+                appendOnly: this.ddAppendOnly === true,
+                /**
+                 * @todo check acl!
+                 */
+                onNodeOver: function (n, dd, e, data) {
+                    var node = n.node;
+
+                    // auto node expand check
+                    if (node.hasChildNodes() && !node.isExpanded()) {
+                        this.queueExpand(node);
+                    }
+                    return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
+                },
+                isValidDropPoint: function (n, dd, e, data) {
+                    return n.node.attributes.allowDrop;
+                },
+                completeDrop: Ext.emptyFn
+            };
+        }
 
         if (this.hasContextMenu) {
             this.initContextMenu();
         }
-              
+
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
         if (this.hasContextMenu) {
             this.on('contextmenu', this.onContextMenu, this);
         }
-        this.on('beforenodedrop', this.onBeforeNodeDrop, this);
-        this.on('append', this.onAppendNode, this);
-        this.on('beforecollapsenode', this.onBeforeCollapse, this);
-        
+
+        if (!this.readOnly) {
+            this.on('beforenodedrop', this.onBeforeNodeDrop, this);
+            this.on('append', this.onAppendNode, this);
+            this.on('beforecollapsenode', this.onBeforeCollapse, this);
+        }
+
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
-        return;
     },
 
     /**
@@ -252,22 +266,22 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
     /**
      * template fn for subclasses to set default path
-     * 
+     *
      * @return {String}
      */
     getDefaultContainerPath: function() {
         return this.defaultContainerPath || '/';
     },
-    
+
     /**
      * template fn for subclasses to append extra items
-     * 
+     *
      * @return {Array}
      */
     getExtraItems: function() {
         return this.extraItems || [];
     },
-    
+
     /**
      * returns a filter plugin to be used in a grid
      */
@@ -277,13 +291,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 treePanel: this
             });
         }
-        
+
         return this.filterPlugin;
     },
-    
+
     /**
      * returns object of selected container/filter or null/default
-     * 
+     *
      * @param {Array} [requiredGrants]
      * @param {Tine.Tinebase.Model.Container} [defaultContainer]
      * @param {Boolean} onlySingle use default if more than one container in selection
@@ -293,21 +307,21 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var container = defaultContainer,
             sm = this.getSelectionModel(),
             selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-        
+
         if (Ext.isArray(selection) && selection.length > 0 && (! onlySingle || selection.length === 1 || ! container)) {
             container = this.getContainerFromSelection(selection, requiredGrants) || container;
-        } 
+        }
         // postpone this as we don't get the whole container record here
 //        else if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
 //            container = this.getContainerFromFilter() || container;
 //        }
-        
+
         return container;
     },
-    
+
     /**
      * get container from selection
-     * 
+     *
      * @param {Array} selection
      * @param {Array} requiredGrants
      * @return {Tine.Tinebase.Model.Container}
@@ -324,21 +338,21 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 }
             }
         }, this);
-        
+
         return result;
     },
 
     /**
      * get container from filter toolbar
-     * 
+     *
      * @param {Array} requiredGrants
      * @return {Tine.Tinebase.Model.Container}
-     * 
+     *
      * TODO make this work -> atm we don't get the account grants here (why?)
      */
     getContainerFromFilter: function(requiredGrants) {
         var result = null;
-        
+
         // check if single container is selected in filter toolbar 
         var ftb = this.filterPlugin.getGridPanel().filterToolbar,
             filterValue = null;
@@ -355,13 +369,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 return false;
             }
         }, this);
-        
+
         return result;
     },
-    
+
     /**
      * convert containerPath to treePath
-     * 
+     *
      * @param {String}  containerPath
      * @return {String} treePath
      */
@@ -377,13 +391,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountId, 'personal');
             }
         }
-        
+
         return treePath;
     },
-    
+
     /**
-     * checkes if user has requested grant for given container represented by a tree node 
-     * 
+     * checkes if user has requested grant for given container represented by a tree node
+     *
      * @param {Ext.tree.TreeNode} node
      * @param {Array} grant
      * @return {}
@@ -401,34 +415,40 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         return condition;
     },
-    
+
     /**
      * @private
      * - select default path
      */
     afterRender: function() {
         Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
-        
+
         var defaultContainerPath = this.getDefaultContainerPath();
-        
+
         if (defaultContainerPath && defaultContainerPath != '/') {
             var root = '/' + this.getRootNode().id;
-            
+
             this.expand();
+
             // @TODO use getTreePath() when filemanager is fixed
-            this.selectPath.defer(100, this, [root + defaultContainerPath]);
+            (function() {
+                // no initial load triggering here
+                this.getSelectionModel().suspendEvents();
+                this.selectPath(root + defaultContainerPath);
+                this.getSelectionModel().resumeEvents();
+            }).defer(100, this);
         }
-        
+
         if (this.filterMode == 'filterToolbar' && this.filterPlugin && this.filterPlugin.getGridPanel()) {
             this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
         }
     },
-    
+
     /**
      * @private
      */
     initContextMenu: function() {
-        
+
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
             actions: ['add'],
@@ -436,7 +456,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backend: 'Tinebase_Container',
             backendModel: 'Container'
         });
-        
+
         this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
             actions: ['delete', 'rename', 'grants'].concat(
@@ -448,7 +468,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backend: 'Tinebase_Container',
             backendModel: 'Container'
         });
-        
+
         this.contextMenuSingleContainerProperties = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
             actions: ['properties'],
@@ -457,42 +477,46 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backendModel: 'Container'
         });
     },
-    
+
     /**
      * called when node is appended to this tree
      */
     onAppendNode: function(tree, parent, appendedNode, idx) {
         if (appendedNode.leaf && this.hasGrant(appendedNode, this.requiredGrants)) {
             if (this.useContainerColor) {
-                appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                    this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color || '#808080'}}, true);
+                appendedNode.ui.render = appendedNode.ui.render.createSequence(function () {
+                    this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
+                        tag: 'span',
+                        html: '&nbsp;&#9673;&nbsp',
+                        style: {color: appendedNode.attributes.container.color || '#808080'}
+                    }, true);
                 }, appendedNode.ui);
             }
         }
     },
-    
+
     /**
      * expand automatically on node click
-     * 
+     *
      * @param {} node
      * @param {} e
      */
     onClick: function(node, e) {
         var sm = this.getSelectionModel(),
             selectedNode = sm.getSelectedNode();
-    
+
         // NOTE: in single select mode, a node click on a selected node does not trigger 
         //       a selection change. We need to do this by hand here
         if (! this.allowMultiSelection && node == selectedNode) {
             this.onSelectionChange(sm, node);
         }
-        
+
         node.expand();
     },
-    
+
     /**
      * show context menu
-     * 
+     *
      * @param {} node
      * @param {} event
      */
@@ -501,14 +525,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var container = node.attributes.container,
             path = container.path,
             owner;
-        
+
         if (! Ext.isString(path)) {
             return;
         }
 
         event.stopPropagation();
         event.preventDefault();
-        
+
         if (Tine.Tinebase.container.pathIsContainer(path)) {
             if (container.account_grants && container.account_grants.adminGrant) {
                 this.contextMenuSingleContainer.showAt(event.getXY());
@@ -524,7 +548,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
     /**
      * adopt attr
-     * 
+     *
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
@@ -533,25 +557,25 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             attr.path = '/personal/' + attr.accountId;
             attr.id = attr.accountId;
         }
-        
+
         if (! attr.name && attr.path) {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
-        
+
         Ext.applyIf(attr, {
             text: Ext.util.Format.htmlEncode(attr.name),
             qtip: Tine.Tinebase.common.doubleEncode(attr.name),
             leaf: !!attr.account_grants,
             allowDrop: !!attr.account_grants && attr.account_grants.addGrant
         });
-        
+
         // copy 'real' data to container space
         attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
     },
-    
+
     /**
      * returns params for async request
-     * 
+     *
      * @param {Ext.tree.TreeNode} node
      * @return {Object}
      */
@@ -559,11 +583,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var path = node.attributes.path;
         var type = Tine.Tinebase.container.path2type(path);
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
-        
+
         if (type === 'personal' && ! owner) {
             type = 'otherUsers';
         }
-        
+
         var params = {
             method: 'Tinebase_Container.getContainer',
             application: this.app.appName,
@@ -571,13 +595,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             requiredGrants: this.requiredGrants,
             owner: owner
         };
-        
+
         return params;
     },
-    
+
     /**
      * permit selection of nodes with missing required grant
-     * 
+     *
      * @param {} sm
      * @param {} newSelection
      * @param {} oldSelection
@@ -595,25 +619,25 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }
         }
     },
-    
+
     /**
      * record got dropped on container node
-     * 
+     *
      * @param {Object} dropEvent
      * @private
-     * 
+     *
      * TODO use Ext.Direct
      */
     onBeforeNodeDrop: function(dropEvent) {
         var targetContainerId = dropEvent.target.id;
-        
+
         // get selection filter from grid
         var sm = this.app.getMainScreen().getCenterPanel().getGrid().getSelectionModel();
         if (sm.getCount() === 0) {
             return false;
         }
         var filter = sm.getSelectionFilter();
-        
+
         // move messages to folder
         Ext.Ajax.request({
             params: {
@@ -629,12 +653,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 this.app.getMainScreen().getCenterPanel().loadGridData();
             }
         });
-        
+
         // prevent repair actions
         dropEvent.dropStatus = true;
         return true;
     },
-    
+
     /**
      * called on filtertrigger of filter toolbar
      * clears selection silently
@@ -643,13 +667,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         /* 2012-01-30 cweiss: i have no idea what this was for.
          * if its needed please document here!
         var sm = this.getSelectionModel();
-        
+
         sm.suspendEvents();
         sm.clearSelections();
         sm.resumeEvents();
         */
     },
-    
+
     /**
      * If first node is collapsed, reload all data
      */
@@ -662,7 +686,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
     /**
      * called when tree selection changes
-     * 
+     *
      * @param {} sm
      * @param {} node
      */
@@ -688,13 +712,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
             ftb.supressEvents = false;
-            
+
             // set ftb filters according to tree selection
             var containerFilter = this.getFilterPlugin().getFilter();
             ftb.addFilter(new ftb.record(containerFilter));
-        
+
             ftb.onFiltertrigger();
-            
+
             // finally select the selected node, as filtertrigger clears all selections
             sm.suspendEvents();
             Ext.each(nodes, function(node) {
@@ -703,10 +727,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             sm.resumeEvents();
         }
     },
-    
+
     /**
      * selects path by container Path
-     * 
+     *
      * @param {String} containerPath
      * @param {String} [attr]
      * @param {Function} [callback]
@@ -714,10 +738,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     selectContainerPath: function(containerPath, attr, callback) {
         return this.selectPath(this.getTreePath(containerPath), attr, callback);
     },
-    
+
     /**
      * get default container for new records
-     * 
+     *
      * @param {String} default container registry key
      * @return {Tine.Tinebase.Model.Container}
      */
@@ -725,9 +749,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (! registryKey) {
             registryKey = 'defaultContainer';
         }
-        
+
         var container = Tine[this.appName].registry.get(registryKey);
-        
+
         return this.getSelectedContainer('addGrant', container, true);
     }
 });

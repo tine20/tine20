@@ -9,15 +9,56 @@
 Ext.ns('Tine.Tinebase');
 
 /**
- * Tine 2.0 jsclient MainScreen.
+ * Tine 2.0 jsclient MainScreen with app selection, menu etc.
  * 
  * @namespace   Tine.Tinebase
  * @class       Tine.Tinebase.MainScreenPanel
- * @extends     Ext.Panel
+ * @extends     Ext.Container
  * @singleton   
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
+
+Tine.Tinebase.MainScreenPanel = function(config) {
+    this.addEvents(
+        /**
+         * @event beforeappappactivate
+         * fired before an application gets appactivated. Retrun false to stop activation
+         * @param {Tine.Aplication} app about to appactivate
+         */
+        'beforeappappactivate',
+        /**
+         * @event appactivate
+         * fired when an application gets appactivated
+         * @param {Tine.Aplication} appactivated app
+         */
+        'appactivate',
+        /**
+         * @event beforeappappdeactivate
+         * fired before an application gets appdeactivated. Retrun false to stop deactivation
+         * @param {Tine.Aplication} app about to appdeactivate
+         */
+        'beforeappappdeactivate',
+        /**
+         * @event appdeactivate
+         * fired when an application gets appdeactivated
+         * @param {Tine.Aplication} appdeactivated app
+         */
+        'appdeactivate',
+        /**
+         * @event windowopenexception
+         * windowopenexceptionated
+         * @param {} Exception
+         */
+        'windowopenexception'
+    );
+
+    // NOTE: this is a cruid method to create some kind of singleton...
+    Tine.Tinebase.MainScreen = this;
+
+    Tine.Tinebase.MainScreenPanel.superclass.constructor.call(this, config);
+}
+
+Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
     
     border: false,
     layout: {
@@ -25,22 +66,18 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
         align:'stretch',
         padding:'0'
     },
+
     /**
      * the active app
      * @type {Tine.Tinebase.Application}
      */
     app: null,
-    
+
     /**
      * @private
      */
     initComponent: function() {
-        // NOTE: this is a cruid method to create some kind of singleton...
-        Tine.Tinebase.MainScreen = this;
-        
         this.initLayout();
-        Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
-
         this.supr().initComponent.apply(this, arguments);
     },
 
@@ -156,10 +193,56 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
      */
     activateDefaultApp: function() {
         if (this.getCenterPanel().rendered) {
-            Tine.Tinebase.appMgr.activate();
+            this.activate();
         } else {
             this.activateDefaultApp.defer(10, this);
         }
+    },
+
+    /**
+     * activate application
+     *
+     * @param {Tine.Application} app
+     * @return {Boolean}
+     */
+    activate: function(app) {
+        if (app || (app = Tine.Tinebase.appMgr.getDefault())) {
+            if (app == this.getActiveApp()) {
+                // app is already active, nothing to do
+                return true;
+            }
+
+            if (this.app) {
+                if ((this.fireEvent('beforeappappdeactivate', this.app) === false || this.app.onBeforeDeActivate() === false)) {
+                    return false;
+                }
+
+                this.app.onDeActivate();
+                this.fireEvent('appdeactivate', this.app);
+                this.app = null;
+            }
+
+            if (this.fireEvent('beforeappappactivate', app) === false || app.onBeforeActivate() === false) {
+                return false;
+            }
+
+            this.setActiveCenterPanel(app.getMainScreen(), true);
+            Tine.Tinebase.router.setRoute('/' + app.appName);
+
+            this.app = app;
+            this.onAppActivate(app);
+
+            app.onActivate();
+            this.fireEvent('appactivate', app);
+        }
+    },
+
+    /**
+     * returns currently activated app
+     * @return {Tine.Application}
+     */
+    getActiveApp: function() {
+        return this.app;
     },
 
     /**
@@ -236,3 +319,25 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
         return this.app.getMainScreen().getActiveToolbar();
     }
 });
+
+/**
+ * lazy mainscreen init
+ *
+ * @static
+ * @param app
+ */
+Tine.Tinebase.MainScreenPanel.show = function(app) {
+    var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
+
+    if (! Tine.Tinebase.MainScreen) {
+        Tine.Tinebase.appMgr.setDefault(app);
+        new Tine.Tinebase.MainScreenPanel();
+        mainCardPanel.add(Tine.Tinebase.MainScreen);
+        mainCardPanel.layout.setActiveItem(Tine.Tinebase.MainScreen.id);
+        Tine.Tinebase.MainScreen.doLayout();
+    }
+
+    else {
+        Tine.Tinebase.MainScreen.activate(app);
+    }
+};

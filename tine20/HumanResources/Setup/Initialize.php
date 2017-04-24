@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -58,7 +58,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     /**
      * init example workingtime models
      */
-    function _initializeWorkingTimeModels()
+    protected function _initializeWorkingTimeModels()
     {
         $translate = Tinebase_Translation::getTranslation('HumanResources');
         $_record = new HumanResources_Model_WorkingTime(array(
@@ -99,16 +99,12 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
      */
     public static function createReportTemplatesFolder()
     {
-        $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
-            'HumanResources',
-            'Report Templates',
-            HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID
-        );
         try {
-            Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+            $node = Tinebase_FileSystem::getInstance()->createAclNode('/HumanResources/folders/shared/Report Templates');
+            HumanResources_Config::getInstance()->set(HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not create template folder: ' . $teb);
+                . ' Could not create report template folder: ' . $teb);
         }
     }
 }

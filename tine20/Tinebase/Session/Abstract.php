@@ -197,7 +197,25 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         
         return $sessionDir;
     }
-    
+
+    /**
+     * get session lifetime
+     */
+    public static function getSessionLifetime()
+    {
+        $config = Tinebase_Core::getConfig();
+        $sessionLifetime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is def
+
+        /** @var Tinebase_Session_SessionLifetimeDelegateInterface $delegate */
+        $delegate = Tinebase_Core::getDelegate('Tinebase', 'sessionLifetimeDelegate',
+            'Tinebase_Session_SessionLifetimeDelegateInterface');
+        if (false !== $delegate) {
+            return $delegate->getSessionLifetime($sessionLifetime);
+        }
+
+        return $sessionLifetime;
+    }
+
     /**
      * set session backend
      */
@@ -208,7 +226,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         $defaultSessionSavePath = ini_get('session.save_path');
 
         $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : $defaultSessionSaveHandler;
-        $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
+        $maxLifeTime = self::getSessionLifetime();
         
         switch ($backendType) {
             case 'Files': // this is the default for the ini setting session.save_handler

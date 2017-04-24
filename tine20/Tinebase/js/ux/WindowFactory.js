@@ -89,7 +89,7 @@ Ext.ux.WindowFactory.prototype = {
             activeItem: 0,
             isWindowMainCardPanel: true,
             items: [this.getCenterPanel(c)]
-        }
+        };
         
         // we can only handle one window yet
         c.modal = true;
@@ -109,14 +109,14 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-    getCenterPanel: function (config) {
+     getCenterPanel: function (config) {
         var items;
-        
+
         // (re-) create applicationstarter apps on BrowserWindows
         if (this.windowType == 'Browser') {
             Tine.Tinebase.ApplicationStarter.init();
         }
-        
+
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
@@ -195,14 +195,15 @@ Ext.ux.WindowFactory.prototype = {
             delete config.contentPanelConstructorConfig.title;
         }
         
-        switch (windowType) 
-        {
+        switch (windowType) {
         case 'Browser' :
-            return this.getBrowserWindow(config);
+            try {
+                return this.getBrowserWindow(config);
+            } catch (e) {
+                // fallthrough to Ext Window
+            }
         case 'Ext' :
             return this.getExtWindow(config);
-        case 'Air' :
-            return this.getAirWindow(config);
         default :
             console.error('No such windowType: ' + this.windowType);
             break;

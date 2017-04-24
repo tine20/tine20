@@ -296,7 +296,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
                 $newPath = '';
                 $i = 0;
                 while($i < $pathDept) {
-                    $newPath .= '/' . $pathParts[$i++];
+                    $newPath = '/' . $pathParts[$i++] . $newPath;
                 }
 
                 $uniquePaths[$tailPart] = array('path' => $newPath, 'record' => $path);
@@ -371,7 +371,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
             foreach($_uniqueChildPaths as $childShadowPathPart => $childData) {
                 if (isset($childData['record']) && $childData['record']->shadow_path === $childShadowPathPart) {
-                    $path = $data['record'];
+                    $path = $childData['record'];
                 } elseif (true === $reUsePath) {
                     $path = $data['record'];
                     $reUsePath = false;

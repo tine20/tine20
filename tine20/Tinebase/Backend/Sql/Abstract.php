@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -733,8 +733,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _checkTracing(Zend_Db_Select $select)
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config = Tinebase_Core::getConfig()->logger) {
-            if ($config->traceQueryOrigins) {
+        $config = Tinebase_Core::getConfig();
+        if ( Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config && isset($config->logger)) {
+            if ($config->logger->traceQueryOrigins) {
                 $e = new Exception();
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "\n" . 
                     "BACKTRACE: \n" . $e->getTraceAsString() . "\n" . 
@@ -820,6 +821,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @param Zend_Db_Select $_select
      * @param array|string $_cols columns to get, * per default
+     * @param string $_groupBy
      * 
      * @todo joining the same table twice with same name but different "on"'s is not possible currently
      */
@@ -1149,7 +1151,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * - replace int and bool values by Zend_Db_Expr
      *
      * @param array &$_recordArray
-     * @return array with the prepared data
      */
     protected function _prepareData(&$_recordArray) 
     {

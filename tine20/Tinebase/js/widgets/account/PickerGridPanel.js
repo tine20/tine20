@@ -258,14 +258,23 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      * @private
      */
     getColumnModel: function () {
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true
-            },
-            columns:  [
-                {id: 'name', header: i18n._('Name'), dataIndex: this.recordPrefix + 'name', renderer: Tine.Tinebase.common.accountRenderer}
-            ].concat(this.configColumns)
-        });
+        if (! this.colModel) {
+            this.colModel = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: true
+                },
+                columns: [
+                    {
+                        id: 'name',
+                        header: i18n._('Name'),
+                        dataIndex: this.recordPrefix + 'name',
+                        renderer: Tine.Tinebase.common.accountRenderer
+                    }
+                ].concat(this.configColumns)
+            });
+        }
+
+        return this.colModel;
     },
     
     /**

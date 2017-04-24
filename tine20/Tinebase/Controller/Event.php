@@ -70,4 +70,29 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
     {
         $this->_disabledEvents = false;
     }
+
+    /**
+     * creates the initial (file/tree node) folder for new accounts
+     *
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
+     * @param string $applicationName
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Tree_Node
+     */
+    public function createPersonalFileFolder($_account, $applicationName)
+    {
+        $account = (! $_account instanceof Tinebase_Model_User)
+            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_account)
+            : $_account;
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $nodeName = sprintf($translation->_("%s's personal files"), $account->accountFullName);
+        $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                $applicationName,
+                Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            ) . '/' . $account->getId() . '/' . $nodeName;
+        $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
+
+        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($personalNode));
+
+        return $container;
+    }
 }

@@ -303,7 +303,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                         containersName: this.recordClass.getContainersName(),
                         appName: this.appName,
                         value: this.defaultImportContainer,
-                        requiredGrant: false
+                        requiredGrant: false,
+                        recordClass: this.recordClass
                     })]
                 }]
             }]

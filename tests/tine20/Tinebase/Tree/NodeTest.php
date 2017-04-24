@@ -4,23 +4,14 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Tree_NodeTest::main');
-}
-
-/**
  * Test class for Tinebase_User
  */
-class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
+class Tinebase_Tree_NodeTest extends TestCase
 {
     /**
      * @var array test objects
@@ -30,22 +21,15 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
     /**
      * Backend
      *
-     * @var Filemanager_Backend_Node
+     * @var Tinebase_Tree_FileObject
      */
-    protected $_backend;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filemanager directory backend tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+    protected $_fileObjectBackend;
 
+    /**
+     * @var Tinebase_Tree_Node
+     */
+    protected $_treeNodeBackend;
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -94,12 +78,10 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
         
         $treeNode = $this->getTestRecord();
         $treeNode->object_id = $object->getId();
-        #var_dump($object->toArray());
-        
+
         $testTreeNode = $this->_treeNodeBackend->create($treeNode);
         $this->objects['nodes'][] =  $testTreeNode;
-        #var_dump($testTreeNode->toArray());
-        
+
         $this->assertEquals($treeNode->name,                           $testTreeNode->name);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testTreeNode->type);
         
@@ -115,11 +97,9 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
     {
         $treeNode = $this->testCreateTreeNode();
         $treeNode->name = $treeNode->name . 'updated';
-        #var_dump($treeNode->toArray());
-        
+
         $testTreeNode = $this->_treeNodeBackend->update($treeNode);
-        #var_dump($testTreeNode->toArray());
-        
+
         $this->assertEquals($treeNode->name,                           $testTreeNode->name);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testTreeNode->type);
         
@@ -141,9 +121,7 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_treeNodeBackend->getLastPathNode('/' . $treeNode->name);
         
-        #var_dump($node->toArray());
         $this->assertEquals($treeNode->name, $node->name);
-        #$this->assertEquals($treeNode->getId(), $node->getId());
     }
     
     /**
@@ -157,9 +135,4 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
         
         return $object;
     }
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Tree_NodeTest::main') {
-    Tinebase_Tree_NodeTest::main();
 }

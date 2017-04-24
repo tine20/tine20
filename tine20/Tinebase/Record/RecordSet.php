@@ -58,19 +58,32 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param array|Tinebase_Record_RecordSet $_records array of record objects
      * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
      * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
+     * @param bool $_silentlySkipFails
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct($_className, $_records = array(), $_bypassFilters = false, $_convertDates = true)
+    public function __construct($_className, $_records = array(), $_bypassFilters = false, $_convertDates = true, $_silentlySkipFails = false)
     {
         if (! class_exists($_className)) {
             throw new Tinebase_Exception_InvalidArgument('Class ' . $_className . ' does not exist');
         }
         $this->_recordClass = $_className;
-        
-        foreach ($_records as $record) {
-            $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
-            $this->addRecord($toAdd);
+
+        if (false === $_silentlySkipFails) {
+            foreach ($_records as $record) {
+                $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+                $this->addRecord($toAdd);
+            }
+        } else {
+            foreach ($_records as $record) {
+                try {
+                    $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+                    $this->addRecord($toAdd);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' silently skip. Failed to create record ' . $this->_recordClass . ' with message: ' . get_class($e) .': ' . $e->getMessage() . ' with data: ' . print_r($record, true));
+                }
+            }
         }
     }
     

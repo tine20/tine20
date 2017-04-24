@@ -14,6 +14,8 @@
  *
  * @package     Tinebase
  * @subpackage  Backend
+ *
+ * TODO refactor to Tinebase_Tree_Backend_FileObject
  */
 class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 {
@@ -54,6 +56,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
     protected $_getSelectHook = array();
 
+    protected $_revision = null;
+
     /**
      * the constructor
      *
@@ -76,7 +80,28 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         parent::__construct($_dbAdapter, $_options);
     }
-    
+
+    public function setRevision($_revision)
+    {
+        $this->_revision = null !== $_revision ? (int)$_revision : null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getKeepOldRevision()
+    {
+        return $this->_keepOldRevisions;
+    }
+
+    /**
+     * @param boolean $_value
+     */
+    public function setKeepOldRevision($_value)
+    {
+        $this->_keepOldRevisions = true === $_value;
+    }
+
     /**
      * get the basic select object to fetch records from the database
      *  
@@ -91,9 +116,13 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $select->joinLeft(
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
-                . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision'),
+                . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier($this->_tableName . '.revision')),
             /* select */ array('hash', 'size')
-        );
+        )->joinLeft(
+            /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
+            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
+            /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
+        )->group($this->_tableName . '.id');
 
         if (count($this->_getSelectHook) > 0) {
             foreach($this->_getSelectHook as $hook) {
@@ -316,11 +345,15 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                     ->where('id = ?', $id));
                 if (($row = $stmt->fetch(Zend_Db::FETCH_NUM)) && ((int)$row[0]) !== ((int)$record->revision_size)) {
 
+                    $stmt->closeCursor();
+
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' revision size mismatch on ' . $id . ': ' . $row[0] .' != ' . $record->revision_size);
 
                     $record->revision_size = $row[0];
                     $this->update($record);
+                } else {
+                    $stmt->closeCursor();
                 }
 
                 $transactionManager->commitTransaction($transactionId);
@@ -358,5 +391,53 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $this->_getSelectHook = array();
 
         return $fileObjects;
+    }
+
+    /**
+     * delete old file revisions that are older than $_months months
+     *
+     * @param string $_id
+     * @param int $_months
+     * @return int number of deleted revisions
+     */
+    public function clearOldRevisions($_id, $_months)
+    {
+        $months = (int)$_months;
+        if ($months < 1) {
+            return 0;
+        }
+
+        // TODO PGSQL =>  this is only supported by MySQL
+        // pgsql -> subquery with ids?
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            throw new Tinebase_Exception_NotImplemented('only mysql supported');
+        }
+
+        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
+
+        return $stmt->rowCount();
+    }
+
+    /**
+     * @param string $_id
+     * @param array $_revisions
+     * @return int
+     */
+    public function deleteRevisions($_id, array $_revisions)
+    {
+        // TODO PGSQL =>  this is only supported by MySQL
+        // pgsql -> subquery with ids?
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            throw new Tinebase_Exception_NotImplemented('only mysql supported');
+        }
+
+        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.revision IN ' .
+            $this->_db->quoteInto('(?)', $_revisions));
+
+        return $stmt->rowCount();
     }
 }

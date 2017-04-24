@@ -1,3 +1,6 @@
+.cal-print-marker { /* NOTE: this has to be the first line here. @see js/Printer/DaysView.js */
+    top:0;
+}
 .CalendarIconCls, .CalendarEvent {
     background-image:url(../../images/oxygen/16x16/apps/korganizer.png);
 }

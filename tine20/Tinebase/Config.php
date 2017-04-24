@@ -1051,6 +1051,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        // TODO move to FILESYSTEM
         self::FILESDIR => array(
                                    //_('Files Directory')
             'label'                 => 'Files Directory',

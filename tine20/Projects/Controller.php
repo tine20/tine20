@@ -19,7 +19,7 @@
  * @package Projects
  * @subpackage  Controller
  */
-class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * the constructor

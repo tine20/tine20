@@ -83,7 +83,46 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
             $this->assertEquals($container['name'], 'Other Room');
         }
     }
-    
+
+    public function testRenameContainer()
+    {
+        $resource = $this->_getResource();
+        $createResource = Calendar_Controller_Resource::getInstance()->create($resource);
+
+        $container = Tinebase_Container::getInstance()->get($createResource->container_id);
+        $container->name = 'UNIT/' . $container->name;
+        // don't dare to use the rename fn :)
+        Tinebase_Container::getInstance()->update($container);
+
+        $resource = Calendar_Controller_Resource::getInstance()->get($createResource->getId());
+        $this->assertEquals($container->name, $resource->name, 'resource name not updated');
+    }
+
+    public function testDeleteContainer()
+    {
+        $resource = $this->_getResource();
+        $createResource = Calendar_Controller_Resource::getInstance()->create($resource);
+
+        Tinebase_Container::getInstance()->delete($createResource->container_id);
+
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Calendar_Controller_Resource::getInstance()->get($createResource->container_id);
+    }
+
+    public function testManageResourceRight()
+    {
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        $roleRights = Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId());
+        $roleRights = array_filter($roleRights, function($right) {
+            return $right['right'] != Calendar_Acl_Rights::MANAGE_RESOURCES && $right['right'] != Calendar_Acl_Rights::ADMIN;
+        });
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $roleRights);
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'You don\'t have the right to manage resources');
+        $this->testRenameContainer();
+    }
+
     public function testResourceConflict()
     {
         $resource = $this->testCreateResource();

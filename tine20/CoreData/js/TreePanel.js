@@ -131,8 +131,7 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
 
             var mainscreen = this.app.getMainScreen();
 
-            mainscreen.activeContentType = node.attributes.attributes.id;
-            mainscreen.activate();
+            mainscreen.setActiveContentType(node.attributes.attributes.id);
             mainscreen.getCenterPanel().getStore().reload();
         } else {
             return false;

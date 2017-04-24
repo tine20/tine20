@@ -120,6 +120,9 @@ class Addressbook_CliTest extends TestCase
             'email' => $attenderEmail
         );
         Calendar_Model_Attender::resolveEmailToContact($attenderData);
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());

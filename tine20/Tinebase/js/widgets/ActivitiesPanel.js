@@ -98,7 +98,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the gridpanel
         var gridPanel = new Ext.grid.GridPanel({
-            id: 'Activities_Grid',
             cls: 'tw-activities-grid',
             store: this.store,
             cm: columnModel,
@@ -120,15 +119,30 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     },
 
     noteRenderer: function(note) {
-        var recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model),
-            app = Tine.Tinebase.appMgr.get(this.app);
+        var editDialog = this.findParentBy(function(c){return !!c.record}),
+            record = editDialog ? editDialog.record : {},
+            recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model),
+            appName = recordClass.getMeta('appName'),
+            app = Tine.Tinebase.appMgr.get(appName),
+            i18n = app ? app.i18n : window.i18n;
 
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
-                if (field.label) {
-                    note = String(note).replace(field.name, '<br>' + app.i18n._hidden(field.label));
-                    //map[field.name] = '<br>' + this.app.i18n._hidden(field.label);
+                var i18nLabel = field.label ? i18n._hidden(field.label) : field.name,
+                    regexp = new RegExp(' (' + field.name +'|' + i18nLabel + ') \\((.*) (->) ([^)]*)\\)'),
+                    struct = regexp.exec(note),
+                    label = struct && struct.length == 5 ? struct[1] : null,
+                    oldValue = label ? struct[2] : null,
+                    newValue = label ? struct[4] : null;
+
+                if (label) {
+                    var renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
+                        oldValue = renderer(oldValue, {}, record),
+                        newValue = renderer(newValue, {}, record);
+
+                    note = note.replace(regexp, ' <br />' + i18nLabel + ' (' + oldValue + ' \u27bd ' + newValue + ')');
                 }
+
             }, this);
         }
 

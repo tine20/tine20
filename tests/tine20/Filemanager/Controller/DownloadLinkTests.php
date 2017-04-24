@@ -62,27 +62,23 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         $resultNode = $this->_getUit()->getNode($downloadLink, array());
         
         $this->assertEquals(
-            Tinebase_Container::getInstance()->getDefaultContainer('Filemanager_Model_Node')->getId(),
+            Tinebase_FileSystem::getInstance()->getDefaultContainer('Filemanager_Model_Node')->name,
             $resultNode->name,
             'download link should resolve the default container'
         );
     }
     
     /**
-     * @return Filemanager_Model_Node
+     * @return Tinebase_Model_Tree_Node
      */
     protected function _getPersonalRootNode()
     {
-        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager_Model_Node');
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field'    => 'path',
-            'operator' => 'equals',
-            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
-        )));
-        $node = Filemanager_Controller_Node::getInstance()->search($filter)->getFirstRecord();
-        
+        $node = Tinebase_FileSystem::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser(),
+            'Filemanager_Model_Node',
+            Tinebase_Core::getUser()
+        )->getFirstRecord();
         $this->assertInstanceOf('Tinebase_Model_Tree_Node', $node);
-        
         return $node;
     }
     
@@ -93,8 +89,8 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
     {
         $downloadLink = $this->testCreateDownloadLink();
         
-        $basePath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
-            . '/' . Tinebase_Container::getInstance()->getDefaultContainer('Filemanager_Model_Node')->name;
+        $basePath = '/' .Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
+            . '/' . Tinebase_FileSystem::getInstance()->getDefaultContainer('Filemanager_Model_Node')->name;
         $directories = array(
             $basePath . '/one',
             $basePath . '/two',

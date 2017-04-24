@@ -349,16 +349,37 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     /**
      * check if the current user has a given grant
      *
-     * @param int $_containerId
-     * @param int $_grant
+     * @param mixed $_containerId
+     * @param string $_grant
+     * @param string $_aclModel
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * TODO improve handling of different acl models
      */
-    public function hasGrant($_containerId, $_grant)
+    public function hasGrant($_containerId, $_grant, $_aclModel = 'Tinebase_Model_Container')
     {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->hasGrant($this->accountId, $_containerId, $_grant);
-        
+        if ($_containerId instanceof Tinebase_Record_Abstract) {
+            $aclModel = get_class($_containerId);
+            if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
+                // fall back to param
+                $aclModel = $_aclModel;
+            }
+        } else {
+            $aclModel = $_aclModel;
+        }
+
+        switch ($aclModel) {
+            case 'Tinebase_Model_Container':
+                $result = Tinebase_Container::getInstance()->hasGrant($this->accountId, $_containerId, $_grant);
+                break;
+            case 'Tinebase_Model_Tree_Node':
+                $result = Tinebase_FileSystem::getInstance()->hasGrant($this->accountId, $_containerId, $_grant);
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('ACL model not supported ');
+        }
+
         return $result;
     }
     

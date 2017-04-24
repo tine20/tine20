@@ -82,6 +82,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
+                'type'    => 'fulltext',
                 'queryFilter' => TRUE,
             ),
             'address_id'       => array(

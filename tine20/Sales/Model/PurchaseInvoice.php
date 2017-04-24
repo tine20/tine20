@@ -93,6 +93,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             'description' => array(
                 'label'   => 'Description',     // _('Description')
                 'queryFilter' => TRUE,
+                'type' => 'fulltext'
             ),
             'date' => array(
                 'type'  => 'date',

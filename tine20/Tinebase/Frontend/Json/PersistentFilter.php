@@ -132,6 +132,8 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Skipping filter: ' . $e->getMessage());
+                if ($_filter && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Filter: ' . print_r($_filter->toArray(), true));
                 unset($result[$idx]);
                 continue;
             }

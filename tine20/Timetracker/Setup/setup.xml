@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>10.2</version>
+    <version>10.5</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>timetracker_timeaccount</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -167,11 +167,18 @@
                         <field>id</field>
                     </reference>
                 </index>
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
             </declaration>
         </table>
         <table>
             <name>timetracker_timesheet</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -290,6 +297,13 @@
                         <table>timetracker_timeaccount</table>
                         <field>id</field>
                     </reference>
+                </index>
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
                 </index>
             </declaration>
         </table>

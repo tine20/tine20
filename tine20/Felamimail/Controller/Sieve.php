@@ -554,25 +554,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @param string $templateId
      * @return string
-     * 
-     * @todo generalize and move to Tinebase_FileSystem / Node controller
      */
     protected function _getMessageFromTemplateFile($templateId)
     {
-        $template = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
-            array('field' => 'id', 'operator' => 'equals', 'value' => $templateId)
-        )))->getFirstRecord();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($template->toArray(), TRUE));
-        
-        $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
-        $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer) . '/' . $template->name;
-        
-        $templateHandle = Tinebase_FileSystem::getInstance()->fopen($path, 'r');
-        $message = stream_get_contents($templateHandle);
-        Tinebase_FileSystem::getInstance()->fclose($templateHandle);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+        $message = Tinebase_FileSystem::getInstance()->getNodeContents($templateId);
         
         return $message;
     }

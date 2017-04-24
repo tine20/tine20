@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-interface Tinebase_Record_Abstract_GetPathPartDecorator
+interface Tinebase_Record_Abstract_GetPathPartDelegatorInterface
 {
     /**
      * @param Tinebase_Record_Interface $_record

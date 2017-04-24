@@ -837,11 +837,12 @@ class Felamimail_Controller_MessageTest extends TestCase
         $forwardedMessage = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->getFolder('INBOX'));
         $forwardedMessageInSent = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
+        $attachmentName = preg_replace('/\s*/', '', $cachedMessage->subject);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
-        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name'],
+        $this->assertEquals($attachmentName . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name'],
             'filename mismatch in structure' . print_r($forwardedMessage['structure']['parts'][2], TRUE));
-        $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename'],
+        $this->assertEquals($attachmentName . '.eml', $completeForwardedMessage->attachments[0]['filename'],
             'filename mismatch of attachment' . print_r($completeForwardedMessage->attachments[0], TRUE));
         
         return $forwardedMessage;

@@ -131,7 +131,7 @@ class Tinebase_FileSystem_RecordAttachments
                     'operator'  => 'in',
                     'value'     => $recordIds
                 )
-            ));
+            ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
             $recordNodes = $this->_fsController->searchNodes($searchFilter);
             if ($recordNodes->count() === 0) {
                 // nothing to be done 
@@ -210,10 +210,15 @@ class Tinebase_FileSystem_RecordAttachments
             $name = $attachment->name;
         }
 
+        // If there is no tempfile, the attachment was added from the filemanager
+        if ($attachment instanceof Tinebase_Model_Tree_Node && !isset($attachment->tempFile) && isset($attachment->path)) {
+            return $this->addRecordAttachmentFromFilemanager($record, $attachment);
+        }
+
         if ($attachment instanceof Tinebase_Model_Tree_Node && empty($name)) {
             $name = $attachment->name;
         }
-        
+
         if (empty($name)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Could not evaluate attachment name.');
@@ -234,7 +239,28 @@ class Tinebase_FileSystem_RecordAttachments
         $node = $this->_fsController->stat($attachmentPath);
         return $node;
     }
-    
+
+    /**
+     * Add a filemanager attachment to a given record
+     *
+     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Model_Tree_Node $attachment
+     * @return null|Tinebase_Model_Tree_Node
+     */
+    public function addRecordAttachmentFromFilemanager(Tinebase_Record_Abstract $record, Tinebase_Model_Tree_Node $attachment) {
+        if (!$attachment->path || !$attachment->name) {
+            return null;
+        }
+
+        $attachmentsDir = $this->getRecordAttachmentPath($record, true);
+        $attachmentPath = $attachmentsDir . '/' . $attachment->name;
+
+        $nodeController = Filemanager_Controller_Node::getInstance();
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($attachment->path));
+        $attachment = $this->_fsController->copy($path->statpath, $attachmentPath);
+
+        return $attachment;
+    }
     
     /**
      * delete attachments of record

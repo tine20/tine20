@@ -237,7 +237,7 @@
             <available file="${project.basedir}/${name}/js/package.json"/>
             <then>
                 <echo message="Starting npm..." />
-                <exec command="npm install" dir="${project.basedir}/${name}/js" passthru="true" />
+                <exec command="npm install --no-optional" dir="${project.basedir}/${name}/js" passthru="true" />
             </then>
         </if>
 

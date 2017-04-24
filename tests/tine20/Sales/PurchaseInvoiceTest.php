@@ -196,7 +196,23 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $customerBackend = new Sales_Backend_PurchaseInvoice();
         $deletedPurchase = $customerBackend->get($purchase['id'], TRUE);
         $this->assertEquals(1, $deletedPurchase->is_deleted);
-        
     }
 
+    public function testImportPurchaseInvoiceViaWebdav()
+    {
+        $importPath = 'Sales/PurchaseInvoices/Import';
+        $collection = new Sales_Frontend_WebDAV_Import($importPath);
+
+        $filehandle = fopen(dirname(__DIR__) . '/Filemanager/files/test.txt', 'r');
+        $result = $collection->createFile('import.txt', $filehandle);
+
+        $this->assertEquals('"1"', $result);
+
+        $search = $this->_json->searchPurchaseInvoices(
+            array(array('field' => 'query', 'operator' => 'contains', 'value' => '')),
+            $this->_getPaging())
+        ;
+        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(Tinebase_DateTime::now()->setTime(0,0,0), $search['results'][0]['due_at']);
+    }
 }

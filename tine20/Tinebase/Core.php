@@ -208,11 +208,11 @@ class Tinebase_Core
     protected static $_serverPlugins = array();
 
     /**
-     * contains the decorators fetched from configuration
+     * contains the delegates fetched from configuration
      *
      * @var array
      */
-    protected static $_decoratorCache = array();
+    protected static $_delegatorCache = array();
 
     /******************************* DISPATCH *********************************/
     
@@ -438,7 +438,10 @@ class Tinebase_Core
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
-        
+
+        // init database after cache init
+        self::getDb();
+
         Tinebase_Core::setupBuildConstants();
         
         // setup a temporary user locale. This will be overwritten later but we 
@@ -1411,6 +1414,12 @@ class Tinebase_Core
         return self::get(self::USER);
     }
 
+    public static function unsetUser()
+    {
+        Zend_Registry::set(self::USER, null);
+        Tinebase_Log_Formatter::resetUsername();
+    }
+
     /**
      * get current users timezone
      *
@@ -1828,26 +1837,24 @@ class Tinebase_Core
         }
     }
 
-    public static function getDecorator($calledClass, $applicationName, $configKey, $interfaceName)
+    public static function getDelegate($applicationName, $configKey, $interfaceName)
     {
-        $cacheKey = $configKey . '_' . $calledClass;
-
-        if (!isset(static::$_decoratorCache[$cacheKey])) {
+        if (!isset(static::$_delegatorCache[$configKey])) {
             $config = Tinebase_Config_Abstract::factory($applicationName);
-            $decorator = $config->get($cacheKey);
-            if (null === $decorator || ! class_exists($decorator) || ! in_array($interfaceName, class_implements($decorator))) {
-                $decorator = false;
+            $delegate = $config->get($configKey);
+            if (null === $delegate || ! class_exists($delegate) || ! in_array($interfaceName, class_implements($delegate))) {
+                $delegate = false;
             } else {
-                $decorator = new $decorator();
+                $delegate = new $delegate();
             }
-            static::$_decoratorCache[$cacheKey] = $decorator;
+            static::$_delegatorCache[$configKey] = $delegate;
         }
 
-        return static::$_decoratorCache[$cacheKey];
+        return static::$_delegatorCache[$configKey];
     }
 
-    public static function clearDecoratorCache()
+    public static function clearDelegatorCache()
     {
-        static::$_decoratorCache = array();
+        static::$_delegatorCache = array();
     }
 }

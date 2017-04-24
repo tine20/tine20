@@ -17,7 +17,7 @@
  * @package     SimpleFAQ
  * @subpackage  Controller
  */
-Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * default settings

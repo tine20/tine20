@@ -87,10 +87,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
 
-        $this->_objects['containerids'][] = $createdNode['name']['id'];
-
-        self::assertTrue(is_array($createdNode['name']));
-        self::assertEquals($containerName, $createdNode['name']['name']);
+        self::assertEquals($containerName, $createdNode['name']);
         self::assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
 
         return $createdNode;
@@ -135,7 +132,6 @@ class MailFiler_Frontend_JsonTests extends TestCase
             'type' => Tinebase_Model_Tag::TYPE_PERSONAL,
             'name' => 'file tag',
         ));
-        $node['name'] = $node['name']['id'];
         $updatedNode = $this->_json->saveNode($node);
 
         $this->assertEquals(1, count($updatedNode['tags']));

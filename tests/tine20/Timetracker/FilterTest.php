@@ -76,6 +76,11 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         ));
         $ta1->relations = array($this->_getRelation($contract, $ta1));
         $this->_timeaccountController->update($ta1);
+
+        $this->_deleteTimeAccounts[] = $ta1->getId();
+        $this->_deleteTimeAccounts[] = $ta2->getId();
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // search by contract
         $f = new Timetracker_Model_TimeaccountFilter(array(array('field' => 'contract', 'operator' => 'AND', 'value' =>

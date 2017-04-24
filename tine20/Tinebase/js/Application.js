@@ -31,9 +31,11 @@ Tine.Tinebase.Application = function(config) {
 
     this.init();
     if (Tine.CoreData && Tine.CoreData.Manager) {
-        this.registerCoreData();
+        Tine.log.debug('Tine.Tinebase.Application - register core data for ' + this.appName)
+        this.registerCoreData.defer(500, this);
     }
     this.initAutoHooks();
+    this.initRoutes();
 };
 
 Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
@@ -53,6 +55,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @cfg {Object} routes
      */
     routes: null,
+
+    /**
+     * @cfg {String} defaultRoute
+     */
+    defaultRoute : 'mainscreen',
 
     /**
      * @property {Locale.gettext} i18n
@@ -97,7 +104,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         
         return this.mainScreen;
     },
-    
+
     /**
      * returns registry of this app
      * 
@@ -157,11 +164,34 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
     },
 
+    initRoutes: function() {
+        var route, action;
+
+        if (this.routes) {
+            for (route in this.routes) {
+                if (this.routes.hasOwnProperty(route)) {
+                    action = this.routes[route];
+                    if (Ext.isString(action) && Ext.isFunction(this[action])) {
+                        action = this[action].createDelegate(this);
+                    }
+                    if (route[0] != '/') {
+                        route = '/' + this.appName + '/' + route;
+                    }
+                    Tine.Tinebase.router.on(route, action);
+                }
+            }
+        }
+
+        // default mainscreen route
+        if (!this.routes || !this.routes['']) {
+            var me = this;
+            Tine.Tinebase.router.on('/' + this.appName, function() {
+                Tine.Tinebase.MainScreenPanel.show(me);
+            });
+        }
+    },
+
     /**
-     * Ext 5 like route dispatcher
-     *
-     * @see http://docs.sencha.com/extjs/5.0/application_architecture/router.html
-     *
      * @param {String} action
      * @param {Array} params
      */

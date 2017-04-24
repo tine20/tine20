@@ -76,7 +76,7 @@ Tine.Tinebase.CanonicalPath.hasPathPart = function(component) {
  */
 Tine.Tinebase.CanonicalPath.activateAll = function() {
     Tine.Tinebase.appMgr.apps.each(function (app) {
-        Tine.Tinebase.appMgr.activate(app);
+        Tine.Tinebase.MainScreen.activate(app);
         var mainScreen = app.getMainScreen(),
             westPanel = mainScreen ? mainScreen.getWestPanel() : null,
             moduleTree = mainScreen && mainScreen.useModuleTreePanel && Ext.isFunction(mainScreen.getModuleTreePanel) ?

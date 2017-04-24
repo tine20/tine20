@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -118,8 +118,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * 
      * @param Tinebase_Model_Tree_Node $node
      * @param string $filesystemPath
+     * @param int|null $revision
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _downloadFileNode($node, $filesystemPath)
+    protected function _downloadFileNode($node, $filesystemPath, $revision = null)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
         
@@ -128,7 +130,17 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         $this->_prepareHeader($node->name, $node->contenttype);
 
-        $handle = fopen($filesystemPath, 'r');
+        if (null !== $revision) {
+            $streamContext = stream_context_create(array(
+                'Tinebase_FileSystem_StreamWrapper' => array(
+                    'revision' => $revision
+                )
+            ));
+            $handle = fopen($filesystemPath, 'r', false, $streamContext);
+        } else {
+            $handle = fopen($filesystemPath, 'r');
+        }
+
         fpassthru($handle);
         fclose($handle);
 

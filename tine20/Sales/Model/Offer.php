@@ -85,7 +85,7 @@ class Sales_Model_Offer extends Tinebase_Record_Abstract
                 'label'      => 'Description',    // _('Description')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter' => TRUE,
-                'type' => 'text',
+                'type' => 'fulltext',
             ),
             'customer' => array(
                 'type' => 'virtual',

@@ -324,6 +324,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_uit->uninstallApplications($installedApplications->name);
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
+        Tinebase_Acl_Roles::unsetInstance();
+        Tinebase_Core::unsetUser();
     }
     
     /**

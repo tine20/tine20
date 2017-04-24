@@ -36,11 +36,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $this->_doContainerACLChecks  = FALSE;
         $this->_purgeRecords          = FALSE;
         
-        $this->_backend = new Tinebase_Backend_Sql(array(
-            'tableName'     => 'container',
-            'modelName'     => $this->_modelName,
-            'modlogActive'  => TRUE,
-        ));
+        $this->_backend = Tinebase_Container::getInstance();
         
         $this->_containerController = Tinebase_Container::getInstance();
     }

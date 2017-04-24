@@ -130,7 +130,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
-                'type'    => 'text',
+                'type'    => 'fulltext',
                 'queryFilter' => TRUE,
             ),
             'parent_id'       => array(
@@ -222,7 +222,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ),
             
             'fulltext' => array(
-                'type' => 'string',
+                'type' => 'string'
             ),
             
             'merge_invoices' => array(

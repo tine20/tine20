@@ -962,3 +962,6 @@ msgstr "Zuletzt von mir bearbeitet"
 #: Setup/Initialize.php:150
 msgid "All contacts that I have last modified"
 msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
+
+msgid "Groups"
+msgstr "Gruppen"

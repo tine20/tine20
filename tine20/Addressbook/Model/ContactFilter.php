@@ -42,7 +42,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                   => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality'))
+            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality', 'note'))
         ),
         'path'                => array(
             'filter' => 'Tinebase_Model_Filter_Path',
@@ -136,7 +136,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'tel_pager_normalized'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_prefer_normalized'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_work_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'note'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'note'                 => array('filter' => 'Tinebase_Model_Filter_FullText'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'assistent'            => array('filter' => 'Tinebase_Model_Filter_Text'),

@@ -101,7 +101,47 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         
         this.supr().initComponent.call(this);
     },
-    
+
+    initContextMenu: function() {
+        this.supr().initContextMenu.call(this);
+        this.action_editResource = new Ext.Action({
+            iconCls: 'cal-resource',
+            hidden: true,
+            text: this.app.i18n._('Edit Resource'),
+            handler: function() {
+                var resource = new Tine.Calendar.Model.Resource({id: this.action_editResource.resourceId}, this.action_editResource.resourceId);
+                Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
+            },
+            scope: this
+        });
+
+        this.contextMenuSingleContainer.add(this.action_editResource);
+        this.contextMenuSingleContainerProperties.add(this.action_editResource);
+    },
+
+    onContextMenu: function(node, event) {
+        var grants = lodash.get(node, 'attributes.container.account_grants'),
+            xprops = lodash.get(node, 'attributes.container.xprops'),
+            resourceId;
+
+        if (Ext.isString(xprops)) {
+            xprops = Ext.decode(xprops);
+        }
+
+        resourceId = lodash.get(xprops, 'Calendar.Resource.resource_id');
+
+        if (resourceId) {
+            this.action_editResource.setText(grants.adminGrant ?
+                this.app.i18n._('Edit Resource') :
+                this.app.i18n._('View Resource')
+            );
+        }
+
+        this.action_editResource.setHidden(! grants.readGrant || ! resourceId);
+        this.action_editResource.resourceId = resourceId;
+
+        this.supr().onContextMenu.apply(this, arguments);
+    },
     /**
      * dissalow loading of all and otherUsers node
      * 

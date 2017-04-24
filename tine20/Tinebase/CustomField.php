@@ -102,7 +102,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * add new custom field
      *
-     * @param Tinebase_Model_CustomField_Config $_customField
+     * @param Tinebase_Model_CustomField_Config $_record
      * @return Tinebase_Model_CustomField_Config
      */
     public function addCustomField(Tinebase_Model_CustomField_Config $_record)
@@ -119,7 +119,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * update custom field
      *
-     * @param Tinebase_Model_CustomField_Config $_customField
+     * @param Tinebase_Model_CustomField_Config $_record
      * @return Tinebase_Model_CustomField_Config
      */
     public function updateCustomField(Tinebase_Model_CustomField_Config $_record)
@@ -138,6 +138,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function getCustomField($_customFieldId)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->_backendConfig->get($_customFieldId);
     }
 
@@ -305,8 +306,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * saves multiple Custom Fields
      * @param String $_modelName
-     * @param Array $_recordIds
-     * @param Array $_customFieldValues
+     * @param array $_recordIds
+     * @param array $_customFieldValues
      */
     
     public function saveMultipleCustomFields($_modelName, $_recordIds, $_customFieldValues) 
@@ -365,11 +366,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         $this->_clearCache();
       }
-    
+
     /**
      * save custom fields of record in its custom fields table
      *
      * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function saveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
@@ -398,6 +400,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                     $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
                     
                     if (is_array($value)) {
+                        /** @var Tinebase_Record_Interface $model */
                         $model = new $modelName(array(), TRUE);
                         $value = $value[$model->getIdProperty()];
                     }
@@ -458,8 +461,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Adding ' . count($customFields) . ' customfields to record  ' . $_record->getId());
-        
-        $result = array();
+
         foreach ($customFields as $customField) {
             $this->_setCfValueInRecord($_record, $customField, $_configs);
         }
@@ -468,11 +470,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * set customfield value in record
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param Tinebase_Model_CustomField_Value $customField
      * @param Tinebase_Record_RecordSet $configs
      */
-    protected function _setCfValueInRecord(Tinebase_Record_Abstract $record, Tinebase_Model_CustomField_Value $customField, Tinebase_Record_RecordSet $configs)
+    protected function _setCfValueInRecord(Tinebase_Record_Interface $record, Tinebase_Model_CustomField_Value $customField, Tinebase_Record_RecordSet $configs)
     {
         $recordCfs = $record->customfields;
         $idx = $configs->getIndexById($customField->customfield_id);
@@ -543,6 +545,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         // NOTE: as filtering is currently very slow, we have to loop the customfields and add the value to the record.
         // @see 0007496: timeout when opening multiedit dlg and assigning records to events/projects/email
         // @see 0007558: reactivate indices in Tinebase_Record_RecordSet
+        /** @var Tinebase_Record_Interface $record */
         $record = NULL;
         foreach ($customFields as $customField) {
             if (! $record || $record->getId() !== $customField->record_id) {
@@ -559,7 +562,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * get custom fields of record(s)
      *
      * @param string|array $_recordId
-     * @param array $_recordId
+     * @param array|null $_configIds
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Value
      */
     protected function _getCustomFields($_recordId, $_configIds = NULL)
@@ -596,6 +599,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param   string $_accountType
      * @param   int $_accountId
      * @return  void
+     * @throws Tinebase_Exception_Backend
      */
     public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL)
     {
@@ -671,7 +675,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     * 
     * @todo this needs to clear in a more efficient way
     */
-    public function clearCacheForConfig(Tinebase_Model_CustomField_Config $record)
+    public function clearCacheForConfig(/** @noinspection PhpUnusedParameterInspection */
+        Tinebase_Model_CustomField_Config $record)
     {
         $this->_clearCache();
         
@@ -727,12 +732,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * get list of custom field values
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
+     * @param Tinebase_Record_Interface $_pagination
      * @param bool $_getRelations (unused)
-     * @param boolean $_onlyIds (unused)
+     * @param bool $_onlyIds (unused)
      * @return Tinebase_Record_RecordSet
      */
-    public function searchConfig(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function searchConfig(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, /** @noinspection PhpUnusedParameterInspection */ $_getRelations = FALSE, /** @noinspection PhpUnusedParameterInspection */ $_onlyIds = FALSE)
     {
         $result = $this->_backendConfig->search($_filter, $_pagination);
         return $result;

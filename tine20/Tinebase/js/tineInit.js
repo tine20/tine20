@@ -129,10 +129,30 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
+            var target = e.getTarget('a',1 ,true);
+            if (target) {
+                // allow native context menu for links
+                return;
+            }
+
             e.stopPropagation();
             e.preventDefault();
 
             Tine.Tinebase.MainContextMenu.showIf(e);
+        }, this);
+
+        // open internal links in same window (use router)
+        Ext.getBody().on('click', function(e) {
+            var target = e.getTarget('a',1 ,true);
+            if (target && target.getAttribute('target') == '_blank') {
+                var href = String(target.getAttribute('href'));
+                    if (href.match(new RegExp('^' + Tine.Tinebase.common.getUrl()))) {
+                        target.set({
+                            href: decodeURI(href),
+                            target: "_self"
+                        });
+                    }
+            }
         }, this);
     },
 
@@ -175,33 +195,28 @@ Tine.Tinebase.tineInit = {
      * Each window has exactly one viewport containing a card layout in its lifetime
      * The default card is a splash screen.
      * 
-     * defautl wait panel (picture only no string!)
+     * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
-        
-        this.splash = {
-            xtype: 'container',
-            id: 'tine-viewport-waitcycle',
-            border: false,
-            layout: 'fit',
-            width: 16,
-            height: 16,
-            // the content elements come from the initial html so they are displayed fastly
-            contentEl: Ext.select('div[class^=tine-viewport-]')
-        };
-        
         Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',
             border: false,
             items: {
                 xtype: 'container',
-                id: 'tine-viewport-maincardpanel',
                 ref: 'tineViewportMaincardpanel',
                 isWindowMainCardPanel: true,
                 layout: 'card',
                 border: false,
                 activeItem: 0,
-                items: this.splash
+                items: [{
+                    xtype: 'container',
+                    border: false,
+                    layout: 'fit',
+                    width: 16,
+                    height: 16,
+                    // the content elements come from the initial html so they are displayed fastly
+                    contentEl: Ext.select('div[class^=tine-viewport-]')
+                }]
             }
         });
     },
@@ -231,8 +246,6 @@ Tine.Tinebase.tineInit = {
 
     renderWindow: function () {
         Tine.log.info('renderWindow::start');
-        
-        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
 
         // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
@@ -252,42 +265,32 @@ Tine.Tinebase.tineInit = {
             });
             
             return;
+        } else {
+            var sessionLifeTime = Tine.Tinebase.registry.get('sessionLifeTime') || 86400,
+                presenceObserver = new Tine.Tinebase.PresenceObserver({
+                    maxAbsenseTime: sessionLifeTime / 60,
+                    callback: function(lastPresence, po) {
+                        Tine.Tinebase.MainMenu.prototype._doLogout()
+                    }
+                });
         }
 
-        // experimental deep link
+        Tine.Tinebase.router = new director.Router().init();
+        Tine.Tinebase.router.configure({notfound: function () {
+            var defaultApp = Tine.Tinebase.appMgr.getDefault()
+            Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
+        }});
+
+        // deep links
         if (window.location.hash) {
-            var hash = window.location.hash.replace(/^#+/, ''),
-                config;
+            var route = Tine.Tinebase.router.getRoute();
 
-            if (hash.match(/\//)) {
-                var args = hash.split('/'),
-                    app = Tine.Tinebase.appMgr.get(args.shift()),
-                    method = args.shift();
+            // init the app
+            Tine.Tinebase.ApplicationStarter.init();
+            Tine.Tinebase.appMgr.getAll();
 
-                config = app.dispatchRoute(method, args);
-
-            } else {
-                //http://tine.example.com/#{"name":"TimesheetEditWindow_0","contentPanelConstructor":"Tine.Timetracker.TimesheetEditDialog","recordId":0}
-                config = Ext.decode(hash);
-            }
-
-            if (window.history && window.history.replaceState) {
-                window.history.replaceState({}, document.title, Tine.Tinebase.common.getUrl());
-            }
-
-            // what about plugins?
-            Ext.applyIf(config, {
-                name: window.name,
-                popup: window
-            });
-
-            window.name = config.name;
-
-            // disable mainWindows per hash for the moment. MainWindow concept needs to be rethought
-            // in the context of window manager rewrite
-            window.isMainWindow = false;
-
-            Ext.ux.PopupWindowMgr.register(new Ext.ux.PopupWindow(config));
+            Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
+            return;
         }
 
         /**
@@ -301,7 +304,6 @@ Tine.Tinebase.tineInit = {
             });
         }
 
-
         Tine.log.info('renderWindow::before get window');
         
         // fetch window config from WindowMgr
@@ -313,7 +315,9 @@ Tine.Tinebase.tineInit = {
         Tine.log.info('renderWindow::getCenterPanel');
         
         // finally render the window contents in a new card
-        var card = Tine.WindowFactory.getCenterPanel(c);
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+            card = Tine.WindowFactory.getCenterPanel(c);
+
         mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();

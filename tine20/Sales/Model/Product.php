@@ -58,7 +58,7 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
                 'label'       => 'Description',  // _('Description')
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter' => TRUE,
-                'type'        => 'text',
+                'type'        => 'fulltext',
             ),
             'purchaseprice' => array(
                 'label'        => 'Purchaseprice', // _('Purchaseprice')

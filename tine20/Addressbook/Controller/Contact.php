@@ -103,7 +103,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         self::$_instance = null;
     }
-    
+
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    {
+        $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+
+        if($_id) {
+            $listController = Addressbook_Controller_List::getInstance();
+            $groups = $listController->getMemberships($_id);
+            $contact->groups = $listController->getMultiple($groups);
+        }
+
+        return $contact;
+    }
+
     /**
      * gets binary contactImage
      *

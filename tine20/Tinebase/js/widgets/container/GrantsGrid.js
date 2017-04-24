@@ -115,12 +115,26 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         
         Ext.each(grants, function(grant) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
+                id: grant,
                 header: i18n._(this[grant + 'GrantTitle']),
                 tooltip: i18n._(this[grant + 'GrantDescription']),
                 dataIndex: grant + 'Grant',
                 width: 55
             }));
         }, this);
+    },
+
+    useGrant: function(grant, use) {
+        var cm = this.getColumnModel(),
+            findFn = function(o) { return o.id == grant;},
+            current = lodash.find(cm.config, findFn),
+            config = lodash.find(this.configColumns, findFn);
+
+        if (use && ! current) {
+            cm.setConfig(cm.config.push(config));
+        } else if (! use && current) {
+            cm.setConfig(lodash.filter(cm.config, lodash.negate(findFn)));
+        }
     }
 });
 
@@ -154,7 +168,7 @@ Tine.widgets.container.GrantsManager = function() {
          * @return Array
          */
         getByContainer: function(container) {
-            var modelName = container.model,
+            var modelName = container.model || container,
                 grants  = grantsForModels[modelName]
                     ? (Ext.isFunction(grantsForModels[modelName]) ? grantsForModels[modelName](container) : grantsForModels[modelName])
                     : this.defaultGrants();

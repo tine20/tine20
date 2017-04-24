@@ -4,61 +4,15 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Convert_Contact_VCard_GenericTest::main');
-}
-
-/**
  * Test class for Addressbook_Convert_Contact_VCard_Generic
  */
-class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_TestCase
+class Addressbook_Convert_Contact_VCard_GenericTest extends TestCase
 {
-    /**
-     * @var array test objects
-     */
-    protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Generic Contact Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    }
-    
     /**
      * test converting vcard from sogo connector to Addressbook_Model_Contact
      * 
@@ -103,8 +57,8 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertEquals('+49 PAGER',               $contact->tel_pager);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
         $this->assertEquals('Titel',                   $contact->title);
-        $this->assertEquals('http\://www.tine20.com',  $contact->url);
-        $this->assertEquals('http\://www.tine20.org',  $contact->url_home);
+        $this->assertEquals('http://www.tine20.com',   $contact->url);
+        $this->assertEquals('http://www.tine20.org',   $contact->url_home);
         $this->assertContains('CATEGORY 1',            $contact->tags->name);
         $this->assertContains('CATEGORY 2',            $contact->tags->name);
         
@@ -139,8 +93,6 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
-        //var_dump($vcard);
-        
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
         
@@ -160,10 +112,9 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertContains('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=WORK:http\\://www.tine20.com', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
         $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcard, $vcard);
     }
-    
 }

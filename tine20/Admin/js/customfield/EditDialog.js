@@ -341,7 +341,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
 
             var curApp =  Tine.Tinebase.appMgr.get(app.get('name'));
-            var curTitle = curApp.getTitle();
+            var curTitle = curApp ? curApp.getTitle() : '';
 
             app.set('i18nName', curTitle);
         }, this);

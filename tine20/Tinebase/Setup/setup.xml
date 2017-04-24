@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.12</version>
+    <version>10.20</version>
     <tables>
         <table>
             <name>applications</name>
@@ -520,7 +520,7 @@
         </table>
         <table>
             <name>container</name>
-            <version>11</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -622,6 +622,12 @@
                     <name>uuid</name>
                     <type>text</type>
                     <length>64</length>
+                    <default>NULL</default>
+                </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
                 <index>
@@ -908,7 +914,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -916,28 +922,34 @@
                     <autoincrement>true</autoincrement>
                 </field>
                 <field>
-                    <name>observable_application</name>
-                    <type>integer</type>
+                    <name>observable_model</name>
+                    <type>text</type>
+                    <length>100</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observable_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>observer_application</name>
-                    <type>integer</type>
+                    <name>observer_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observer_identifier</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observed_event</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
+                    <length>100</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -949,39 +961,6 @@
                     <type>datetime</type>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <notnull>true</notnull>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
-                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -990,13 +969,16 @@
                     </field>
                 </index>
                 <index>
-                    <name>observable_id-observer_id-application_id</name>
+                    <name>observable-observer-event</name>
                     <unique>true</unique>
                     <field>
-                        <name>observable_application</name>
+                        <name>observable_model</name>
                     </field>
                     <field>
                         <name>observable_identifier</name>
+                    </field>
+                    <field>
+                        <name>observer_model</name>
                     </field>
                     <field>
                         <name>observer_identifier</name>
@@ -1006,18 +988,14 @@
                     </field>
                 </index>
                 <index>
-                    <name>observer_application</name>
+                    <name>observer</name>
                     <field>
-                        <name>observer_application</name>
+                        <name>observer_model</name>
                     </field>
-                </index>
-                <index>
-                    <name>observer_identifier</name>
                     <field>
                         <name>observer_identifier</name>
                     </field>
                 </index>
-
             </declaration>
         </table>
 
@@ -1335,7 +1313,7 @@
 
         <table>
             <name>tags</name>
-            <version>7</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1362,8 +1340,9 @@
                 </field>
                 <field>
                     <name>description</name>
+                    <!--Long text!-->
+                    <length>2147483647</length>
                     <type>text</type>
-                    <length>255</length>
                     <default>NULL</default>
                 </field>
                 <field>
@@ -1432,6 +1411,13 @@
                     <name>name</name>
                     <field>
                         <name>name</name>
+                    </field>
+                </index>
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
                     </field>
                 </index>
             </declaration>
@@ -3251,7 +3237,7 @@
         
         <table>
             <name>tree_fileobjects</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3349,6 +3335,13 @@
                         <name>is_deleted</name>
                     </field>
                 </index>
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
             </declaration>
         </table>
 
@@ -3436,7 +3429,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3471,6 +3464,16 @@
                     <name>indexed_hash</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>acl_node</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>revisionProps</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -3513,6 +3516,87 @@
                         <field>id</field>
                         <onupdate>cascade</onupdate>
                         <!-- add ondelete? -->
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>tree_node_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>tree_node_acl::record_id--tree_nodes::id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>

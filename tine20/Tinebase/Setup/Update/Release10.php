@@ -91,7 +91,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.6');
     }
 
-
     /**
      * update to 10.7
      *
@@ -504,5 +503,435 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '10.12');
+    }
+
+    /**
+     * add tree_node_acl
+     */
+    public function update_12()
+    {
+        if (! $this->_backend->columnExists('acl_node', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>acl_node</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+            ');
+            $query = $this->_backend->addAddCol('', 'tree_nodes', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>revisionProps</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>');
+            $query = $this->_backend->addAddCol($query, 'tree_nodes', $declaration);
+            $this->_backend->execQueryVoid($query);
+
+            $this->setTableVersion('tree_nodes', 2);
+
+            $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>tree_node_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>tree_node_acl::record_id--tree_nodes::id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>');
+            $this->createTable('tree_node_acl', $declaration);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.13');
+    }
+
+    /**
+     * update to 10.14
+     *
+     * add file revision cleanup task to scheduler
+     */
+    public function update_13()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.14');
+    }
+
+    /**
+     * update to 10.15
+     *
+     * update record_observer
+     */
+    public function update_14()
+    {
+        $this->dropTable('record_observer', 'Tinebase');
+
+        $this->createTable('record_observer', new Setup_Backend_Schema_Table_Xml('<table>
+            <name>record_observer</name>
+            <version>4</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>observable_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observable_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observer_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observer_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>observed_event</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>observable-observer-event</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>observable_model</name>
+                    </field>
+                    <field>
+                        <name>observable_identifier</name>
+                    </field>
+                    <field>
+                        <name>observer_model</name>
+                    </field>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                    <field>
+                        <name>observed_event</name>
+                    </field>
+                </index>
+                <index>
+                    <name>observer</name>
+                    <field>
+                        <name>observer_model</name>
+                    </field>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>'), 'Tinebase', 3);
+
+        $this->setApplicationVersion('Tinebase', '10.15');
+    }
+
+    /**
+     * update to 10.16
+     *
+     * add container xprops column
+     */
+    public function update_15()
+    {
+        if (! $this->_backend->columnExists('xprops', 'container')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
+                </field>
+            ');
+            $this->_backend->addCol('container', $declaration);
+            $this->setTableVersion('container', 12);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.16');
+    }
+
+    /**
+     * update node acl: find all nodes that have containers, copy acl to node and remove container
+     *
+     * TODO allow to call from cli?
+     */
+    public function update_16()
+    {
+        //
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if ($setupUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+        foreach ($applications as $application) {
+            $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
+            $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.17');
+    }
+
+    /**
+     * @param $application
+     * @param $type
+     */
+    protected function _migrateAclForApplication($application, $type)
+    {
+        $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            $application->name,
+            $type
+        );
+        try {
+            $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return;
+        }
+
+        $childNodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($parentNode);
+
+        if (count($childNodes) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " No container nodes found for application " . $application->name);
+            return;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' ' . count($childNodes) . " nodes found for application " . $application->name);
+
+        if ($type === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) {
+            foreach ($childNodes as $accountNode) {
+                $personalNodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($accountNode);
+                $this->_moveAclFromContainersToNodes($personalNodes);
+            }
+        } else {
+            // shared
+            $this->_moveAclFromContainersToNodes($childNodes);
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $nodes
+     *
+     * TODO move to TFS?
+     */
+    protected function _moveAclFromContainersToNodes(Tinebase_Record_RecordSet $nodes)
+    {
+        foreach ($nodes as $node) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($node->name);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // already converted
+                continue;
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                // already converted
+                continue;
+            }
+            //print_r($container->toArray());
+            if ($container->model === 'HumanResources_Model_Employee') {
+                // fix broken HR template container to prevent problems when removing data
+                $container->model = 'Tinebase_Model_Tree_Node';
+                Tinebase_Container::getInstance()->update($container);
+            }
+
+            // set container acl in node
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, /* ignore acl */ true);
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
+
+            // set container name in node
+            $node->name = $container->name;
+            // check if node exists and if yes: attach uid
+            $parentNode = Tinebase_FileSystem::getInstance()->get($node->parent_id);
+            $parentPath = Tinebase_FileSystem::getInstance()->getPathOfNode($parentNode, true);
+            if (Tinebase_FileSystem::getInstance()->fileExists($parentPath . '/' . $node->name)) {
+                $node->name .= ' ' . Tinebase_Record_Abstract::generateUID(8);
+            }
+
+            $node->acl_node = $node->getId();
+            Tinebase_FileSystem::getInstance()->update($node);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Updated node acl for ' . $node->name .' (container id: ' . $container->getId() . ')');
+
+            // remove old acl container
+            Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */ true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Removed old container ' . $container->name);
+        }
+    }
+
+    /**
+     * update to 10.18
+     *
+     * Add fulltext index for description field
+     */
+    public function update_17()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('tree_fileobjects', $declaration);
+
+        $this->setTableVersion('tree_fileobjects', '5');
+        $this->setApplicationVersion('Tinebase', '10.18');
+    }
+
+    /**
+     * update to 10.19
+     *
+     * Add fulltext search index for tags description
+     */
+    public function update_18()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        try {
+            $this->_backend->dropIndex('tags', 'description');
+        } catch (Exception $e) {
+            // Ignore, if there is no index, we can just go on and create one.
+        }
+
+        $this->_backend->addIndex('tags', $declaration);
+
+        $this->setTableVersion('tags', 8);
+        $this->setApplicationVersion('Tinebase', '10.19');
+    }
+
+    /**
+     * update to 10.20
+     *
+     * Make tags description a longtext field
+     */
+    public function update_19()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <!--Long text!-->
+                <length>2147483647</length>
+                <type>text</type>
+                <default>NULL</default>
+            </field>
+        ');
+
+        $this->_backend->alterCol('tags', $declaration);
+
+        $this->setTableVersion('tags', 9);
+        $this->setApplicationVersion('Tinebase', '10.20');
     }
 }

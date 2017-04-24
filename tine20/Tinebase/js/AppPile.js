@@ -49,8 +49,8 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.apps = Tine.Tinebase.appMgr.getAll();
         this.defaultApp = Tine.Tinebase.appMgr.getDefault();
-        
-        Tine.Tinebase.appMgr.on('activate', this.onActivateApp, this);
+
+        Tine.Tinebase.MainScreen.on('appactivate', this.onActivateApp, this);
         
         Tine.Tinebase.AppPile.superclass.initComponent.call(this);
         
@@ -106,7 +106,7 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      */
     onAppTitleClick: function(e, dom, app) {
         this.setActiveItem(Ext.get(dom));
-        Tine.Tinebase.appMgr.activate(app);
+        Tine.Tinebase.MainScreen.activate(app);
     },
     
     /**

@@ -19,7 +19,7 @@
  * @package ExampleApplication
  * @subpackage  Controller
  */
-class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * holds the default Model of this application

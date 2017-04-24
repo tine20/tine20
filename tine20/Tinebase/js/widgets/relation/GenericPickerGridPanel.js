@@ -442,19 +442,20 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @private
      */
     getColumnModel: function () {
-        
-        this.degreeEditor = new Ext.form.ComboBox({
-            store: new Ext.data.ArrayStore({
-                fields: ['id', 'value'],
-                data: this.degreeData
-            }),
-            allowBlank: false,
-            displayField: 'value',
-            valueField: 'id',
-            mode: 'local'
-        });
 
         if (! this.colModel) {
+
+            this.degreeEditor = new Ext.form.ComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['id', 'value'],
+                    data: this.degreeData
+                }),
+                allowBlank: false,
+                displayField: 'value',
+                valueField: 'id',
+                mode: 'local'
+            });
+
             this.colModel = new Ext.grid.ColumnModel({
                 defaults: {
                     sortable: true,

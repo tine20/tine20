@@ -76,7 +76,7 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
             'description' => array(
                 'label'       => 'Description', // _('Description')
                 'group'       => 'core',
-                'type'        => 'text',
+                'type'        => 'fulltext',
                 'queryFilter' => TRUE,
                 'shy'         => TRUE
             ),
