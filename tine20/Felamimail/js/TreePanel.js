@@ -249,12 +249,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var ftb = this.filterPlugin.getGridPanel().filterToolbar;
             // in case of filterPanel
             ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
-            
-            if (! ftb.rendered) {
-                this.onSelectionChange.defer(150, this, [sm, nodes]);
-                return;
-            }
-            
+
             // remove path filter
             ftb.supressEvents = true;
             ftb.filterStore.each(function(filter) {
