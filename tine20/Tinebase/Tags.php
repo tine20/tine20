@@ -303,6 +303,10 @@ class Tinebase_Tags
             $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);
         }
 
+        if (! is_object(Tinebase_Core::getUser())) {
+            throw new Tinebase_Exception_NotFound('no valid user object for tag creation');
+        }
+
         $currentAccountId = Tinebase_Core::getUser()->getId();
 
         $newId = $_tag->generateUID();
