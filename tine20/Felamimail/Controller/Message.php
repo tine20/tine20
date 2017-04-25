@@ -888,13 +888,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $structure = $message->getPartStructure($_partId);
-        
-        $attachments = array();
-        
         if (! isset($structure['parts'])) {
-            return $attachments;
+            if ($structure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+                && isset($structure['messageStructure']['parts']) && is_array($structure['messageStructure']['parts'])
+            ) {
+                $structure = $structure['messageStructure'];
+            } else {
+                return array();
+            }
         }
-        
+
+        $attachments = array();
         foreach ($structure['parts'] as $part) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' ' . print_r($part, TRUE));
