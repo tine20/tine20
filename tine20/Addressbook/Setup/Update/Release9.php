@@ -29,7 +29,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        // do nothing
+        $this->setApplicationVersion('Addressbook', '9.2');
     }
 
     /**
