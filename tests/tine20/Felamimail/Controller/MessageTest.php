@@ -725,7 +725,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->assertEquals('4121', $message->size);
         $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
         $this->assertTrue(isset($message->body), 'no body found');
-        $this->assertContains('getLogger()-&gt;debug', $message->body);
+        $this->assertContains('getLogger()->debug', $message->body);
     }
     
     /**
@@ -741,6 +741,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->assertContains("Proposal: Zend_Grid", $message->subject);
         $this->assertTrue(isset($message->body), 'no body found');
         $this->assertContains('Bento Vilas Boas wrote', $message->body ,'string not found in body: ' . $message->body);
+        $this->assertEquals(1, count($message->attachments), 'did not find attachment');
         $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
     }
     

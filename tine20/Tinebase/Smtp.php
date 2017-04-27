@@ -70,11 +70,13 @@ class Tinebase_Smtp
             if (isset($config['ssl']) && $config['ssl'] == 'none') {
                 unset($config['ssl']);
             }
-            
+
+            $config['connectionOptions'] = Tinebase_Mail::getConnectionOptions();
+
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting default SMTP transport. Hostname: ' . $config['hostname']);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
-            
-            self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
+
+            $transport = new Zend_Mail_Transport_Smtp($config['hostname'], $config);
+            self::setDefaultTransport($transport);
         }
     }
     

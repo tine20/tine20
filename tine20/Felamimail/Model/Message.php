@@ -440,7 +440,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             
             foreach ($iterator as $key => $value) {
                 if ($key == $_partId && is_array($value) && (isset($value['partId']) || array_key_exists('partId', $value))) {
-                    $result = ($_useMessageStructure && is_array($value) && (isset($value['messageStructure']) || array_key_exists('messageStructure', $value))) ? $value['messageStructure'] : $value;
+                    $result = (
+                        $_useMessageStructure
+                        && is_array($value)
+                        && (isset($value['messageStructure']) || array_key_exists('messageStructure', $value))
+                        && (! isset($value['contentType']) || $value['contentType'] !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
+                    )   ? $value['messageStructure']
+                        : $value;
                 }
             }
         }
@@ -472,7 +478,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         if ((isset($structure['parts']) || array_key_exists('parts', $structure))) {
             $bodyParts = $bodyParts + $this->_parseMultipart($structure, $_preferedMimeType);
         } else {
-            $bodyParts = $bodyParts + $this->_parseSinglePart($structure, in_array($_preferedMimeType, array(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT)));
+            $bodyParts = $bodyParts + $this->_parseSinglePart(
+                $structure,
+                in_array($_preferedMimeType, array(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT))
+                    && $structure['contentType'] !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            );
         }
         
         return $bodyParts;
@@ -488,7 +498,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $result = array();
         
-        if (! (isset($_structure['type']) || array_key_exists('type', $_structure)) || $_structure['type'] != 'text') {
+        if (! (isset($_structure['type']) || array_key_exists('type', $_structure))
+            || ($_structure['type'] != 'text' && $_structure['type'] != 'message')
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Structure has no type key or type != text: ' . print_r($_structure, TRUE));
             return $result;
         }

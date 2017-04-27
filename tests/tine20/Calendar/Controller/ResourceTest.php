@@ -103,10 +103,10 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $resource = $this->_getResource();
         $createResource = Calendar_Controller_Resource::getInstance()->create($resource);
 
-        Tinebase_Container::getInstance()->delete($createResource->container_id);
+        Tinebase_Container::getInstance()->delete((string)$createResource->container_id);
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        Calendar_Controller_Resource::getInstance()->get($createResource->container_id);
+        Calendar_Controller_Resource::getInstance()->get((string)$createResource->container_id);
     }
 
     public function testManageResourceRight()

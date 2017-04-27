@@ -106,9 +106,10 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         var t = this.findTargets(e);
         if(t.item && t.item != this.activeTab){
             var appName = this.id2appName(t.item);
-            var app = Tine.Tinebase.appMgr.get(appName);
-
-            Tine.Tinebase.MainScreen.activate(app);
+            if (appName !== 'menu') {
+                var app = Tine.Tinebase.appMgr.get(appName);
+                Tine.Tinebase.MainScreen.activate(app);
+            }
         }
 
         this.supr().onStripMouseDown.apply(this, arguments);

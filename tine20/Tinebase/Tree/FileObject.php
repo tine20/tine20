@@ -407,15 +407,17 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             return 0;
         }
 
-        // TODO PGSQL =>  this is only supported by MySQL
-        // pgsql -> subquery with ids?
-        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
-            throw new Tinebase_Exception_NotImplemented('only mysql supported');
-        }
+        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+                SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+                $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
 
-        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
-            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
-            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
+        } else {
+            // pgsql -> subquery
+            $stmt = $this->_db->query('DELETE FROM ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_revisionsTableName) . ' WHERE ' . $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $_id) .
+                ' AND ' . $this->_db->quoteIdentifier('revision') . ' < (SELECT ' . $this->_db->quoteIdentifier('revision') . ' FROM '. $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_tableName) .
+                ' WHERE ' . $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $_id) . ')');
+        }
 
         return $stmt->rowCount();
     }
@@ -429,14 +431,18 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     {
         // TODO PGSQL =>  this is only supported by MySQL
         // pgsql -> subquery with ids?
-        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
-            throw new Tinebase_Exception_NotImplemented('only mysql supported');
-        }
+        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+            $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
+                SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
+                $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.revision IN ' .
+                $this->_db->quoteInto('(?)', $_revisions));
 
-        $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
-            SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
-            $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.revision IN ' .
-            $this->_db->quoteInto('(?)', $_revisions));
+        } else {
+            // pgsql -> subquery
+            $stmt = $this->_db->query('DELETE FROM ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_revisionsTableName) . ' WHERE ' . $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $_id) .
+                ' AND ' . $this->_db->quoteIdentifier('revision') . $this->_db->quoteInto(' IN (?)', $_revisions) . ' AND ' . $this->_db->quoteIdentifier('revision') . ' < (SELECT ' . $this->_db->quoteIdentifier('revision') . ' FROM '. $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_tableName) .
+                ' WHERE ' . $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $_id) . ')');
+        }
 
         return $stmt->rowCount();
     }
