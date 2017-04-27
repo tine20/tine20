@@ -192,8 +192,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                         . ' Export filter: ' . print_r($decodedFilter, true)
                         . ' Options: ' . print_r($decodedOptions, true));
 
-                    $filterModel = $this->_applicationName . '_Model_' . $model . 'Filter';
-                    $filter = $this->_getFilterObject($filterModel);
+                    $modelName = $this->_applicationName . '_Model_' . $model;
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
                     $filter->setFromArrayInUsersTimezone($decodedFilter);
 
                     return $this->_export($filter, $decodedOptions, $modelController);
