@@ -934,4 +934,18 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('tags', 9);
         $this->setApplicationVersion('Tinebase', '10.20');
     }
+
+    /**
+     * update to 10.21
+     *
+     * add new file system tasks to scheduler
+     */
+    public function update_20()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.21');
+    }
 }

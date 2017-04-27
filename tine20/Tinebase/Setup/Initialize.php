@@ -168,5 +168,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
         Tinebase_Scheduler_Task::addReplicationTask($scheduler);
         Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
     }
 }
