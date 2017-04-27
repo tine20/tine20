@@ -651,7 +651,17 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             /** @var Tinebase_Model_Tree_FileObject $fileObject */
             foreach($this->_fileObjectBackend->getMultiple($objectIds) as $fileObject) {
                 $fileObject->size = (int)$fileObject->size + (int)$_sizeDiff;
+                if ($fileObject->size < 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
+                    $fileObject->size = 0;
+                }
                 $fileObject->revision_size = (int)$fileObject->revision_size + (int)$_revisionSizeDiff;
+                if ($fileObject->revision_size < 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' revision_size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
+                    $fileObject->revision_size = 0;
+                }
                 $this->_fileObjectBackend->update($fileObject);
             }
         }
