@@ -37,7 +37,7 @@ class Felamimail_Backend_ImapFactory
             // get imap config from account
             $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
             $imapConfig = $account->getImapConfig();
-            
+
             // we need to instantiate a new imap backend
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port'] 

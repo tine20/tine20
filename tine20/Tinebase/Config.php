@@ -561,7 +561,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * ssl (bool)
          * user (string) ?
          * backend (string) - see Tinebase_EmailUser::$_supportedBackends
-         *
+         * verifyPeer (bool)
          */
         self::IMAP => array(
                                    //_('System IMAP')

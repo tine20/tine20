@@ -19,11 +19,6 @@
 class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 {
     /**
-     * timeout in seconds for initiating session (parent: 30)
-     */
-    const TIMEOUT_CONNECTION = 20;
-    
-    /**
      * Examine and select have the same response. The common code for both
      * is in this method
      * 
@@ -101,61 +96,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         
         return $result;
     }
-    
-    /**
-     * Open connection to IMAP server
-     * - overwritten to adjust connection timeout (static late binding/timeout is defined as constant) :(
-     *
-     * @param  string      $host  hostname of IP address of POP3 server
-     * @param  int|null    $port  of IMAP server, default is 143 (993 for ssl)
-     * @param  string|bool $ssl   use 'SSL', 'TLS' or false
-     * @return string welcome message
-     * @throws Zend_Mail_Protocol_Exception
-     * 
-     * @todo    can be removed when we can adjust the connection timeout in config
-     */
-    public function connect($host, $port = null, $ssl = false)
-    {
-        if ($ssl == 'SSL') {
-            $host = 'ssl://' . $host;
-        }
 
-        if ($port === null) {
-            $port = $ssl === 'SSL' ? 993 : 143;
-        }
-
-        $errno  =  0;
-        $errstr = '';
-        $this->_socket = @fsockopen($host, $port, $errno, $errstr, self::TIMEOUT_CONNECTION);
-        if (!$this->_socket) {
-            /**
-             * @see Zend_Mail_Protocol_Exception
-             */
-            require_once 'Zend/Mail/Protocol/Exception.php';
-            throw new Zend_Mail_Protocol_Exception('cannot connect to host : ' . $errno . ' : ' . $errstr);
-        }
-
-        if (!$this->_assumedNextLine('* OK')) {
-            /**
-             * @see Zend_Mail_Protocol_Exception
-             */
-            require_once 'Zend/Mail/Protocol/Exception.php';
-            throw new Zend_Mail_Protocol_Exception('host doesn\'t allow connection');
-        }
-
-        if ($ssl === 'TLS') {
-            $result = $this->requestAndResponse('STARTTLS');
-            $result = $result && stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-            if (!$result) {
-                /**
-                 * @see Zend_Mail_Protocol_Exception
-                 */
-                require_once 'Zend/Mail/Protocol/Exception.php';
-                throw new Zend_Mail_Protocol_Exception('cannot enable TLS');
-            }
-        }
-    }
-    
     /**
      *
      * @param array $_params Parameters for authentication
@@ -165,7 +106,6 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      */
     public function saslAuthenticate($_params, $_method = 'PLAIN')
     {
-        
         switch ($_method)
         {
             case 'PLAIN' :
