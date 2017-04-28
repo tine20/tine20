@@ -1131,7 +1131,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             return;
         }
 
-        $controller = Tinebase_Core::getApplicationInstance($model);
+        $controller = Tinebase_Core::getApplicationInstance($model, /* $_modelName */ '', $_ignoreAcl);
 
         if ($controller) {
             if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {

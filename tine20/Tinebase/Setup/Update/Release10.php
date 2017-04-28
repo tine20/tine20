@@ -423,7 +423,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->createTable('path', $declaration, 'Tinebase', 2);
 
-        Tinebase_Controller::getInstance()->rebuildPaths();
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if ($setupUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+            Tinebase_Controller::getInstance()->rebuildPaths();
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+        }
 
         $this->setApplicationVersion('Tinebase', '10.10');
     }
