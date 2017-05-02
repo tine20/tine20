@@ -38,7 +38,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                 255 => 'character varying',
                 65535 => 'character varying',
                 16777215 => 'text',
-                4294967295 => 'text'),
+                2147483647 => 'text'),
             'defaultType' => 'text',
             'defaultLength' => null,
             'lengthLessTypes' => array(

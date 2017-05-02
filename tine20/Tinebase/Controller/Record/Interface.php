@@ -72,7 +72,7 @@ interface Tinebase_Controller_Record_Interface
      * 
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
-     * @return  integer number of updated records
+     * @return  array $this->_updateMultipleResult
      */
     public function updateMultiple($_filter, $_data);
     

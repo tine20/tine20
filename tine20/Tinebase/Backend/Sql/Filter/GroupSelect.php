@@ -41,8 +41,8 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
     /**
      * @var array
      */
-     protected $_parts = array();
-     
+    protected $_parts = array();
+
     /**
      * save an instance of the select object
      *
@@ -53,9 +53,9 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
         $this->_select = $_select;
         $this->_adapter = Tinebase_Core::getDb();
     }
-    
+
     /**
-     * route all function calls besides the fuctions declared here directly
+     * route all function calls besides the functions declared here directly
      * to the original select object
      *
      * @param  string $_name

@@ -202,7 +202,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             var notesRecords = [];
 
             Ext.each(notes, function (notes) {
-                notesRecords.push(new Tine.Tinebase.Model.Node(notes, notes.id));
+                notesRecords.push(new Tine.Tinebase.Model.Tree_Node(notes, notes.id));
             }, this);
             this.store.add(notesRecords);
         } else {

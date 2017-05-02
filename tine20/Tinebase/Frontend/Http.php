@@ -564,7 +564,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
         } else {
-            $json = file_get_contents($jsonFile);
+            $json = file_get_contents(dirname(dirname(__DIR__)) . '/' . $jsonFile);
         }
 
         return $asJson ? $json : json_decode($json, true);

@@ -258,14 +258,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function isReplicable();
 
     /**
-     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_parent
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
     public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
 
     /**
-     * @param Tinebase_Record_Interface|null $parent
+     * @param Tinebase_Record_Interface|null $_parent
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
@@ -280,4 +280,12 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return string
      */
     public function getTypeForPathPart();
+
+    /**
+     * extended properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &xprops($_property = 'xprops');
 }

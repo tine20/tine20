@@ -84,6 +84,10 @@
           "path": "js/"
         },
         {
+          "text": "contactListsGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "ListGridDetailsPanel.js",
           "path": "js/"
         },

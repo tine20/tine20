@@ -56,7 +56,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('cal_resources', $declaration);
 
-        $resourceController =  Calendar_Controller_Resource::getInstance();
+        $resourceController = Calendar_Controller_Resource::getInstance();
         $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
@@ -70,8 +70,74 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         $this->setTableVersion('cal_resources', 5);
-
-
         $this->setApplicationVersion('Calendar', '10.3');
+    }
+
+    /**
+     * add resource xprops to container
+     */
+    public function update_3()
+    {
+        $be = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Calendar_Model_Resource',
+            'tableName' => 'cal_resources'
+        ));
+
+        $persistentObserver = Tinebase_Record_PersistentObserver::getInstance();
+
+        foreach($be->getAll() as $resource) {
+            try {
+                $container = Tinebase_Container::getInstance()->get($resource->container_id);
+                $container->xprops()['Calendar']['Resource']['resource_id'] = $resource->getId();
+
+                Tinebase_Container::getInstance()->update($container);
+
+                $updateObserver = new Tinebase_Model_PersistentObserver(array(
+                    'observable_model'      => 'Tinebase_Model_Container',
+                    'observable_identifier' => $resource->container_id,
+                    'observer_model'        => $this->_modelName,
+                    'observer_identifier'   => $resource->getId(),
+                    'observed_event'        => 'Tinebase_Event_Record_Update'
+                ));
+                $persistentObserver->addObserver($updateObserver);
+
+                $deleteObserver = new Tinebase_Model_PersistentObserver(array(
+                    'observable_model'      => 'Tinebase_Model_Container',
+                    'observable_identifier' => $resource->container_id,
+                    'observer_model'        => $this->_modelName,
+                    'observer_identifier'   => $resource->getId(),
+                    'observed_event'        => 'Tinebase_Event_Record_Delete'
+                ));
+                $persistentObserver->addObserver($deleteObserver);
+
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e, /* suppress trace */ false);
+            }
+        }
+
+        $this->setApplicationVersion('Calendar', '10.4');
+    }
+
+    /**
+     * update to 10.5
+     *
+     * Add fulltext index for description field
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                    <name>description</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('cal_events', $declaration);
+
+        $this->setTableVersion('cal_events', 13);
+        $this->setApplicationVersion('Calendar', '10.5');
     }
 }

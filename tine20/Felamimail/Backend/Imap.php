@@ -52,15 +52,19 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *
      * @param  object $params mail reader specific parameters
      */
+    /** @noinspection MagicMethodsValidityInspection */
     public function __construct($params)
     {
+        /** @noinspection OffsetOperationsInspection */
         $this->_has['flags'] = true;
 
         $this->_messageClass = 'Felamimail_Message';
         $this->_useUid = true;
-        
+
         $this->_protocol = new Felamimail_Protocol_Imap();
-        
+        $connectionOptions = Tinebase_Mail::getConnectionOptions(20);
+        $this->_protocol->setConnectionOptions($connectionOptions);
+
         if ($this->_logImapRequestsAndResponses && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             $this->_protocol->setLogger(Tinebase_Core::getLogger());
         }

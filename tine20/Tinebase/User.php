@@ -998,6 +998,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
             // continue
         }
 
+        // disable modlog stuff
+        $oldGroupValue = Tinebase_Group::getInstance()->modlogActive(false);
+        $oldUserValue = Tinebase_User::getInstance()->modlogActive(false);
         $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
 
         if (null === $defaultGroup) {
@@ -1053,6 +1056,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $systemUser = null;
         }
 
+        // re-enable modlog stuff
+        Tinebase_Group::getInstance()->modlogActive($oldGroupValue);
+        Tinebase_User::getInstance()->modlogActive($oldUserValue);
         if (null !== $plugin) {
             Tinebase_User::getInstance()->registerPlugin($plugin);
         }

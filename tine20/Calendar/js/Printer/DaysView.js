@@ -17,18 +17,16 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
      * @return {String} The HTML fragment to place inside the print window's <head> element
      */
     getAdditionalHeaders: function(component) {
-        var calendarCSS = Tine.clientVersion.buildType.match(/DEBUG|RELEASE/) ? 
-            '@import url(Calendar/css/Calendar-FAT.css);' : (
-            
-            '@import url(Calendar/css/daysviewpanel.css);' +
-            '@import url(Calendar/css/Calendar.css);'
-        );
-            
-        var head = 
+        var head =
             '<style type="text/css" title="text/css" media="screen,print">' +
                 '@import url(library/ExtJS/resources/css/ext-all.css);' +
-                calendarCSS +
             '</style>';
+
+        Ext.each(Ext.getDoc().query('style'), function(style) {
+            if(style.innerText.match(/^\.cal-print-marker/)) {
+                head += style.outerHTML;
+            }
+        });
         
         return head;
     },

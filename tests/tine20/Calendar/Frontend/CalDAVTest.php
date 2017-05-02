@@ -100,7 +100,10 @@ class Calendar_Frontend_CalDAVTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
         
-        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $collection = new Calendar_Frontend_WebDAV(
+            \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id,
+            array('useIdAsName' => true)
+        );
         $children = $this->testGetChildren();
         
         $taskContainer = array_reduce($children, function($result, $container){
@@ -108,7 +111,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         }, NULL);
         $child = $collection->getChild($taskContainer->getName());
     
-        $this->assertTrue($child instanceof Tasks_Frontend_WebDAV_Container);
+        $this->assertTrue($child instanceof Tasks_Frontend_WebDAV_Container, 'got ' . get_class($child));
     }
     
     /**

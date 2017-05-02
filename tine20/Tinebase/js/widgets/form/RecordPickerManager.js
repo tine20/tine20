@@ -59,7 +59,6 @@ Tine.widgets.form.RecordPickerManager = function() {
          * @param {String/Object} component the component or xtype to register 
          */
         register: function(appName, modelName, component) {
-            
             if(!Tine.hasOwnProperty('log')) {
                 this.register.defer(100, this, [appName, modelName, component]);
                 return false;
@@ -69,10 +68,8 @@ Tine.widgets.form.RecordPickerManager = function() {
                 modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
                 key = appName+modelName;
 
-            if(!items[key]) {
-                Tine.log.debug('RecordPickerManager::registerItem: ' + appName + modelName);
-                items[key] = component;
-            }
+            Tine.log.debug('RecordPickerManager::registerItem: ' + appName + modelName);
+            items[key] = component;
         }
     };
 }();

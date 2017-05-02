@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9c1b34c1556bfd3bfe75c42e0a923425",
-    "content-hash": "58d55cc1685482af7a2bbc71f82c5e76",
+    "content-hash": "845d7b68c3e2b60d9c0677eafc588912",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -353,7 +352,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2016-09-09 19:13:33"
+            "time": "2016-01-05 22:11:12"
         },
         {
             "name": "doctrine/inflector",
@@ -604,7 +603,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2016-09-10 18:51:13"
+            "time": "2016-01-05 21:34:58"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1044,34 +1043,39 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.1.3",
+            "version": "3.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruux/sabre-vobject.git",
-                "reference": "961546d71c332ab34ad1c5bba7f372c08b388dcf"
+                "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/961546d71c332ab34ad1c5bba7f372c08b388dcf",
-                "reference": "961546d71c332ab34ad1c5bba7f372c08b388dcf",
-                "shasum": ""
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/129d80533a9ec0d9cacfb50b51180c34edb6874c",
+                "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c",
+                "shasum": "c5692defcb3616042c047fdf553105276abfc70e"
             },
             "require": {
                 "ext-mbstring": "*",
                 "php": ">=5.3.1"
             },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
             "bin": [
-                "bin/vobject"
+                "bin/vobject",
+                "bin/generate_vcards"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Sabre\\VObject": "lib/"
+                "psr-4": {
+                    "Sabre\\VObject\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1081,19 +1085,27 @@
             "authors": [
                 {
                     "name": "Evert Pot",
-                    "email": "evert@rooftopsolutions.nl",
-                    "homepage": "http://www.rooftopsolutions.nl/",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dominik Tobschall",
+                    "email": "dominik@fruux.com",
+                    "homepage": "http://tobschall.de/",
                     "role": "Developer"
                 }
             ],
             "description": "The VObject library for PHP allows you to easily parse and manipulate iCalendar and vCard objects",
-            "homepage": "https://github.com/fruux/sabre-vobject",
+            "homepage": "http://sabre.io/vobject/",
             "keywords": [
                 "VObject",
                 "iCalendar",
+                "jCal",
+                "jCard",
                 "vCard"
             ],
-            "time": "2013-10-02 15:59:03"
+            "time": "2016-10-07 03:20:40"
         },
         {
             "name": "symfony/console",
@@ -1153,7 +1165,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-08-19 06:48:39"
+            "time": "2016-06-29 07:02:31"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1643,11 +1655,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl11",
+            "version": "1.12.20pl13",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "55105647829fb306170c9f3301f63435372e922a"
+                "reference": "f25bf29049a2ede3ab053bdd7b83a5ea8f07b884"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1664,7 +1676,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2017-02-22 19:16:44"
+            "time": "2017-04-24 12:45:00"
         }
     ],
     "packages-dev": [
@@ -2224,13 +2236,13 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch11",
+            "version": "1.12.20.0-patch13",
             "package": "zendframework/zendframework1"
         },
         {
-            "alias": "2.1.313",
-            "alias_normalized": "2.1.313.0",
-            "version": "3.1.3.0",
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0",
             "package": "sabre/vobject"
         }
     ],

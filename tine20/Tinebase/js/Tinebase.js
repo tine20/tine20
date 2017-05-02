@@ -12,6 +12,7 @@
  * webpack entry
  */
 var lodash = require('lodash');
+var director = require('director');
 var postal = require('postal');
 require('postal.federation');
 require('postal.xwindow');
@@ -22,6 +23,7 @@ require('./../../Tinebase/Tinebase.jsb2');
 
 
 module.exports = {
+    director: director,
     postal: postal,
     lodash: lodash
 };

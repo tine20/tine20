@@ -28,7 +28,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     protected $_applicationName;
 
     /**
-     * @var string|Tinebase_Model_Container
+     * @var string|Tinebase_Model_Container|Tinebase_Model_Tree_Node
      */
     protected $_container;
     
@@ -39,14 +39,14 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     protected $_suffix;
     
     protected $_useIdAsName;
-    
+
     /**
-     * contructor
-     * 
-     * @param  string|Tinebase_Model_Application  $_application  the current application
-     * @param  string                             $_container    the current path
+     * constructor
+     *
+     * @param  Tinebase_Model_Container|Tinebase_Model_Tree_Node    $_container
+     * @param  boolean                                              $_useIdAsName
      */
-    public function __construct(Tinebase_Model_Container $_container, $_useIdAsName = false)
+    public function __construct($_container, $_useIdAsName = false)
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         $this->_container   = $_container;
@@ -136,7 +136,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      *
      * @return Sabre\DAV\INode[]
      */
-    function getChildren()
+    public function getChildren()
     {
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass(array(

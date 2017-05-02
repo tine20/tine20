@@ -83,14 +83,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * download file
      */
     onDownload: function() {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Filemanager.downloadFile',
-                requestType: 'HTTP',
-                path: '',
-                id: this.record.get('id')
-            }
-        }).start();
+        Tine.Filemanager.downloadFile(this.record);
     },
     
     /**
@@ -114,7 +107,13 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             title: this.app.i18n._('Public Links'),
             editDialog: this
         });
-        
+
+        // require('./GrantsPanel');
+        var grantsPanel = new Tine.Filemanager.GrantsPanel({
+            app: this.app,
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -226,9 +225,11 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                record_model: 'Tinebase_Model_Tree_Node'
                 }),
-                this.downloadLinkGrid
+                this.downloadLinkGrid,
+                {xtype: 'Tine.Filemanager.UsagePanel'},
+                grantsPanel
             ]
         };
     }

@@ -41,6 +41,14 @@ class Setup_Initialize
         if (class_exists($classname)) {
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
 
+            // custom init might need a valid user
+            if (! is_object(Tinebase_Core::getUser()) && ! in_array($applicationName, array('Setup', 'Tinebase', 'Addressbook', 'Admin'))) {
+                $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+                if ($user) {
+                    Tinebase_Core::set(Tinebase_Core::USER, $user);
+                }
+            }
+
             $instance = new $classname;
             $instance->_initialize($_application, $_options);
         } else {

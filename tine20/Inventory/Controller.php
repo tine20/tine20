@@ -19,7 +19,7 @@
  * @package Inventory
  * @subpackage  Controller
  */
-class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
 
     /**

@@ -178,9 +178,10 @@ Tine.Voipmanager.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel,{
             var contentType = node.getPath().split('/')[3];
             var contentGroup = node.getPath().split('/')[2];
                                 
-            this.app.getMainScreen().activeContentType = contentType;
             this.app.getMainScreen().activeContentGroup = contentGroup;
-            this.app.getMainScreen().activate();
+            this.app.getMainScreen().setActiveContentType(contentType)
+
+            Tine.Tinebase.MainScreen.activate(this.app);
             
             
             

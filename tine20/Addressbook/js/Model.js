@@ -48,6 +48,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_two_countryname', label: 'Country (Private Address)', group: 'Private Address' }, //_('Country (Private Address)')
     {name: 'adr_two_lon', group: 'Private Address', omitDuplicateResolving: true},
     {name: 'adr_two_lat', group: 'Private Address', omitDuplicateResolving: true},
+    {name: 'preferred_address', group: 'Preferred Address', omitDuplicateResolving: true}, //_('Preferred Address')
     {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication')
     {name: 'tel_cell', label: 'Mobile', group: 'Company Communication' }, //_('Mobile')
     {name: 'tel_fax', label: 'Fax', group: 'Company Communication' }, //_('Fax')
@@ -78,7 +79,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'paths', omitDuplicateResolving: true},
     {name: 'type', omitDuplicateResolving: true},
     {name: 'memberroles', omitDuplicateResolving: true},
-    {name: 'industry', omitDuplicateResolving: true}
+    {name: 'industry', omitDuplicateResolving: true},
+    {name: 'groups', label: 'Groups'} //_('Groups')
 ]);
 
 /**
@@ -238,6 +240,7 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'group_id'},
     {name: 'emails'},
     {name: 'notes', omitDuplicateResolving: true},
+    {name: 'paths', omitDuplicateResolving: true},
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
     {name: 'tags'}

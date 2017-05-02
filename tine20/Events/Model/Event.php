@@ -1,18 +1,18 @@
 <?php
 /**
  * class to hold Event data
- * 
+ *
  * @package     Events
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  */
 
 /**
  * class to hold Event data
- * 
+ *
  * @package     Events
  * @subpackage  Model
  */
@@ -63,7 +63,7 @@ class Events_Model_Event extends Tinebase_Record_Abstract
 
         'appName'         => 'Events',
         'modelName'       => 'Event',
-        
+
         'fields'          => array(
             'title' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
@@ -152,7 +152,9 @@ class Events_Model_Event extends Tinebase_Record_Abstract
                     'type'       => 'date'
             ),
             'description' => array(
-                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE)
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type' => 'fulltext',
+                'queryFilter' => true
             )
         )
      );

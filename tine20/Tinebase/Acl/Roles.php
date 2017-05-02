@@ -82,6 +82,11 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = NULL;
+    }
     
     /**
      * check if one of the roles the user is in has a given right for a given application

@@ -58,6 +58,26 @@
         {
           "text": "Filemanager.js",
           "path": "js/"
+        },
+        {
+          "text": "FilePickerDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "FilePicker.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecursiveFilter.js",
+          "path": "js/"
+        },
+        {
+          "text": "UsagePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "GrantsPanel.js",
+          "path": "js/"
         }
       ]
     },

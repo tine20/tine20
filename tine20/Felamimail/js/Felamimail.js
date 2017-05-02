@@ -76,10 +76,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     unreadcountInDefaultInbox: 0,
 
-    routes : {
-        'MailTo/:params' : {
-            action     : 'mailto'
-        }
+    routes: {
+        'MailTo/:params': 'mailto'
     },
 
     /**
@@ -768,12 +766,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
         params['accountId'] = activeAccount ? activeAccount.id : null;
 
-        return {
-            name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
-            contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
-            contentPanelConstructorConfig: params
-        }
-
+        //@TODO: remove old url from popstate. its ugly!
+        Tine.Tinebase.MainScreenPanel.show(this);
+        Tine.Felamimail.MessageEditDialog.openWindow(params);
     }
 });
 

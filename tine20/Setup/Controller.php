@@ -1444,6 +1444,11 @@ class Setup_Controller
         $this->_replaceTinebaseidInDump($mysqlBackupFile);
         $this->restore($options);
 
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+
         // set the replication master id
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         $state = $tinebase->state;

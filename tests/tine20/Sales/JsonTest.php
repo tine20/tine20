@@ -17,7 +17,8 @@ class Sales_JsonTest extends TestCase
      * @var Sales_Frontend_Json
      */
     protected $_instance = array();
-    
+
+    protected $_deleteContracts = array();
     /**
      * Runs the test methods of this class.
      *
@@ -44,6 +45,8 @@ class Sales_JsonTest extends TestCase
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
+
+        $this->_deleteContracts = array();
     }
 
     protected function tearDown()
@@ -51,6 +54,10 @@ class Sales_JsonTest extends TestCase
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
 
         parent::tearDown();
+
+        if (count($this->_deleteContracts) > 0) {
+            $this->_instance->deleteContracts($this->_deleteContracts);
+        }
     }
 
     /**
@@ -257,6 +264,10 @@ class Sales_JsonTest extends TestCase
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
 
+        $this->_deleteContracts = array($contractData['id']);
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
         // search & check
         $search = $this->_instance->searchContracts($this->_getFilter(), $this->_getPaging());
         $this->assertEquals($contract->title, $search['results'][0]['title']);
@@ -307,6 +318,10 @@ class Sales_JsonTest extends TestCase
         // create
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
+
+        $this->_deleteContracts = array($contractData['id']);
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $filter = $this->_getFilter();
         $filter[] = array('field' => 'end_date', 'operator' => 'equals', 'value' => '');
@@ -787,6 +802,11 @@ class Sales_JsonTest extends TestCase
 
         // test notcontains
         $contract2 = Sales_Controller_Contract::getInstance()->create($this->_getContract('test2'));
+
+        $this->_deleteContracts = array($contract->getId(), $contract2->getId());
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+
         $result = $this->_instance->searchContracts($this->_getFilter(), array());
         $this->assertEquals(2, $result['totalcount'], 'should find 2 contracts');
 
@@ -795,8 +815,8 @@ class Sales_JsonTest extends TestCase
             array('field' => 'query', 'operator' => 'notcontains', 'value' => 'wolf'),
         ), $this->_getPaging());
 
-        $this->assertEquals($contract2->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals($contract2->title, $search['results'][0]['title']);
 
         // search with notcontains
         $search = $this->_instance->searchContracts(array(

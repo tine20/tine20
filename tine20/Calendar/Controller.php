@@ -13,7 +13,7 @@
  *
  * @package     Calendar
  */
-class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
+class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
     /**
      * holds the instance of the singleton

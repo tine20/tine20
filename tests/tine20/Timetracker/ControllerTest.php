@@ -40,6 +40,9 @@ class Timetracker_ControllerTest extends TestCase
      * @var array
      */
     protected $_objects = array();
+
+    protected $_deleteTimeAccounts = array();
+    protected $_deleteTimeSheets = array();
     
     /**
      * Sets up the fixture.
@@ -50,6 +53,8 @@ class Timetracker_ControllerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+
+        Timetracker_Controller_Timesheet::unsetInstance();
         
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
         $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
@@ -61,6 +66,11 @@ class Timetracker_ControllerTest extends TestCase
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         $this->_roleRights = self::removeManageAllRight();
+
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        $this->_deleteTimeAccounts = array();
+        $this->_deleteTimeSheets = array();
     }
     
     /**
@@ -97,6 +107,38 @@ class Timetracker_ControllerTest extends TestCase
         parent::tearDown();
         
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        if (count($this->_deleteTimeSheets) > 0 || count($this->_deleteTimeAccounts) > 0) {
+            $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+            Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $this->_roleRights);
+            Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+       /*     try {
+                $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => Tinebase_Core::getUser()->getId(),
+                    'account_type' => 'user',
+                    Tinebase_Model_Grants::GRANT_ADMIN => TRUE,
+                )));
+                Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+                    $this->_objects['timeaccount'],
+                    $grants,
+                    TRUE
+                );
+            } catch (Exception $e) {
+            }*/
+        }
+
+        if (count($this->_deleteTimeSheets) > 0) {
+            try {
+                Timetracker_Controller_Timesheet::getInstance()->delete($this->_deleteTimeSheets);
+            } catch (Exception $e) {}
+        }
+
+        if (count($this->_deleteTimeAccounts) > 0) {
+            try {
+                Timetracker_Controller_Timeaccount::getInstance()->delete($this->_deleteTimeAccounts);
+            } catch (Exception $e) {}
+        }
     }
     
     /************ test functions follow **************/
@@ -369,22 +411,51 @@ class Timetracker_ControllerTest extends TestCase
                 $this->_timesheetController->create($ts);
                 break;
             case 'search_bookable':
+                $this->_deleteTimeSheets[] = $this->_objects['timesheet']->getId();
+                $this->_deleteTimeAccounts[] = $this->_objects['timeaccount']->getId();
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+                $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
                 $filter = $this->_getTimeaccountFilter(TRUE);
                 $result = $this->_timeaccountController->search($filter);
                 $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTA':
+
+                $this->_deleteTimeSheets[] = $this->_objects['timesheet']->getId();
+                $this->_deleteTimeAccounts[] = $this->_objects['timeaccount']->getId();
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+                $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
                 $filter = $this->_getTimeaccountFilter();
                 $result = $this->_timeaccountController->search($filter);
                 $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTS':
-                $filter = $this->_getTimesheetFilter();
                 $ts = $this->_timesheetController->create($ts);
+
+                $this->_deleteTimeSheets[] = $this->_objects['timesheet']->getId();
+                $this->_deleteTimeSheets[] = $ts->getId();
+                $this->_deleteTimeAccounts[] = $this->_objects['timeaccount']->getId();
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+                $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+                $filter = $this->_getTimesheetFilter();
+
                 $result = $this->_timesheetController->search($filter);
                 $this->assertEquals($_expect, count($result));
                 break;
             case 'searchTSExport':
+
+                $this->_deleteTimeSheets[] = $this->_objects['timesheet']->getId();
+                $this->_deleteTimeAccounts[] = $this->_objects['timeaccount']->getId();
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+                $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
                 $filter = $this->_getTimesheetFilter();
                 $result = $this->_timesheetController->search($filter, NULL, FALSE, FALSE, 'export');
                 $this->assertEquals($_expect, count($result));
@@ -447,6 +518,7 @@ class Timetracker_ControllerTest extends TestCase
     /**
      * get Timeaccount filter
      *
+     * @param bool $bookable
      * @return Timetracker_Model_TimeaccountFilter
      */
     protected function _getTimeaccountFilter($bookable = FALSE)
@@ -474,7 +546,7 @@ class Timetracker_ControllerTest extends TestCase
     /**
      * get Timesheet filter
      *
-     * @return array
+     * @return Timetracker_Model_TimesheetFilter
      */
     protected function _getTimesheetFilter()
     {

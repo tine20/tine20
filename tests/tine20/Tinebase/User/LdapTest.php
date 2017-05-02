@@ -54,7 +54,7 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testAddUser()
     {
-        $user = $this->getTestRecord();
+        $user = TestCase::getTestUser();
 
         $this->_usernamesToDelete[] = $user->accountLoginName;
         $testUser = $this->_backend->addUser($user);
@@ -234,7 +234,7 @@ class Tinebase_User_LdapTest extends TestCase
         ));
 
         // add user in LDAP
-        $user = $this->_backend->addUserToSyncBackend(self::getTestRecord());
+        $user = $this->_backend->addUserToSyncBackend(self::getTestUser());
         $this->_usernamesToDelete[] = $user->accountLoginName;
 
         $syncedUser = Tinebase_User::syncUser($user);
@@ -280,7 +280,7 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testSyncUsersNoContactData()
     {
-        $testRecord = self::getTestRecord();
+        $testRecord = self::getTestUser();
         try {
             // cleanup if required
             $user = $this->_backend->getUserByPropertyFromSyncBackend('accountLoginName', $testRecord->accountLoginName);
@@ -334,26 +334,6 @@ class Tinebase_User_LdapTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->get($syncedUser->contact_id);
         $this->assertFalse(isset($contact->tel_work), 'tel_work is set');
         $this->assertEquals(0, $contact->jpegphoto, 'jpegphoto is not 0');
-    }
-
-    /**
-     * @return Tinebase_Model_FullUser
-     */
-    public static function getTestRecord()
-    {
-        $emailDomain = TestServer::getPrimaryMailDomain();
-        
-        $user  = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'tine20phpunituser',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit User',
-            'accountEmailAddress'   => 'phpunit@' . $emailDomain,
-        ));
-        
-        return $user;
     }
 
     /**

@@ -782,6 +782,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     modelName: 'Resource',
     idProperty: 'id',
     titleProperty: 'name',
+    containerProperty: 'container_id',
     // ngettext('Resource', 'Resources', n); gettext('Resources');
     recordName: 'Resource',
     recordsName: 'Resources'

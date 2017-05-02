@@ -50,49 +50,6 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Grants
     );
     
     /**
-     * is acl filter resolved?
-     *
-     * @var boolean
-     */
-    protected $_isResolved = FALSE;
-
-    /**
-     * sets the grants this filter needs to assure
-     *
-     * @param array $_grants
-     */
-    public function setRequiredGrants(array $_grants)
-    {
-        $this->_requiredGrants = $_grants;
-        $this->_isResolved = FALSE;
-    }
-    
-    /**
-     * set options 
-     *
-     * @param  array $_options
-     * @throws Tinebase_Exception_Record_NotDefined
-     */
-    protected function _setOptions(array $_options)
-    {
-        $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
-        
-        $this->_options = $_options;
-    }
-    
-    /**
-     * appends custom filters to a given select object
-     * 
-     * @param  Zend_Db_Select                    $select
-     * @param  Tinebase_Backend_Sql_Abstract     $backend
-     * @return void
-     */
-    public function appendFilterSql($select, $backend)
-    {
-        $this->_appendAclSqlFilter($select, $backend);
-    }
-    
-    /**
      * add account id to filter
      *
      * @param Zend_Db_Select $select
@@ -109,11 +66,8 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Grants
             }
             
             $this->_appendAccountFilter($select, $backend, $user);
-            
-            if (! $this->_options['ignoreAcl']) {
-                $this->_appendGrantsFilter($select, $backend, $user);
-            }
-            
+            $this->_appendGrantsFilter($select, $backend, $user);
+
             $this->_isResolved = TRUE;
         }
     }

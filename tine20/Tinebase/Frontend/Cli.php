@@ -80,27 +80,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * rebuild paths for multiple records in an iteration
-     * @see Tinebase_Record_Iterator / self::rebuildPaths()
-     *
-     * @param Tinebase_Record_RecordSet $records
-     * @param Tinebase_Controller_Abstract $controller
-     */
-    public function rebuildPathsIteration(Tinebase_Record_RecordSet $records, Tinebase_Controller_Record_Abstract $controller)
-    {
-        foreach ($records as $record) {
-            try {
-                $controller->buildPath($record, true);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' record path building failed: '
-                    . $e->getMessage() . PHP_EOL
-                    . $e->getTraceAsString() . PHP_EOL
-                    . $record->toArray());
-            }
-        }
-    }
-
-    /**
      * forces containers that support sync token to resync via WebDAV sync tokens
      *
      * this will cause 2 BadRequest responses to sync token requests
@@ -770,11 +749,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * add new customfield config
-     * 
-     * needs args like this:
-     * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datefield"
-     * @see Tinebase_Model_CustomField_Config for full list 
-     * 
+     *
+     * example:
+     * $ php tine20.php --method=Tinebase.addCustomfield -- \
+         application="Addressbook" model="Addressbook_Model_Contact" name="datefield" \
+         definition='{"label":"Date","type":"datetime", "uiconfig": {"group":"Dates", "order": 30}}'
+     * @see Tinebase_Model_CustomField_Config for full list
+     *
      * @param $_opts
      * @return boolean success
      */

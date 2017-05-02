@@ -146,7 +146,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // NOTE: the Ext.progessbar has an ugly bug: it does not layout correctly when hidden
         //       so we need to listen when we get activated to relayout the progessbar
-        Tine.Tinebase.appMgr.on('activate', function(app) {
+        Tine.Tinebase.MainScreen.on('appactivate', function(app) {
             if (app.appName === 'Felamimail') {
                 this.quotaBar.syncProgressBar();
                 this.quotaBar.setWidth(this.quotaBar.getWidth());
@@ -480,6 +480,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
 
             this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+            this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());

@@ -616,4 +616,32 @@ class Tinebase_Mail extends Zend_Mail
         
         return $result;
     }
+
+    /**
+     * get imap/smtp connection options
+     *
+     * do we verify imap/smtp peers?
+     *
+     * @param integer $timeout connection timeout
+     * @return array
+     *
+     * TODO use separate configs for imap/smtp/sieve...
+     */
+    public static function getConnectionOptions($timeout = 30)
+    {
+        $connectionOptions = array(
+            'timeout' => $timeout,
+        );
+        $tinebaseImapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        if (isset($tinebaseImapConfig->verifyPeer) && $tinebaseImapConfig->verifyPeer == false) {
+            $connectionOptions['context'] = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ),
+            );
+        }
+
+        return $connectionOptions;
+    }
 }

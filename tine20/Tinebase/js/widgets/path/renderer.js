@@ -60,7 +60,7 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
         });
 
         // skip path if no token matched
-        if (queryParts.length != queryMatchCount) {
+        if (queryParts.length > queryMatchCount) {
             pathName = '';
         }
     }

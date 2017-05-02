@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -42,16 +42,16 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_directoryClass = 'Tinebase_Frontend_WebDAV_Directory';
 
     /**
-     * contructor
+     * constructor
      * 
-     * @param  string|Tinebase_Model_Application  $_application  the current application
-     * @param  string                             $_container    the current path
+     * @param  Tinebase_Model_Tree_Node    $_container
+     * @param  boolean                     $_useIdAsName
      */
-    public function __construct(Tinebase_Model_Container $_container, $_useIdAsName = false)
+    public function __construct($_container, $_useIdAsName = false)
     {
         parent::__construct($_container, $_useIdAsName);
         
-        $this->_path = Tinebase_FileSystem::getInstance()->getContainerPath($this->_container);
+        $this->_path = Tinebase_FileSystem::getInstance()->getPathOfNode($this->_container, /* as string */ true);
         
         // make sure filesystem path exists
         try {
@@ -137,7 +137,6 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     /**
      * Deleted the current container
      *
-     * @todo   use filesystem controller to delete directories recursive
      * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
@@ -154,11 +153,9 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             $child->delete();
         }
     
-        if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path)) {
+        if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path, /* $recursive */ true)) {
             throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
         }
-    
-        Tinebase_Container::getInstance()->delete($this->_getContainer());
     }
     
     public function getChild($name)
@@ -186,7 +183,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @return Sabre\DAV\INode[]
      */
-    function getChildren()
+    public function getChildren()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
@@ -227,13 +224,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
         
         $this->_getContainer()->name = $name;
-        Tinebase_Container::getInstance()->update($this->_getContainer());
+        Tinebase_FileSystem::getInstance()->update($this->_getContainer());
     }
     
     /**
      * return container for given path
      * 
-     * @return Tinebase_Model_Container
+     * @return Tinebase_Model_Tree_Node
      */
     protected function _getContainer()
     {

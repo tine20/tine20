@@ -141,24 +141,10 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
          }];
     },
 
-    /**
-     * shows/activates this app mainscreen
-     *
-     * @return {Tine.widgets.MainScreen} this
-     */
-    activate: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            Tine.Tinebase.MainScreen.setActiveCenterPanel(this, true);
+    afterRender: function() {
+        Tine.widgets.MainScreen.superclass.afterRender.call(this);
 
-            // lazy loading
-            this.showWestCardPanel();
-            this.showCenterPanel();
-            this.showNorthPanel();
-            this.showModuleTreePanel();
-
-            this.fireEvent('show', this);
-        }
-        return this;
+        this.setActiveContentType(this.activeContentType);
     },
 
     /**
@@ -172,8 +158,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      
     /**
      * get center panel for given contentType
-     * 
-     * template method to be overridden by subclasses to modify default behaviour
      * 
      * @param {String} contentType
      * @return {Ext.Panel}
@@ -199,8 +183,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
 
     /**
      * get north panel for given contentType
-     * 
-     * template method to be overridden by subclasses to modify default behaviour
      * 
      * @param {String} contentType
      * @return {Ext.Panel}
@@ -363,7 +345,11 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     setActiveContentType: function(contentType) {
         this.activeContentType = contentType;
-        this.activate();
+
+        this.showWestCardPanel();
+        this.showCenterPanel();
+        this.showNorthPanel();
+        this.showModuleTreePanel();
     },
 
     /**

@@ -340,4 +340,18 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $recordToTest->inarray = 'value1';
         $this->assertTrue($recordToTest->isValid());
     }
+
+    public function testXPropsSet()
+    {
+        $uit = new Tinebase_Record_DummyRecord();
+        $uit->xprops()['someproperty'] = 'somevalue';
+        $uit->xprops()['foo']['bar'] = 'baz';
+
+        $this->assertEquals('somevalue', $uit->xprops()['someproperty']);
+        $this->assertEquals('baz', $uit->xprops()['foo']['bar']);
+        $this->assertEquals(array('bar' => 'baz'), $uit->xprops()['foo']);
+
+        $this->setExpectedException('Exception');
+        $uit->xprops()['foo']['bar']['baz'] = 'error';
+    }
 }

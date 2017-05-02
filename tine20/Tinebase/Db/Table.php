@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Db
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -26,7 +26,7 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
      * @param int $_count OPTIONAL
      * @param int $_offset OPTIONAL
      * @throws Tinebase_Exception_InvalidArgument if $_dir is not ASC or DESC
-     * @return array the row results per the Zend_Db_Adapter fetch mode.
+     * @return Zend_Db_Table_Rowset_Abstract array the row results per the Zend_Db_Adapter fetch mode.
      */
     public function fetchAll($_where = NULL, $_order = NULL, $_dir = 'ASC', $_count = NULL, $_offset = NULL)
     {

@@ -322,6 +322,10 @@
           "path": "js/ux/display/"
         },
         {
+          "text": "DisplayTextArea.js",
+          "path": "js/ux/display/"
+        },
+        {
           "text": "Display.js",
           "path": "js/ux/layout/"
         },
@@ -424,6 +428,10 @@
         {
           "text": "configManager.js",
           "path": "js/"
+        },
+        {
+          "text": "RendererManager.js",
+          "path": "js/widgets/grid/"
         },
         {
           "text": "Models.js",
@@ -552,10 +560,6 @@
         {
           "text": "DuplicateResolveGridPanel.js",
           "path": "js/widgets/dialog/"
-        },
-        {
-          "text": "RendererManager.js",
-          "path": "js/widgets/grid/"
         },
         {
           "text": "DetailsPanel.js",
@@ -890,7 +894,7 @@
           "path": "js/"
         },
         {
-          "text": "MainScreen.js",
+          "text": "MainScreenPanel.js",
           "path": "js/"
         },
         {
@@ -916,6 +920,10 @@
         {
           "text": "layoutFixes.js",
           "path": "js/touch/"
+        },
+        {
+          "text": "PresenceObserver.js",
+          "path": "js/"
         },
         {
           "text": "tineInit.js",

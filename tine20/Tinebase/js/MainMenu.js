@@ -281,6 +281,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     
     /**
      * logout user & redirect
+     * @static
      */
     _doLogout: function() {
         Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));

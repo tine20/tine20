@@ -3,9 +3,9 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     ExampleApplication
- * @subpackage  Record
+ * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 

@@ -86,4 +86,27 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
             $this->assertContains($username . ' - ', $loggerFile);
         }
     }
+
+    public function testColorize()
+    {
+        $logfile = tempnam(Tinebase_Core::getTempDir(), 'testlog');
+        $writer = new Zend_Log_Writer_Stream($logfile);
+
+        $formatter = new Tinebase_Log_Formatter();
+        $formatter->setOptions(array('colorize' => true));
+        $writer->setFormatter($formatter);
+        $this->_logger->addWriter($writer);
+        $filter = new Zend_Log_Filter_Priority(5);
+        $this->_logger->addFilter($filter);
+
+        $this->_logger->notice("test logging");
+        $loggerFile = file_get_contents($logfile);
+        $writer->shutdown();
+        unlink($logfile);
+
+        self::assertContains("\e[1m", $loggerFile, 'did not find ansi color escape code');
+        self::assertContains("\e[36m", $loggerFile, 'did not find color for prio 5 (36m)');
+
+        //echo $loggerFile;
+    }
 }

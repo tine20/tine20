@@ -122,7 +122,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      */
     initStore: function () {
         this.store = new Ext.data.SimpleStore({
-            fields: Tine.Tinebase.Model.Node
+            fields: Tine.Tinebase.Model.Tree_Node
         });
     },
     
@@ -192,7 +192,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             var attachmentRecords = [];
             
             Ext.each(attachments, function(attachment) {
-                attachmentRecords.push(new Tine.Tinebase.Model.Node(attachment, attachment.id));
+                attachmentRecords.push(new Tine.Tinebase.Model.Tree_Node(attachment, attachment.id));
             }, this);
             this.store.add(attachmentRecords);
         } else {

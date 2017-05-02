@@ -144,16 +144,17 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $config = Courses_Config::getInstance();
         $courseTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
-        
+
+        $defaultType = '';
         if (isset($config->default_department)) {
-            for ($i = 0; $i <= count($courseTypes); $i ++) {
-                if ($courseTypes[$i]->name == $config->default_department) {
-                    $defaultType = $courseTypes[$i]->getId();
+            foreach ($courseTypes as $courseType) {
+                if ($courseType->name == $config->default_department) {
+                    $defaultType = $courseType->getId();
                     break;
                 }
             }
-        } else {
-            $defaultType = count($courseTypes) > 0 ? $courseTypes[0]->getId() : '';
+        } else if (count($courseTypes) > 0) {
+            $defaultType = $courseTypes->getFirstRecord()->getId();
         }
         $result = array(
             'defaultType' => array(

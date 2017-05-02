@@ -109,11 +109,10 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             );
             
             // initialize in case validators are switched off
-            $this->_properties[$grant] = false;
-            
+            $this->{$grant} = false;
         }
         
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**
@@ -145,7 +144,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * @param Tinebase_Model_FullUser $user
      * @return boolean
      */
-    public function userHasGrant($grant, $user = null)
+    public function userHasGrant($grant, Tinebase_Model_FullUser $user = null)
     {
         if ($user === null) {
             $user = Tinebase_Core::getUser();
@@ -214,5 +213,57 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         }
         
         return $this;
+    }
+
+    /**
+     * return default grants with read for user group and write/admin for admin group
+     *
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Grants
+     */
+    public static function getDefaultGrants()
+    {
+        $groupsBackend = Tinebase_Group::getInstance();
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id' => $groupsBackend->getDefaultGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+            ),
+            array(
+                'account_id' => $groupsBackend->getDefaultAdminGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => true,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+            ),
+        ), TRUE);
+    }
+
+    /**
+     * return personal grants for given account
+     *
+     * @param string|Tinebase_Model_User          $_accountId
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Grants
+     */
+    public static function getPersonalGrants($_accountId)
+    {
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'     => $accountId,
+            'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => true,
+            Tinebase_Model_Grants::GRANT_EXPORT    => true,
+            Tinebase_Model_Grants::GRANT_SYNC      => true,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true,
+        )));
     }
 }

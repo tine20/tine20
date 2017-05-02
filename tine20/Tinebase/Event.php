@@ -38,14 +38,14 @@ class Tinebase_Event
             return;
         }
         
-        foreach(Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
+        foreach (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             try {
                 $controller = Tinebase_Core::getApplicationInstance($application, NULL, TRUE);
             } catch (Tinebase_Exception_NotFound $e) {
                 // application has no controller or is not useable at all
                 continue;
             }
-            if($controller instanceof Tinebase_Event_Interface) {
+            if ($controller instanceof Tinebase_Event_Interface) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
                     . __LINE__ . ' calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
                 try {

@@ -60,7 +60,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
     }
     
     /**
-     * import one purchase imvoice file
+     * import one purchase invoice file
      * 
      * a new invoice with default data will be created and the invoice file will be attached
      * 
@@ -71,7 +71,9 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
      */
     public function importPurchaseInvoice($name, $data)
     {
-        // create invoice
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Creating purchase invoice for imported file ' . $name);
+
         $purchaseInvoice = new Sales_Model_PurchaseInvoice(array(
             'number'      => '',
             'description' => '',
@@ -86,7 +88,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
         ));
         
         // Don't use duplicate check for this import. The default data makes them duplicate by default.
-        $invoice = $this->create($purchaseInvoice, /* duplicateCheck = */ false);
+        $this->create($purchaseInvoice, /* duplicateCheck = */ false);
         
         // attach invoice file (aka a pdf)
         $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, TRUE);

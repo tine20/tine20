@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -24,7 +24,27 @@ class Tinebase_Record_PersistentObserver
      * 
      * @var Tinebase_Db_Table
      */
+    protected $_table;
+
+    /**
+     * @var Zend_Db
+     */
     protected $_db;
+
+    /**
+     * @var array
+     */
+    protected $_controllerCache = array();
+
+    /**
+     * @var array
+     */
+    protected $_eventRecursionPrevention = array();
+
+    /**
+     * @var bool
+     */
+    protected $_outerCall = true;
     
     /* holds the instance of the singleton
      *
@@ -38,13 +58,11 @@ class Tinebase_Record_PersistentObserver
      */
     private function __construct()
     {
-        // temporary on the fly creation of table
-        Tinebase_Setup_SetupSqlTables::createPersistentObserverTable();
-        $this->_db = new Tinebase_Db_Table(array(
-            'name' => SQL_TABLE_PREFIX . 'record_persistentobserver',
-            'primary' => 'identifier'
+        $this->_table = new Tinebase_Db_Table(array(
+            'name' => SQL_TABLE_PREFIX . 'record_observer',
+            'primary' => 'id'
         ));
-        
+        $this->_db = $this->_table->getAdapter();
     }
     
     /**
@@ -64,49 +82,67 @@ class Tinebase_Record_PersistentObserver
     /**
      *
      * @param Tinebase_Record_Interface $_observable 
-     * @param Tinebase_Event_Abstract $_event 
+     * @param string $_event
      */
-    public function fireEvent( $_observable,  $_event ) {
-        $observers = $this->getObserversByEvent($_observable, $_event);
-        foreach ($observers as $observer) {
-            $controllerName = $observer->observer_application . '_Controller';
-            
-            if(!class_exists($controllerName)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " No such application controller: '$controllerName'");
-                continue;
-            }
-            
-            if(!class_exists($_event)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " No such event: '$_event'");
-                continue;
-            }
-            
-            try {
-                $controller = call_user_func(array($controllerName, 'getInstance'));
-            } catch (Exception $e) {
-                // application has no controller or is not useable at all
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Can't get instance of $controllerName : $e");
-                continue;
-            }
-            
-            $eventObject = new $_event();
-            
-            // Tinebase_Model_PersistentObserver holds observer and observable
-            $eventObject->observable = $observer;
-            
-            $controller->handleEvent($eventObject);
+    public function fireEvent(Tinebase_Record_Interface $_observable, $_event)
+    {
+        if (!class_exists($_event)) {
+            throw new Tinebase_Exception_InvalidArgument('Event ' . $_event . ' doesn\'t exist');
         }
-    } // end of member function fireEvent
+
+        $setOuterCall = false;
+        if (true === $this->_outerCall) {
+            $this->_eventRecursionPrevention = array();
+            $this->_outerCall = false;
+            $setOuterCall = true;
+        }
+
+        try {
+            $observers = $this->getObserversByEvent($_observable, $_event);
+            /** @var Tinebase_Event_Observer_Abstract $eventObject */
+            $eventObject = new $_event();
+            $eventObject->observable = $_observable;
+
+            /** @var Tinebase_Model_PersistentObserver $observer */
+            foreach ($observers as $observer) {
+
+                $observerId = $observer->getId();
+                if (isset($this->_eventRecursionPrevention[$observerId])) {
+                    continue;
+                }
+                $this->_eventRecursionPrevention[$observerId] = true;
+
+                /** @var Tinebase_Controller_Record_Abstract $controller */
+                if (!isset($this->_controllerCache[$observer->observer_model])) {
+                    $controller = Tinebase_Core::getApplicationInstance($observer->observer_model);
+                    $this->_controllerCache[$observer->observer_model] = $controller;
+                } else {
+                    $controller = $this->_controllerCache[$observer->observer_model];
+                }
+
+                $eventObject->persistentObserver = $observer;
+
+                $controller->handleEvent($eventObject);
+            }
+        } finally {
+            $this->_outerCall = $setOuterCall;
+            if (true === $this->_outerCall) {
+                $this->_eventRecursionPrevention = array();
+            }
+        }
+    }
 
     /**
      * registers new persistent observer
-     * 
-     * @param Tinebase_Model_PersistentObserver $_persistentObserver 
+     *
+     * @param Tinebase_Model_PersistentObserver $_persistentObserver
      * @return Tinebase_Model_PersistentObserver the new persistentObserver
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function addObserver( $_persistentObserver ) {
-        if ($_persistentObserver->getId()) {
-            throw new Tinebase_Exception_Record_NotAllowed('Could not add existing observer');
+    public function addObserver(Tinebase_Model_PersistentObserver $_persistentObserver) {
+        if (null !== $_persistentObserver->getId()) {
+            throw new Tinebase_Exception_Record_NotAllowed('Can not add existing observer');
         }
         
         $_persistentObserver->created_by = Tinebase_Core::getUser()->getId();
@@ -115,41 +151,31 @@ class Tinebase_Record_PersistentObserver
         if ($_persistentObserver->isValid()) {
             $data = $_persistentObserver->toArray();
             
-            // resolve apps
-            $application = Tinebase_Application::getInstance();
-            $data['observable_application'] = $application->getApplicationByName($_persistentObserver->observable_application)->id;
-            $data['observer_application']   = $application->getApplicationByName($_persistentObserver->observer_application)->id;
-            
-            $identifier = $this->_db->insert($data);
+            $identifier = $this->_table->insert($data);
 
-            $persistentObserver = $this->_db->fetchRow( "identifier = $identifier");
+            $persistentObserver = $this->_table->fetchRow("id = $identifier");
             
             return new Tinebase_Model_PersistentObserver($persistentObserver->toArray(), true);
             
         } else {
             throw new Tinebase_Exception_Record_Validation('some fields have invalid content');
         }
-    } // end of member function addObserver
+    }
 
     /**
-     * unregisters a persistaent observer
+     * unregisters a persistent observer
      * 
      * @param Tinebase_Model_PersistentObserver $_persistentObserver 
      * @return void 
      */
-    public function removeObserver( $_persistentObserver ) {
-        if ($_persistentObserver->getId() && $_persistentObserver->isValid()) {
-            $where = array(
-                $this->_db->quoteIdentifier('identifier') . ' = ' . $_persistentObserver->getId()
-            );
-            
-            $this->_db->update(array(
-                'is_deleted'   => true,
-                'deleted_by'   => Tinebase_Core::getUser()->getId(),
-                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            ), $where);
-        }
-    } // end of member function removeObserver
+    public function removeObserver(Tinebase_Model_PersistentObserver $_persistentObserver)
+    {
+        $where = array(
+            $this->_db->quoteIdentifier('id') . ' = ' . (int)$_persistentObserver->getId()
+        );
+
+        $this->_table->delete($where);
+    }
 
     /**
      * unregisters all observables of a given observer 
@@ -157,87 +183,66 @@ class Tinebase_Record_PersistentObserver
      * @param Tinebase_Record_Interface $_observer 
      * @return void
      */
-    public function removeAllObservables( $_observer ) {
-        if ($_observer->getApplication() && $_observer->getId()) {
-            $where = array(
-                $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
-                $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId()
-            );
-            
-            $this->_db->update(array(
-                'is_deleted'   => true,
-                'deleted_by'   => Tinebase_Core::getUser()->getId(),
-                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            ), $where);
-        } else {
-            throw new Tinebase_Exception_Record_DefinitionFailure();
-        }
-    } // end of member function removeAllObservables
+    public function removeAllObservables(Tinebase_Record_Interface $_observer)
+    {
+        $where = array(
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
+        );
+
+        $this->_table->delete($where);
+    }
 
     /**
      * returns all observables of a given observer
      * 
      * @param Tinebase_Record_Interface $_observer 
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersitentObserver
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersistentObserver
      */
-    public function getAllObservables( $_observer ) {
-        if ($_observer->getApplication() && $_observer->getId()) {
-            $where = array(
-                $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
-                $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId()
-            );
-            
-            return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
-        } else {
-            throw new Tinebase_Exception_Record_DefinitionFailure();
-        }
-    } // end of member function getAllObservables
+    public function getAllObservables(Tinebase_Record_Interface $_observer)
+    {
+        $where = array(
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
+        );
+
+        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
+    }
 
     /**
      * returns all observables of a given event and observer
      * 
      * @param Tinebase_Record_Interface $_observer 
-     * @param string _event 
-     * @return Tinebase_Record_RecordSet
+     * @param string $_event
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersistentObserver
      */
-    public function getObservablesByEvent( $_observer,  $_event ) {
-        if (!$_observer->getApplication() || !$_observer->getId()) {
-            throw new Tinebase_Exception_Record_DefinitionFailure();
-        } 
-        
+    public function getObservablesByEvent(Tinebase_Record_Interface $_observer, $_event)
+    {
         $where = array(
-            $this->_db->quoteIdentifier('observer_application') . ' =' . $_observer->getApplication(),
-            $this->_db->quoteIdentifier('observer_identifier') . '  =' . $_observer->getId(),
-            $this->_db->quoteIdentifier('observed_event') . '       =' . $this->_db->getAdapter()->quote($_event)
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId()),
+            $this->_db->quoteIdentifier('observed_event') .       ' = ' . $this->_db->quote((string)$_event)
         );
         
-        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
-    } // end of member function getObservablesByEvent
+        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
+    }
 
 
     /**
      * returns all observers of a given observable and event
      * 
-     * @param Tinebase_Record_Interface $_observable 
-     * @param string _event 
-     * @return Tinebase_Record_RecordSet
+     * @param Tinebase_Record_Interface $_observable
+     * @param string $_event
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersistentObserver
      */
-    protected function getObserversByEvent( $_observable,  $_event ) {
-        if (!$_observer->getApplication() || !$_observer->getId()) {
-            throw new Tinebase_Exception_Record_DefinitionFailure();
-        }
-        
+    protected function getObserversByEvent(Tinebase_Record_Interface $_observable,  $_event)
+    {
         $where = array(
-            $this->_db->quoteIdentifier('observable_application') . ' =' . $_observable->getApplication(),
-            $this->_db->quoteIdentifier('observable_identifier') . '  =' . $_observable->getId(),
-            $this->_db->quoteIdentifier('observed_event') . '         =' . $this->_db->getAdapter()->quote($_event)
+            $this->_db->quoteIdentifier('observable_model') .       ' = ' . $this->_db->quote(get_class($_observable)),
+            $this->_db->quoteIdentifier('observable_identifier') .  ' = ' . $this->_db->quote((string)$_observable->getId()),
+            $this->_db->quoteIdentifier('observed_event') .         ' = ' . $this->_db->quote((string)$_event)
         );
-        
-        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_db->fetchAll($where), true);
-    } // end of member function getObserversByEvent
 
-
-
-
-} // end of Tinebase_Record_PersistentObserver
-?>
+        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
+    }
+}

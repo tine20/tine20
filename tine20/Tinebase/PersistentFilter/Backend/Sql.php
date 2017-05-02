@@ -100,6 +100,6 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
         foreach($_rawDatas as $idx => $rawData) {
             $_rawDatas[$idx]['filters'] = Zend_Json::decode($rawData['filters']);
         }
-        return new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
+        return new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true, true, true);
     }
 }

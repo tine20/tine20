@@ -725,7 +725,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->assertEquals('4121', $message->size);
         $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
         $this->assertTrue(isset($message->body), 'no body found');
-        $this->assertContains('getLogger()-&gt;debug', $message->body);
+        $this->assertContains('getLogger()->debug', $message->body);
     }
     
     /**
@@ -741,6 +741,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->assertContains("Proposal: Zend_Grid", $message->subject);
         $this->assertTrue(isset($message->body), 'no body found');
         $this->assertContains('Bento Vilas Boas wrote', $message->body ,'string not found in body: ' . $message->body);
+        $this->assertEquals(1, count($message->attachments), 'did not find attachment');
         $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
     }
     
@@ -837,11 +838,12 @@ class Felamimail_Controller_MessageTest extends TestCase
         $forwardedMessage = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->getFolder('INBOX'));
         $forwardedMessageInSent = $this->searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
+        $attachmentName = preg_replace('/\s*/', '', $cachedMessage->subject);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
-        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name'],
+        $this->assertEquals($attachmentName . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name'],
             'filename mismatch in structure' . print_r($forwardedMessage['structure']['parts'][2], TRUE));
-        $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename'],
+        $this->assertEquals($attachmentName . '.eml', $completeForwardedMessage->attachments[0]['filename'],
             'filename mismatch of attachment' . print_r($completeForwardedMessage->attachments[0], TRUE));
         
         return $forwardedMessage;

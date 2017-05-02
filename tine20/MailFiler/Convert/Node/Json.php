@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Convert
  */
-class MailFiler_Convert_Node_Json extends Tinebase_Convert_Json
+class MailFiler_Convert_Node_Json extends Tinebase_Convert_Tree_Node_Json
 {
     /**
      * resolves child records before converting the record set to an array

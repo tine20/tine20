@@ -165,7 +165,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
             'description'           => array(
                 'label'                 => 'Description', // _('Description')
-                'type'                  => 'text',
+                'type'                  => 'fulltext',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'queryFilter'           => TRUE
             ),

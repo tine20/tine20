@@ -35,6 +35,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     multipleEdit: true,
     displayNotes: true,
 
+    preferredAddressBusinessCheckbox: null,
+    preferredAddressPrivateCheckbox: null,
+
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
@@ -53,6 +56,37 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 html: ''
             });
         }
+
+
+        this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
+            checked: this.record.get('preferred_address') === "0",
+            hideLabel: false,
+            fieldLabel: i18n._('Preferred Address'),
+            listeners: {
+                'check': function(checkbox, value) {
+                    if (value) {
+                        this.preferredAddressPrivateCheckbox.setValue(false);
+                        this.record.set('preferred_address', 0);
+                    }
+                },
+                scope: this
+            }
+        });
+
+        this.preferredAddressPrivateCheckbox = new Ext.form.Checkbox({
+            checked: this.record.get('preferred_address') === "1",
+            hideLabel: false,
+            fieldLabel: i18n._('Preferred Address'),
+            listeners: {
+                'check': function(checkbox, value) {
+                    if (value) {
+                        this.preferredAddressBusinessCheckbox.setValue(false);
+                        this.record.set('preferred_address', 1);
+                    }
+                },
+                scope: this
+            }
+        });
 
         return {
             xtype: 'tabpanel',
@@ -278,7 +312,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         region: 'south',
                         border: false,
                         deferredRender: false,
-                        height: 124,
+                        height: 160,
                         split: true,
                         activeTab: 0,
                         defaults: {
@@ -316,7 +350,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 fieldLabel: this.app.i18n._('Country'),
                                 name: 'adr_one_countryname',
                                 maxLength: 64
-                            }]]
+                            }], [this.preferredAddressBusinessCheckbox]]
                         }, {
                             title: this.app.i18n._('Private Address'),
                             xtype: 'columnform',
@@ -345,7 +379,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 fieldLabel: this.app.i18n._('Country'),
                                 name: 'adr_two_countryname',
                                 maxLength: 64
-                            }]]
+                            }], [this.preferredAddressPrivateCheckbox]]
                         }]
                     }]
                 }, {
@@ -385,8 +419,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.tags.TagPanel({
+                        }), new Ext.Panel({
+                            title: this.app.i18n._('Groups'),
+                            iconCls: 'tinebase-accounttype-group',
+                            layout: 'fit',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;',
+                            items: [
+                                this.groupsPanel
+                            ]
+                        }), new Tine.widgets.tags.TagPanel({
                             app: 'Addressbook',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
@@ -410,7 +452,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         var relatedRecords = {};
 
         this.initToolbar();
-
+        this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
+            frame: false
+        });
         this.supr().initComponent.apply(this, arguments);
     },
 
@@ -530,6 +574,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
                 this.mapPanel.onRecordLoad(this.record);
             }
+        }
+        if (this.record.id) {
+            this.groupsPanel.store.loadData(this.record.get('groups'));
         }
         this.supr().onRecordLoad.apply(this, arguments);
     }

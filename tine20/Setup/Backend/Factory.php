@@ -5,7 +5,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,14 +16,22 @@
 class Setup_Backend_Factory
 {
 
+    static protected $_instanceCache = array();
+
     /**
      * factory function to return a selected setup backend class
      *
-     * @param string | optional $_type
+     * @param string|null $_type
      * @return Setup_Backend_Interface
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
      */
     static public function factory($_type = null)
     {
+        if (isset(static::$_instanceCache[$_type])) {
+            return static::$_instanceCache[$_type];
+        }
+
         if (empty($_type)) {
             $db = Tinebase_Core::getDb();
             $adapterName = get_class($db);
@@ -44,10 +52,12 @@ class Setup_Backend_Factory
         }
         
         if (!class_exists($className)) {
-            throw new InvalidArgumentException('Invalid database backend type defined.');
+            throw new Tinebase_Exception_InvalidArgument('Invalid database backend type defined.');
         }
         
         $instance = new $className();
+
+        static::$_instanceCache[$_type] = $instance;
 
         return $instance;
     }

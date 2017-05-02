@@ -170,7 +170,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     protected function _addUser($username = NULL)
     {
-        $user = Tinebase_User_LdapTest::getTestRecord();
+        $user = TestCase::getTestUser();
         if ($username) {
             $user->accountLoginName = $username;
         }

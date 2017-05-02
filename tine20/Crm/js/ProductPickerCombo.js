@@ -5,7 +5,6 @@
  * @author      Michael Spahn <kontakt@michaelspahn.de>
  * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
 Ext.ns('Tine.Crm');
 
 Tine.Crm.ProductPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
@@ -19,4 +18,4 @@ Tine.Crm.ProductPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicker
     }
 });
 
-Tine.widgets.form.RecordPickerManager.register('Crm', 'Lead', Tine.Crm.ProductPickerCombo);
+Tine.widgets.form.RecordPickerManager.register('Crm', 'Product', Tine.Crm.ProductPickerCombo);

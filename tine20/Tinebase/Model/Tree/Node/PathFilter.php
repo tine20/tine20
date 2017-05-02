@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
  */
 
 /**
@@ -33,13 +31,6 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      * @var Tinebase_Model_Tree_Node_Path
      */
     protected $_path = NULL;
-    
-    /**
-     * @var array one of these grants must be met
-     */
-    protected $_requiredGrants = array(
-        Tinebase_Model_Grants::GRANT_READ
-    );
     
     /**
      * set options 
@@ -94,10 +85,6 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         $this->_parsePath();
         
         $this->_addParentIdFilter($_select, $_backend);
-        
-        if (! $this->_path->container) {
-            $this->_addContainerTypeFilter($_select, $_backend);
-        }
     }
     
     /**
@@ -124,46 +111,5 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
 
         $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
         $parentIdFilter->appendFilterSql($_select, $_backend);
-    }
-
-    /**
-     * adds container type filter sql
-     *
-     * @param  Zend_Db_Select                    $_select
-     * @param  Tinebase_Backend_Sql_Abstract     $_backend
-     */
-    protected function _addContainerTypeFilter($_select, $_backend)
-    {
-        $currentAccount = Tinebase_Core::getUser();
-        $appName        = $this->_path->application->name;
-        $ignoreAcl      = $this->_options['ignoreAcl'];
-        
-        switch ($this->_path->containerType) {
-            case Tinebase_Model_Container::TYPE_PERSONAL:
-                if (! $this->_path->containerOwner) {
-                    throw new Tinebase_Exception_InvalidArgument('Container owner not set.');
-                }
-                
-                if ($this->_path->containerOwner == $currentAccount->accountLoginName) {
-                    $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
-                        $currentAccount, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                } else {
-                    $owner = Tinebase_User::getInstance()->getFullUserByLoginName($this->_path->containerOwner);
-                    $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
-                        $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                }
-                break;
-                
-            case Tinebase_Model_Container::TYPE_SHARED:
-                $names = Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName,
-                    $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                break;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Filter names: ' . print_r($names, TRUE));
-        
-        $nameFilter = new Tinebase_Model_Filter_Text('name', 'in', $names);
-        $nameFilter->appendFilterSql($_select, $_backend);
     }
 }

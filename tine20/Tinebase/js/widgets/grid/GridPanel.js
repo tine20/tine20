@@ -33,11 +33,17 @@ Tine.widgets.grid.GridPanel = function(config) {
     this.defaultPaging = this.defaultPaging || {
         start: 0,
         limit: 50
-    };      
+    };
+
+    var stateIdPrefix = '';
+
+    if (config.hasOwnProperty('stateIdPrefix')) {
+        stateIdPrefix = config.stateIdPrefix;
+    }
 
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
-        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
+        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel' + stateIdPrefix;
     }
 
     if (this.stateId && Ext.isTouchDevice) {
@@ -132,6 +138,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
+    /**
+     * Tree panel referenced to this gridpanel
+     */
+    treePanel: null,
 
     /**
      * if this resides in a editDialog, this property holds it
@@ -241,6 +251,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     copyEditAction: false,
 
     /**
+     * @cfg {Boolean} moveAction
+     * activate moveAction
+     */
+    moveAction: true,
+
+    /**
      * disable delete confirmation by default
      *
      * @type Boolean
@@ -339,6 +355,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     border: false,
     stateful: true,
 
+    stateIdPrefix: null,
+
+    /**
+     * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
+     */
+    readOnly: false,
+
     /**
      * extend standard initComponent chain
      * 
@@ -380,7 +403,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             containerProperty: this.recordClass.getMeta('containerProperty'), 
             evalGrants: this.evalGrants
         });
-        this.initActions();
+
+        if (!this.readOnly) {
+            this.initActions();
+        }
 
         this.initLayout();
 
@@ -394,7 +420,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
-        this.on('resize', this.onContentResize, this, {buffer: 100});
+        if (this.detailsPanel) {
+            this.on('resize', this.onContentResize, this, {buffer: 100});
+        }
 
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
@@ -598,7 +626,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     afterlayout: function(ct) {
                         ct.suspendEvents();
-                        ct.setHeight(Math.min(120, this.filterToolbar.getHeight()));
+                        ct.setHeight(Math.min(120, this.filterToolbar.getHeight() + (ct.topToolbar ? ct.topToolbar.getHeight() : 0)));
                         ct.getEl().child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
@@ -681,6 +709,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             translationObject: this.i18nMoveActionText ? this.app.i18n : i18n,
             text: this.i18nMoveActionText ? this.i18nMoveActionText[0] : String.format(i18n.ngettext('Move {0}', 'Move {0}', 1), this.i18nRecordName),
             disabled: true,
+            hidden: !this.moveAction || !this.recordClass.getMeta('containerProperty'),
             actionType: 'edit',
             handler: this.onMoveRecords,
             scope: this,
@@ -799,10 +828,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
+            defaultImportContainer: treePanel.getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
             listeners: {
                 scope: this,
                 'finish': function() {
@@ -1206,12 +1236,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
         Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.appName,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
                 ? this.getDefaultContainer()
-                : this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
+                : treePanel.getDefaultContainer(),
             // update grid after import
             listeners: {
                 scope: this,
@@ -1534,6 +1565,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
+            this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
@@ -1544,6 +1576,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     onActionToolbarResize: function(tb) {
+        if (! tb.rendered) return;
         var actionGrp = tb.items.get(0),
             availableWidth = tb.getBox()['width'] - 5,
             maxNeededWidth = Ext.layout.ToolbarLayout.prototype.triggerWidth + 10;
@@ -1613,7 +1646,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-New'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-New' + this.stateIdPrefix
                 }]
             });
 
@@ -1632,7 +1665,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-Add'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-Add' + this.stateIdPrefix
                 }]
             });
 
@@ -1650,7 +1683,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: items,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu' + this.stateIdPrefix
                 }, {
                     ptype: 'ux.itemregistry',
                     key:   'Tinebase-MainContextMenu'
@@ -1880,7 +1913,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.EventObject} e
      */
     onRowContextMenu: function(grid, row, e) {
-        console.log(e);
         e.stopEvent();
         var selModel = grid.getSelectionModel();
         if (!selModel.isSelected(row)) {
@@ -1889,7 +1921,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             selModel.selectRow(row);
         }
 
-        this.getContextMenu(grid, row, e).showAt(e.getXY());
+        var contextMenu = this.getContextMenu(grid, row, e);
+
+        if (contextMenu) {
+            contextMenu.showAt(e.getXY());
+        }
+
         // reset preview update
         this.updateOnSelectionChange = true;
     },
