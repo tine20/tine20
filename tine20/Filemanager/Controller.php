@@ -57,7 +57,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     /**
      * the singleton pattern
      *
-     * @return Addressbook_Controller
+     * @return Filemanager_Controller
      */
     public static function getInstance() 
     {

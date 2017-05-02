@@ -531,6 +531,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $syncedUser = $userBackend->addUserInSqlBackend($user);
+
+            // fire event to make sure all user data is created in the apps
+            // TODO convert to Tinebase event?
+            $event = new Admin_Event_AddAccount(array(
+                'account' => $syncedUser
+            ));
+            Tinebase_Event::fireEvent($event);
+
             // the addressbook is registered as a plugin and will take care of the create
             $userBackend->addPluginUser($syncedUser, $user);
 

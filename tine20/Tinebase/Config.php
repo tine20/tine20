@@ -56,6 +56,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * DEFAULT_LOCALE
+     *
+     * @var string
+     */
+    const DEFAULT_LOCALE = 'defaultLocale';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -530,6 +537,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'type'                  => 'array',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        /**
+         * for example: 'de'
+         */
+        self::DEFAULT_LOCALE => array(
+            //_('Default Locale')
+            'label'                 => 'Default Locale',
+            //_('Default locale for this installation.')
+            'description'           => 'Default locale for this installation.',
+            'type'                  => 'string',
+            'default'               => 'en',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
         /**
