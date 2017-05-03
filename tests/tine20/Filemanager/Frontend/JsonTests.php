@@ -134,8 +134,29 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _assertRootNodes($searchResult)
     {
+        $translate = Tinebase_Translation::getTranslation('Filemanager');
         $this->assertEquals(3, $searchResult['totalcount'], 'did not get root nodes: ' . print_r($searchResult, TRUE));
-        $this->assertEquals('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName, $searchResult['results'][0]['path']);
+        $this->assertEquals(array(
+            'id'    => 'myUser',
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+            'name' => $translate->_('My folders'),
+            'type' => 'folder',
+            'tags' => array(),
+            ), $searchResult['results'][0]);
+        $this->assertEquals(array(
+            'id'    => Tinebase_Model_Container::TYPE_SHARED,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            'name' => $translate->_('Shared folders'),
+            'type' => 'folder',
+            'tags' => array(),
+        ), $searchResult['results'][1]);
+        $this->assertEquals(array(
+            'id'    => Tinebase_Model_Container::TYPE_OTHERUSERS,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+            'name' => $translate->_('Other users folders'),
+            'type' => 'folder',
+            'tags' => array(),
+        ), $searchResult['results'][2]);
     }
     
     /**
@@ -148,7 +169,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name
+            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/'
+                . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
     }
@@ -184,7 +206,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
         
         if ($_checkAccountGrants) {
-            $this->assertTrue(isset($result['results'][0]['account_grants']));
+            $this->assertTrue(isset($result['results'][0]['account_grants']), 'account grants missing');
             $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_grants']['account_id']);
         }
         
@@ -212,7 +234,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testSearchOtherUsersNodes()
     {
         $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
-        
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
@@ -268,7 +289,20 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
             )
         );
-        $this->_searchHelper($filter, 'clever', FALSE, FALSE);
+        $result = $this->_searchHelper(
+            $filter,
+            $this->_personas['sclever']->accountDisplayName,
+            /* $_toplevel */ false,
+            /* $_checkAccountGrants */ false
+        );
+        // make sure, own user is not in other users
+        $found = false;
+        foreach ($result['results'] as $node) {
+            if ($node['path'] === '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName) {
+                $found = true;
+            }
+        }
+        self::assertFalse($found, 'own personal node found! ' . print_r($result['results'], true));
     }
 
     /**

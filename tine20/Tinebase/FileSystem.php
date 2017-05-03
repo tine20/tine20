@@ -2228,8 +2228,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_SystemGeneric
-     *
-     * TODO split this fn
      */
     protected function _getNodesOfType($_type, $_accountId, $_recordClass, $_owner = null, $_grant = Tinebase_Model_Grants::GRANT_READ, $_ignoreACL = false)
     {
@@ -2240,25 +2238,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         $path = $this->getApplicationBasePath($app, $_type);
 
         if ($_type == self::FOLDER_TYPE_PERSONAL and $_owner == null) {
-            // other users
-            $accountIds = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
-            // remove own id
-            $accountIds = Tinebase_Helper::array_remove_by_value($accountId, $accountIds);
-            $filter = new Tinebase_Model_Tree_Node_Filter(
-                array(
-                    array('field' => 'name', 'operator' => 'in', 'value' => $accountIds),
-                ),
-                /* $_condition = */ '',
-                /* $_options */ array(
-                    'ignoreAcl' => true,
-                )
-            );
-            $result = $this->searchNodes($filter);
-            $filterArray = array(
-                array('field' => 'parent_id', 'operator' => 'in', 'value' => $result->getArrayOfIds()),
-            );
+            return $this->_getOtherUsersNodes($_accountId, $path, $_grant, $_ignoreACL);
 
         } else {
+            // SHARED or MY_FOLDERS
 
             $ownerId = $_owner instanceof Tinebase_Model_FullUser ? $_owner->getId() : $_owner;
             if ($ownerId) {
@@ -2269,6 +2252,19 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             try {
                 $parentNode = $this->stat($pathRecord->statpath);
                 $filterArray = array(array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId()));
+
+                $filter = new Tinebase_Model_Tree_Node_Filter(
+                    $filterArray,
+                    /* $_condition = */ '',
+                    /* $_options */ array(
+                    'ignoreAcl' => $_ignoreACL,
+                    'user' => $_accountId instanceof Tinebase_Record_Abstract
+                        ? $_accountId->getId()
+                        : $_accountId
+                ));
+                $filter->setRequiredGrants((array)$_grant);
+                $result = $this->searchNodes($filter);
+
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if ($accountId === $ownerId) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -2280,24 +2276,72 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
             }
         }
 
+        foreach ($result as $node) {
+            $node->path = $path . '/' . $node->name;
+        }
+
+        return $result;
+    }
+
+
+    protected function _getOtherUsersNodes($_accountId, $_path, $_grant, $_ignoreACL)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+
+        // other users
+        $accountIds = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
+        // remove own id
+        $accountIds = Tinebase_Helper::array_remove_by_value($accountId, $accountIds);
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($_path);
+        try {
+            $parentNode = $this->stat($pathRecord->statpath);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if ($accountId === $ownerId) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Creating PERSONAL root node');
+                $this->createAclNode($pathRecord->statpath);
+            }
+
+            return $result;
+        }
         $filter = new Tinebase_Model_Tree_Node_Filter(
-            $filterArray,
+            array(
+                array('field' => 'name',      'operator' => 'in',     'value' => $accountIds),
+                array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
+            ),
+            /* $_condition = */ '',
+            /* $_options */ array(
+                'ignoreAcl' => true,
+            )
+        );
+        $otherAccountNodes = $this->searchNodes($filter);
+        $filter = new Tinebase_Model_Tree_Node_Filter(
+            array(
+                array('field' => 'parent_id', 'operator' => 'in', 'value' => $otherAccountNodes->getArrayOfIds()),
+            ),
             /* $_condition = */ '',
             /* $_options */ array(
                 'ignoreAcl' => $_ignoreACL,
                 'user' => $_accountId instanceof Tinebase_Record_Abstract
                     ? $_accountId->getId()
                     : $_accountId
-            ));
+            )
+        );
         $filter->setRequiredGrants((array)$_grant);
-        $result = $this->searchNodes($filter);
+        // get shared folders of other users
+        $sharedFoldersOfOtherUsers = $this->searchNodes($filter);
 
-        foreach ($result as $node) {
-            if ($_type == self::FOLDER_TYPE_PERSONAL and $_owner === null) {
-                // add owner (user id) to path for other users
-                $node->path = $path . '/' . $node->parent_id . '/' . $node->name;
-            } else {
-                $node->path = $path . '/' . $node->name;
+        foreach ($otherAccountNodes as $otherAccount) {
+            if ($sharedFoldersOfOtherUsers->filter('parent_id', $otherAccount->getId())) {
+                $result->addRecord($otherAccount);
+                $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend(
+                    'accountId',
+                    $otherAccount->name,
+                    'Tinebase_Model_FullUser'
+                );
+                $otherAccount->name = $account->accountDisplayName;
+                $otherAccount->path = $_path . '/' . $account->accountLoginName;
             }
         }
 
