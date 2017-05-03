@@ -6,7 +6,7 @@
  * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -191,7 +191,7 @@ abstract class Tinebase_Export_Abstract
 //    abstract public function write();
 
     /**
-     * @param string|ressource $file
+     * @param string|resource $file
      */
 //    abstract public function save($file);
 
@@ -213,6 +213,7 @@ abstract class Tinebase_Export_Abstract
      * get export format string (csv, ...)
      * 
      * @return string
+     * @throws Tinebase_Exception_NotFound
      */
     public function getFormat()
     {
@@ -235,6 +236,7 @@ abstract class Tinebase_Export_Abstract
      * 
      * @param string $_appName
      * @param string $_format
+     * @return string
      */
     public function getDownloadFilename($_appName, $_format)
     {
@@ -324,16 +326,25 @@ abstract class Tinebase_Export_Abstract
      * return template filename if set
      * 
      * @return string|NULL
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getTemplateFilename()
     {
         $templateFile = $this->_config->get('template', NULL);
         if ($templateFile !== NULL) {
-            
+
             // check if template file has absolute path
             if (strpos($templateFile, '/') !== 0) {
-                $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
-                    DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
+
+                $tineFileSystemPath = Tinebase_Model_Tree_Node_Path::createFromPath('/Tinebase/folders/shared/export/templates/' . $this->_applicationName . '/' . $templateFile);
+                if (Tinebase_FileSystem::getInstance()->isFile($tineFileSystemPath->statpath)) {
+                    /** @var Tinebase_Model_Tree_Node $fileNode */
+                    $fileNode = Tinebase_FileSystem::getInstance()->stat($tineFileSystemPath->statpath);
+                    $templateFile = $fileNode->getFilesystemPath();
+                } else {
+                    $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName .
+                        DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
+                }
             }
             if (file_exists($templateFile)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Using template file "' . $templateFile . '" for ' . $this->_modelName . ' export.');
@@ -414,7 +425,7 @@ abstract class Tinebase_Export_Abstract
     /**
      * 
      * @param Zend_Config_Xml $config
-     * @param Zend_Config_Xml $fieldConfig
+     * @param Zend_Config $fieldConfig
      * @throws Tinebase_Exception_Data
      */
     protected function _addMatrixHeaders(Zend_Config_Xml $config, Zend_Config $fieldConfig)
@@ -553,6 +564,8 @@ abstract class Tinebase_Export_Abstract
      * @param string $relationType
      * @param string $recordField
      * @param boolean $onlyFirstRelation
+     * @param string $keyfield
+     * @param string $application
      * @return string
      */
     protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
@@ -591,7 +604,6 @@ abstract class Tinebase_Export_Abstract
      * add relation summary (such as n_fileas, title, ...)
      * 
      * @param Tinebase_Record_Abstract $_record
-     * @param string $_type
      * @return string
      */
     protected function _getRelationSummary(Tinebase_Record_Abstract $_record)
@@ -613,8 +625,6 @@ abstract class Tinebase_Export_Abstract
      * add relation values from related records
      * 
      * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
      * @return string
      */
     protected function _addNotes(Tinebase_Record_Abstract $_record)
@@ -640,7 +650,8 @@ abstract class Tinebase_Export_Abstract
      * @param string $_cellType
      * @return string
      */
-    protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
+    protected function _getSpecialFieldValue(/** @noinspection PhpUnusedParameterInspection */
+        Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
         return '';
     }
@@ -683,7 +694,7 @@ abstract class Tinebase_Export_Abstract
      * get field config by name
      *
      * @param  string $fieldName
-     * @return Zend_Config
+     * @return Zend_Config|null
      */
     public function getFieldConfig($fieldName)
     {
@@ -692,5 +703,6 @@ abstract class Tinebase_Export_Abstract
                 return $column;
             }
         }
+        return null;
     }
 }
