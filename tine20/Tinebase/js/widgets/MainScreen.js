@@ -221,7 +221,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     if(node != this.lastClickedNode) {
                         this.lastClickedNode = node;
                         this.fireEvent('selectionchange');
-                    } else {
+                    } else if (me.getWestPanel().getFavoritesPanel()) {
                         // select default favorite
                         // NOTE: a lot of models don't have a default favorite defined...
                         me.getWestPanel().getFavoritesPanel().selectDefault();
@@ -272,8 +272,11 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     }
                 };
             try {
-                if(Tine[this.app.name].hasOwnProperty(wpName)) this[wpName] = new Tine[this.app.appName][wpName](wpconfig);
-                else this[wpName] = new Tine.widgets.mainscreen.WestPanel(wpconfig);
+                if (Tine[this.app.name].hasOwnProperty(wpName)) {
+                    this[wpName] = new Tine[this.app.appName][wpName](wpconfig);
+                } else {
+                    this[wpName] = new Tine.widgets.mainscreen.WestPanel(wpconfig);
+                }
             } catch (e) {
                 Tine.log.error('Could not create westPanel');
                 Tine.log.error(e.stack ? e.stack : e);

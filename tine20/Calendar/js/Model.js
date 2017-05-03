@@ -753,7 +753,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, 
     }
 
     return attendeeData;
-}
+};
 
 /**
  * @namespace Tine.Calendar.Model

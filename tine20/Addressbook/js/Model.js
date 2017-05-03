@@ -143,6 +143,36 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
 });
 
 /**
+ * Make resource model available in adb
+ */
+Tine.Addressbook.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'},
+    {name: 'email'},
+    {name: 'max_number_of_people', type: 'int'},
+    {name: 'type', type: 'keyField', keyFieldConfigName: 'resourceTypes'},
+    {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
+    {name: 'busy_type', type: 'keyField', keyFieldConfigName: 'freebusyTypes'},
+    {name: 'suppress_notification', type: 'bool'},
+    {name: 'tags'},
+    {name: 'notes'},
+    {name: 'grants'},
+    { name: 'attachments'},
+    { name: 'relations',   omitDuplicateResolving: true},
+    { name: 'customfields', omitDuplicateResolving: true}
+]), {
+    appName: 'Calendar',
+    modelName: 'Resource',
+    idProperty: 'id',
+    titleProperty: 'name',
+    containerProperty: 'container_id',
+    // ngettext('Resource', 'Resources', n); gettext('Resources');
+    recordName: 'Resource',
+    recordsName: 'Resources'
+});
+
+/**
  * get filtermodel of contact model
  * 
  * @namespace Tine.Addressbook.Model

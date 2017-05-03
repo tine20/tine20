@@ -68,6 +68,10 @@
           "path": "js/"
         },
         {
+          "text": "ResourceGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "ContactFilterModel.js",
           "path": "js/"
         },
