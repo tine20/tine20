@@ -347,4 +347,19 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         return $accountGrants;
     }
+
+    /**
+     * returns grants of record
+     *
+     * @param Tinebase_Record_Abstract $record
+     * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     */
+    public function getGrantsForRecord($record)
+    {
+        if (empty($record->grants)) {
+            $this->_getGrants($record);
+        }
+
+        return $record->grants;
+    }
 }

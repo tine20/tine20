@@ -186,23 +186,26 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     }
     
     /**
-     * Returns a list of ACE's for this node.
+     * Returns a list of ACLs for this node.
      *
-     * Each ACE has the following properties:
+     * Each ACL has the following properties:
      *   * 'privilege', a string such as {DAV:}read or {DAV:}write. These are
      *     currently the only supported privileges
      *   * 'principal', a url to the principal who owns the node
      *   * 'protected' (optional), indicating that this ACE is not allowed to
      *      be updated.
      *      
-     * @todo implement real logic
      * @return array
      */
     public function getACL() 
     {
         $acl    = array();
-        
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container, true);
+
+        if ($this->_container instanceof Tinebase_Model_Container) {
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container, true);
+        } else {
+            $grants = Tinebase_FileSystem::getInstance()->getGrantsOfContainer($this->_container, true);
+        }
         
         foreach ($grants as $grant) {
             switch ($grant->account_type) {

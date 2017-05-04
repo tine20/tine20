@@ -2445,6 +2445,30 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
 
     /**
+     * get all grants assigned to this container
+     *
+     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   bool                         $_ignoreAcl
+     * @param   string                       $_grantModel
+     * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
+     * @throws  Tinebase_Exception_AccessDenied
+     *
+     * TODO add to interface
+     */
+    public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE, $_grantModel = 'Tinebase_Model_Grants')
+    {
+        $record = $_containerId instanceof Tinebase_Model_Tree_Node ? $_containerId : $this->get($_containerId);
+
+        if (! $_ignoreAcl) {
+            if (! Tinebase_Core::getUser()->hasGrant($record, Tinebase_Model_Grants::GRANT_READ)) {
+                throw new Tinebase_Exception_AccessDenied('not allowed to read grants');
+            }
+        }
+
+        return $this->_nodeAclController->getGrantsForRecord($record);
+    }
+
+    /**
      * remove file revisions based on settings:
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS

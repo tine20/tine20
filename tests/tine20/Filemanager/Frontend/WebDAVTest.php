@@ -175,11 +175,11 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
-        
+
         $node->createDirectory('unittestdirectory');
-        
+
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
-        
+
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV_Container', $node, 'wrong node class');
         $this->assertEquals('unittestdirectory', $node->getName());
         
@@ -188,6 +188,19 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $properties = $node->getProperties(array());
         
         return $node;
+    }
+
+    /**
+     * testGetAcl of shared node
+     */
+    public function testGetAcl()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $node->createDirectory('unittestdirectory');
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
+
+        $acl = $node->getAcl();
+        self::assertEquals(6, count($acl));
     }
 
     /**
