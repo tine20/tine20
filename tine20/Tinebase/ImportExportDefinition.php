@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -112,13 +112,16 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'              => $_applicationId,
                 'name'                        => $name,
-                'label'                       => $config->label,
+                'label'                       => empty($config->label) ? $name : $config->label,
                 'description'                 => $config->description,
                 'type'                        => $config->type,
                 'model'                       => $config->model,
                 'plugin'                      => $config->plugin,
+                'icon_class'                  => $config->icon_class,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
+                'favorite'                    => false == $config->favorite ? 0 : 1,
+                'order'                       => intval($config->order),
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
                 'postMappingHook'             => $config->postMappingHook

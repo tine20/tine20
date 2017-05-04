@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -15,6 +15,10 @@
  *
  * @package     Calendar
  * @subpackage  Export
+ *
+ * @property Tinebase_Controller_Record_Abstract    $_controller
+ * @property Tinebase_Model_Filter_FilterGroup      $_filter
+ * @property boolen                                 $_getRelations
  *
  * TODO rename trait to hint functionality? GenericTrait is not a good name ;)
  */
