@@ -31,4 +31,13 @@ class HumanResources_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     * @var string
     */
     protected $_hasPersonalFolders = FALSE;
+
+    /**
+     * container model name
+     *
+     * one of: Tinebase_Model_Container | Tinebase_Model_Tree_Node
+     *
+     * @var string
+     */
+    protected $_containerModel = 'Tinebase_Model_Tree_Node';
 }

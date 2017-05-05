@@ -468,7 +468,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * get available templates by containerId
      *
-     * @param integer $nodeId
+     * @param string $nodeId
      * @return array
      */
     public function getTemplates($nodeId = NULL)
