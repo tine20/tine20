@@ -830,7 +830,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function getSystemUsernames()
     {
-        return array('cronuser', 'calendarscheduling', 'setupuser');
+        return array('cronuser', 'calendarscheduling', 'setupuser', 'replicationuser');
     }
 
     /**
