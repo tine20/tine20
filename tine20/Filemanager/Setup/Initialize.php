@@ -27,6 +27,7 @@ class Filemanager_Setup_Initialize extends Setup_Initialize
                 $reflectionClass = new ReflectionClass($initializeClass);
                 $methods = $reflectionClass->getMethods();
                 foreach ($methods as $method) {
+                    $methodName = $method->name;
                     if ($methodName == '_initializeFilemanagerFolder') {
                         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing filemanager folder for application: ' . $app->name);
                         $class = $reflectionClass->newInstance();
