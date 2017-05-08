@@ -165,6 +165,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 Tinebase_Model_Grants::GRANT_FREEBUSY => false,
                 Tinebase_Model_Grants::GRANT_PRIVATE => false,
                 Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
+                Tinebase_Model_Grants::GRANT_PUBLISH => false,
             ),
             'tags'           => array(),
             ), $searchResult['results'][0], 'my user folder mismatch');
@@ -187,6 +188,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 Tinebase_Model_Grants::GRANT_FREEBUSY => false,
                 Tinebase_Model_Grants::GRANT_PRIVATE => false,
                 Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
+                Tinebase_Model_Grants::GRANT_PUBLISH => false,
             ),
             'tags' => array(),
         ), $searchResult['results'][1], 'shared folder mismatch');
@@ -209,6 +211,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 Tinebase_Model_Grants::GRANT_FREEBUSY => false,
                 Tinebase_Model_Grants::GRANT_PRIVATE => false,
                 Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
+                Tinebase_Model_Grants::GRANT_PUBLISH => false,
             ),
             'tags' => array(),
         ), $searchResult['results'][2], 'other user folder mismatch');

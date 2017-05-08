@@ -1022,4 +1022,45 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
 
+
+    /**
+     * update to 10.24
+     *
+     * 0013032: add GRANT_DOWNLOAD
+     * 0013034: add GRANT_PUBLISH
+     */
+    public function update_23()
+    {
+        // get all folder nodes with own acl
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+            )
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        $folders = Tinebase_FileSystem::getInstance()->searchNodes($searchFilter);
+        $updateCount = 0;
+        foreach ($folders as $folder) {
+            if ($folder->acl_node === $folder->getId()) {
+                $grants = Tinebase_FileSystem::getInstance()->getGrantsOfContainer($folder, /* ignoreAcl */ true);
+                foreach ($grants as $grant) {
+                    // add download & publish for admins and only download for the rest
+                    if ($grant->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                        $grant->{Tinebase_Model_Grants::GRANT_DOWNLOAD} = true;
+                        $grant->{Tinebase_Model_Grants::GRANT_PUBLISH} = true;
+                    } else {
+                        $grant->{Tinebase_Model_Grants::GRANT_DOWNLOAD} = true;
+                    }
+                }
+                Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $grants);
+                $updateCount++;
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Added DOWNLOAD & PUBLISH grants to ' . $updateCount . ' folder nodes');
+
+        $this->setApplicationVersion('Tinebase', '10.24');
+    }
 }

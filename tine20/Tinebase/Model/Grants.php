@@ -70,6 +70,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     const GRANT_DOWNLOAD = 'downloadGrant';
 
     /**
+     * grant to publish nodes in Filemanager
+     * @todo move to Filemanager_Model_Grant once we are able to cope with app specific grant classes
+     */
+    const GRANT_PUBLISH = 'publishGrant';
+
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -138,6 +144,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             self::GRANT_ADMIN,
             self::GRANT_FREEBUSY,
             self::GRANT_DOWNLOAD,
+            self::GRANT_PUBLISH,
         );
     
         return $allGrants;
@@ -225,9 +232,10 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * return default grants with read for user group and write/admin for admin group
      *
      * @param array $_additionalGrants
+     * @param array $_additionalAdminGrants
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Grants
      */
-    public static function getDefaultGrants($_additionalGrants = array())
+    public static function getDefaultGrants($_additionalGrants = array(), $_additionalAdminGrants = array())
     {
         $groupsBackend = Tinebase_Group::getInstance();
         return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
@@ -238,7 +246,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
             ), $_additionalGrants),
-            array_merge(array(
+            array_merge(array_merge(array(
                 'account_id' => $groupsBackend->getDefaultAdminGroup()->getId(),
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                 Tinebase_Model_Grants::GRANT_READ => true,
@@ -248,7 +256,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 Tinebase_Model_Grants::GRANT_ADMIN => true,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
-            ), $_additionalGrants),
+            ), $_additionalGrants), $_additionalAdminGrants),
         ), TRUE);
     }
 

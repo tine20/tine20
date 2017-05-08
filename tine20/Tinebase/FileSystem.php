@@ -290,12 +290,15 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                 switch ($pathRecord->containerType) {
                     case self::FOLDER_TYPE_PERSONAL:
                         $node->grants = Tinebase_Model_Grants::getPersonalGrants($pathRecord->getUser(), array(
-                            Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                            Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
+                            Tinebase_Model_Grants::GRANT_PUBLISH => true,
                         ));
                         break;
                     case self::FOLDER_TYPE_SHARED:
                         $node->grants = Tinebase_Model_Grants::getDefaultGrants(array(
                             Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                        ), array(
+                            Tinebase_Model_Grants::GRANT_PUBLISH => true
                         ));
                         break;
                 }
