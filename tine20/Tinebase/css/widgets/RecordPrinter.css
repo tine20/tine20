@@ -1,0 +1,50 @@
+
+
+#csscheck {
+    display: none;
+}
+
+div.page
+{
+    page-break-after: always;
+    page-break-inside: avoid;
+}
+
+.rp-print-title {
+    text-align: center;
+    font-size: 20px;
+}
+/* ------------ single record ------------ */
+
+.rp-print-single-details-row:nth-of-type(odd) {
+    background: #e0e0e0;
+}
+
+.customfield-rendered-label,
+.rp-print-single-label{
+    font-style: italic;
+    display: inline-block;
+    width: 6cm;
+}
+
+.rp-print-single-block {
+    margin-left: 0.5cm;
+}
+
+.rp-print-single-summary, .rp-print-single-value {
+    font-weight: bold;
+}
+
+.rp-print-single {
+    margin-left: 1cm;
+    margin-right: 1cm;
+}
+
+.rp-print-single-logo {
+    text-align: right;
+    margin-bottom: 1cm;
+}
+
+.rp-print-single-image {
+    text-align: left;
+}
