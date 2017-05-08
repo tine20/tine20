@@ -206,7 +206,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var boolean
      */
     const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
-    
+
+    /**
+     * configure when user should be removed from sql after it is removed from sync backend
+     *
+     * @var boolean
+     */
+    const SYNC_USER_DELETE_AFTER = 'syncUserDeleteAfter';
+
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
@@ -727,6 +734,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => TRUE
+        ),
+        self::SYNC_USER_DELETE_AFTER => array(
+            //_('Sync user: delete after X months)
+            'label'                 => 'Sync user: delete after X months',
+            //_('Removed users should be deleted after X months')
+            'description'           => 'Removed users should be deleted after X months',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 12,
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

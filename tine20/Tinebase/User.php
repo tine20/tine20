@@ -825,8 +825,8 @@ class Tinebase_User
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' User already expired ' . print_r($user->toArray(), true));
 
-                // TODO make time span configurable?
-                if ($user->accountExpires->isEarlier($now->subYear(1))) {
+                $deleteAfterMonths = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_DELETE_AFTER);
+                if ($user->accountExpires->isEarlier($now->subMonth($deleteAfterMonths))) {
                     // if he or she is already expired longer than configured expiry, we remove them!
                     Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
 
