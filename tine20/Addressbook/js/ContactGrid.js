@@ -116,50 +116,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             disabled: true,
             allowMultiple: true,
             menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as PDF'),
-                        iconCls: 'action_exportAsPdf',
-                        format: 'pdf',
-                        exportFunction: 'Addressbook.exportContacts',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as CSV'),
-                        iconCls: 'tinebase-action-export-csv',
-                        format: 'csv',
-                        exportFunction: 'Addressbook.exportContacts',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Addressbook.exportContacts',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as XLS'),
-                        format: 'xls',
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Addressbook.exportContacts',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as DOC'),
-                        format: 'doc',
-                        iconCls: 'tinebase-action-export-doc',
-                        exportFunction: 'Addressbook.exportContacts',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Addressbook.exportContacts',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
+                items: this.initExportButton()
             }
         });
 
