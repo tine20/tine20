@@ -149,6 +149,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null)
     {
+        if (! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+            throw new Tinebase_Exception_AccessDenied('download not allowed');
+        }
+
         Tinebase_Core::setExecutionLifeTime(0);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -180,6 +184,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _prepareHeader($filename, $contentType, $disposition = 'attachment')
     {
+        if (headers_sent()) {
+            return;
+        }
+
         // cache for 3600 seconds
         $maxAge = 3600;
         header('Cache-Control: private, max-age=' . $maxAge);

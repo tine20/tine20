@@ -251,7 +251,7 @@ Tine.Filemanager.nodeActions.Move = {
  */
 Tine.Filemanager.nodeActions.Download = {
     app: 'Filemanager',
-    requiredGrant: 'readGrant',
+    requiredGrant: 'downloadGrant',
     allowMultiple: false,
     actionType: 'download',
     text: 'Save locally', // _('Save locally')
@@ -265,7 +265,7 @@ Tine.Filemanager.nodeActions.Download = {
         var enabled = !isFilterSelect
             && records && records.length == 1
             && records[0].get('type') != 'folder'
-            && window.lodash.get(records, '[0].data.account_grants.readGrant', false);
+            && window.lodash.get(records, '[0].data.account_grants.downloadGrant', false);
 
         action.setDisabled(!enabled);
     }

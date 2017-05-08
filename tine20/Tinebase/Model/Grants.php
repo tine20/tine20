@@ -63,7 +63,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * @todo move to Calendar_Model_Grant once we are able to cope with app specific grant classes
      */
     const GRANT_FREEBUSY = 'freebusyGrant';
-    
+
+    /**
+     * grant to download file nodes
+     */
+    const GRANT_DOWNLOAD = 'downloadGrant';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -132,6 +137,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             self::GRANT_SYNC,
             self::GRANT_ADMIN,
             self::GRANT_FREEBUSY,
+            self::GRANT_DOWNLOAD,
         );
     
         return $allGrants;
@@ -218,20 +224,21 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     /**
      * return default grants with read for user group and write/admin for admin group
      *
+     * @param array $_additionalGrants
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Grants
      */
-    public static function getDefaultGrants()
+    public static function getDefaultGrants($_additionalGrants = array())
     {
         $groupsBackend = Tinebase_Group::getInstance();
         return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-            array(
+            array_merge(array(
                 'account_id' => $groupsBackend->getDefaultGroup()->getId(),
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
-            ),
-            array(
+            ), $_additionalGrants),
+            array_merge(array(
                 'account_id' => $groupsBackend->getDefaultAdminGroup()->getId(),
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                 Tinebase_Model_Grants::GRANT_READ => true,
@@ -241,7 +248,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 Tinebase_Model_Grants::GRANT_ADMIN => true,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
-            ),
+            ), $_additionalGrants),
         ), TRUE);
     }
 
@@ -249,21 +256,24 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * return personal grants for given account
      *
      * @param string|Tinebase_Model_User          $_accountId
+     * @param array $_additionalGrants
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Grants
      */
-    public static function getPersonalGrants($_accountId)
+    public static function getPersonalGrants($_accountId, $_additionalGrants = array())
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'     => $accountId,
-            'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            Tinebase_Model_Grants::GRANT_READ      => true,
+        $grants = array(Tinebase_Model_Grants::GRANT_READ      => true,
             Tinebase_Model_Grants::GRANT_ADD       => true,
             Tinebase_Model_Grants::GRANT_EDIT      => true,
             Tinebase_Model_Grants::GRANT_DELETE    => true,
             Tinebase_Model_Grants::GRANT_EXPORT    => true,
             Tinebase_Model_Grants::GRANT_SYNC      => true,
             Tinebase_Model_Grants::GRANT_ADMIN     => true,
-        )));
+        );
+        $grants = array_merge($grants, $_additionalGrants);
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array_merge(array(
+            'account_id'     => $accountId,
+            'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+        ), $grants)));
     }
 }
