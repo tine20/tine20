@@ -1616,10 +1616,10 @@ class Setup_Controller
                 }
             }
             
+            Setup_Initialize::initialize($application, $_options);
+
             // look for import definitions and put them into the db
             $this->createImportExportDefinitions($application);
-            
-            Setup_Initialize::initialize($application, $_options);
         } catch (Exception $e) {
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
@@ -1640,8 +1640,9 @@ class Setup_Controller
 
         return $result;
     }
+
     /**
-     * look for import definitions and put them into the db
+     * look for export & import definitions and put them into the db
      *
      * @param Tinebase_Model_Application $_application
      */
@@ -1663,6 +1664,41 @@ class Setup_Controller
                                 . ' Not installing import/export definion from file: ' . $filename
                                 . ' / Error message: ' . $e->getMessage());
                         }
+                    }
+                }
+            }
+
+            $path =
+                $this->_baseDir . $_application->name .
+                DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'templates';
+
+            if (file_exists($path)) {
+                $fileSystem = Tinebase_FileSystem::getInstance();
+                $templateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath('/Tinebase/folders/shared/' . strtolower($type) . '/templates/' . $_application->name);
+
+                if (! $fileSystem->isDir($templateAppPath->statpath)) {
+                    $fileSystem->mkdir($templateAppPath->statpath);
+                }
+
+                foreach (new DirectoryIterator($path) as $item) {
+                    if (!$item->isFile()) {
+                        continue;
+                    }
+                    if (false === ($content = file_get_contents($item->getPathname()))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Could not import template: ' . $item->getPathname());
+                        continue;
+                    }
+                    if (false === ($file = $fileSystem->fopen($templateAppPath->statpath . '/' . $item->getFileName(), 'w'))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' could not open ' . $templateAppPath->statpath . '/' . $item->getFileName() . ' for writting');
+                        continue;
+                    }
+                    fwrite($file, $content);
+                    if (true !== $fileSystem->fclose($file)) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' write to ' . $templateAppPath->statpath . '/' . $item->getFileName() . ' did not succeed');
+                        continue;
                     }
                 }
             }

@@ -288,4 +288,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return &array
      */
     public function &xprops($_property = 'xprops');
+
+    /**
+     * get fields
+     *
+     * @return array
+     */
+    public function getFields();
 }
