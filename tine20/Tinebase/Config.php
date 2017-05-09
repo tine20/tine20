@@ -103,7 +103,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNCOPTIONS = 'syncOptions';
-    
+
     /**
      * user backend type config
      * 
@@ -248,7 +248,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_DELETED_USER = 'syncDeletedUser';
-    
+
+    /**
+     * configure when user should be removed from sql after it is removed from sync backend
+     *
+     * @var boolean
+     */
+    const SYNC_USER_DELETE_AFTER = 'syncUserDeleteAfter';
+
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
@@ -1044,6 +1051,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
+        ),
+        self::SYNC_USER_CONTACT_DATA => array(
+            //_('Sync contact data from sync backend')
+            'label'                 => 'Sync contact data from sync backend',
+            //_('Sync user contact data from sync backend')
+            'description'           => 'Sync user contact data from sync backend',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

@@ -427,6 +427,70 @@ cGU9J2F0dHJpYnV0aW9uJz4=&#13;
     }
 
     /**
+     * Test whether Base64Decoded Messages can be send or not
+     *
+     * TODO reply?
+     * @see TODO add mantis
+     */
+    public function testSendBase64EncodedMessage ()
+    {
+        $messageId = '<j4wxaho1t8ggvk5cef7kqc6i.1373048280847@email.ipad>';
+
+        $email = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SendMail xmlns="uri:ComposeMail">
+  <ClientId>C3918F20-DAEA-48CD-963D-56E2CA6EC013</ClientId>
+  <SaveInSentItems/>
+  <Mime>Content-Type: multipart/signed;&#13;
+	boundary=Apple-Mail-3CB7E652-FD9A-4AAF-B60E-B7101AC3752F;&#13;
+	protocol="application/pkcs7-signature";&#13;
+	micalg=sha1&#13;
+Content-Transfer-Encoding: 7bit&#13;
+From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+Mime-Version: 1.0 (1.0)&#13;
+Subject: Re: testmail&#13;
+Message-ID: ' . htmlspecialchars($messageId) . '&#13;
+Date: Thu, 12 Jan 2017 11:07:13 +0100&#13;
+&#13;
+&#13;
+--Apple-Mail-3CB7E652-FD9A-4AAF-B60E-B7101AC3752F&#13;
+Content-Type: text/plain;&#13;
+	charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6SGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZjsgZm9u&#13;
+dC1zaXplOjEyLjBwdDsgbGluZS1oZWlnaHQ6MS4zOyBjb2xvcjojMDAwMDAwIj5IaSw8YnI+UGxl&#13;
+YXNlIFRpbmUyMCBhbnN3ZXIgbWUuPGJyPkJlc3Q8YnI+PGJyPjxkaXYgaWQ9InNpZ25hdHVyZS14&#13;
+IiBzdHlsZT0iLXdlYmtpdC11c2VyLXNlbGVjdDpub25lOyBmb250LWZhbWlseTpIZWx2ZXRpY2Es&#13;
+IEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6MTIuMHB0OyBjb2xvcjojMDAwMDAwIiBjbGFz&#13;
+cyA9ICJzaWduYXR1cmVfZWRpdG9yIj48ZGl2Pjxicj48L2Rpdj48L2Rpdj48L2Rpdj4gPGJyIHR5&#13;
+cGU9J2F0dHJpYnV0aW9uJz4=&#13;
+&#13;
+--Apple-Mail-3CB7E652-FD9A-4AAF-B60E-B7101AC3752F&#13;
+Content-Type: application/pkcs7-signature;&#13;
+	name=smime.p7s&#13;
+Content-Disposition: attachment;&#13;
+	filename=smime.p7s&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6SGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZjsgZm9u&#13;
+dC1zaXplOjEyLjBwdDsgbGluZS1oZWlnaHQ6MS4zOyBjb2xvcjojMDAwMDAwIj5IaSw8YnI+UGxl&#13;
+YXNlIFRpbmUyMCBhbnN3ZXIgbWUuPGJyPkJlc3Q8YnI+PGJyPjxkaXYgaWQ9InNpZ25hdHVyZS14&#13;
+IiBzdHlsZT0iLXdlYmtpdC11c2VyLXNlbGVjdDpub25lOyBmb250LWZhbWlseTpIZWx2ZXRpY2Es&#13;
+IEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6MTIuMHB0OyBjb2xvcjojMDAwMDAwIiBjbGFz&#13;
+cyA9ICJzaWduYXR1cmVfZWRpdG9yIj48ZGl2Pjxicj48L2Rpdj48L2Rpdj48L2Rpdj4gPGJyIHR5&#13;
+cGU9J2F0dHJpYnV0aW9uJz4=&#13;
+--Apple-Mail-3CB7E652-FD9A-4AAF-B60E-B7101AC3752F--&#13;
+</Mime>
+</SendMail>';
+
+        $stringToCheck = 'Please Tine20 answer me.';
+
+        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail", Syncroton_Model_Device::TYPE_IPHONE);
+    }
+
+    /**
      * @see 0011556: sending mails to multiple recipients fails
      */
     public function testSendMessageToMultipleRecipients()
@@ -653,7 +717,8 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $this->_createdMessages->addRecord($message);
         
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        
+
+        //echo $completeMessage->body;
         $this->assertContains($stringToCheck, $completeMessage->body);
     }
     
@@ -859,7 +924,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
     public function testGetCountOfChanges()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
-        
+
         // set inbox timestamp a long time ago (15 mins)
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         $inbox->cache_timestamp = Tinebase_DateTime::now()->subMinute(15);

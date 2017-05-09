@@ -16,20 +16,6 @@
 class Felamimail_Config extends Tinebase_Config_Abstract
 {
     /**
-     * id of (filsystem) container for vacation templates
-     * 
-     * @var string
-     */
-    const VACATION_TEMPLATES_CONTAINER_ID = 'vacationTemplatesContainerId';
-    
-    /**
-     * user can set custom vacation message
-     * 
-     * @var string
-     */
-    const VACATION_CUSTOM_MESSAGE_ALLOWED = 'vacationMessageCustomAllowed';
-    
-    /**
      * is email body cached
      * 
      * @var string
@@ -57,6 +43,27 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FILTER_EMAIL_URIS = 'filterEmailUris';
+
+    /**
+     * system account special folders
+     *
+     * @var string
+     */
+    const SYSTEM_ACCOUNT_FOLDER_DEFAULTS = 'systemAccountFolderDefaults';
+
+    /**
+     * id of (filsystem) container for vacation templates
+     *
+     * @var string
+     */
+    const VACATION_TEMPLATES_CONTAINER_ID = 'vacationTemplatesContainerId';
+
+    /**
+     * user can set custom vacation message
+     *
+     * @var string
+     */
+    const VACATION_CUSTOM_MESSAGE_ALLOWED = 'vacationMessageCustomAllowed';
 
     /**
      * (non-PHPdoc)
@@ -132,6 +139,25 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => true,
+        ),
+        /**
+         * possible keys/values::
+         *
+         * 'sent_folder'       => 'Sent',
+         * 'trash_folder'      => 'Trash',
+         * 'drafts_folder'     => 'Drafts',
+         * 'templates_folder'  => 'Templates',
+         */
+        self::SYSTEM_ACCOUNT_FOLDER_DEFAULTS => array(
+            //_('System Account Folder Defaults')
+            'label'                 => 'System Account Folder Defaults',
+            // _('Paths of the special folders (like Sent, Trash, ...)')
+            'description'           => 'Paths of the special folders (like Sent, Trash, ...)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+            'default'               => null,
         ),
     );
     

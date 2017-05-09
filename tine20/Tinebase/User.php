@@ -800,8 +800,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' User already expired ' . print_r($user->toArray(), true));
 
-                // TODO make time span configurable?
-                if ($user->accountExpires->isEarlier($now->subYear(1))) {
+                $deleteAfterMonths = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_DELETE_AFTER);
+                if ($user->accountExpires->isEarlier($now->subMonth($deleteAfterMonths))) {
                     // if he or she is already expired longer than configured expiry, we remove them!
                     // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
                     Tinebase_User::getInstance()->deleteUser($userToDelete);
