@@ -547,10 +547,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
                     
                 case 'accountStatus':
-                    if ($value == 'enabled') {
+                    if ($value === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED) {
                         // unset account disable flag
                         $ldapData['useraccountcontrol'] &= ~self::ACCOUNTDISABLE;
-                    } else {
+                    } elseif ($value === Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
                         // set account disable flag
                         $ldapData['useraccountcontrol'] |=  self::ACCOUNTDISABLE;
                     }

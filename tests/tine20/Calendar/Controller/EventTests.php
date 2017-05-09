@@ -1314,7 +1314,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * @param bool $mute
      * @todo replace with TestCase::_getEvent
      */
-    protected function _getEvent($_now = FALSE, $mute = NULL)
+    public function _getEvent($_now = FALSE, $mute = NULL)
     {
         $event = new Calendar_Model_Event(array(
             'summary'     => 'Mittagspause',

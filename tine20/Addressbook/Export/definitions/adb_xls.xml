@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_xls</name>
+    <label>Export as XLS</label>
+    <type>export</type>
+    <plugin>Addressbook_Export_Xls</plugin>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <favorite>true</favorite>
+    <order>400</order>
+</config>

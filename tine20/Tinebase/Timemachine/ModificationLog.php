@@ -206,9 +206,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     /** @var Tinebase_Record_Abstract $record */
                     $record = new $model(null, true);
 
-                    $modelFilter = $model . 'Filter';
                     /** @var Tinebase_Model_Filter_FilterGroup $idFilter */
-                    $idFilter = new $modelFilter(array(), '', array('ignoreAcl' => true));
+                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        $model,
+                        array(),
+                        '',
+                        array('ignoreAcl' => true)
+                    );
                     $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
                         'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
                     )));

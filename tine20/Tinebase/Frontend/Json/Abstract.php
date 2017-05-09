@@ -217,14 +217,14 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
         if (is_array($decodedFilter)) {
-            $filter = $this->_getFilterObject($filterModel);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterModel);
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
             $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
         } else if ($_throwExceptionIfEmpty) {
             throw new Tinebase_Exception_InvalidArgument('Filter must not be empty!');
         } else {
-            $filter = $this->_getFilterObject($filterModel);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterModel);
         }
 
         return $filter;
@@ -468,7 +468,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * get available templates by containerId
      *
-     * @param integer $nodeId
+     * @param string $nodeId
      * @return array
      */
     public function getTemplates($nodeId = NULL)

@@ -12,7 +12,7 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
      * update to 10.1
-     * 
+     *
      * change signature to medium text
      */
     public function update_0()
@@ -32,5 +32,27 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
         $update9 = new Felamimail_Setup_Update_Release9($this->_backend);
         $update9->update_3();
         $this->setApplicationVersion('Felamimail', '10.2');
+    }
+
+    /**
+     * update to 10.3
+     *
+     * update vacation templates node id in config
+     */
+    public function update_2()
+    {
+        try {
+            $container = Tinebase_Container::getInstance()->get(
+                Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID},
+                /* $_getDeleted */ true
+            );
+            $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Felamimail', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+            $path .= '/' . $container->name;
+            $node = Tinebase_FileSystem::getInstance()->stat($path);
+            Felamimail_Config::getInstance()->set(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID, $node->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
+        $this->setApplicationVersion('Felamimail', '10.3');
     }
 }

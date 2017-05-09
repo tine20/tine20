@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_pdf</name>
+    <label>Export as PDF</label>
+    <type>export</type>
+    <plugin>Addressbook_Export_Pdf</plugin>
+    <icon_class>action_exportAsPdf</icon_class>
+    <favorite>true</favorite>
+    <order>100</order>
+</config>

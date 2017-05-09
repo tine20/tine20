@@ -82,7 +82,8 @@
                     allowMultiple: action.allowMultiple,
                     singularText: action.singularText,
                     pluralText: action.pluralText,
-                    translationObject: action.translationObject
+                    translationObject: action.translationObject,
+                    selections: []
                 });
             }
             
@@ -110,10 +111,15 @@
             var actionUpdater = action.actionUpdater || action.initialConfig.actionUpdater;
             if (typeof(actionUpdater) == 'function') {
                 var scope = action.scope || action.initialConfig.scope || window;
-                actionUpdater.call(scope, action, grants, records);
+                actionUpdater.call(scope, action, grants, records, isFilterSelect);
             } else {
                 this.defaultUpdater(action, grants, records, isFilterSelect);
             }
+
+            // reference selection into action
+            action.initialConfig.selections = records;
+            action.initialConfig.isFilterSelect = isFilterSelect;
+
         }, this);
         
     },

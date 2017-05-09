@@ -98,6 +98,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     cls: 'tw-ftb-filterpanel',
     layout: 'border',
     border: false,
+
+    /**
+     * We expect the filter panel to be layouted
+     */
+    forceLayout: true,
     
     initComponent: function() {
         

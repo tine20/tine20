@@ -376,6 +376,57 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_FileSystem::clearFileRevisions in scheduler.');
     }
+
+    /**
+     * add file system index checking task to scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addFileSystemCheckIndexTask(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystemCheckIndex')) {
+            return;
+        }
+
+        $task = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'checkIndexing',
+        ));
+
+        $_scheduler->addTask('Tinebase_FileSystemCheckIndex', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::checkIndexing in scheduler.');
+    }
+
+    /**
+     * add file system size recalculation task to scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addFileSystemSizeRecalculation(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystemSizeRecalculation')) {
+            return;
+        }
+
+        $task = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'recalculateRevisionSize',
+        ));
+
+        self::addRequestToTask($task, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'recalculateFolderSize',
+        ));
+
+        $_scheduler->addTask('Tinebase_FileSystemSizeRecalculation', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::recalculateRevisionSize and recalculateFolderSize in scheduler.');
+    }
     
     /**
      * run requests

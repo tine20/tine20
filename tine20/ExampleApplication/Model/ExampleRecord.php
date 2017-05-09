@@ -15,8 +15,6 @@
  * 
  * @package     ExampleApplication
  * @subpackage  Model
- *
- * TODO switch to doctrine
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {

@@ -247,7 +247,9 @@ class Tinebase_Translation
      */
     public static function getTranslation($_applicationName, Zend_Locale $_locale = NULL)
     {
-        $locale = $_locale ?: Tinebase_Core::get('locale') ?: 'en';
+        $locale = $_locale
+            ?: Tinebase_Core::get('locale')
+            ?: (Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE, 'en'));
         
         $cacheId = (string) $locale . $_applicationName;
         

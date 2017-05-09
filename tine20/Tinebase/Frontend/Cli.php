@@ -1147,6 +1147,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
+
+        return 0;
     }
     
     /**

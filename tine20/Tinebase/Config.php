@@ -56,6 +56,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * DEFAULT_LOCALE
+     *
+     * @var string
+     */
+    const DEFAULT_LOCALE = 'defaultLocale';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -96,7 +103,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNCOPTIONS = 'syncOptions';
-    
+
     /**
      * user backend type config
      * 
@@ -241,7 +248,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_DELETED_USER = 'syncDeletedUser';
-    
+
+    /**
+     * configure when user should be removed from sql after it is removed from sync backend
+     *
+     * @var boolean
+     */
+    const SYNC_USER_DELETE_AFTER = 'syncUserDeleteAfter';
+
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
@@ -537,6 +551,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'type'                  => 'array',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        /**
+         * for example: 'de'
+         */
+        self::DEFAULT_LOCALE => array(
+            //_('Default Locale')
+            'label'                 => 'Default Locale',
+            //_('Default locale for this installation.')
+            'description'           => 'Default locale for this installation.',
+            'type'                  => 'string',
+            'default'               => 'en',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
         /**
@@ -1030,6 +1058,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
+        ),
+        self::SYNC_USER_CONTACT_DATA => array(
+            //_('Sync contact data from sync backend')
+            'label'                 => 'Sync contact data from sync backend',
+            //_('Sync user contact data from sync backend')
+            'description'           => 'Sync user contact data from sync backend',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

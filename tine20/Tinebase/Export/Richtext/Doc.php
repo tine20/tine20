@@ -146,7 +146,16 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
             $column = $this->_config->columns->column->{$i};
 
             // @TODO value should be generated in Export_Abstract
-            $value = $record->{$column->identifier};
+            if (in_array($column->identifier, $this->_getCustomFieldNames())) {
+                // add custom fields
+                if (isset($record->customfields[$column->identifier])) {
+                    $value = $record->customfields[$column->identifier]['name'];
+                } else {
+                    $value = '';
+                }
+            } else {
+                $value = $record->{$column->identifier};
+            }
             if ($value instanceof DateTime) {
                 $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $column->format);
             }

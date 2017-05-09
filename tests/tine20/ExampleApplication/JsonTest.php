@@ -28,7 +28,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         ), Tinebase_Application::ENABLED);
         
         parent::setUp();
-        $this->_json = new ExampleApplication_Frontend_Json();
+        $this->_json = $this->_getUit();
         $this->_recordsToDelete = array();
     }
 
@@ -176,5 +176,21 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_json->getExampleRecord($exampleRecordID);
+    }
+
+    /**
+     * testCustomFields
+     */
+    public function testCustomFields()
+    {
+        $this->_createCustomField($name = 'YomiName', $model = 'ExampleApplication_Model_ExampleRecord');
+        $exampleRecord = $this->testCreateExampleRecord();
+        $exampleRecord['customfields']['YomiName'] = 'lalala';
+
+        $savedRecord = $this->_json->saveExampleRecord($exampleRecord);
+        self::assertEquals($exampleRecord['customfields']['YomiName'], $savedRecord['customfields']['YomiName']);
+
+        $record = $this->_json->getExampleRecord($exampleRecord['id']);
+        self::assertEquals($exampleRecord['customfields']['YomiName'], $record['customfields']['YomiName']);
     }
 }

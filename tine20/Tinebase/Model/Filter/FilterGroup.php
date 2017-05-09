@@ -924,6 +924,40 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             }
         }
     }
+
+    /**
+     * returns filter for given model
+     *
+     * @param        $_modelOrFilterName model or model filter class name
+     * @param array  $_data
+     * @param string $_condition
+     * @param array  $_options
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    public static function getFilterForModel($_modelOrFilterName, array $_data = array(), $_condition = '', $_options = array())
+    {
+        if (preg_match('/Filter$/', $_modelOrFilterName)) {
+            $modelName = preg_replace('/Filter$/', '', $_modelOrFilterName);
+            $modelFilterClass = $_modelOrFilterName;
+        } else {
+            $modelName = $_modelOrFilterName;
+            $modelFilterClass = $modelName . 'Filter';
+        }
+
+        if (! class_exists($modelFilterClass)) {
+            // TODO check if model class exists?
+            //if (class_exists($modelName))
+
+            // use generic filter model
+            $filter = new Tinebase_Model_Filter_FilterGroup(array(), $_condition, $_options);
+            $filter->setConfiguredModel($modelName);
+            $filter->setFromArray($_data);
+        } else {
+            $filter = new $modelFilterClass($_data, $_condition, $_options);
+        }
+
+        return $filter;
+    }
     
     ###### iterator interface ###########
     public function rewind() {

@@ -1697,8 +1697,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetVacationTemplates()
     {
-        $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
         $this->_addVacationTemplateFile();
         $result = $this->_json->getVacationMessageTemplates();
         
@@ -1733,8 +1731,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetVacationMessage()
     {
-        $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
         $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
@@ -1776,8 +1772,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetVacationWithSignature()
     {
-        $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
         $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
         
         // set signature with <br> + linebreaks

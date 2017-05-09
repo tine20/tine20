@@ -1053,7 +1053,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/129d80533a9ec0d9cacfb50b51180c34edb6874c",
                 "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c",
-                "shasum": "c5692defcb3616042c047fdf553105276abfc70e"
+                "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",

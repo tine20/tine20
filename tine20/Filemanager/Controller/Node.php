@@ -302,32 +302,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         return $result;
-
-/*
-        $files = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
-        $ret = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
-        $folders = $this->_getRootNodes();
-        $folders->merge($this->_getOtherUserNodes());
-
-        while($folders->count()) {
-            $node = $folders->getFirstRecord();
-            $filter = new Tinebase_Model_Tree_Node_Filter(array(
-                array('field' => 'path', 'operator' => 'equals', 'value' => $node->path),
-                ), 'AND');
-            $result = $this->search($filter);
-            $folders->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FOLDER));
-            
-            if($_filter->getFilter('query') && $_filter->getFilter('query')->getValue()) {
-                $files->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE)->filter('name', '/^'.$_filter->getFilter('query')->getValue().'./i', true));
-            } else {
-                $files->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE));
-            }
-            
-            $folders->removeRecord($node);
-        }
-        $this->_recursiveSearchTotalCount = $files->count();
-        $ret = $files->sortByPagination($_pagination)->limitByPagination($_pagination);
-        return $ret;*/
     }
     
     /**
@@ -387,15 +361,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 'name' => $translate->_('My folders'),
                 'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
-                'id' => Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
-
+                'id' => 'myUser',
             ),
             array(
                 'name' => $translate->_('Shared folders'),
                 'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
                 'id' => Tinebase_FileSystem::FOLDER_TYPE_SHARED,
-            
             ),
             array(
                 'name' => $translate->_('Other users folders'),
@@ -418,10 +390,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
         return $result;
     }
-    
+
     /**
      * sort nodes (only checks if we are on the container level and sort by container_name then)
-     * 
+     *
      * @param Tinebase_Record_RecordSet $nodes
      * @param Tinebase_Model_Tree_Node_Path $path
      * @param Tinebase_Model_Pagination $pagination
@@ -442,7 +414,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 //
 //        $nodes->sort('container_name', $dir);
     }
-    
+
     /**
      * get file node
      * 
