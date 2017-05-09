@@ -70,6 +70,11 @@
      * @param {Ext.Action} action
      */
     addAction: function(action) {
+        // register action once only!
+        if (this.actions.indexOf(action) >= 0) {
+            return;
+        }
+
         // if action has to initialConfig it's no Ext.Action!
         if (action && action.initialConfig) {
             
@@ -96,9 +101,12 @@
      * @param {Array|SelectionModel} records
      */
     updateActions: function(records) {
-        var isFilterSelect = false;
+        var isFilterSelect = false,
+            selectionModel = null;
+
         if (typeof(records.getSelections) == 'function') {
             isFilterSelect = records.isFilterSelect;
+            selectionModel = records;
             records = records.getSelections();
         } else if (typeof(records.beginEdit) == 'function') {
             records = [records];
@@ -119,6 +127,7 @@
             // reference selection into action
             action.initialConfig.selections = records;
             action.initialConfig.isFilterSelect = isFilterSelect;
+            action.initialConfig.selectionModel = selectionModel;
 
         }, this);
         

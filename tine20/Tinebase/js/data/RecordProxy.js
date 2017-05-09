@@ -143,6 +143,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
+            this.postMessage('update', response.responseText);
             return [this.recordReader(response)];
         };
         
@@ -195,6 +196,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
+            // do we need to distingush create/update?
+            this.postMessage('update', response.responseText);
             return [this.recordReader(response)];
         };
         
@@ -228,7 +231,16 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         if (additionalArguments) {
             Ext.apply(options.params, additionalArguments);
         }
-        
+
+        options.beforeSuccess = function(response) {
+            var _ = window.lodash,
+                me = this;
+
+            _.each(records, function(record) {
+                me.postMessage('delete', record.data);
+            });
+        };
+
         // increase timeout as this can take a long time (2 mins)
         options.timeout = this.deleteTimeout;
         
@@ -404,12 +416,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             params: options.params,
             callback: options.callback,
             success: function(response) {
+                var args = [];
+                if (typeof options.beforeSuccess == 'function') {
+                    args = options.beforeSuccess.call(this, response);
+                }
+
                 if (typeof options.success == 'function') {
-                    var args = [];
-                    if (typeof options.beforeSuccess == 'function') {
-                        args = options.beforeSuccess.call(this, response);
-                    }
-                    
                     options.success.apply(options.scope, args);
                 }
             },
@@ -420,14 +432,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     
                 exception.request = jsonrpcoptions.jsonData;
                 exception.response = response.responseText;
-                
+
+                var args = [exception];
+                if (typeof options.beforeFailure == 'function') {
+                    args = options.beforeFailure.call(this, response);
+                }
                 if (typeof options.failure == 'function') {
-                    var args = [];
-                    if (typeof options.beforeFailure == 'function') {
-                        args = options.beforeFailure.call(this, response);
-                    } else {
-                        args = [exception];
-                    }
                     Tine.log.debug('Tine.Tinebase.data.RecordProxy::doXHTTPRequest -> call failure fn');
                     options.failure.apply(options.scope, args);
                 }
@@ -457,5 +467,28 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      */
     handleRequestException: function(exception) {
         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+    },
+
+    /**
+     * posts message about record crud action on central message bus
+     *
+     * NOTE: we don't use the Ext internal write event as:
+     *       a) to deal with cross window issues we only publish bare data
+     *       b) to be able mix with other libraries
+     *
+     * @param {String} action [create|update|delete]
+     * @param {Record} record
+     */
+    postMessage: function(action, record) {
+        var _ = window.lodash,
+            recordData = _.isFunction(record.beginEdit) ? record.data :
+                         _.isString(record) ? JSON.parse(record) :
+                         record;
+
+        window.postal.publish({
+            channel: "recordchange",
+            topic: [this.appName, this.modelName, action].join('.'),
+            data: recordData
+        });
     }
 });

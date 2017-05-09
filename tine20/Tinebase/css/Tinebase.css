@@ -444,6 +444,14 @@ html, body {
     background-image:url(../../images/oxygen/22x22/actions/history-kdeprint.png) !important;
 }
 
+.tinebase-dd-drop-ok-copy  .x-dd-drop-icon {
+    background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;
+}
+
+.tinebase-dd-drop-ok-move  .x-dd-drop-icon {
+    background-image:url(../../images/edit-move.png) !important;
+}
+
 /* ----- tree classes --------------------------------------------------------*/
 .tinebase-tree-drop-move  .x-dd-drop-icon {
     background-image:url(../../images/oxygen/16x16/places/link.png) !important;

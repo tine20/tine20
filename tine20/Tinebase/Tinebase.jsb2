@@ -458,6 +458,10 @@
           "path": "js/widgets/"
         },
         {
+          "text": "ActionManager.js",
+          "path": "js/widgets/"
+        },
+        {
           "text": "ActionUpdater.js",
           "path": "js/widgets/"
         },

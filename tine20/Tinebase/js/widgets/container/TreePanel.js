@@ -186,7 +186,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.rootVisible = false;
         }
 
-        if (!this.readOnly) {
+        if (!this.readOnly && !this.dropConfig) {
             // init drop zone
             this.dropConfig = {
                 ddGroup: this.ddGroup || 'TreeDD',

@@ -26,26 +26,7 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     // ngettext('Folder', 'Folders', n); gettext('Folder');
     containerName: 'Folder',
     containersName: 'Folders',
-    
-    /**
-     * checks whether creating folders is allowed
-     */
-    isCreateFolderAllowed: function() {
-        var grants = this.get('account_grants');
-        
-        if(!grants && this.data.id !== 'personal' && this.data.id !== 'shared') {
-            return false;
-        }
-        else if(!grants && (this.data.id === 'personal' 
-            || (this.data.id === 'shared' && (Tine.Tinebase.common.hasRight('admin', this.appName) 
-            || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName))))) {
-            return true;
-        } else if (!grants) {
-            return false;
-        }
-        
-        return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;
-    },
+
     
     isDropFilesAllowed: function() {
         var grants = this.get('account_grants');
@@ -57,19 +38,18 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         }
         return true;
     },
-    
-    isDragable: function() {
-        var grants = this.get('account_grants');
-        
-        if(!grants) {
-            return false;
-        }
-        
-        if(this.get('id') === 'personal' || this.get('id') === 'shared' || this.get('id') === 'otherUsers') {
-            return false;
-        }
-        
-        return true;
+
+    /**
+     * virtual nodes are part of the tree but don't exists / are editable
+     *
+     * NOTE: only "real" virtual node is node with path "otherUsers". all other nodes exist
+     *
+     * @returns {boolean}
+     */
+    isVirtual: function() {
+        var _ = window.lodash;
+
+        return _.indexOf(['/', Tine.Tinebase.container.getMyFileNodePath(), '/personal', '/shared'], this.get('path')) >= 0;
     }
 });
 
@@ -138,22 +118,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         options.beforeSuccess = function(response) {
             var folder = this.recordReader(response);
             folder.set('client_access_time', new Date());
+            this.postMessage('create', folder.data);
             return [folder];
         };
-        
-        options.success = function(result){
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-            var grid = app.getMainScreen().getCenterPanel();
-            var nodeData = Ext.util.JSON.decode(result);
-            var newNode = app.getMainScreen().getWestPanel().getContainerTreePanel().createTreeNode(nodeData, parentNode);
-            
-            var parentNode = grid.currentFolderNode;
-            if(parentNode) {
-                parentNode.appendChild(newNode);
-            }
-            grid.getStore().reload();
-        };
-        
+
         return this.doXHTTPRequest(options);
     },
     
@@ -170,71 +138,60 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
 
     /**
      * deleting file or folder
-     * 
+     *
+     * overridden cause json fe works on filenames / not id's
+     *
      * @param items     files/folders to delete
      * @param options   additional options
      * @returns
      */
     deleteItems: function(items, options) {
         options = options || {};
-        
-        var filenames = new Array();
-        var nodeCount = items.length;
+
+        var _ = window.lodash,
+            me = this,
+            filenames = new Array(),
+            nodeCount = items.length;
+
         for(var i=0; i<nodeCount; i++) {
             filenames.push(items[i].data.path );
         }
-        
+
         var params = {
             application: this.appName,
             filenames: filenames,
             method: this.appName + ".deleteNodes",
             timeout: 300000 // 5 minutes
         };
-        
+
         options.params = params;
-        
+
         options.beforeSuccess = function(response) {
             var folder = this.recordReader(response);
             folder.set('client_access_time', new Date());
             return [folder];
         };
-        
-        options.success = (function(result){
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
-                grid = app.getMainScreen().getCenterPanel(),
-                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-                nodeData = this.items;
-            
-            for(var i=0; i<nodeData.length; i++) {
-                var treeNode = treePanel.getNodeById(nodeData[i].id);
-                if(treeNode) {
-                    treeNode.parentNode.removeChild(treeNode);
-                }
-            }
-            
-            grid.getStore().remove(nodeData);
-            grid.selectionModel.deselectRange(0, grid.getStore().getCount());
-            grid.pagingToolbar.refresh.enable();
-            
-        }).createDelegate({items: items});
-        
+
+        // announce delte before server delete to improve ux
+        _.each(items, function(record) {
+            me.postMessage('delete', record.data);
+        });
+
         return this.doXHTTPRequest(options);
     },
     
     /**
      * copy/move folder/files to a folder
-     * 
+     *
      * @param items files/folders to copy
      * @param targetPath
+     *
      * @param move
      */
-    
     copyNodes : function(items, target, move, params) {
         
-        var containsFolder = false,
-            message = '',
+        var message = '',
             app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-        
         
         if(!params) {
         
@@ -243,27 +200,24 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             
             var sourceFilenames = new Array(),
-            destinationFilenames = new Array(),
-            forceOverwrite = false,
-            treeIsTarget = false,
-            treeIsSource = false,
-            targetPath = target;
+                destinationFilenames = new Array(),
+                forceOverwrite = false,
+                treeIsTarget = false,
+                targetPath = target;
             
             if(target.data) {
-                targetPath = target.data.path;
+                targetPath = target.data.path + (target.data.type == 'folder' ? '/' : '');
             }
             else if (target.attributes) {
-                targetPath = target.attributes.path;
+                targetPath = target.attributes.path + '/';
                 treeIsTarget = true;
             }
-            
+
             for(var i=0; i<items.length; i++) {
-                
                 var item = items[i];
                 var itemData = item.data;
                 if(!itemData) {
                     itemData = item.attributes;
-                    treeIsSource = true;
                 }
                 sourceFilenames.push(itemData.path);
                 
@@ -271,11 +225,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 if(typeof itemName == 'object') {
                     itemName = itemName.name;
                 }
-                
-                destinationFilenames.push(targetPath + '/' + itemName);
-                if(itemData.type == 'folder') {
-                    containsFolder = true;
-                }
+
+                destinationFilenames.push(targetPath + (targetPath.match(/\/$/) ? itemName : ''));
             }
             
             var method = "Filemanager.copyNodes",
@@ -314,45 +265,55 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 this.loadMask.hide();
                 app.getMainScreen().getWestPanel().setDisabled(false);
                 app.getMainScreen().getNorthPanel().setDisabled(false);
-                
-                var nodeData = Ext.util.JSON.decode(result.responseText),
-                    treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-                    grid = app.getMainScreen().getCenterPanel();
-             
-                // Tree refresh
-                if(treeIsTarget) {
-                    
-                    for(var i=0; i<items.length; i++) {
-                        
-                        var nodeToCopy = items[i];
-                        
-                        if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
-                            continue;
-                        }
-                        
-                        if(move) {
-                            var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
-                                nodeToCopyId = nodeToCopy.id,
-                                removeNode = treePanel.getNodeById(nodeToCopyId);
-                            
-                            if(removeNode && removeNode.parentNode) {
-                                removeNode.parentNode.removeChild(removeNode);
-                            }
-                            
-                            target.appendChild(copiedNode);
-                            copiedNode.setId(nodeData[i].id);
-                        } 
-                        else {
-                            var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
-                            target.appendChild(copiedNode);
-                            copiedNode.setId(nodeData[i].id);
-                            
-                        }
-                    }
-                }
-               
-                // Grid refresh
-                grid.getStore().reload();
+
+                // send updates
+                var _ = window.lodash,
+                    me = this,
+                    recordsData = Ext.util.JSON.decode(result.responseText);
+
+                _.each(recordsData, function(recordData) {
+                    me.postMessage('update', recordData);
+                });
+
+
+                // var nodeData = Ext.util.JSON.decode(result.responseText),
+                //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+                //     grid = app.getMainScreen().getCenterPanel();
+                //
+                // // Tree refresh
+                // if(treeIsTarget) {
+                //
+                //     for(var i=0; i<items.length; i++) {
+                //
+                //         var nodeToCopy = items[i];
+                //
+                //         if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
+                //             continue;
+                //         }
+                //
+                //         if(move) {
+                //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
+                //                 nodeToCopyId = nodeToCopy.id,
+                //                 removeNode = treePanel.getNodeById(nodeToCopyId);
+                //
+                //             if(removeNode && removeNode.parentNode) {
+                //                 removeNode.parentNode.removeChild(removeNode);
+                //             }
+                //
+                //             target.appendChild(copiedNode);
+                //             copiedNode.setId(nodeData[i].id);
+                //         }
+                //         else {
+                //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
+                //             target.appendChild(copiedNode);
+                //             copiedNode.setId(nodeData[i].id);
+                //
+                //         }
+                //     }
+                // }
+                //
+                // // Grid refresh
+                // grid.getStore().reload();
             },
             failure: function(response, request) {
                 var nodeData = Ext.util.JSON.decode(response.responseText),

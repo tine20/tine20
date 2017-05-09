@@ -424,7 +424,38 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.on('resize', this.onContentResize, this, {buffer: 100});
         }
 
+        if (this.listenMessageBus) {
+            this.initMessageBus();
+        }
+
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
+    },
+
+    initMessageBus: function() {
+        postal.subscribe({
+            channel: "recordchange",
+            topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
+            callback: this.onRecordChanges.createDelegate(this)
+        });
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onRecordChanges: function(data, e) {
+        var existingRecord = this.store.getById(data.id);
+        if (existingRecord && e.topic.match(/\.update/)) {
+            // NOTE: local mode saves again (and again...)
+            this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
+        } if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            // we can't evaluate the filters on client side to check compute if this affects us
+            // so just lets reload
+            this.loadGridData({
+                removeStrategy: 'keepBuffered'
+            });
+        }
     },
 
     /**
