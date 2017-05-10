@@ -976,7 +976,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <name>favorite</name>
                     <type>boolean</type>
                 </field>');
-            $this->_backend->addCol($query, 'importexport_definition', $declaration);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>order</name>
