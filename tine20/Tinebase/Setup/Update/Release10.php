@@ -969,14 +969,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>text</type>
                     <length>255</length>
                 </field>');
-            $query = $this->_backend->addAddCol('', 'importexport_definition', $declaration);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>favorite</name>
                     <type>boolean</type>
                 </field>');
-            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
+            $this->_backend->addCol($query, 'importexport_definition', $declaration);
 
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>order</name>
@@ -984,9 +984,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>');
-            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
-
-            $this->_backend->execQuery($query);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $this->setTableVersion('importexport_definition', 9);
         }
