@@ -209,17 +209,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         return $node;
     }
 
-    /**
-     * @param $user
-     * @param $node
-     * @return mixed
-     */
-    public function resolveAccountGrants($user, $node)
-    {
-        $node->account_grants = $this->_nodeAclController->getGrantsOfAccount($user, $node);
-        return $node;
-    }
-
     protected function _getTreeNodeBackend()
     {
         if ($this->_treeNodeBackend === null) {
@@ -2437,7 +2426,46 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
      */
     public function getGrantsOfAccount($_accountId, $_containerId, /** @noinspection PhpUnusedParameterInspection */ $_grantModel = 'Tinebase_Model_Grants')
     {
-        return $this->_nodeAclController->getGrantsOfAccount($_accountId, $_containerId);
+        $path = $this->getPathOfNode($_containerId, true);
+        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($path);
+        if ($pathRecord->isPersonalPath($_accountId)) {
+            return new Tinebase_Model_Grants(array(
+                'account_id' => $accountId,
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => true,
+            ));
+        } else if ($pathRecord->isToplevelPath() && $pathRecord->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED) {
+            $account = $_accountId instanceof Tinebase_Model_FullUser
+                ? $_accountId
+                : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
+            $hasManageSharedRight = $account->hasRight($pathRecord->application->name, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS);
+            return new Tinebase_Model_Grants(array(
+                'account_id' => $accountId,
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => $hasManageSharedRight,
+                Tinebase_Model_Grants::GRANT_EDIT => $hasManageSharedRight,
+                Tinebase_Model_Grants::GRANT_DELETE => $hasManageSharedRight,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+            ));
+        } else if ($pathRecord->isToplevelPath() && $pathRecord->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) {
+            // other users
+            return new Tinebase_Model_Grants(array(
+                'account_id' => $accountId,
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+            ));
+        } else {
+            return $this->_nodeAclController->getGrantsOfAccount($_accountId, $_containerId);
+        }
     }
 
 
@@ -2480,7 +2508,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         $parents = array();
         $count = 0;
 
-        foreach($treeNodeBackend->search(
+        foreach ($treeNodeBackend->search(
                 new Tinebase_Model_Tree_Node_Filter(array(
                     array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_Node::TYPE_FILE)
                 ), '', array('ignoreAcl' => true))

@@ -137,26 +137,68 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $translate = Tinebase_Translation::getTranslation('Filemanager');
         $this->assertEquals(3, $searchResult['totalcount'], 'did not get root nodes: ' . print_r($searchResult, TRUE));
         $this->assertEquals(array(
-            'id'    => 'myUser',
-            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
-            'name' => $translate->_('My folders'),
-            'type' => 'folder',
-            'tags' => array(),
-            ), $searchResult['results'][0]);
+            'id'             => 'myUser',
+            'path'           => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+            'name'           => $translate->_('My folders'),
+            'type'           => 'folder',
+            'grants'         => array(),
+            'account_grants' => array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => true,
+                Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+                Tinebase_Model_Grants::GRANT_PRIVATE => false,
+            ),
+            'tags'           => array(),
+            ), $searchResult['results'][0], 'my user folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_SHARED,
             'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
             'name' => $translate->_('Shared folders'),
             'type' => 'folder',
+            'grants'         => array(),
+            'account_grants' => array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EXPORT => true,
+                Tinebase_Model_Grants::GRANT_SYNC => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => false,
+                Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+                Tinebase_Model_Grants::GRANT_PRIVATE => false,
+            ),
             'tags' => array(),
-        ), $searchResult['results'][1]);
+        ), $searchResult['results'][1], 'shared folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_OTHERUSERS,
             'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
             'name' => $translate->_('Other users folders'),
             'type' => 'folder',
+            'grants'         => array(),
+            'account_grants' => array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => false,
+                Tinebase_Model_Grants::GRANT_EDIT => false,
+                Tinebase_Model_Grants::GRANT_DELETE => false,
+                Tinebase_Model_Grants::GRANT_EXPORT => false,
+                Tinebase_Model_Grants::GRANT_SYNC => false,
+                Tinebase_Model_Grants::GRANT_ADMIN => false,
+                Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+                Tinebase_Model_Grants::GRANT_PRIVATE => false,
+            ),
             'tags' => array(),
-        ), $searchResult['results'][2]);
+        ), $searchResult['results'][2], 'other user folder mismatch');
     }
     
     /**
@@ -204,7 +246,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $this->assertTrue(isset($result['results'][0]), print_r($result, true));
             $this->assertEquals($_expectedName, $result['results'][0]['name']);
         }
-        
+
         if ($_checkAccountGrants) {
             $this->assertTrue(isset($result['results'][0]['account_grants']), 'account grants missing');
             $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_grants']['account_id']);
