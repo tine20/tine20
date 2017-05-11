@@ -2297,12 +2297,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         try {
             $parentNode = $this->stat($pathRecord->statpath);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if ($accountId === $ownerId) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Creating PERSONAL root node');
-                $this->createAclNode($pathRecord->statpath);
-            }
-
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Creating PERSONAL root node');
+            $this->createAclNode($pathRecord->statpath);
             return $result;
         }
         $filter = new Tinebase_Model_Tree_Node_Filter(
