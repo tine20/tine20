@@ -586,8 +586,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @todo get locale from placeholder (i.e. endDate-_LOCALESTRING_)
      * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
-     * @todo use html templates?
-     * @todo use ZF templates / phplib tpl files?
+     * @todo use twig
      */
     protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
     {
