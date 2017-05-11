@@ -100,7 +100,11 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     public static function createReportTemplatesFolder()
     {
         try {
-            $node = Tinebase_FileSystem::getInstance()->createAclNode('/HumanResources/folders/shared/Report Templates');
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'HumanResources',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Report Templates');
             HumanResources_Config::getInstance()->set(HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__

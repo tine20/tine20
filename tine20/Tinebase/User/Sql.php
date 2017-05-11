@@ -872,8 +872,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // don't update id
         unset($accountData['id']);
         
-        // ignore all other states (expired and blocked)
-        if ($_user->accountStatus == Tinebase_User::STATUS_ENABLED) {
+        // ignore all other states (blocked)
+        unset($accountData[$this->rowNameMapping['accountStatus']]);
+        if ($_user->accountStatus === Tinebase_User::STATUS_ENABLED) {
             $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
             
             if ($oldUser->accountStatus === Tinebase_User::STATUS_BLOCKED) {
@@ -881,7 +882,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             } elseif ($oldUser->accountStatus === Tinebase_User::STATUS_EXPIRED) {
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
             }
-        } elseif ($_user->accountStatus == Tinebase_User::STATUS_DISABLED) {
+        } elseif ($_user->accountStatus === Tinebase_User::STATUS_DISABLED ||
+                Tinebase_User::STATUS_EXPIRED === $_user->accountStatus) {
             $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
         }
         
@@ -998,7 +1000,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array(
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
-            'status'            => $_user->accountStatus,
             'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,

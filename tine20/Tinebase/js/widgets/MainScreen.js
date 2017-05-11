@@ -261,7 +261,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                                         var sm = grid.getSelectionModel();
                                         if(sm) {
                                             sm.clearSelections();
-                                            cp.actionUpdater.updateActions(sm.getSelectionsCollection());
+                                            cp.actionUpdater.updateActions(sm);
                                         }
                                     }
                                 } catch (e) {

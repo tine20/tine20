@@ -666,4 +666,29 @@ class Tinebase_FileSystemTest extends TestCase
         $middleChildNodePath = $path . '/test/sub';
         $this->_testNodeAcl($childChildNode, $middleChildNodePath);
     }
+
+    /**
+     * test that an invalid folder size (< 0) will be set to 0 instead
+     */
+    public function testInvalidFolderSize()
+    {
+        $testFile = $this->testCreateFile();
+        $testDir = dirname($testFile);
+        $fileObjectController = new Tinebase_Tree_FileObject();
+
+        $dirNode = $this->_controller->stat($testDir);
+        /** @var Tinebase_Model_Tree_FileObject $dirObject */
+        $dirObject = $fileObjectController->get($dirNode->object_id);
+        static::assertEquals(7, $dirObject->size, 'direcotry size wrong');
+
+        $dirObject->size = 3;
+        $fileObjectController->update($dirObject);
+        $dirObject = $fileObjectController->get($dirNode->object_id);
+        static::assertEquals(3, $dirObject->size, 'direcotry size update did not work');
+
+        $this->_controller->unlink($testFile);
+
+        $dirObject = $fileObjectController->get($dirNode->object_id);
+        static::assertEquals(0, $dirObject->size, 'direcotry size should not become negative, it should be set to 0 instead');
+    }
 }

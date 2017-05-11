@@ -96,23 +96,36 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRequestAutoProcess()
     {
-        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/invitation_request_external.ics' );
+        return $this->_testExternalImap('invitation_request_external.ics', 5, 'test mit extern');
+    }
+
+    protected function _testExternalImap($icsFilename, $numAttendee, $summary)
+    {
+        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/' . $icsFilename);
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'REQUEST',
             'originator'     => 'l.kneschke@caldav.org',
         ));
-        
+
         $this->_iMIPFrontend->autoProcess($iMIP);
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
-        
+
         $this->assertEmpty($prepared->existing_event, 'there should be no existing event');
         $this->assertEmpty($prepared->preconditions, 'no preconditions should be raised');
-        $this->assertEquals(5, count($prepared->event->attendee));
-        $this->assertEquals('test mit extern', $prepared->event->summary);
-        
+        $this->assertEquals($numAttendee, count($prepared->event->attendee));
+        $this->assertEquals($summary, $prepared->event->summary);
+
         return $iMIP;
+    }
+
+    /**
+     * testExternalInvitationRequestAutoProcessMozilla
+     */
+    public function testExternalInvitationRequestAutoProcessMozilla()
+    {
+        $this->_testExternalImap('invitation_request_external_mozilla.ics', 2, 'Input Plakat für Veranstaltung am 19.10.');
     }
 
     /**

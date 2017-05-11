@@ -223,7 +223,7 @@ abstract class Calendar_TestCase extends TestCase
      * 
      * @return Tinebase_Model_Container
      */
-    protected function _getTestCalendar()
+    public function _getTestCalendar()
     {
         if ($this->_testCalendar === NULL) {
             $this->_testCalendar = $this->_getTestContainer('Calendar');

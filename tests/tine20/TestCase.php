@@ -351,6 +351,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * lazy init of uit
      * 
      * @return Object
+     * @throws Exception
      * 
      * @todo fix ide object class detection for completions
      */
@@ -363,7 +364,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             } else if (@class_exists($uitClass)) {
                 $this->_uit = new $uitClass();
             } else {
-                throw new Exception('could not find class ' . $uitClass);
+                // use generic json frontend
+                if ($pos = strpos($uitClass, '_')) {
+                    $appName = substr($uitClass, 0, $pos);
+                    $this->_uit = new Tinebase_Frontend_Json_Generic($appName);
+                } else {
+                    throw new Exception('could not find class ' . $uitClass);
+                }
             }
         }
         

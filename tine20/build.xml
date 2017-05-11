@@ -163,6 +163,35 @@
     </target>
 
     <!-- ============================================      -->
+    <!-- Target: phpunit-exec-build                        -->
+    <!--                                                   -->
+    <!-- - no clean here as we need the build files!       -->
+    <!--                                                   -->
+    <!-- this runs phpunit in an exec task. we do this     -->
+    <!-- to overcome some drawbacks (for example we can't  -->
+    <!-- use the LogListener) of the phing phpunit task.   -->
+    <!-- ============================================      -->
+    <target name="phpunit-exec-build" depends="phpunit-prepare">
+        <property name="testinclude" value="AllTests.php" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library:${project.basedir}/vendor/zendframework/zendframework1/library" override="true" />
+        <property name="testadditionalparams" value="" override="true" />
+        <property name="testsuite" value="tine20" override="true" />
+
+        <echo msg="Starting Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
+        <echo msg="Setting include_path to ${includepath}" />
+
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/${testsuite}" passthru="true">
+            <arg line="-d max_execution_time=0
+             -d include_path=${includepath}
+             --configuration ${testconfigdir}/phpunit.xml
+             --log-junit ${builddir}/reports/junit.xml
+             ${testadditionalparams}
+             ${testinclude} " />
+        </exec>
+    </target>
+
+    <!-- ============================================      -->
     <!-- Target: phpunit-serv                              -->
     <!--                                                   -->
     <!-- this runs phpunit in an exec task. we do this     -->

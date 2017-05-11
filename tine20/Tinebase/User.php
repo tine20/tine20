@@ -531,6 +531,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $syncedUser = $userBackend->addUserInSqlBackend($user);
+
+            // fire event to make sure all user data is created in the apps
+            // TODO convert to Tinebase event?
+            $event = new Admin_Event_AddAccount(array(
+                'account' => $syncedUser
+            ));
+            Tinebase_Event::fireEvent($event);
+
             // the addressbook is registered as a plugin and will take care of the create
             $userBackend->addPluginUser($syncedUser, $user);
 
@@ -792,8 +800,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' User already expired ' . print_r($user->toArray(), true));
 
-                // TODO make time span configurable?
-                if ($user->accountExpires->isEarlier($now->subYear(1))) {
+                $deleteAfterMonths = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_DELETE_AFTER);
+                if ($user->accountExpires->isEarlier($now->subMonth($deleteAfterMonths))) {
                     // if he or she is already expired longer than configured expiry, we remove them!
                     // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
                     Tinebase_User::getInstance()->deleteUser($userToDelete);
@@ -822,7 +830,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function getSystemUsernames()
     {
-        return array('cronuser', 'calendarscheduling', 'setupuser');
+        return array('cronuser', 'calendarscheduling', 'setupuser', 'replicationuser');
     }
 
     /**

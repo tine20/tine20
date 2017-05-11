@@ -2,20 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     Felamimail
+ * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to handle container tree
  *
- * @package     Felamimail
+ * @package     Tinebase
  * @subpackage  Frontend
  */
-class Felamimail_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
+class Tinebase_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 {
     /**
      * app has personal folders

@@ -218,9 +218,10 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.Action} action
      * @param {Object} grants grants sum of grants
      * @param {Object} records
+     * @param {Boolean} isFilterSelect
      * @param {Array} requiredAccountStatus
      */
-    enableDisableActionUpdater: function(action, grants, records, requiredAccountStatus) {
+    enableDisableActionUpdater: function(action, grants, records, isFilterSelect, requiredAccountStatus) {
         var enabled = records.length > 0;
         Ext.each(records, function(record){
             enabled &= requiredAccountStatus.indexOf(record.get('accountStatus')) >=0;// === requiredAccountStatus;

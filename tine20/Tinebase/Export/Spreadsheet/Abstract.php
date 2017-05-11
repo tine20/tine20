@@ -100,7 +100,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 $result = $this->_replaceAndMatchvalue($result, $_field);
                 return $result;
                 
-            } else if (isset($field->formula) 
+            } else if (isset($_field->formula)
                 || (! isset($_record->{$_field->identifier}) 
                     && ! in_array($_field->type, $this->_resolvedFields) 
                     && ! in_array($_field->identifier, $this->_getCustomFieldNames())

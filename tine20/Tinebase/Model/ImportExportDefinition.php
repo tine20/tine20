@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -25,6 +25,9 @@
  * @property string plugin
  * @property string plugin_options
  * @property string filename
+ * @property bool   favorite
+ * @property string icon_class
+ * @property int    order
  */
 class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract 
 {
@@ -52,9 +55,9 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'application_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'application_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
+        'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
+        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
         'label'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
@@ -62,7 +65,10 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
             'presence'                      => 'required',
             array('InArray', array('import', 'export', 'letter'))
         ),
-        'plugin'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'favorite'              => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required', 'default' => true),
+        'order'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required', 'default' => 0),
+        'icon_class'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'plugin'                => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
         'plugin_options'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // if filename is set, read file from App/Export(Import)/definitions/filename
         'filename'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

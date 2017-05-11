@@ -249,6 +249,15 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME));
     }
 
+    /**
+     * set + get array config
+     */
+    public function testArrayConfig()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ALLOWEDJSONORIGINS, array("www.test.de", "www.tine20.net"));
+        $this->assertEquals(array("www.test.de", "www.tine20.net"), Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()));
+    }
+
     public function testConfigStructure()
     {
         $exampleConfig = ExampleApplication_Config::getInstance();

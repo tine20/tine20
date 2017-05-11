@@ -423,7 +423,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->createTable('path', $declaration, 'Tinebase', 2);
 
-        Tinebase_Controller::getInstance()->rebuildPaths();
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if ($setupUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+            Tinebase_Controller::getInstance()->rebuildPaths();
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+        }
 
         $this->setApplicationVersion('Tinebase', '10.10');
     }
@@ -933,5 +940,57 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setTableVersion('tags', 9);
         $this->setApplicationVersion('Tinebase', '10.20');
+    }
+
+    /**
+     * update to 10.21
+     *
+     * add new file system tasks to scheduler
+     */
+    public function update_20()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.21');
+    }
+
+    /**
+     * update to 10.22
+     *
+     * add favorite column to importexport_definition
+     */
+    public function update_21()
+    {
+        if (! $this->_backend->columnExists('favorite', 'importexport_definition')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>icon_class</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $query = $this->_backend->addAddCol('', 'importexport_definition', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>favorite</name>
+                    <type>boolean</type>
+                </field>');
+            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>');
+            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
+
+            $this->_backend->execQuery($query);
+
+            $this->setTableVersion('importexport_definition', 9);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.22');
     }
 }
