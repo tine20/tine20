@@ -766,13 +766,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
-        //
         $applications = Tinebase_Application::getInstance()->getApplications();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if ($setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
         foreach ($applications as $application) {
+            if ($setupUser && ! $setupUser->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Skipping ' . $application->name . ' because setupuser has no RUN right');
+                }
+                continue;
+            }
+
             $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
             $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_SHARED);
         }
