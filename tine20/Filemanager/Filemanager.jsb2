@@ -74,6 +74,10 @@
         {
           "text": "GrantsPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "DocumentPreview.js",
+          "path": "js/"
         }
       ]
     },

@@ -318,6 +318,23 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * Capture space to toggle document preview
+     */
+    onKeyDown: function(e) {
+        Tine.Filemanager.NodeGridPanel.superclass.onKeyDown.apply(this, arguments);
+
+        var sm = this.selectionModel,
+            node = sm.getSelected();
+
+        // Open preview on space if a node is selected and the node type equals file
+        if (e.getKey() === 32 && node && node.get('type') === 'file') {
+            Tine.Filemanager.DocumentPreview.openWindow({
+                record: node
+            });
+        }
+    },
+
+    /**
      * init ext grid panel
      * @private
      */

@@ -499,6 +499,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'acl_node' },
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
+    { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
 
     { name: 'relations' },
     { name: 'customfields' },

@@ -123,14 +123,19 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     {
         $fileSystem = Tinebase_FileSystem::getInstance();
 
-        $this->_prepareHeader($_node->name, $_node->contenttype, 'inline');
-
         $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
+
+        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline');
+
+
         $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
+
         if (false === $handle) {
             throw new Tinebase_Exception_NotFound('could not open preview by real path for hash');
         }
+
         fpassthru($handle);
+
         fclose($handle);
     }
 
