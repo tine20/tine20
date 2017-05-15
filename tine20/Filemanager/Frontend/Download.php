@@ -12,7 +12,7 @@
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        allow to download a folder as ZIP file
  */
@@ -33,6 +33,12 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             
             $downloadId = array_shift($splittedPath);
             $download = $this->_getDownloadLink($downloadId);
+
+            if (! $this->_verfiyPassword($download)) {
+                $this->_renderPasswordForm();
+                exit;
+            }
+
             $this->_setDownloadLinkOwnerAsUser($download);
             
             $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
@@ -48,21 +54,63 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(
-                __METHOD__ . '::' . __LINE__ . ' exception: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' exception: ' . $e->getTraceAsString());
-            
-            header('HTTP/1.0 404 Not found');
-            
-            $view = $this->_getView();
-            header('Content-Type: text/html; charset=utf-8');
-            die($view->render('notfound.phtml'));
+            Tinebase_Exception::log($e);
+            $this->_renderNotFoundPage();
         }
         
         exit;
     }
-    
+
+    protected function _verfiyPassword($download)
+    {
+        if (! Filemanager_Controller_DownloadLink::getInstance()->hasPassword($download)) {
+            return true;
+        }
+
+        $password = $this->_getPassword();
+        if (Filemanager_Controller_DownloadLink::getInstance()->validatePassword($download, $password)) {
+            // save password in cookie / 1 hour lifetime
+            setcookie('dlpassword', $password, time() + 3600, '/download');
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * fetch password from request
+     *
+     * @return string
+     *
+     * TODO improve this: maybe we can get the param from the Zend\Http\Request object
+     *  -> $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+     */
+    protected function _getPassword()
+    {
+        if (isset($_REQUEST['dlpassword'])) {
+            return $_REQUEST['dlpassword'];
+        } elseif (isset($_COOKIE['dlpassword'])) {
+                return $_COOKIE['dlpassword'];
+        } else {
+            return '';
+        }
+    }
+
+    protected function _renderPasswordForm()
+    {
+        $view = $this->_getView();
+        header('Content-Type: text/html; charset=utf-8');
+        die($view->render('password.phtml'));
+    }
+
+    protected function _renderNotFoundPage()
+    {
+        header('HTTP/1.0 404 Not found');
+        $view = $this->_getView();
+        header('Content-Type: text/html; charset=utf-8');
+        die($view->render('notfound.phtml'));
+    }
+
     /**
      * download file
      * 
@@ -74,6 +122,12 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             $splittedPath = explode('/', trim($path, '/'));
             $downloadId = array_shift($splittedPath);
             $download = $this->_getDownloadLink($downloadId);
+
+            if (! $this->_verfiyPassword($download)) {
+                $this->_renderPasswordForm();
+                exit;
+            }
+
             $this->_setDownloadLinkOwnerAsUser($download);
             
             $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
@@ -88,18 +142,8 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(
-                __METHOD__ . '::' . __LINE__ . ' exception: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' exception: ' . $e->getTraceAsString());
-            
-            header('HTTP/1.0 404 Not found');
-            
-            $view = new Zend_View();
-            $view->setScriptPath('Filemanager/views');
-            
-            header('Content-Type: text/html; charset=utf-8');
-            die($view->render('notfound.phtml'));
+            Tinebase_Exception::log($e);
+            $this->_renderNotFoundPage();
         }
         
         exit;
@@ -119,7 +163,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-     * generate directroy listing
+     * generate directory listing
      * 
      * @param Filemanager_Model_DownloadLink $download
      * @param Tinebase_Model_Tree_Node       $node
@@ -129,7 +173,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     {
         $view = $this->_getView($path, $node);
         $view->files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
-        
+
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('folder.phtml'));
     }
