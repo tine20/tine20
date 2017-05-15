@@ -212,7 +212,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Got ' . count($result) . ' search results');
+            . ' Got ' . count($result) . ' search results of ' . $this->_modelName);
         
         if (! $_onlyIds) {
             if ($_getRelations && count($result) > 0 && $result->getFirstRecord()->has('relations')) {
