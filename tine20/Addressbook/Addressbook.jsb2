@@ -134,6 +134,10 @@
         {
           "text": "ContactRecord.js",
           "path": "js/Printer/"
+        },
+        {
+          "text": "ListRecord.js",
+          "path": "js/Printer/"
         }
       ]
     },

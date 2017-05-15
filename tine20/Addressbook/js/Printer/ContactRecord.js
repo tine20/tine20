@@ -1,7 +1,6 @@
 Ext.ns('Tine.Addressbook.Printer');
 
 Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
-    //stylesheetPath: 'Calendar/css/print.css',
     stylesheetPath: 'Tinebase/css/widgets/RecordPrinter.css',
 
     generateBody: function(contact) {
