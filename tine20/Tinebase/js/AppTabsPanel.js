@@ -102,20 +102,19 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         }
     },
 
-    onStripMouseDown: function(e) {
-        var t = this.findTargets(e);
-        if(t.item && t.item != this.activeTab){
-            var appName = this.id2appName(t.item);
-            if (appName !== 'menu') {
-                var app = Tine.Tinebase.appMgr.get(appName);
+    setActiveTab : function(item) {
+        this.supr().setActiveTab.apply(this, arguments);
+
+        var appName = this.id2appName(item);
+        if (appName !== 'menu') {
+            var app = Tine.Tinebase.appMgr.get(appName),
+                activeApp = Tine.Tinebase.MainScreen.getActiveApp();
+
+            if (app != activeApp) {
                 Tine.Tinebase.MainScreen.activate(app);
             }
         }
-
-        this.supr().onStripMouseDown.apply(this, arguments);
     },
-
-
 
     /**
      * init the combined appchooser/tine menu
