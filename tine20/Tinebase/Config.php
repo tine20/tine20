@@ -1065,6 +1065,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => TRUE
         ),
+        self::SYNC_USER_DELETE_AFTER => array(
+            //_('Sync user: delete after X months)
+            'label'                 => 'Sync user: delete after X months',
+            //_('Removed users should be deleted after X months')
+            'description'           => 'Removed users should be deleted after X months',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 12,
+        ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
             'label'                 => 'IP Session Validator',
