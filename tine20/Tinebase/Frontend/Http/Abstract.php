@@ -125,8 +125,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
 
-        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline');
-
+        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size);
 
         $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
 
@@ -158,7 +157,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Download file node ' . print_r($node->toArray(), TRUE));
 
-        $this->_prepareHeader($node->name, $node->contenttype);
+        $this->_prepareHeader($node->name, $node->contenttype, /* $disposition */ null, $node->size);
 
         if (null !== $revision) {
             $streamContext = stream_context_create(array(
@@ -181,8 +180,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filename
      * @param string $contentType
      * @param string $disposition
+     * @param string $length
      */
-    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment')
+    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment', $length = null)
     {
         if (headers_sent()) {
             return;
@@ -200,6 +200,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
         }
         header("Content-Type: " . $contentType);
+
+        if ($length) {
+            header("Content-Length: " . $length);
+        }
     }
 
     /**
