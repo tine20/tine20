@@ -233,7 +233,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ));
         $result = $this->_searchHelper($filter, 'unittestdir_personal');
         // check correct path resolving
-        self::assertEquals($path . '/unittestdir_personal', $result['results'][0]['path']);
+        $node = $this->_getNodeByNameFromResult('unittestdir_personal', $result);
+        self::assertEquals($path . '/unittestdir_personal', $node['path']);
     }
     
     /**
@@ -248,6 +249,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes($_filter, array('sort' => 'size'));
         
         $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'expected at least one entry');
+        $node = $this->_getNodeByNameFromResult($_expectedName, $result);
         if ($_toplevel) {
             $found = FALSE;
             foreach ($result['results'] as $container) {
@@ -262,16 +264,27 @@ class Filemanager_Frontend_JsonTests extends TestCase
             }
             $this->assertTrue($found, 'container not found: ' . print_r($result['results'], TRUE));
         } else {
-            $this->assertTrue(isset($result['results'][0]), print_r($result, true));
-            $this->assertEquals($_expectedName, $result['results'][0]['name']);
+            self::assertNotNull($node);
         }
 
         if ($_checkAccountGrants) {
-            $this->assertTrue(isset($result['results'][0]['account_grants']), 'account grants missing');
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_grants']['account_id']);
+            $this->assertTrue(isset($node['account_grants']), 'account grants missing');
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $node['account_grants']['account_id']);
         }
         
         return $result;
+    }
+
+    protected function _getNodeByNameFromResult($_expectedName, $_result)
+    {
+        self::assertTrue(isset($_result['results']));
+        foreach ($_result['results'] as $node) {
+            if ($node['name'] === $_expectedName) {
+                return $node;
+            }
+        }
+
+        return null;
     }
     
     /**
@@ -365,8 +378,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
         self::assertFalse($found, 'own personal node found! ' . print_r($result['results'], true));
         // check correct path resolving
+        $node = $this->_getNodeByNameFromResult($this->_personas['sclever']->accountDisplayName, $result);
         $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountDisplayName;
-        self::assertEquals($path, $result['results'][0]['path']);
+        self::assertEquals($path, $node['path']);
     }
 
     /**
@@ -386,10 +400,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'value'    => 'weekThis',
         ));
         $result = $this->_searchHelper($filter, $this->_getOtherUserContainer()->name, TRUE);
-        
+
         $expectedPath = $filter[0]['value'] . '/' . $this->_getOtherUserContainer()->name;
-        $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
-        $this->assertEquals($filter[0]['value'], $result['filter'][0]['value']['path'], 'filter path mismatch');
+        $node = $this->_getNodeByNameFromResult($this->_getOtherUserContainer()->name, $result);
+        self::assertNotNull($node);
+        self::assertEquals($expectedPath, $node['path'], 'node path mismatch');
+        self::assertEquals($filter[0]['value'], $result['filter'][0]['value']['path'], 'filter path mismatch');
     }
 
     /**

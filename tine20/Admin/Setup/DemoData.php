@@ -209,7 +209,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
                 $user = Tinebase_User::getInstance()->addUser($user);
-                
+
+                // fire event to make sure all user data is created in the apps
+                $event = new Admin_Event_AddAccount(array(
+                    'account' => $user
+                ));
+                Tinebase_Event::fireEvent($event);
+
                 Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
                 
                 if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {

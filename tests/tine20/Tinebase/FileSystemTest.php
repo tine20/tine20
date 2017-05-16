@@ -577,7 +577,7 @@ class Tinebase_FileSystemTest extends TestCase
         // try $persona
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas[$persona]);
         $result = $this->_controller->search($filter);
-        self::assertEquals(1, count($result), $persona . ' should see the node');
+        self::assertGreaterThanOrEqual(1, count($result), $persona . ' should see the node');
     }
 
     /**
