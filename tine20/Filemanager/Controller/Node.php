@@ -239,6 +239,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $this->_backend->mkdir($path->statpath);
             }
             $result = $this->_getOtherUserNodes();
+            $this->resolvePath($result, $path);
         } else {
             try {
                 $result = $this->_backend->searchNodes($_filter, $_pagination);

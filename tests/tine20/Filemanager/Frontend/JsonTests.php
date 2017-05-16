@@ -207,14 +207,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testSearchPersonalNodes()
     {
         $this->_setupTestPath(Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
-        
+
+        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/'
+            . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/'
-                . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name
+            'value'    => $path
         ));
-        $this->_searchHelper($filter, 'unittestdir_personal');
+        $result = $this->_searchHelper($filter, 'unittestdir_personal');
+        // check correct path resolving
+        self::assertEquals($path . '/unittestdir_personal', $result['results'][0]['path']);
     }
     
     /**
@@ -345,6 +348,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
             }
         }
         self::assertFalse($found, 'own personal node found! ' . print_r($result['results'], true));
+        // check correct path resolving
+        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountDisplayName;
+        self::assertEquals($path, $result['results'][0]['path']);
     }
 
     /**

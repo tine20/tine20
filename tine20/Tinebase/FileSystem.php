@@ -2393,7 +2393,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
                     'Tinebase_Model_FullUser'
                 );
                 $otherAccount->name = $account->accountDisplayName;
-                $otherAccount->path = $_path . '/' . $account->accountLoginName;
             }
         }
 
