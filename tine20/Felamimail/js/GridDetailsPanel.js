@@ -374,7 +374,8 @@ Ext.ns('Tine.Felamimail');
             'span[class=tinebase-download-link]',
             'a[class=tinebase-email-link]',
             'span[class=tinebase-addtocontacts-link]',
-            'span[class=tinebase-showheaders-link]'
+            'span[class=tinebase-showheaders-link]',
+            'a[href^=#]'
         ];
         
         // find the correct target
@@ -490,6 +491,18 @@ Ext.ns('Tine.Felamimail');
                 
                 target.innerHTML = html;
                 
+                break;
+            case 'a[href^=#]':
+                e.stopEvent();
+                var anchor = this.getEl().query('#' + target.href.replace(/.*#/, ''));
+                if (anchor.length) {
+                    var scrollEl = Ext.fly(anchor[0]).findParent('.x-panel-body');
+                    if (scrollEl) {
+                        var box = Ext.fly(anchor[0]).getBox();
+                        // TODO improve accuracy of scrolling
+                        scrollEl.scrollTop = box.y - 180;
+                    }
+                }
                 break;
         }
     }
