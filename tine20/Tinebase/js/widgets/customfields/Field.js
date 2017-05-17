@@ -118,6 +118,9 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                         fieldDef.hideLabel = true;
                         fieldDef.boxLabel = fieldDef.fieldLabel;
                         break;
+                    case 'textarea':
+                        fieldDef.xtype = 'textarea';
+                        break;
                     case 'string':
                     default:
                         fieldDef.xtype = 'textfield';

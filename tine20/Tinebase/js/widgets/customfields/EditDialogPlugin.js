@@ -125,7 +125,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
 
         _.each(cfConfigs, _.bind(_.defaultsDeep, cfConfigs, _, {data: {definition: {uiconfig: {tab: 'customfields', 'group': '', sort: 0}}}}));
         _.each(_.groupBy(cfConfigs, 'data.definition.uiconfig.tab'), _.bind(function(fields, tabId) {
-            var tab = tabPanel.items.get(_.isNaN(+tabId) ? tabId : +tabId);
+            var tab = tabPanel.items.get(_.isNaN(+tabId) || ['', null].indexOf(tabId) >= 0? tabId : +tabId);
             if (! tab) {
                 this.addCFTab(fields, tabId);
             } else {
@@ -184,7 +184,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         }, this));
 
         this.getTabPanel().add(new Ext.Panel({
-            title: tabName == 'customfields' ? i18n._('Custom Fields') : i18n._hidden(tabName),
+            title: (!tabName || tabName == 'customfields') ? i18n._('Custom Fields') : i18n._hidden(tabName),
             layout: 'form',
             border: true,
             frame: true,

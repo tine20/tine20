@@ -428,6 +428,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         readOnly: this.record.id != 0,
                         store: [
                             ['string', this.app.i18n._('Text')],
+                            ['textarea', this.app.i18n._('Textarea')],
                             ['integer', this.app.i18n._('Number')],
                             ['date', this.app.i18n._('Date')],
                             ['datetime', this.app.i18n._('DateTime')],
