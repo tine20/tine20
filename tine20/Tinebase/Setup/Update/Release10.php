@@ -766,13 +766,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
-        //
         $applications = Tinebase_Application::getInstance()->getApplications();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if ($setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
         foreach ($applications as $application) {
+            if ($setupUser && ! $setupUser->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Skipping ' . $application->name . ' because setupuser has no RUN right');
+                }
+                continue;
+            }
+
             $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
             $this->_migrateAclForApplication($application, Tinebase_FileSystem::FOLDER_TYPE_SHARED);
         }
@@ -969,14 +976,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>text</type>
                     <length>255</length>
                 </field>');
-            $query = $this->_backend->addAddCol('', 'importexport_definition', $declaration);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>favorite</name>
                     <type>boolean</type>
                 </field>');
-            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>order</name>
@@ -984,13 +991,76 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>');
-            $query = $this->_backend->addAddCol($query, 'importexport_definition', $declaration);
-
-            $this->_backend->execQuery($query);
+            $this->_backend->addCol('importexport_definition', $declaration);
 
             $this->setTableVersion('importexport_definition', 9);
         }
 
         $this->setApplicationVersion('Tinebase', '10.22');
+    }
+
+    /**
+     * update to 10.23
+     *
+     * add preview_count column to tree_filerevisions
+     */
+    public function update_22()
+    {
+        if (! $this->_backend->columnExists('preview_count', 'tree_filerevisions')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>preview_count</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>');
+            $this->_backend->addCol('tree_filerevisions', $declaration);
+            $this->setTableVersion('tree_filerevisions', 2);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.23');
+    }
+
+
+
+    /**
+     * update to 10.24
+     *
+     * 0013032: add GRANT_DOWNLOAD
+     * 0013034: add GRANT_PUBLISH
+     */
+    public function update_23()
+    {
+        // get all folder nodes with own acl
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+            )
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        $folders = Tinebase_FileSystem::getInstance()->searchNodes($searchFilter);
+        $updateCount = 0;
+        foreach ($folders as $folder) {
+            if ($folder->acl_node === $folder->getId()) {
+                $grants = Tinebase_FileSystem::getInstance()->getGrantsOfContainer($folder, /* ignoreAcl */ true);
+                foreach ($grants as $grant) {
+                    // add download & publish for admins and only download for the rest
+                    if ($grant->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                        $grant->{Tinebase_Model_Grants::GRANT_DOWNLOAD} = true;
+                        $grant->{Tinebase_Model_Grants::GRANT_PUBLISH} = true;
+                    } else {
+                        $grant->{Tinebase_Model_Grants::GRANT_DOWNLOAD} = true;
+                    }
+                }
+                Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $grants);
+                $updateCount++;
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Added DOWNLOAD & PUBLISH grants to ' . $updateCount . ' folder nodes');
+
+        $this->setApplicationVersion('Tinebase', '10.24');
     }
 }

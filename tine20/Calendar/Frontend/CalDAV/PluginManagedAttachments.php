@@ -172,7 +172,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
                 
                 $attachment = new Tinebase_Model_Tree_Node(array(
                     'name'         => rawurldecode($name),
-                    'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                    'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     'contenttype'  => $contentType,
                     'hash'         => $attachmentId,
                 ), true);

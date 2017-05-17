@@ -117,7 +117,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
                 . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier($this->_tableName . '.revision')),
-            /* select */ array('hash', 'size')
+            /* select */ array('hash', 'size', 'preview_count')
         )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
@@ -131,7 +131,16 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         }
             
         return $select;
-    }        
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_count
+     */
+    public function updatePreviewCount($_hash, $_count)
+    {
+        $this->_db->update($this->_tablePrefix . $this->_revisionsTableName, array('preview_count' => (int)$_count), $this->_db->quoteInto('hash = ?', $_hash));
+    }
 
     /**
      * get value of next revision for given fileobject
@@ -227,6 +236,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             'created_by'    => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
             'hash'          => $_record->hash,
             'size'          => $_record->size,
+            'preview_count' => (int)$_record->preview_count,
             'revision'      => false === $createRevision && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type ? 1 : $this->_getNextRevision($_record),
         );
             
@@ -262,7 +272,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      * @param array $_hashes
      * @return array
      */
-    public function checkRevisions($_hashes)
+    public function checkRevisions(array $_hashes)
     {
         if (empty($_hashes)) {
             return array();
@@ -270,11 +280,33 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         
         $select = $this->_db->select();
         $select->from(array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), array('hash'));
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.hash') . ' IN (?)', (array) $_hashes));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.hash') . ' IN (?)', $_hashes));
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
+        return $queryResult;
+    }
+
+    /**
+     * returns all hashes of all revisions for given file object ids
+     *
+     * @param array $_ids
+     * @return array
+     */
+    public function getHashes(array $_ids)
+    {
+        if (empty($_ids)) {
+            return array();
+        }
+
+        $select = $this->_db->select();
+        $select->from(array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), array('hash'));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' IN (?)',  $_ids));
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+
         return $queryResult;
     }
     

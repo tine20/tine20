@@ -90,3 +90,7 @@
     background-color:#fff;
     background-image:url(../../../../themes/tine20/resources/images/tine20/form/text-bg.gif);
 }
+
+.x-ux-displayfield-text {
+    background-image: none;
+}

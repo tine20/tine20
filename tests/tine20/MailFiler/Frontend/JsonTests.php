@@ -84,7 +84,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
     public function testCreateContainerNodeInPersonalFolder($containerName = 'testcontainer')
     {
         $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $containerName;
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
 
         self::assertEquals($containerName, $createdNode['name']);
@@ -107,7 +107,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
         $filePath = $node1['path'] . '/my.eml';
         MailFiler_Controller_Node::getInstance()->createNodes(
             array($filePath),
-            Tinebase_Model_Tree_Node::TYPE_FILE,
+            Tinebase_Model_Tree_FileObject::TYPE_FILE,
             array($tempFile->getId()),
             /* $_forceOverwrite */ true
         )->getFirstRecord();

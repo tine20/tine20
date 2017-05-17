@@ -16,10 +16,6 @@
           "path": "js/"
         },
         {
-          "text": "GridContextMenu.js",
-          "path": "js/"
-        },
-        {
           "text": "Model.js",
           "path": "js/"
         },
@@ -32,15 +28,15 @@
           "path": "js/"
         },
         {
+          "text": "NodeTreePanel.js",
+          "path": "js/"
+        },
+        {
           "text": "PathFilterPlugin.js",
           "path": "js/"
         },
         {
           "text": "NodeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "NodeTreePanel.js",
           "path": "js/"
         },
         {
@@ -77,6 +73,10 @@
         },
         {
           "text": "GrantsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DocumentPreview.js",
           "path": "js/"
         }
       ]

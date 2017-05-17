@@ -458,6 +458,10 @@
           "path": "js/widgets/"
         },
         {
+          "text": "ActionManager.js",
+          "path": "js/widgets/"
+        },
+        {
           "text": "ActionUpdater.js",
           "path": "js/widgets/"
         },
@@ -666,6 +670,10 @@
             "path": "js/widgets/relation/"
         },
         {
+          "text": "RecordRenderer.js",
+          "path": "js/widgets/printer/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/widgets/grid/"
         },
@@ -727,6 +735,10 @@
         },
         {
           "text": "FilterModel.js",
+          "path": "js/widgets/relation/"
+        },
+        {
+          "text": "Renderer.js",
           "path": "js/widgets/relation/"
         },
         {
@@ -1070,6 +1082,10 @@
         },
         {
           "text": "UidTriggerField.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "RecordPrinter.css",
           "path": "css/widgets/"
         },
         {

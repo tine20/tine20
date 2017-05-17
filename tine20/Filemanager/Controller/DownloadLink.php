@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -72,6 +72,11 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $node = Tinebase_FileSystem::getInstance()->get($_record->node_id);
+        if (! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_PUBLISH)) {
+            throw new Tinebase_Exception_AccessDenied('you are not allowed to publish this file');
+        }
+
         $this->_sanitizeUserInput($_record);
     }
     
@@ -217,8 +222,8 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             
             $files->addRecord($parent);
         }
-        $files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FOLDER)->sort('name'));
-        $files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE)->sort('name'));
+        $files->merge($children->filter('type', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->sort('name'));
+        $files->merge($children->filter('type', Tinebase_Model_Tree_FileObject::TYPE_FILE)->sort('name'));
         
         return $files;
     }

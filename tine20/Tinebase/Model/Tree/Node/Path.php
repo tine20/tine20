@@ -133,11 +133,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             array_unshift($pathParts, $app->getId(), self::FOLDERS_PART);
         }
         $newStatPath = '/' . implode('/', $pathParts);
-        $container = null;
 
         if (count($pathParts) > 3) {
             // replace account id with login name
-            $userId = $pathParts[3];
             try {
                 $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
                 $containerType = Tinebase_FileSystem::FOLDER_TYPE_PERSONAL;
@@ -146,6 +144,13 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                 // not a user -> shared
                 $containerType = Tinebase_FileSystem::FOLDER_TYPE_SHARED;
             }
+        } else if (count($pathParts) === 3) {
+            $containerType = (in_array($pathParts[2], array(
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+                Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            ))) ? $pathParts[2] : self::TYPE_ROOT;
+        } else {
+            $containerType = self::TYPE_ROOT;
         }
 
         $flatPath = '/' . implode('/', $pathParts);
@@ -428,6 +433,26 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $parts = $this->_getPathParts();
         return  (count($parts) < 3) ||
             (count($parts) == 3 && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL);
+    }
+
+
+    /**
+     * check if this path is the users personal path (/application/personal/account_id)
+     *
+     * @param string|Tinebase_Model_User          $_accountId
+     * @return boolean
+     */
+    public function isPersonalPath($_accountId)
+    {
+        $account = $_accountId instanceof Tinebase_Model_FullUser
+            ? $_accountId
+            : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
+
+        $parts = $this->_getPathParts();
+        return (count($parts) == 4
+            && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            && ($parts[3] === $account->getId() || $parts[3] === $account->accountLoginName)
+        );
     }
 
     /**

@@ -10,9 +10,11 @@
 
 $values = array(
     'installed'     => true,
-    'version'       => '5.0.20',
-    'versionstring' => '5.0.11',
+    'version'       => '8.1.12.2',
+    'versionstring' => '8.1.12',
+    'maintenance'   => false,
     'edition'       => ''
 );
 
+header('Content-Type', 'application/json');
 echo(json_encode($values));

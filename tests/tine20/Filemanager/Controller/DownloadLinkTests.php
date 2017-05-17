@@ -95,7 +95,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             $basePath . '/one',
             $basePath . '/two',
         );
-        Filemanager_Controller_Node::getInstance()->createNodes($directories, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        Filemanager_Controller_Node::getInstance()->createNodes($directories, Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         
         $fileList = $this->_getUit()->getFileList($downloadLink, array());
 

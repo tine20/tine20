@@ -203,6 +203,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
             
             $user = $this->_userBackend->updateUser($_user);
+
+            // update account status if changed to enabled/disabled
+            if ($oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
+                    Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
+                    Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
+                ))) {
+                $this->_userBackend->setStatus($_user->getId(), $_user->accountStatus);
+            }
             
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));

@@ -17,7 +17,11 @@
           "path": "js/"
         },
         {
-          "text": "Setup.js",
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreePanel.js",
           "path": "js/"
         },
         {

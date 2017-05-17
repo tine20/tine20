@@ -99,7 +99,7 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 Tine.Filemanager.downloadFile = function(path, revision) {
     path = lodash.get(path, 'data.path') || lodash.get(path, 'path') || path;
 
-    return downloader = new Ext.ux.file.Download({
+    return new Ext.ux.file.Download({
         params: {
             method: 'Filemanager.downloadFile',
             requestType: 'HTTP',

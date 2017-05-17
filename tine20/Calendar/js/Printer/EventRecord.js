@@ -7,7 +7,7 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         var bodyTpl = new Ext.XTemplate(
             '<div class="cal-print-single">',
                 '<div class="cal-print-single-logo">',
-                    '<img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '">',
+                    '<img src="' + Tine.logo + '">',
                 '</div>',
                 '<div class="cal-print-single-summary">',
                     '<span class="cal-print-single-label">', i18n._('Summary'), '</span>',

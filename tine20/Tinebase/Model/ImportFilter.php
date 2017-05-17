@@ -45,6 +45,7 @@ class Tinebase_Model_ImportFilter extends Tinebase_Model_Filter_FilterGroup
         'timestamp'      => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'synctoken'      => array('filter' => 'Tinebase_Model_Filter_Text'),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'application_id' => array('filter' => 'Tinebase_Model_Filter_Id')
+        'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'failcount'      => array('filter' => 'Tinebase_Model_Filter_Int')
     );
 }

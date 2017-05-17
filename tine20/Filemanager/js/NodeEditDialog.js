@@ -153,6 +153,12 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Type'),
                                     name: 'contenttype',
                                     columnWidth: .25
+                                }],[{
+                                    xtype: 'displayfield',
+                                    name: 'path',
+                                    hideLabel: true,
+                                    fieldClass: 'x-ux-displayfield-text',
+                                    columnWidth: 1
                                 }],[
                                 Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     userOnly: true,
