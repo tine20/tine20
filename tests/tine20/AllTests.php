@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -24,29 +24,47 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
-        
-        $suite->addTest(Tinebase_AllTests::suite());
-        $suite->addTest(Addressbook_AllTests::suite());
-        $suite->addTest(Admin_AllTests::suite());
-        $suite->addTest(Felamimail_AllTests::suite());
-        $suite->addTest(Calendar_AllTests::suite());
-        $suite->addTest(Crm_AllTests::suite());
-        $suite->addTest(Tasks_AllTests::suite());
-        $suite->addTest(Voipmanager_AllTests::suite());
-        $suite->addTest(Phone_AllTests::suite());
-        $suite->addTest(Sales_AllTests::suite());
-        $suite->addTest(Timetracker_AllTests::suite());
-        $suite->addTest(Courses_AllTests::suite());
-        $suite->addTest(ActiveSync_AllTests::suite());
-        $suite->addTest(Filemanager_AllTests::suite());
-        $suite->addTest(Projects_AllTests::suite());
-        $suite->addTest(HumanResources_AllTests::suite());
-        $suite->addTest(Inventory_AllTests::suite());
-        $suite->addTest(Events_AllTests::suite());
-        $suite->addTest(ExampleApplication_AllTests::suite());
-        $suite->addTest(SimpleFAQ_AllTests::suite());
-        $suite->addTest(CoreData_AllTests::suite());
-        $suite->addTest(Zend_AllTests::suite());
+
+        $oldSuits = array(
+            'Tinebase',
+            'Addressbook',
+            'Admin',
+            'Felamimail',
+            'Calendar',
+            'Crm',
+            'Tasks',
+            'Voipmanager',
+            'Phone',
+            'Sales',
+            'Timetracker',
+            'Courses',
+            'ActiveSync',
+            'Filemanager',
+            'Projects',
+            'HumanResources',
+            'Inventory',
+            'Events',
+            'ExampleApplication',
+            'SimpleFAQ',
+            'CoreData',
+            'Zend'
+        );
+
+        foreach($oldSuits as $className) {
+            $className .= '_AllTests';
+            $suite->addTest($className::suite());
+        }
+
+        // this will not find ./library/OpenDocument/AllTests.php ... but it had not been added previously neither. So nothing changed with regards to that
+        foreach(new DirectoryIterator(__DIR__) as $dirIter) {
+            if ($dirIter->isDir() && !$dirIter->isDot() &&
+                    is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
+                    'Scheduler' !== $dirIter->getFilename() &&
+                    !in_array($dirIter->getFilename(), $oldSuits)) {
+                $className = $dirIter->getFilename() . '_AllTests';
+                $suite->addTest($className::suite());
+            }
+        }
         
         return $suite;
     }
