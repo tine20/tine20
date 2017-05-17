@@ -614,6 +614,9 @@ class Tinebase_Relations
                         . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $_relations->removeRecords($relations);
                     continue;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not find controller for model: ' . $modelName . '! you have broken relations: ' . join(',', $relations->id));
+                    $_relations->removeRecords($relations);
                 }
             }
 
