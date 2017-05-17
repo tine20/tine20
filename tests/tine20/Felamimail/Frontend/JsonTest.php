@@ -1199,7 +1199,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $user = Tinebase_Core::getUser();
         $personalFilemanagerContainer = $this->_getPersonalContainerNode($appName, $user);
-        $message = $this->_sendMessage();
+        $message = $this->_sendMessage(
+            'INBOX',
+            /* $addtionalHeaders */ array(),
+            /* $_emailFrom */ '',
+            /*$_subject */ 'test\test' // is converted to 'test_test'
+        );
         $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
             . '/' . $user->accountLoginName
             . '/' . $personalFilemanagerContainer->name;
@@ -1218,7 +1223,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         ), array(
             'field'    => 'name',
             'operator' => 'contains',
-            'value'    => $message['subject']
+            'value'    => 'test_test'
         )));
         $nodeController = Tinebase_Core::getApplicationInstance($appName . '_Model_Node');
         $emlNode = $nodeController->search($filter)->getFirstRecord();
@@ -1259,7 +1264,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'value'    => $path
         ), array(
             'field'    => 'subject',
-            'operator' => 'equals',
+            'operator' => 'contains',
             'value'    => 'test'
         ));
         $mailFilerJson = new MailFiler_Frontend_Json();
@@ -1331,7 +1336,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM');
         $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
         $this->assertContains('"ss/ss"', $emlNode['message']['subject'], print_r($emlNode['message'], true));
-        $this->assertContains('"ssss"', $emlNode['name'], print_r($emlNode, true));
+        $this->assertContains('"ss_ss"', $emlNode['name'], print_r($emlNode, true));
     }
 
     /**
@@ -1915,9 +1920,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * @param array $addtionalHeaders
      * @return array
      */
-    protected function _sendMessage($folderName = 'INBOX', $addtionalHeaders = array())
+    protected function _sendMessage($folderName = 'INBOX', $addtionalHeaders = array(), $_emailFrom = '', $_subject = 'test')
     {
-        $messageToSend = $this->_getMessageData();
+        $messageToSend = $this->_getMessageData($_emailFrom, $_subject);
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);

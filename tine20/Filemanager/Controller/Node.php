@@ -1313,8 +1313,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($message->toArray(), true));
 
-        // remove '/' from name as this might break paths
-        $subject = preg_replace('/[\/]+/', '', $message->subject);
+        // remove '/' and '\' from name as this might break paths
+        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
         // remove possible harmful utf-8 chars
         // TODO should not be enabled by default (configurable?)
         $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
