@@ -274,7 +274,28 @@ Tine.Filemanager.nodeActions.Download = {
 /**
  * one file node with readGrant
  */
-// Tine.Filemanager.nodeActions.Preview = {};
+Tine.Filemanager.nodeActions.Preview = {
+    app: 'Filemanager',
+    allowMultiple: false,
+    requiredGrant: 'readGrant',
+    text: 'Preview', // _('Preview')
+    disabled: true,
+    iconCls: 'previewIcon',
+    scope: this,
+    handler: function () {
+        var selections = this.initialConfig.selections;
+
+        if (selections.length > 0) {
+            var selection = selections[0];
+
+            if (selection && selection.get('type') === 'file') {
+                Tine.Filemanager.DocumentPreview.openWindow({
+                    record: selection
+                });
+            }
+        }
+    }
+};
 
 /**
  * one node with publish grant
