@@ -439,9 +439,6 @@ class Tinebase_Core
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
 
-        // init database after cache init
-        self::getDb();
-
         Tinebase_Core::setupBuildConstants();
         
         // setup a temporary user locale. This will be overwritten later but we 
