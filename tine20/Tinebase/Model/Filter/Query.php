@@ -47,6 +47,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
             $condition,
             $_data['options']);
 
+        if (isset($_data['id'])) {
+            $this->setId($_data['id']);
+        }
+        if (isset($_data['label'])) {
+            $this->setLabel($_data['label']);
+        }
+
         $this->_field = $_data['field'];
         $this->_value = $_data['value'];
         $this->_operator = $_data['operator'];
