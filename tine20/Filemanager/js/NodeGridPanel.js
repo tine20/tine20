@@ -738,13 +738,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var files = fileSelector.getFileList();
 
-        if(files.length > 0) {
-            grid.pagingToolbar.refresh.disable();
-        }
-
         var filePathsArray = [], uploadKeyArray = [];
 
         Ext.each(files, function (file) {
+            if ("" === file.type) {
+                return true;
+            }
+
             var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
                 filePath = targetFolderPath + '/' + fileRecord.get('name');
 
@@ -767,6 +767,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             uploadKeyArray.push(uploadKey);
 
         }, this);
+
+        if (0 === uploadKeyArray.length) {
+            return;
+        }
 
         var params = {
                 filenames: filePathsArray,
