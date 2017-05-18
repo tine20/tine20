@@ -1192,7 +1192,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        $result = Tinebase_Lock::aquireDBSessionLock(__METHOD__);
+        $result = Tinebase_Lock::aquireDBSessionLock(__FUNCTION__);
         if (false === $result) {
             // we are already running
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
