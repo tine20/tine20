@@ -411,6 +411,11 @@ class Setup_Controller
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
         if ($_applications === null) {
             $_applications = Tinebase_Application::getInstance()->getApplications();
         }
@@ -1501,6 +1506,11 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
         $this->_clearCache();
 
         $installedApps = Tinebase_Application::getInstance()->getApplications();
