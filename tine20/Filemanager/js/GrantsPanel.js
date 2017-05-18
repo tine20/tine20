@@ -32,7 +32,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.title = this.title || this.app.i18n._('Grants');
 
         this.editDialog.on('load', this.onRecordLoad, this);
-        this.editDialog.on('save', this.onRecordSave, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
         this.hasOwnGrantsCheckbox = new Ext.form.Checkbox({
             disabled: true,
@@ -93,7 +93,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         // this.ownerCt[(record.get('type') == 'folder' ? 'un' : '') + 'hideTabStripItem'](this);
     },
 
-    onRecordSave: function(editDialog, record, ticketFn) {
+    onRecordUpdate: function(editDialog, record) {
         var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : '',
             grants = [];
 

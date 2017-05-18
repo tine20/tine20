@@ -76,7 +76,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         //Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         this.editDialog.on('load', this.onLoadRecord, this);
-        this.editDialog.on('save', this.onSaveRecord, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
         Tine.widgets.activities.ActivitiesGridPanel.superclass.initComponent.call(this);
 
@@ -170,20 +170,15 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      *
      * @param {Tine.widgets.dialog.EditDialog} dialog
      * @param {Tine.Tinebase.data.Record} record
-     * @param {Function} ticket
      * @return {Boolean}
      */
-    onSaveRecord: function(dialog, record, ticket) {
-        var interceptor = ticket();
-
+    onRecordUpdate: function(dialog, record) {
         if (record.data.hasOwnProperty('notes')) {
             record.data.notes = null;
             delete record.data.notes;
         }
 
         record.set('notes', this.getData());
-
-        interceptor();
     },
 
     /**

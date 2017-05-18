@@ -836,11 +836,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * executed when record gets updated from form
      */
-    onRecordUpdate: function() {
+    onRecordUpdate: function(callback, scope) {
         var form = this.getForm();
 
         // merge changes from form into record
         form.updateRecord(this.record);
+
+        //TODO Use Promises instead of Tickets if async is needed
+        this.fireEvent('recordUpdate', this, this.record);
     },
     
     /**
@@ -969,7 +972,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // we need to sync record before validating to let (sub) panels have 
         // current data of other panels
         this.onRecordUpdate();
-        
+
         // quit copy mode
         this.copyRecord = false;
 

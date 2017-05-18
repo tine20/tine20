@@ -135,7 +135,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var me = this;
 
         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
-        this.on('save', this.onSave, this);
 
         Tine.Felamimail.mailvelopeHelper.mailvelopeLoaded.then(function() {
             me.button_toggleEncrypt.setVisible(true);
