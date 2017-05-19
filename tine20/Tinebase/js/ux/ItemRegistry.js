@@ -30,24 +30,44 @@ Ext.ux.ItemRegistry = function (config) {
  * @private
  */
 Ext.ux.ItemRegistry.itemMap = {};
+Ext.ux.ItemRegistry.AUTO_ID = 1;
 
 /**
  * registers an item for a given key
  * @static
  * 
- * @param {String} key
+ * @param {String|Ext.Component|Object} key
  * @param {String/Constructor/Object} item
  * @param {Number} pos (optional)
  */
 Ext.ux.ItemRegistry.registerItem = function(key, item, pos) {
-    if (! Ext.ux.ItemRegistry.itemMap.hasOwnProperty(key)) {
-        Ext.ux.ItemRegistry.itemMap[key] = [];
+    var _ = window.lodash;
+
+    if (_.isString(key)) {
+        if (!Ext.ux.ItemRegistry.itemMap.hasOwnProperty(key)) {
+            Ext.ux.ItemRegistry.itemMap[key] = [];
+        }
+
+        Ext.ux.ItemRegistry.itemMap[key].push({
+            item: item,
+            pos: pos
+        });
     }
 
-    Ext.ux.ItemRegistry.itemMap[key].push({
-        item: item,
-        pos: pos
-    });
+    else {
+        // initialised component
+        var dynKey = 'Ext.ux.ItemRegistry-' + ++Ext.ux.ItemRegistry.AUTO_ID,
+            plugin = new Ext.ux.ItemRegistry({key: dynKey});
+
+        Ext.ux.ItemRegistry.registerItem(dynKey, item, pos);
+
+        key.plugins = key.plugins || [];
+        key.plugins.push(plugin);
+
+        if (_.get(key, 'items.items')) {
+            plugin.init(key);
+        }
+    }
 };
 
 Ext.ux.ItemRegistry.prototype = {
@@ -73,8 +93,27 @@ Ext.ux.ItemRegistry.prototype = {
         }, this);
 
         var regItems = Ext.ux.ItemRegistry.itemMap[this.key] || [];
-        
+
+
+
         Ext.each(regItems, function(reg) {
+            // key hat / -> find item defined by first part and register item,regItem,possuffix -> return
+            var path = String(reg.pos).split('/');
+            if (path.length > 1) {
+                var idx = +path.shift(),
+                    item = this.cmp.items.get(idx);
+
+                if (item) {
+                    // console.info(path.join('/'))
+                    Ext.ux.ItemRegistry.registerItem(this.cmp.items.get(idx), reg.item, path.join('/'));
+                } else {
+                    console.warn('cannot register for path - ' + path.join('/'));
+                }
+                return;
+
+            }
+
+
             var addItem = this.getItem(reg),
                 addPos = null;
 
@@ -115,8 +154,11 @@ Ext.ux.ItemRegistry.prototype = {
 };
 Ext.ComponentMgr.registerPlugin('ux.itemregistry', Ext.ux.ItemRegistry);
 
-/* test
- *
+/* test - uncomment to run
+if (! window.lodash) {
+    window.lodash = _;
+}
+
 Ext.onReady(function() {
     var testWin = new Ext.Window({
         width: 640,
@@ -144,6 +186,12 @@ Ext.onReady(function() {
         }]
     });
     testWin.show();
+
+    Ext.ux.ItemRegistry.registerItem(testWin.items.get(0), {
+        xtype: 'panel',
+        title: 'key-cmp',
+        html: 'register item in an existing component'
+    }, 80);
 });
 
 itemRegTestPanel20 = Ext.extend(Ext.Panel, {
@@ -166,7 +214,9 @@ Ext.ux.ItemRegistry.registerItem('testWin', itemRegTestPanel20, 20);
 itemRegTestPanel60 = {
     xtype: 'panel',
     title: 'add panel pos 60',
-    html: 'add panel pos 60'
+    items: [{items: [{html: 'add panel pos 60'}]}]
 };
 Ext.ux.ItemRegistry.registerItem('testWin', itemRegTestPanel60, 60);
+Ext.ux.ItemRegistry.registerItem(itemRegTestPanel60, {html: 'registered in component config'}, 20);
+Ext.ux.ItemRegistry.registerItem('testWin', {html: 'registered with path position '}, '4/0/20');
 */

@@ -59,45 +59,78 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
     
     layout: 'hfit',
     labelAlign: 'top',
+
     /**
      * @private
      */
     initComponent: function() {
         var items = [];
-            
+
         // each item is an array with the config of one row
         for (var i=0,j=this.items.length; i<j; i++) {
             
             var initialRowConfig = this.items[i];
             var rowConfig = {
+                xtype: 'container',
                 border: false,
                 layout: 'column',
-                items: []
-            };
-            // each row consits n column objects 
-            for (var n=0,m=initialRowConfig.length; n<m; n++) {
-                var column = initialRowConfig[n];
-                var idx = rowConfig.items.push({
-                    columnWidth: column.columnWidth ? column.columnWidth : this.formDefaults.columnWidth,
-                    layout: 'form',
-                    labelAlign: this.labelAlign,
-                    defaults: this.formDefaults,
-                    //Is n the last column object? Then no padding.
-                    bodyStyle: n+1>=m ? 'padding-right: 0px;' : 'padding-right: 5px;',
-                    border: false,
-                    items: column
-                });
-                
-                if (column.width) {
-                    rowConfig.items[idx-1].width = column.width;
-                    delete rowConfig.items[idx-1].columnWidth;
+                items: [],
+                listeners: {
+                    scope: this,
+                    beforeadd: this.onBeforeAddFromItem
                 }
+            };
+            // each row consits n column objects
+            for (var n=0,m=initialRowConfig.length; n<m; n++) {
+                var column = initialRowConfig[n],
+                    cell = this.wrapFormItem(column);
+
+                rowConfig.items.push(cell);
             }
             items.push(rowConfig);
         }
         this.items = items;
         
         Ext.ux.form.ColumnFormPanel.superclass.initComponent.call(this);
+    },
+
+    onBeforeAddFromItem: function(column, c, index) {
+        if (!c.isWraped) {
+            var cell = this.wrapFormItem(c),
+                rowItems = [cell].concat(column.items.items),
+                totalWidth = 0;
+
+            // normalize columnWidth to fit in row
+            Ext.each(rowItems, function(c) {totalWidth += (c.columnWidth || 0)});
+            Ext.each(rowItems, function(c) {
+                if (c.columnWidth) {
+                    c.columnWidth = c.columnWidth/totalWidth;
+                }
+            });
+
+            column.insert(index, cell);
+            return false;
+        }
+    },
+
+    wrapFormItem: function(c) {
+        var cell = {
+            isWraped: true,
+            columnWidth: c.columnWidth ? c.columnWidth : this.formDefaults.columnWidth,
+            layout: 'form',
+            labelAlign: this.labelAlign,
+            defaults: this.formDefaults,
+            bodyStyle: 'padding-left: 2px; padding-right: 2px;',
+            border: false,
+            items: c
+        };
+
+        if (c.width) {
+            cell.width = c.width;
+            delete cell.columnWidth;
+        }
+
+        return cell;
     }
 });
 
