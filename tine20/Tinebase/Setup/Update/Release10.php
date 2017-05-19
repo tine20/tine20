@@ -766,6 +766,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
+        // this is needed for filesystem operations
+        $this->_addRevisionPreviewCountCol();
+
         $applications = Tinebase_Application::getInstance()->getApplications();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if ($setupUser) {
@@ -1006,6 +1009,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_22()
     {
+        $this->_addRevisionPreviewCountCol();
+        $this->setApplicationVersion('Tinebase', '10.23');
+    }
+
+    protected function _addRevisionPreviewCountCol()
+    {
         if (! $this->_backend->columnExists('preview_count', 'tree_filerevisions')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
@@ -1017,11 +1026,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->_backend->addCol('tree_filerevisions', $declaration);
             $this->setTableVersion('tree_filerevisions', 2);
         }
-
-        $this->setApplicationVersion('Tinebase', '10.23');
     }
-
-
 
     /**
      * update to 10.24
@@ -1083,6 +1088,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 3);
         }
 
-        $this->setApplicationVersion('Tinebase', '10.21');
+        $this->setApplicationVersion('Tinebase', '10.25');
     }
 }
