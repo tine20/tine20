@@ -1511,36 +1511,32 @@ class Setup_Controller
         }
         
         // deactivate foreign key check if all installed apps should be uninstalled
+        $deactivatedForeignKeyCheck = false;
         if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
-            foreach ($installedApps as $app) {
-                if ($app->name != 'Tinebase') {
-                    $this->_uninstallApplication($app, true);
-                } else {
-                    $tinebase = $app;
-                }
+            $deactivatedForeignKeyCheck = true;
+        }
+
+        // get xml and sort apps first
+        $applications = array();
+        foreach ($_applications as $applicationName) {
+            try {
+                $applications[$applicationName] = $this->getSetupXml($applicationName);
+            } catch (Setup_Exception_NotFound $senf) {
+                // application setup.xml not found
+                Tinebase_Exception::log($senf);
+                $applications[$applicationName] = null;
             }
-            // tinebase should be uninstalled last
-            $this->_uninstallApplication($tinebase);
+        }
+        $applications = $this->_sortUninstallableApplications($applications);
+
+        foreach ($applications as $name => $xml) {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($name);
+            $this->_uninstallApplication($app);
+        }
+
+        if (true === $deactivatedForeignKeyCheck) {
             $this->_backend->setForeignKeyChecks(1);
-        } else {
-            // get xml and sort apps first
-            $applications = array();
-            foreach ($_applications as $applicationName) {
-                try {
-                    $applications[$applicationName] = $this->getSetupXml($applicationName);
-                } catch (Setup_Exception_NotFound $senf) {
-                    // application setup.xml not found
-                    Tinebase_Exception::log($senf);
-                    $applications[$applicationName] = null;
-                }
-            }
-            $applications = $this->_sortUninstallableApplications($applications);
-            
-            foreach ($applications as $name => $xml) {
-                $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-                $this->_uninstallApplication($app);
-            }
         }
     }
     
