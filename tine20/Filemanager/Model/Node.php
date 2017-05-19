@@ -48,6 +48,6 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
      */
     public function isReplicable()
     {
-        return static::TYPE_FOLDER === $this->type;
+        return Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $this->type;
     }
 }

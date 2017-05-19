@@ -80,6 +80,7 @@ class Tinebase_ScheduledImportTest extends TestCase
         $this->_uit->runNextScheduledImport();
 
         $all = $cc->search($filter);
+        self::assertGreaterThan(0, count($all));
         $seq = $all->getFirstRecord()->seq;
 
         // assert all events have been imported
@@ -94,8 +95,8 @@ class Tinebase_ScheduledImportTest extends TestCase
         $this->_uit->doScheduledImport($record);
 
         $all = $cc->search($filter);
-        $this->assertEquals(1, $all->count());
-        $this->assertGreaterThan($seq, $all->getFirstRecord()->seq);
+        self::assertEquals(1, $all->count());
+        self::assertGreaterThan($seq, $all->getFirstRecord()->seq);
     }
 
     /**

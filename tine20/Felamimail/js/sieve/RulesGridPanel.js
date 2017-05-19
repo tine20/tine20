@@ -276,8 +276,8 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         if (action_argument && action_argument != '') {
-            result += Ext.isObject(action_argument)
-                ? ': '  + action_argument.emails + (action_argument.copy ? ' (' + this.app.i18n._('Keep a copy') + ')' : '')
+            result += ': ' + Ext.isObject(action_argument)
+                ? action_argument.emails + (action_argument.copy ? ' (' + this.app.i18n._('Keep a copy') + ')' : '')
                 : action_argument;
         }
             

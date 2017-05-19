@@ -979,6 +979,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $accountData = $this->_recordToRawData($_user);
+        // persist status for new users!
+        $accountData['status'] = $_user->accountStatus;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
         

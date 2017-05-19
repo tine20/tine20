@@ -18,6 +18,9 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
 {
     public function get() 
     {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
+        }
         $handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r');
          
         return $handle;

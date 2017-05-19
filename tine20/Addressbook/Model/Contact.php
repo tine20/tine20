@@ -242,7 +242,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'industry'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'syncBackendIds'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'groups' => array(
-            'type' => 'virtual'
+            'type' => 'virtual',
+            Zend_Filter_Input::ALLOW_EMPTY => true,
         ),
     );
     

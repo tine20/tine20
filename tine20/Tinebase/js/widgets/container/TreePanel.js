@@ -186,7 +186,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.rootVisible = false;
         }
 
-        if (!this.readOnly) {
+        if (!this.readOnly && !this.dropConfig) {
             // init drop zone
             this.dropConfig = {
                 ddGroup: this.ddGroup || 'TreeDD',
@@ -660,27 +660,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
 
     /**
-     * called on filtertrigger of filter toolbar
-     * clears selection silently
-     */
-    onFilterChange: function() {
-        /* 2012-01-30 cweiss: i have no idea what this was for.
-         * if its needed please document here!
-        var sm = this.getSelectionModel();
-
-        sm.suspendEvents();
-        sm.clearSelections();
-        sm.resumeEvents();
-        */
-    },
-
-    /**
-     * If first node is collapsed, reload all data
+     * require reload when node is collapsed
      */
     onBeforeCollapse: function(node) {
-        if (node.attributes && node.attributes.path == "/") {
-            this.getLoader().load(this.root);
-        }
+        node.removeAll();
+        node.loaded = false;
     },
 
 

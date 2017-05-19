@@ -18,7 +18,11 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tree');
  * ctxNode class var is required in calling class
  */
 Tine.widgets.tree.ContextMenu = {
-    
+    /**
+     * @cfg {Tine.widgets.ActionManager} actionMgr
+     */
+    actionMgr: null,
+
     /**
      * create new Ext.menu.Menu with actions
      * 
@@ -103,15 +107,6 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config,
             actionUpdater: this.isResumeEnabled
         });
-        this.action_editFile = new Ext.Action({
-            requiredGrant: 'editGrant',
-            allowMultiple: false,
-            text: i18n._('Edit Properties'),
-            handler: this.onEditFile,
-            iconCls: 'action_edit_file',
-            actionType: 'edit',
-            scope: this
-        });
         this.action_pause = new Ext.Action({
             text: String.format(i18n._('Pause upload'), config.nodeName),
             iconCls: 'action_pause',
@@ -145,11 +140,15 @@ Tine.widgets.tree.ContextMenu = {
 
             if (Ext.isString(action)) {
                 method = 'action_' + action;
-                if (! this[method]) {
-                    Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: action "' + method + '" is not definded');
+                if (this.actionMgr && this.actionMgr.has(action)) {
+                    items.push(this.actionMgr.get(action));
+                } else if (this[method]) {
+                    items.push(this[method]);
+                } else {
+                    Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: action "' + action + '" is not definded');
                     continue;
                 }
-                items.push(this[method]);
+
             }
 
             else if (action && action.isAction) {

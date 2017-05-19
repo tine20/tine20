@@ -488,7 +488,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     foreach ($event->attachments as $attachment) {
                         $recurException->attachments->addRecord(new Tinebase_Model_Tree_Node(array(
                             'name'         => $attachment->name,
-                            'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                            'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
                             'contenttype'  => $attachment->contenttype,
                             'hash'         => $attachment->hash,
                         ), true));
@@ -982,7 +982,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                 $stream = fopen($url, 'r');
                                 $attachment = new Tinebase_Model_Tree_Node(array(
                                     'name'         => rawurldecode($name),
-                                    'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                                    'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
                                     'contenttype'  => (string) $property['FMTTYPE'],
                                     'tempFile'     => $stream,
                                     ), true);

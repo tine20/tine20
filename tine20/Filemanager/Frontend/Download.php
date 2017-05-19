@@ -38,11 +38,11 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
             
             switch ($node->type) {
-                case Tinebase_Model_Tree_Node::TYPE_FILE:
+                case Tinebase_Model_Tree_FileObject::TYPE_FILE:
                     $this->_displayFile($download, $node, $splittedPath);
                     break;
                     
-                case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
                     $this->_listDirectory($download, $node, $splittedPath);
                     break;
             }
@@ -78,7 +78,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             
             $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
             
-            if ($node->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
                 $nodeController = Filemanager_Controller_Node::getInstance();
                 $nodeController->resolveMultipleTreeNodesPath($node);
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($node->path));

@@ -192,7 +192,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             enableDrag: false,
             treePanel: this.getTreePanel(),
             hasQuickSearchFilterToolbarPlugin: false,
-            stateIdPrefix: '-FilePicker',
+            stateIdSuffix: '-FilePicker',
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
 

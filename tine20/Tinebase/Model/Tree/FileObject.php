@@ -20,6 +20,7 @@
  * @property  integer  revision_size
  * @property  string   hash
  * @property  string   type
+ * @property  integer  preview_count
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
@@ -51,6 +52,14 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var string
      */
     const TYPE_FILE   = 'file';
+
+
+    /**
+     * object type: preview
+     *
+     * @var string
+     */
+    const TYPE_PREVIEW = 'preview';
     
     /**
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -87,11 +96,12 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
+        'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             'presence' => 'required',
-            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE))
+            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW))
         )
     );
     

@@ -478,8 +478,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             scope: this,
             enableToggle: true
         });
+        this.printButton = new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Print contact'),
+            handler: this.onPrint,
+            iconCls:'action_print',
+            disabled: false,
+            scope: this
+        });
 
-        this.tbarItems = [exportContactButton, this.parseAddressButton];
+        this.tbarItems = [exportContactButton, this.parseAddressButton, this.printButton];
+    },
+
+    onPrint: function(printMode) {
+        this.onRecordUpdate();
+        var renderer = new Tine.Addressbook.Printer.ContactRenderer();
+        renderer.print(this.record);
     },
 
     /**

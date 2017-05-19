@@ -48,6 +48,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
 
         'exposeHttpApi'     => true,
+        'exposeJsonApi'     => true,
 
         'appName'           => 'ExampleApplication',
         'modelName'         => 'ExampleRecord',
@@ -103,7 +104,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
             'number_str' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'       => 'Number', // _('Number')
-                'queryFilter' => TRUE,
+                // TODO reactivate when fixed in query filter
+                //'queryFilter' => TRUE,
                 'type' => 'numberableStr',
                 'config' => array(
                     Tinebase_Numberable::CONF_STEPSIZE          => 1,
@@ -124,7 +126,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
             'number_int' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'       => 'Number', // _('Number')
-                'queryFilter' => TRUE,
+                // TODO reactivate when fixed in query filter
+                //'queryFilter' => TRUE,
                 'type' => 'numberableInt',
                 'config' => array(
                     Tinebase_Numberable::CONF_STEPSIZE          => 1,

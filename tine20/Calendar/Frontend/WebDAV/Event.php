@@ -87,7 +87,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         $node = new Tinebase_Model_Tree_Node(array(
             'name'         => $name,
-            'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+            'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
             'contenttype'  => $contentType,
             'stream'       => $attachment,
         ), true);

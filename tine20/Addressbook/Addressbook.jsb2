@@ -126,7 +126,11 @@
         {
           "text": "AdminPanel.js",
           "path": "js/"
-          }
+          },
+        {
+          "text": "ContactRecord.js",
+          "path": "js/Printer/"
+        }
       ]
     },
     {

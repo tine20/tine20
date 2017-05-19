@@ -91,9 +91,8 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $aWeekAgo = clone $now;
         $aWeekAgo->subWeek(1);
 
-        $filter = new Tinebase_Model_ImportFilter(array(array(
-                array('field' => 'failcount', 'operator' => 'greater', 'value' => 5),
-            ),
+        $filter = new Tinebase_Model_ImportFilter(array(
+            array('field' => 'failcount', 'operator' => 'less', 'value' => self::MAXFAILCOUNT + 1),
             array(
             'condition' => 'OR', 'filters' => array(
                 array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
@@ -140,8 +139,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $records = $this->search($filter, $pagination);
 
         foreach ($records as $record) {
-            // TODO add failcount to filter in getScheduledImportFilter as
-            //   no more valid imports are run if we have 50+ failing imports
             if ($record->failcount < self::MAXFAILCOUNT) {
                 return $record;
             } else {
