@@ -242,7 +242,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     /**
      * add grants to container
      *
-     * @todo    check that grant is not already given to container/type/accout combi
+     * @todo    check that grant is not already given to container/type/account combination
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   int $_accountId
      * @param   array $_grants list of grants to add
