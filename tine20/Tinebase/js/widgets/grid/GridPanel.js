@@ -491,10 +491,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             Tine.log.debug('init generic gridpanel with config:');
             Tine.log.debug(this.modelConfig);
-            
+
+            // TODO move to uiConfig
             if (this.modelConfig.hasOwnProperty('multipleEdit') && (this.modelConfig.multipleEdit === true)) {
                 this.multipleEdit = true;
-                this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight')) ? this.modelConfig.multipleEditRequiredRight : null;
+                this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight'))
+                    ? this.modelConfig.multipleEditRequiredRight
+                    : null;
+            }
+
+            // TODO move to uiConfig
+            if (this.modelConfig.hasOwnProperty('copyEditAction') && (this.modelConfig.copyEditAction === true)) {
+                this.copyEditAction = true;
             }
         }
         
