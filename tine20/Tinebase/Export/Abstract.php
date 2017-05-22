@@ -176,6 +176,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_exportTimeStamp = null;
 
     /**
+     * @var null|string
+     */
+    protected $_logoPath = null;
+
+    /**
      * the constructor
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -638,11 +643,29 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _getTwigContext(array $context)
     {
 
-        // TODO treat branding logo, add path, and protocol!
+        if (null === $this->_logoPath) {
+            $this->_logoPath = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO};
+
+            if (strpos($this->_logoPath, '://') === false) {
+                if ('.' === $this->_logoPath[0] && '/' === $this->_logoPath[1]) {
+                    $this->_logoPath = mb_substr($this->_logoPath, 1);
+                } elseif ('/' !== $this->_logoPath[0]) {
+                    $this->_logoPath = '/' . $this->_logoPath;
+                }
+
+                $this->_logoPath = 'file://' . dirname(dirname(__DIR__)) . $this->_logoPath;
+
+                if (!is_file($this->_logoPath)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not find branding logo. Config: ' . Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO} . ' path: ' . $this->_logoPath);
+                    $this->_logoPath = false;
+                }
+            }
+        }
+
 
         return array_merge(array(
             'branding'          => array(
-                'logo'              => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO},
+                'logo'              => $this->_logoPath,
                 'title'             => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
                 'description'       => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_DESCRIPTION},
                 'weburl'            => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},

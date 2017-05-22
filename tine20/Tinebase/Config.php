@@ -1373,7 +1373,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 //_('Path to custom logo.')
                 'description'           => 'Path to custom logo.',
                 'type'                  => 'string',
-                'default'               => '',
+                'default'               => '/images/tine_logo.png',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,
