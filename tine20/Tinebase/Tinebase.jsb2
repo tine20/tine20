@@ -946,6 +946,10 @@
           "path": "js/"
         },
         {
+          "text": "PasswordGenerator.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }

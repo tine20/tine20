@@ -1135,7 +1135,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Enable password policy')
             'description'           => 'Enable password policy',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1155,7 +1155,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum password length')
             'description'           => 'Minimum password length.',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1165,7 +1165,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum word chars in password')
             'description'           => 'Minimum word chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1175,7 +1175,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum uppercase chars in password')
             'description'           => 'Minimum uppercase chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1185,7 +1185,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum special chars in password')
             'description'           => 'Minimum special chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1195,7 +1195,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum numbers in password')
             'description'           => 'Minimum numbers in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),

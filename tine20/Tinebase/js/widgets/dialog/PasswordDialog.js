@@ -24,9 +24,9 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
     allowEmptyPassword: false,
 
     /**
-     * Entered password
+     * Password field
      */
-    password: null,
+    passwordField: null,
 
     /**
      * Constructor.
@@ -62,6 +62,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
                         name: 'password',
                         maxLength: 100,
                         allowBlank: false,
+                        ref: '../../../../passwordField',
                         listeners: {
                             scope: this,
                             keyup: this.onChange.createDelegate(this)
@@ -81,6 +82,19 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             scope: this
         });
 
+        this.pwgenAction = new Ext.Action({
+            disabled: false,
+            text: 'Generate password',
+            minWidth: 70,
+            iconCls: 'action_managePermissions',
+            handler: this.onPWGen.createDelegate(me),
+            scope: this
+        });
+
+        this.tbar = [
+            this.pwgenAction
+        ];
+
         this.bbar = [
             '->',
             this.okAction
@@ -90,11 +104,31 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
     },
 
     /**
+     * Generate pw
+     */
+    onPWGen: function () {
+        var config = null;
+
+        if (Tine.Tinebase.configManager.get('pwPolicyActive')) {
+            config = {
+                minLength: Tine.Tinebase.configManager.get('pwPolicyMinLength'),
+                minWordChars: Tine.Tinebase.configManager.get('pwPolicyMinWordChars'),
+                minUppercaseChars: Tine.Tinebase.configManager.get('pwPolicyMinUppercaseChars'),
+                minSpecialChars: Tine.Tinebase.configManager.get('pwPolicyMinSpecialChars'),
+                minNumericalChars: Tine.Tinebase.configManager.get('pwPolicyMinNumbers')
+            }
+        }
+
+        var gen = new Tine.Tinebase.PasswordGenerator(config);
+
+        this.passwordField.setValue(gen.generatePassword());
+    },
+
+    /**
      * Disable ok button if no password entered
      * @param el
      */
     onChange: function (el) {
-        this.password = el.getValue();
         this.okAction.setDisabled(!this.allowEmptyPassword && el.getValue().length === 0)
     },
 
@@ -102,7 +136,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
      * button handler
      */
     onOk: function () {
-        this.fireEvent('passwordEntered', this.password);
+        this.fireEvent('passwordEntered', this.passwordField.getValue());
         this.window.close();
     },
 
