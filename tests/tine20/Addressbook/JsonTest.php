@@ -613,6 +613,8 @@ class Addressbook_JsonTest extends TestCase
 
     /**
      * test updating of a contact (including geodata)
+     *
+     * @group longrunning
      */
     public function testUpdateContactWithGeodata()
     {
