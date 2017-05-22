@@ -274,7 +274,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event updateDependent
              * Fired when a subpanel updates the record locally
              */
-            'updateDependent'
+            'updateDependent',
+            /**
+             * @event change
+             * Fires just before the field blurs if the field value has changed.
+             * @param {Ext.form.Field} this
+             * @param {Mixed} newValue The new value
+             * @param {Mixed} oldValue The original value
+             */
+            'change'
         );
 
         if (Ext.isString(this.modelConfig)) {
@@ -352,7 +360,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initNotesPanel();
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
-        
+
         // set fields readOnly if set
         this.fixFields();
         
@@ -517,6 +525,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }, this);
         }
+    },
+
+    /**
+     * call checkState for every field
+     */
+    checkStates: function() {
+        this.onRecordUpdate();
+        this.getForm().items.each(function (item) {
+            if (Ext.isFunction(item.checkState)) {
+                item.checkState(this, this.record);
+            }
+        }, this)
     },
 
     /**
@@ -827,7 +847,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
             this.record.set('id', (new Date()).getTime());
         }
-        
+
+        this.checkStates();
+
         if (this.loadMask) {
             this.loadMask.hide();
         }
@@ -876,6 +898,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
             this.loadMask.show();
         }
+
+        // init change event
+        var form = this.getForm().items.each(function(item) {
+            this.relayEvents(item, ['change']);
+        }, this);
+        this.on('change', this.checkStates, this);
     },
     
     /**
