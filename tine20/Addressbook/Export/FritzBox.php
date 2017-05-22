@@ -19,7 +19,7 @@
  * 
  * @deprecated this is no longer supported 
  */
-class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
+class Addressbook_Export_FritzBox extends Tinebase_Export_AbstractDeprecated implements Tinebase_Record_IteratableInterface
 {
     /**
      * @var string $_applicationName

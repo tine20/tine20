@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  FileSystem
  */
-class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Container_Interface
+class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Container_Interface, Tinebase_Controller_Alarm_Interface
 {
     /**
      * folder name/type for previews
@@ -83,6 +83,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
     protected $_streamOptionsForNextOperation = array();
 
+    protected $_notificationActive = false;
+
     /**
      * stat cache
      * 
@@ -114,6 +116,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         if ($fsConfig) {
             $this->_modLogActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
             $this->_indexingActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+            $this->_notificationActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
             $this->_previewActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
         }
 
@@ -240,7 +243,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
 
             $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
                 'modelName' => $this->_treeNodeModel,
-                Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
+                Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS => $this->_notificationActive
             ));
         }
 
@@ -528,7 +531,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
         
         $options = stream_context_get_options($handle);
         $this->_streamOptionsForNextOperation = array();
-        
+
         switch ($options['tine20']['mode']) {
             case 'w':
             case 'wb':
@@ -2756,5 +2759,238 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface, Tinebase_Con
     public function updatePreviewCount($_hash, $_count)
     {
         $this->_fileObjectBackend->updatePreviewCount($_hash, $_count);
+    }
+
+    /**
+     * check the folder tree up to the root for notification settings and either send notification immediately
+     * or create alarm for it to be send in the future. Alarms aggregate!
+     *
+     * @param string $_fileNodeId
+     * @param string $_crudAction
+     * @return boolean
+     */
+    public function checkForCRUDNotifications($_fileNodeId, $_crudAction)
+    {
+        $nodeId = $_fileNodeId;
+        $foundUsers = array();
+        $foundGroups = array();
+        $alarmController = Tinebase_Alarm::getInstance();
+
+        do {
+            $node = $this->get($nodeId);
+            $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
+
+            if (count($notificationProps) === 0) {
+                continue;
+            }
+
+            //sort it to handle user settings first, then group settings!
+            //TODO write a test that tests this!
+            usort($notificationProps, function($a) {
+                if (is_array($a) && isset($a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                    $a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                    return false;
+                }
+                return true;
+            });
+
+            foreach($notificationProps as $notificationProp) {
+
+                $notifyUsers = array();
+
+                if (!isset($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) ||
+                        !isset($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE])) {
+                    // LOG broken notification setting
+                    continue;
+                }
+
+                if ($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                    if (isset($foundUsers[$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]])) {
+                        continue;
+                    }
+
+                    $foundUsers[$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]] = true;
+                    if (isset($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE]) && false === (bool)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE]) {
+                        continue;
+                    }
+
+                    $notifyUsers[] = $notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID];
+
+                } elseif ($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    if (isset($foundGroups[$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]])) {
+                        continue;
+                    }
+
+                    $foundGroups[$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]] = true;
+
+                    $doNotify = !isset($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE]) ||
+                        true === (bool)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE];
+
+                    // resolve Group Members
+                    foreach (Tinebase_Group::getInstance()->getGroupMembers($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) as $userId) {
+                        if (true === $doNotify && !isset($foundUsers[$userId])) {
+                            $notifyUsers[] = $userId;
+                        }
+                        $foundUsers[$userId] = true;
+                    }
+
+                    if (false === $doNotify) {
+                        continue;
+                    }
+                } else {
+                    // LOG broken notification setting
+                    continue;
+                }
+
+                if (isset($notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_SUMMARY]) && (int)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_SUMMARY] > 0) {
+
+                    foreach ($notifyUsers as $accountId) {
+                        $crudNotificationHash = $this->_getCRUDNotificationHash($accountId, $nodeId);
+                        $alarms = $alarmController->search(new Tinebase_Model_AlarmFilter(array(
+                            array(
+                                'field'     => 'model',
+                                'operator'  => 'equals',
+                                'value'     => 'Tinebase_FOOO_FileSystem'
+                            ),
+                            array(
+                                'field'     => 'record_id',
+                                'operator'  => 'equals',
+                                'value'     => $crudNotificationHash
+                            ),
+                            array(
+                                'field'     => 'sent_status',
+                                'operator'  => 'equals',
+                                'value'     => Tinebase_Model_Alarm::STATUS_PENDING
+                            )
+                        )));
+
+                        if ($alarms->count() > 0) {
+                            /** @var Tinebase_Model_Alarm $alarm */
+                            $alarm = $alarms->getFirstRecord();
+                            $options = json_decode($alarm->options, true);
+                            if (null === $options) {
+                                // broken! not good
+                                $options = array();
+                            }
+                            if (!isset($options['files'])) {
+                                // broken! not good
+                                $options['files'] = array();
+                            }
+                            if (!isset($options['files'][$_fileNodeId])) {
+                                $options['files'][$_fileNodeId] = array();
+                            }
+                            $options['files'][$_fileNodeId][$_crudAction] = true;
+                            $alarm->options = json_encode($options);
+                            $alarmController->update($alarm);
+                        } else {
+                            $alarm = new Tinebase_Model_Alarm(array(
+                                'record_id'     => $crudNotificationHash,
+                                'model'         => 'Tinebase_FOOO_FileSystem',
+                                'minutes_before'=> 0,
+                                'alarm_time'    => Tinebase_DateTime::now()->addDay((int)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_SUMMARY]),
+                                'options'       => array(
+                                    'files'     => array($_fileNodeId => array($_crudAction => true)),
+                                    'accountId' => $accountId
+                                ),
+                            ));
+                            $alarmController->create($alarm);
+                        }
+                    }
+                } else {
+                    $this->sendCRUDNotification($notifyUsers, array($_fileNodeId => array($_crudAction => true)));
+                }
+            }
+
+        } while(null !== ($nodeId = $node->parent_id));
+
+        return true;
+    }
+
+    protected function _getCRUDNotificationHash($_accountId, $_nodeId)
+    {
+        return md5($_accountId . '_' . $_nodeId);
+    }
+
+    public function sendCRUDNotification(array $_accountIds, array $_crudActions)
+    {
+        $fileSystem = Tinebase_FileSystem::getInstance();
+
+        foreach($_accountIds as $accountId) {
+            //$locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $accountId));
+            //$translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            $messageBody = '<html><body>';
+            foreach($_crudActions as $fileNodeId => $changes) {
+
+                try {
+                    $fileNode = $fileSystem->get($fileNodeId, true);
+                    $path = explode('/', ltrim($fileSystem->getPathOfNode($fileNode, true), '/'));
+                    array_walk($path, function(&$val) {
+                        $val = urldecode($val);
+                    });
+                    $path = '/' . join('/', $path);
+                } catch(Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                }
+
+                $messageBody .= '<p>';
+
+                foreach ($changes as $change => $foo) {
+                    switch($change) {
+                        case 'created':
+                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been created.<br/>';
+                            break;
+                        case 'updated':
+                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been changed.<br/>';
+                            break;
+                        case 'deleted':
+                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been deleted.<br/>';
+                            break;
+                        default:
+                            // should not happen!
+                    }
+                }
+
+                $messageBody .= '</p>';
+            }
+            $messageBody .= '</body></html>';
+
+            Tinebase_Notification::getInstance()->send($accountId, $user->contact_id, 'filemanager notification', '', $messageBody);
+        }
+    }
+
+    /**
+     * sendAlarm - send an alarm and update alarm status/sent_time/...
+     *
+     * @param  Tinebase_Model_Alarm $_alarm
+     * @return Tinebase_Model_Alarm
+     */
+    public function sendAlarm(Tinebase_Model_Alarm $_alarm)
+    {
+        $options = json_decode($_alarm->options, true);
+        do {
+            if (null === $options) {
+                // broken! not good
+                break;
+            }
+            if (!isset($options['files'])) {
+                // broken! not good
+                break;
+            }
+            if (!isset($options['accountId'])) {
+                // broken! not good
+                break;
+            }
+
+            $this->sendCRUDNotification((array)$options['accountId'], $options['files']);
+        } while (false);
+
+        return $_alarm;
     }
 }

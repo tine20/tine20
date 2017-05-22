@@ -38,6 +38,15 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     const XPROPS_REVISION_ON = 'keep';
     const XPROPS_REVISION_NUM = 'keepNum';
     const XPROPS_REVISION_MONTH = 'keepMonth';
+
+    /**
+     * {"notificationProps":[{"active":true,....},{"active":true....},{....}]}
+     */
+    const XPROPS_NOTIFICATION = 'notificationProps';
+    const XPROPS_NOTIFICATION_ACTIVE = 'active';
+    const XPROPS_NOTIFICATION_SUMMARY = 'summary';
+    const XPROPS_NOTIFICATION_ACCOUNT_ID = 'accountId';
+    const XPROPS_NOTIFICATION_ACCOUNT_TYPE = 'accountType';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -94,13 +103,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // model specific fields
-        'parent_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'object_id'      => array('presence' => 'required'),
-        'revisionProps'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'parent_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'object_id'         => array('presence' => 'required'),
+        'revisionProps'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notificationProps' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // contains id of node with acl info
-        'acl_node'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'name'           => array('presence' => 'required'),
-        'islink'         => array(
+        'acl_node'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'name'              => array('presence' => 'required'),
+        'islink'            => array(
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
@@ -154,7 +164,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     * @param mixed $_data
     * @param bool $_bypassFilters
     * @param mixed $_convertDates
-    * @return void
     */
     public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = TRUE)
     {
@@ -180,6 +189,15 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 $this->_properties[self::XPROPS_REVISION] = null;
             }
         }
+
+        if(isset($this->_properties[self::XPROPS_NOTIFICATION]) && is_array($this->_properties[self::XPROPS_NOTIFICATION])) {
+            if (count($this->_properties[self::XPROPS_NOTIFICATION]) > 0) {
+                $this->_properties[self::XPROPS_NOTIFICATION] = json_encode($this->_properties[self::XPROPS_NOTIFICATION]);
+            } else {
+                $this->_properties[self::XPROPS_NOTIFICATION] = null;
+            }
+        }
+
         parent::runConvertToData();
     }
 

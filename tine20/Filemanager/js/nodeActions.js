@@ -295,22 +295,33 @@ Tine.Filemanager.nodeActions.Publish = {
             return;
         }
 
-        var date = new Date();
-        date.setDate(date.getDate() + 30);
-
-        var record = new Tine.Filemanager.Model.DownloadLink({node_id: selections[0].id, expiry_time: date});
-        Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
-            success: function (record) {
-                // TODO: add mail-button
-                Ext.MessageBox.show({
-                    title: selections[0].data.type == 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
-                    msg: String.format(app.i18n._("Url: {0}") + '<br />' + app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')),
-                    minWidth: 900,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.INFO,
-                });
-            }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this
+        var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+            allowEmptyPassword: true
         });
+        passwordDialog.openWindow();
+
+        passwordDialog.on('passwordEntered', function (password) {
+            var date = new Date();
+            date.setDate(date.getDate() + 30);
+
+            var record = new Tine.Filemanager.Model.DownloadLink({
+                node_id: selections[0].id,
+                expiry_time: date,
+                password: password
+            });
+            Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
+                success: function (record) {
+                    // TODO: add mail-button
+                    Ext.MessageBox.show({
+                        title: selections[0].data.type == 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
+                        msg: String.format(app.i18n._("Url: {0}") + '<br />' + app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')),
+                        minWidth: 900,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO,
+                    });
+                }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this
+            });
+        }, this);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
         var enabled = !isFilterSelect

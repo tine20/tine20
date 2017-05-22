@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.24</version>
+    <version>10.25</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3450,7 +3450,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3493,6 +3493,11 @@
                 </field>
                 <field>
                     <name>revisionProps</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <field>
+                    <name>notificationProps</name>
                     <type>text</type>
                     <length>65535</length>
                 </field>

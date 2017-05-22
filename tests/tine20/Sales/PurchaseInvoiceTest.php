@@ -198,6 +198,11 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $this->assertEquals(1, $deletedPurchase->is_deleted);
     }
 
+    /**
+     * testImportPurchaseInvoiceViaWebdav and query filter with advanced search
+     *
+     * @throws Tinebase_Exception_NotFound
+     */
     public function testImportPurchaseInvoiceViaWebdav()
     {
         $importPath = 'Sales/PurchaseInvoices/Import';
@@ -207,6 +212,9 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $result = $collection->createFile('import.txt', $filehandle);
 
         $this->assertEquals('"1"', $result);
+
+        // activate advanced search
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
 
         $search = $this->_json->searchPurchaseInvoices(
             array(array('field' => 'query', 'operator' => 'contains', 'value' => '')),

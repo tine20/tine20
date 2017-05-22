@@ -71,7 +71,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         
         Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         
-        this.editDialog.on('save', this.onSaveRecord, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
         this.editDialog.on('load', this.onLoadRecord, this);
 
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
@@ -152,19 +152,14 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * 
      * @param {Tine.widgets.dialog.EditDialog} dialog
      * @param {Tine.Tinebase.data.Record} record
-     * @param {Function} ticket
      * @return {Boolean}
      */
-    onSaveRecord: function(dialog, record, ticket) {
-        var interceptor = ticket();
-
+    onRecordUpdate: function(dialog, record) {
         if (record.data.hasOwnProperty('attachments')) {
             delete record.data.attachments;
         }
         var attachments = this.getData();
         record.set('attachments', attachments);
-        
-        interceptor();
     },
     
     /**

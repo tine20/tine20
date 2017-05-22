@@ -91,7 +91,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record) {
             // remove all definitions that does not share the (grid) model / store.filter() did not do the job
             this.definitionsStore.each(function(record) {
-                if (record.get('model') !== this.record.get('model')) {
+                if (record.get('model') !== this.record.get('model') || record.get('favorite') == '1') {
                     this.definitionsStore.remove(record);
                 }
             }, this);

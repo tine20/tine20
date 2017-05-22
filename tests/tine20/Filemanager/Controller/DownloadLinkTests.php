@@ -46,8 +46,10 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             'node_id'       => $node->getId(),
             'expiry_date'   => Tinebase_DateTime::now()->addDay(1)->toString(),
             'access_count'  => 7,
+            'password'      => 'myDownloadPassword'
         )));
-        $this->assertTrue(! empty($downloadLink->url));
+        self::assertTrue(! empty($downloadLink->url));
+        self::assertTrue($this->_getUit()->hasPassword($downloadLink), 'link should have pw');
         
         return $downloadLink;
     }
@@ -170,5 +172,27 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         $fileList = $this->testGetFileList();
 
         $this->assertContains('example', $fileList[0]->path);
+    }
+
+    /**
+     * @see 0013072: add password protection to download links
+     *
+     * @throws Exception
+     */
+    public function testDownloadPassword()
+    {
+        $dl = $this->testCreateDownloadLink();
+
+        self::assertFalse($this->_getUit()->validatePassword($dl, 'myWrongPassword'),
+            'user should not be able to access password protected download link node');
+        self::assertTrue($this->_getUit()->validatePassword($dl, 'myDownloadPassword'),
+            'user should be able to access password protected download link node');
+
+        $resultNode = $this->_getUit()->getNode($dl, array());
+        $this->assertEquals(
+            Tinebase_FileSystem::getInstance()->getDefaultContainer('Filemanager_Model_Node')->name,
+            $resultNode->name,
+            'download link should resolve the default container'
+        );
     }
 }

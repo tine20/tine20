@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -25,6 +25,10 @@ class Tinebase_Lock
         $db = Tinebase_Core::getDb();
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            if (strlen($id) > 64) {
+                throw new Tinebase_Exception_InvalidArgument('lock id is too long (max 64 chars)');
+            }
+
             if (    ($stmt = $db->query('SELECT IS_FREE_LOCK("' . $id . '")')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
@@ -66,6 +70,10 @@ class Tinebase_Lock
         $db = Tinebase_Core::getDb();
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            if (strlen($id) > 64) {
+                throw new Tinebase_Exception_InvalidArgument('lock id is too long (max 64 chars)');
+            }
+
             if (    ($stmt = $db->query('SELECT RELEASE_LOCK("' . $id . '")')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&

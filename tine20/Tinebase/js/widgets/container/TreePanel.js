@@ -438,10 +438,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 this.getSelectionModel().resumeEvents();
             }).defer(100, this);
         }
-
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin && this.filterPlugin.getGridPanel()) {
-            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
-        }
     },
 
     /**

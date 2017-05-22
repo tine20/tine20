@@ -766,6 +766,9 @@ class Tinebase_ModelConfiguration {
         'container' => 'Tinebase_Model_Filter_Container',
         'tag'       => 'Tinebase_Model_Filter_Tag',
         'user'      => 'Tinebase_Model_Filter_User',
+
+        'numberableStr' => 'Tinebase_Model_Filter_Text',
+        'numberableInt' => 'Tinebase_Model_Filter_Int',
     );
 
     /**

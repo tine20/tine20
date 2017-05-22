@@ -515,6 +515,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_INDEX_CONTENT = 'index_content';
     const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
+    const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
 
     /**
      * (non-PHPdoc)
@@ -1379,7 +1380,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 //_('Path to custom logo.')
                 'description'           => 'Path to custom logo.',
                 'type'                  => 'string',
-                'default'               => '',
+                'default'               => '/images/tine_logo.png',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,
@@ -1466,6 +1467,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'label'                 => 'Filesystem index content',
                     //_('Filesystem index content.')
                     'description'           => 'Filesystem index content.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => FALSE,
+                ),
+                self::FILESYSTEM_ENABLE_NOTIFICATIONS => array(
+                    //_('Filesystem enable notifications')
+                    'label'                 => 'Filesystem enable notifications',
+                    //_('Filesystem enable notifications.')
+                    'description'           => 'Filesystem enable notifications.',
                     'type'                  => 'bool',
                     'clientRegistryInclude' => TRUE,
                     'setByAdminModule'      => FALSE,

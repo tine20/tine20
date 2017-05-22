@@ -16,7 +16,7 @@
  * @subpackage    Export
  */
 
-class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface {
+class Tinebase_Export_Richtext_Doc extends Tinebase_Export_AbstractDeprecated implements Tinebase_Record_IteratableInterface {
     
     /**
      * the document

@@ -109,107 +109,93 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
      * create cf tab on demand
      */
     onBeforeRender: function() {
-        var modelName = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
+        var _ = window.lodash,
+            modelName = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
             allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            tabPanel = this.getTabPanel(),
             form = this.editDialog.getForm(),
-            cfConfigs = new Ext.util.MixedCollection();
+            cfConfigs = [];
         
         // remove already applied cfs / fill the mixed collection
         Ext.each(allCfConfigs, function(cfConfig) {
             if (! form.findField('customfield_' + cfConfig.get('name'))) {
-                cfConfigs.add(cfConfig.id, cfConfig);
+                cfConfigs.push(cfConfig);
             }
         }, this);
-        
-        // auto add cf tab
-        if (cfConfigs.getCount()) {
-            this.addCFTab(cfConfigs);
-        }
+
+        _.each(cfConfigs, _.bind(_.defaultsDeep, cfConfigs, _, {data: {definition: {uiconfig: {tab: 'customfields', 'group': '', sort: 0}}}}));
+        _.each(_.groupBy(cfConfigs, 'data.definition.uiconfig.tab'), _.bind(function(fields, tabId) {
+            var tab = tabPanel.items.get(_.isNaN(+tabId) ? tabId : +tabId);
+            if (! tab) {
+                this.addCFTab(fields, tabId);
+            } else {
+                // evaluate group here?
+                _.each(fields, _.bind(function(fieldConfig) {
+                    var formField = Tine.widgets.customfields.Field.get(this.app, fieldConfig, {}, this.editDialog),
+                        pos = _.get(fieldConfig, 'data.definition.uiconfig.order');
+
+                    Ext.ux.ItemRegistry.registerItem(tab, formField, pos);
+                }, this));
+
+            }
+        }, this));
     },
-    
+
+    getTabPanel: function () {
+        if (! this.tabPanel) {
+            // find the first tabPanel and add it there
+            this.tabPanel = this.editDialog.items.find(function (item) {
+                return Ext.isObject(item) && Ext.isFunction(item.getXType) && item.getXType() == 'tabpanel';
+            });
+        }
+
+        return this.tabPanel;
+    },
+
     /**
      * create a cf tab
      * 
-     * @param {Ext.util.MixedCollection} cfConfigs
+     * @param {Collection} cfConfigs
+     * @param {String} tabName
      */
-    addCFTab: function(cfConfigs) {
-        this.cfTabItems = [];
-        this.fieldsets = {};
-        
-        cfConfigs.sort('ASC', function(r1, r2) {
-            var o1 = (r1.get('definition').uiconfig && r1.get('definition').uiconfig.order) ? r1.get('definition').uiconfig.order : 0,
-                o2 = (r2.get('definition').uiconfig && r2.get('definition').uiconfig.order) ? r2.get('definition').uiconfig.order : 0;
-            return o1 > o2 ? 1 : 0;
-        });
+    addCFTab: function(cfConfigs, tabName) {
+        var _ = window.lodash,
+            groups = _.groupBy(cfConfigs, 'data.definition.uiconfig.group'),
+            items = [];
 
-        var definition = null,
-            fieldObj = null,
-            uiConfig = null,
-            group = null;
-        
-        cfConfigs.each(function(cfConfig) {
-            try {
-                definition = cfConfig.get('definition');
-                fieldObj = Tine.widgets.customfields.Field.get(this.app, cfConfig, {anchor: '95%'}, this.editDialog);
-                uiConfig = definition.uiconfig ? definition.uiconfig : {};
-                group = uiConfig.group ? uiConfig.group : i18n._('General');
-                
-                Tine.log.debug('Tine.widgets.customfields.EditDialogPlugin::addCFTab() - Adding ' + cfConfig.get('name') + ' to group ' + group);
-                this.getFieldSet(group).add(fieldObj);
-                
-            } catch (e) {
-                Tine.log.debug(e);
-                Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
+        _.each(groups, _.bind(function(fields, groupName) {
+            groupName = !groupName && tabName == 'customfields' ? 'General' : groupName;
+            fields = _.sortBy(fields, 'data.definition.uiconfig.order');
+
+            var fieldObjects = _.map(fields, _.bind(Tine.widgets.customfields.Field.get, this, this.app, _, {anchor: '95%'}, this.editDialog));
+            if (groupName) {
+                items.push(new Ext.form.FieldSet({
+                    title: i18n._hidden(groupName),
+                    autoHeight:true,
+                    autoWidth:true,
+                    labelAlign: 'top',
+                    labelWidth: '90%',
+                    collapsible:true,
+                    items: fieldObjects
+                }));
+            } else {
+                items = items.concat(fieldObjects);
             }
-        }, this);
-        
-        this.cfTab  = new Ext.Panel({
-            title: i18n._('Custom Fields'),
+        }, this));
+
+        this.getTabPanel().add(new Ext.Panel({
+            title: tabName == 'customfields' ? i18n._('Custom Fields') : i18n._hidden(tabName),
             layout: 'form',
             border: true,
             frame: true,
             labelAlign: 'top',
             autoScroll: true,
-            items: this.cfTabItems,
+            items: items,
             defaults: {
                 anchor: '100%',
                 labelSeparator: ''
             }
-        });
-        
-        // find the first tabPanel and add it there
-        var tabPanel = this.editDialog.items.find(function(item) {
-            return Ext.isObject(item) && Ext.isFunction(item.getXType) && item.getXType() == 'tabpanel';
-        });
-        
-        if (tabPanel) {
-            tabPanel.add(this.cfTab);
-        }
-    },
-    
-    /**
-     * sort custom fields into groups
-     * 
-     * @param {String} name
-     * @return {Ext.form.FieldSet}
-     */
-    getFieldSet: function(name) {
-        var reg = /\s+/;
-        var system_name = name.replace(reg,'_');
-        if (! this.fieldsets[system_name]) {
-            this.fieldsets[system_name] = new Ext.form.FieldSet({
-                title: name,
-                autoHeight:true,
-                autoWidth:true,
-                labelAlign: 'top',
-                labelWidth: '90%',
-                collapsible:true,
-                name:system_name,
-                id: Ext.id() + system_name
-            });
-            this.cfTabItems.push(this.fieldsets[system_name]);
-        }
-        return this.fieldsets[system_name];
+        }));
     }
 };
 

@@ -173,7 +173,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         $fileConfigArray = null;
         $dbConfigArray = null;
-        $dbAvailable = Tinebase_Core::hasDb();
+        $dbAvailable = ('database' === $name || 'caching' === $name || 'logger' === $name) ? Tinebase_Core::hasDb() : true;
 
         // NOTE: we return here (or in the default handling) if db is not available. That is to prevent db lookup when db is not yet setup
         $configFileSection = $this->getConfigFileSection($name);

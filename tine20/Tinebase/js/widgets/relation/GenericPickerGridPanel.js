@@ -178,7 +178,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.on('validateedit', this.onValidateRowEdit, this);
         this.on('afteredit', this.onAfterRowEdit, this);
         
-        this.editDialog.on('save', this.onSaveRecord, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
         this.editDialog.on('load', this.loadRecord, this);
 
         Tine.widgets.relation.GenericPickerGridPanel.superclass.initComponent.call(this);
@@ -195,12 +195,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * 
      * @param {Tine.widgets.dialog.EditDialog} dialog
      * @param {Tine.Tinebase.data.Record} record
-     * @param {Function} ticket
      * @return {Boolean}
      */
-    onSaveRecord: function(dialog, record, ticket) {
-        var interceptor = ticket();
-
+    onRecordUpdate: function(dialog, record) {
         // update from relationsPanel if any
         if (this.isValid()) {
             if (record.data.hasOwnProperty('relations')) {
@@ -221,7 +218,6 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             this.editDialog.saving = false;
             return false;
         }
-        interceptor();
     },
     
     /**

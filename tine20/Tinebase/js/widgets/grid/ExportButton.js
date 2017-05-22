@@ -32,6 +32,9 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * @cfg {String} format of export (default: csv)
      */
     format: 'csv',
+
+    definitionId: null,
+
     /**
      * @cfg {String} export function (for example: Timetracker.exportTimesheets)
      */
@@ -99,6 +102,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 filter: Ext.util.JSON.encode(filterSettings),
                 options: Ext.util.JSON.encode({
                     format: this.format,
+                    definitionId: this.definitionId,
                     sortInfo: this.gridPanel.getStore().sortInfo
                 })
             }
