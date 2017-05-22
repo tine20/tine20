@@ -2,7 +2,7 @@
 <config>
     <model>Addressbook_Model_List</model>
     <name>adb_list_xls</name>
-    <label>Export as XLS</label>
+    <label>Export List as XLS</label>
     <type>export</type>
     <plugin>Addressbook_Export_List_Xls</plugin>
     <icon_class>tinebase-action-export-xls</icon_class>

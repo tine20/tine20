@@ -2,7 +2,7 @@
 <config>
     <model>Addressbook_Model_List</model>
     <name>adb_list_doc</name>
-    <label>Export as DOC</label>
+    <label>Export List as DOC</label>
     <type>export</type>
     <plugin>Addressbook_Export_List_Doc</plugin>
     <icon_class>tinebase-action-export-doc</icon_class>
