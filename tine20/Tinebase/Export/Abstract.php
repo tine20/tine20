@@ -348,6 +348,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_loadTwig();
         }
 
+        $this->_onBeforeExportRecords();
+
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => $this->_controller,
@@ -367,6 +369,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Exported ' . $result['totalcount'] . ' records.');
     }
+
+    protected function _onBeforeExportRecords()
+    {}
 
     /**
      * @return bool

@@ -41,6 +41,15 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_rowCount = 0;
 
+    protected $_cloneRow = null;
+    protected $_block = null;
+    protected $_separator = null;
+
+    /**
+     * @var Tinebase_Record_RecordSet|null
+     */
+    protected $_records = null;
+
     /**
      * get download content type
      *
@@ -169,5 +178,61 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             . ' returning twig template source: ' . $source);
 
         return $source;
+    }
+
+    protected function _onBeforeExportRecords()
+    {
+        $templateProcessor = $this->getDocument();
+
+        // first step: generate layout
+        $this->_block = $templateProcessor->cloneBlock('BLOCK', 1, false);
+        $this->_separator = $templateProcessor->cloneBlock('SEPARATOR', 1, false);
+
+        if (preg_match('/<w:tbl.*\${([^}]+)}/is', $this->_block, $matches)) {
+            $this->_cloneRow = $matches[1];
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('BLOCK needs to contain a replacement variable');
+        }
+    }
+
+    /**
+     * bypass process iterations
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    public function processIteration($_records)
+    {
+        if (null === $this->_records) {
+            $this->_records = $_records;
+        } else {
+            $this->_records->merge($_records);
+        }
+    }
+
+    /**
+     * now simulate processIteration and finish with _onAfterExportRecords
+     *
+     * @param array $result
+     */
+    protected function _onAfterExportRecords(/** @noinspection PhpUnusedParameterInspection */ array $result)
+    {
+        $templateProcessor = $this->getDocument();
+
+        $blockCount = $this->_records->count();
+        $blocks = $blockCount ? $this->_block : '';
+        for ($i=1; $i<$blockCount; $i++) {
+            $blocks .= $this->_seperator;
+            $blocks .= $this->_block;
+        }
+
+        $templateProcessor->replaceBlock('BLOCK', $blocks);
+        $templateProcessor->deleteBlock('SEPARATOR');
+
+        unset($blocks);
+
+        parent::processIteration($this->_records);
+
+        // do this at the end, first we simulate the normal flow through processIteration
+        parent::_onAfterExportRecords($result);
     }
 }

@@ -8,4 +8,5 @@
     <icon_class>tinebase-action-export-doc</icon_class>
     <favorite>true</favorite>
     <order>500</order>
+    <template>addressbook_contact_export.docx</template>
 </config>

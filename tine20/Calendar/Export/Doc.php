@@ -94,7 +94,7 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
 
         }
 
-        parent::_onAfterExportRecords($result);
+        Tinebase_Export_Abstract::_onAfterExportRecords($result);
     }
 
     /**
