@@ -646,19 +646,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     /**
      * init buttons
-     * 
+     *
      * use button order from preference
      */
     initButtons: function () {
         this.fbar = [
             '->'
         ];
-        
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.fbar.push(this.action_saveAndClose, this.action_cancel);
-        } else {
-            this.fbar.push(this.action_cancel, this.action_saveAndClose);
-        }
+
+        this.fbar.push(this.action_cancel, this.action_saveAndClose);
 
         if (this.action_export) {
             this.actionUpdater.addAction(this.action_export);
