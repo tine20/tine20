@@ -76,16 +76,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 _revision: revision
             }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-            var height = this.window.height - 20,
-                width = this.window.height - 20;
-
             me.add({
-                html: '<img style="width: 100%; height: 100%" src="' + url + '" />',
+                html: '<img style="width: 100%;" src="' + url + '" />',
                 xtype: 'panel',
                 frame: true,
-                border: true,
-                height: height,
-                width: width
+                border: true
             });
         }, this);
     },
