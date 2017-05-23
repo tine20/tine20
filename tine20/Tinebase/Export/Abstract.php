@@ -19,6 +19,10 @@
  */
 abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {
+    const ROW_TYPE_RECORD = 'record';
+    const ROW_TYPE_GENERIC_HEADER = 'genericHeader';
+    const ROW_TYPE_GROUP_HEADER = 'groupHeader';
+
     /**
      * default export definition name
      *
@@ -31,21 +35,21 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @var Tinebase_Controller_Record_Abstract
      */
-    protected $_controller = NULL;
+    protected $_controller = null;
 
     /**
      * translation object
      *
      * @var Zend_Translate
-     *
+     */
     protected $_translate;
 
     /**
      * locale object
      *
      * @var Zend_Locale
-     *
-    protected $_locale;*/
+     */
+    protected $_locale;
 
     /**
      * export config
@@ -86,21 +90,21 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @var string
      */
-    protected $_prefKey = NULL;
+    protected $_prefKey = null;
 
     /**
      * format strings
      *
      * @var string
      */
-    protected $_format = NULL;
+    protected $_format = null;
 
     /**
      * custom field names for this model
      *
      * @var array
      */
-    protected $_customFieldNames = NULL;
+    protected $_customFieldNames = null;
 
     /**
      * user fields to resolve
@@ -185,6 +189,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_records = null;
 
+    protected $_lastGroupValue = null;
+
+    protected $_groupByProperty = null;
+
+    protected $_currentRowType = null;
+
+    protected $_getRelations = false;
+
     /**
      * the constructor
      *
@@ -192,8 +204,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
-    {
+    public function __construct(
+        Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Controller_Record_Interface $_controller = null,
+        $_additionalOptions = array()
+    ) {
         $this->_filter = $_filter;
         if (! $this->_modelName) {
             $this->_modelName = $this->_filter->getModelName();
@@ -202,21 +217,37 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
-        $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
-        //$this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        $this->_controller = ($_controller !== null) ? $_controller :
+            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         $this->_config = $this->_getExportConfig($_additionalOptions);
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
-        //$this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         $this->_exportTimeStamp = Tinebase_DateTime::now();
 
+        if (!empty($this->_config->group)) {
+            $this->_groupByProperty = $this->_config->group;
+            $this->_sortInfo['sort'] = $this->_groupByProperty;
+            if (!empty($this->_config->groupSortDir)) {
+                $this->_sortInfo['dir'] = $this->_config->groupSortDir;
+            }
+        }
+
         if (isset($_additionalOptions['sortInfo'])) {
-            if (isset($_additionalOptions['sortInfo']['field'])) {
-                $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
-                $this->_sortInfo['dir'] = isset($_additionalOptions['sortInfo']['direction']) ? $_additionalOptions['sortInfo']['direction'] : 'ASC';
+            if (isset($this->_sortInfo['sort'])) {
+                $this->_sortInfo['sort'] = array_unique(array_merge((array)$this->_sortInfo['sort'],
+                    (array)((isset($_additionalOptions['sortInfo']['field']) ?
+                        $_additionalOptions['sortInfo']['field'] : $_additionalOptions['sortInfo']['sort']))));
             } else {
-                $this->_sortInfo =  $_additionalOptions['sortInfo'];
+                if (isset($_additionalOptions['sortInfo']['field'])) {
+                    $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
+                    $this->_sortInfo['dir'] = isset($_additionalOptions['sortInfo']['direction']) ?
+                        $_additionalOptions['sortInfo']['direction'] : 'ASC';
+                } else {
+                    $this->_sortInfo = $_additionalOptions['sortInfo'];
+                }
             }
         }
 
@@ -235,21 +266,22 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getExportConfig($_additionalOptions = array())
     {
-        if ((isset($_additionalOptions['definitionFilename']) || array_key_exists('definitionFilename', $_additionalOptions))) {
+        if ((isset($_additionalOptions['definitionFilename']) ||
+            array_key_exists('definitionFilename', $_additionalOptions))) {
             // get definition from file
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $_additionalOptions['definitionFilename'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             );
-
-        } else if ((isset($_additionalOptions['definitionId']) || array_key_exists('definitionId', $_additionalOptions))) {
+        } elseif ((isset($_additionalOptions['definitionId']) ||
+            array_key_exists('definitionId', $_additionalOptions))) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
-
         } else {
             // get preference from db and set export definition name
             $exportName = $this->_defaultExportname;
-            if ($this->_prefKey !== NULL) {
-                $exportName = Tinebase_Core::getPreference($this->_applicationName)->getValue($this->_prefKey, $exportName);
+            if ($this->_prefKey !== null) {
+                $exportName = Tinebase_Core::getPreference($this->_applicationName)->
+                    getValue($this->_prefKey, $exportName);
             }
 
             // get export definition by name / model
@@ -259,15 +291,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             ));
             $definitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
             if (count($definitions) == 0) {
-                throw new Tinebase_Exception_NotFound('Export definition for model ' . $this->_modelName . ' not found.');
+                throw new Tinebase_Exception_NotFound('Export definition for model ' .
+                    $this->_modelName . ' not found.');
             }
             $definition = $definitions->getFirstRecord();
         }
 
-        $config = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($definition, $_additionalOptions);
+        $config = Tinebase_ImportExportDefinition::getInstance()->
+            getOptionsAsZendConfigXml($definition, $_additionalOptions);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' export config: ' . print_r($config->toArray(), TRUE));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' export config: ' .
+                print_r($config->toArray(), true));
         }
 
         return $config;
@@ -280,8 +315,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getCustomFieldNames()
     {
-        if ($this->_customFieldNames === NULL) {
-            $this->_customFieldNames = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
+        if ($this->_customFieldNames === null) {
+            $this->_customFieldNames = Tinebase_CustomField::getInstance()->
+                getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
         }
 
         return $this->_customFieldNames;
@@ -300,7 +336,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getFormat()
     {
-        if ($this->_format === NULL) {
+        if ($this->_format === null) {
             throw new Tinebase_Exception_NotFound('Format string not found.');
         }
 
@@ -379,11 +415,28 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 ),
             ));
 
-            $result = $iterator->iterate();
+            if (false === ($result = $iterator->iterate())) {
+                $result = array(
+                    'totalcount' => $this->_records->count(),
+                    'results'    => array(),
+                );
+            }
         } else {
+            $totalCount = 0;
+            $totalCountFn = function(&$val) use (&$totalCountFn, &$totalCount) {
+                if (is_array($val)) {
+                    foreach ($val as &$a) {
+                        $totalCountFn($a);
+                    }
+                } else {
+                    /** @var Tinebase_Record_RecordSet $val */
+                    $totalCount += $val->count();
+                }
+            };
+            $totalCountFn($this->_records);
 
             $result = array(
-                'totalcount' => $this->_records->count(),
+                'totalcount' => $totalCount,
                 'results'    => array(),
             );
             $result['results'][] = $this->processIteration($this->_records);
@@ -396,7 +449,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     }
 
     protected function _onBeforeExportRecords()
-    {}
+    {
+    }
 
     /**
      * @return bool
@@ -407,7 +461,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             return true;
         }
         if ($this->_config->columns && $this->_config->columns->column) {
-            foreach($this->_config->columns->column as $column) {
+            foreach ($this->_config->columns->column as $column) {
                 if ($column->twig) {
                     return true;
                 }
@@ -416,40 +470,36 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         return false;
     }
 
-    // TODO clean this up
-    // unique template name!
-    // cache dir?
-    // autoescaping to be json conform!
     protected function _loadTwig()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
 
-        $twigTemplateName = $this->_getUniqueTemplateName();
-
-        $tineTwigLoader = new Tinebase_Twig_CallBackLoader($twigTemplateName, $this->_getLastModifiedTimeStamp(),
+        $tineTwigLoader = new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
             array($this, '_getTwigSource'));
 
+        // TODO turn on caching
+        // in order to cache the templates, we need to cache $this->_twigMapping too!
+        /*
         $cacheDir = rtrim(Tinebase_Core::getTempDir(), '/') . '/tine20Twig';
         if (!is_dir($cacheDir)) {
             mkdir($cacheDir, 0777, true);
-        }
-
-        $twig = new Twig_Environment($tineTwigLoader, array(
-            //'strict_variables' => true,
-            'auto_reload' => true, // <- TODO only on dev env true?
-            //'autoescape' => 'json shubidubidu',
-            'cache' => $cacheDir
-        ));
-
-        /*if (true === $this->_hasTemplate) {
-            $lexer = new Twig_Lexer($twig, array(
-                'tag_block' => array('{$%', '%}'),
-                'tag_variable' => array('{$', '}'),
-            ));
-            $twig->setLexer($lexer);
         }*/
 
-        $this->_twigTemplate = $twig->load($twigTemplateName);
+        $twig = new Twig_Environment($tineTwigLoader, array(
+            'autoescape' => 'json',
+            'cache' => false, //$cacheDir
+        ));
+        $twig->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
+            return json_encode($string);
+        });
+
+        $locale = $this->_locale;
+        $translate = $this->_translate;
+        $twig->addFunction(new Twig_SimpleFunction('translate', function ($str) use($locale, $translate) {
+            return $translate->_($str, $locale);
+        }));
+
+        $this->_twigTemplate = $twig->load($this->_templateFileName);
     }
 
     /**
@@ -461,7 +511,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (true !== $this->_hasTemplate && $this->_config->columns && $this->_config->columns->column) {
             foreach ($this->_config->columns->column as $column) {
                 if ($column->twig) {
-                   $source .= ($source!=='' ? ',"' : '""') . (string)$column->twig . '"';
+                    $source .= ($source!=='' ? ',"' : '""') . (string)$column->twig . '"';
                 }
             }
         }
@@ -469,33 +519,34 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     }
 
     /**
-     * TODO fix this
-     *
-     * @return string
-     */
-    protected function _getUniqueTemplateName()
-    {
-        return uniqid();
-    }
-
-    /**
-     * TODO fix this
-     *
      * @return int
      */
     protected function _getLastModifiedTimeStamp()
     {
-        return time();
+        return filemtime($this->_templateFileName);
     }
 
     /**
      * add body rows
      *
-     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Record_RecordSet|array $_records
      */
     public function processIteration($_records)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' iterating over export data...');
+
+        if (is_array($_records)) {
+
+            foreach ($_records as $key => $value) {
+                $this->_startDataSource($key);
+
+                $this->processIteration($value);
+
+                $this->_endDataSource($key);
+            }
+
+            return;
+        }
 
         $this->_resolveRecords($_records);
 
@@ -503,16 +554,72 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_writeGenericHead();
         }
 
-        foreach($_records as $record) {
+        $first = $this->_firstIteration;
+        foreach ($_records as $record) {
+            if (null !== $this->_groupByProperty && (true === $first ||
+                    $this->_lastGroupValue !== $record->{$this->_groupByProperty})) {
+                $this->_lastGroupValue = $record->{$this->_groupByProperty};
+                if (false === $first) {
+                    $this->_endGroup();
+                }
+                $this->_startGroup();
+                // TODO fix this?
+                //$this->_writeGroupHeading($record);
+            }
+
+            $this->_currentRowType = self::ROW_TYPE_RECORD;
 
             $this->_startRow();
 
             $this->_processRecord($record);
 
             $this->_endRow();
+
+            if (true === $first) {
+                $first = false;
+            }
+        }
+
+        if ($_records->count() > 0 && null !== $this->_groupByProperty) {
+            $this->_endGroup();
         }
 
         $this->_firstIteration = false;
+    }
+
+    /**
+     * @param $_name
+     */
+    protected function _startDataSource($_name)
+    {
+    }
+
+    /**
+     * @param $_name
+     */
+    protected function _endDataSource($_name)
+    {
+    }
+
+    protected function _startGroup()
+    {
+    }
+
+    protected function _endGroup()
+    {
+    }
+
+    protected function _writeGroupHeading(Tinebase_Record_Interface $_record)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' writting group heading...');
+
+        $this->_currentRowType = self::ROW_TYPE_GROUP_HEADER;
+
+        $this->_startRow();
+
+        $this->_writeValue($_record->{$this->_groupByProperty});
+
+        $this->_endRow();
     }
 
     /**
@@ -543,13 +650,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         foreach ($this->_userFields as $field) {
             if (in_array($field, $types) || in_array($field, $identifiers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
-                Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, TRUE);
+                Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, true);
             }
         }
 
         // add notes
         if (in_array('notes', $types)) {
-            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, 'notes', 'Sql', FALSE);
+            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, 'notes', 'Sql', false);
         }
 
         // add container
@@ -564,10 +671,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' writing generic header...');
 
+        $this->_currentRowType = self::ROW_TYPE_GENERIC_HEADER;
+
         $this->_startRow();
 
         if ($this->_config->columns && $this->_config->columns->column) {
-            foreach($this->_config->columns->column as $column) {
+            foreach ($this->_config->columns->column as $column) {
                 if ($column->header) {
                     $this->_writeValue($column->header);
                 } elseif ($column->recordProperty) {
@@ -589,7 +698,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_endRow();
     }
 
-    protected function _startRow() {}
+    protected function _startRow()
+    {
+    }
 
     /**
      * @param Tinebase_Record_Interface $_record
@@ -599,14 +710,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' processing a export record...');
 
         if (true === $this->_dumpRecords) {
-            foreach($_record->getFields() as $field) {
+            foreach ($_record->getFields() as $field) {
                 $this->_writeValue($this->_convertToString($_record->{$field}));
             }
-
         } elseif (true !== $this->_hasTemplate) {
             $twigResult = array();
             if (null !== $this->_twigTemplate) {
-                $result = json_decode($this->_twigTemplate->render($this->_getTwigContext(array('record' => $_record))));
+                $result = json_decode($this->_twigTemplate->render(
+                    $this->_getTwigContext(array('record' => $_record))));
                 if (is_array($result)) {
                     $twigResult = $result;
                 } else {
@@ -615,7 +726,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
             $twigCounter = 0;
-            foreach($this->_config->columns->column as $column) {
+            foreach ($this->_config->columns->column as $column) {
                 if ($column->twig) {
                     if (isset($twigResult[$twigCounter]) || array_key_exists($twigCounter, $twigResult)) {
                         $this->_writeValue($this->_convertToString($twigResult[$twigCounter]));
@@ -624,23 +735,24 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                             ' twig column: ' . $column->twig . ' not found in twig result array');
                         $this->_writeValue('');
                     }
-                } elseif($column->recordProperty) {
+                } elseif ($column->recordProperty) {
                     $this->_writeValue($this->_convertToString($_record->{$column->recordProperty}));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' pointless column found: ' . print_r($column, true));
                 }
             }
-
         } elseif (null !== $this->_twigTemplate) {
-            $twigResult = json_decode($this->_twigTemplate->render($this->_getTwigContext(array('record' => $_record))));
+            $twigResult = $this->_twigTemplate->render(
+                $this->_getTwigContext(array('record' => $_record)));
+            $twigResult = json_decode($twigResult);
             if (!is_array($twigResult)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
                     ' twig render and json_decode did not return an array: ' . print_r($twigResult, true));
                 return;
             }
 
-            foreach($this->_twigMapping as $key => $twigKey) {
+            foreach ($this->_twigMapping as $key => $twigKey) {
                 if (isset($twigResult[$key]) || array_key_exists($key, $twigResult)) {
                     $value = $this->_convertToString($twigResult[$key]);
                 } else {
@@ -650,7 +762,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
                 $this->_setValue($twigKey, $value);
             }
-
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not process record, misconfigured!');
         }
@@ -693,6 +804,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             'export'            => array(
                 'timestamp'         => $this->_exportTimeStamp,
                 'account'           => Tinebase_Core::getUser(),
+                'groupdata'         => $this->_lastGroupValue,
             )
         ), $context);
     }
@@ -719,7 +831,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if ($_value instanceof DateTime) {
-            $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null, $this->_config->datetimeformat);
+            $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
+                $this->_config->datetimeformat);
         }
 
         if (is_object($_value) && method_exists($_value, '__toString')) {
@@ -733,7 +846,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         return (string)$_value;
     }
 
-    protected function _endRow() {}
+    protected function _endRow()
+    {
+    }
 
     /**
      * set generic data

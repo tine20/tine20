@@ -19,6 +19,11 @@
 
 class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\TemplateProcessor
 {
+    const TYPE_STANDARD = 'standard';
+    const TYPE_DATASOURCE = 'datasource';
+    const TYPE_GROUP = 'group';
+    const TYPE_RECORD = 'record';
+
     /**
      * Content of document rels (in XML format) of the temporary document.
      *
@@ -30,15 +35,31 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
     protected $_tempFooterRels = array();
 
+    protected $_type = null;
+
+    protected $_parent = null;
+
+    protected $_config = array();
 
     /**
      * @param string $documentTemplate The fully qualified template filename.
+     * @param bool   $inMemory
+     * @param string $type
+     * @param Tinebase_Export_Richtext_TemplateProcessor|null $parent
      *
      * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
      * @throws \PhpOffice\PhpWord\Exception\CopyFileException
      */
-    public function __construct($documentTemplate)
+    public function __construct($documentTemplate, $inMemory = false, $type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null)
     {
+        $this->_type = $type;
+        $this->_parent = $parent;
+
+        if (true === $inMemory) {
+            $this->tempDocumentMainPart = $documentTemplate;
+            return;
+        }
+
         parent::__construct($documentTemplate);
 
         $index = 1;
@@ -66,6 +87,22 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->_temporaryDocumentRels = $this->fixBrokenMacros(
                 $this->zipClass->getFromName('word/_rels/document.xml.rels'));
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+    /**
+     * @return Tinebase_Export_Richtext_TemplateProcessor|null
+     */
+    public function getParent()
+    {
+        return $this->_parent;
     }
 
     public function replaceTine20ImagePaths()
@@ -136,5 +173,165 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         }
 
         return parent::save();
+    }
+
+    /**
+     * @param string $data
+     */
+    public function setMainPart($data)
+    {
+        $this->tempDocumentMainPart = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainPart()
+    {
+        return $this->tempDocumentMainPart;
+    }
+
+    /**
+     * replace a table row in a template document and return replaced row
+     *
+     * @param string $search
+     * @param string $replacement
+     *
+     * @return string
+     *
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    public function replaceRow($search, $replacement)
+    {
+        if ('${' !== substr($search, 0, 2) && '}' !== substr($search, -1)) {
+            $search = '${' . $search . '}';
+        }
+
+        $tagPos = strpos($this->tempDocumentMainPart, $search);
+        if (!$tagPos) {
+            throw new \PhpOffice\PhpWord\Exception\Exception("Can not clone row, template variable not found or variable contains markup.");
+        }
+
+        $rowStart = $this->findRowStart($tagPos);
+        $rowEnd = $this->findRowEnd($tagPos);
+        $xmlRow = $this->getSlice($rowStart, $rowEnd);
+
+        $result = $this->getSlice(0, $rowStart) . $replacement;
+        $result .= $this->getSlice($rowEnd);
+
+        $this->tempDocumentMainPart = $result;
+
+        return $xmlRow;
+    }
+
+    /**
+     * @param $data
+     */
+    public function append($data)
+    {
+        $this->tempDocumentMainPart .= $data;
+    }
+
+    /**
+     * @param string $row
+     * @param int $num
+     * @param string $where
+     *
+    public function insertRow($row, $num, $where)
+    {
+        $row = preg_replace('/\$\{(.*?)\}/', '\${\\1#' . $num . '}', $row);
+
+        $this->setValue($where, $row . $where);
+    }*/
+
+    /**
+     * Clone a block.
+     *
+     * @param string $blockname
+     * @param integer $clones
+     * @param boolean $replace
+     *
+     * @return string|null
+     */
+    public function cloneBlock($blockname, $clones = 1, $replace = true)
+    {
+        $xmlBlock = null;
+        preg_match(
+            '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p( [^>]+)?>.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            $this->tempDocumentMainPart,
+            $matches
+        );
+
+        if (isset($matches[3])) {
+            $xmlBlock = $matches[3];
+            $cloned = array();
+            for ($i = 1; $i <= $clones; $i++) {
+                $cloned[] = $xmlBlock;
+            }
+
+            if ($replace) {
+                $this->tempDocumentMainPart = str_replace(
+                    $matches[2] . $matches[3] . $matches[4],
+                    implode('', $cloned),
+                    $this->tempDocumentMainPart
+                );
+            }
+        }
+
+        return $xmlBlock;
+    }
+
+    /**
+     * Replace a block.
+     *
+     * @param string $blockname
+     * @param string $replacement
+     *
+     * @return void
+     */
+    public function replaceBlock($blockname, $replacement)
+    {
+        preg_match(
+            '/(<\?xml.*)(<w:p( [^>]+)?>.*\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p( [^>]+)?>.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            $this->tempDocumentMainPart,
+            $matches
+        );
+
+        if (isset($matches[4])) {
+            $this->tempDocumentMainPart = str_replace(
+                $matches[2] . $matches[4] . $matches[5],
+                $replacement,
+                $this->tempDocumentMainPart
+            );
+        }
+    }
+
+    /**
+     * @param array $config
+     */
+    public function setConfig(array $config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function hasConfig($key)
+    {
+        return isset($this->_config[$key]);
+    }
+
+    /**
+     * @param string|null $key
+     * @return mixed
+     */
+    public function getConfig($key = null)
+    {
+        if (null === $key) {
+            return $this->_config;
+        }
+        return $this->_config[$key];
     }
 }

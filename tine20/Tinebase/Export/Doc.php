@@ -16,7 +16,8 @@
  * @subpackage  Export
  */
 
-class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface {
+class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
+{
 
     /**
      * the document
@@ -39,13 +40,30 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected $_format = 'docx';
 
+    /**
+     * @var int
+     */
     protected $_rowCount = 0;
 
-    protected $_cloneRow = null;
-    protected $_block = null;
-    protected $_separator = null;
+    /**
+     * @var array
+     */
+    protected $_templateVariables = null;
 
-    protected $delayIteration = true;
+    /**
+     * @var array
+     */
+    protected $_dataSources = array();
+
+    /**
+     * @var boolean
+     */
+    protected $_skip = false;
+
+    /**
+     * @var Tinebase_Export_Richtext_TemplateProcessor
+     */
+    protected $_currentProcessor = null;
 
 
 
@@ -72,15 +90,15 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         return 'letter_' . strtolower($_appName) . '.docx';
     }
 
+
     /**
      * generate export
      */
     public function generate()
     {
-        if (null !== $this->_records) {
-            $this->delayIteration = false;
-        }
         $this->_rowCount = 0;
+        $this->_writeGenericHeader = false;
+        $this->_dumpRecords = false;
         $this->_createDocument();
         $this->_exportRecords();
         if (null !== $this->_docTemplate) {
@@ -108,9 +126,185 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         unlink($tempfile);
     }
 
+    /**
+     * @param string $str
+     * @return string
+     */
+    protected function _cutXml($str)
+    {
+        return substr($str, 5);
+    }
+
+    /**
+     * @param $_name
+     */
+    protected function _startDataSource($_name)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting datasource ' . $_name);
+
+        if (!isset($this->_dataSources[$_name])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' datasource not found, skipping data!');
+            $this->_skip = true;
+            return;
+        }
+
+        $this->_currentProcessor = $this->_dataSources[$_name];
+        $this->_rowCount = 0;
+    }
+
+    /**
+     * @param $_name
+     */
+    protected function _endDataSource($_name)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ending datasource ' . $_name);
+
+        $data = '';
+
+        if (false === $this->_skip) {
+
+            $this->_unwrapProcessors();
+
+            /** @var Tinebase_Export_Richtext_TemplateProcessor $processor */
+            $processor = $this->_dataSources[$_name];
+            $data = $this->_cutXml($processor->getMainPart());
+        }
+
+        $this->_lastGroupValue = null;
+        $this->_skip = false;
+        $this->_currentProcessor = $this->_docTemplate;
+        $this->_docTemplate->setValue('DATASOURCE_' . $_name, $data);
+    }
+
+    protected function _unwrapProcessors()
+    {
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD) {
+            $this->_currentProcessor = $this->_currentProcessor->getParent();
+            $this->_currentProcessor->setValue('${RECORD_BLOCK}', '');
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_STANDARD) {
+            $this->_currentProcessor->setValue('${RECORD_ROW}', '');
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP) {
+            $processor = $this->_currentProcessor->getParent();
+            $processor->setValue('${GROUP_BLOCK}', $this->_cutXml($this->_currentProcessor->getMainPart()));
+            $this->_currentProcessor = $processor;
+        }
+    }
+
+    protected function _startGroup()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting group...');
+
+        if (true === $this->_skip) {
+            return;
+        }
+
+        if ($this->_currentProcessor->hasConfig('group')) {
+            $this->_currentProcessor = $this->_currentProcessor->getConfig('group');
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP) {
+            if ($this->_rowCount > 0 && $this->_currentProcessor->hasConfig('groupSeparator')) {
+                $this->_currentProcessor->append($this->_currentProcessor->getConfig('groupSeparator'));
+            }
+
+            if ($this->_currentProcessor->hasConfig('groupHeader')) {
+                $this->_currentProcessor->append($this->_currentProcessor->getConfig('groupHeader'));
+            }
+
+            $this->_currentProcessor->append($this->_currentProcessor->getConfig('groupXml'));
+        } elseif ($this->_currentProcessor->hasConfig('recordRow')) {
+            $recordRow = $this->_currentProcessor->getConfig('recordRow');
+
+            if ($this->_rowCount > 0 && isset($recordRow['groupSeparatorRow'])) {
+                $this->_currentProcessor->setValue('${RECORD_ROW}', $recordRow['groupSeparatorRow'] . '${RECORD_ROW}');
+            }
+
+            if (isset($recordRow['groupHeaderRow'])) {
+                $this->_currentProcessor->setValue('${RECORD_ROW}', $recordRow['groupHeaderRow'] . '${RECORD_ROW}');
+            }
+        }
+    }
+
+    protected function _endGroup()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ending group...');
+
+        if (true === $this->_skip) {
+            return;
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP) {
+            $this->_currentProcessor->setValue('${RECORD_ROW}', '');
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD) {
+            $this->_currentProcessor = $this->_currentProcessor->getParent();
+            if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP) {
+                $this->_currentProcessor->setValue('${RECORD_BLOCK}', '');
+            }
+        }
+
+        if ($this->_currentProcessor->hasConfig('recordRow')) {
+            $recordRow = $this->_currentProcessor->getConfig('recordRow');
+            if (isset($recordRow['groupFooterRow'])) {
+                $this->_currentProcessor->setValue('${RECORD_ROW}', $recordRow['groupFooterRow'] . '${RECORD_ROW}');
+            }
+        }
+
+        if ($this->_currentProcessor->hasConfig('groupFooter')) {
+            $this->_currentProcessor->append($this->_currentProcessor->getConfig('groupFooter'));
+        }
+    }
+
     protected function _startRow()
     {
+        if (true === $this->_skip) {
+            return;
+        }
+
         $this->_rowCount += 1;
+
+        if ($this->_currentProcessor->hasConfig('recordRow')) {
+            $recordRow = $this->_currentProcessor->getConfig('recordRow');
+            $this->_currentProcessor->setValue('${RECORD_ROW}', $recordRow['recordRow'] . '${RECORD_ROW}');
+        } else {
+            if ($this->_currentProcessor->hasConfig('record')) {
+                $this->_currentProcessor = $this->_currentProcessor->getConfig('record');
+            }
+
+            if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD) {
+                $data = '';
+                if ($this->_rowCount > 1 && $this->_currentProcessor->hasConfig('separator')) {
+                    $data .= $this->_currentProcessor->getConfig('separator');
+                }
+
+                if ($this->_currentProcessor->hasConfig('header')) {
+                    $data .= $this->_currentProcessor->getConfig('header');
+                }
+
+                $data .= $this->_currentProcessor->getConfig('recordXml') . '${RECORD_BLOCK}';
+                $this->_currentProcessor->getParent()->setValue('${RECORD_BLOCK}', $data);
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('template and definition do not match');
+            }
+        }
+    }
+
+    protected function _endRow()
+    {
+        if (true === $this->_skip) {
+            return;
+        }
+
+        if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD &&
+                $this->_currentProcessor->hasConfig('footer')) {
+            $this->_currentProcessor->getParent()->setValue('${RECORD_BLOCK}',
+                $this->_currentProcessor->getConfig('footer') . '${RECORD_BLOCK}');
+        }
     }
 
     /**
@@ -136,7 +330,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $templateFile = $this->_getTemplateFilename();
         $this->_docObject = new \PhpOffice\PhpWord\PhpWord();
 
-        if ($templateFile !== NULL) {
+        if ($templateFile !== null) {
+            $this->_hasTemplate = true;
             $this->_docTemplate = new Tinebase_Export_Richtext_TemplateProcessor($templateFile);
         }
     }
@@ -147,10 +342,14 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _setValue($_key, $_value)
     {
-        if (true === $this->_iterationDone) {
-            $this->_docTemplate->setValue($_key, $_value);
-        } else {
-            $this->_docTemplate->setValue($_key . '#' . $this->_rowCount, $_value);
+        if (true === $this->_skip) {
+            return;
+        }
+
+        $this->_currentProcessor->setValue($_key, $_value);
+
+        if($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD) {
+            $this->_currentProcessor->getParent()->setValue($_key, $_value);
         }
     }
 
@@ -160,17 +359,18 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _writeValue($_value)
     {
-        throw new Tinebase_Exception_NotImplemented(__CLASS__ . ' can not provide a meaningful default implementation. Subclass needs to provide or avoid it from being called');
+        throw new Tinebase_Exception_NotImplemented(__CLASS__ . ' can not provide a meaningful default '
+                . 'implementation. Subclass needs to provide or avoid it from being called');
     }
 
     public function _getTwigSource()
     {
         $i = 0;
         $source = '[';
-        foreach ($this->_docTemplate->getVariables() as $placeholder) {
+        foreach ($this->_getTemplateVariables() as $placeholder) {
             if (strpos($placeholder, 'twig:') === 0) {
                 $this->_twigMapping[$i] = $placeholder;
-                $source .= ($i === 0 ? '' : ',') . '"{{' . substr($placeholder, 5) . '}}"';
+                $source .= ($i === 0 ? '' : ',') . '{{' . html_entity_decode(substr($placeholder, 5), ENT_QUOTES | ENT_XML1) . '}}';
                 ++$i;
             }
         }
@@ -184,60 +384,168 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _onBeforeExportRecords()
     {
-        $templateProcessor = $this->getDocument();
+        if (null !== $this->_docTemplate) {
+            $this->_findAndReplaceDatasources();
 
-        // first step: generate layout
-        $this->_block = $templateProcessor->cloneBlock('BLOCK', 1, false);
-        $this->_separator = $templateProcessor->cloneBlock('SEPARATOR', 1, false);
+            if (empty($this->_dataSources)) {
+                $this->_findAndReplaceGroup($this->_docTemplate);
+                $this->_currentProcessor = $this->_docTemplate;
 
-        if (preg_match('/<w:tbl.*\${([^}]+)}/is', $this->_block, $matches)) {
-            $this->_cloneRow = $matches[1];
-        } else {
-            throw new Tinebase_Exception_UnexpectedValue('BLOCK needs to contain a replacement variable');
+            }
+        }
+    }
+
+    protected function _findAndReplaceDatasources()
+    {
+        foreach ($this->_getTemplateVariables() as $placeholder) {
+            if (strpos($placeholder, 'DATASOURCE') === 0 && preg_match('/DATASOURCE_(.*)/', $placeholder, $match)) {
+                if (null === ($dataSource = $this->_docTemplate->cloneBlock($placeholder, 1, false))) {
+                    throw new Tinebase_Exception_UnexpectedValue('clone block for ' . $placeholder . ' failed');
+                }
+
+                $dataSource = '<?xml' . $dataSource;
+                $processor = new Tinebase_Export_Richtext_TemplateProcessor($dataSource, true,
+                    Tinebase_Export_Richtext_TemplateProcessor::TYPE_DATASOURCE);
+                $this->_dataSources[$match[1]] = $processor;
+                $this->_docTemplate->replaceBlock($match[0], '${' . $match[0] . '}');
+
+                $this->_findAndReplaceGroup($processor);
+            }
         }
     }
 
     /**
-     * bypass process iterations
-     *
-     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor
      */
-    public function processIteration($_records)
+    protected function _findAndReplaceGroup(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor)
     {
-        if (false === $this->delayIteration) {
-            return;
-        }
-        if (null === $this->_records) {
-            $this->_records = $_records;
+        $config = array();
+
+        if (null !== ($group = $_templateProcessor->cloneBlock('GROUP_BLOCK', 1, false))) {
+            $_templateProcessor->replaceBlock('GROUP_BLOCK', '${GROUP_BLOCK}');
+            $groupProcessor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml' . $group, true,
+                Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP, $_templateProcessor);
+
+            if (null === ($recordProcessor = $this->_findAndReplaceRecord($groupProcessor))) {
+                $config['recordRow'] = $this->_findAndReplaceRecordRow($groupProcessor);
+            } else {
+                $config['record'] = $recordProcessor;
+            }
+            if (null !== ($groupHeader = $_templateProcessor->cloneBlock('GROUP_HEADER', 1, false))) {
+                $_templateProcessor->replaceBlock('GROUP_HEADER', '');
+                $config['groupHeader'] = $groupHeader;
+            }
+            if (null !== ($groupFooter = $_templateProcessor->cloneBlock('GROUP_FOOTER', 1, false))) {
+                $_templateProcessor->replaceBlock('GROUP_FOOTER', '');
+                $config['groupFooter'] = $groupFooter;
+            }
+            if (null !== ($groupSeparator = $_templateProcessor->cloneBlock('GROUP_SEPARATOR', 1, false))) {
+                $_templateProcessor->replaceBlock('GROUP_SEPARATOR', '');
+                $config['groupSeparator'] = $groupSeparator;
+            }
+            if (isset($config['recordRow']) && (isset($config['groupHeaderRow']) || isset($config['groupFooterRow']) ||
+                    isset($config['groupSeparatorRow']))) {
+                throw new Tinebase_Exception_UnexpectedValue('GROUP must not contain header, footer or separator rows');
+            }
+            $config['groupXml'] = $this->_cutXml($groupProcessor->getMainPart());
+            $groupProcessor->setMainPart('<?xml');
+            $groupProcessor->setConfig($config);
+            $config = array('group' => $groupProcessor);
+
+        } elseif (null === ($record = $this->_findAndReplaceRecord($_templateProcessor))) {
+            $config['recordRow'] = $this->_findAndReplaceRecordRow($_templateProcessor);
         } else {
-            $this->_records->merge($_records);
+            $config['record'] = $record;
         }
+
+        $_templateProcessor->setConfig($config);
     }
+
+    /**
+     * @param Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor
+     * @return Tinebase_Export_Richtext_TemplateProcessor|null
+     */
+    protected function _findAndReplaceRecord(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor)
+    {
+        if (null !== ($recordBlock = $_templateProcessor->cloneBlock('RECORD_BLOCK', 1, false))) {
+            $_templateProcessor->replaceBlock('RECORD_BLOCK', '${RECORD_BLOCK}');
+            $processor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml', true,
+                Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD, $_templateProcessor);
+            $config = array(
+                'recordXml'     => $recordBlock
+            );
+
+            if (null !== ($recordHeader = $_templateProcessor->cloneBlock('RECORD_HEADER', 1, false))) {
+                $_templateProcessor->replaceBlock('RECORD_HEADER', '');
+                $config['header'] = $recordHeader;
+            }
+
+            if (null !== ($recordFooter = $_templateProcessor->cloneBlock('RECORD_FOOTER', 1, false))) {
+                $_templateProcessor->replaceBlock('RECORD_FOOTER', '');
+                $config['footer'] = $recordFooter;
+            }
+
+            if (null !== ($recordSeparator = $_templateProcessor->cloneBlock('RECORD_SEPARATOR', 1, false))) {
+                $_templateProcessor->replaceBlock('RECORD_SEPARATOR', '');
+                $config['separator'] = $recordSeparator;
+            }
+            $processor->setConfig($config);
+            return $processor;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor
+     * @return array
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    protected function _findAndReplaceRecordRow(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor)
+    {
+        $result = array();
+
+        if (preg_match('/<w:tbl.*?(\$\{twig:[^}]*record[^}]*})/is', $_templateProcessor->getMainPart(), $matches)) {
+            $result['recordRow'] = $_templateProcessor->replaceRow($matches[1], '${RECORD_ROW}');
+
+            if (strpos($_templateProcessor->getMainPart(), '${GROUP_HEADER}') !== false) {
+                $result['groupHeaderRow'] = str_replace('${GROUP_HEADER}', '', $_templateProcessor->replaceRow('${GROUP_HEADER}', ''));
+            }
+
+            if (strpos($_templateProcessor->getMainPart(), '${GROUP_FOOTER}') !== false) {
+                $result['groupFooterRow'] = str_replace('${GROUP_FOOTER}', '', $_templateProcessor->replaceRow('${GROUP_FOOTER}', ''));
+            }
+
+            if (strpos($_templateProcessor->getMainPart(), '${GROUP_SEPARATOR}') !== false) {
+                $result['groupSeparatorRow'] = str_replace('${GROUP_SEPARATOR}', '', $_templateProcessor->replaceRow('${GROUP_SEPARATOR}', ''));
+            }
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('template without RECORD_BLOCK needs to contain a table row with a replacement variable');
+        }
+
+        return $result;
+    }
+
 
     /**
      * now simulate processIteration and finish with _onAfterExportRecords
      *
-     * @param array $result
+     * @param array $_result
      */
-    protected function _onAfterExportRecords(/** @noinspection PhpUnusedParameterInspection */ array $result)
+    protected function _onAfterExportRecords(array $_result)
     {
-        $templateProcessor = $this->getDocument();
+        $this->_unwrapProcessors();
 
-        $blockCount = $this->_records->count();
-        $blocks = $blockCount ? $this->_block : '';
-        for ($i=1; $i<$blockCount; $i++) {
-            $blocks .= $this->_seperator;
-            $blocks .= $this->_block;
+        parent::_onAfterExportRecords($_result);
+    }
+
+    protected function _getTemplateVariables()
+    {
+        if (null === $this->_templateVariables) {
+            $this->_templateVariables = $this->_docTemplate->getVariables();
         }
 
-        $templateProcessor->replaceBlock('BLOCK', $blocks);
-        $templateProcessor->deleteBlock('SEPARATOR');
-
-        unset($blocks);
-
-        parent::processIteration($this->_records);
-
-        // do this at the end, first we simulate the normal flow through processIteration
-        parent::_onAfterExportRecords($result);
+        return $this->_templateVariables;
     }
 }
