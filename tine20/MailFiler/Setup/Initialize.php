@@ -38,4 +38,19 @@ class MailFiler_Setup_Initialize extends Setup_Initialize
             }
         }
     }
+
+    /**
+     * initialize folders for current users
+     */
+    public function _initializePersonalFolders(Tinebase_Model_Application $_application, $_options = null)
+    {
+        $users = Tinebase_User::getInstance()->getFullUsers();
+        foreach ($users as $user) {
+            if (in_array($user->accountLoginName, Tinebase_User::getSystemUsernames())) {
+                continue;
+            }
+
+            MailFiler_Controller::getInstance()->createPersonalFolder($user);
+        }
+    }
 }
