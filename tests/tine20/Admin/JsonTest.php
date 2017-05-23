@@ -1036,8 +1036,26 @@ class Admin_JsonTest extends TestCase
         }
         // record should not be found
         $this->assertEquals($e->getMessage(), 'Addressbook_Model_Contact record with id = ' . $contact->getId().' not found!');
-        
-        
+    }
+
+    /**
+     * test create container with model
+     * 0013120: Via Admin-App created calendar-container have a wrong model
+     */
+    public function testCreateContainerWithModel()
+    {
+        $container = $this->_json->saveContainer(array(
+            "type" => Tinebase_Model_Container::TYPE_SHARED,
+            "backend" => "Sql",
+            "name" => "testtest",
+            "color" => "#008080",
+            "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            "model" => "Tine.Calendar.Model.Event",
+            "note" => ""
+        ));
+
+        // check if the model was set
+        $this->assertEquals($container['model'], 'Calendar_Model_Event');
     }
     
     /**
