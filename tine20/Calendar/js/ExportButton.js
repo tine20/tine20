@@ -8,32 +8,35 @@
  */
 Ext.ns('Tine.Calendar');
 
-
 Tine.Calendar.ExportButton = Ext.extend(Tine.widgets.grid.ExportButton, {
 
     doExport: function() {
         var app = Tine.Tinebase.appMgr.get('Calendar'),
             mainScreen = app.getMainScreen(),
             centerPanel = mainScreen.getCenterPanel(),
-            filterData = centerPanel.getAllFilterData({
-                noPeriodFilter: false
+            exportJob = new Tine.Tinebase.Model.ExportJob({
+                scope: this.exportScope,
+                filter: centerPanel.getAllFilterData({
+                    noPeriodFilter: false
+                }),
+                format: this.format,
+                exportFunction: this.exportFunction,
+                recordsName: Tine.Calendar.Model.Event.getRecordsName(),
+                count: '',
+                model: 'Calendar_Model_Event',
+                options: {
+                    format: this.format,
+                    definitionId: this.definitionId
+                }
             });
 
         if (this.showExportDialog) {
             Tine.widgets.dialog.ExportDialog.openWindow({
                 appName: 'Calendar',
-                record: new Tine.Tinebase.Model.ExportJob({
-                    filter: filterData,
-                    format: this.format,
-                    exportFunction: this.exportFunction,
-                    recordsName: Tine.Calendar.Model.Event.getRecordsName(),
-                    count: '',
-                    model: 'Calendar_Model_Event'
-                })
+                record: exportJob
             });
         } else {
-            this.gridPanel = centerPanel;
-            this.startDownload(filterData);
+            Tine.widgets.exportAction.downloadExport(exportJob);
         }
     }
 

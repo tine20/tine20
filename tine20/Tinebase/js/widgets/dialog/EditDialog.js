@@ -615,8 +615,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             iconCls: 'action_delete',
             disabled: true
         });
+
+        this.action_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
+            getExportOptions: this.getExportOptions.createDelegate(this)
+        }, Tine.widgets.exportAction.SCOPE_SINGLE);
     },
-    
+
+    /**
+     * get export options/data
+     */
+    getExportOptions: function() {
+        this.onRecordUpdate();
+        return {
+            recordData: this.record.data
+        };
+    },
+
     /**
      * init buttons
      * 
@@ -632,8 +646,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         } else {
             this.fbar.push(this.action_cancel, this.action_saveAndClose);
         }
-       
-        if (this.tbarItems) {
+
+        if (this.action_export) {
+            this.tbarItems = this.tbarItems || [];
+            this.tbarItems.push(this.action_export);
+        }
+
+        if (this.tbarItems && this.tbarItems.length) {
             this.tbar = new Ext.Toolbar({
                 items: this.tbarItems
             });

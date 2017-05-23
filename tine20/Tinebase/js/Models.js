@@ -329,6 +329,7 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
  * Model of an export job
  */
 Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
+    {name: 'scope'                  },
     {name: 'filter'                 },
     {name: 'export_definition_id'   },
     {name: 'format'                 },

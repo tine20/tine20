@@ -292,7 +292,14 @@ Tine.widgets.actionUpdater = function(records, actions, containerField, skipGran
             grants[grant] = grants[grant] & recordGrants[grant];
         }
     }
-    
+
+    // if calculated admin right is true, overwrite all grants with true
+    if(grants.adminGrant) {
+        for (var grant in grants) {
+            grants[grant] = true;
+        }
+    }
+
     /**
      * action iterator
      */

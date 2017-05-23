@@ -105,21 +105,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
-        this.actions_exportContact = new Ext.Action({
-            requiredGrant: 'exportGrant',
-            text: String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 50), this.i18nRecordsName),
-            singularText: String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 1), this.i18nRecordName),
-            pluralText:  String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 1), this.i18nRecordsName),
-            translationObject: this.app.i18n,
-            iconCls: 'action_export',
-            scope: this,
-            disabled: true,
-            allowMultiple: true,
-            menu: {
-                items: this.initExportButton()
-            }
-        });
-
         this.actions_import = new Ext.Action({
             //requiredGrant: 'addGrant',
             text: this.app.i18n._('Import contacts'),
@@ -132,7 +117,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportContact,
             this.actions_import
         ]);
         
@@ -149,25 +133,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * add custom items to action toolbar
-     * 
-     * @return {Object}
-     */
-    getActionToolbarItems: function() {
-        return [
-            {
-                xtype: 'buttongroup',
-                columns: 1,
-                frame: false,
-                items: [
-                    this.actions_exportContact,
-                    this.actions_import
-                ]
-            }
-        ];
-    },
-    
-    /**
      * add custom items to context menu
      * 
      * @return {Array}
@@ -175,7 +140,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getContextMenuItems: function() {
         var items = [
             '-',
-            this.actions_exportContact,
+            this.actions_export,
             '-'
         ];
         

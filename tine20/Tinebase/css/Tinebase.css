@@ -716,6 +716,10 @@ html, body {
     text-decoration: underline;
 }
 
+.x-btn-group-bwrap .x-toolbar-cell{
+    vertical-align: top;
+}
+
 .tine-favicon {
     background-image:url(../../images/favicon.png) !important;
 }
