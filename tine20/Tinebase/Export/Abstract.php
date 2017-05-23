@@ -181,6 +181,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_logoPath = null;
 
     /**
+     * @var Tinebase_Record_RecordSet|null
+     */
+    protected $_records = null;
+
+    /**
      * the constructor
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -213,6 +218,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } else {
                 $this->_sortInfo =  $_additionalOptions['sortInfo'];
             }
+        }
+
+        if (isset($_additionalOptions['recordData'])) {
+            $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
+                array(new $this->_modelName($_additionalOptions['recordData'])));
         }
     }
 
@@ -355,19 +365,29 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         $this->_onBeforeExportRecords();
 
-        $iterator = new Tinebase_Record_Iterator(array(
-            'iteratable' => $this,
-            'controller' => $this->_controller,
-            'filter'     => $this->_filter,
-            'options'     => array(
-                'searchAction' => 'export',
-                'sortInfo'     => $this->_sortInfo,
-                'getRelations' => $this->_getRelations,
-            ),
-        ));
-
         $this->_firstIteration = true;
-        $result = $iterator->iterate();
+
+        if (null === $this->_records) {
+            $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => $this->_controller,
+                'filter' => $this->_filter,
+                'options' => array(
+                    'searchAction' => 'export',
+                    'sortInfo' => $this->_sortInfo,
+                    'getRelations' => $this->_getRelations,
+                ),
+            ));
+
+            $result = $iterator->iterate();
+        } else {
+
+            $result = array(
+                'totalcount' => $this->_records->count(),
+                'results'    => array(),
+            );
+            $result['results'][] = $this->processIteration($this->_records);
+        }
 
         $this->_onAfterExportRecords($result);
 

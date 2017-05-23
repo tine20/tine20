@@ -45,10 +45,9 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_block = null;
     protected $_separator = null;
 
-    /**
-     * @var Tinebase_Record_RecordSet|null
-     */
-    protected $_records = null;
+    protected $delayIteration = true;
+
+
 
     /**
      * get download content type
@@ -78,6 +77,9 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     public function generate()
     {
+        if (null !== $this->_records) {
+            $this->delayIteration = false;
+        }
         $this->_rowCount = 0;
         $this->_createDocument();
         $this->_exportRecords();
@@ -202,6 +204,9 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     public function processIteration($_records)
     {
+        if (false === $this->delayIteration) {
+            return;
+        }
         if (null === $this->_records) {
             $this->_records = $_records;
         } else {
