@@ -1090,4 +1090,25 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.25');
     }
+
+    /**
+     * update to 10.26
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_25()
+    {
+        if (! $this->_backend->columnExists('scope', 'importexport_definition')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>scope</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $this->_backend->addCol('importexport_definition', $declaration);
+
+            $this->setTableVersion('importexport_definition', 10);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.26');
+    }
 }

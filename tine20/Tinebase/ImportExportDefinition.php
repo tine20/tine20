@@ -18,6 +18,9 @@
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
+    const SCOPE_SINGLE = 'single';
+    const SCOPE_MULTI = 'multi';
+
     /**
      * holds the instance of the singleton
      *
@@ -118,6 +121,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'model'                       => $config->model,
                 'plugin'                      => $config->plugin,
                 'icon_class'                  => $config->icon_class,
+                'scope'                       => (empty($config->scope) ||
+                        !in_array($config->scope, array(self::SCOPE_SINGLE, self::SCOPE_MULTI))) ? '' : $config->scope,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,

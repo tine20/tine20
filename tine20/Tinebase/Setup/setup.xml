@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.25</version>
+    <version>10.26</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2600,7 +2600,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2660,6 +2660,11 @@
                 </field>
                 <field>
                     <name>icon_class</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>scope</name>
                     <type>text</type>
                     <length>255</length>
                 </field>

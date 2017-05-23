@@ -1674,7 +1674,17 @@ class Setup_Controller
 
             if (file_exists($path)) {
                 $fileSystem = Tinebase_FileSystem::getInstance();
-                $templateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath('/Tinebase/folders/shared/' . strtolower($type) . '/templates/' . $_application->name);
+
+                $basepath = $fileSystem->getApplicationBasePath(
+                    'Tinebase',
+                    Tinebase_FileSystem::FOLDER_TYPE_SHARED
+                ) . '/' . strtolower($type);
+
+                if (false === $fileSystem->isDir($basepath)) {
+                    $fileSystem->createAclNode($basepath);
+                }
+
+                $templateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath($basepath . '/templates/' . $_application->name);
 
                 if (! $fileSystem->isDir($templateAppPath->statpath)) {
                     $fileSystem->mkdir($templateAppPath->statpath);
