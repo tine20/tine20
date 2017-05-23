@@ -33,6 +33,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * init component
      */
     initComponent: function () {
+        this.on('load', this.resolveMemberData, this);
+
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
             region: "center",
             frame: true,
@@ -176,16 +178,13 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * onRecordLoad
      */
-    onRecordLoad: function () {
-        // NOTE: it comes again and again till
-        if (this.rendered) {
-            this.memberGridPanel.record = this.record;
-            if (this.record.id) {
-                this.memberGridPanel.setMembers();
-                this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
-            }
+    resolveMemberData: function (editDialog, record, ticketFn) {
+        var ticket = ticketFn();
+        this.memberGridPanel.record = this.record;
+        if (this.record.id) {
+            this.memberGridPanel.setMembers(ticket);
+            this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
         }
-        this.supr().onRecordLoad.apply(this, arguments);
     },
 
     /**

@@ -83,12 +83,16 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     /**
      * initialises grid with an array of member uids
      */
-    setMembers: function() {
+    setMembers: function(cb, scope) {
         var members = this.record.get("members"),
             memberroles = this.record.get("memberroles")
 
         if (members) {
-            var options = {params: {filter: [ { "field":"id","operator":"in", "value": members } ]}};
+            var options = {
+                params: {filter: [ { "field":"id","operator":"in", "value": members } ]},
+                callback: cb || Ext.emptyFn,
+                scope: scope
+            };
             this.store.load(options);
             this.store.sort("n_fileas");
         }
