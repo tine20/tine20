@@ -1923,6 +1923,30 @@ Steuernummer 33/111/32212";
         return $list;
     }
 
+    public function testUpdateListWithRelation()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        $relatedList = $this->testCreateListWithMemberAndRole();
+
+        $list['relations'] =  array(
+            array(
+                'type'  => 'LIST',
+                'own_model' => 'Addressbook_Model_List',
+                'own_backend' => 'Sql',
+                'related_degree' => 'sibling',
+                'related_model' => 'Addressbook_Model_List',
+                'related_backend' => 'Sql',
+                'related_id' => $relatedList['id'],
+                'related_record' => $relatedList
+            )
+        );
+        $list = $this->_uit->saveList($list);
+        self::assertEquals(1, count($list['relations']), 'relation missing from list');
+        //Save the list again...
+        $list = $this->_uit->saveList($list);
+        self::assertEquals(1, count($list['relations']), 'relation missing from list');
+    }
+
     public function testSearchListsByMember()
     {
         $list = $this->testCreateListWithMemberAndRole();
