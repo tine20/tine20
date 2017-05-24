@@ -35,7 +35,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
-     * we don't use modlog here because the name is unique. If the only do a soft delete, it is not possible to create the same node again!
+     * we don't use modlog here because the name is unique. If the only do a soft delete, it is not possible to create
+     * the same node again!
      *
      * @var boolean
      */
