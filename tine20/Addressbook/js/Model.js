@@ -300,7 +300,7 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app, field: 'contact'},
         {label: app.i18n._('Name'),                                               field: 'name' },
-        {label: app.i18n._('Description'),                                                field: 'description'},
+        {label: app.i18n._('Description'),                                                field: 'description', operators: ['contains', 'notcontains']},
         {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
         {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
         {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},

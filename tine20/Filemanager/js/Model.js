@@ -584,7 +584,7 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
 //        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
         {label: app.i18n._('Contenttype'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-        {label: app.i18n._('Description'), field: 'description'},
+        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
         {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
         {filtertype : 'tinebase.tag', app : app} 
     ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
