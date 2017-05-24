@@ -75,6 +75,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
                         name: 'url',
                         xtype: 'datefield',
                         editable: false,
+                        readOnly: true,
                         value: this.record.get('expiry_time')
                     }]
                 ]
