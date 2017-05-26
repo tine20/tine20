@@ -1673,7 +1673,19 @@ class Felamimail_Controller_MessageTest extends TestCase
         </span><pre><span style="font-family:tahoma;">John Smith
 Photographer', $message->body);
     }
-    
+
+    /**
+     * @see 0013150: convert single part file content body to attachment
+     */
+    public function testSinglePartPdfMail()
+    {
+        $cachedMessage = $this->messageTestHelper('single_part_pdf.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+
+        self::assertEquals(1, count($message->attachments));
+        self::assertTrue($message->has_attachment, 'attachments missing!');
+    }
+
     /**
      * @see: 0010150: Jump Labels get converted
      * 
