@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage    Export
  */
-class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
+class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements Tinebase_Record_IteratableInterface
 {
     /**
      * relation types

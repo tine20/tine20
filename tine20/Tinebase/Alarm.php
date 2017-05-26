@@ -119,7 +119,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             
             // loop alarms and call sendAlarm in controllers
             foreach ($alarms as $alarm) {
-                list($appName, $i, $itemName) = explode('_', $alarm->model);
+                list($appName, , $itemName) = explode('_', $alarm->model);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             
                 if ($appController instanceof Tinebase_Controller_Alarm_Interface) {

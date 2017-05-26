@@ -110,16 +110,33 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate() {
 
         $this->_getDays();
-        foreach($this->_personas as $loginName => $persona) {
+        foreach ($this->_personas as $loginName => $persona) {
             $this->_calendars[$loginName] = Tinebase_Container::getInstance()->getContainerById(Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $persona->getId()));
 
             if (isset($this->_personas['sclever'])) {
-                Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+                Tinebase_Container::getInstance()->addGrants(
+                    $this->_calendars[$loginName]->getId(),
+                    Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    $this->_personas['sclever']->getId(),
+                    $this->_secretaryGrants,
+                    true
+                );
             }
             if (isset($this->_personas['rwright'])) {
-                Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+                Tinebase_Container::getInstance()->addGrants(
+                    $this->_calendars[$loginName]->getId(),
+                    Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    $this->_personas['rwright']->getId(),
+                    $this->_controllerGrants,
+                    true);
             }
 
+            Tinebase_Container::getInstance()->addGrants(
+                $this->_calendars[$loginName]->getId(),
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
+                $this->_adminGrants,
+                true);
         }
     }
     
@@ -193,7 +210,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         }
 
         $lastMonday->add(date_interval_create_from_date_string('20 weeks'));
-        $rruleUntilMondayMeeting = $lastMonday->format('d-m-Y') . ' 16:00:00';
         
         // shared events data
         $this->sharedEventsData = array(
@@ -203,6 +219,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 12:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 13:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -210,6 +232,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Treffen aller Projektleiter' : 'meeting of all project leaders',
                     'dtstart'     => $monday->format('d-m-Y') . ' 14:15:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 16:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -217,6 +245,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Treffen aller Geschäftsführer' : 'Meeting of all CEO',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 12:30:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 13:45:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -224,6 +258,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Wie verhalte ich mich meinen Mitarbeitern gegenüber in Problemsituationen.' : 'How to manage problematic situations with the employees',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:30:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -231,6 +271,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Besprechung des Projekts Alpha' : 'Meeting of the Alpha project',
                     'dtstart'     => $wednesday->format('d-m-Y') . ' 08:30:00',
                     'dtend'       => $wednesday->format('d-m-Y') . ' 09:45:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'WE',
+                        'byday' => 'WE',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -238,6 +284,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Besprechung des Projekts Beta' : 'Meeting of the beta project',
                     'dtstart'     => $wednesday->format('d-m-Y') . ' 10:00:00',
                     'dtend'       => $wednesday->format('d-m-Y') . ' 11:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'WE',
+                        'byday' => 'WE',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -245,6 +297,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Fahrt in die Semperoper nach Dresden' : 'Trip to the Semper Opera in Dresden',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 12:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 13:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -252,6 +310,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Das Projekt Alpha wird der Firma GammaTecSolutions vorgestellt' : 'presentation of Project Alpha for GammaTecSolutions',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 16:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 17:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )),
             array_merge_recursive($defaultData,
                 array(
@@ -262,11 +326,9 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'rrule' => array(
                         'freq' => 'WEEKLY',
                         'interval' => '1',
-                        'count' => 20,
                         'wkst' => 'MO',
                         'byday' => 'MO',
                     ),
-                    'rrule_until' => $rruleUntilMondayMeeting
         )),
         array_merge_recursive(
             $defaultData,
@@ -282,7 +344,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'wkst' => 'FR',
                     'byday' => 'FR',
                 ),
-                'rrule_until' => $lastFriday->add(date_interval_create_from_date_string('20 weeks'))->format('d-m-Y') . ' 16:00:00'
             ))
         );
 
@@ -300,15 +361,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // Paul Wulf
         $monday = clone $this->_monday;
         $tuesday = clone $this->_tuesday;
-        $wednesday = clone $this->_wednesday;
         $thursday = clone $this->_thursday;
         $friday = clone $this->_friday;
         $saturday = clone $this->_saturday;
         $sunday = clone $this->_sunday;
         $lastMonday = clone $this->_lastMonday;
-        $lastFriday = clone $this->_lastFriday;
         $lastSaturday = clone $this->_lastSaturday;
-        $lastSunday = clone $this->_lastSunday;
 
         $cal = $this->_calendars['pwulf'];
         $user = $this->_personas['pwulf'];
@@ -330,7 +388,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Lucy\'s Geburtstag' : 'Lucy\'s birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -353,9 +411,15 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Lucy\'s Geburtstagsfeier' : 'Lucy\'s birthday party',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'FR',
+                        'byday' => 'FR',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
@@ -364,14 +428,26 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Treffpunkt ist am oberen Parkplatz' : 'Meet at upper parking lot',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 16:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'SA',
+                        'byday' => 'SA',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Schwimmen gehen' : 'go swimming',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
@@ -380,6 +456,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
@@ -388,6 +470,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 16:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
@@ -396,6 +484,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => 'Brighton Centre',
                     'dtstart'     => $sunday->format('d-m-Y') . ' 20:00:00',
                     'dtend'       => $sunday->format('d-m-Y') . ' 21:30:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'SU',
+                        'byday' => 'SU',
+                    ),
                 )
             ),
 
@@ -480,7 +574,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Catherine\'s Geburtstag' : 'Catherine\'s birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -503,33 +597,57 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Elternabend Anne' : 'Talk to Ann\'s teacher',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'FR',
+                        'byday' => 'FR',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'I-Phone vom I-Store abholen'  : 'Fetch Iphone from store',
-                    'description' => static::$_de ? '':'',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 16:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'SA',
+                        'byday' => 'SA',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Anne vom Sport abholen' : 'Pick up Ann after her sports lesson',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Paul vom Klavierunterricht abholen' : 'Pick up Paul after his piano lesson',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )
             ),
 
@@ -568,7 +686,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Projektbesprechung Projekt Epsilon mit John' : 'Project Epsilon Meeting with John',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 09:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 10:30:00',
                 )
@@ -617,7 +735,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Joshuas Geburtstag' : 'Joshua\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -640,7 +758,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'James Geburtstag' : 'James\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -663,16 +781,21 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Shoppen mit Susan' : 'Go shopping with Susan',
-
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Joga Kurs' : 'yoga course',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 16:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 18:00:00',
                     'rrule' => array(
@@ -690,6 +813,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => static::$_de ? 'Fortbildungsveranstaltung' : 'further education',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             )
         );
@@ -719,25 +848,43 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Präsentation Quartalszahlen' : 'presentation quarter figures',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 09:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 10:30:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Kostenstellenanalyse' : 'cost put analysis',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 10:30:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 12:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Controller Meeting' : 'Controllers meeting',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 10:30:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 12:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             ),
         );
@@ -785,7 +932,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Elvis\' Geburtstag' : 'Elvis\' birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -808,7 +955,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'James Geburtstag' : 'James\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -831,16 +978,21 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Shoppen mit Roberta' : 'Go shopping with Roberta',
-
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Shoppen gehen' : 'go shopping',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 16:00:00',
                     'rrule' => array(
@@ -855,25 +1007,43 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Shoppen gehen' : 'go shopping',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Tanzen gehen mit Elvis' : 'Dance with Elvis',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'FR',
+                        'byday' => 'FR',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Disco Fever' : 'Disco fever',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'SA',
+                        'byday' => 'SA',
+                    ),
                 )
             ),
         );
@@ -918,7 +1088,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Catherines Geburtstag' : 'Catherine\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -941,7 +1111,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Alyssas Geburtstag' : 'Alyssa\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $friday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $friday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -964,7 +1134,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Brendas\' Geburtstag' : 'Brenda\'s Birthday',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 00:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 23:59:00',
                     'is_all_day_event' => true,
@@ -987,33 +1157,57 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Automesse in Liverpool' : 'Auto fair in Liverpool',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 19:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 23:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Weinverkostung auf der Burg' : 'Wine tasting at the castle',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $saturday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $saturday->format('d-m-Y') . ' 16:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'SA',
+                        'byday' => 'SA',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Eigentümerversammlung' : 'Owners\' meeting',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $tuesday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $tuesday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TU',
+                        'byday' => 'TU',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Datamining Konferenz' : 'Data mining conference',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 18:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'TH',
+                        'byday' => 'TH',
+                    ),
                 )
             )
         );
@@ -1046,25 +1240,43 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Projektbesprechung Projekt Gamma mit Herrn Pearson' : 'Project Gamma Meeting with Mr. Pearson',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 09:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 10:30:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
-                    'summary'     => static::$_de ? 'MDH Pitch' : 'MDH Pitch',
-                    'description' => static::$_de ? '' : '',
+                    'summary'     => 'MDH Pitch',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 10:30:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 12:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Mitarbeitergespräch mit Jack' : 'employee appraisal with Jack',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 10:30:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 12:00:00',
+                    'rrule' => array(
+                        'freq' => 'WEEKLY',
+                        'interval' => '1',
+                        'wkst' => 'MO',
+                        'byday' => 'MO',
+                    ),
                 )
             ),
         );

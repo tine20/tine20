@@ -18,17 +18,16 @@ Ext.ns('Ext.ux.form');
  * Textfield with clearing trigger
  */
 Ext.ux.form.ClearableTextField = Ext.extend(Ext.form.TriggerField, {
+    /**
+     * @cfg {Boolean} disableTrigger
+     */
+    disableTrigger: false,
+
     enableKeyEvents: true,
     triggerClass: 'x-form-clear-trigger',
     
     checkTrigger: function() {
-        if (this.getValue()) {
-            this.el.setWidth(this.wrap.getWidth() - this.trigger.getWidth());
-            this.trigger.show();
-        } else {
-            this.trigger.hide();
-            this.el.setWidth(this.wrap.getWidth());
-        }
+        this.setHideTrigger(! (this.getValue() && !this.disableTrigger));
     },
     
     initComponent: function() {

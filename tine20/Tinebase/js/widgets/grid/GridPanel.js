@@ -790,6 +790,45 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.getActionToolbar();
     },
 
+    // Generate Export button. New definitions needed!
+    initExportButton: function() {
+        var exportDefinitions = Tine[this.app.name].registry.get('exportDefinitions');
+        var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
+
+            items = [
+                new Tine.widgets.grid.ExportButton({
+                    text: this.app.i18n._('Export as ...'),
+                    iconCls: 'tinebase-action-export-xls',
+                    exportFunction: exportFunction,
+                    showExportDialog: true,
+                    order: 1000,
+                    gridPanel: this
+                })
+            ];
+
+        // create items from available export definitions
+        if (exportDefinitions.results) {
+            Ext.each(exportDefinitions.results, function (definition) {
+                if (definition.favorite == '1') {
+                    items.unshift(new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._hidden(definition.label ? definition.label : definition.name),
+                        format: '',
+                        definitionId: definition.id,
+                        iconCls: definition.icon_class,
+                        exportFunction: exportFunction,
+                        order: definition.order,
+                        gridPanel: this
+                    }))
+                }
+            }, this);
+        }
+
+        //apply order
+        items.sort(function(a,b) {return a.order - b.order});
+
+        return items;
+    },
+
     initActionsImportExport: function() {
         if (this.modelConfig && this.modelConfig['export']) {
             var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',

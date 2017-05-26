@@ -28,7 +28,9 @@ Tine.Tinebase.widgets.form.UidTriggerField = Ext.extend(Ext.form.TriggerField, {
      * Overrides initComponent to reenable field if it is empty
      */
     initComponent: function () {
-        this.on('keyup', this.manageTriggerField);
+        this.on('keyup', function() {
+            this.setHideTrigger(!!this.getValue())
+        }, this);
 
         Tine.Tinebase.widgets.form.UidTriggerField.superclass.initComponent.call(this);
     },

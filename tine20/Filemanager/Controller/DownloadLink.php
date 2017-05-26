@@ -61,6 +61,9 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        // password can only be set on creation
+        unset($_record->password);
+
         $this->_sanitizeUserInput($_record);
     }
     
@@ -75,6 +78,10 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
         $node = Tinebase_FileSystem::getInstance()->get($_record->node_id);
         if (! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_PUBLISH)) {
             throw new Tinebase_Exception_AccessDenied('you are not allowed to publish this file');
+        }
+
+        if (! empty($_record->password)) {
+            $_record->password = Hash_Password::generate('SSHA256', $_record->password);
         }
 
         $this->_sanitizeUserInput($_record);
@@ -129,12 +136,13 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      * 
      * @param Filemanager_Model_DownloadLink $download
      * @param array $splittedPath
+     * @param string $password
      * @return Tinebase_Model_Tree_Node
      */
     public function getNode(Filemanager_Model_DownloadLink $download, $splittedPath)
     {
         $this->_checkExpiryDate($download);
-        
+
         $node = $this->_getRootNode($download);
         
         foreach ($splittedPath as $subPath) {
@@ -143,7 +151,16 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
         
         return $node;
     }
-    
+
+    public function hasPassword(Filemanager_Model_DownloadLink $download)
+    {
+        // always refetch
+        $download = $this->get($download->getId());
+
+        $pw = $download->password;
+        return ! empty($pw);
+    }
+
     /**
      * check download link expiry date
      * 
@@ -159,7 +176,22 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             throw new Tinebase_Exception_AccessDenied('Download link has expired');
         }
     }
-    
+
+    /**
+     * check download link password
+     *
+     * @param Filemanager_Model_DownloadLink $download
+     * @param string $password
+     * @return boolean
+     */
+    public function validatePassword(Filemanager_Model_DownloadLink $download, $password)
+    {
+        // always refetch
+        $download = $this->get($download->getId());
+
+        return Hash_Password::validate($download->password, $password);
+    }
+
     /**
      * resolve root tree node
      *

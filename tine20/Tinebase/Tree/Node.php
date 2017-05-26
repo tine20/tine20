@@ -35,10 +35,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     * we don't use modlog here because the name is unique. If the only do a soft delete, it is not possible to create the same node again!
      *
      * @var boolean
      */
     protected $_modlogActive = false;
+
+    protected $_notificationActive = false;
 
     protected $_revision = null;
 
@@ -68,9 +71,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
-        /*if (isset($_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) && true === $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) {
-            $this->_modlogActive = true;
-        }*/
+        // we don't use modlog here because the name is unique. If the only do a soft delete, it is not possible to create the same node again!
+        if (isset($_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS]) && true === $_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS]) {
+            $this->_notificationActive = $_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS];
+        }
 
         parent::__construct($_dbAdapter, $_options);
     }
@@ -131,6 +135,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
         /** @var Tinebase_Model_Tree_Node $_newRecord */
         $this->_inspectForPreviewCreation($_newRecord);
+
+        if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'created');
+        }
     }
 
     /**
@@ -170,6 +178,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
         if ($currentMods->count() > 0) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+
+            if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
+                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
+            }
         }
 
         /** @var Tinebase_Model_Tree_Node $_newRecord */

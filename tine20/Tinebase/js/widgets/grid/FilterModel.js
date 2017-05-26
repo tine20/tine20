@@ -373,6 +373,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     filter.formFields.value = filter.datePicker;
             }
         }
+
+        var _ = window.lodash,
+            valueField = _.get(filter, 'formFields.value');
+
+        if (valueField instanceof Ext.ux.form.ClearableTextField) {
+            valueField.disableTrigger = (newOperator != 'contains');
+            valueField.checkTrigger();
+        }
     },
     
     /**
@@ -478,7 +486,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             case 'string':
             case 'number':
             default:
-                value = new Ext.form.TextField(Ext.apply(commonOptions, {
+                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
                     emptyText: this.emptyText,
                     listeners: {
                         scope: this,

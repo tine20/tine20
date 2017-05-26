@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage    Export
  */
-abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
+abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_AbstractDeprecated
 {
     /**
      * group by this field

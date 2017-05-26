@@ -15,6 +15,16 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string     id
+ * @property string     record_id
+ * @property string     model
+ * @property string     alarm_time
+ * @property string     minutes_before
+ * @property string     sent_time
+ * @property string     sent_status
+ * @property string     sent_message
+ * @property string     options
  */
 class Tinebase_Model_Alarm extends Tinebase_Record_Abstract 
 {
@@ -107,7 +117,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      *
      * @param Tinebase_DateTime $_date
      */
-    public function setTime(DateTime $_date)
+    public function setTime(Tinebase_DateTime $_date)
     {
         if (! isset($this->minutes_before)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -129,7 +139,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      *
      * @param Tinebase_DateTime $_date
      */
-    public function setMinutesBefore(DateTime $_date)
+    public function setMinutesBefore(Tinebase_DateTime $_date)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Current alarm: ' . print_r($this->toArray(), TRUE));
@@ -153,7 +163,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      * sets an option
      * 
      * @param string|array $_key
-     * @param scalar|array of scalar $_value
+     * @param mixed $_value
      */
     public function setOption($_key, $_value = null)
     {
@@ -171,7 +181,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      * gets an option
      * 
      * @param  string $_key
-     * @return scalar|array of scalar
+     * @return mixed
      */
     public function getOption($_key)
     {

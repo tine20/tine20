@@ -47,6 +47,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
             $condition,
             $_data['options']);
 
+        if (isset($_data['id'])) {
+            $this->setId($_data['id']);
+        }
+        if (isset($_data['label'])) {
+            $this->setLabel($_data['label']);
+        }
+
         $this->_field = $_data['field'];
         $this->_value = $_data['value'];
         $this->_operator = $_data['operator'];
@@ -57,7 +64,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
             /** @var Tinebase_Model_Filter_FilterGroup $parentFilterGroup */
             $parentFilterGroup = $this->_options['parentFilter'];
             /** @var Tinebase_Model_Filter_FilterGroup $innerGroup */
-            $innerGroup = new Tinebase_Model_Filter_FilterGroup(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
+            $innerGroup = new Tinebase_Model_Filter_FilterGroup(array(),
+                Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
 
             switch ($this->_operator) {
                 case 'contains':
@@ -74,8 +82,10 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                             if (in_array($this->_operator, $filter->getOperators())) {
                                 $subGroup->addFilter($filter);
                             } else {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                    ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                        ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                                }
                             }
                         }
                         $innerGroup->addFilterGroup($subGroup);
@@ -89,8 +99,10 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                         if (in_array($this->_operator, $filter->getOperators())) {
                             $innerGroup->addFilter($filter);
                         } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                    ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                            }
                         }
                     }
                     break;
@@ -99,12 +111,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
             }
 
             $this->addFilterGroup($innerGroup);
-        }
 
-        if (isset($this->_options['relatedModels']) && isset($this->_options['modelName'])) {
-            $relationFilter = $this->_getAdvancedSearchFilter($this->_options['modelName'], $this->_options['relatedModels']);
-            if (null !== $relationFilter) {
-                $this->addFilter($relationFilter);
+            if (isset($this->_options['relatedModels']) && isset($this->_options['modelName'])) {
+                $relationFilter = $this->_getAdvancedSearchFilter($this->_options['modelName'],
+                    $this->_options['relatedModels']);
+                if (null !== $relationFilter) {
+                    $this->addFilter($relationFilter);
+                }
             }
         }
     }
