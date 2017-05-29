@@ -27,7 +27,11 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('timetracker_timesheet', $declaration);
+        try {
+            $this->_backend->addIndex('timetracker_timesheet', $declaration);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('timetracker_timesheet', '6');
         $this->setApplicationVersion('Timetracker', '10.1');
@@ -36,7 +40,7 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 10.2
      *
-     * Add fulltext index to field description of timesheet
+     * Add fulltext index to field description of timeaccount
      */
     public function update_1()
     {
@@ -50,7 +54,11 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('timetracker_timeaccount', $declaration);
+        try {
+            $this->_backend->addIndex('timetracker_timeaccount', $declaration);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('timetracker_timeaccount', '11');
         $this->setApplicationVersion('Timetracker', '10.2');
