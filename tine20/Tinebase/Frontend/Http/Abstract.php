@@ -144,11 +144,12 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_Tree_Node $node
      * @param string $filesystemPath
      * @param int|null $revision
+     * @param boolean $ignoreAcl
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null)
+    protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
     {
-        if (! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+        if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
             throw new Tinebase_Exception_AccessDenied('download not allowed');
         }
 
