@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.26</version>
+    <version>10.27</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1766,12 +1766,12 @@
 
         <table>
             <name>role_accounts</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>role_id</name>

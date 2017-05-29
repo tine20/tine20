@@ -1111,4 +1111,22 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.26');
     }
+
+    /**
+     * update to 10.27
+     *
+     * change role_accounts id to uuid
+     */
+    public function update_26()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+        $this->_backend->alterCol('role_accounts', $declaration);
+
+        $this->setTableVersion('role_accounts', 4);
+        $this->setApplicationVersion('Tinebase', '10.27');
+    }
 }

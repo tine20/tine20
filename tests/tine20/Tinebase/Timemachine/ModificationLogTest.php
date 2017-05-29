@@ -355,7 +355,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         /** @var Tinebase_Acl_Roles $roleController */
         $roleController = Tinebase_Core::getApplicationInstance('Tinebase_Model_Role');
-        $this->assertEquals('Tinebase_Acl_Roles', get_class($roleController));
+        $this->assertEquals('Tinebase_Role', get_class($roleController));
 
         $role = new Tinebase_Model_Role(array('name' => 'unittest test role'));
         $role = $roleController->create($role);
@@ -401,7 +401,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         $newRole = $roleController->get($role->getId());
 
-        $diff = $role->diff($newRole, array('creation_time', 'created_by', 'last_modified_by', 'last_modified_time'));
+        $diff = $role->diff($newRole, array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time'));
 
         $this->assertTrue($diff->isEmpty(), 'diff should be empty: ' . print_r($diff, true));
 
