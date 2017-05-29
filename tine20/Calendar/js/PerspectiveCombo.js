@@ -317,7 +317,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             containerField = this.editDialog.getForm().findField('container_id');
             
         
-        if (! isOriginPerspective) {
+        if (perspectiveRecord && !isOriginPerspective) {
             perspectiveRecord.set('transp', attendeeTranspField.getValue());
             perspectiveRecord.set('status', attendeeStatusField.getValue());
             perspectiveRecord.set('displaycontainer_id', attendeeContainerField.selectedContainer);

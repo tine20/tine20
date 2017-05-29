@@ -848,7 +848,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record.set('id', (new Date()).getTime());
         }
 
-        this.checkStates();
+        this.checkStates.defer(100, this);
 
         if (this.loadMask) {
             this.loadMask.hide();

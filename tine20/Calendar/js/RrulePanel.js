@@ -214,7 +214,9 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     },
     
     onRecordUpdate: function(record) {
-        var rrule = this.activeRuleCard.rendered ? this.activeRuleCard.getRule() : this.rrule;
+        var _ = window.lodash,
+            rendered = _.get(this, 'activeRuleCard.rendered', false),
+            rrule = rendered ? this.activeRuleCard.getRule() : this.rrule;
         
         if (! this.rrule && rrule) {
             // mark as new rule to avoid series confirm dlg
@@ -226,7 +228,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
 
         record.set('rrule_constraints', '');
 
-        if (! this.activeRuleCard.rendered) {
+        if (! rendered) {
             record.set('rrule_constraints', this.constrains);
         } else if (this.activeRuleCard.constrains)  {
             var constrainsValue = this.activeRuleCard.constrains.getValue();
