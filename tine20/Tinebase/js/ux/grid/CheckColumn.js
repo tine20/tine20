@@ -46,21 +46,11 @@ Ext.ux.grid.CheckColumn = function(config){
     if(!this.id){
         this.id = Ext.id();
     }
-    // this.addEvents(
-    //     /**
-    //      * @event beforecheck
-    //      * is fired when user clicks the checkbox
-    //      * return false to abort checking
-    //      * @param {Ext.ux.grid.CheckColumn}
-    //      * @param {record} row record
-    //      * @param {bool} current Value
-    //      */
-    //     'beforecheck'
-    // );
+
     this.renderer = this.renderer.createDelegate(this);
 };
 
-Ext.ux.grid.CheckColumn.prototype ={
+Ext.ux.grid.CheckColumn.prototype = {
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -69,14 +59,28 @@ Ext.ux.grid.CheckColumn.prototype ={
         }, this);
     },
 
+    /**
+     * Validate action is valid or not here
+     *
+     * If returned false, the setting won't be changed.
+     *
+     * @param checkbox
+     * @param record
+     * @return {boolean}
+     */
+    onBeforeCheck: function(checkbox, record) {
+        return true;
+    },
+
     onMouseDown : function(e, t){
         if(Ext.fly(t).hasClass(this.createId())){
             e.stopEvent();
             var index = this.grid.getView().findRowIndex(t);
             var record = this.grid.store.getAt(index);
-            // if (this.fireEvent('beforecheck', this, record, record.data[this.dataIndex]) !== false) {
+
+            if (this.onBeforeCheck(this, record)) {
                 record.set(this.dataIndex, !record.data[this.dataIndex]);
-            // }
+            }
         }
     },
 

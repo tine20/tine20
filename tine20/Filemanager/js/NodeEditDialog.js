@@ -115,6 +115,11 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             editDialog: this
         });
 
+        var notificationPanel = new Tine.Filemanager.NotificationPanel({
+            app: this.app,
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -244,7 +249,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, 
+            },
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
@@ -252,7 +257,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }),
                 this.downloadLinkGrid,
                 {xtype: 'Tine.Filemanager.UsagePanel'},
-                grantsPanel
+                grantsPanel,
+                notificationPanel
             ]
         };
     }

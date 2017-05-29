@@ -283,13 +283,13 @@ Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
     recordsName: 'Alarms',
     getOption: function(name) {
         var encodedOptions = this.get('options'),
-            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+            options = encodedOptions ? Ext.decode(encodedOptions) : {};
         
         return options[name];
     },
     setOption: function(name, value) {
         var encodedOptions = this.get('options'),
-            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+            options = encodedOptions ? Ext.decode(encodedOptions) : {};
         
         options[name] = value;
         this.set('options', Ext.encode(options));
@@ -506,7 +506,10 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'relations' },
     { name: 'customfields' },
     { name: 'notes' },
-    { name: 'tags' }
+    { name: 'tags' },
+
+    { name: 'revisionProps' },
+    { name: 'notificationProps' }
 ]);
 /**
  * @namespace   Tine.Tinebase.Model
