@@ -1718,7 +1718,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         try {
             try {
-                $this->_backend->dropIndex('tags', 'description');
+                $setupBackend->dropIndex('tags', 'description');
             } catch (Exception $e) {
                 // Ignore, if there is no index, we can just go on and create one.
             }
