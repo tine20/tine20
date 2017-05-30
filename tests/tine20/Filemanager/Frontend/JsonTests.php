@@ -1826,8 +1826,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
          * @var Tinebase_Model_Tree_Node $node
          */
         foreach($_nodes as $key => $node) {
+            $actual = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+            if (!empty($actual) && isset($actual[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID])) {
+                unset($actual[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID]);
+            }
             $expected = isset($_resultMap[$key]) ? $_resultMap[$key] : $_defaultResult;
-            static::assertTrue($expected == $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION), 'node revisions don\'t match for node: ' . $node->name . ' expected: ' . print_r($expected, true) . ' actual: ' . print_r($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION), true));
+            static::assertTrue($expected == $actual, 'node revisions don\'t match for node: ' . $node->name . ' expected: ' . print_r($expected, true) . ' actual: ' . print_r($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION), true));
         }
     }
 
@@ -1836,6 +1840,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         foreach($_properties as $key => $value) {
             $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[$key] = $value;
         }
+        $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID] =
+            $_node->getId();
     }
 
     public function testSetRevisionSettings()

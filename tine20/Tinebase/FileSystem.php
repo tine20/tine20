@@ -1710,6 +1710,9 @@ class Tinebase_FileSystem implements
 
             $oldValue = $currentNodeObject->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
             $newValue = $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+            if (!empty($newValue) && !isset($newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID])) {
+                $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID] = $_node->getId();
+            }
 
             if ($oldValue != $newValue) {
                 $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;

@@ -31,6 +31,7 @@
  * @property    string             acl_node
  * @property    string             revisionProps
  * @property    string             preview_count
+ * @property    Tinebase_Record_RecordSet grants
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {

@@ -641,7 +641,20 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         // create two folders
         $fmController->createNodes(array($testPath, $testPath . '/subfolder'), Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
-        $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath))->statpath);
+
+        // set Grants
+        $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+        $testPathNode = $fmController->resolveGrants($testPathNode)->getFirstRecord();
+        $grantRecord = $testPathNode->grants->getFirstRecord();
+        $grantRecord->id = null;
+        $testPathNode->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($grantRecord));
+        $testPathNode->acl_node = $testPathNode->getId();
+        $fmController->update($testPathNode);
+
+        // unset Grants
+        $testPathNode->acl_node = null;
+        $fmController->update($testPathNode);
+
         // move subfolder to new name
         /*$newSubFolderNode = */$fmController->moveNodes(array($testPath . '/subfolder'), array($testPath . '/newsubfolder'))->getFirstRecord();
         // copy it back to old name
@@ -684,6 +697,22 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+
+        // set grants
+        $mod = $fmModifications->getFirstRecord();
+        $fmModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+        static::assertEquals($testPathNode->getId(), $testPathNode->acl_node, 'grants not set');
+
+        // unset grants
+        $mod = $fmModifications->getFirstRecord();
+        $fmModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+        static::assertNotEquals($testPathNode->getId(), $testPathNode->acl_node, 'grants still set');
 
         // move subfolder to new name
         $mod = $fmModifications->getFirstRecord();
