@@ -1349,7 +1349,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $setupBackend = Setup_Backend_Factory::factory();
-        if ($setupBackend->supports('mysql >= 5.6.4')) {
+        if (!$setupBackend->supports('mysql >= 5.6.4')) {
             return -2;
         }
 
