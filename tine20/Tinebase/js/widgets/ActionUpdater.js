@@ -93,6 +93,13 @@
             }
             
             this.actions.push(action);
+
+            if (action.initialConfig.menu) {
+                this.addActions(action.initialConfig.menu.items ?
+                    action.initialConfig.menu.items :
+                    action.initialConfig.menu
+                );
+            }
         }
     },
     

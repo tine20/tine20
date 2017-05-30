@@ -1342,7 +1342,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             gridPanel: this
         });
         this.selectionModel.on('selectionchange', function(sm) {
-            //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             this.actionUpdater.updateActions(sm);
 
             this.ctxNode = this.selectionModel.getSelections();

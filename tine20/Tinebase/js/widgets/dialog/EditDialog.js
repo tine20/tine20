@@ -619,6 +619,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.action_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
             getExportOptions: this.getExportOptions.createDelegate(this)
         }, Tine.widgets.exportAction.SCOPE_SINGLE);
+
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            containerProperty: this.recordClass.getMeta('containerProperty'),
+            evalGrants: this.evalGrants
+        });
+
+        this.actionUpdater.addActions([
+            this.action_saveAndClose,
+            this.action_applyChanges,
+            this.action_cancel,
+            this.action_delete
+        ]);
     },
 
     /**
@@ -648,11 +661,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         if (this.action_export) {
+            this.actionUpdater.addAction(this.action_export);
             this.tbarItems = this.tbarItems || [];
             this.tbarItems.push(this.action_export);
         }
 
         if (this.tbarItems && this.tbarItems.length) {
+            this.actionUpdater.addActions(this.tbarItems);
             this.tbar = new Ext.Toolbar({
                 items: this.tbarItems
             });
@@ -940,10 +955,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_delete,
             this.action_cancel
         ];
-        Tine.widgets.actionUpdater(record, actions, containerField);
-        Tine.widgets.actionUpdater(record, this.tbarItems, containerField);
+        this.actionUpdater.updateActions(record);
     },
-    
+
     /**
      * get top toolbar
      */

@@ -46,12 +46,13 @@ Tine.widgets.exportAction.getExportMenuItems = function (recordClass, exportConf
     return _.reduce(exportDefinitions, function(items, definition) {
         items.push(new Tine.widgets.grid.ExportButton(_.assign({
             recordClass: recordClass,
+            definition: definition,
             text: app.i18n._hidden(definition.label ? definition.label : definition.name),
             format: '',
             definitionId: definition.id,
             iconCls: definition.icon_class,
             order: definition.order
-        }, definition, exportConfig)));
+        }, exportConfig)));
 
         return items;
     }, []);

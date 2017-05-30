@@ -30,9 +30,9 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     recordClass: null,
 
     /**
-     *
+     * @cfg {Object} definition
      */
-    exportScope: '',
+    definition: '',
 
     /**
      * @cfg {Function} getExportOptions
@@ -71,17 +71,59 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     /**
      * @cfg {Boolean} showExportDialog
      */
-
     showExportDialog: false,
-    
+
+    /**
+     * add sub menu with attached/related templates
+     *
+     * @param action
+     * @param grants
+     * @param records
+     * @param isFilterSelect
+     */
+    actionUpdater: function(action, grants, records, isFilterSelect) {
+        var _ = window.lodash,
+            favorite = _.get(action, 'initialConfig.definition.favorite'),
+            scope = _.get(action, 'initialConfig.definition.scope'),
+            format = _.get(action, 'initialConfig.definition.format'),
+            handler = _.get(action, 'initialConfig.handler');
+
+        if (_.isFunction(handler) && favorite == '1' && records.length == 1) {
+            var record = records[0],
+                attachments = _.get(record, 'data.attachments', []),
+                relations = _.get(record, 'data.relations', []),
+                relatedFiles = _.map(_.filter(relations, {related_model: 'Filemanager_Model_Node'}), 'related_record'),
+                allFiles = _.concat(attachments, relatedFiles),
+                menuItems = _.reduce(allFiles, function(result, file) {
+                    if (_.endsWith(file.name, format)) {
+                        result.push({
+                            text: file.name,
+                            handler: handler.createDelegate(action, [{template: file.id}])
+                        });
+                    }
+                    return result;
+                }, []);
+
+            if (menuItems.length) {
+                _.each(action.items, function(item) {
+                    item.menu = new Ext.menu.Menu({
+                        items: menuItems
+                    });
+                });
+            }
+        }
+    },
+
     /**
      * do export
      */
-    doExport: function() {
+    doExport: function(options) {
         var _ = window.lodash,
             appName, filter, model,
-            count = 1,
-            options = {};
+            count = 1;
+
+        // options could be action (default handler signature)
+        options = !options || options.el ? {} : options;
 
         if (this.gridPanel) {
             // get selection model
@@ -109,7 +151,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         this.exportFunction = this.exportFunction || (appName + '.export' + this.recordClass.getMeta('modelName') + 's');
 
         var exportJob = new Tine.Tinebase.Model.ExportJob({
-            scope: this.exportScope,
+            scope: this.definition.scope,
             filter: filter,
             format: this.format,
             exportFunction: this.exportFunction,

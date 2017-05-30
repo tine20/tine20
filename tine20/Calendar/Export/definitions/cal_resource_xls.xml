@@ -3,6 +3,8 @@
     <model>Calendar_Model_Resource</model>
     <name>cal_resource_xls</name>
     <label>Export Resource as XLS</label>
+    <favorite>true</favorite>
+    <scope>multi</scope>
     <type>export</type>
     <plugin>Calendar_Export_Resource_Xls</plugin>
     <icon_class>tinebase-action-export-xls</icon_class>
