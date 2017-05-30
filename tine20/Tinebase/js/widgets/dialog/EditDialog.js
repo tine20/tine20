@@ -901,9 +901,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // init change event
         var form = this.getForm().items.each(function(item) {
-            this.relayEvents(item, ['change']);
+            this.relayEvents(item, ['change', 'select']);
         }, this);
         this.on('change', this.checkStates, this);
+        this.on('select', this.checkStates, this);
     },
     
     /**
