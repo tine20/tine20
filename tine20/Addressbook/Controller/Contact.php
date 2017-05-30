@@ -148,7 +148,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     */
     protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
-        if (! $_filter->isFilterSet('showDisabled')) {
+        // look into subfilters
+        // TODO only allow admins to see hidden/disabled users?
+        if (! $_filter->isFilterSet('showDisabled', /* recursive */ true)) {
             $disabledFilter = $_filter->createFilter('showDisabled', 'equals', FALSE);
             $disabledFilter->setIsImplicit(TRUE);
             $_filter->addFilter($disabledFilter);

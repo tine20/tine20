@@ -1027,6 +1027,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Creating new system user ' . print_r($systemUser->toArray(), true));
 
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($systemUser, /* setModlog */ false);
+            $systemUser->contact_id = $contact->getId();
+        }
+
         try {
             $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
             Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());

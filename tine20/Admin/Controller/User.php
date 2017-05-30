@@ -431,10 +431,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * create or update contact in addressbook backend
      * 
-     * @param  Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_FullUser $_user
+     * @param boolean $_setModlog
      * @return Addressbook_Model_Contact
      */
-    public function createOrUpdateContact(Tinebase_Model_FullUser $_user)
+    public function createOrUpdateContact(Tinebase_Model_FullUser $_user, $_setModlog = true)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $contactsBackend->setGetDisabledContacts(true);
@@ -461,9 +462,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $contact->container_id = $_user->container_id;
 
             unset($contact->jpegphoto);
-            
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+
+            if ($_setModlog) {
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+            }
             
             $contact = $contactsBackend->update($contact);
             
@@ -478,9 +480,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
                 'container_id'  => $_user->container_id
             ));
-            
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+
+            if ($_setModlog) {
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+            }
     
             $contact = $contactsBackend->create($contact);
         }

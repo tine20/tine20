@@ -157,7 +157,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' is JSON request. rawdata: ' . print_r($_requests, true));
+                . ' is JSON request. rawdata: ' . var_export($_requests, true));
         } 
         
         $response = array();

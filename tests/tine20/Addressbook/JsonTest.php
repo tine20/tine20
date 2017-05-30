@@ -1780,7 +1780,59 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(1, $result['totalcount']);
     }
-    
+
+    /**
+     * test search hidden user (foir example as role member)
+     *
+     * @see 0013160: user search should find disabled/hidden users
+     */
+    public function testSearchHiddenUser()
+    {
+        $filter = array(
+            0 =>
+                array(
+                    'condition' => 'OR',
+                    'filters' =>
+                        array(
+                            0 =>
+                                array(
+                                    'condition' => 'AND',
+                                    'filters' =>
+                                        array(
+                                            0 =>
+                                                array(
+                                                    'field' => 'query',
+                                                    'operator' => 'contains',
+                                                    'value' => 'replication',
+                                                ),
+                                            1 =>
+                                                array(
+                                                    'field' => 'showDisabled',
+                                                    'operator' => 'equals',
+                                                    'value' => true,
+                                                ),
+                                        ),
+                                ),
+                            1 =>
+                                array(
+                                    'field' => 'path',
+                                    'operator' => 'contains',
+                                    'value' => 'reploic',
+                                ),
+                        ),
+                ),
+            1 =>
+                array(
+                    'field' => 'type',
+                    'operator' => 'equals',
+                    'value' => 'user',
+                ),
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+        self::assertEquals(1, $result['totalcount'], 'should find replication user');
+    }
+
     /**
      * test search hidden list -> should not appear
      * 
