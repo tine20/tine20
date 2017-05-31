@@ -158,11 +158,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_ADD => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EDIT => false,
+                Tinebase_Model_Grants::GRANT_DELETE => false,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
-                Tinebase_Model_Grants::GRANT_ADMIN => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => false,
                 Tinebase_Model_Grants::GRANT_FREEBUSY => false,
                 Tinebase_Model_Grants::GRANT_PRIVATE => false,
                 Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
@@ -183,8 +183,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_ADD => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EDIT => false,
+                Tinebase_Model_Grants::GRANT_DELETE => false,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
                 Tinebase_Model_Grants::GRANT_ADMIN => false,
@@ -390,6 +390,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->_getNodeByNameFromResult($this->_personas['sclever']->accountDisplayName, $result);
         $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountDisplayName;
         self::assertEquals($path, $node['path']);
+        self::assertEquals(1, $result['totalcount'],
+            'only expected sclever personal folder in result. got: ' . print_r($result['results'], true));
     }
 
     /**
@@ -531,6 +533,33 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
+
+    /**
+     * testCreateFileNodeInPersonalRoot
+     */
+    public function testCreateFileNodeInPersonalRoot()
+    {
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . 'file1';
+
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = array(Tinebase_TempFile::getInstance()->createTempFile($tempPath));
+        file_put_contents($tempPath, 'someData');
+
+        try {
+            $result = $this->_getUit()->createNodes(array($testPath), Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                $tempFileIds, false);
+            self::fail('it is not allowed to create new files here');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertContains('No permission to add nodes in path', $tead->getMessage());
+        }
+    }
+
+    /**
+     * testMoveFileNode
+     */
     public function testMoveFileNode()
     {
         $filePaths = $this->testCreateFileNodes(true);

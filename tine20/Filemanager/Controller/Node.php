@@ -664,7 +664,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         try {
             $this->_checkIfExists($path);
-            $this->_backend->checkPathACL($parentPathRecord, 'add');
+            $this->_backend->checkPathACL($parentPathRecord, 'add', /* $_topLevelAllowed */ $_type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite) {
 

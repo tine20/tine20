@@ -2166,7 +2166,7 @@ class Tinebase_FileSystem implements
     {
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
-                if ($_path->containerOwner) {
+                if ($_path->containerOwner && ($_topLevelAllowed || ! $_path->isToplevelPath())) {
                     $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
                 } else {
                     $hasPermission = ($_action === 'get');
@@ -2174,7 +2174,7 @@ class Tinebase_FileSystem implements
                 break;
             case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
                 if ($_action !== 'get') {
-                    // TODO check if app has MANAGE_SHARED_FOLDERS richt?
+                    // TODO check if app has MANAGE_SHARED_FOLDERS right?
                     $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
@@ -2409,7 +2409,7 @@ class Tinebase_FileSystem implements
         $sharedFoldersOfOtherUsers = $this->searchNodes($filter);
 
         foreach ($otherAccountNodes as $otherAccount) {
-            if ($sharedFoldersOfOtherUsers->filter('parent_id', $otherAccount->getId())) {
+            if (count($sharedFoldersOfOtherUsers->filter('parent_id', $otherAccount->getId())) > 0) {
                 $result->addRecord($otherAccount);
                 $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend(
                     'accountId',
@@ -2524,11 +2524,10 @@ class Tinebase_FileSystem implements
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_ADD => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_EDIT => false,
+                Tinebase_Model_Grants::GRANT_DELETE => false,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
-                Tinebase_Model_Grants::GRANT_ADMIN => true,
             ));
         } else if ($pathRecord->isToplevelPath() && $pathRecord->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED) {
             $account = $_accountId instanceof Tinebase_Model_FullUser
@@ -2540,8 +2539,8 @@ class Tinebase_FileSystem implements
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_ADD => $hasManageSharedRight,
-                Tinebase_Model_Grants::GRANT_EDIT => $hasManageSharedRight,
-                Tinebase_Model_Grants::GRANT_DELETE => $hasManageSharedRight,
+                Tinebase_Model_Grants::GRANT_EDIT => false,
+                Tinebase_Model_Grants::GRANT_DELETE => false,
                 Tinebase_Model_Grants::GRANT_EXPORT => true,
                 Tinebase_Model_Grants::GRANT_SYNC => true,
             ));
