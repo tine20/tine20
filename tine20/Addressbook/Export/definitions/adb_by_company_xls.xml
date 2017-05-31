@@ -4,7 +4,11 @@
     <name>adb_by_company_xls</name>
     <type>export</type>
     <plugin>Addressbook_Export_Xls</plugin>
-    <description>xls contact by company export definition</description>
+    <!-- _('Excel phone list') -->
+    <label>Excel phone list</label>
+    <!-- _('Excel phone list grouped by company') -->
+    <description>Excel phone list grouped by company</description>
+    <scope>multi</scope>
     <header>0</header>
     <headers>
         <header>{date}</header>

@@ -189,8 +189,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $this->_excelObject->setActiveSheetIndex($activeSheet);
 
             $this->_hasTemplate = true;
-            $this->_dumpRecords = false;
-            $this->_writeGenericHeader = false;
+            $this->_dumpRecords = true;
+            $this->_writeGenericHeader = true;
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
             $this->_excelObject = new PHPExcel();
@@ -289,11 +289,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
             /** @var PHPExcel_Cell $cell */
             foreach($cellIter as $cell) {
-                if (false !== strpos($cell->getValue(), '{$twig:') &&
-                        preg_match_all('/{\$twig:([^}]+?)}/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
+                if (false !== strpos($cell->getValue(), '${twig:') &&
+                        preg_match_all('/\${twig:([^}]+?)}/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
                     foreach($matches as $match) {
                         $this->_twigMapping[$i] = $match[0];
-                        $source .= ($i === 0 ? '' : ',') . '"{{' . $match[1] . '}}"';
+                        $source .= ($i === 0 ? '' : ',') . '{{' . $match[1] . '}}';
                         ++$i;
                     }
                 }
@@ -302,12 +302,12 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         foreach($this->_excelObject->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
-            if (false !== strpos($desc, '{$twig:') &&
-                preg_match_all('/{\$twig:([^}]+?)}/s', $desc, $matches, PREG_SET_ORDER)
+            if (false !== strpos($desc, '${twig:') &&
+                preg_match_all('/\${twig:([^}]+?)}/s', $desc, $matches, PREG_SET_ORDER)
             ) {
                 foreach ($matches as $match) {
                     $this->_twigMapping[$i] = $match[0];
-                    $source .= ($i === 0 ? '' : ',') . '"{{' . $match[1] . '}}"';
+                    $source .= ($i === 0 ? '' : ',') . '{{' . $match[1] . '}}';
                     ++$i;
                 }
             }
@@ -321,19 +321,34 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         return $source;
     }
 
+    protected function _findFirstFreeRow()
+    {
+        $sheet = $this->_excelObject->getActiveSheet();
+
+        $rowIter = $sheet->getRowIterator();
+        /** @var PHPExcel_Worksheet_Row $row */
+        foreach($rowIter as $row) {
+            ++$this->_rowCount;
+        }
+    }
+
     protected function _onBeforeExportRecords()
     {
         // TODO header row?
 
-        if (null === ($block = $this->_findCell('{$ROW}'))) {
-            return;
+        if (null === ($block = $this->_findCell('${ROW}'))) {
+            return $this->_findFirstFreeRow();
         }
         $startColumn = $block->getColumn();
         $this->_rowOffset = $block->getRow();
 
-        if (null === ($block = $this->_findCell('{$/ROW}'))) {
-            return;
+        if (null === ($block = $this->_findCell('${/ROW}'))) {
+            return $this->_findFirstFreeRow();
         }
+
+        $this->_dumpRecords = false;
+        $this->_writeGenericHeader = false;
+
         $endColumn = $block->getColumn();
         if ($block->getRow() !== $this->_rowOffset) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
@@ -350,7 +365,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         $rowIterator = $sheet->getRowIterator($this->_rowOffset);
         $cellIterator = $rowIterator->current()->getCellIterator($startColumn, $endColumn);
 
-        $replace = array('{$ROW}', '{$/ROW}');
+        $replace = array('${ROW}', '${/ROW}');
         /** @var PHPExcel_Cell $cell */
         foreach($cellIterator as $cell) {
             $this->_cloneRow[] = array(

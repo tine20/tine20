@@ -1213,6 +1213,11 @@ class Tinebase_FileSystem implements
         try {
 
             $pathParts = $this->_splitPath($path);
+            if (strlen($pathParts[0]) !== 40) {
+                $oldPart = $pathParts[0];
+                $pathParts[0] = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
+                $path = '/' . $pathParts[0] . mb_substr($path, mb_strlen($oldPart) + 1);
+            }
             $cacheId = $this->_getCacheId($pathParts, $revision);
 
             // let's see if the path is cached in statCache

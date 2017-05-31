@@ -231,6 +231,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $this->_templateFileName = $path->streamwrapperpath;
             } catch (Exception $e) {}
         }
+        if (! $this->_modelName && !empty($this->_config->model)) {
+            $this->_modelName = $this->_config->model;
+        }
         $this->_exportTimeStamp = Tinebase_DateTime::now();
 
         if (!empty($this->_config->group)) {
@@ -258,6 +261,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if (isset($_additionalOptions['recordData'])) {
+            if (isset($_additionalOptions['recordData']['container_id']) && is_array($_additionalOptions['recordData']['container_id'])) {
+                $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
+            }
             $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
                 array(new $this->_modelName($_additionalOptions['recordData'])));
         }
@@ -716,7 +722,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     /**
      * @param Tinebase_Record_Interface $_record
      */
-    protected function _processRecord(Tinebase_Record_Interface $_record = null)
+    protected function _processRecord(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' processing a export record...');
 
@@ -754,27 +760,35 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
         } elseif (null !== $this->_twigTemplate) {
-            $twigResult = $this->_twigTemplate->render(
-                $this->_getTwigContext(array('record' => $_record)));
-            $twigResult = json_decode($twigResult);
-            if (!is_array($twigResult)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                    ' twig render and json_decode did not return an array: ' . print_r($twigResult, true));
-                return;
-            }
-
-            foreach ($this->_twigMapping as $key => $twigKey) {
-                if (isset($twigResult[$key]) || array_key_exists($key, $twigResult)) {
-                    $value = $this->_convertToString($twigResult[$key]);
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                        ' twig mapping: ' . $key . ' ' . $twigKey . ' not found in twig result array');
-                    $value = '';
-                }
-                $this->_setValue($twigKey, $value);
-            }
+            $this->_renderTwigTemplate($_record);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not process record, misconfigured!');
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_record
+     */
+    protected function _renderTwigTemplate($_record = null)
+    {
+        $twigResult = $this->_twigTemplate->render(
+            $this->_getTwigContext(array('record' => $_record)));
+        $twigResult = json_decode($twigResult);
+        if (!is_array($twigResult)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                ' twig render and json_decode did not return an array: ' . print_r($twigResult, true));
+            return;
+        }
+
+        foreach ($this->_twigMapping as $key => $twigKey) {
+            if (isset($twigResult[$key]) || array_key_exists($key, $twigResult)) {
+                $value = $this->_convertToString($twigResult[$key]);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' twig mapping: ' . $key . ' ' . $twigKey . ' not found in twig result array');
+                $value = '';
+            }
+            $this->_setValue($twigKey, $value);
         }
     }
 
@@ -871,7 +885,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_iterationDone = true;
 
         if (null !== $this->_twigTemplate) {
-            $this->_processRecord(null);
+            $this->_renderTwigTemplate();
         }
     }
 }

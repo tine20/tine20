@@ -2,7 +2,8 @@
 <config>
     <model>Addressbook_Model_Contact</model>
     <name>adb_doc</name>
-    <label>Export as DOC</label>
+    <!-- _('Word details') -->
+    <label>Word details</label>
     <type>export</type>
     <plugin>Addressbook_Export_Doc</plugin>
     <icon_class>tinebase-action-export-doc</icon_class>

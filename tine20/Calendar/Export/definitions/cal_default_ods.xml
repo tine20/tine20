@@ -6,8 +6,8 @@
     <favorite>true</favorite>
     <scope>multi</scope>
     <plugin>Calendar_Export_Ods</plugin>
-    <!-- _('Default Event Data Export') -->
-    <label>Default Event Data Export</label>
+    <!-- _('OpenDocument all data') -->
+    <label>OpenDocument all data</label>
     <!-- _('Export event data into ods spreadsheet') -->
     <description>Export event data into ods spreadsheet</description>
     <header>1</header>
