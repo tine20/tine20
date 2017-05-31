@@ -50,43 +50,6 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array} of Ext.Action
      */
     getActionToolbarItems: function() {
-        this.actions_export = new Ext.Action({
-            // i18n._('Export Invoices')
-            text: this.app.i18n._hidden('Export Invoices'),
-            iconCls: 'action_export',
-            scope: this,
-            requiredGrant: 'exportGrant',
-            disabled: true,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export selected invoices as ODS'),
-                        singularText: this.app.i18n._('Export selected invoice as ODS'),
-                        pluralText: this.app.i18n._('Export selected invoices as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Sales.exportInvoices',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Sales.exportInvoices',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
-
-        var exportButton = Ext.apply(new Ext.SplitButton(this.actions_export), {
-            scale: 'medium',
-            rowspan: 2,
-            iconAlign: 'top',
-            arrowAlign:'right'
-        });
-        
         this.actions_reversal = new Ext.Action({
             text: this.app.i18n._('Create Reversal Invoice'),
             iconCls: 'action_reversal',
@@ -153,9 +116,9 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconAlign: 'top'
         });
         
-        var additionalActions = [this.actions_export, this.actions_reversal, this.actions_rebill, this.actions_merge];
+        var additionalActions = [this.actions_reversal, this.actions_rebill, this.actions_merge];
         this.actionUpdater.addActions(additionalActions);
-        return [exportButton, reversalButton, rebillButton, mergeButton];
+        return [reversalButton, rebillButton, mergeButton];
     },
     
     /**
@@ -247,7 +210,6 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getContextMenuItems: function() {
         var items = [
             '-',
-            this.actions_export,
             this.actions_reversal,
             this.actions_rebill,
             this.actions_merge

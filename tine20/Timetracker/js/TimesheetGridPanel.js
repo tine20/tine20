@@ -223,7 +223,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
-        this.actions_exportTimesheet = new Ext.Action({
+        this.actions_export = new Ext.Action({
             text: this.app.i18n._('Export Timesheets'),
             iconCls: 'action_export',
             scope: this,
@@ -260,7 +260,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportTimesheet
+            this.actions_export
         ]);
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
@@ -292,34 +292,5 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var disable = ! exportGrant;
         action.setDisabled(disable);
         return false;
-    },
-
-    /**
-     * add custom items to action toolbar
-     * 
-     * @return {Object}
-     */
-    getActionToolbarItems: function() {
-        return [
-            Ext.apply(new Ext.Button(this.actions_exportTimesheet), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            })
-        ];
-    },
-    
-    /**
-     * add custom items to context menu
-     * 
-     * @return {Array}
-     */
-    getContextMenuItems: function() {
-        var items = [
-            '-',
-            this.actions_exportTimesheet
-        ];
-        
-        return items;
     }
 });

@@ -780,8 +780,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
         });
 
-        this.initActionsImportExport();
-        
+        this.initExports();
+        this.initImports();
+
         // add actions to updater
         this.actionUpdater.addActions([
             this.action_addInNewWindow,
@@ -798,7 +799,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.getActionToolbar();
     },
 
-    initActionsImportExport: function() {
+    initExports: function() {
+        if (this.actions_export !== undefined) return;
+
         var _ = window.lodash,
             exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
             additionalItems = [];
@@ -829,6 +832,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.actions_export) {
             this.actionUpdater.addActions([this.actions_export]);
         }
+    },
+
+    initImports: function() {
+        if (this.actions_import !== undefined) return;
 
         if (this.modelConfig && this.modelConfig['import']) {
             this.actions_import = new Ext.Action({
@@ -1652,7 +1659,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.duplicateResolvable) {
                 items.push(this.action_resolveDuplicates);
             }
-            
+
+            if (this.actions_export) {
+                items.push('-', this.actions_export);
+            }
+
             if (this.action_tagsMassAttach && ! this.action_tagsMassAttach.hidden) {
                 items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }

@@ -133,21 +133,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * add custom items to context menu
-     * 
-     * @return {Array}
-     */
-    getContextMenuItems: function() {
-        var items = [
-            '-',
-            this.actions_export,
-            '-'
-        ];
-        
-        return items;
-    },
-
-    /**
      * returns details panel
      * 
      * @private

@@ -96,45 +96,6 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
-     * add custom items to action toolbar
-     *
-     * @return {Object}
-     */
-    getActionToolbarItems: function () {
-        var items = [
-            this.actions_export = this.actions_exportLead
-        ];
-        if (this.app.featureEnabled('featureLeadImport')) {
-            items.push(this.actions_import = new Ext.Action({
-                text: this.app.i18n._('Import leads'),
-                disabled: false,
-                handler: this.onImport,
-                iconCls: 'action_import',
-                scope: this,
-                allowMultiple: true
-            }));
-        }
-        return [{
-            xtype: 'buttongroup',
-            columns: 1,
-            frame: false,
-            items: items
-        }];
-    },
-
-    /**
-     * add custom items to context menu
-     * 
-     * @return {Array}
-     */
-    getContextMenuItems: function() {
-        return [
-            '-',
-            this.actions_exportLead
-        ];
-    },
-    
-    /**
      * returns cm
      * 
      * @return Ext.grid.ColumnModel
@@ -200,60 +161,18 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function(){
-        this.actions_exportLead = new Ext.Action({
-            text: this.app.i18n._('Export Lead'),
-            iconCls: 'action_export',
-            scope: this,
-            requiredGrant: 'readGrant',
-            disabled: true,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as PDF'),
-                        iconCls: 'action_exportAsPdf',
-                        format: 'pdf',
-                        exportFunction: 'Crm.exportLead',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as CSV'),
-                        iconCls: 'tinebase-action-export-csv',
-                        format: 'csv',
-                        exportFunction: 'Crm.exportLead',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        iconCls: 'tinebase-action-export-ods',
-                        format: 'ods',
-                        exportFunction: 'Crm.exportLead',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as XLS'),
-                        iconCls: 'tinebase-action-export-xls',
-                        format: 'xls',
-                        exportFunction: 'Crm.exportLead',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Crm.exportLead',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
-        
-        this.actionUpdater.addActions([
-            this.actions_exportLead
-        ]);
-        
+        this.actions_import = this.app.featureEnabled('featureLeadImport') ?
+            new Ext.Action({
+                text: this.app.i18n._('Import leads'),
+                disabled: false,
+                handler: this.onImport,
+                iconCls: 'action_import',
+                scope: this,
+                allowMultiple: true
+            }) : false;
+
         this.supr().initActions.call(this);
-    }    
+    }
 });
 
 /**
