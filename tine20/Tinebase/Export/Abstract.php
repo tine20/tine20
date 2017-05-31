@@ -225,6 +225,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
+        if (isset($_additionalOptions['template'])) {
+            try {
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'], true));
+                $this->_templateFileName = $path->streamwrapperpath;
+            } catch (Exception $e) {}
+        }
         $this->_exportTimeStamp = Tinebase_DateTime::now();
 
         if (!empty($this->_config->group)) {
@@ -341,6 +347,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         return $this->_format;
+    }
+
+    public static function getDefaultFormat()
+    {
+        return null;
     }
 
     /**

@@ -119,7 +119,7 @@ class Addressbook_Export_DocTest extends TestCase
         static::markTestSkipped('FIX ME');
 
         $this->_genericExportTest(array(
-            'definition' => __DIR__ . '/../../../../tine20/Addressbook/Export/definitions/adb_default_doc.xml',
+            'definition' => __DIR__ . '/../../../../tine20/Addressbook/Export/definitions/adb_doc_letter.xml',
             'template' => 'file://' . __DIR__ . '/../../../../tine20/Addressbook/Export/templates/FIXME.docx',
             'filename' => __METHOD__ . '_',
         ));

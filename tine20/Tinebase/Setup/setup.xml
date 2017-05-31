@@ -2600,7 +2600,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2665,6 +2665,11 @@
                 </field>
                 <field>
                     <name>scope</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>format</name>
                     <type>text</type>
                     <length>255</length>
                 </field>

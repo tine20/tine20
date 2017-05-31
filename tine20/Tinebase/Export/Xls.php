@@ -61,6 +61,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         }
     }
 
+    public static function getDefaultFormat()
+    {
+        return 'xlsx';
+    }
+
     /**
      * get excel object
      *
@@ -320,13 +325,13 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     {
         // TODO header row?
 
-        if (null === ($block = $this->_findCell('{$BLOCK}'))) {
+        if (null === ($block = $this->_findCell('{$ROW}'))) {
             return;
         }
         $startColumn = $block->getColumn();
         $this->_rowOffset = $block->getRow();
 
-        if (null === ($block = $this->_findCell('{$/BLOCK}'))) {
+        if (null === ($block = $this->_findCell('{$/ROW}'))) {
             return;
         }
         $endColumn = $block->getColumn();
@@ -345,7 +350,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         $rowIterator = $sheet->getRowIterator($this->_rowOffset);
         $cellIterator = $rowIterator->current()->getCellIterator($startColumn, $endColumn);
 
-        $replace = array('{$BLOCK}', '{$/BLOCK}');
+        $replace = array('{$ROW}', '{$/ROW}');
         /** @var PHPExcel_Cell $cell */
         foreach($cellIterator as $cell) {
             $this->_cloneRow[] = array(

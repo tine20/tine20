@@ -1129,4 +1129,25 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('role_accounts', 4);
         $this->setApplicationVersion('Tinebase', '10.27');
     }
+
+    /**
+     * update to 10.28
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_27()
+    {
+        if (! $this->_backend->columnExists('format', 'importexport_definition')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>format</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $this->_backend->addCol('importexport_definition', $declaration);
+
+            $this->setTableVersion('importexport_definition', 11);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.28');
+    }
 }

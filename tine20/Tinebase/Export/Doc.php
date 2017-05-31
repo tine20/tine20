@@ -90,6 +90,10 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         return 'letter_' . strtolower($_appName) . '.docx';
     }
 
+    public static function getDefaultFormat()
+    {
+        return 'docx';
+    }
 
     /**
      * generate export

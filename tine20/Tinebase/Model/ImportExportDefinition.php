@@ -71,6 +71,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         'plugin'                => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
         'scope'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'plugin_options'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'format'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // if filename is set, read file from App/Export(Import)/definitions/filename
         'filename'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information

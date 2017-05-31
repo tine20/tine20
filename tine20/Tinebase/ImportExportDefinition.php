@@ -70,6 +70,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public function getByName($_name)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->_backend->getByProperty($_name);
     }
     
@@ -111,6 +112,16 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             } else {
                 $name = $_name;
             }
+
+            $format = null;
+            if (class_exists($config->plugin)) {
+                try {
+                    $plugin = $config->plugin;
+                    if (is_subclass_of($plugin, 'Tinebase_Export_Abstract')) {
+                        $format = $plugin::getDefaultFormat();
+                    }
+                } catch(Exception $e) {}
+            }
             
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'              => $_applicationId,
@@ -126,6 +137,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,
+                'format'                      => $format,
                 'order'                       => intval($config->order),
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
@@ -241,8 +253,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     /**
      * get generic import definition
      *
-     * @param string $application
-     * @param $model
+     * @param string $model
      * @return Tinebase_Model_ImportExportDefinition
      */
     public function getGenericImport($model)
