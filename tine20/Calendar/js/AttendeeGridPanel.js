@@ -386,6 +386,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     // NOTE: Ext docu seems to be wrong on arguments here
     onContextMenu: function(e, target) {
         e.preventDefault();
+        var me = this;
         var row = this.getView().findRowIndex(target);
         var attender = this.store.getAt(row);
         if (attender && ! this.disabled) {
@@ -439,17 +440,48 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
             if (attender.get('user_type') == 'resource') {
                 Tine.log.debug('Adding resource hook for attender');
-                var resourceId = attender.get('user_id').id;
+                var resourceId = attender.get('user_id').id,
+                    resource = new Tine.Calendar.Model.Resource(attender.get('user_id'), resourceId);
 
                 items = items.concat(new Ext.Action({
                     text: this.app.i18n._('Edit Resource'),
                     iconCls: 'cal-resource',
                     scope: this,
                     handler: function() {
-                        var resource = new Tine.Calendar.Model.Resource({id: resourceId}, resourceId);
                         Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
                     }
                 }));
+
+                var exportAction = Tine.widgets.exportAction.getExportButton(
+                    Tine.Calendar.Model.Resource, {
+                        getExportOptions: function() {
+                            var options = {
+                                recordData: attender.get('user_id')
+                            };
+
+                            // do we have a 'real' event?
+                            if (me.record.data.dtstart) {
+                                options.additionalRecords = {
+                                    Event: {
+                                        model: 'Calendar_Model_Event',
+                                            recordData: me.record.data
+                                    }
+                                };
+                            }
+                            return options;
+                        }
+                    },
+                    Tine.widgets.exportAction.SCOPE_SINGLE
+                );
+
+                var actionUpdater = new Tine.widgets.ActionUpdater({
+                    containerProperty: Tine.Calendar.Model.Resource.getMeta('containerProperty'),
+                    evalGrants: true
+                });
+                actionUpdater.addAction(exportAction);
+                actionUpdater.updateActions([resource]);
+
+                items = items.concat(exportAction);
             }
 
             var plugins = [];
