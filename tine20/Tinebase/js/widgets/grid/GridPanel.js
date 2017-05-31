@@ -349,7 +349,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     border: false,
     stateful: true,
 
-    stateIdSuffix: null,
+    stateIdSuffix: '',
 
     /**
      * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
