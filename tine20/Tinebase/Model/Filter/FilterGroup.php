@@ -660,6 +660,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getModelName()
     {
+        if (null === $this->_modelName) {
+            $this->_modelName = substr(get_called_class(), 0, -6);
+        }
         return $this->_modelName;
     }
     
