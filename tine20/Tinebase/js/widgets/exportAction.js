@@ -104,15 +104,23 @@ Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, 
  */
 Tine.widgets.exportAction.downloadExport = function(exportJob) {
     var _ = window.lodash,
-    downloader = new Ext.ux.file.Download({
+        filter = exportJob.get('filter'),
+        options = _.assign(exportJob.get('options'), {
+            format: exportJob.get('format'),
+            definitionId: exportJob.get('export_definition_id')
+        });
+
+        if (options.filter) {
+            filter = options.filter;
+            delete options.filter;
+        }
+
+    new Ext.ux.file.Download({
         params: {
             method: exportJob.get('exportFunction'),
             requestType: 'HTTP',
-            filter: Ext.util.JSON.encode(exportJob.get('filter')),
-            options: Ext.util.JSON.encode(_.assign(exportJob.get('options'), {
-                format: exportJob.get('format'),
-                definitionId: exportJob.get('export_definition_id')
-            }))
+            filter: Ext.util.JSON.encode(filter),
+            options: Ext.util.JSON.encode(options)
         }
     }).start();
 };
