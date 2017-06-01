@@ -381,6 +381,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
         $roleModifications = $modifications->filter('record_type', 'Tinebase_Model_Role');
+        static::assertEquals(5, $roleModifications->count(), 'should have 5 mod logs to process');
         //$groupModifications = $modifications->filter('record_type', 'Tinebase_Model_Group');
         //$userModifications = $modifications->filter('record_type', '/Tinebase_Model_User.*/', true);
 
@@ -425,6 +426,98 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(1, $newRole->members->filter('account_id', 'test3')->count(), 'record set diff modified didn\'t work, test3 not found');
     }
 
+    public function testContainerReplication()
+    {
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        $containerController = Tinebase_Container::getInstance();
+
+        $container = new Tinebase_Model_Container(array(
+            'name' => 'unittest test container',
+            'type' => Tinebase_Model_Container::TYPE_SHARED,
+            'backend' => 'sql',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+        ));
+        $container = $containerController->addContainer($container);
+
+        $container->color = '#FFFFFF';
+        $containerController->update($container);
+
+        $grants = $containerController->getGrantsOfContainer($container->getId(), true);
+        static::assertEquals(2, $grants->count(), 'should find 2 grant records');
+        /** @var Tinebase_Model_Grants $grant */
+        $grant = $grants->filter('account_type', 'anyone')->getFirstRecord();
+        static::assertNotNull($grant);
+        static::assertEquals(false, $grant->{Tinebase_Model_Grants::GRANT_EDIT}, 'edit grant should be false');
+        $grant->{Tinebase_Model_Grants::GRANT_EDIT} = true;
+        $grant = $grants->filter('account_id', Tinebase_Core::getUser()->getId())->getFirstRecord();
+        static::assertNotNull($grant);
+        static::assertEquals(true, $grant->{Tinebase_Model_Grants::GRANT_EDIT}, 'edit grant should be true');
+        $grant->{Tinebase_Model_Grants::GRANT_EDIT} = false;
+        $containerController->setGrants($container->getId(), $grants, true);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $containerModifications = $modifications->filter('record_type', 'Tinebase_Model_Container');
+        static::assertEquals(4, $containerModifications->count(), 'should have 4 mod logs to process');
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $notFound = false;
+        try {
+            // avoid Cache, so use get, not getContainerById
+            $containerController->get($container->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $notFound = true;
+        }
+        static::assertTrue($notFound, 'roll back did not work...');
+
+        // create the container
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        static::assertTrue($result, 'applyReplactionModLogs failed');
+        // avoid Cache, so use get, not getContainerById
+        /** @var Tinebase_Model_Container $newContainer */
+        $newContainer = $containerController->get($container->getId());
+        static::assertEquals($container->name, $newContainer->name);
+        static::assertTrue(empty($newContainer->color), 'color not empty');
+
+        // set grants from initial container create, nothing changes actually
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        static::assertTrue($result, 'applyReplactionModLogs failed');
+
+        // change color
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        static::assertTrue($result, 'applyReplactionModLogs failed');
+        // avoid Cache, so use get, not getContainerById
+        $newContainer = $containerController->get($container->getId());
+        static::assertEquals('#FFFFFF', $newContainer->color, 'color not set properly');
+
+        //change grants
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $grants = $containerController->getGrantsOfContainer($container->getId(), true);
+        static::assertEquals(2, $grants->count(), 'should find 2 grant records');
+        $grant = $grants->filter('account_type', 'anyone')->getFirstRecord();
+        static::assertNotNull($grant);
+        static::assertEquals(true, $grant->{Tinebase_Model_Grants::GRANT_EDIT}, 'edit grant should be true');
+        $grant = $grants->filter('account_id', Tinebase_Core::getUser()->getId())->getFirstRecord();
+        static::assertNotNull($grant);
+        static::assertEquals(false, $grant->{Tinebase_Model_Grants::GRANT_EDIT}, 'edit grant should be false');
+    }
+
     public function testGroupReplication()
     {
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
@@ -442,6 +535,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
         $groupModifications = $modifications->filter('record_type', 'Tinebase_Model_Group');
+        static::assertEquals(5, $groupModifications->count(), 'should have 5 mod logs to process');
 
         if ($groupController instanceof Tinebase_Group_Interface_SyncAble) {
             $this->assertEquals(0, $groupModifications->count(), ' for syncables group replication should be turned off!');

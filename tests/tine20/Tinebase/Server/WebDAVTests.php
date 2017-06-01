@@ -317,6 +317,9 @@ EOS
         $account = $this->getAccountByName($credentials['username']);
         
         $this->assertInstanceOf('Tinebase_Model_FullUser', $account);
+        if (Tinebase_Core::getUser() === null) {
+            Tinebase_Core::set(Tinebase_Core::USER, $account);
+        }
         
         $containerId = $this->getPersonalContainer($account, 'Calendar_Model_Event')
             ->getFirstRecord()
@@ -378,6 +381,10 @@ EOS
         $account = $this->getAccountByName($credentials['username']);
         
         $this->assertInstanceOf('Tinebase_Model_FullUser', $account);
+
+        if (Tinebase_Core::getUser() === null) {
+            Tinebase_Core::set(Tinebase_Core::USER, $account);
+        }
         
         $containerId = $this->getPersonalContainer($account, 'Calendar_Model_Event')
             ->getFirstRecord()
