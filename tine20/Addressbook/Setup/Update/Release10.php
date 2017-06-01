@@ -91,16 +91,15 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $addressbookApplication = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $definitionDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'definitions' . DIRECTORY_SEPARATOR;
-        $files = array(
-            'adb_pdf.xml',
-            'adb_csv.xml',
-            'adb_ods.xml',
-            'adb_xls.xml',
-            'adb_doc.xml'
-        );
 
-        foreach($files as $file) {
-            Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($definitionDirectory . $file, $addressbookApplication);
+        $dir = new DirectoryIterator($definitionDirectory);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename(
+                    $fileinfo->getPath() . '/' . $fileinfo->getFilename(),
+                    $addressbookApplication
+                );
+            }
         }
 
         $this->setApplicationVersion('Addressbook', '10.5');

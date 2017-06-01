@@ -65,7 +65,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
             'presence'                      => 'required',
             array('InArray', array('import', 'export', 'letter'))
         ),
-        'favorite'              => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required', 'default' => true),
+        'favorite'              => array(Zend_Filter_Input::ALLOW_EMPTY => true,    'default' => true),
         'order'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required', 'default' => 0),
         'icon_class'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'plugin'                => array(Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'),
