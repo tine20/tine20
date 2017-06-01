@@ -193,6 +193,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected $_groupByProperty = null;
 
+    protected $_groupByProcessor = null;
+
     protected $_currentRowType = null;
 
     protected $_getRelations = false;
@@ -585,13 +587,19 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         $first = $this->_firstIteration;
         foreach ($_records as $record) {
-            if (null !== $this->_groupByProperty && (true === $first ||
-                    $this->_lastGroupValue !== $record->{$this->_groupByProperty})) {
-                $this->_lastGroupValue = $record->{$this->_groupByProperty};
-                if (false === $first) {
-                    $this->_endGroup();
+            if (null !== $this->_groupByProperty) {
+                $propertyValue = $record->{$this->_groupByProperty};
+                if (null !== $this->_groupByProcessor) {
+                    $fn = $this->_groupByProcessor;
+                    $fn($propertyValue);
                 }
-                $this->_startGroup();
+                if (true === $first || $this->_lastGroupValue !== $propertyValue) {
+                    $this->_lastGroupValue = $propertyValue;
+                    if (false === $first) {
+                        $this->_endGroup();
+                    }
+                    $this->_startGroup();
+                }
                 // TODO fix this?
                 //$this->_writeGroupHeading($record);
             }

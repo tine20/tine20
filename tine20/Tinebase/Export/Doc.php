@@ -152,6 +152,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             return;
         }
 
+        $this->_firstIteration = true;
         $this->_currentProcessor = $this->_dataSources[$_name];
         $this->_rowCount = 0;
     }
