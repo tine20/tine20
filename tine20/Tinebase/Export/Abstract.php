@@ -197,6 +197,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected $_getRelations = false;
 
+    protected $_additionalRecords = array();
+
     /**
      * the constructor
      *
@@ -266,6 +268,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
             $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
                 array(new $this->_modelName($_additionalOptions['recordData'])));
+        }
+
+        if (isset($_additionalOptions['additionalRecords'])) {
+            foreach ($_additionalOptions['additionalRecords'] as $key => $value) {
+                if (!isset($value['model']) || !isset($value['recordData'])) {
+                    throw new Tinebase_Exception_UnexpectedValue('additionalRecords needs to specify model and recordData');
+                }
+                $record = new $value['model']($value['recordData']);
+                $this->_additionalRecords[$key] = $record;
+            }
         }
     }
 
@@ -830,7 +842,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 'timestamp'         => $this->_exportTimeStamp,
                 'account'           => Tinebase_Core::getUser(),
                 'groupdata'         => $this->_lastGroupValue,
-            )
+            ),
+            'additionalRecords' => $this->_additionalRecords,
         ), $context);
     }
 
