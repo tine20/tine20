@@ -39,7 +39,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * true to only show types and names in the list
      */
     showNamesOnly: false,
-    
+
+    /**
+     * @cfg {Boolean} showAttendeeRole
+     * true to show roles in the list
+     */
+    showAttendeeRole: false,
+
     /**
      * The record currently being edited
      * 
@@ -78,6 +84,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @type Tine.Phone.AddressbookGridPanelHook
      */
     phoneHook: null,
+
+    lastSelectedRole: 'OPT',
     
     stateful: true,
     stateId: 'cal-attendeegridpanel',
@@ -136,9 +144,16 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'role',
             width: 70,
             sortable: true,
-            hidden: this.showNamesOnly || true,
+            value: this.lastSelectedRole,
+            hidden: !this.showAttendeeRole || this.showNamesOnly,
             header: this.app.i18n._('Role'),
             renderer: this.renderAttenderRole.createDelegate(this),
+            listeners: {
+                scope: this,
+                select: function (field, newValue) {
+                    this.lastSelectedRole = newValue;
+                }
+            },
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app:   'Calendar',
