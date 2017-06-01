@@ -64,7 +64,7 @@ Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, 
         recordName = recordClass.getRecordName(),
         recordsName = recordClass.getRecordsName(),
         exportFunction = appName + '.export' + recordClass.getMeta('modelName') + 's',
-        allItems = Tine.widgets.exportAction.getExports(recordClass),
+        allItems = Tine.widgets.exportAction.getExports(recordClass, null, scope),
         menuItems = Tine.widgets.exportAction.getExportMenuItems(recordClass, exportConfig, scope);
 
     if (allItems.length > menuItems.length) {

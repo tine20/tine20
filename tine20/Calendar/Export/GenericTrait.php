@@ -136,7 +136,7 @@ trait Calendar_Export_GenericTrait
         $this->_onAfterExportRecords($result);
     }
 
-    protected function _sortRecords($records)
+    protected function _sortRecords(&$records)
     {
         $records->sort(function($r1, $r2) {
             return $r1->dtstart > $r2->dtstart;

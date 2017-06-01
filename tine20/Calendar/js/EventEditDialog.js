@@ -33,10 +33,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     displayNotes: true,
 
     mode: 'local',
-    
-    // note: we need up use new action updater here or generally in the widget!
-    evalGrants: false,
-    
+
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
