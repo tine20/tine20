@@ -31,7 +31,59 @@ class Tinebase_Convert_Tree_Node_Json extends Tinebase_Convert_Json
         /** @noinspection PhpUndefinedMethodInspection */
         $records->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
+        $this->_resolveXProps($records);
+
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveXProps($_records)
+    {
+        $groups = array();
+        $users =  array();
+        foreach ($_records as $record) {
+            if (!empty($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $val) {
+                    if (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER ===
+                        $val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) {
+                        $users[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]] = true;
+                    } else {
+                        $groups[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]] = true;
+                    }
+                }
+            }
+        }
+
+        if (count($groups) > 0) {
+            foreach (Tinebase_Group::getInstance()->getMultiple(array_keys($groups)) as $group) {
+                $groups[$group->getId()] = $group->name;
+            }
+        }
+
+        if (count($users) > 0) {
+            foreach (Tinebase_User::getInstance()->getMultiple(array_keys($users), 'Tinebase_Model_FullUser') as $user) {
+                $users[$user->getId()] = $user->accountDisplayName;
+            }
+        }
+
+        foreach ($_records as $record) {
+            if (!empty($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as &$val) {
+                    if (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER ===
+                        $val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) {
+                        if (isset($users[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]])) {
+                            $val['accountName'] = $users[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]];
+                        }
+                    } else {
+                        if (isset($groups[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]])) {
+                            $val['accountName'] = $groups[$val[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]];
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
