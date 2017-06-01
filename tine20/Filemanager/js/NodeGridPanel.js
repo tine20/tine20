@@ -58,11 +58,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     currentFolderNode: null,
 
-    /**
-     * Prevent download and edit of nodes/files and so on. Only allow the selection of items
-     */
-    selectOnly: false,
-
     previewsEnabled: false,
 
     /**
@@ -141,6 +136,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * after grid renderd
      */
     initDragDrop: function () {
+        if (! this.enableDD) {
+            return;
+        }
+
         var grid = this.grid,
             view = grid.getView();
 
