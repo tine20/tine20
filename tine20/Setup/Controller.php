@@ -2014,7 +2014,8 @@ class Setup_Controller
         $cache = Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
         Tinebase_Application::getInstance()->resetClassCache();
-        
+        Tinebase_Cache_PerRequest::getInstance()->reset();
+
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }
