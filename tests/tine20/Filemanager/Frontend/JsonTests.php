@@ -747,6 +747,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $personalContainerNode = $this->_getUit()->getNode($personalContainerNode['id']);
         $personalContainerNode['customfields'][$cf->name] = 'cf value';
+        $personalContainerNode['revisionProps']['nodeId'] = $personalContainerNode['id'];
         $personalContainerNode['revisionProps']['keep'] = true;
         $personalContainerNode['revisionProps']['keepNum'] = 3;
         $personalContainerNode['revisionProps']['keepMonth'] = 4;
@@ -760,6 +761,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         static::assertTrue(isset($updatedNode['revisionProps']) && isset($updatedNode['revisionProps']['keep']) &&
             isset($updatedNode['revisionProps']['keepNum']) && isset($updatedNode['revisionProps']['keepMonth']),
             'revisionProps not saved: ' . print_r($updatedNode, true));
+        static::assertEquals($personalContainerNode['revisionProps']['nodeId'], $personalContainerNode['id']);
         static::assertEquals($personalContainerNode['revisionProps']['keep'], true);
         static::assertEquals($personalContainerNode['revisionProps']['keepNum'], 3);
         static::assertEquals($personalContainerNode['revisionProps']['keepMonth'], 4);

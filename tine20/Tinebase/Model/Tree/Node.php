@@ -29,7 +29,8 @@
  * @property    string             available_revisions
  * @property    string             description
  * @property    string             acl_node
- * @property    string             revisionProps
+ * @property    array              revisionProps
+ * @property    array              notificationProps
  * @property    string             preview_count
  * @property    Tinebase_Record_RecordSet grants
  */
@@ -228,4 +229,51 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         return $baseDir . DIRECTORY_SEPARATOR . substr($this->hash, 0, 3) . DIRECTORY_SEPARATOR .
             substr($this->hash, 3);
     }
+
+    public function isValid($_throwExceptionOnInvalidData = false)
+    {
+        if ($this->_isValidated === true) {
+            return true;
+        }
+
+        $invalid = array();
+        if (!empty($this->revisionProps)) {
+            if (count($this->revisionProps) > 4 || !isset($this->revisionProps[static::XPROPS_REVISION_NODE_ID])
+                    || !isset($this->revisionProps[static::XPROPS_REVISION_MONTH]) ||
+                    !isset($this->revisionProps[static::XPROPS_REVISION_ON]) ||
+                    !isset($this->revisionProps[static::XPROPS_REVISION_NUM])) {
+                $invalid[] = 'revisionProps';
+            }
+        }
+        if (!empty($this->notificationProps)) {
+            foreach ($this->notificationProps as $val) {
+                foreach ($val as $key => $val1) {
+                    if (!in_array($key, array(
+                            static::XPROPS_NOTIFICATION_ACCOUNT_ID,
+                            static::XPROPS_NOTIFICATION_ACCOUNT_TYPE,
+                            static::XPROPS_NOTIFICATION_ACTIVE,
+                            static::XPROPS_NOTIFICATION_SUMMARY))) {
+                        $invalid[] = 'notificationProps';
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        if (!empty($invalid) && $_throwExceptionOnInvalidData) {
+            $e = new Tinebase_Exception_Record_Validation('Some fields ' . implode(',', $invalid)
+                . ' have invalid content');
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " "
+                . $e->getMessage()
+                . print_r($this->_validationErrors, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Record: ' . print_r($this->toArray(), true));
+
+            throw $e;
+        }
+
+        return parent::isValid($_throwExceptionOnInvalidData);
+    }
+
 }
