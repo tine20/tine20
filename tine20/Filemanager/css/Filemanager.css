@@ -96,3 +96,15 @@
 .x-btn-large .action_publish {
     background-image: url("../../images/oxygen/32x32/apps/package-network.png");
 }
+
+.revision-checkbox-field .x-form-check-wrap {
+    display: inline;
+}
+
+.revision-checkbox-field input:last-child {
+    margin-left: 5px;
+}
+
+.revision-container {
+    margin-left: 20px;
+}

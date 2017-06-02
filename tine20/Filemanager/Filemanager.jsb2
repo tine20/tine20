@@ -90,6 +90,10 @@
         {
           "text": "NotificationGridPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "RevisionPanel.js",
+          "path": "js/"
         }
       ]
     },

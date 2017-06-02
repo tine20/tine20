@@ -1025,21 +1025,19 @@ class Tinebase_FileSystem implements
                     }
                 }
 
-                if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                    if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
-                        $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
-                    ) {
-                        $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $newParent->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
-                        $oldValue = $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
-                        $newValue = $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
-                        $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
-                        $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
-                        if (null === $newValue) {
-                            $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = null;
-                        }
-                        // update revisionProps of subtree if changed
-                        $this->_recursiveInheritFolderPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
+                if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
+                    $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
+                ) {
+                    $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $newParent->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
+                    $oldValue = $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                    $newValue = $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                    $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
+                    $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                    if (null === $newValue) {
+                        $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = null;
                     }
+                    // update revisionProps of subtree if changed
+                    $this->_recursiveInheritPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
                 }
 
                 $node->parent_id = $newParent->getId();
@@ -1726,7 +1724,7 @@ class Tinebase_FileSystem implements
                 $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
 
                 // update revisionProps of subtree if changed
-                $this->_recursiveInheritFolderPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
+                $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
             }
 
             $newNode = $this->_getTreeNodeBackend()->update($_node);

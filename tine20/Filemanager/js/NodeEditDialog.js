@@ -50,7 +50,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             text: this.app.i18n._('Save locally'),
             handler: this.onDownload,
             iconCls: 'action_filemanager_save_all',
-            disabled: false,
+            disabled: this.record.data.type === 'folder',
             scope: this
         });
         
@@ -85,7 +85,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onDownload: function() {
         Tine.Filemanager.downloadFile(this.record);
     },
-    
+
     /**
      * returns dialog
      * @return {Object}
@@ -93,6 +93,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         var me = this,
+            _ = window.lodash,
+            fsConfig = Tine.Tinebase.configManager.get('filesystem'),
             formFieldDefaults = {
             xtype:'textfield',
             anchor: '100%',
@@ -119,6 +121,14 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             app: this.app,
             editDialog: this
         });
+
+        var revisionPanel = {};
+
+        if (_.get(fsConfig, 'modLogActive', false)) {
+            revisionPanel = new Tine.Filemanager.RevisionPanel({
+                editDialog: this
+            });
+        }
 
         return {
             xtype: 'tabpanel',
@@ -207,9 +217,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }
                                 ]]
                         }]
-                    }
-                    
-                    ]
+                    }, revisionPanel]
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -260,9 +268,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 grantsPanel,
                 notificationPanel
             ]
-        };
+        }
     }
-    
 });
 
 /**
