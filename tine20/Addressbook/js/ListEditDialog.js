@@ -192,9 +192,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * onRecordLoad
      */
     resolveMemberData: function (editDialog, record, ticketFn) {
-        var ticket = ticketFn();
         this.memberGridPanel.record = this.record;
         if (this.record.id) {
+            var ticket = ticketFn();
             this.memberGridPanel.setMembers(ticket);
             this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
         }

@@ -95,11 +95,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     },
 
     onBeforeLoad: function (store, options) {
-        var members = this.record.get("members");
-
-        if (! members) {
-            return false;
-        }
+        var members = this.record.get("members") || [];
 
         options.params = options.params || {};
         options.params.paging = {"sort":"n_fileas","dir":"ASC"};
