@@ -501,6 +501,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
     { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
+    { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
 
     { name: 'relations' },
     { name: 'customfields' },

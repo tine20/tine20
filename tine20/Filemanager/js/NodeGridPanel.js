@@ -302,6 +302,21 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
         }
 
+        if (Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
+            columns.push({
+                id: 'isIndexed',
+                header: this.app.i18n._("Indexed"),
+                tooltip: this.app.i18n._("File contents is part of the search index"),
+                width: 40,
+                sortable: true,
+                dataIndex: 'isIndexed',
+                hidden: true,
+                renderer: function(value, i, node) {
+                    return node.get('type') == 'file' ? Tine.Tinebase.common.booleanRenderer(value) : '';
+                }
+            });
+        }
+
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
