@@ -236,7 +236,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         Tine.widgets.dialog.AlarmPanel.prototype.onRecordUpdate.call(this.editDialog.alarmPanel, record);
         
         this.applyAlarmFilter();
-        alarmStore.suspendEvents();
+        alarmStore.resumeEvents();
     },
     
     onPerspectiveChange: function(field, newValue, oldValue) {
