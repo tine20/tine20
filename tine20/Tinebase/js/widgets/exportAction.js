@@ -59,6 +59,8 @@ Tine.widgets.exportAction.getExportMenuItems = function (recordClass, exportConf
 };
 
 Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, scope, additionalItems) {
+    if (! recordClass) return;
+
     var _ = window.lodash,
         appName = recordClass.getMeta('appName'),
         recordName = recordClass.getRecordName(),

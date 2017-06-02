@@ -622,7 +622,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: this.recordClass.getMeta('containerProperty'),
+            containerProperty: this.recordClass ? this.recordClass.getMeta('containerProperty') : null,
             evalGrants: this.evalGrants
         });
 
