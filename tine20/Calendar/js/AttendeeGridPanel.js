@@ -46,6 +46,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     showAttendeeRole: false,
 
+
+    /**
+     * @cfg {String} defaultAttendeeRole
+     * attendee role for new attendee row
+     */
+    defaultAttendeeRole: 'REQ',
+
     /**
      * The record currently being edited
      * 
@@ -84,8 +91,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @type Tine.Phone.AddressbookGridPanelHook
      */
     phoneHook: null,
-
-    lastSelectedRole: 'OPT',
     
     stateful: true,
     stateId: 'cal-attendeegridpanel',
@@ -124,7 +129,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);
         this.on('afteredit', this.onAfterAttenderEdit, this);
-        
+        this.addEvents('beforenewattendee');
+
         this.initColumns();
         
         this.mon(Ext.getBody(), 'click', this.stopEditingIf, this);
@@ -144,20 +150,19 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             dataIndex: 'role',
             width: 70,
             sortable: true,
-            value: this.lastSelectedRole,
             hidden: !this.showAttendeeRole || this.showNamesOnly,
             header: this.app.i18n._('Role'),
             renderer: this.renderAttenderRole.createDelegate(this),
-            listeners: {
-                scope: this,
-                select: function (field, newValue) {
-                    this.lastSelectedRole = newValue;
-                }
-            },
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app:   'Calendar',
-                keyFieldName: 'attendeeRoles'
+                keyFieldName: 'attendeeRoles',
+                listeners: {
+                    scope: this,
+                    change: function (field, newValue) {
+                        this.setDefaultAttendeeRole(newValue);
+                    }
+                }
             }
         }, {
             id: 'displaycontainer_id',
@@ -275,8 +280,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         o.record.set('status', o.record.get('user_id').status);
                     }
                     
-                    var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
-                    this.store.add([newAttender]);
+                    this.addNewAttendeeRow();
                     this.startEditing(o.row +1, o.column);
                 }
                 break;
@@ -566,11 +570,23 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
         
         if (record.get('editGrant')) {
-            // Add new attendee
-            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
+            this.addNewAttendeeRow();
         }
     },
-    
+
+    // Add new attendee
+    addNewAttendeeRow: function() {
+        this.newAttendee = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
+        this.newAttendee.set('role', this.defaultAttendeeRole);
+        this.fireEvent('beforenewattendee', this, this.newAttendee, this.record);
+        this.store.add([this.newAttendee]);
+    },
+
+    setDefaultAttendeeRole:function(role) {
+        this.defaultAttendeeRole = role;
+        this.newAttendee.set('role', role);
+    },
+
     /**
      * Updates given record with data from this panel
      * called by edit dialog to get data
