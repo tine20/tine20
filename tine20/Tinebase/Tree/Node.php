@@ -117,7 +117,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
                 /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
-            )->group($this->_tableName . '.object_id');
+            )->group($this->_tableName . '.object_id'
+            )->columns('(tree_fileobjects.indexed_hash = tree_filerevisions.hash) AS isIndexed');
             
         return $select;
     }

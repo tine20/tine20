@@ -1375,6 +1375,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             array('field' => 'recursive', 'operator' => 'equals',   'value' => 1),
             array('field' => 'path',      'operator' => 'equals',   'value' => '/'),
             array('field' => 'query',     'operator' => 'contains', 'value' => 'color'),
+            array('field' => 'isIndexed', 'operator' => 'equals',   'value' => 0),
         'AND');
         
         $result = $this->_getUit()->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
