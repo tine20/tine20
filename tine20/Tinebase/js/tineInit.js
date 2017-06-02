@@ -282,48 +282,12 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
         }});
 
-        // deep links
-        if (window.location.hash) {
-            var route = Tine.Tinebase.router.getRoute();
+        var route = Tine.Tinebase.router.getRoute();
 
-            // init the app
-            Tine.Tinebase.ApplicationStarter.init();
-            Tine.Tinebase.appMgr.getAll();
+        Tine.Tinebase.ApplicationStarter.init();
+        Tine.Tinebase.appMgr.getAll();
 
-            Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
-            return;
-        }
-
-        /**
-         * register MainWindow
-         */
-        else if (window.isMainWindow) {
-            Ext.ux.PopupWindowMgr.register({
-                name: window.name,
-                popup: window,
-                contentPanelConstructor: 'Tine.Tinebase.MainScreenPanel'
-            });
-        }
-
-        Tine.log.info('renderWindow::before get window');
-        
-        // fetch window config from WindowMgr
-        var c = Ext.ux.PopupWindowMgr.get(window) || {};
-        
-        // set window title
-        window.document.title = Ext.util.Format.stripTags(c.title ? c.title : window.document.title);
-        
-        Tine.log.info('renderWindow::getCenterPanel');
-        
-        // finally render the window contents in a new card
-        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
-            card = Tine.WindowFactory.getCenterPanel(c);
-
-        mainCardPanel.add(card);
-        mainCardPanel.layout.setActiveItem(card.id);
-        card.doLayout();
-        
-        window.initializationComplete = true;
+        Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
     },
 
     initAjax: function () {
