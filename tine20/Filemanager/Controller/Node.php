@@ -124,25 +124,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 }
             }
 
-            if (null !== $usersNotificationSettings) {
-                // we reset all input and then just apply the notification settings for the current user
-                $_record = $this->get($_record->getId());
-                $found = false;
-                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as &$xpNotification) {
-                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
-                            isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
-                            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                            $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+            // we reset all input and then just apply the notification settings for the current user
+            $_record = $this->get($_record->getId());
+            $found = false;
+            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
+                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+                        isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                        Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
+                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                    if (null !== $usersNotificationSettings) {
                         $xpNotification = $usersNotificationSettings;
-                        $found = true;
-                        break;
+                    } else {
+                        unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
                     }
+                    $found = true;
+                    break;
                 }
-                if (false === $found) {
-                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
-                }
-                // now continue to do the update
-            } else {
+            }
+            if (false === $found && null !== $usersNotificationSettings) {
+                $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
+            }
+
+            if (false === $found && null === $usersNotificationSettings){
                 throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
             }
         }

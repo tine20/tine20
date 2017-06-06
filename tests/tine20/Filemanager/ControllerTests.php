@@ -120,6 +120,10 @@ class Filemanager_ControllerTests extends TestCase
                 isset($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[0]) &&
                 $scleverNotificationProps == $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[0]
             );
+
+            $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array();
+            $node = $fileManager->update($node);
+            static::assertEquals(0, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
