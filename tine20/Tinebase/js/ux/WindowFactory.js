@@ -73,36 +73,42 @@ Ext.ux.WindowFactory.prototype = {
      * @private
      */
     getExtWindow: function (c) {
-        // add titleBar
-        c.height = c.height + 20;
-        // border width
-        c.width = c.width + 16;
-        
-        //limit the window size
-        c.height = Math.min(Ext.getBody().getBox().height, c.height);
-        c.width = Math.min(Ext.getBody().getBox().width, c.width);
-        
-        c.layout = c.layout || 'fit';
-        c.items = {
-            layout: 'card',
-            border: false,
-            activeItem: 0,
-            isWindowMainCardPanel: true,
-            items: [this.getCenterPanel(c)]
-        };
-        
-        // we can only handle one window yet
-        c.modal = true;
-        
-        var win = new Ext.Window(c);
-        c.items.items[0].window = win;
-        
-        // if initShow property is present and it is set to false don't show window, just return reference
-        if (c.hasOwnProperty('initShow') && c.initShow === false) {
-            return win;
+        var win = Ext.WindowMgr.get(c.name);
+
+        if (! win) {
+            c.id = c.name;
+
+            // add titleBar
+            c.height = c.height + 20;
+            // border width
+            c.width = c.width + 16;
+
+            //limit the window size
+            c.height = Math.min(Ext.getBody().getBox().height, c.height);
+            c.width = Math.min(Ext.getBody().getBox().width, c.width);
+
+            c.layout = c.layout || 'fit';
+            c.items = {
+                layout: 'card',
+                border: false,
+                activeItem: 0,
+                isWindowMainCardPanel: true,
+                items: [this.getCenterPanel(c)]
+            };
+
+            // we can only handle one window yet
+            c.modal = true;
+
+
+            win = new Ext.Window(c);
+            c.items.items[0].window = win;
         }
         
-        win.show();
+        // if initShow property is present and it is set to false don't show window, just return reference
+        if (! c.hasOwnProperty('initShow') || c.initShow !== false) {
+            win.show();
+        }
+        
         return win;
     },
     
