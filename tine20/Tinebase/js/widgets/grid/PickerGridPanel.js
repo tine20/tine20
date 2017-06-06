@@ -131,12 +131,19 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
-        this.getTopToolbar().items.each(function(item) {
-            if (Ext.isFunction(item.setDisabled)) {
-                item.setDisabled(readOnly);
-            }
-        }, this);
-        this.actionRemove.setDisabled(readOnly);
+        var _ = window.lodash;
+
+        var tbar = this.getTopToolbar();
+        if (tbar) {
+            this.getTopToolbar().items.each(function (item) {
+                if (Ext.isFunction(item.setDisabled)) {
+                    item.setDisabled(readOnly);
+                }
+            }, this);
+        }
+        if (_.get(this, 'actionRemove.setDisabled')) {
+            this.actionRemove.setDisabled(readOnly);
+        }
         if (this.rendered) {
             this.getEl()[(readOnly ? '' : 'un') + 'mask']();
         }
