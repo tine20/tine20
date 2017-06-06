@@ -282,12 +282,22 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
         }});
 
-        var route = Tine.Tinebase.router.getRoute();
+        var route = Tine.Tinebase.router.getRoute(),
+            winConfig = Ext.ux.PopupWindowMgr.get(window);
 
         Tine.Tinebase.ApplicationStarter.init();
         Tine.Tinebase.appMgr.getAll();
 
-        Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
+        if (winConfig) {
+            var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+                card = Tine.WindowFactory.getCenterPanel(winConfig);
+
+            mainCardPanel.add(card);
+            mainCardPanel.layout.setActiveItem(card.id);
+            card.doLayout();
+        } else {
+            Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
+        }
     },
 
     initAjax: function () {
@@ -789,11 +799,6 @@ Tine.Tinebase.tineInit = {
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
-
-        // init ApplicationStarter on Ext window once
-        if (windowType == 'Ext') {
-            Tine.Tinebase.ApplicationStarter.init();
-        }
     },
     /**
      * initialise state provider

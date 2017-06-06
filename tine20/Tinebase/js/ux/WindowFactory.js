@@ -112,11 +112,6 @@ Ext.ux.WindowFactory.prototype = {
      getCenterPanel: function (config) {
         var items;
 
-        // (re-) create applicationstarter apps on BrowserWindows
-        if (this.windowType == 'Browser') {
-            Tine.Tinebase.ApplicationStarter.init();
-        }
-
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 

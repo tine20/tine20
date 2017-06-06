@@ -93,7 +93,6 @@ Tine.Admin.Applications.Main = {
                     var result = Ext.util.JSON.decode(_response.responseText);
                     if(result.success === true) {
                         // reload mainscreen because apps have to be loaded / unloaded
-                        Tine.Tinebase.ApplicationStarter.init();
                         Tine.Tinebase.common.reload();
                     }
                 }

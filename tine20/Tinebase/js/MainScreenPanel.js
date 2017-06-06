@@ -190,6 +190,12 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      */
     activate: function(app) {
         if (app) {
+            // activation via routing only
+            if (Tine.Tinebase.router.getRoute()[0] != app.appName) {
+                Tine.Tinebase.router.setRoute('/' + app.appName);
+                return;
+            }
+
             if (app == this.getActiveApp()) {
                 // app is already active, nothing to do
                 return true;
