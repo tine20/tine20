@@ -50,4 +50,25 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
     {
         return Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $this->type;
     }
+
+    /**
+     * returns a URL with a deep link path to the node provided
+     *
+     * @param Tinebase_Model_Tree_Node $_record
+     * @return string
+     */
+    public static function getDeepLink($_record)
+    {
+        if (empty($_record->path)) {
+            $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_record, true));
+            $_record->path = $path->flatpath;
+        }
+
+        $path = explode('/', ltrim(Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_record->path, 'Filemanager'), '/'));
+        array_walk($path, function(&$val) {
+            $val = urlencode($val);
+        });
+
+        return Tinebase_Core::getUrl() . '#/Filemanager/showNode/' . join('/', $path);
+    }
 }

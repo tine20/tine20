@@ -26,6 +26,7 @@ class Tinebase_FileSystemTest extends TestCase
     protected $_oldModLog;
     protected $_oldIndexContent;
     protected $_oldCreatePreview;
+    protected $_oldNotification;
 
     protected $_rmDir = array();
 
@@ -46,6 +47,7 @@ class Tinebase_FileSystemTest extends TestCase
         parent::setUp();
 
         $this->_rmDir = array();
+        $this->_oldNotification = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
         $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_oldCreatePreview = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
@@ -68,6 +70,7 @@ class Tinebase_FileSystemTest extends TestCase
         $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
         $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = $this->_oldIndexContent;
         $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = $this->_oldCreatePreview;
+        $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS} = $this->_oldNotification;
 
         Tinebase_FileSystem::getInstance()->resetBackends();
 
@@ -717,5 +720,43 @@ class Tinebase_FileSystemTest extends TestCase
 
         $dirObject = $fileObjectController->get($dirNode->object_id);
         static::assertEquals(0, $dirObject->size, 'direcotry size should not become negative, it should be set to 0 instead');
+    }
+
+    public function testNotification()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (empty($smtpConfig)) {
+            $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+
+        $mailer = Tinebase_Smtp::getDefaultTransport();
+        $mailer->flush();
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS} = true;
+        $this->_controller = new Tinebase_FileSystem();
+        Tinebase_FileSystem::getInstance()->resetBackends();
+
+        $testDir = '/shared/test';
+        $baseFolder = Filemanager_Controller_Node::getInstance()->createNodes(array($testDir), Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        $baseFolder->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array(array(
+            Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true
+        ));
+        Filemanager_Controller_Node::getInstance()->update($baseFolder);
+
+        $handle = $this->_controller->fopen($this->_controller->getPathOfNode($baseFolder, true) . '/test.file', 'x');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
+        $written = fwrite($handle, 'phpunit');
+        $this->assertEquals(7, $written);
+        $this->_controller->fclose($handle);
+
+        // mail foo?
+        // check mail
+        $messages = $mailer->getMessages();
+        $this->assertEquals(2, count($messages));
+        $headers = $messages[0]->getHeaders();
+        $this->assertEquals('filemanager notification', $headers['Subject'][0]);
+        $this->assertTrue(strpos($headers['To'][0], Tinebase_Core::getUser()->accountEmailAddress) !== false);
     }
 }

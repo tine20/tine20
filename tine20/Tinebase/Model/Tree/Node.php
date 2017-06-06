@@ -238,7 +238,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         }
 
         $invalid = array();
-        if (!empty($this->revisionProps)) {
+        if (!empty($this->xprops(static::XPROPS_REVISION))) {
             if (count($this->revisionProps) > 4 || !isset($this->revisionProps[static::XPROPS_REVISION_NODE_ID])
                     || !isset($this->revisionProps[static::XPROPS_REVISION_MONTH]) ||
                     !isset($this->revisionProps[static::XPROPS_REVISION_ON]) ||
@@ -246,7 +246,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 $invalid[] = 'revisionProps';
             }
         }
-        if (!empty($this->notificationProps)) {
+        if (!empty($this->xprops(static::XPROPS_NOTIFICATION))) {
             foreach ($this->notificationProps as $val) {
                 foreach ($val as $key => $val1) {
                     if (!in_array($key, array(

@@ -520,6 +520,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             'autoescape' => 'json',
             'cache' => false, //$cacheDir
         ));
+        /** @noinspection PhpUndefinedMethodInspection */
+        /** @noinspection PhpUnusedParameterInspection */
         $twig->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
             return json_encode($string);
         });
@@ -590,6 +592,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (null !== $this->_groupByProperty) {
                 $propertyValue = $record->{$this->_groupByProperty};
                 if (null !== $this->_groupByProcessor) {
+                    /** @var closure $fn */
                     $fn = $this->_groupByProcessor;
                     $fn($propertyValue);
                 }

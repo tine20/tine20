@@ -149,6 +149,8 @@ class Tinebase_FileSystem implements
         $config = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM};
         $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        $this->_notificationActive = true === $config->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
+        $this->_previewActive = true === $config->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
 
         $this->_treeNodeBackend = null;
 
@@ -2929,8 +2931,8 @@ class Tinebase_FileSystem implements
         $fileSystem = Tinebase_FileSystem::getInstance();
 
         foreach($_accountIds as $accountId) {
-            //$locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $accountId));
-            //$translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $accountId));
+            $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
 
             try {
                 $user = Tinebase_User::getInstance()->getFullUserById($accountId);
@@ -2938,32 +2940,35 @@ class Tinebase_FileSystem implements
                 continue;
             }
 
-            $messageBody = '<html><body>';
+            $translatedMsgHeader = $translate->_('The following files have changed:'); // _('The following files have changed:')
+            $fileStr = $translate->_('File'); // _('File')
+            $createdStr = $translate->_('has been created.'); // _('has been created.')
+            $updatedStr = $translate->_('has been changed.'); // _('has been changed.')
+            $deleteStr = $translate->_('has been deleted.'); // _('has been deleted.')
+
+            $messageBody = '<html><body><p>' . $translatedMsgHeader . '</p>';
             foreach($_crudActions as $fileNodeId => $changes) {
 
                 try {
                     $fileNode = $fileSystem->get($fileNodeId, true);
-                    $path = explode('/', ltrim($fileSystem->getPathOfNode($fileNode, true), '/'));
-                    array_walk($path, function(&$val) {
-                        $val = urldecode($val);
-                    });
-                    $path = '/' . join('/', $path);
                 } catch(Tinebase_Exception_NotFound $tenf) {
                     continue;
                 }
+
+                $path = Filemanager_Model_Node::getDeepLink($fileNode);
 
                 $messageBody .= '<p>';
 
                 foreach ($changes as $change => $foo) {
                     switch($change) {
                         case 'created':
-                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been created.<br/>';
+                            $messageBody .= $fileStr . ' <a href="' . $path . '">' . $fileNode->name . '</a> ' . $createdStr . '<br/>';
                             break;
                         case 'updated':
-                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been changed.<br/>';
+                            $messageBody .= $fileStr . ' <a href="' . $path . '">' . $fileNode->name . '</a> ' . $updatedStr . '<br/>';
                             break;
                         case 'deleted':
-                            $messageBody .= 'File <a href="http://tine20.vagrant/#/Filemanager' . $path . '">' . $fileNode->name . '</a> has been deleted.<br/>';
+                            $messageBody .= $fileStr . ' <a href="' . $path . '">' . $fileNode->name . '</a> ' . $deleteStr . '<br/>';
                             break;
                         default:
                             // should not happen!
@@ -2974,7 +2979,9 @@ class Tinebase_FileSystem implements
             }
             $messageBody .= '</body></html>';
 
-            Tinebase_Notification::getInstance()->send($accountId, $user->contact_id, 'filemanager notification', '', $messageBody);
+            $translatedSubject = $translate->_('filemanager notification'); // _('filemanager notification')
+
+            Tinebase_Notification::getInstance()->send($accountId, array($user->contact_id), $translatedSubject, '', $messageBody);
         }
     }
 
