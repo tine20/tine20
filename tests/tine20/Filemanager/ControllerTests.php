@@ -124,4 +124,16 @@ class Filemanager_ControllerTests extends TestCase
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
     }
+
+    public function testRenameFolderCaseSensitive()
+    {
+        // check if personal folder exists
+        $personalFolderPath = $this->_getPersonalPath(Tinebase_Core::getUser());
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
+        $fileManager = Filemanager_Controller_Node::getInstance();
+
+        $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
+    }
 }

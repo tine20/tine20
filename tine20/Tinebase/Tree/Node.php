@@ -271,7 +271,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
         $child = $this->search($searchFilter)->getFirstRecord();
         
-        if (!$child) {
+        if (!$child || $childName !== $child->name) {
             throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
         }
         
