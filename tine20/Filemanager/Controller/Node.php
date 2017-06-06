@@ -108,7 +108,43 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function update(Tinebase_Record_Interface $_record)
     {
         if (! $this->_backend->checkACLNode($_record, 'update')) {
-            throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            if (! $this->_backend->checkACLNode($_record, 'get')) {
+                throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            }
+            // we allow only notification updates for the current user itself
+            $usersNotificationSettings = null;
+            $currentUserId = Tinebase_Core::getUser()->getId();
+            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
+                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+                        isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                        Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
+                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                    $usersNotificationSettings = $xpNotification;
+                    break;
+                }
+            }
+
+            if (null !== $usersNotificationSettings) {
+                // we reset all input and then just apply the notification settings for the current user
+                $_record = $this->get($_record->getId());
+                $found = false;
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as &$xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+                            isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
+                            $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        $xpNotification = $usersNotificationSettings;
+                        $found = true;
+                        break;
+                    }
+                }
+                if (false === $found) {
+                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
+                }
+                // now continue to do the update
+            } else {
+                throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            }
         }
 
         return parent::update($_record);
