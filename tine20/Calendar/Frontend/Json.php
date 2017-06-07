@@ -485,23 +485,55 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $_ignoreUIDs
      * @return array
      */
-    public function searchAllAttendeeTypes($_filter, $_paging, $_periods, $_ignoreUIDs)
+    public function searchAttendee($_filter, $_paging, $_periods, $_ignoreUIDs)
     {
-        $addressBookFE = new Addressbook_Frontend_Json();
-        $contactFilter = array(array('condition' => 'OR', 'filters' => array(
-            $_filter[0],
-            array('field' => 'path', 'operator' => 'contains', 'value' => $_filter[0]['value'])
-        )));
-        $groupFilter = $contactFilter;
-        $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
-        $contactPaging = $_paging;
-        $contactPaging['sort'] = 'type';
+        $filters = array();
+        foreach($_filter as $filter) {
+            switch($filter['field']) {
+                case 'query':
+                    $filters['query'] = $filter;
+                    break;
+                default:
+                    $filters[$filter['field']] = $filter['value'];
+                    break;
+            }
+        }
 
-        $result = array(
-            Calendar_Model_Attender::USERTYPE_USER => $addressBookFE->searchContacts($contactFilter, $contactPaging),
-            Calendar_Model_Attender::USERTYPE_GROUP => $addressBookFE->searchLists($groupFilter, $_paging),
-            Calendar_Model_Attender::USERTYPE_RESOURCE => $this->searchResources($_filter, $_paging)
-        );
+        $result = array();
+        $addressBookFE = new Addressbook_Frontend_Json();
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_USER, $filters['type'])) {
+            $contactFilter = array(array('condition' => 'OR', 'filters' => array(
+                $filters['query'],
+                array('field' => 'path', 'operator' => 'contains', 'value' => $filters['query']['value'])
+            )));
+            if (isset($filters['userFilter'])) {
+                $contactFilter[] = $filters['userFilter'];
+            }
+            $contactPaging = $_paging;
+            $contactPaging['sort'] = 'type';
+            $result[Calendar_Model_Attender::USERTYPE_USER] = $addressBookFE->searchContacts($contactFilter, $contactPaging);
+        }
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_GROUP, $filters['type'])) {
+            $groupFilter = array(array('condition' => 'OR', 'filters' => array(
+                $filters['query'],
+                array('field' => 'path', 'operator' => 'contains', 'value' => $filters['query']['value'])
+            )));
+            if (isset($filters['groupFilter'])) {
+                $groupFilter[] = $filters['groupFilter'];
+            }
+            $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
+            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $_paging);
+        }
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_RESOURCE, $filters['type'])) {
+            $resourceFilter = array($filters['query']);
+            if (isset($filters['resourceFilter'])) {
+                $resourceFilter[] = $filters['resourceFilter'];
+            }
+            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $_paging);
+        }
 
         $attendee = array();
         foreach ($result as $type => $res) {
