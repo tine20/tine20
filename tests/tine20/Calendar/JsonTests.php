@@ -1987,4 +1987,26 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(1, $relations['totalcount']);
         $this->assertEquals($contact->n_fn, $relations['results'][0]['related_record']['n_family'], print_r($relations['results'], true));
     }
+
+    public function testGetFreeBusyInfo()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
+        ));
+        $persistentEvent = $this->_eventController->create($event);
+
+        $period = array(array(
+            'field'     => 'period',
+            'operator'  => 'within',
+            'value'     => array(
+                'from'      => $persistentEvent->dtstart,
+                'until'     => $persistentEvent->dtend
+            ),
+        ));
+
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $period);
+        $this->assertGreaterThanOrEqual(2, count($fbinfo));
+    }
 }

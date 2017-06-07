@@ -460,4 +460,20 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $this->iMIPPrepare($iMIPMessage);
     }
+
+    /**
+     * @param array $_attendee
+     * @param array $_periods
+     * @param array $_ignoreUIDs
+     * @return array
+     */
+    public function getFreeBusyInfo($_attendee, $_periods, $_ignoreUIDs = array())
+    {
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_attendee);
+        $periods = new Calendar_Model_EventFilter($_periods);
+
+        $fbInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($periods, $attendee, $_ignoreUIDs);
+
+        return $fbInfo->toArray();
+    }
 }
