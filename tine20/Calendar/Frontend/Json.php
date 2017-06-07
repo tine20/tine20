@@ -43,7 +43,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $event = new Calendar_Model_Event(array(), TRUE);
         $event->setFromJsonInUsersTimezone($recordData);
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts);
         
         return $this->getEvent($returnEvent->getId());
@@ -52,7 +53,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing events
      *
-     * @param array $_ids
+     * @param array $ids
      * @param string $range
      * @return string
      */
@@ -64,7 +65,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing resources
      *
-     * @param array $_ids 
+     * @param array $ids
      * @return string
      */
     public function deleteResources($ids)
@@ -76,7 +77,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * deletes a recur series
      *
      * @param  array $recordData
-     * @return void
+     * @return array
      */
     public function deleteRecurSeries($recordData)
     {
@@ -273,8 +274,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for events matching given arguments
      *
-     * @param  array $_filter
-     * @param  array $_paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchEvents($filter, $paging)
@@ -349,8 +350,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for resources matching given arguments
      *
-     * @param  array $_filter
-     * @param  array $_paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchResources($filter, $paging)
@@ -430,7 +431,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * prepares an iMIP (RFC 6047) Message
      * 
-     * @param array $iMIP
+     * @param array|Calendar_Model_iMIP $iMIP
      * @return array prepared iMIP part
      */
     public function iMIPPrepare($iMIP)
@@ -475,5 +476,45 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $fbInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($periods, $attendee, $_ignoreUIDs);
 
         return $fbInfo->toArray();
+    }
+
+    /**
+     * @param array $_filter
+     * @param array $_paging
+     * @param array $_periods
+     * @param array $_ignoreUIDs
+     * @return array
+     */
+    public function searchAllAttendeeTypes($_filter, $_paging, $_periods, $_ignoreUIDs)
+    {
+        $addressBookFE = new Addressbook_Frontend_Json();
+        $contactFilter = array(array('condition' => 'OR', 'filters' => array(
+            $_filter[0],
+            array('field' => 'path', 'operator' => 'contains', 'value' => $_filter[0]['value'])
+        )));
+        $groupFilter = $contactFilter;
+        $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
+        $contactPaging = $_paging;
+        $contactPaging['sort'] = 'type';
+
+        $result = array(
+            Calendar_Model_Attender::USERTYPE_USER => $addressBookFE->searchContacts($contactFilter, $contactPaging),
+            Calendar_Model_Attender::USERTYPE_GROUP => $addressBookFE->searchLists($groupFilter, $_paging),
+            Calendar_Model_Attender::USERTYPE_RESOURCE => $this->searchResources($_filter, $_paging)
+        );
+
+        $attendee = array();
+        foreach ($result as $type => $res) {
+            foreach ($res['results'] as $r) {
+                $attendee[] = array(
+                    'user_id'   => $r['id'],
+                    'user_type' => $type
+                );
+            }
+        }
+
+        $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $_periods, $_ignoreUIDs);
+
+        return $result;
     }
 }

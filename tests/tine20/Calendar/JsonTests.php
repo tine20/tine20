@@ -2007,6 +2007,40 @@ class Calendar_JsonTests extends Calendar_TestCase
         ));
 
         $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $period);
-        $this->assertGreaterThanOrEqual(2, count($fbinfo));
+        $this->assertEquals(2, count($fbinfo));
+
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $period, array($persistentEvent->uid));
+        $this->assertEquals(0, count($fbinfo));
+    }
+
+    public function testSearchAllAttendeeTypes()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
+        ));
+        $persistentEvent = $this->_eventController->create($event);
+
+        $period = array(array(
+            'field'     => 'period',
+            'operator'  => 'within',
+            'value'     => array(
+                'from'      => $persistentEvent->dtstart,
+                'until'     => $persistentEvent->dtend
+            ),
+        ));
+
+        $filter = array(array('field' => 'name', 'operator' => 'contains', 'value' => 'l'));
+        $paging = array('sort' => 'name', 'dir' => 'ASC', 'start' => 0, 'limit' => 10);
+
+        $result = $this->_uit->searchAllAttendeeTypes($filter, $paging, $period, array());
+        $this->assertTrue(
+            isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
+            count($result[Calendar_Model_Attender::USERTYPE_USER]) === 3 &&
+            isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
+            isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE]) &&
+            isset($result['freeBusyInfo']) &&
+            count($result['freeBusyInfo']) === 2, print_r($result, true));
     }
 }
