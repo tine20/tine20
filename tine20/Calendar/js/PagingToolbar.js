@@ -295,23 +295,66 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
  * @constructor
  */
 Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, {
+    datepickerMenu: null,
+    datepickerButton: null,
+    wkField: null,
+
     init: function() {
         this.label = new Ext.form.Label({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Week'),
             style: 'padding-right: 3px'
-            //hidden: this.tb.activeView != 'week'
         });
-        this.field = new Ext.form.TextField({
+
+        this.wkField = new Ext.form.TextField({
             value: this.tb.dtStart.getWeekOfYear(),
             width: 30,
             cls: "x-tbar-page-number",
-            //hidden: this.tb.activeView != 'week',
             listeners: {
                 scope: this,
                 specialkey: this.onSelect,
                 blur: this.onSelect
             }
         });
+
+        this.datepickerMenu = new Ext.menu.DateMenu({
+            value: this.tb.dtStart,
+            hideOnClick: true,
+            focusOnSelect: true,
+            plugins: [new Ext.ux.DatePickerWeekPlugin({
+                weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
+            })],
+            listeners: {
+                'select': function (picker, date) {
+                    var toolbar = arguments[arguments.length - 1];
+
+                    this.setValue(date.getWeekOfYear());
+
+                    var diff = this.getValue() - toolbar.dtStart.getWeekOfYear() - parseInt(toolbar.dtStart.getDay() < 1 ? 1 : 0, 10);
+
+                    if (diff !== 0) {
+                        toolbar.update(toolbar.dtStart.add(Date.DAY, diff * 7));
+                        toolbar.fireEvent('change', toolbar, 'week', toolbar.getPeriod());
+                    }
+                }.createDelegate(this.wkField, [this], true)
+            }
+        });
+
+        this.datepickerButton = new Ext.Button({
+            iconCls: 'cal-sheet-view-type'
+        });
+
+        this.datepickerButton.on('click', function () {
+            this.datepickerMenu.show(this.datepickerButton.el);
+        }.createDelegate(this));
+
+        this.field = {
+            xtype: 'container',
+            cls: 'inline',
+            items: [
+                this.wkField,
+                this.datepickerButton
+            ]
+        }
     },
     onSelect: function(field, e) {
         if (e && e.getKey() == e.ENTER) {
@@ -319,7 +362,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         }
         var diff = field.getValue() - this.dtStart.getWeekOfYear() - parseInt(this.dtStart.getDay() < 1 ? 1 : 0, 10);
         if (diff !== 0) {
-            this.update(this.dtStart.add(Date.DAY, diff * 7))
+            this.update(this.dtStart.add(Date.DAY, diff * 7));
             this.fireEvent('change', this, 'week', this.getPeriod());
         }
         
@@ -332,11 +375,11 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         }
         this.dtStart = from;
         
-        if (this.field && this.field.rendered) {
+        if (this.wkField && this.wkField.rendered) {
             // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
             var wkStart = dtStart.add(Date.DAY, dtStart.getDay() < 1 ? 1 : 0);
             
-            this.field.setValue(parseInt(wkStart.getWeekOfYear(), 10));
+            this.wkField.setValue(parseInt(wkStart.getWeekOfYear(), 10));
         }
     },
     render: function() {
@@ -364,20 +407,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
             from: this.dtStart.clone(),
             until: this.dtStart.add(Date.DAY, 7)
         };
-    }/*
-    getPeriod: function() {
-        // period is the week current startDate is in
-        var startDay = Ext.DatePicker.prototype.startDay;
-        console.log(startDay);
-        var diff = startDay - this.dtStart.getDay();
-        console.log(diff);
-        
-        var from = Date.parseDate(this.dtStart.add(Date.DAY, diff).format('Y-m-d') + ' 00:00:00', Date.patterns.ISO8601Long);
-        return {
-            from: from,
-            until: from.add(Date.DAY, 7)
-        };
-    }*/
+    }
 });
 
 /**
