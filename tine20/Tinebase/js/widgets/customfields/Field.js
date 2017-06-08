@@ -96,6 +96,19 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                             editDialog: editDialog
                         });
                         break;
+                    case 'recordlist':
+                        var options = def.options ? def.options : {},
+                            recordListConfig = def.recordListConfig ? def.recordListConfig : null;
+
+                        Ext.apply(fieldDef, {
+                            xtype: 'tinepickergridlayercombo',
+                            app: options.app ? options.app : app,
+                            resizable: true,
+                            gridRecordClass: eval(recordListConfig.value.records),
+                            allowLinkingItself: false,
+                            editDialog: editDialog
+                        });
+                        break;
                     case 'integer':
                     case 'int':
                         fieldDef.xtype = 'numberfield';

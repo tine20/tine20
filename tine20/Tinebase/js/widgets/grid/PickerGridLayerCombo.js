@@ -74,7 +74,11 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
      * sets values to innerForm (grid)
      */
     setFormValue: function (value) {
-        this.setStoreFromArray(listRoles);
+        if (!value) {
+            value = [];
+        }
+
+        this.setStoreFromArray(value);
     },
 
     /**
@@ -95,13 +99,20 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
      */
     setStoreFromArray: function(data) {
         //this.pickerGrid.getStore().clearData();
+        var rawData = [];
         this.pickerGrid.getStore().removeAll();
 
         for (var i = data.length-1; i >=0; --i) {
-            var recordData = data[i];
-
-            this.pickerGrid.getStore().insert(0, new this.gridRecordClass(recordData));
+            var recordData = data[i],
+                newRecord = new this.gridRecordClass(recordData);
+            this.pickerGrid.getStore().insert(0, newRecord);
+            rawData.push(newRecord.getTitle());
         }
+
+        if (rawData) {
+            this.setRawValue(rawData.join(', '));
+        }
+
     },
 
     /**
@@ -120,3 +131,5 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
         return result;
     }
 });
+
+Ext.reg('tinepickergridlayercombo', Tine.widgets.grid.PickerGridLayerCombo);

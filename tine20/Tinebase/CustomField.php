@@ -395,21 +395,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 
                 // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
-                if (strtolower($customField->definition['type']) == 'record') {
-                    $modelParts = explode('.', $customField->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
-                    $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
-                    
-                    if (is_array($value)) {
-                        /** @var Tinebase_Record_Interface $model */
-                        $model = new $modelName(array(), TRUE);
-                        $value = $value[$model->getIdProperty()];
-                    }
-                    // check if customfield value is the record itself
-                    if (get_class($_record) == $modelName && $_record->getId() == $value) {
-                        throw new Tinebase_Exception_Record_Validation('It is not allowed to add the same record as customfield record!');
-                    }
+                if (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist') {
+                    $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
                 }
-                
+
                 switch (count($filtered)) {
                     case 1:
                         $cf = $filtered->getFirstRecord();
@@ -438,6 +427,53 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 }
             }
         }
+    }
+
+    /**
+     * @param $_record
+     * @param $_customField
+     * @param $_value
+     * @return string
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _getValueForRecordOrListCf($_record, $_customField, $_value)
+    {
+        // get model parts from saved record class e.g. Tine.Admin.Model.Group
+        $modelParts = explode('.', $_customField->definition[$_customField->definition['type'] . 'Config']['value']['records']);
+        $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
+        $model = new $modelName(array(), true);
+        $idProperty = $model->getIdProperty();
+        if (is_array($_value)) {
+            if (strtolower($_customField->definition['type']) == 'record') {
+                /** @var Tinebase_Record_Interface $model */
+                $value = $_value[$idProperty];
+
+            } else {
+                // recordlist
+                $values = array();
+                foreach ($_value as $record) {
+                    if (is_array($record) || $record instanceof Tinebase_Record_Abstract) {
+                        $values[] = $record[$idProperty];
+                    } else {
+                        $values[] = $record;
+                    }
+                }
+
+                // remove own record if in list
+                sort($values);
+                Tinebase_Helper::array_remove_by_value($_record->getId(), $values);
+                $value = json_encode($values);
+            }
+        } else {
+            $value = $_value;
+        }
+
+        // check if customfield value is the record itself
+        if (get_class($_record) == $modelName && strpos($value, $_record->getId()) !== false) {
+            throw new Tinebase_Exception_Record_Validation('It is not allowed to add the same record as customfield record!');
+        }
+
+        return $value;
     }
     
     /**
@@ -480,8 +516,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $idx = $configs->getIndexById($customField->customfield_id);
         if ($idx !== FALSE) {
             $config = $configs[$idx];
-            if (strtolower($config->definition['type']) == 'record') {
-                $value = $this->_getRecordTypeCfValue($config, $customField->value);
+            if (strtolower($config->definition->type) == 'record' || strtolower($config->definition->type) == 'recordlist') {
+                $value = $this->_getRecordTypeCfValue($config, $customField->value, strtolower($config->definition['type']));
             } else {
                 $value = $customField->value;
             }
@@ -503,15 +539,21 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string $value
      * @return string
      */
-    protected function _getRecordTypeCfValue($config, $value)
+    protected function _getRecordTypeCfValue($config, $value, $type = 'record')
     {
         try {
-            $model = $config->definition['recordConfig']['value']['records'];
+            $recordConfigIndex = $type === 'record' ? 'recordConfig' : 'recordListConfig';
+            $model = $config->definition[$recordConfigIndex]['value']['records'];
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Fetching record customfield of type ' . $model);
+                . ' Fetching ' . $type . ' customfield of type ' . $model);
             
             $controller = Tinebase_Core::getApplicationInstance($model);
-            $result = $controller->get($value)->toArray();
+            // TODO why do we already convert to array here? should be done in converter!
+            if ($type === 'record') {
+                $result = $controller->get($value)->toArray();
+            } else {
+                $result = $controller->getMultiple(Tinebase_Helper::jsonDecode($value))->toArray();
+            }
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Error resolving custom field record: ' . $e->getMessage());
@@ -520,7 +562,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         return $result;
     }
-    
+
     /**
      * get all customfields of all given records
      * 
