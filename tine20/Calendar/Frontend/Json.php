@@ -270,6 +270,36 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_get($id, Calendar_Controller_Resource::getInstance());
     }
+
+    /**
+     * @param array $_event
+     *   attendee to find free timeslot for
+     *   dtstart, dtend -> to calculate duration
+     *   originator_tz needs to be set!
+     *   rrule optional
+     * @param array $_options
+     *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
+     *  'until'        datetime (optional, defaults 2 years) until when to giveup searching
+     *  'constraints'  array    (optional, defaults 8-20 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR') array of timespecs to limit the search with
+     *     timespec:
+     *       dtstart,
+     *       dtend,
+     *       rrule ... for example "work days" -> 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+     * @return array
+     */
+    public function searchFreeTime($_event, $_options)
+    {
+        $records = Calendar_Controller_Event::getInstance()->searchFreeTime(new Calendar_Model_Event($_event, true), $_options);
+
+        $records->attendee = array();
+        $result = $this->_multipleRecordsToJson($records, null, null);
+
+        return array(
+            'results'       => $result,
+            'totalcount'    => count($result),
+            'filter'        => array(),
+        );
+    }
     
     /**
      * Search for events matching given arguments

@@ -2055,4 +2055,30 @@ class Calendar_JsonTests extends Calendar_TestCase
             isset($result['freeBusyInfo']) &&
             count($result['freeBusyInfo']) === 0, print_r($result, true));
     }
+
+    public function testSearchFreeTime()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
+        ));
+        $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,FR';
+        $event->originator_tz = $event->dtstart->getTimezone()->getName();
+
+        $options = array(
+            'constraints' => array(array(
+                'dtstart'   => $event->dtstart->getClone()->setHour(10),
+                'dtend'     => $event->dtstart->getClone()->setHour(22),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+            )),
+        );
+
+        $expectedDtStart = new Tinebase_DateTime('2009-03-27 10:00:00', $event->originator_tz);
+        $expectedDtStart->setTimezone(Tinebase_Core::getUserTimezone());
+
+        $result = $this->_uit->searchFreeTime($event->toArray(), $options);
+        static::assertTrue(is_array($result) && count($result) === 3 && count($result['results']) === 1);
+        static::assertEquals($expectedDtStart->toString(), $result['results'][0]['dtstart']);
+    }
 }
