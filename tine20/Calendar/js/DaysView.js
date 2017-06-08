@@ -696,7 +696,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     createEvent: function(e, event) {
         // only add range events if mouse is down long enough
-        if (this.editing || (event.isRangeAdd && ! this.mouseDown)) {
+        if (this.editing || (event.isRangeAdd && ! this.mouseDown) || !event.isValid()) {
             return;
         }
         
@@ -928,7 +928,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 dtend: dtend,
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
-            
+
             this.createEvent(e, event);
             event.dirty = true;
         } else if (target.className == 'cal-daysviewpanel-dayheader-day'){

@@ -93,6 +93,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const FIRSTDAYOFWEEK = 'firstdayofweek';
 
     /**
+     * default calendar strategy
+     */
+    const DEFAULT_CALENDAR_STRATEGY = 'defaultCalendarStrategy';
+
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -121,7 +126,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_TIMEINCREMENT,
             self::DEFAULTATTENDEE_STRATEGY,
             self::DEFAULT_EVENTS_RRIVATE,
-            self::FIRSTDAYOFWEEK
+            self::FIRSTDAYOFWEEK,
+            self::DEFAULT_CALENDAR_STRATEGY
         );
         
         if ($cropDays) {
@@ -195,11 +201,15 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULT_EVENTS_RRIVATE => array(
                 'label'         => $translate->_('Default set Events to privat'),
-                'description'   => $translate->_('If enabled every created event is always privat.'),
+                'description'   => $translate->_('If enabled every created event is always privat'),
             ),
             self::FIRSTDAYOFWEEK => array(
                 'label'         => $translate->_('First Day of Week'),
                 'description'   => $translate->_('On what day the week should be starting'),
+            ),
+            self::DEFAULT_CALENDAR_STRATEGY => array(
+                'label'         => $translate->_('Default calendar strategy'),
+                'description'   => $translate->_('The calendar for new events if no container is selected'),
             ),
         );
         
@@ -408,6 +418,20 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <option>
                             <label>Monday</label>
                             <value>1</value>
+                        </option>
+                    </options>';
+                break;
+            case self::DEFAULT_CALENDAR_STRATEGY:
+                $preference->value = 'default';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Default Calendar</label>
+                            <value>default</value>
+                        </option>
+                        <option>
+                            <label>None</label>
+                            <value>none</value>
                         </option>
                     </options>';
                 break;

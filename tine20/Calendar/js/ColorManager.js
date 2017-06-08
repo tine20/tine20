@@ -226,6 +226,10 @@ Tine.Calendar.colorStrategies['container'] = {
         var container = null,
             color = null,
             schema = null;
+
+        if (null === container) {
+            return;
+        }
         
         if (! Ext.isFunction(event.get)) {
             // tree comes with containers only

@@ -75,6 +75,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     containerName: 'Calendar',
     containersName: 'Calendars',
     copyOmitFields: ['uid', 'recurid'],
+    allowBlankContainer: false,
     
     /**
      * mark record out of current filter
@@ -220,7 +221,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
-        defaultAttendee = []
+        defaultAttendee = [],
         calendarResources = app.getRegistry().get('calendarResources');
         
     // shift -> change intelligent <-> me
