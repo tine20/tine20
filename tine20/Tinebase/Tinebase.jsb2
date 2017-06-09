@@ -378,6 +378,10 @@
           "path": "js/data/"
         },
         {
+          "text": "GroupedStoreCollection.js",
+          "path": "js/data/"
+        },
+        {
           "text": "RecordProxy.js",
           "path": "js/data/"
         },

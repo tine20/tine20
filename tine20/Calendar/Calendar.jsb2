@@ -36,6 +36,10 @@
           "path": "js/"
         },
         {
+          "text": "AbstractView.js",
+          "path": "js/"
+        },
+        {
           "text": "EventUI.js",
           "path": "js/"
         },
@@ -65,6 +69,22 @@
         },
         {
           "text": "GridView.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimelineLabel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimelineViewEventUI.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimelineView.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimelinePanel.js",
           "path": "js/"
         },
         {
@@ -200,6 +220,10 @@
         },
         {
           "text": "monthviewpanel.css",
+          "path": "css/"
+        },
+        {
+          "text": "timelinepanel.css",
           "path": "css/"
         },
         {

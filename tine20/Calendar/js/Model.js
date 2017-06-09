@@ -545,7 +545,11 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
         var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
     },
     */
-    
+
+    getCompoundId: function() {
+        return this.get('user_type') + '-' + this.getUserId();
+    },
+
     /**
      * returns account_id if attender is/has a user account
      * 
@@ -593,7 +597,7 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
         }
         
         var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
-        
+
         if (!userData) {
             return null;
         }
@@ -624,6 +628,25 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                 return userData.id
                 break;
         }
+    },
+
+    getIconCls: function() {
+        var type = this.get('user_type'),
+            cls = 'cal-attendee-type-';
+
+        switch(type) {
+            case 'user':
+                cls = 'renderer_typeAccountIcon';
+                break;
+            case 'group':
+                cls = 'renderer_accountGroupIcon';
+                break;
+            default:
+                cls += type;
+                break;
+        }
+
+        return cls;
     }
 });
 
@@ -679,6 +702,9 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     Ext.each(attendeeData, function(attender) {
         if (attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id && Ext.isString(attender.id) ? attender.id : Ext.id());
+            if (record.get('user_id') == "currentContact") {
+                record.set('user_id', Tine.Tinebase.registry.get('userContact'));
+            }
             attendeeStore.addSorted(record);
         }
     });

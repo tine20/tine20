@@ -1,0 +1,151 @@
+.cal-timelinepanel-header {
+    height: 100%;
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    overflow-y: scroll;
+}
+
+.cal-timelinepanel-header-label {
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-right: 3px double #E1E1E1;
+}
+
+.cal-timelinepanel-yscroller-labels {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-right: 3px double #E1E1E1;
+}
+
+.cal-timelinepanel-headeritem {
+    height: 100%;
+    float: left;
+    padding-top: 5px;
+    padding-left: 3px;
+     box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-right: 1px dotted #E1E1E1;
+    text-align: left;
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+    overflow: hidden;
+}
+
+.cal-timelinepanel-headeritem:hover, cal-timelinepanel-headeritem-today{
+    background:#EBF3FD url(../../library/ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll 0 bottom;
+}
+
+.cal-timelinepanel-headeritem-long {
+    display: none;
+}
+
+.cal-timelinepanel-header-long .cal-timelinepanel-headeritem-long {
+    display: inline;
+}
+
+.cal-timelinepanel-header-long .cal-timelinepanel-headeritem-short {
+    display: none;
+}
+
+.cal-timelinepanel-vscroller .x-box-inner {
+    overflow-y: scroll;
+}
+
+
+/*.cal-timelinepanel-yscroller-labels,*/
+/*.cal-timelinepanel-yscroller-timelines {*/
+    /*box-sizing: border-box;*/
+    /*-moz-box-sizing: border-box;*/
+    /*-webkit-box-sizing: border-box;*/
+/*}*/
+
+.cal-timelinelabel {
+    background-color: #F9F9F9;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-bottom: 1px solid #E1E1E1;
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+.cal-timelinelabel div {
+    height: 100%;
+    float: left;
+}
+
+.cal-timelinelabel-collapsetool {
+    width: 16px;
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat -18px 0;
+    position: relative;
+    margin-top: -4px;
+}
+
+.cal-timelinelabel-collapsetool:hover {
+    background-position: -48px 0;
+}
+
+.cal-timelinelabel-collapsed .cal-timelinelabel-collapsetool {
+    background-position: 0 0;
+}
+
+.cal-timelinelabel-collapsed .cal-timelinelabel-collapsetool:hover {
+    background-position: -32px 0;
+}
+
+.cal-timelinelabel-icon {
+    width: 20px;
+    margin-right: 2px;
+    margin-top: -3px;
+}
+
+.cal-timelinelabel-icon . .cal-timelinelabel-noicon {
+    width: 0px;
+    margin: 0;
+}
+
+.cal-timeline-view {
+    background-color: #FFFFFF;
+    position: relative;
+    padding-top: 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+/* reuse daysview allday css */
+.cal-timeline-view .cal-daysviewpanel-event {
+    margin-left: 0px;
+}
+
+.cal-timeline-view .cal-daysviewpanel-event .cal-daysviewpanel-wholedayevent-body,
+.cal-timeline-view .cal-daysviewpanel-event-editgrant .cal-daysviewpanel-event-header {
+    cursor: pointer !important;
+}
+
+.cal-timeline-view .cal-daysviewpanel-event-header-icons {
+    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    padding-left: 2px;
+    top: 3px;
+}

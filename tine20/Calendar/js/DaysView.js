@@ -11,7 +11,7 @@ Ext.ns('Tine.Calendar');
 /**
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.DaysView
- * @extends     Ext.util.Observable
+ * @extends     Tine.Calendar.AbstractView
  * Calendar view representing each day in a column
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @constructor
@@ -82,7 +82,7 @@ Tine.Calendar.DaysView = function(config){
     );
 };
 
-Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
+Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     /**
      * @cfg {Date} startDate
      * start date
@@ -185,7 +185,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @private
      */
     ds: null,
-    
+
+    eventCls: 'cal-daysviewpanel-event',
+
     /**
      * updates period to display
      * @param {Array} period
@@ -233,18 +235,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         this.timeIncrement = parseInt(this.app.getRegistry().get('preferences').get('timeIncrement')) || this.timeIncrement;
 
-        this.initData(this.store);
-        
         this.initTimeScale();
-        this.initTemplates();
 
         this.mon(Tine.Tinebase.MainScreen, 'appactivate', this.onAppActivate, this);
-        
-        if (! this.selModel) {
-            this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
-        }
-
-        this.onLayout = Function.createBuffered(this.unbufferedOnLayout, 100, this);
 
         // apply preferences
         var prefs = this.app.getRegistry().get('preferences'),
@@ -275,28 +268,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
-    
-    /**
-     * @private
-     * @param {Ext.data.Store} ds
-     */
-    initData : function(ds){
-        if(this.store){
-            this.store.un("load", this.onLoad, this);
-            this.store.un("beforeload", this.onBeforeLoad, this);
-            this.store.un("add", this.onAdd, this);
-            this.store.un("remove", this.onRemove, this);
-            this.store.un("update", this.onUpdate, this);
-        }
-        if(ds){
-            ds.on("load", this.onLoad, this);
-            ds.on("beforeload", this.onBeforeLoad, this);
-            ds.on("add", this.onAdd, this);
-            ds.on("remove", this.onRemove, this);
-            ds.on("update", this.onUpdate, this);
-        }
-        this.store = ds;
-    },
+
     /**
      * inits time scale
      * @private
@@ -508,7 +480,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         });
         
         this.initElements();
-        this.getSelectionModel().init(this);
     },
 
     /**
@@ -516,14 +487,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     afterRender: function() {
         Tine.Calendar.DaysView.superclass.afterRender.apply(this, arguments);
-        
-        this.mon(this.el, 'click', this.onClick, this);
-        this.mon(this.el, 'dblclick', this.onDblClick, this);
-        this.mon(this.el, 'contextmenu', this.onContextMenu, this);
+
         this.mon(this.el, 'mousedown', this.onMouseDown, this);
         this.mon(this.el, 'mouseup', this.onMouseUp, this);
-        this.mon(this.el, 'keydown', this.onKeyDown, this);
-        
+
         this.initDropZone();
         this.initDragZone();
         
@@ -655,39 +622,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     insertEvent: function(event) {
         event.ui = new Tine.Calendar.DaysViewEventUI(event);
         event.ui.render(this);
-    },
-    
-    /**
-     * removes all events
-     */
-    removeAllEvents: function() {
-        this.store.each(function(event) {
-            if (event.ui) {
-                event.ui.remove();
-            }
-        });
-    },
-    
-    /**
-     * removes a event from the dom
-     * @param {Tine.Calendar.Model.Event} event
-     */
-    removeEvent: function(event) {
-        if(this.editing == event) {
-            this.abortCreateEvent(event);
-        }
-
-        if (event.ui) {
-            event.ui.remove();
-        }
-    },
-    
-    /**
-     * returns the selectionModel of the active panel
-     * @return {}
-     */
-    getSelectionModel: function() {
-        return this.selModel;
     },
     
     /**
@@ -876,19 +810,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             this.scroller.scroll(hint.hasClass('cal-daysviewpanel-body-daycolumn-hint-above') ? 't' : 'b', 10000, true);
             return;
         }
-        
-        var event = this.getTargetEvent(e);
-        if (event) {
-            this.fireEvent('click', event, e);
-        }
-    },
-    
-    onContextMenu: function(e) {
-        this.fireEvent('contextmenu', e);
-    },
-    
-    onKeyDown : function(e){
-        this.fireEvent("keydown", e);
+
+        return Tine.Calendar.DaysView.superclass.onClick.call(this, e);
     },
     
     /**
@@ -1077,134 +1000,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             event.ui.clearDirty();
         }
     },
-    
-    /**
-     * @private
-     */
-    onUpdate : function(ds, event){
-        // don't update events while being created
-        if (event.get('id').match(/new/)) {
-            return;
-        }
-        
-        // relayout original context
-        var originalRegistry = (event.modified.hasOwnProperty('is_all_day_event') ? event.modified.is_all_day_event : event.get('is_all_day_event')) ? 
-            this.parallelWholeDayEventsRegistry : 
+
+    getParallelEventRegistry: function(event, original) {
+        var isAllDayEvent = original && event.modified.hasOwnProperty('is_all_day_event') ?
+            event.modified.is_all_day_event :
+            event.get('is_all_day_event');
+
+        return isAllDayEvent ?
+            this.parallelWholeDayEventsRegistry :
             this.parallelScrollerEventsRegistry;
-
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        var originalDtstart = event.modified.hasOwnProperty('dtstart') ? event.modified.dtstart : event.get('dtstart');
-        var originalDtend = event.modified.hasOwnProperty('dtend') ? event.modified.dtend : event.get('dtend');
-
-        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
-        for (var j=0; j<originalParallels.length; j++) {
-            this.removeEvent(originalParallels[j]);
-        }
-        originalRegistry.unregister(event);
-        
-        var originalParallels = originalRegistry.getEvents(originalDtstart, originalDtend);
-        for (var j=0; j<originalParallels.length; j++) {
-            this.insertEvent(originalParallels[j]);
-        }
-        
-        // relayout actual context
-        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-        for (var j=0; j<parallelEvents.length; j++) {
-            this.removeEvent(parallelEvents[j]);
-        }
-        
-        registry.register(event);
-        var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-        for (var j=0; j<parallelEvents.length; j++) {
-            this.insertEvent(parallelEvents[j]);
-        }
-        
-        this.onLayout();
     },
 
-    /**
-     * @private
-     */
-    onAdd : function(ds, records, index){
-        for (var i=0; i<records.length; i++) {
-            var event = records[i];
-            
-            var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-            registry.register(event);
-            
-            var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
-            
-            for (var j=0; j<parallelEvents.length; j++) {
-                this.removeEvent(parallelEvents[j]);
-                this.insertEvent(parallelEvents[j]);
-            }
-        }
-        
-        this.onLayout();
-    },
-
-    /**
-     * @private
-     */
-    onRemove : function(ds, event, index, isUpdate) {
-        if (!event || index == -1) {
-            return;
-        }
-        
-        if(isUpdate !== true){
-            //this.fireEvent("beforeeventremoved", this, index, record);
-        }
-        var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-        registry.unregister(event);
-        this.removeEvent(event);
-        this.getSelectionModel().unselect(event);
-        this.onLayout();
-    },
-    
-    onBeforeLoad: function(store, options) {
-        if (options.autoRefresh && this.editing) {
-            Tine.log.debug('Tine.Calendar.DaysView::onBeforeLoad skipping autorefresh as editing is in progress');
-            return false;
-        }
-        if (! options.refresh) {
-            this.store.each(this.removeEvent, this);
-            this.transitionEvents = [];
-        } else {
-            this.transitionEvents = this.store.data.items;
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onLoad : function() {
-        if(! this.rendered){
-            return;
-        }
-        
-        // remove old events
-        Ext.each(this.transitionEvents, this.removeEvent, this);
-        
-        // setup registry
+    initParallelEventRegistry: function(event) {
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
-        
-        // todo: sort generic?
-        this.store.fields = Tine.Calendar.Model.Event.prototype.fields;
-        this.store.sortInfo = {field: 'dtstart', direction: 'ASC'};
-        this.store.applySort();
-        
-        this.store.each(function(event) {
-            var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
-            registry.register(event);
-        }, this);
-        
-        // put the events in
-        this.store.each(this.insertEvent, this);
-        
-        this.onLayout();
     },
-    
+
     /**
      * print wrapper
      */
@@ -1212,32 +1023,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var renderer = new this.printRenderer({printMode: printMode});
         renderer.print(this);
     },
-    
-    hex2dec: function(hex) {
-        var dec = 0;
-        hex = hex.toString();
-        var length = hex.length, multiplier, digit;
-        for (var i=0; i<length; i++) {
-            
-            multiplier = Math.pow(16, (Math.abs(i - hex.length)-1));
-            digit = parseInt(hex.toString().charAt([i]), 10);
-            if (isNaN(digit)) {
-                switch (hex.toString().charAt([i]).toUpperCase()) {
-                    case 'A': digit = 10;  break;
-                    case 'B': digit = 11;  break;
-                    case 'C': digit = 12;  break;
-                    case 'D': digit = 13;  break;
-                    case 'E': digit = 14;  break;
-                    case 'F': digit = 15;  break;
-                    default: return NaN;
-                }
-            }
-            dec = dec + (multiplier * digit);
-        }
-        
-        return dec;
-    },
-    
+
     getPeriod: function() {
         return {
             from: this.startDate,
@@ -1280,23 +1066,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             }
             
             return date;
-        }
-    },
-    
-    /**
-     * gets event el of target
-     * 
-     * @param {Ext.EventObject} e
-     * @return {Tine.Calendar.Model.Event}
-     */
-    getTargetEvent: function(e) {
-        var target = e.getTarget();
-        var el = Ext.fly(target);
-        
-        if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[id*=event:]', 10))) {
-            var parts = el.dom.id.split(':');
-            
-            return this.store.getById(parts[1]);
         }
     },
 
@@ -1512,14 +1281,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         // take one third of the available height maximum
         return bottom - wholeDayAreaEl.getTop() + this.minAllDayScrollerHight;
-    },
-
-    onDestroy: function() {
-        this.removeAllEvents();
-        this.initData(false);
-        this.purgeListeners();
-        
-        Tine.Calendar.DaysView.superclass.onDestroy.apply(this, arguments);
     },
     
     /**

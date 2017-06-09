@@ -58,7 +58,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     defaultPrintMode: 'sheet',
     
     periodRe: /^(day|week|month|year)/i,
-    presentationRe: /(sheet|grid)$/i,
+    presentationRe: /(sheet|grid|timeline)$/i,
     
     calendarPanels: {},
     
@@ -235,6 +235,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this
         });
 
+        this.showTimelineView = new Ext.Button({
+            pressed: this.isActiveView('Timeline'),
+            scale: 'medium',
+            minWidth: 60,
+            rowspan: 2,
+            iconAlign: 'top',
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Timeline'),
+            handler: this.changeView.createDelegate(this, ["timeline"]),
+            iconCls:'cal-timeline-view-type',
+            xtype: 'tbbtnlockedtoggle',
+            toggleGroup: 'Calendar_Toolbar_tgViewTypes',
+            scope: this
+        });
+
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.isActiveView('Day'),
             text: this.app.i18n._('Day'),
@@ -354,25 +369,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     isActiveView: function(view)
     {
-        switch (view) {
-            case 'Grid':
-                return String(this.activeView).match(/grid$/i);
-                break;
-            case 'Day':
-                return String(this.activeView).match(/day/i);
-                break;
-            case 'Week':
-                return String(this.activeView).match(/week/i);
-                break;
-            case 'Month':
-                return String(this.activeView).match(/month/i);
-                break;
-            case 'Sheet':
-                return String(this.activeView).match(/sheet/i);
-                break;
-            default:
-                return false;
-        }
+        var re = new RegExp(String(view).toLowerCase(), 'i');
+        return String(this.activeView).match(re);
     },
     
     /**
@@ -414,6 +412,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }],
             items: [
                 this.showSheetView,
+                this.showTimelineView,
                 this.showGridView
             ]
         }];
@@ -1783,7 +1782,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         });
                         break;
                 }
-                
+
                 view.on('changeView', this.changeView, this);
                 view.on('changePeriod', function (period) {
                     this.startDate = period.from;
@@ -1806,6 +1805,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     tbar: tbar,
                     store: store,
                     canonicalName: ['Event', 'Grid']
+                });
+            }  else if (whichParts.presentation.match(/timeline/i)) {
+                this.calendarPanels[which] = new Tine.Calendar.TimelinePanel({
+                    tbar: tbar,
+                    period: tbar.periodPicker.getPeriod(),
+                    viewType: whichParts.period,
+                    store: store,
+                    canonicalName: ['Event', 'Timeline']
                 });
             }
 

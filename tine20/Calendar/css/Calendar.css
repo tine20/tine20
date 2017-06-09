@@ -51,6 +51,16 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-list.png) !important;
 }
 
+.cal-timeline-view-type {
+    background-image:url(../../images/oxygen/16x16/actions/view-calendar-timeline.png) !important;
+}
+.x-btn-medium .cal-timeline-view-type {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-timeline.png) !important;
+}
+.x-btn-large .cal-timeline-view-type {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-timeline.png) !important;
+}
+
 .cal-grid-view-color {
     background-image:url(../../images/oxygen/16x16/actions/color-fill.png) !important;
 }
