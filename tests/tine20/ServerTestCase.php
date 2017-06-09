@@ -29,6 +29,8 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
      * @var Zend_Config
      */
     protected $_config;
+
+    protected $_oldDenyList;
     
     /**
      * set up tests
@@ -48,6 +50,8 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
         $this->_config = new Zend_Config($configData);
         
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $this->_oldDenyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST);
     }
     
     /**
@@ -60,6 +64,8 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST, $this->_oldDenyList);
     }
     
     /**

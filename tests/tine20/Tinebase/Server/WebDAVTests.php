@@ -21,7 +21,7 @@ class Tinebase_Server_WebDAVTests extends ServerTestCase
      * test general functionality of Tinebase_Server_WebDAV
      * @group ServerTests
      */
-    public function testServer()
+    public function testServer($noAssert = false)
     {
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
 PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1
@@ -54,8 +54,20 @@ EOS
         $result = ob_get_contents();
         
         ob_end_clean();
-        
+
+        if (true === $noAssert) {
+            return $result;
+        }
+
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+
+    public function testDenyingWebDavClient()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST, array('/deniedClient/'));
+
+        $_SERVER['HTTP_USER_AGENT'] = 'deniedClient';
+        static::assertTrue(empty($this->testServer(true)));
     }
     
     /**

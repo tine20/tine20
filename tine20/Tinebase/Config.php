@@ -459,6 +459,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const DENY_WEBDAV_CLIENT_LIST = 'denyWebDavClientList';
+
+    /**
+     * @var string
+     */
     const VERSION_CHECK = 'versionCheck';
 
     /**
@@ -1399,6 +1404,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,
+        ),
+        self::DENY_WEBDAV_CLIENT_LIST  => array(
+            //_('List of WebDav agent strings that will be denied')
+            'label'                 => 'List of WebDav agent strings that will be denied',
+            //_('List of WebDav agent strings that will be denied.')
+            'description'           => 'List of WebDav agent strings that will be denied.',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => NULL,
         ),
         self::FILESYSTEM => array(
             //_('Filesystem settings')
