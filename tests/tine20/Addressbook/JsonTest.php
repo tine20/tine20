@@ -417,7 +417,22 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
         $this->_checkChangedNote($result['id'], ' ->  ' . $cf->name . ': changed value)');
     }
-    
+
+    /**
+     * test record customfield resolving
+     */
+    public function testCustomfieldResolving()
+    {
+        $cf = $this->_createCustomfield($name = 'ContactCF', $model = 'Addressbook_Model_Contact', $type = 'record');
+        $contact = $this->_addContact();
+        $contact2 = $this->_addContact('another one');
+        $contact['customfields'][$cf->name] = $contact2['id'];
+        $result = $this->_uit->saveContact($contact);
+
+        $this->assertTrue(is_array($result['customfields'][$cf->name]), 'customfield value is not resolved');
+        $this->assertEquals($contact2['id'], $result['customfields'][$cf->name]['id']);
+    }
+
     /**
      * check 'changed' system note and modlog after tag/customfield update
      * 
