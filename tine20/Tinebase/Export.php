@@ -41,7 +41,7 @@ class Tinebase_Export
         // always merge options? this needs to be refactored!
         $_additionalOptions = array_merge($_additionalOptions, $_options);
         
-        if ((isset($_options['definitionId']) || array_key_exists('definitionId', $_options))) {
+        if (isset($_options['definitionId'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
             

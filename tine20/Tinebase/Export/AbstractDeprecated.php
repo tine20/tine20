@@ -365,14 +365,14 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      */
     protected function _getExportConfig($_additionalOptions = array())
     {
-        if ((isset($_additionalOptions['definitionFilename']) || array_key_exists('definitionFilename', $_additionalOptions))) {
+        if (isset($_additionalOptions['definitionFilename'])) {
             // get definition from file
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $_additionalOptions['definitionFilename'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
             );
             
-        } else if ((isset($_additionalOptions['definitionId']) || array_key_exists('definitionId', $_additionalOptions))) {
+        } elseif (isset($_additionalOptions['definitionId'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
             
         } else {
