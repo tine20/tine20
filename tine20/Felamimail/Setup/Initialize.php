@@ -127,10 +127,17 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             fwrite($fh, <<<'sieveFile'
 require ["enotify", "variables", "copy"];
 
-if header :contains "X-Tine20-Type" "Notification" {
+if header :contains "Return-Path" "<>" {
+} elsif header :contains "X-Tine20-Type" "Notification" {
     redirect :copy "USER_EXTERNAL_EMAIL"; 
 } else {
-    notify :message "you have a new mail"
+    if header :matches "Subject" "*" {
+        set "subject" "${1}";
+    }
+    if header :matches "From" "*" {
+        set "from" "${1}";
+    }
+    notify :message "TRANSLATE_SUBJECT${from}: ${subject}"
               "mailto:USER_EXTERNAL_EMAIL";
 }
 sieveFile

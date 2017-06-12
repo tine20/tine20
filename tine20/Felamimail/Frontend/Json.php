@@ -612,4 +612,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
+
+    /**
+     * @param string $_accountId
+     * @param string $_email
+     * @return array
+     */
+    public function setSieveNotificationEmail($_accountId, $_email)
+    {
+        Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($_accountId, $_email);
+
+        return array('success' => true);
+    }
 }

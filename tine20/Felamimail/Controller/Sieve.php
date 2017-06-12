@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add __destruct with $_backend->logout()?
  */
@@ -348,13 +348,13 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         return (preg_match('/dbmail/i', $this->_backend->getImplementation()));
     }
-        
+
     /**
      * put updated sieve script
-     * 
+     *
      * @param string|Felamimail_Model_Account $_accountId
      * @param Felamimail_Sieve_Backend_Abstract $_script
-     * @throws Felamimail_Exception_Sieve
+     * @throws Felamimail_Exception_SievePutScriptFail
      */
     protected function _putScript($_accountId, $_script)
     {
@@ -626,5 +626,89 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $result);
         
         return $result;
+    }
+
+    /**
+     * @param string $_accountId
+     * @param string $_email
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function setNotificationEmail($_accountId, $_email)
+    {
+        $_email = trim($_email);
+        if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+            throw new Tinebase_Exception_UnexpectedValue($_email . ' is not a valid email address');
+        }
+
+        // acl check
+        if (!$_accountId instanceof Felamimail_Model_Account) {
+            Felamimail_Controller_Account::getInstance()->get($_accountId);
+        }
+
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart', array());
+
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $subject = $translate->_('You have new mail from ', $locale);
+
+        /** @var Tinebase_Model_Tree_Node $sieveNode */
+        foreach ($fileSystem->getTreeNodeChildren(Felamimail_Config::getInstance()->
+                get(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID)) as $sieveNode) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $sieveNode->type) {
+                continue;
+            }
+            $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($sieveNode, true));
+            $sieveScript = file_get_contents($path->streamwrapperpath);
+            $sieveScript = str_replace('USER_EXTERNAL_EMAIL', $_email, $sieveScript);
+            $sieveScript = str_replace('TRANSLATE_SUBJECT', $subject, $sieveScript);
+            $scriptParts->addRecord(Felamimail_Model_Sieve_ScriptPart::createFromString(
+                Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION, $sieveNode->name, $sieveScript));
+        }
+
+        $this->setNotificationScripts($_accountId, $scriptParts);
+    }
+
+    /**
+     * set notification scripts for account
+     *
+     * @param string|Felamimail_Model_Account $_accountId
+     * @param Tinebase_Record_RecordSet $_scriptParts (Felamimail_Model_Sieve_ScriptPart)
+     */
+    public function setNotificationScripts($_accountId, Tinebase_Record_RecordSet $_scriptParts)
+    {
+        // acl check
+        if (!$_accountId instanceof Felamimail_Model_Account) {
+            Felamimail_Controller_Account::getInstance()->get($_accountId);
+        }
+
+        if ($_scriptParts->count() !==
+                $_scriptParts->filter('type', Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION)->count()) {
+            throw new Tinebase_Exception_UnexpectedValue('all script parts need to be of type '
+                . Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION);
+        }
+        $_scriptParts->account_id = $_accountId;
+
+        $script = $this->_getSieveScript($_accountId);
+
+        if (null === $script) {
+            $script = $this->_createNewSieveScript($_accountId);
+        }
+
+        try {
+            $script->readScriptData();
+        } catch(Tinebase_Exception_NotFound $tenf) {}
+
+        $oldScripParts = $script->getScriptParts();
+        $oldScripParts->removeRecords($oldScripParts->filter('type',
+            Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION));
+        $oldScripParts->merge($_scriptParts);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' .
+                $this->_scriptName);
+        }
+
+        $this->_putScript($_accountId, $script);
     }
 }

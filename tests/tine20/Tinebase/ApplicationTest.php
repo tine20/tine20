@@ -326,6 +326,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Felamimail_Model_Account',
                 'Felamimail_Model_Sieve_Vacation',
                 'Felamimail_Model_Sieve_Rule',
+                'Felamimail_Model_Sieve_ScriptPart',
                 'Felamimail_Model_PreparedMessagePart',
                 'Felamimail_Model_Message',
                 'Felamimail_Model_Folder',

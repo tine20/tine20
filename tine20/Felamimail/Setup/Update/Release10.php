@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -54,5 +54,80 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
             // do nothing
         }
         $this->setApplicationVersion('Felamimail', '10.3');
+    }
+
+    /**
+     * update to 10.4
+     *
+     * add sieve script part table
+     */
+    public function update_3()
+    {
+        $tableDefinition = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>felamimail_sieve_scriptpart</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>60</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>script</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <field>
+                    <name>requires</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id-type-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>type</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        if (! $this->_backend->tableExists('felamimail_sieve_scriptpart')) {
+            $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_scriptpart');
+        }
+
+        $this->setApplicationVersion('Felamimail', '10.4');
     }
 }
