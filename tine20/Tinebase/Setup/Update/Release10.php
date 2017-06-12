@@ -1030,6 +1030,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>integer</type>
                     <length>64</length>
                     <notnull>true</notnull>
+                    <default>0</default>
                 </field>');
             $this->_backend->addCol('tree_filerevisions', $declaration);
             $this->setTableVersion('tree_filerevisions', 2);

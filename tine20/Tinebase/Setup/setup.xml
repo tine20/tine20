@@ -3403,6 +3403,7 @@
                     <type>integer</type>
                     <length>64</length>
                     <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <field>
                     <name>created_by</name>
