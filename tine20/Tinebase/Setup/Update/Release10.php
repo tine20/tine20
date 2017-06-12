@@ -1045,6 +1045,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_23()
     {
+        $this->_addNotificationProps();
+        
         // get all folder nodes with own acl
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
@@ -1085,6 +1087,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_24()
     {
+        $this->_addNotificationProps();
+        $this->setApplicationVersion('Tinebase', '10.25');
+    }
+
+    protected function _addNotificationProps()
+    {
         if (! $this->_backend->columnExists('notificationProps', 'tree_nodes')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
@@ -1096,8 +1104,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->_backend->addCol('tree_nodes', $declaration);
             $this->setTableVersion('tree_nodes', 3);
         }
-
-        $this->setApplicationVersion('Tinebase', '10.25');
     }
 
     /**
