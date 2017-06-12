@@ -233,15 +233,11 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      *
      * @param string $_password
      * @return void
-     * @todo write test for that
      */
     public function setPassword($_password)
     {
         $backend = Tinebase_User::getInstance();
-        
-        $result = $backend->setPassword($this->accountId, $_password);
-        
-        return $result;
+        $backend->setPassword($this->accountId, $_password);
     }
     
     /**

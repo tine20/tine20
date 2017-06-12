@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -59,6 +59,7 @@ class Tinebase_User_SqlTest extends TestCase
     /**
      * try to add an account
      *
+     * @return Tinebase_Model_FullUser
      */
     public function testAddUser()
     {
@@ -409,5 +410,37 @@ class Tinebase_User_SqlTest extends TestCase
         ));
         
         return $user;
+    }
+
+    /**
+     * @see 0013188: set interval for user password change
+     */
+    public function testPasswordMustChange()
+    {
+        $user = $this->testAddUser();
+        self::assertTrue($user->mustChangePassword());
+
+        $user->setPassword(Tinebase_Record_Abstract::generateUID(20));
+        // refetch
+        $user = Tinebase_User::getInstance()->getFullUserById($user->getId());
+        self::assertFalse($user->mustChangePassword());
+
+        // change days config to 10
+        Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER, 10);
+
+        // set password change: 11 days ago)
+        $now = Tinebase_DateTime::now();
+        $accountData['last_password_change'] = $now->subDay(11)->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto(
+                $accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $user->getId()
+            )
+        );
+        $accountsTable->update($accountData, $where);
+
+        // refetch
+        $user = Tinebase_User::getInstance()->getFullUserById($user->getId());
+        self::assertTrue($user->mustChangePassword(), 'user should need pw change: ' . print_r($user->toArray(), true));
     }
 }

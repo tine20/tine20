@@ -1210,6 +1210,7 @@ class Setup_Controller
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
+            Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER        => 0,
         );
 
         $result = array();
