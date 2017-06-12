@@ -59,6 +59,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const VACATION_TEMPLATES_CONTAINER_ID = 'vacationTemplatesContainerId';
 
     /**
+     * id of (filsystem) container for email notification templates
+     *
+     * @var string
+     */
+    const EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID = 'emailNotificationTemplatesContainerId';
+
+    /**
      * user can set custom vacation message
      *
      * @var string
@@ -74,6 +81,15 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         //_('Vacation Templates Node ID')
             'label'                 => 'Vacation Templates Node ID',
             'description'           => 'Vacation Templates Node ID',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID => array(
+            //_('Email Notification Templates Node ID')
+            'label'                 => 'Email Notification Templates Node ID',
+            'description'           => 'Email Notification Templates Node ID',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
