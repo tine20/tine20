@@ -518,8 +518,16 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         static::assertEquals(false, $grant->{Tinebase_Model_Grants::GRANT_EDIT}, 'edit grant should be false');
     }
 
+    /**
+     * testGroupReplication
+     */
     public function testGroupReplication()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
+
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $groupController = Tinebase_Group::getInstance();

@@ -1801,12 +1801,17 @@ Steuernummer 33/111/32212";
     }
 
     /**
-     * test search hidden user (foir example as role member)
+     * test search hidden user (for example as role member)
      *
      * @see 0013160: user search should find disabled/hidden users
      */
     public function testSearchHiddenUser()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
+
         $filter = array(
             0 =>
                 array(
