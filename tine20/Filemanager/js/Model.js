@@ -91,7 +91,7 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
 /**
  * default ExampleRecord backend
  */
-Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
+Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {
     appName: 'Filemanager',
     modelName: 'Node',
     recordClass: Tine.Filemanager.Model.Node,
@@ -191,7 +191,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     copyNodes : function(items, target, move, params) {
         
         var message = '',
-            app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+            app = Tine.Tinebase.appMgr.get(this.appName);
         
         if(!params) {
         
@@ -229,10 +229,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 destinationFilenames.push(targetPath + (targetPath.match(/\/$/) ? itemName : ''));
             }
             
-            var method = "Filemanager.copyNodes",
+            var method = this.appName + ".copyNodes",
                 message = app.i18n._('Copying data .. {0}');
             if(move) {
-                method = "Filemanager.moveNodes";
+                method = this.appName + ".moveNodes";
                 message = app.i18n._('Moving data .. {0}');
             }
             
@@ -246,7 +246,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
         } else {
             message = app.i18n._('Copying data .. {0}');
-            if(params.method == 'Filemanager.moveNodes') {
+            if(params.method == this.appName + '.moveNodes') {
                 message = app.i18n._('Moving data .. {0}');
             }
         }
@@ -336,13 +336,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @param Boolean addToGridStore 
      */
     createNode: function(params, uploadKey, addToGridStore) {
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        var app = Tine.Tinebase.appMgr.get(this.appName),
             me = this,
             grid = app.getMainScreen().getCenterPanel(),
             gridStore = grid.getStore();
         
-        params.application = 'Filemanager';
-        params.method = 'Filemanager.createNode';
+        params.application = this.appName;
+        params.method = this.appName + '.createNode';
         params.uploadKey = uploadKey;
         params.addToGridStore = addToGridStore;
         
@@ -396,13 +396,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @param Boolean addToGridStore
      */
     createNodes: function (params, uploadKeyArray, addToGridStore) {
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        var app = Tine.Tinebase.appMgr.get(this.appName),
             grid = app.getMainScreen().getCenterPanel(),
             me = this,
             gridStore = grid.store;
 
-        params.application = 'Filemanager';
-        params.method = 'Filemanager.createNodes';
+        params.application = this.appName;
+        params.method = this.appName + '.createNodes';
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
 
@@ -460,7 +460,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * Is bind to the record proxy scope
      */
     onUploadUpdate: function (change, upload, fileRecord) {
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        var app = Tine.Tinebase.appMgr.get(this.appName),
             grid = app.getMainScreen().getCenterPanel(),
             rowsToUpdate = grid.store.query('name', fileRecord.get('name'));
 
@@ -534,7 +534,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         Ext.Ajax.request({
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
             params: {
-                method: 'Filemanager.createNode',
+                method: this.appName + '.createNode',
                 filename: upload.id,
                 type: 'file',
                 tempFileId: file.get('id'),
@@ -552,7 +552,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @param {Tine.Exception} exception
      */
     handleRequestException: function(exception, request) {
-        Tine.Filemanager.handleRequestException(exception, request);
+        var _ = window.lodash,
+            appNS = _.get(Tine, this.appName);
+        appNS.handleRequestException(exception, request);
     },
     
     /**
@@ -567,7 +569,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         return nodeRecord;
     }
 });
-
+Tine.Filemanager.fileRecordBackend = new Tine.Filemanager.FileRecordBackend({});
 
 /**
  * get filtermodel of Node records

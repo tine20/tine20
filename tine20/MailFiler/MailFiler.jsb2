@@ -36,10 +36,6 @@
           "path": "js/"
         },
         {
-          "text": "PathFilterPlugin.js",
-          "path": "js/"
-        },
-        {
           "text": "NodeEditDialog.js",
           "path": "js/"
         },
