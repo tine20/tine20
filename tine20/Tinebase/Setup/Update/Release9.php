@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
@@ -65,33 +65,39 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        if ($this->getTableVersion('container') < 10) {
-            $declaration = new Setup_Backend_Schema_Field_Xml(
-            '<field>
-                <name>owner_id</name>
-                <type>text</type>
-                <length>40</length>
-                <notnull>false</notnull>
-            </field>
-            ');
-            $this->_backend->addCol('container', $declaration);
+        $this->_addOwnerIdColumn();
+        $this->setTableVersion('container', 10);
+        $this->setApplicationVersion('Tinebase', '9.5');
+    }
 
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>owner_id</name>
-                    <field>
-                        <name>owner_id</name>
-                    </field>
-                </index>
-            ');
-
-            $this->_backend->addIndex('container', $declaration);
-            $this->setTableVersion('container', 10);
+    protected function _addOwnerIdColumn()
+    {
+        if ($this->_backend->columnExists('owner_id', 'container')) {
+            return;
         }
 
-        Tinebase_Container::getInstance()->setContainerOwners();
+        $declaration = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+            <name>owner_id</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>false</notnull>
+        </field>
+        ');
+        $this->_backend->addCol('container', $declaration);
 
-        $this->setApplicationVersion('Tinebase', '9.5');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>owner_id</name>
+                <field>
+                    <name>owner_id</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('container', $declaration);
+
+        Tinebase_Container::getInstance()->setContainerOwners();
     }
 
     /**
@@ -290,5 +296,16 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setTableVersion('import', '2');
         $this->setApplicationVersion('Tinebase', '9.10');
+    }
+
+    /**
+     * update to 9.11
+     *
+     * adds owner_id column if still missing
+     */
+    public function update_10()
+    {
+        $this->_addOwnerIdColumn();
+        $this->setApplicationVersion('Tinebase', '9.11');
     }
 }
