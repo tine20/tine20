@@ -48,7 +48,7 @@ class Setup_Frontend_Cli
     public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
         Setup_Core::set(Setup_Core::USER, 'setupuser');
-        
+
         $result = 0;
         if (isset($_opts->install)) {
             $this->_install($_opts);
@@ -598,7 +598,12 @@ class Setup_Frontend_Cli
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             die('Install Tinebase first.');
         }
-        
+
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+
         echo "Please enter a username. An existing user is reactivated and you can reset the password.\n";
         $username = strtolower(Tinebase_Server_Cli::promptInput('Username'));
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
