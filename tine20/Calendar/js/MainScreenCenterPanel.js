@@ -306,13 +306,18 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             allowMultiple: true
         });
 
-        this.action_export = new Tine.Calendar.ExportButton({
-            text: this.app.i18n._('Export Events'),
-            iconCls: 'action_export',
-            exportFunction: 'Calendar.exportEvents',
-            showExportDialog: true,
-            gridPanel: this
-        });
+        this.action_export = Tine.widgets.exportAction.getExportButton(
+            Tine.Calendar.Model.Event, {
+                getExportOptions: (function() {
+                    return {
+                        filter: this.getAllFilterData({
+                            noPeriodFilter: false
+                        })
+                    }
+                }).createDelegate(this)
+        }, Tine.widgets.exportAction.SCOPE_MULTI);
+        this.action_export.setDisabled(false);
+        this.action_export.setText(this.action_export.initialConfig.pluralText);
 
         this.changeViewActions = [
             this.showDayView,

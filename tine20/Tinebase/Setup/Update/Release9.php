@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
@@ -65,33 +65,39 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        if (! $this->_backend->columnExists('owner_id', 'container')) {
-            $declaration = new Setup_Backend_Schema_Field_Xml(
-            '<field>
-                <name>owner_id</name>
-                <type>text</type>
-                <length>40</length>
-                <notnull>false</notnull>
-            </field>
-            ');
-            $this->_backend->addCol('container', $declaration);
+        $this->_addOwnerIdColumn();
+        $this->setTableVersion('container', 10);
+        $this->setApplicationVersion('Tinebase', '9.5');
+    }
 
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>owner_id</name>
-                    <field>
-                        <name>owner_id</name>
-                    </field>
-                </index>
-            ');
-
-            $this->_backend->addIndex('container', $declaration);
-            $this->setTableVersion('container', 10);
+    protected function _addOwnerIdColumn()
+    {
+        if ($this->_backend->columnExists('owner_id', 'container')) {
+            return;
         }
 
-        Tinebase_Container::getInstance()->setContainerOwners();
+        $declaration = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+            <name>owner_id</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>false</notnull>
+        </field>
+        ');
+        $this->_backend->addCol('container', $declaration);
 
-        $this->setApplicationVersion('Tinebase', '9.5');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>owner_id</name>
+                <field>
+                    <name>owner_id</name>
+                </field>
+            </index>
+        ');
+
+        $this->_backend->addIndex('container', $declaration);
+
+        Tinebase_Container::getInstance()->setContainerOwners();
     }
 
     /**
@@ -295,9 +301,20 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     /**
      * update to 9.11
      *
-     * @see xxx: add numberables
+     * adds owner_id column if still missing
      */
     public function update_10()
+    {
+        $this->_addOwnerIdColumn();
+        $this->setApplicationVersion('Tinebase', '9.11');
+    }
+
+    /**
+     * update to 9.12
+     *
+     * @see xxx: add numberables
+     */
+    public function update_11()
     {
         if ($this->getTableVersion('numberable') === 0) {
             $declaration = new Setup_Backend_Schema_Table_Xml('<table>
@@ -343,15 +360,15 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 
             $this->createTable('numberable', $declaration);
         }
-        $this->setApplicationVersion('Tinebase', '9.11');
+        $this->setApplicationVersion('Tinebase', '9.12');
     }
 
     /**
-     * update to 9.12
+     * update to 9.13
      *
      * @see 0012162: create new MailFiler application
      */
-    public function update_11()
+    public function update_12()
     {
         if ($this->getTableVersion('tree_fileobjects') < 3) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -365,7 +382,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             $this->setTableVersion('tree_fileobjects', '3');
         }
 
-        $this->setApplicationVersion('Tinebase', '9.12');
+        $this->setApplicationVersion('Tinebase', '9.13');
     }
 
     /**
@@ -373,7 +390,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      *
      * @return void
      */
-    public function update_12()
+    public function update_13()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }

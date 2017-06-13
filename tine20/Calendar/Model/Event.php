@@ -36,6 +36,8 @@
  * @property Tinebase_Record_RecordSet      attendee
  * @property Tinebase_DateTime              dtstart
  * @property Tinebase_DateTime              dtend
+ * @property Calendar_Model_Rrule           rrule
+ * @property string                         transp
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {

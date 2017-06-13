@@ -84,8 +84,8 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             renderer: Tine.Calendar.ResourcesGridPanel.locationRenderer,
             sortable: false
         }];
-        
-        this.supr().initComponent.call(this);
+
+        Tine.Calendar.ResourcesGridPanel.superclass.initComponent.call(this);
     },
     
     initLayout: function() {

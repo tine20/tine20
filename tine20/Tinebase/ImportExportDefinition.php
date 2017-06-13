@@ -18,6 +18,9 @@
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
+    const SCOPE_SINGLE = 'single';
+    const SCOPE_MULTI = 'multi';
+
     /**
      * holds the instance of the singleton
      *
@@ -67,6 +70,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public function getByName($_name)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->_backend->getByProperty($_name);
     }
     
@@ -108,6 +112,16 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             } else {
                 $name = $_name;
             }
+
+            $format = null;
+            if (class_exists($config->plugin)) {
+                try {
+                    $plugin = $config->plugin;
+                    if (is_subclass_of($plugin, 'Tinebase_Export_Abstract')) {
+                        $format = $plugin::getDefaultFormat();
+                    }
+                } catch(Exception $e) {}
+            }
             
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'              => $_applicationId,
@@ -118,9 +132,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'model'                       => $config->model,
                 'plugin'                      => $config->plugin,
                 'icon_class'                  => $config->icon_class,
+                'scope'                       => (empty($config->scope) ||
+                        !in_array($config->scope, array(self::SCOPE_SINGLE, self::SCOPE_MULTI))) ? '' : $config->scope,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,
+                'format'                      => $format,
                 'order'                       => intval($config->order),
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
@@ -236,8 +253,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     /**
      * get generic import definition
      *
-     * @param string $application
-     * @param $model
+     * @param string $model
      * @return Tinebase_Model_ImportExportDefinition
      */
     public function getGenericImport($model)

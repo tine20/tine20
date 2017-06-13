@@ -137,7 +137,10 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             );
         }
 
-        this.action_editResource.setHidden(! grants.readGrant || ! resourceId);
+        if (grants) {
+            this.action_editResource.setHidden(! grants.readGrant || ! resourceId);
+        }
+
         this.action_editResource.resourceId = resourceId;
 
         this.supr().onContextMenu.apply(this, arguments);

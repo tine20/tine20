@@ -10,7 +10,6 @@ Ext.ns('Tine.Tinebase');
 /**
  * Main appStarter/picker tab panel
  * 
- * @todo discuss: default app vs. last active tab
  * @todo discuss: have a set of default apps?
  * 
  * @namespace   Tine.Tinebase
@@ -33,8 +32,6 @@ Tine.Tinebase.AppTabsPanel = function(config) {
 };
 
 Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
-    activeTab: 1,
-    
     stateful: true,
     stateEvents: ['add', 'remove', 'tabchange', 'tabsort'],
     stateId: 'tinebase-mainscreen-apptabs',
@@ -111,7 +108,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                 activeApp = Tine.Tinebase.MainScreen.getActiveApp();
 
             if (app != activeApp) {
-                Tine.Tinebase.MainScreen.activate(app);
+                Tine.Tinebase.router.setRoute('/' + app.appName);
             }
         }
     },
@@ -156,6 +153,9 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      * executed after render
      */
     afterRender: function() {
+        // no state from tab!
+        this.activeTab = undefined;
+
         this.supr().afterRender.apply(this, arguments);
         
         this.menuTabEl = Ext.get(this.getTabEl(0));

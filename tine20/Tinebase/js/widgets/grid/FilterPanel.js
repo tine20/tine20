@@ -116,7 +116,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
 
         this.items = [{
             region: 'east',
-            width: 180,
+            width: 200,
             border: false,
             layout: 'fit',
             split: true,

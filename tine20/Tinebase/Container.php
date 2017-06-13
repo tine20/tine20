@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage, use standard record controller/backend functions
@@ -25,6 +25,8 @@
  */
 class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tinebase_Controller_SearchInterface, Tinebase_Container_Interface
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
     /**
      * Table name without prefix
      *
@@ -238,6 +240,18 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         return $container;
     }
+
+    /**
+     * do something after creation of record
+     *
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_recordToCreate
+     * @return void
+     */
+    protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
+    {
+        $this->_writeModLog($_newRecord, null);
+    }
     
     /**
      * add grants to container
@@ -290,6 +304,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $this->_getContainerAclTable()->insert($data);
             }
         }
+
+        $newGrants = $this->getGrantsOfContainer($containerId, true);
+        $this->_writeModLog(
+            new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
+            new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $containerGrants), true)
+        );
         
         $this->_setRecordMetaDataAndUpdate($containerId, 'update');
         
@@ -1063,6 +1083,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->_writeModLog(null, $container);
+
             $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
 
@@ -1513,6 +1535,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     }
                 }
             }
+
+            $newGrants = $this->getGrantsOfContainer($containerId, true);
+            $this->_writeModLog(
+                new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
+                new Tinebase_Model_Container(array('id' => $containerId), true)
+            );
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -1887,7 +1915,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+        //use get (avoids cache) or getContainerById, guess its better to avoid the cache
+        $oldContainer = $this->get($_record->getId());
+
         $result = parent::update($_record);
+
+        unset($result->account_grants);
+        unset($oldContainer->account_grants);
+        $this->_writeModLog($result, $oldContainer);
 
         Tinebase_Record_PersistentObserver::getInstance()->fireEvent($result, 'Tinebase_Event_Record_Update');
 
@@ -1926,5 +1961,40 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Set owner for ' . $count . ' containers.');
+    }
+
+    /**
+     * apply modification logs from a replication master locally
+     *
+     * @param Tinebase_Model_ModificationLog $_modification
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+        switch ($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                $record = new $model($diff->diff);
+                $this->addContainer($record, null, true);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                if (isset($diff->diff['account_grants'])) {
+                    $this->setGrants($_modification->record_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $diff->diff['account_grants']), true, false);
+                } else {
+                    $record = $this->get($_modification->record_id, true);
+                    $record->applyDiff($diff);
+                    $this->update($record);
+                }
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $this->delete($_modification->record_id);
+                break;
+
+            default:
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+        }
     }
 }

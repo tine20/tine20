@@ -2,10 +2,9 @@
 <config>
     <model>Addressbook_Model_Contact</model>
     <name>adb_csv</name>
-    <label>Export as CSV</label>
+    <!-- _('CSV all data') -->
+    <label>CSV all data</label>
     <type>export</type>
     <plugin>Addressbook_Export_Csv</plugin>
     <icon_class>tinebase-action-export-csv</icon_class>
-    <favorite>true</favorite>
-    <order>200</order>
 </config>

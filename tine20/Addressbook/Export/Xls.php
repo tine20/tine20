@@ -16,7 +16,7 @@
  * @package     Addressbook
  * @subpackage  Export
  */
-class Addressbook_Export_Xls extends Tinebase_Export_Spreadsheet_Xls
+class Addressbook_Export_Xls extends Tinebase_Export_Xls
 {
     /**
      * the constructor

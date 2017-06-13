@@ -274,7 +274,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event updateDependent
              * Fired when a subpanel updates the record locally
              */
-            'updateDependent'
+            'updateDependent',
+            /**
+             * @event change
+             * Fires just before the field blurs if the field value has changed.
+             * @param {Ext.form.Field} this
+             * @param {Mixed} newValue The new value
+             * @param {Mixed} oldValue The original value
+             */
+            'change'
         );
 
         if (Ext.isString(this.modelConfig)) {
@@ -352,7 +360,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initNotesPanel();
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
-        
+
         // set fields readOnly if set
         this.fixFields();
         
@@ -520,6 +528,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
+     * call checkState for every field
+     */
+    checkStates: function() {
+        this.onRecordUpdate();
+        this.getForm().items.each(function (item) {
+            if (Ext.isFunction(item.checkState)) {
+                item.checkState(this, this.record);
+            }
+        }, this)
+    },
+
+    /**
      * Get available model for given application
      *
      *  @param {Mixed} application
@@ -595,25 +615,55 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             iconCls: 'action_delete',
             disabled: true
         });
+
+        this.action_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
+            getExportOptions: this.getExportOptions.createDelegate(this)
+        }, Tine.widgets.exportAction.SCOPE_SINGLE);
+
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            containerProperty: this.recordClass ? this.recordClass.getMeta('containerProperty') : null,
+            evalGrants: this.evalGrants
+        });
+
+        this.actionUpdater.addActions([
+            this.action_saveAndClose,
+            this.action_applyChanges,
+            this.action_cancel,
+            this.action_delete
+        ]);
     },
-    
+
+    /**
+     * get export options/data
+     */
+    getExportOptions: function() {
+        this.onRecordUpdate();
+        return {
+            recordData: this.record.data
+        };
+    },
+
     /**
      * init buttons
-     * 
+     *
      * use button order from preference
      */
     initButtons: function () {
         this.fbar = [
             '->'
         ];
-        
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.fbar.push(this.action_saveAndClose, this.action_cancel);
-        } else {
-            this.fbar.push(this.action_cancel, this.action_saveAndClose);
+
+        this.fbar.push(this.action_cancel, this.action_saveAndClose);
+
+        if (this.action_export) {
+            this.actionUpdater.addAction(this.action_export);
+            this.tbarItems = this.tbarItems || [];
+            this.tbarItems.push(this.action_export);
         }
-       
-        if (this.tbarItems) {
+
+        if (this.tbarItems && this.tbarItems.length) {
+            this.actionUpdater.addActions(this.tbarItems);
             this.tbar = new Ext.Toolbar({
                 items: this.tbarItems
             });
@@ -827,7 +877,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
             this.record.set('id', (new Date()).getTime());
         }
-        
+
+        this.checkStates.defer(100, this);
+
         if (this.loadMask) {
             this.loadMask.hide();
         }
@@ -876,6 +928,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
             this.loadMask.show();
         }
+
+        // init change event
+        var form = this.getForm().items.each(function(item) {
+            this.relayEvents(item, ['change', 'select']);
+        }, this);
+        this.on('change', this.checkStates, this);
+        this.on('select', this.checkStates, this);
     },
     
     /**
@@ -892,10 +951,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_delete,
             this.action_cancel
         ];
-        Tine.widgets.actionUpdater(record, actions, containerField);
-        Tine.widgets.actionUpdater(record, this.tbarItems, containerField);
+        this.actionUpdater.updateActions(record);
     },
-    
+
     /**
      * get top toolbar
      */

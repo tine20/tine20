@@ -25,20 +25,40 @@ Tine.widgets.grid.ExportButton = function(config) {
 
 Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     /**
+     * @cfg {Tine.Tinebase.data.Record} recordClass
+     */
+    recordClass: null,
+
+    /**
+     * @cfg {Object} definition
+     */
+    definition: '',
+
+    /**
+     * @cfg {Function} getExportOptions
+     */
+    getExportOptions: null,
+
+    /**
      * @cfg {String} icon class
      */
     iconCls: 'action_export',
+
     /**
      * @cfg {String} format of export (default: csv)
      */
     format: 'csv',
 
+    /**
+     * @cfg {String} definitionId
+     */
     definitionId: null,
 
     /**
      * @cfg {String} export function (for example: Timetracker.exportTimesheets)
      */
     exportFunction: null,
+
     /**
      * @cfg {Tine.widgets.grid.FilterSelectionModel} sm
      */
@@ -52,61 +72,104 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * @cfg {Boolean} showExportDialog
      */
     showExportDialog: false,
-    
+
+    /**
+     * add sub menu with attached/related templates
+     *
+     * @param action
+     * @param grants
+     * @param records
+     * @param isFilterSelect
+     */
+    actionUpdater: function(action, grants, records, isFilterSelect) {
+        var _ = window.lodash,
+            favorite = _.get(action, 'initialConfig.definition.favorite'),
+            scope = _.get(action, 'initialConfig.definition.scope'),
+            format = _.get(action, 'initialConfig.definition.format'),
+            handler = _.get(action, 'initialConfig.handler');
+
+        if (_.isFunction(handler) && favorite == '1' && records.length == 1) {
+            var record = records[0],
+                attachments = _.get(record, 'data.attachments', []),
+                relations = _.get(record, 'data.relations', []),
+                relatedFiles = _.map(_.filter(relations, {related_model: 'Filemanager_Model_Node'}), 'related_record'),
+                allFiles = _.concat(attachments, relatedFiles),
+                menuItems = _.reduce(allFiles, function(result, file) {
+                    if (_.endsWith(file.name, format)) {
+                        result.push({
+                            text: file.name,
+                            handler: handler.createDelegate(action, [{template: file.id}])
+                        });
+                    }
+                    return result;
+                }, []);
+
+            if (menuItems.length) {
+                _.each(action.items, function(item) {
+                    item.menu = new Ext.menu.Menu({
+                        items: menuItems
+                    });
+                });
+            }
+        }
+    },
+
     /**
      * do export
      */
-    doExport: function() {
-        // get selection model
-        if (!this.sm) {
-            this.sm = this.gridPanel.grid.getSelectionModel();
+    doExport: function(options) {
+        var _ = window.lodash,
+            appName, filter, model,
+            count = 1;
+
+        // options could be action (default handler signature)
+        options = !options || options.el ? {} : options;
+
+        if (this.gridPanel) {
+            // get selection model
+            if (!this.sm) {
+                this.sm = this.gridPanel.grid.getSelectionModel();
+            }
+
+            // return if no rows are selected
+            if (this.sm.getCount() === 0) {
+                return false;
+            }
+
+            this.recordClass = this.recordClass || this.gridPanel.recordClass;
+            filter = this.sm.getSelectionFilter();
+            count = this.sm.getCount();
+            options.sortInfo = this.gridPanel.getStore().sortInfo;
         }
-        
-        // return if no rows are selected
-        if (this.sm.getCount() === 0) {
-            return false;
+
+        if (_.isFunction(this.getExportOptions)) {
+            _.assign(options, this.getExportOptions());
         }
-        
-        var filterSettings = this.sm.getSelectionFilter();
+
+        appName = this.recordClass.getMeta('appName');
+        model = this.recordClass.getMeta('phpClassName');
+        this.exportFunction = this.exportFunction || (appName + '.export' + this.recordClass.getMeta('modelName') + 's');
+
+        var exportJob = new Tine.Tinebase.Model.ExportJob({
+            scope: this.definition.scope,
+            filter: filter,
+            format: this.format,
+            exportFunction: this.exportFunction,
+            count: count,
+            export_definition_id: this.definitionId,
+            recordsName: this.recordClass.getRecordsName(),
+            model: model,
+            options: options
+        });
 
         if (this.showExportDialog) {
-            var gridRecordClass = this.gridPanel.recordClass,
-                model = gridRecordClass.getMeta('appName') + '_Model_' + gridRecordClass.getMeta('modelName');
-                
             Tine.widgets.dialog.ExportDialog.openWindow({
-                appName: this.gridPanel.app.appName,
-                record: new Tine.Tinebase.Model.ExportJob({
-                    filter: filterSettings,
-                    format: this.format,
-                    exportFunction: this.exportFunction,
-                    count: this.sm.getCount(),
-                    recordsName: this.gridPanel.i18nRecordsName,
-                    model: model
-                })
+                appName: appName,
+                record: exportJob
             });
         } else {
-            this.startDownload(filterSettings);
+            Tine.widgets.exportAction.downloadExport(exportJob);
         }
-    },
-    
-    /**
-     * Start download by submitting current filter settings and sort information of the grid
-     * 
-     * @param {Object} filterSettings
-     */
-    startDownload: function(filterSettings, sortInfo) {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: this.exportFunction,
-                requestType: 'HTTP',
-                filter: Ext.util.JSON.encode(filterSettings),
-                options: Ext.util.JSON.encode({
-                    format: this.format,
-                    definitionId: this.definitionId,
-                    sortInfo: this.gridPanel.getStore().sortInfo
-                })
-            }
-        }).start();
     }
 });
 

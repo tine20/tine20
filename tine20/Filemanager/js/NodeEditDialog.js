@@ -92,7 +92,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
-        var formFieldDefaults = {
+        var me = this,
+            formFieldDefaults = {
             xtype:'textfield',
             anchor: '100%',
             labelSeparator: '',
@@ -110,6 +111,11 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // require('./GrantsPanel');
         var grantsPanel = new Tine.Filemanager.GrantsPanel({
+            app: this.app,
+            editDialog: this
+        });
+
+        var notificationPanel = new Tine.Filemanager.NotificationPanel({
             app: this.app,
             editDialog: this
         });
@@ -154,6 +160,22 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     name: 'contenttype',
                                     columnWidth: .25
                                 }],[{
+                                    xtype: 'displayfield',
+                                    name: 'isIndexed',
+                                    hideLabel: true,
+                                    fieldClass: 'x-ux-displayfield-text',
+                                    width: 10,
+                                    setValue: function(value) {
+                                        var string, color, html = '';
+                                        if (Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') && me.record.get('type') == 'file') {
+                                            string = value ? me.app.i18n._('Indexed') : me.app.i18n._('Not yet indexed');
+                                            color = value ? 'green' : 'yellow';
+                                            html = ['<span style="color:', color, ' !important;" qtip="',string, '">&bull;</span>'].join('');
+                                        }
+
+                                        this.setRawValue(html);
+                                    }
+                                }, {
                                     xtype: 'displayfield',
                                     name: 'path',
                                     hideLabel: true,
@@ -227,7 +249,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, 
+            },
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
@@ -235,7 +257,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }),
                 this.downloadLinkGrid,
                 {xtype: 'Tine.Filemanager.UsagePanel'},
-                grantsPanel
+                grantsPanel,
+                notificationPanel
             ]
         };
     }

@@ -521,6 +521,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             addToGridStore = false;
 
         Ext.each(files, function (file) {
+            if ("" === file.type) {
+                return true;
+            }
 
             var fileName = file.name || file.fileName,
                 filePath = targetNodePath + '/' + fileName;
@@ -540,6 +543,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             addToGridStore = grid.currentFolderNode.id === targetNodeId;
 
         }, this);
+
+        if (0 === uploadKeyArray.length) {
+            return;
+        }
 
         var params = {
                 filenames: filePathsArray,

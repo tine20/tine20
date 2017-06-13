@@ -590,6 +590,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "exportAction.js",
+          "path": "js/widgets/"
+        },
+        {
           "text": "FilterToolbar.js",
           "path": "js/widgets/grid/"
         },
@@ -943,6 +947,10 @@
         },
         {
           "text": "PresenceObserver.js",
+          "path": "js/"
+        },
+        {
+          "text": "PasswordGenerator.js",
           "path": "js/"
         },
         {

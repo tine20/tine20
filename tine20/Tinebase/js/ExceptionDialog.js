@@ -98,39 +98,21 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * @return {Array}
      */
     initButtons: function () {
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.reportButtons = [{
-                text: i18n._('Send Report'),
-                iconCls: 'action_saveAndClose',
-                enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
-                scope: this,
-                handler: this.onSendReport
-            }, {
-                text: i18n._('Cancel'),
-                iconCls: 'action_cancel',
-                scope: this,
-                handler: function() {
-                    this.close();
-                }
-            }];
-        }
-        else {
-            this.reportButtons = [{
-                text: i18n._('Cancel'),
-                iconCls: 'action_cancel',
-                scope: this,
-                handler: function() {
-                    this.close();
-                }
-            }, {
-                text: i18n._('Send Report'),
-                iconCls: 'action_saveAndClose',
-                enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
-                scope: this,
-                handler: this.onSendReport
-            }];
-        }
-        
+        this.reportButtons = [{
+            text: i18n._('Cancel'),
+            iconCls: 'action_cancel',
+            scope: this,
+            handler: function () {
+                this.close();
+            }
+        }, {
+            text: i18n._('Send Report'),
+            iconCls: 'action_saveAndClose',
+            enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
+            scope: this,
+            handler: this.onSendReport
+        }];
+
         return this.reportButtons;
     },
     

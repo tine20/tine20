@@ -2,7 +2,8 @@
 <config>
     <model>Addressbook_Model_Contact</model>
     <name>adb_pdf</name>
-    <label>Export as PDF</label>
+    <!-- _('PDF details') -->
+    <label>PDF details</label>
     <type>export</type>
     <plugin>Addressbook_Export_Pdf</plugin>
     <icon_class>action_exportAsPdf</icon_class>

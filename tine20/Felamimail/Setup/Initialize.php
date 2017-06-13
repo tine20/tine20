@@ -78,6 +78,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
     protected function _initializeFolders()
     {
         self::createVacationTemplatesFolder();
+        self::createEmailNotificationTemplatesFolder();
     }
     
     /**
@@ -98,6 +99,52 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
         } catch (Tinebase_Exception_Backend $teb) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not create vacation template folder: ' . $teb);
+        }
+    }
+
+    /**
+     * create email notification templates folder
+     */
+    public static function createEmailNotificationTemplatesFolder()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Creating email notification template in vfs ...');
+
+        try {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Email Notification Templates');
+            Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
+
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+            fwrite($fh, <<<'sieveFile'
+require ["enotify", "variables", "copy"];
+
+if header :contains "X-Tine20-Type" "Notification" {
+    redirect :copy "USER_EXTERNAL_EMAIL"; 
+} else {
+    notify :message "you have a new mail"
+              "mailto:USER_EXTERNAL_EMAIL";
+}
+sieveFile
+            );
+
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create email notification template folder: ' . $teb);
         }
     }
 }

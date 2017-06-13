@@ -126,17 +126,26 @@ trait Calendar_Export_GenericTrait
 
         $this->_sortRecords($records);
 
-        $this->_resolveRecords($records);
-        foreach($records as $idx => $record) {
-            $this->processRecord($record, $idx);
+        if ($this instanceof Tinebase_Export_Abstract) {
+            $this->_records = $records;
+            $this->_groupByProperty = 'dtstart';
+            $this->_groupByProcessor = function(&$val) {
+                $val = $val->format('Y-m-d');
+            };
+            parent::_exportRecords();
+        } else {
+            $this->_resolveRecords($records);
+            foreach ($records as $idx => $record) {
+                $this->processRecord($record, $idx);
+            }
+
+            $result = array();
+
+            $this->_onAfterExportRecords($result);
         }
-
-        $result = array();
-
-        $this->_onAfterExportRecords($result);
     }
 
-    protected function _sortRecords($records)
+    protected function _sortRecords(&$records)
     {
         $records->sort(function($r1, $r2) {
             return $r1->dtstart > $r2->dtstart;

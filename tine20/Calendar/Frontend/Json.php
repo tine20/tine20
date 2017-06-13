@@ -43,7 +43,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $event = new Calendar_Model_Event(array(), TRUE);
         $event->setFromJsonInUsersTimezone($recordData);
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts);
         
         return $this->getEvent($returnEvent->getId());
@@ -52,7 +53,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing events
      *
-     * @param array $_ids
+     * @param array $ids
      * @param string $range
      * @return string
      */
@@ -64,7 +65,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing resources
      *
-     * @param array $_ids 
+     * @param array $ids
      * @return string
      */
     public function deleteResources($ids)
@@ -76,7 +77,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * deletes a recur series
      *
      * @param  array $recordData
-     * @return void
+     * @return array
      */
     public function deleteRecurSeries($recordData)
     {
@@ -269,12 +270,42 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_get($id, Calendar_Controller_Resource::getInstance());
     }
+
+    /**
+     * @param array $_event
+     *   attendee to find free timeslot for
+     *   dtstart, dtend -> to calculate duration
+     *   originator_tz needs to be set!
+     *   rrule optional
+     * @param array $_options
+     *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
+     *  'until'        datetime (optional, defaults 2 years) until when to giveup searching
+     *  'constraints'  array    (optional, defaults 8-20 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR') array of timespecs to limit the search with
+     *     timespec:
+     *       dtstart,
+     *       dtend,
+     *       rrule ... for example "work days" -> 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+     * @return array
+     */
+    public function searchFreeTime($_event, $_options)
+    {
+        $records = Calendar_Controller_Event::getInstance()->searchFreeTime(new Calendar_Model_Event($_event, true), $_options);
+
+        $records->attendee = array();
+        $result = $this->_multipleRecordsToJson($records, null, null);
+
+        return array(
+            'results'       => $result,
+            'totalcount'    => count($result),
+            'filter'        => array(),
+        );
+    }
     
     /**
      * Search for events matching given arguments
      *
-     * @param  array $_filter
-     * @param  array $_paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchEvents($filter, $paging)
@@ -349,8 +380,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for resources matching given arguments
      *
-     * @param  array $_filter
-     * @param  array $_paging
+     * @param  array $filter
+     * @param  array $paging
      * @return array
      */
     public function searchResources($filter, $paging)
@@ -430,7 +461,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * prepares an iMIP (RFC 6047) Message
      * 
-     * @param array $iMIP
+     * @param array|Calendar_Model_iMIP $iMIP
      * @return array prepared iMIP part
      */
     public function iMIPPrepare($iMIP)
@@ -459,5 +490,93 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $iMIPFrontend->process($iMIPMessage, $status);
         
         return $this->iMIPPrepare($iMIPMessage);
+    }
+
+    /**
+     * @param array $_attendee
+     * @param array $_periods
+     * @param array $_ignoreUIDs
+     * @return array
+     */
+    public function getFreeBusyInfo($_attendee, $_periods, $_ignoreUIDs = array())
+    {
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_attendee);
+        $periods = new Calendar_Model_EventFilter($_periods);
+
+        $fbInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($periods, $attendee, $_ignoreUIDs);
+
+        return $fbInfo->toArray();
+    }
+
+    /**
+     * @param array $_filter
+     * @param array $_paging
+     * @param array $_periods
+     * @param array $_ignoreUIDs
+     * @return array
+     */
+    public function searchAttendee($_filter, $_paging, $_periods, $_ignoreUIDs)
+    {
+        $filters = array();
+        foreach($_filter as $filter) {
+            switch($filter['field']) {
+                case 'query':
+                    $filters['query'] = $filter;
+                    break;
+                default:
+                    $filters[$filter['field']] = $filter['value'];
+                    break;
+            }
+        }
+
+        $result = array();
+        $addressBookFE = new Addressbook_Frontend_Json();
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_USER, $filters['type'])) {
+            $contactFilter = array(array('condition' => 'OR', 'filters' => array(
+                $filters['query'],
+                array('field' => 'path', 'operator' => 'contains', 'value' => $filters['query']['value'])
+            )));
+            if (isset($filters['userFilter'])) {
+                $contactFilter[] = $filters['userFilter'];
+            }
+            $contactPaging = $_paging;
+            $contactPaging['sort'] = 'type';
+            $result[Calendar_Model_Attender::USERTYPE_USER] = $addressBookFE->searchContacts($contactFilter, $contactPaging);
+        }
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_GROUP, $filters['type'])) {
+            $groupFilter = array(array('condition' => 'OR', 'filters' => array(
+                $filters['query'],
+                array('field' => 'path', 'operator' => 'contains', 'value' => $filters['query']['value'])
+            )));
+            if (isset($filters['groupFilter'])) {
+                $groupFilter[] = $filters['groupFilter'];
+            }
+            $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
+            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $_paging);
+        }
+
+        if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_RESOURCE, $filters['type'])) {
+            $resourceFilter = array($filters['query']);
+            if (isset($filters['resourceFilter'])) {
+                $resourceFilter[] = $filters['resourceFilter'];
+            }
+            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $_paging);
+        }
+
+        $attendee = array();
+        foreach ($result as $type => $res) {
+            foreach ($res['results'] as $r) {
+                $attendee[] = array(
+                    'user_id'   => $r['id'],
+                    'user_type' => $type
+                );
+            }
+        }
+
+        $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $_periods, $_ignoreUIDs);
+
+        return $result;
     }
 }

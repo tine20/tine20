@@ -217,9 +217,13 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             if (mailAddress)
                 mailAddresses.push(mailAddress);
         } else {
-            Ext.each(contact.get("emails").split(","), function(mail) {
-                mailAddresses.push(mail);
-            });
+            var emails = contact.get("emails");
+
+            if (emails) {
+                Ext.each(emails.split(","), function (mail) {
+                    mailAddresses.push(mail);
+                });
+            }
         }
     },
     

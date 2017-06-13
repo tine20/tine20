@@ -157,7 +157,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' is JSON request. rawdata: ' . print_r($_requests, true));
+                . ' is JSON request. rawdata: ' . var_export($_requests, true));
         } 
         
         $response = array();
@@ -266,7 +266,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
                     (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon'));
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Get server from cache");
 
                 $server = $cache->load($cacheId);

@@ -29,7 +29,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @cfg {String} appName
      */
     appName: null,
-    
+
     /**
      * @private
      */
@@ -55,10 +55,14 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             idProperty: 'id',
             remoteSort: false
         });
-        
+
+        var recordClass = Tine.Tinebase.data.RecordMgr.get(this.record.get('model')),
+            scope = this.record.get('scope'),
+            exportDefinitions = Tine.widgets.exportAction.getExports(recordClass, false, scope);
+
         // check if initial data available
         if (Tine[this.appName].registry.get('exportDefinitions')) {
-            Ext.each(Tine[this.appName].registry.get('exportDefinitions').results, function(defData) {
+            Ext.each(exportDefinitions, function(defData) {
                 var options = defData.plugin_options,
                     extension = options ? options.extension : null;
                 
@@ -132,18 +136,8 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var form = this.getForm();
         if (form.isValid()) {
             this.onRecordUpdate();
-            
-            // start download + pass definition id to export function
-            var downloader = new Ext.ux.file.Download({
-                params: {
-                    method: this.record.get('exportFunction'),
-                    requestType: 'HTTP',
-                    filter: Ext.util.JSON.encode(this.record.get('filter')),
-                    options: Ext.util.JSON.encode({
-                        definitionId: this.record.get('export_definition_id')
-                    })
-                }
-            }).start();
+
+            Tine.widgets.exportAction.downloadExport(this.record);
             this.window.close();
             
         } else {

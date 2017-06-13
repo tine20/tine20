@@ -73,6 +73,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_INDUSTRY = 'featureIndustry';
 
     /**
+     * FEATURE_RESOURCES
+     *
+     * @var string
+     */
+    const FEATURE_RESOURCES = 'featureResources';
+
+    /**
      * config for the syncBackends
      *
      * @var string
@@ -85,27 +92,34 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::ENABLED_FEATURES => array(
-           //_('Enabled Features')
-           'label'                 => 'Enabled Features',
-           //_('Enabled Features in Calendar Application.')
-           'description'           => 'Enabled Features in Addressbook Application.',
-           'type'                  => 'object',
-           'class'                 => 'Tinebase_Config_Struct',
-           'clientRegistryInclude' => TRUE,
-           'content'               => array(
-               self::FEATURE_LIST_VIEW => array(
-                   'label'         => 'Addressbook List View', //_('Addressbook List View')
-                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Shows an additional view for lists inside the addressbook')
-               ),
-               self::FEATURE_INDUSTRY => array(
-                       'label'         => 'Addressbook Industries', //_('Addressbook Industries')
-                       'description'   => 'Add Industry field to Adressbook', //_('Add Industry field to Adressbook')
-               ),
-           ),
-           'default'               => array(
-               self::FEATURE_LIST_VIEW   => false,
-               self::FEATURE_INDUSTRY    => true,
-           ),
+            //_('Enabled Features')
+            'label' => 'Enabled Features',
+            //_('Enabled Features in Calendar Application.')
+            'description' => 'Enabled Features in Addressbook Application.',
+            'type' => 'object',
+            'class' => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'content' => array(
+                self::FEATURE_LIST_VIEW => array(
+                    'label' => 'Addressbook List View',
+                    //_('Addressbook List View')
+                    'description' => 'Shows an additional view for lists inside the addressbook',
+                    //_('Shows an additional view for lists inside the addressbook')
+                ),
+                self::FEATURE_INDUSTRY => array(
+                    'label' => 'Addressbook Industries', //_('Addressbook Industries')
+                    'description' => 'Add Industry field to Adressbook', //_('Add Industry field to Adressbook')
+                ),
+                self::FEATURE_RESOURCES => array(
+                    'label' => 'Manage resources in Addressbook', // _('Manage resources in Addressbook')
+                    'description' => 'Show the resources grid also inside the Addressbook' // _('Show the resources grid also inside the Addressbook')
+                )
+            ),
+            'default' => array(
+                self::FEATURE_LIST_VIEW => false,
+                self::FEATURE_INDUSTRY => true,
+                self::FEATURE_RESOURCES => false
+            ),
         ),
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')

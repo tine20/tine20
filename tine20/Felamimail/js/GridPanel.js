@@ -880,7 +880,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     fileRecords: function(appName, path) {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgsIds = [];
+            msgsIds = [],
+            callback = Ext.emptyFn;
 
         if (sm.isFilterSelect) {
             var msgs = this.getStore();
@@ -888,10 +889,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = sm.getSelectionsCollection();
         }
 
-        this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
-        this.fileMessagesLoadMask.show();
+        if (msgs.length < 5) {
+            this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
+            this.fileMessagesLoadMask.show();
+            callback = this.afterFileRecords;
+        }
         // last params are the callback & scope
-        Tine.Felamimail.fileMessages(filter, appName, path, this.afterFileRecords, this);
+        Tine.Felamimail.fileMessages(filter, appName, path, callback, this);
     },
 
     /**

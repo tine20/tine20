@@ -30,7 +30,8 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         4 => 'startswith',
         5 => 'endswith',
         6 => 'notin',
-        7 => 'in'
+        7 => 'in',
+        8 => 'wordstartswith'
     );
 
     /**

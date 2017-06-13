@@ -4,8 +4,11 @@
     <name>adb_default_ods</name>
     <type>export</type>
     <plugin>Addressbook_Export_Ods</plugin>
-    <label>Default OpenDocument Export</label>
-    <description>default ods contact export definition</description>
+    <!-- _('OpenDocument all data') -->
+    <label>OpenDocument all data</label>
+    <favorite>true</favorite>
+    <order>300</order>
+    <scope>multi</scope>
     <header>1</header>
     <headers>
         <header>{date}</header>

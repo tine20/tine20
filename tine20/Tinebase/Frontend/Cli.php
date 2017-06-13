@@ -125,6 +125,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanModlog()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
 
         echo "\ndeleted $deleted modlogs records\n";
@@ -135,6 +139,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanRelations()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $relations = Tinebase_Relations::getInstance();
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
@@ -484,10 +492,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * cleanNotes
+     * cleanNotes: removes notes of records that have been deleted
      */
     public function cleanNotes()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $notesController = Tinebase_Notes::getInstance();
         $notes = $notesController->getAllNotes();
         $controllers = array();
@@ -573,6 +585,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanCustomfields()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
         $deleteCount = 0;
@@ -1273,5 +1289,406 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Container::getInstance()->setContainerOwners();
 
         return 0;
+    }
+
+    public function createFullTextIndex()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $setupBackend = Setup_Backend_Factory::factory();
+        if (!$setupBackend->supports('mysql >= 5.6.4')) {
+            return -2;
+        }
+
+        $failures = array();
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>note</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>note</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('addressbook', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'addressbook';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('cal_events', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'cal_events';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('metacrm_lead', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'metacrm_lead';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('events_event', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'events_event';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('projects_project', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'projects_project';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_contracts', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_contracts';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_products', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_products';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_customers', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_customers';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_suppliers', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_suppliers';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_purchase_invoices', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_purchase_invoices';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_sales_invoices', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_sales_invoices';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('sales_offers', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_offers';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('tasks', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'tasks';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('timetracker_timesheet', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'timetracker_timesheet';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('timetracker_timeaccount', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'timetracker_timeaccount';
+        }
+
+        try {
+            if ($setupBackend->tableExists('path')) {
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>path</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>path</name>
+                        </field>
+                    </index>
+                ');
+                $setupBackend->addIndex('path', $declaration);
+            }
+        } catch (Exception $e) {
+            $failures[] = 'path';
+        }
+
+        try {
+            if ($setupBackend->tableExists('path')) {
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>shadow_path</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>shadow_path</name>
+                        </field>
+                    </index>
+                ');
+                $setupBackend->addIndex('path', $declaration);
+            }
+        } catch (Exception $e) {
+            $failures[] = 'shadow_path';
+        }
+
+        try {
+            if (!$setupBackend->tableExists('path')) {
+                $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+                    <name>path</name>
+                    <version>2</version>
+                    <requirements>
+                        <required>mysql >= 5.6.4</required>
+                    </requirements>
+                    <declaration>
+                        <field>
+                            <name>id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>
+                        <field>
+                            <name>path</name>
+                            <type>text</type>
+                            <length>65535</length>
+                            <notnull>true</notnull>
+                        </field>
+                        <field>
+                            <name>shadow_path</name>
+                            <type>text</type>
+                            <length>65535</length>
+                            <notnull>true</notnull>
+                        </field>
+                        <field>
+                            <name>creation_time</name>
+                            <type>datetime</type>
+                        </field>
+                        <index>
+                            <name>id</name>
+                            <primary>true</primary>
+                            <field>
+                                <name>id</name>
+                            </field>
+                        </index>
+                        <index>
+                        <name>path</name>
+                            <fulltext>true</fulltext>
+                            <field>
+                                <name>path</name>
+                            </field>
+                        </index>
+                        <index>
+                            <name>shadow_path</name>
+                            <fulltext>true</fulltext>
+                            <field>
+                                <name>shadow_path</name>
+                            </field>
+                        </index>
+                    </declaration>
+                </table>');
+
+                $tmp = new Setup_Update_Abstract($setupBackend);
+                $tmp->createTable('path', $declaration, 'Tinebase', 2);
+
+                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+                if ($setupUser) {
+                    Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+                    Tinebase_Controller::getInstance()->rebuildPaths();
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            $failures[] = 'create path';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>text_data</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>text_data</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('external_fulltext', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'external_fulltext';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('tree_fileobjects', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'tree_fileobjects';
+        }
+
+        try {
+            try {
+                $setupBackend->dropIndex('tags', 'description');
+            } catch (Exception $e) {
+                // Ignore, if there is no index, we can just go on and create one.
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
+            $setupBackend->addIndex('tags', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'tags';
+        }
+
+        if (count($failures) > 0) {
+            echo PHP_EOL . 'failures: ' . join(' ', $failures);
+        }
+
+        echo PHP_EOL . 'done' . PHP_EOL . PHP_EOL;
     }
 }

@@ -164,8 +164,6 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
         
-        this.activateDefaultApp();
-        
         // check for new version
         // TODO add helper function for fetching config ... this condition sucks.
         if ((      ! Tine.Tinebase.registry.get("config")
@@ -185,28 +183,19 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
     },
 
     /**
-     * activate default application
-     * 
-     * NOTE: this fn waits for treecard panel to be rendered
-     * 
-     * @private
-     */
-    activateDefaultApp: function() {
-        if (this.getCenterPanel().rendered) {
-            this.activate();
-        } else {
-            this.activateDefaultApp.defer(10, this);
-        }
-    },
-
-    /**
      * activate application
      *
      * @param {Tine.Application} app
      * @return {Boolean}
      */
     activate: function(app) {
-        if (app || (app = Tine.Tinebase.appMgr.getDefault())) {
+        if (app) {
+            // activation via routing only
+            if (Tine.Tinebase.router.getRoute()[0] != app.appName) {
+                Tine.Tinebase.router.setRoute('/' + app.appName);
+                return;
+            }
+
             if (app == this.getActiveApp()) {
                 // app is already active, nothing to do
                 return true;
@@ -227,13 +216,15 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             }
 
             this.setActiveCenterPanel(app.getMainScreen(), true);
-            Tine.Tinebase.router.setRoute('/' + app.appName);
 
             this.app = app;
             this.onAppActivate(app);
 
             app.onActivate();
             this.fireEvent('appactivate', app);
+        } else {
+            app = Tine.Tinebase.appMgr.getDefault();
+            Tine.Tinebase.router.setRoute('/' + app.appName);
         }
     },
 
@@ -330,14 +321,11 @@ Tine.Tinebase.MainScreenPanel.show = function(app) {
     var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
 
     if (! Tine.Tinebase.MainScreen) {
-        Tine.Tinebase.appMgr.setDefault(app);
         new Tine.Tinebase.MainScreenPanel();
         mainCardPanel.add(Tine.Tinebase.MainScreen);
         mainCardPanel.layout.setActiveItem(Tine.Tinebase.MainScreen.id);
         Tine.Tinebase.MainScreen.doLayout();
     }
 
-    else {
-        Tine.Tinebase.MainScreen.activate(app);
-    }
+    Tine.Tinebase.MainScreen.activate(app);
 };

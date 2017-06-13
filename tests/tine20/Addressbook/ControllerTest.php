@@ -488,4 +488,17 @@ class Addressbook_ControllerTest extends TestCase
         $count = $this->_instance->searchCount($filter);
         $this->assertEquals(1, $count);
     }
+
+    /**
+     * 0013014: Allow to manage resources in addressbook module
+     */
+    public function testEnableResourcesFeature()
+    {
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
+        $enabledFeatures[Addressbook_Config::FEATURE_LIST_VIEW] = true;
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+
+        $this->assertTrue(Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW));
+    }
 }

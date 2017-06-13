@@ -44,60 +44,6 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
     }
 
     /**
-     * export single record
-     * @param Tinebase_Record_Interface $record
-     */
-    public function processRecord(Tinebase_Record_Interface $record)
-    {
-        // progressive rendering is not possible with this advanced layout
-        // so we split into days at this stage only
-        $dayString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($record->dtstart, null, null, $this->_config->dateformat);
-        $this->_daysEventMatrix[$dayString][] = $record;
-    }
-
-    /**
-     * do the rendering
-     *
-     * @param array $result
-     */
-    protected function _onAfterExportRecords($result)
-    {
-        $templateProcessor = $this->getDocument();
-
-        $this->_loadTwig();
-        $this->_hasTemplate = true;
-        $this->_dumpRecords = false;
-
-        // first step: generate layout
-        $dayblock = $templateProcessor->cloneBlock('DAYBLOCK', 1, false);
-        $seperator = $templateProcessor->cloneBlock('SEPARATOR', 1, false);
-
-        if (preg_match('/<w:tbl.*\${([^}]+)}/is', $dayblock, $matches)) {
-            $this->_cloneRow = $matches[1];
-        } else {
-            throw new Tinebase_Exception_UnexpectedValue('DAYBLOCK needs to contain a replacement variable');
-        }
-
-        $dayCount = count($this->_daysEventMatrix);
-        $daysblock = $dayCount ? $dayblock : '';
-        for ($i=1; $i<$dayCount; $i++) {
-            $daysblock .= $seperator;
-            $daysblock .= $dayblock;
-        }
-
-        $templateProcessor->replaceBlock('DAYBLOCK', $daysblock);
-        $templateProcessor->deleteBlock('SEPARATOR');
-
-        // second step: render events
-        foreach ($this->_daysEventMatrix as $dayString => $dayEvents) {
-            $this->processDay($dayString, $dayEvents);
-
-        }
-
-        Tinebase_Export_Abstract::_onAfterExportRecords($result);
-    }
-
-    /**
      * @param array $context
      * @return array
      */
@@ -109,24 +55,5 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
                 'until'         => $this->_until,
             )
         ));
-    }
-
-    public function processDay($dayString, $dayEvents)
-    {
-        $templateProcessor = $this->getDocument();
-
-        $templateProcessor->setValue('day', $dayString, 1);
-        $templateProcessor->cloneRow($this->_cloneRow, count($dayEvents));
-
-        $this->processDayEvents($dayEvents);
-    }
-
-    public function processDayEvents($dayEvents)
-    {
-        $this->_rowCount = 0;
-        foreach($dayEvents as $idx => $event) {
-            ++$this->_rowCount;
-            parent::_processRecord($event);
-        }
     }
 }

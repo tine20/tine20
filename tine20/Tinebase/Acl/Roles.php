@@ -55,7 +55,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      *
      * disabled. use the singleton
      */
-    private function __construct() 
+    protected function __construct()
     {
         $this->_applicationName = 'Tinebase';
         $this->_modelName = 'Tinebase_Model_Role';
@@ -438,9 +438,10 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      *
      * @param   int $_roleId
      * @param   array $_roleMembers with role members ("account_type" => account type, "account_id" => account id)
+     * @param   bool $_allowSetId
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setRoleMembers($_roleId, array $_roleMembers)
+    public function setRoleMembers($_roleId, array $_roleMembers, $_allowSetId = false)
     {
         $roleId = (int)$_roleId;
         if ($roleId != $_roleId && $roleId > 0) {
@@ -469,6 +470,11 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
                 'account_type'  => $member['type'],
                 'account_id'    => $member['id'],
             );
+            if (true === $_allowSetId && isset($member['dataId'])) {
+                $data['id'] = $member['dataId'];
+            } else {
+                $data['id'] = Tinebase_Record_Abstract::generateUID();
+            }
             $this->_getDb()->insert(SQL_TABLE_PREFIX . 'role_accounts', $data);
         }
 
@@ -550,6 +556,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             'role_id'       => $roleId,
             'account_type'  => $_account['type'],
             'account_id'    => $_account['id'],
+            'id'            => Tinebase_Record_Abstract::generateUID(),
         );
         
         try {

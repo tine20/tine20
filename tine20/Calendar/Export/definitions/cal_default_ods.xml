@@ -3,9 +3,11 @@
     <model>Calendar_Model_Event</model>
     <name>cal_default_ods</name>
     <type>export</type>
+    <favorite>true</favorite>
+    <scope>multi</scope>
     <plugin>Calendar_Export_Ods</plugin>
-    <!-- _('Default Event Data Export') -->
-    <label>Default Event Data Export</label>
+    <!-- _('OpenDocument all data') -->
+    <label>OpenDocument all data</label>
     <!-- _('Export event data into ods spreadsheet') -->
     <description>Export event data into ods spreadsheet</description>
     <header>1</header>

@@ -236,7 +236,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         Tine.widgets.dialog.AlarmPanel.prototype.onRecordUpdate.call(this.editDialog.alarmPanel, record);
         
         this.applyAlarmFilter();
-        alarmStore.suspendEvents();
+        alarmStore.resumeEvents();
     },
     
     onPerspectiveChange: function(field, newValue, oldValue) {
@@ -317,7 +317,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             containerField = this.editDialog.getForm().findField('container_id');
             
         
-        if (! isOriginPerspective) {
+        if (perspectiveRecord && !isOriginPerspective) {
             perspectiveRecord.set('transp', attendeeTranspField.getValue());
             perspectiveRecord.set('status', attendeeStatusField.getValue());
             perspectiveRecord.set('displaycontainer_id', attendeeContainerField.selectedContainer);

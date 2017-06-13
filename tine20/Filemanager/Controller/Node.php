@@ -108,7 +108,46 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function update(Tinebase_Record_Interface $_record)
     {
         if (! $this->_backend->checkACLNode($_record, 'update')) {
-            throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            if (! $this->_backend->checkACLNode($_record, 'get')) {
+                throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            }
+            // we allow only notification updates for the current user itself
+            $usersNotificationSettings = null;
+            $currentUserId = Tinebase_Core::getUser()->getId();
+            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
+                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+                        isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                        Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
+                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                    $usersNotificationSettings = $xpNotification;
+                    break;
+                }
+            }
+
+            // we reset all input and then just apply the notification settings for the current user
+            $_record = $this->get($_record->getId());
+            $found = false;
+            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
+                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+                        isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                        Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
+                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                    if (null !== $usersNotificationSettings) {
+                        $xpNotification = $usersNotificationSettings;
+                    } else {
+                        unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                    }
+                    $found = true;
+                    break;
+                }
+            }
+            if (false === $found && null !== $usersNotificationSettings) {
+                $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
+            }
+
+            if (false === $found && null === $usersNotificationSettings){
+                throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            }
         }
 
         return parent::update($_record);
@@ -117,7 +156,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (before update)
      *
-     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Filemanager_Model_Node $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
@@ -125,9 +164,37 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'revisionProps', 'acl_node', 'grants'))) {
+            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION))) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
+        }
+
+        $nodePath = null;
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
+            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
+            $modlogNode = new Filemanager_Model_Node(array(
+                'id' => $_record->getId(),
+                'path' => $nodePath->statpath,
+                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION => $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION),
+                // do not set acl_node, this will be calculated on the client side
+            ), true);
+            if (isset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID]) &&
+                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID] === $_record->getId() &&
+                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $_oldRecord->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)) {
+                $revisions = $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                unset($revisions[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID]);
+                $modlogNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $revisions;
+            }
+            $modlogOldNode = new Filemanager_Model_Node(array(
+                'id' => $_record->getId(),
+                'path' => $nodePath->statpath,
+                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION => $_oldRecord->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION),
+            ), true);
+            $this->_omitModLog = false;
+            $this->_writeModLog($modlogNode, $modlogOldNode);
+            $this->_omitModLog = true;
         }
 
         // update node acl
@@ -135,18 +202,53 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type
             && Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')
         ) {
-            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
             if (! $nodePath->isSystemPath()) {
 
+                $modlogOldNode = $modlogNode = null;
                 if ($_record->acl_node === null && ! $nodePath->isToplevelPath()) {
                     // acl_node === null -> remove acl
                     $node = $this->_backend->setAclFromParent($nodePath->statpath);
                     $aclNode = $node->acl_node;
 
-                } else if ($_record->acl_node === $_record->getId()) {
-                    $this->_backend->setGrantsForNode($_record, $_record->grants);
+                    $modlogNode = new Filemanager_Model_Node(array(
+                        'id' => $_record->getId(),
+                        'path' => $nodePath->statpath,
+                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                        'grants' => 'unset'
+                        // do not set acl_node, this will be calculated on the client side
+                    ), true);
+                    $modlogOldNode = new Filemanager_Model_Node(array(
+                        'id' => $_record->getId(),
+                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+                    ), true);
+
+                } elseif ($_record->acl_node === $_record->getId() && isset($_record->grants)) {
+                    $oldGrants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($_oldRecord);
+                    if (is_array($_record->grants)) {
+                        $_record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->grants);
+                    }
+                    $diff = $_record->grants->diff($oldGrants);
+                    if (!$diff->isEmpty() || $_oldRecord->acl_node !== $_record->acl_node) {
+                        $this->_backend->setGrantsForNode($_record, $_record->grants);
+                        $modlogNode = new Filemanager_Model_Node(array(
+                            'id' => $_record->getId(),
+                            'path' => $nodePath->statpath,
+                            'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                            'grants' => $_record->grants
+                            // do not set acl_node, this will be calculated on the client side
+                        ), true);
+                        $modlogOldNode = new Filemanager_Model_Node(array(
+                            'id' => $_record->getId(),
+                            'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+                        ), true);
+                    }
                     $aclNode = $_record->acl_node;
-                    // TODO only update if grants differ from old grants
+                }
+
+                if (null !== $modlogNode) {
+                    $this->_omitModLog = false;
+                    $this->_writeModLog($modlogNode, $modlogOldNode);
+                    $this->_omitModLog = true;
                 }
             }
         }
@@ -601,7 +703,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         try {
             $this->_checkIfExists($path);
-            $this->_backend->checkPathACL($parentPathRecord, 'add');
+            $this->_backend->checkPathACL($parentPathRecord, 'add', /* $_topLevelAllowed */ $_type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite) {
 
@@ -638,20 +740,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $newNodePath = $parentPathRecord->statpath . '/' . $path->name;
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
-        $this->_writeModlogForNewNode($newNode, $existingNode, $_type, $_path);
+        $this->_writeModlogForNewNode($newNode, /*$existingNode,*/ $_type, $_path);
 
         $this->resolvePath($newNode, $parentPathRecord);
         $this->resolveGrants($newNode);
         return $newNode;
     }
 
-    protected function _writeModlogForNewNode($_newNode, $_existingNode, $_type, $_path)
+    /**
+     * @param Tinebase_Model_Tree_Node $_newNode
+     * @param string $_type
+     * @param string $_path
+     */
+    protected function _writeModlogForNewNode($_newNode, /*$_existingNode,*/ $_type, $_path)
     {
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_type && false === $this->_inCopyOrMoveNode) {
             $modlogNode = new Filemanager_Model_Node(array(
                 'id' => $_newNode->getId(),
                 'path' => ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $this->removeBasePath($_path->flatpath) : $_path,
-                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                // no grants, no acl_node, it will all be handled on client side
+                //'grants' => Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($_newNode)
             ), true);
             $this->_omitModLog = false;
             $this->_writeModLog($modlogNode, null);
@@ -908,7 +1017,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                             'id' => $node->getId(),
                             'path' => is_array($_destinationFilenames) ? array($_destinationFilenames[$idx]) : $_destinationFilenames,
                             'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                            'name' => $_action
+                            'name' => $_action,
+                            // do not set acl_node, this will be calculated on the client side
                         ), true);
                         $modlogOldNode = new Filemanager_Model_Node(array(
                             'id' => $node->getId(),
@@ -1402,8 +1512,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 if (isset($diff->diff['name'])) {
                     $this->_copyOrMoveNodes(array($diff->oldData['path']), $diff->diff['path'], $diff->diff['name']);
+                } elseif(isset($diff->diff['grants'])) {
+                    $record = $this->_backend->stat($diff->diff['path']);
+                    if ('unset' === $diff->diff['grants']) {
+                        $this->_backend->removeAclFromNode($record);
+                    } else {
+                        $this->_backend->setGrantsForNode($record, $diff->diff['grants']);
+                    }
                 } else {
-                    throw new Tinebase_Exception_InvalidArgument('update modlogs need the property name containing copy or move');
+                    throw new Tinebase_Exception_InvalidArgument('update modlogs need the property name containing copy or move or grants for grants update');
                 }
                 break;
 

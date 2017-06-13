@@ -274,7 +274,28 @@ Tine.Filemanager.nodeActions.Download = {
 /**
  * one file node with readGrant
  */
-// Tine.Filemanager.nodeActions.Preview = {};
+Tine.Filemanager.nodeActions.Preview = {
+    app: 'Filemanager',
+    allowMultiple: false,
+    requiredGrant: 'readGrant',
+    text: 'Preview', // _('Preview')
+    disabled: true,
+    iconCls: 'previewIcon',
+    scope: this,
+    handler: function () {
+        var selections = this.initialConfig.selections;
+
+        if (selections.length > 0) {
+            var selection = selections[0];
+
+            if (selection && selection.get('type') === 'file') {
+                Tine.Filemanager.DocumentPreview.openWindow({
+                    record: selection
+                });
+            }
+        }
+    }
+};
 
 /**
  * one node with publish grant
@@ -309,15 +330,13 @@ Tine.Filemanager.nodeActions.Publish = {
                 expiry_time: date,
                 password: password
             });
+
             Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
                 success: function (record) {
-                    // TODO: add mail-button
-                    Ext.MessageBox.show({
+                    Tine.Filemanager.FilePublishedDialog.openWindow({
                         title: selections[0].data.type == 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
-                        msg: String.format(app.i18n._("Url: {0}") + '<br />' + app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')),
-                        minWidth: 900,
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.INFO,
+                        record: record,
+                        password: password
                     });
                 }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this
             });

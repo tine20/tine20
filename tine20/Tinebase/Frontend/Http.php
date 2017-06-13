@@ -794,11 +794,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $record = $recordController->get($recordId);
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $node->grants =
         $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
             . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record)
             . '/' . $node->name;
         
-        $this->_downloadFileNode($node, $path);
+        $this->_downloadFileNode($node, $path, /* revision */ null, /* $ignoreAcl */ true);
         exit;
     }
 

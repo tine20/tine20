@@ -274,9 +274,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             sm.resumeEvents();
         }
     },
-    
-    onFilterChange: Tine.widgets.container.TreePanel.prototype.onFilterChange,
-    
+
    /**
      * returns a filter plugin to be used in a grid
      * @private
@@ -313,10 +311,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
         this.initToolTips();
         this.selectInbox();
-        
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
-        }
     },
     
     /**

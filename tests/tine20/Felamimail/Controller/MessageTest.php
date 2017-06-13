@@ -1669,22 +1669,20 @@ class Felamimail_Controller_MessageTest extends TestCase
         $cachedMessage = $this->messageTestHelper('invalid_html.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertContains('hier seine Daten :)<br /><br /><span id="felamimail_inline_felamimail-body-signature">
+        $this->assertContains('hier seine Daten :)<br /><br /><span id="felamimail-body-signature">
         </span><pre><span style="font-family:tahoma;">John Smith
 Photographer', $message->body);
     }
-    
+
     /**
-     * @see: 0010150: Jump Labels get converted
-     * 
-     * https://forge.tine20.org/mantisbt/view.php?id=10150
+     * @see 0013150: convert single part file content body to attachment
      */
-    public function testHtmlJumpLabels()
+    public function testSinglePartPdfMail()
     {
-        $cachedMessage = $this->messageTestHelper('html_jump_labels.eml');
+        $cachedMessage = $this->messageTestHelper('single_part_pdf.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        $this->assertContains('<a href="#felamimail_inline_test" target="_blank">test</a>
-<p>Hello,</p>
-<p id="felamimail_inline_test">Text Content</p>', $message->body);
+
+        self::assertEquals(1, count($message->attachments));
+        self::assertTrue($message->has_attachment, 'attachments missing!');
     }
 }

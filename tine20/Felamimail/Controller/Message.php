@@ -213,7 +213,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $headers     = $this->getMessageHeaders($_message, $_partId, true);
         $body        = $this->getMessageBody($_message, $_partId, $mimeType, $_account, true);
-        $attachments = $this->getAttachments($_message, $_partId);
+        $attachments = array();
+        if ($body === '' && $_partId === null && isset($headers['content-transfer-encoding']) && $headers['content-transfer-encoding'] === 'base64') {
+            // maybe we have a single part message that needs to be treated like an attachment
+            $attachments = $this->getAttachments($_message, 1);
+            $_message->has_attachment = true;
+        }
+
+        $attachments = array_merge($attachments, $this->getAttachments($_message, $_partId));
         
         if ($_partId === null) {
             $message = $_message;
@@ -721,8 +728,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // @see: http://htmlpurifier.org/live/configdoc/plain.html#Attr.EnableID
         $config->set('Attr.EnableID', TRUE);
-        $config->set('Attr.IDPrefix', 'felamimail_inline_');
-        
+
         // @see: http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
         $config->set('HTML.TidyLevel', 'heavy');
         
@@ -900,6 +906,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 && isset($structure['messageStructure']['parts']) && is_array($structure['messageStructure']['parts'])
             ) {
                 $structure = $structure['messageStructure'];
+            } elseif ($_partId === 1) {
+                // handle single part messages with attachment-like content (like a pdf file)
+                $structure['parts'] = array($structure);
             } else {
                 return array();
             }

@@ -56,14 +56,6 @@
           "path": "js/"
         },
         {
-          "text": "DownloadLinkDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "DownloadLinkGridPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "MailFiler.js",
           "path": "js/"
         }
