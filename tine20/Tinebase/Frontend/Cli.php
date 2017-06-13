@@ -125,6 +125,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanModlog()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
 
         echo "\ndeleted $deleted modlogs records\n";
@@ -135,6 +139,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanRelations()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $relations = Tinebase_Relations::getInstance();
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
@@ -484,10 +492,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * cleanNotes
+     * cleanNotes: removes notes of records that have been deleted
      */
     public function cleanNotes()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $notesController = Tinebase_Notes::getInstance();
         $notes = $notesController->getAllNotes();
         $controllers = array();
@@ -573,6 +585,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanCustomfields()
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
         $deleteCount = 0;
