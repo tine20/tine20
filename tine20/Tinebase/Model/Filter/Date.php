@@ -33,7 +33,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         5 => 'notnull',
         6 => 'inweek',
         7 => 'before_or_equals',
-        8 => 'after_or_equals',
+        8 => 'after_or_equals'
     );
     
     /**

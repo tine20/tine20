@@ -18,7 +18,7 @@
  */
 class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
 {
-    protected $_operators = array('within', 'before', 'after', 'equals', 'before_or_equals', 'after_or_equals');
+    protected $_operators = array('within', 'before', 'after', 'equals', 'before_or_equals', 'after_or_equals', 'contains');
 
     /**
      * appends sql to given select statement
@@ -91,6 +91,13 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
                 
                 $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));
             }
+        } elseif ($this->_operator === 'contains') {
+            if (preg_match('/^[\d\-]+$/', trim($this->_value))) {
+                $like = trim($this->_value);
+            } else {
+                $like = '0000-00-00';
+            }
+            $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " LIKE (?)", $like));
         } else {
             
             $date = new Tinebase_DateTime($this->_value);
