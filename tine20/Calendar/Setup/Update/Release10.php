@@ -140,4 +140,27 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 13);
         $this->setApplicationVersion('Calendar', '10.5');
     }
+
+    /**
+     * update to 10.6
+     *
+     * import export definitions
+     */
+    public function update_5()
+    {
+        $addressbookApplication = Tinebase_Application::getInstance()->getApplicationByName('Calendar');
+        $definitionDirectory = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'definitions' . DIRECTORY_SEPARATOR;
+
+        $dir = new DirectoryIterator($definitionDirectory);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename(
+                    $fileinfo->getPath() . '/' . $fileinfo->getFilename(),
+                    $addressbookApplication
+                );
+            }
+        }
+
+        $this->setApplicationVersion('Calendar', '10.6');
+    }
 }
