@@ -1473,4 +1473,47 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
+
+    public function testSendTentativeNotifications()
+    {
+        $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
+        $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
+        $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
+        try {
+            $event = $this->_getEvent(true);
+            $event->dtstart->addHour(15);
+            $event->dtend->addHour(15);
+            $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
+            $event->organizer = $this->_getPersonasContacts('sclever')->getId();
+            $this->_eventController->create($event);
+
+            self::flushMailer();
+            $this->_eventController->sendTentativeNotifications();
+            $this->_assertMail('sclever', 'Tentative');
+        } finally {
+            $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
+        }
+    }
+
+    public function testSendTentativeNotificationsNoAttenders()
+    {
+        $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
+        $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
+        $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
+        try {
+            $event = $this->_getEvent(TRUE);
+            $event->attendee = null;
+            $event->dtstart->addHour(15);
+            $event->dtend->addHour(15);
+            $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
+            $event->organizer = $this->_getPersonasContacts('sclever')->getId();
+            $this->_eventController->create($event);
+
+            self::flushMailer();
+            $this->_eventController->sendTentativeNotifications();
+            $this->_assertMail('sclever', 'Tentative');
+        } finally {
+            $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
+        }
+    }
 }

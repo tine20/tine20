@@ -2937,4 +2937,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $updateCount;
     }
+
+    public function sendTentativeNotifications()
+    {
+        $eventNotificationController = Calendar_Controller_EventNotifications::getInstance();
+        $calConfig = Calendar_Config::getInstance();
+        if (true !== $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
+                ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED}) {
+            return;
+        }
+
+        $days = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}->{Calendar_Config::TENTATIVE_NOTIFICATIONS_DAYS};
+        $additionalFilters = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
+            ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_FILTER};
+
+        $filter = array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => Tinebase_DateTime::now(),
+                'until' => Tinebase_DateTime::now()->addDay($days)
+            )),
+            array('field' => 'status', 'operator' => 'equals', 'value' => Calendar_Model_Event::STATUS_TENTATIVE)
+        );
+
+        if (null !== $additionalFilters) {
+            $filter = array_merge($filter, $additionalFilters);
+        }
+
+        $filter = new Calendar_Model_EventFilter($filter);
+        foreach ($this->search($filter) as $event) {
+            $eventNotificationController->doSendNotifications($event, null, 'tentative');
+        }
+    }
 }

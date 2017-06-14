@@ -161,6 +161,26 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_RECUR_EXCEPT = 'featureRecurExcept';
 
     /**
+     * @var string
+     */
+    const TENTATIVE_NOTIFICATIONS = 'tentativeNotifications';
+
+    /**
+     * @var string
+     */
+    const TENTATIVE_NOTIFICATIONS_ENABLED = 'enabled';
+
+    /**
+     * @var string
+     */
+    const TENTATIVE_NOTIFICATIONS_DAYS = 'days';
+
+    /**
+     * @var string
+     */
+    const TENTATIVE_NOTIFICATIONS_FILTER = 'filter';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -385,22 +405,27 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SPLIT_VIEW => array(
                     'label'         => 'Calendar Split View', //_('Calendar Split View')
                     'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
                 self::FEATURE_YEAR_VIEW => array(
                     'label'         => 'Calendar Year View', //_('Calendar Year View')
                     'description'   => 'Adds year view to Calendar', //_('Adds year view to Calendar')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS => array(
                     'label'         => 'Calendar Extended Context Menu Actions', //_('Calendar Extended Context Menu Actions')
                     'description'   => 'Adds extended actions to event context menus', //_('Adds extended actions to event context menus')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
                 self::FEATURE_COLOR_BY => array(
                     'label'         => 'Color Events By', //_('Color Events By')
                     'description'   => 'Choose event color by different criteria', //_('Choose event color by different criteria')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
                 self::FEATURE_RECUR_EXCEPT => array(
-                        'label'         => 'Recur Events Except', //_('Recur Events Except')
-                        'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
+                    'label'         => 'Recur Events Except', //_('Recur Events Except')
+                    'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
             ),
             'default'               => array(
@@ -410,6 +435,36 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 self::FEATURE_COLOR_BY                          => true,
                 self::FEATURE_RECUR_EXCEPT                      => false,
             ),
+        ),
+        self::TENTATIVE_NOTIFICATIONS => array(
+            'label'                 => 'Send Tentative Notifications', //_('Send Tentative Notifications')
+            'description'           => 'Send notifications to event organiziers of events that are tentative certain days before event is due', //_('Send notifications to event organiziers of events that are tentative certain days before event is due')
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => true,
+            'content'               => array(
+                self::TENTATIVE_NOTIFICATIONS_ENABLED   => array(
+                    'label'         => 'Enabled', //_('Enabled')
+                    'description'   => 'Enabled', //_('Enabled')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
+                    'default'       => false,
+                ),
+                self::TENTATIVE_NOTIFICATIONS_DAYS      => array(
+                    'label'         => 'Days Before Due Date', //_('Days Before Due Date')
+                    'description'   => 'How many days before the events due date to start send notifications.', //_('How many days before the events due date to start send notifications.')
+                    'type'          => Tinebase_Config_Abstract::TYPE_INT,
+                    'default'       => 5,
+                ),
+                self::TENTATIVE_NOTIFICATIONS_FILTER    => array(
+                    'label'         => 'Additional Filter', //_('Additional Filter')
+                    'description'   => 'Additional filter to limit events notifications should be send for.', //_('Additional filter to limit events notifications should be send for.')
+                    'type'          => Tinebase_Config_Abstract::TYPE_STRING,
+                    'default'       => NULL,
+                ),
+            ),
+            'default'               => array(),
         ),
     );
     

@@ -163,4 +163,17 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '10.6');
     }
+
+    /**
+     * update to 10.7
+     *
+     * import export definitions
+     */
+    public function update_6()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
+
+        $this->setApplicationVersion('Calendar', '10.7');
+    }
 }
