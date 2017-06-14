@@ -1400,6 +1400,11 @@ class Setup_Controller
                     $_applications[] = $requiredApp;
                 }
             }
+        } else {
+            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+                Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+            }
         }
         
         // get xml and sort apps first
@@ -1451,7 +1456,7 @@ class Setup_Controller
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+        if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
