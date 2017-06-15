@@ -319,8 +319,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
         // find out if fixed calendars should be used
-        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS);
-        $useFixedCalendars = is_array($fixedCalendars) && ! empty($fixedCalendars);
+        $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
+        $useFixedCalendars = is_array($fixedCalendarIds) && ! empty($fixedCalendarIds);
         
         $periodFilter = $filter->getFilter('period');
         
@@ -336,7 +336,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // add fixed calendar on demand
         if ($useFixedCalendars) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
-            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
+            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendarIds));
             
             $fixed->addFilter($periodFilter);
             
@@ -358,7 +358,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'filter'        => $clientFilter->toArray(TRUE),
         );
     }
-    
+
     /**
      * get default period filter
      * 

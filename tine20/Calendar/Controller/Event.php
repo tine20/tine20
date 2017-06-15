@@ -2966,4 +2966,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $eventNotificationController->doSendNotifications($event, null, 'tentative');
         }
     }
+
+    /**
+     * returns active fixed calendars for users (combines config and preference)
+     *
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFixedCalendarIds()
+    {
+        $fixedCalendars = (array) Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS);
+
+        // add fixed calendars from user preference
+        $fixedCalendarsPref = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::FIXED_CALENDARS);
+        if (is_array($fixedCalendarsPref)) {
+            foreach ($fixedCalendarsPref as $container) {
+                if (isset($container['id'])) {
+                    $fixedCalendars[] = $container['id'];
+                }
+            }
+        }
+
+        return $fixedCalendars;
+    }
 }

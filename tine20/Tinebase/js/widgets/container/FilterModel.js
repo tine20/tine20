@@ -391,3 +391,4 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     }
 });
 
+Ext.reg('containerspicker', Tine.widgets.container.FilterModelMultipleValueField);

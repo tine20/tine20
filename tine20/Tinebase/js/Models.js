@@ -255,6 +255,7 @@ Tine.Tinebase.Model.Preference = Ext.data.Record.create([
     {name: 'description'    },
     {name: 'personal_only',         type: 'boolean' },
     {name: 'locked',                type: 'boolean' },
+    {name: 'uiconfig'       },
     {name: 'options'        }
 ]);
 

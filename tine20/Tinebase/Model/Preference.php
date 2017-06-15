@@ -91,5 +91,64 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         'personal_only'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // don't allow user to change value
         'locked'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        // multiselection preference
+        //'multiselect'        =>  array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => false),
+        'uiconfig'        =>  array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'recordConfig'    =>  array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     );
+
+    /**
+     * TODO remove when converted to ModelConfig
+     * TODO generalize / support other models
+     */
+    public function runConvertToRecord()
+    {
+        // convert value property if necessary
+        if (Tinebase_Helper::is_json($this->value)) {
+            $value = Tinebase_Helper::jsonDecode($this->value);
+            switch ($value['modelName']) {
+                case 'Tinebase_Model_Container':
+                    $containers = array();
+                    foreach ($value['ids'] as $containerId) {
+                        try {
+                            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+                            // TODO should be converted to array by json frontend
+                            $containers[] = $container->toArray();
+                        } catch (Exception $e) {
+                            // not found / no access / ...
+                        }
+                    }
+                    $this->value = $containers;
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('model not supported');
+
+            }
+        } else {
+            parent::runConvertToRecord();
+        }
+    }
+
+    /**
+     * TODO remove when converted to ModelConfig
+     * TODO generalize / support other models
+     */
+    public function runConvertToData()
+    {
+        // convert value property if necessary
+        if (is_array($this->value) && is_array($this->recordConfig) && isset($this->recordConfig['modelName'])) {
+            $value = array(
+                'modelName' => $this->recordConfig['modelName'],
+                'ids' => array(),
+            );
+            foreach ($this->value as $record) {
+                if (isset($record['id'])) {
+                    $value['ids'][] = $record['id'];
+                }
+            }
+            $this->value = json_encode($value);
+        } else {
+            parent::runConvertToData();
+        }
+    }
 }
