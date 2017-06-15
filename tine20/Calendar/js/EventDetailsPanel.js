@@ -16,6 +16,7 @@ Ext.ns('Tine.Calendar');
  */
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     border: false,
+    defaultHeight: 135,
     
     /**
      * renders attendee names
