@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -210,6 +210,14 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                         $group = Tinebase_Group::getInstance()->getNonExistentGroup();
                     }
                     $value['account_name'] = $group->toArray();
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                    try {
+                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id'])->toArray();
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        $role = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
+                    }
+                    $value['account_name'] = $role->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $value['account_name'] = array('accountDisplayName' => Tinebase_Translation::getTranslation('Tinebase')->_('Anyone'));

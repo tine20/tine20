@@ -105,6 +105,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                             $value['account_name'] = array('accountDisplayName' => 'Anyone');
                             break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                            $value['account_name'] = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id'])->toArray();
+                            break;
                         default:
                             throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
                             break;

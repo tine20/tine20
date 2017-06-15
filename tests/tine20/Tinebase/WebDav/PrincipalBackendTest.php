@@ -50,7 +50,15 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     {
         $principals = $this->_backend->getPrincipalsByPrefix(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
 
-        $this->assertGreaterThanOrEqual(1, count($principals));
+        static::assertGreaterThanOrEqual(1, count($principals));
+        $roleFound = false;
+        foreach($principals as $principal) {
+            if (strpos($principal['uri'], '/role-') !== false) {
+                $roleFound = true;
+                break;
+            }
+        }
+        static::assertTrue($roleFound, 'no role principal found');
     }
     
     /**
@@ -72,17 +80,17 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         
         $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id);
         
-        //var_dump($principal);
-        
         $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id, $principal['uri']);
         $this->assertEquals($list->name . ' ('. Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')', $principal['{DAV:}displayname']);
+
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/role-' . $role->getId());
+        $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/role-' . $role->getId(), $principal['uri']);
     }
     
     public function testGetPrincipalByUserPath()
     {
         $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
-        
-        //var_dump($principal);
         
         $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id, $principal['uri']);
         $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $principal['{DAV:}displayname']);
@@ -92,11 +100,32 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     {
         $groupMemberships = $this->_backend->getGroupMembership(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         
-        //var_dump($groupMemberships);
-        
         $this->assertGreaterThanOrEqual(1, count($groupMemberships));
+        $roleFound = false;
+        foreach($groupMemberships as $membership) {
+            if (strpos($membership, '/role-') !== false) {
+                $roleFound = true;
+                break;
+            }
+        }
+        static::assertTrue($roleFound, 'no role membership found');
     }
-    
+
+    public function testSearchPrincipalsQueryForGroups()
+    {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
+        $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, array(
+                '{http://calendarserver.org/ns/}search-token' => 'user')
+        );
+
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $this->assertContains(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/role-' . $role->getId(), $uris);
+    }
+
     public function testSearchPrincipalsByEMail()
     {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
@@ -163,7 +192,11 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         
         //var_dump($groupMemberships);
         
-        $this->assertGreaterThanOrEqual(1, count($groupMemberships));
+        static::assertGreaterThanOrEqual(1, count($groupMemberships));
+
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $groupMemberships = $this->_backend->getGroupMemberSet(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/role-' . $role->getId());
+        static::assertGreaterThanOrEqual(1, count($groupMemberships));
     }
 
     public function testGetMemberSetProxyRead()

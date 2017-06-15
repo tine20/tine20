@@ -105,9 +105,25 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $result = $container->getACL();
         
-        //var_dump($result);
-        
-        $this->assertEquals(6, count($result));
+        static::assertEquals(6, count($result));
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer'], true);
+        $grants->addRecord(new Tinebase_Model_Grants(array(
+            'account_id'    => Tinebase_Acl_Roles::getInstance()->getRoleByName('user role')->getId(),
+            'account_type'  => 'role',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        )));
+        Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], $grants, true);
+
+        $result = $container->getACL();
+
+        static::assertEquals(11, count($result));
     }
     
     public function testGetIdAsName()

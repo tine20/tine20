@@ -119,7 +119,39 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
         
         $this->setExpectedException('Tinebase_Exception_AccessDenied');
-        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        $this->_uit->get($persistentEvent->getId());
+    }
+
+    /**
+     * set role grant for "user" to rwright calendar
+     * try to read an event of the personal calendar of rwright
+     *  -> access because of the role
+     */
+    public function testReadGrantByContainerForRoleRight()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
+
+        $calendarId  = $this->_getPersonasDefaultCals('rwright')->getId();
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($calendarId, true);
+        $grants->addRecord(new Tinebase_Model_Grants(array(
+                'account_id'    => Tinebase_Acl_Roles::getInstance()->getRoleByName('user role')->getId(),
+                'account_type'  => 'role',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+                Tinebase_Model_Grants::GRANT_ADD      => true,
+                Tinebase_Model_Grants::GRANT_EDIT     => true,
+                Tinebase_Model_Grants::GRANT_DELETE   => true,
+                Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+                Tinebase_Model_Grants::GRANT_ADMIN    => true,
+                Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        )));
+        Tinebase_Container::getInstance()->setGrants($calendarId, $grants, true);
+
+        $event = $this->_uit->get($persistentEvent->getId());
+        $event->summary = 'role update';
+        $updatedEvent = $this->_uit->update($event);
+
+        static::assertEquals($event->summary, $updatedEvent->summary);
     }
     
     /**

@@ -157,10 +157,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Tinebase_Model_RoleFilter(array(
-            'name'        => '%' . $filter[0]['value'] . '%',
-            'description' => '%' . $filter[0]['value'] . '%'
-        ));
+        $filter = new Tinebase_Model_RoleFilter($filter);
         
         $paging['sort'] = isset($paging['sort']) ? $paging['sort'] : 'name';
         $paging['dir'] = isset($paging['dir']) ? $paging['dir'] : 'ASC';

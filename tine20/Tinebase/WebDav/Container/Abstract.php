@@ -227,6 +227,18 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                     $principal = 'principals/groups/' . $group->list_id;
                     
                     break;
+
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                    try {
+                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // skip role
+                        continue 2;
+                    }
+
+                    $principal = 'principals/groups/role-' . $role->id;
+
+                    break;
                     
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
