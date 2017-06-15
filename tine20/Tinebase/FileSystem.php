@@ -1213,10 +1213,12 @@ class Tinebase_FileSystem implements
         try {
 
             $pathParts = $this->_splitPath($path);
-            if (strlen($pathParts[0]) !== 40) {
+            // is pathParts[0] not an id (either 40 characters or only digits), then its an application name to resolve
+            if (strlen($pathParts[0]) !== 40 && !ctype_digit($pathParts[0])) {
                 $oldPart = $pathParts[0];
                 $pathParts[0] = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
-                $path = '/' . $pathParts[0] . mb_substr($path, mb_strlen($oldPart) + 1);
+                // + 1 in mb_substr offset because of the leading / char
+                $path = '/' . $pathParts[0] . mb_substr('/' . ltrim($path, '/'), mb_strlen($oldPart) + 1);
             }
             $cacheId = $this->_getCacheId($pathParts, $revision);
 
