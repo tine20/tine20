@@ -422,15 +422,16 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::DEFAULT_CALENDAR_STRATEGY:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value = 'default';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
-                            <label>Default Calendar</label>
+                            <label>' . $translate->_('Default Calendar') . '</label>
                             <value>default</value>
                         </option>
                         <option>
-                            <label>None</label>
+                            <label>' . $translate->_('None') . '</label>
                             <value>none</value>
                         </option>
                     </options>';
