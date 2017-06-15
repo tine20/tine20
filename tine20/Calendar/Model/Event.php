@@ -33,11 +33,13 @@
  * @property string                         uid
  * @property string                         etag
  * @property int                            container_id
+ * @property string                         organizer
  * @property Tinebase_Record_RecordSet      attendee
  * @property Tinebase_DateTime              dtstart
  * @property Tinebase_DateTime              dtend
  * @property Calendar_Model_Rrule           rrule
  * @property string                         transp
+ * @property string                         status
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {

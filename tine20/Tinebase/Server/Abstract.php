@@ -140,6 +140,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         } catch (Tinebase_Exception_NotFound $tenf) {
             // session might be invalid, destroy it
             Tinebase_Session::destroyAndRemoveCookie();
+            $userApplications = array();
         }
 
         $definitions = array();

@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -29,7 +29,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             'model'             => 'Calendar_Model_EventFilter',
         );
         
-        $myEventsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All events I attend", // _("All events I attend")
             'filters'           => array(
@@ -89,5 +89,6 @@ class Calendar_Setup_Initialize extends Setup_Initialize
     {
         $scheduler = Tinebase_Core::getScheduler();
         Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
+        Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
     }
 }

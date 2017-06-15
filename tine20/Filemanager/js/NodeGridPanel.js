@@ -45,6 +45,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     deferredRender: false,
     autoExpandColumn: 'name',
     showProgress: true,
+    enableDD: true,
 
     recordClass: Tine.Filemanager.Model.Node,
     listenMessageBus: true,
@@ -77,13 +78,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
 
-        if (this.readOnly) {
+        if (this.readOnly || ! this.enableDD) {
             this.gridConfig.enableDragDrop = false;
         }
 
         this.previewsEnabled = Tine.Tinebase.configManager.get('filesystem').createPreviews;
 
-        this.recordProxy = Tine.Filemanager.fileRecordBackend;
+        this.recordProxy = this.recordProxy || Tine.Filemanager.fileRecordBackend;
 
         this.gridConfig.cm = this.getColumnModel();
 
@@ -129,7 +130,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //         this.actionUpdater.updateActions(record);
         //     }
         // }, this);
-
     },
 
     /**
@@ -434,7 +434,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     initLayout: function() {
-        this.supr().initLayout.call(this);
+        Tine.Filemanager.NodeGridPanel.superclass.initLayout.call(this);
 
         var northPanel = lodash.find(this.items, function (i) {
             return i.region == 'north'

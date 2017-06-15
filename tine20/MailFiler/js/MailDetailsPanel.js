@@ -73,7 +73,7 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
 
                 showDate: function (sent, recordData) {
                     var date = sent ? Date.parseDate(sent, Date.patterns.ISO8601Long) : Date.parseDate(recordData.received, Date.patterns.ISO8601Long);
-                    return date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date);
+                    return date ? date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date) : '';
                 },
 
                 showFrom: function (email, name, addText, qtip) {
@@ -121,12 +121,16 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
                 },
 
                 showAttachments: function (attachments) {
-                    var result = (attachments.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
+                    var result = '';
 
-                    for (var i = 0, id; i < attachments.length; i++) {
-                        result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">'
-                            + '<i>' + attachments[i].filename + '</i>'
-                            + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')</span> ';
+                    if (attachments && attachments.length > 0) {
+                        result = '<b>' + this.app.i18n._('Attachments') + ':</b> ';
+
+                        for (var i = 0, id; i < attachments.length; i++) {
+                            result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">'
+                                + '<i>' + attachments[i].filename + '</i>'
+                                + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')</span> ';
+                        }
                     }
 
                     return result;

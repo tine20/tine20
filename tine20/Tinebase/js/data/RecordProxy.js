@@ -27,9 +27,9 @@ Tine.Tinebase.data.RecordProxy = function(c) {
     Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this, c);
     
     Ext.apply(this, c);
-    this.appName    = this.appName    ? this.appName    : c.recordClass.getMeta('appName');
-    this.modelName  = this.modelName  ? this.modelName  : c.recordClass.getMeta('modelName');
-    this.idProperty = this.idProperty ? this.idProperty : c.recordClass.getMeta('idProperty');
+    this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
+    this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
+    this.idProperty = this.idProperty ? this.idProperty : this.recordClass.getMeta('idProperty');
     
     /* NOTE: in ExtJS records always are part of a store. The store is
              the only instance which triggers read/write actions.

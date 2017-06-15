@@ -316,8 +316,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     }
                 }).createDelegate(this)
         }, Tine.widgets.exportAction.SCOPE_MULTI);
-        this.action_export.setDisabled(false);
-        this.action_export.setText(this.action_export.initialConfig.pluralText);
+        // FIXME: how can this be null? is it ok??
+        if (this.action_export) {
+            this.action_export.setDisabled(false);
+            this.action_export.setText(this.action_export.initialConfig.pluralText);
+        }
 
         this.changeViewActions = [
             this.showDayView,
@@ -392,15 +395,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onActionToolbarResize: Tine.widgets.grid.GridPanel.prototype.onActionToolbarResize,
     
     getActionToolbarItems: function() {
+        var items = [this.action_import];
+        if (this.action_export) {
+            items = items.concat(this.action_export);
+        }
         return [{
             xtype: 'buttongroup',
             columns: 1,
             rows: 2,
             frame: false,
-            items: [
-                this.action_import,
-                this.action_export
-            ]
+            items: items
         }, {xtype: 'tbseparator'}, {
             xtype: 'buttongroup',
             frame: false,

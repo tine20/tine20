@@ -21,7 +21,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 {
     use Tinebase_Controller_Record_ModlogTrait;
 
-
     /**
      * Model name
      *
@@ -369,6 +368,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get user select
      *
      * @return Zend_Db_Select
+     *
+     * TODO get available fields from schema
      */
     protected function _getUserSelectObject()
     {
@@ -477,7 +478,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $newPassword = new Tinebase_Model_UserPassword($accountData, true);
         $this->_writeModLog($newPassword, $oldPassword);
     }
-    
+
     /**
      * set password in plugins
      * 

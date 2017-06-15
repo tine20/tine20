@@ -169,6 +169,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         }
 
+        if (!Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
+            $_record->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $_oldRecord->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
+        }
+
         $nodePath = null;
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
             $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));

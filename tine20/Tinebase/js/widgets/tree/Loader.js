@@ -40,7 +40,20 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
     filter: null,
     
     url: 'index.php',
-    
+
+    initComponent: function () {
+        this.addEvents(
+            /**
+             * Fires when virtual nodes are selected
+             *
+             * @param selected nodes
+             */
+            'virtualNodesSelected'
+        );
+
+        this.supr().initComponent.apply(this, arguments);
+    },
+
     /**
      * @private
      */
@@ -48,7 +61,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
         this.inspectCreateNode.apply(this, arguments);
         return Tine.widgets.tree.Loader.superclass.createNode.apply(this, arguments);
     },
-    
+
     /**
      * returns params for async request
      * 
@@ -101,7 +114,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                 var child = this.findNodeByName(part, parentNode);
 
                 if (! child) {
-                    var child = {
+                    child = {
                         'name': part,
                         'id': part,
                         'children': [],
@@ -111,7 +124,17 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                         'allowDrag': false,
                         'allowDrop': false,
                         'singleClickExpand': true,
-                        'listeners': {'beforeclick' : function(n,e) {n.toggle(); return false}}
+                        'listeners': {
+                            'click': function (node) {
+                                node.expand(true, true, function (node) {
+                                    var nodes = [];
+                                    this.findAllNodes(node, nodes);
+                                    this.fireEvent('virtualNodesSelected', nodes);
+                                }.createDelegate(this, [node], false));
+
+                                return false;
+                            }.createDelegate(this)
+                        }
                     };
                     parentNode.push(child);
                 }
@@ -128,6 +151,22 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
         response.responseData = newResponse;
 
         return Tine.widgets.tree.Loader.superclass.processResponse.apply(this, arguments);
+    },
+
+    /**
+     * Finds children of a node
+     *
+     * @param node
+     * @param nodes
+     */
+    findAllNodes: function (node, nodes) {
+        if (node.leaf && !node.hasChildNodes()) {
+            nodes.push(node);
+        }
+
+        for (var i = 0; i < node.childNodes.length; i++) {
+            this.findAllNodes(node.childNodes[i], nodes);
+        }
     },
 
     /**

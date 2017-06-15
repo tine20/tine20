@@ -1025,21 +1025,19 @@ class Tinebase_FileSystem implements
                     }
                 }
 
-                if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                    if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
-                        $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
-                    ) {
-                        $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $newParent->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
-                        $oldValue = $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
-                        $newValue = $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
-                        $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
-                        $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
-                        if (null === $newValue) {
-                            $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = null;
-                        }
-                        // update revisionProps of subtree if changed
-                        $this->_recursiveInheritFolderPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
+                if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
+                    $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
+                ) {
+                    $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $newParent->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
+                    $oldValue = $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                    $newValue = $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
+                    $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
+                    $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                    if (null === $newValue) {
+                        $node->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = null;
                     }
+                    // update revisionProps of subtree if changed
+                    $this->_recursiveInheritPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
                 }
 
                 $node->parent_id = $newParent->getId();
@@ -1215,10 +1213,12 @@ class Tinebase_FileSystem implements
         try {
 
             $pathParts = $this->_splitPath($path);
-            if (strlen($pathParts[0]) !== 40) {
+            // is pathParts[0] not an id (either 40 characters or only digits), then its an application name to resolve
+            if (strlen($pathParts[0]) !== 40 && !ctype_digit($pathParts[0])) {
                 $oldPart = $pathParts[0];
                 $pathParts[0] = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
-                $path = '/' . $pathParts[0] . mb_substr($path, mb_strlen($oldPart) + 1);
+                // + 1 in mb_substr offset because of the leading / char
+                $path = '/' . $pathParts[0] . mb_substr('/' . ltrim($path, '/'), mb_strlen($oldPart) + 1);
             }
             $cacheId = $this->_getCacheId($pathParts, $revision);
 
@@ -1726,7 +1726,7 @@ class Tinebase_FileSystem implements
                 $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
 
                 // update revisionProps of subtree if changed
-                $this->_recursiveInheritFolderPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
+                $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
             }
 
             $newNode = $this->_getTreeNodeBackend()->update($_node);

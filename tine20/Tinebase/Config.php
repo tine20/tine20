@@ -362,7 +362,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PASSWORD_POLICY_FORBID_USERNAME = 'pwPolicyForbidUsername';
-    
+
+    /**
+     * PASSWORD_POLICY_CHANGE_AFTER
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_CHANGE_AFTER = 'pwPolicyChangeAfter';
+
     /**
      * AUTOMATIC_BUGREPORTS
      *
@@ -1220,6 +1227,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_CHANGE_AFTER => array(
+        //_('Change Password After ... Days')
+            'label'                 => 'Change Password After ... Days',
+        //_('Users need to change their passwords after defined number of days')
+            'description'           => 'Users need to change their passwords after defined number of days',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 0,
         ),
         self::AUTOMATIC_BUGREPORTS => array(
                                    //_('Automatic bugreports')
