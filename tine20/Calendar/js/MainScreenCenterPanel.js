@@ -136,14 +136,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(i18n._hidden('Edit {0}'), this.i18nRecordName),
             disabled: true,
-            handler: this.onEditInNewWindow.createDelegate(this, ["edit"]),
+            handler: this.onEditInNewWindow.createDelegate(this, ["edit"], 0),
             iconCls: 'action_edit'
         });
         
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._hidden('Add {0}'), this.i18nRecordName),
-            handler: this.onEditInNewWindow.createDelegate(this, ["add"]),
+            handler: this.onEditInNewWindow.createDelegate(this, ["add"], 0),
             iconCls: 'action_add'
         });
         
@@ -1310,9 +1310,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Object} default properties for new items
      */
     onEditInNewWindow: function (action, event, plugins, defaults) {
-        if (! event) {
+        if (! (event && Ext.isFunction(event.beginEdit))) {
             event = null;
         }
+
         // needed for addToEventPanel
         if (Ext.isObject(action)) {
             action = action.actionType;
@@ -1326,7 +1327,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         }
 
-        if (action === 'edit' && (! event || event.dirty)) {
+        if (action === 'edit' && ! event) {
             return;
         }
 
@@ -1342,7 +1343,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::onEditInNewWindow() - Opening event edit dialog with action: ' + action);
 
         Tine.Calendar.EventEditDialog.openWindow({
-            plugins: plugins ? Ext.encode(plugins) : null,
+            plugins: Ext.isArray(plugins) ? Ext.encode(plugins) : null,
             record: Ext.encode(event.data),
             recordId: event.data.id,
             copyRecord: (action == 'copy'),
@@ -1819,7 +1820,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.calendarPanels[which]['canonicalName'].push(Ext.util.Format.capitalize(which.match(/[a-z]+/)[0]));
             this.calendarPanels[which]['canonicalName'] = this.calendarPanels[which]['canonicalName'].join(Tine.Tinebase.CanonicalPath.separator);
 
-            this.calendarPanels[which].on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"]));
+            this.calendarPanels[which].on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"], 0));
             this.calendarPanels[which].on('contextmenu', this.onContextMenu, this);
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
             this.calendarPanels[which].on('keydown', this.onKeyDown, this);

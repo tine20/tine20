@@ -821,8 +821,15 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         e.stopEvent();
         var event = this.getTargetEvent(e);
         var dtStart = this.getTargetDateTime(e);
-        
+
         if (event) {
+            if (event.dirty && this.editing ) {
+                event.set('summary', this.editing.summaryEditor.getValue());
+                event.summaryEditor = false;
+                this.editing = false;
+                this.abortCreateEvent.defer(500, this, [event]);
+            }
+
             this.fireEvent('dblclick', event, e);
         } else if (dtStart && !this.editing) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
