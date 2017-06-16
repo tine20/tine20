@@ -35,7 +35,7 @@ Tine.Tinebase.data.GroupedStoreCollection = function(config) {
     if (this.group) {
         this.applyGrouping();
     }
-}
+};
 
 Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, {
     /**
