@@ -1198,7 +1198,9 @@ class Admin_JsonTest extends TestCase
             'value' => 'Chair'
         );
         $attendeeRoles['value'] = json_encode($keyFieldConfig);
-        $attendeeRoles['id'] = '';
+        if ($attendeeRoles['id'] === 'virtual-attendeeRoles') {
+            $attendeeRoles['id'] = '';
+        }
 
         $this->_json->saveConfig($attendeeRoles);
 
