@@ -521,7 +521,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'status_authkey'},
     {name: 'displaycontainer_id'},
     {name: 'transp'},
-    {name: 'checked'} // filter grid helper field
+    {name: 'checked'}, // filter grid helper field
+    {name: 'fbInfo'}   // helper field
 ], {
     appName: 'Calendar',
     modelName: 'Attender',
@@ -539,16 +540,11 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
      * gets name of attender
      * 
      * @return {String}
-     *
-    getName: function() {
-        var user_id = this.get('user_id');
-        if (! user_id) {
-            return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
-        }
-        
-        var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
+     */
+    getTitle: function() {
+        var p = Tine.Calendar.AttendeeGridPanel.prototype;
+        return p.renderAttenderName.call(p, this.get('user_id'), false, this);
     },
-    */
 
     getCompoundId: function() {
         return this.get('user_type') + '-' + this.getUserId();
@@ -664,7 +660,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
  */ 
 Tine.Calendar.Model.Attender.getDefaultData = function() {
     return {
-        user_type: 'user',
+        // @TODO have some config here? user vs. default?
+        user_type: 'any',
         role: 'REQ',
         quantity: 1,
         status: 'NEEDS-ACTION'

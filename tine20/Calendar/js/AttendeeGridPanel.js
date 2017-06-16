@@ -10,6 +10,9 @@
  
 Ext.ns('Tine.Calendar');
 
+require('./AttendeePickerCombo');
+require('./ResourcePickerCombo');
+
 /**
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.AttendeeGridPanel
@@ -213,6 +216,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 listWidth     : 100,
                 mode          : 'local',
                 store         : [
+                    ['any',      '...'                     ],
                     ['user',     this.app.i18n._('User')   ],
                     ['group',    this.app.i18n._('Group')  ],
                     ['resource', this.app.i18n._('Resource')]
@@ -241,7 +245,50 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }];
     },
-    
+
+    onEditComplete: function(ed, value, startValue) {
+        var _ = window.lodash,
+            attendeeData = _.get(ed, 'field.selectedRecord.data.user_id'),
+            type = _.get(ed, 'field.selectedRecord.data.user_type');
+
+        // attendeePickerCombo
+        if (attendeeData && type) {
+            if (this.showMemberOfType && 'group' == type) {
+                var row = ed.row,
+                    col = ed.col,
+                    selectedRecord = _.get(ed, 'field.selectedRecord');
+
+                Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                    title: this.app.i18n._('Whole Group or each Member of Group'),
+                    questionText: this.app.i18n._('Choose "Group" to filter for the whole group itself. Choose "Member of Group" to filter for each member of the group'),
+                    height: 170,
+                    scope: this,
+                    options: [
+                        {text: 'Group', name: 'sel_group'},
+                        {text: 'Member of Group', name: 'sel_memberOf'}
+                    ],
+
+                    handler: function(option) {
+                        this.startEditing(row, col);
+                        selectedRecord.set('user_type', option);
+                        selectedRecord.groupType = option;
+                        this.activeEditor.field.selectedRecord = selectedRecord;
+                        this.stopEditing();
+                    }
+                });
+
+                // abort normal flow
+                value = startValue;
+            } else {
+                value = attendeeData;
+                ed.record.set('user_type', type.replace(/^sel_/, ''));
+                ed.record.commit();
+            }
+        }
+
+        Tine.Calendar.AttendeeGridPanel.superclass.onEditComplete.call(this, ed, value, startValue);
+    },
+
     onAfterAttenderEdit: function(o) {
         switch (o.field) {
             case 'user_id' :
@@ -377,6 +424,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 }));
                 break;
+
+                case 'any':
+                    colModel.config[o.column].setEditor(new Tine.Calendar.AttendeePickerCombo({
+                        minListWidth: 370,
+                        blurOnSelect: true,
+                        eventRecord: this.record
+                    }));
+                    break;
             }
             colModel.config[o.column].editor.selectedRecord = null;
         }
@@ -624,8 +679,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     renderAttenderName: function(name, metaData, record) {
         if (name) {
-            var type = record ? record.get('user_type') : 'user';
-            return this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'].apply(this, arguments);
+            var type = record ? record.get('user_type') : 'user',
+                fn = this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'];
+
+            return fn ? fn.apply(this, arguments): '';
         }
         
         // add new user:

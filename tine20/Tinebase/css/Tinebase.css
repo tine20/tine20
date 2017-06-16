@@ -1079,3 +1079,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
+.x-form-radio-group .x-form-item {
+    padding-left: 2px;
+}

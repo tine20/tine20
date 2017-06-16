@@ -286,3 +286,29 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .inline table {
     display: inline-block;
 }
+
+.cal-attendee-picker-combo-list-item .x-combo-list-item {
+    border: none;
+}
+
+.cal-fbinfo-state {
+    min-width: 20px;
+    min-height: 20px;
+    background-repeat: no-repeat;
+}
+
+.cal-fbinfo-state-free {
+    background-image:url(../../images/oxygen/16x16/actions/ok.png) !important;
+}
+
+.cal-fbinfo-state-tentative {
+    background-image:url(../../images/calendar-response-tentative.png) !important;
+}
+
+.cal-fbinfo-state-busy {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
+}
+
+.cal-fbinfo-state-unavailable {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-error.png) !important;
+}

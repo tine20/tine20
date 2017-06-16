@@ -116,7 +116,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
         // Custom rendering Template
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate(
-                '<tpl for="."><div class="search-item addressbook-search-combo">',
+                '<tpl for="."><div class="search-item addressbook-search-combo x-combo-list-item">',
                     '<table>',
                         '<tr>',
                             '<td style="min-width: 20px;">{[Tine.Addressbook.ContactGridPanel.contactTypeRenderer(null, null, values)]}</td>',
@@ -130,8 +130,10 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                             '</td>',
                         '</tr>',
                     '</table>',
-                    '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
-                '</div></tpl>'
+                    '{[Tine.widgets.path.pathsRenderer(values.paths, this.getLastQuery())]}',
+                '</div></tpl>', {
+                    getLastQuery: this.getLastQuery.createDelegate(this)
+                }
             );
         }
     },

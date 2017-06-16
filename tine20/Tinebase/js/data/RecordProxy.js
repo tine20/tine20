@@ -172,7 +172,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         p.method = this.appName + '.search' + this.modelName + 's';
         p.filter = (filter) ? filter : [];
         p.paging = paging;
-        
+
         options.beforeSuccess = function(response) {
             return [this.jsonReader.read(response)];
         };
@@ -325,6 +325,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             };
             
             this.searchRecords(params.filter, paging, {
+                params: params,
                 scope: this,
                 success: function(records) {
                     callback.call(scope||this, records, arg, true);
