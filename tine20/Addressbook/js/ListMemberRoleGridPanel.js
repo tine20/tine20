@@ -48,6 +48,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             reader: Tine.Addressbook.contactBackend.getReader(),
             listeners: {
                 load: this.onLoad,
+                beforeload: this.onBeforeLoad,
                 scope: this
             }
         });
@@ -83,20 +84,29 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     /**
      * initialises grid with an array of member uids
      */
-    setMembers: function() {
-        var members = this.record.get("members"),
-            memberroles = this.record.get("memberroles")
+    setMembers: function(cb, scope) {
+        var options = {
+            loadCb: cb || Ext.emptyFn,
+            scope: scope
+        };
 
-        if (members) {
-            var options = {params: {filter: [ { "field":"id","operator":"in", "value": members } ]}};
-            this.store.load(options);
-            this.store.sort("n_fileas");
-        }
-
-        this.memberroles = memberroles;
+        this.memberroles = this.record.get("memberroles");
+        this.store.load(options)
     },
 
-    onLoad: function(store) {
+    onBeforeLoad: function (store, options) {
+        var members = this.record.get("members") || [];
+
+        options.params = options.params || {};
+        options.params.paging = {"sort":"n_fileas","dir":"ASC"};
+        options.params.filter = [
+            {"field": "id", "operator": "in", "value": members}
+        ];
+    },
+
+    onLoad: function(store, records, options) {
+        this.store.sort("n_fileas", "ASC");
+        
         if (this.memberroles) {
             this.store.each(function(contact) {
                 var contactRoles = [];
@@ -118,6 +128,10 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             }, this);
 
             this.memberRolesPanel.setListRoles(this.memberroles);
+        }
+
+        if (Ext.isFunction(options.loadCb)) {
+            options.loadCb.call(options.scope || window);
         }
     },
 

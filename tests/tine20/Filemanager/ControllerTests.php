@@ -65,4 +65,79 @@ class Filemanager_ControllerTests extends TestCase
         self::setExpectedException('Tinebase_Exception_NotFound', 'child:');
         Tinebase_FileSystem::getInstance()->stat($personalFolderPath);
     }
+
+    public function testNotificationUpdateForReadOnly()
+    {
+        $oldUser = Tinebase_Core::getUser();
+        /** @var Tinebase_Model_FullUser $sclever */
+        $sclever = $this->_personas['sclever'];
+        try {
+            $personalFolderPath = $this->_getPersonalPath($oldUser);
+            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            $fileManager = Filemanager_Controller_Node::getInstance();
+            $personalFolderName = sprintf($translation->_("%s's personal files"), $oldUser->accountFullName);
+            $node = $fileSystem->stat($personalFolderPath . '/' . $personalFolderName);
+
+            // try a failing update
+            Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+            $scleverNotificationProps = array(
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
+            );
+            $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $scleverNotificationProps;
+            $failed = false;
+            try {
+                $fileManager->update($node);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                $failed = true;
+            }
+            static::assertTrue($failed);
+
+            // now set grants so update can work
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+            $node = $fileManager->get($node->getId());
+            $node->grants = $fileSystem->getGrantsOfContainer($node);
+            $node->grants->addRecord(new Tinebase_Model_Grants(array(
+                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id'        => $sclever->getId(),
+                Tinebase_Model_Grants::GRANT_READ => true,
+            )));
+            $node = $fileManager->update($node);
+
+            // do update again, it should work now
+            Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+            $scleverNotificationProps = array(
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
+            );
+            $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $scleverNotificationProps;
+            $node = $fileManager->update($node);
+            static::assertEquals(1, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
+            static::assertTrue(
+                isset($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[0]) &&
+                $scleverNotificationProps == $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[0]
+            );
+
+            $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array();
+            $node = $fileManager->update($node);
+            static::assertEquals(0, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+        }
+    }
+
+    public function testRenameFolderCaseSensitive()
+    {
+        // check if personal folder exists
+        $personalFolderPath = $this->_getPersonalPath(Tinebase_Core::getUser());
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
+        $fileManager = Filemanager_Controller_Node::getInstance();
+
+        $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
+    }
 }

@@ -273,8 +273,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function fileMessages($filterData, $targetApp, $targetPath)
     {
-        // close session to allow other requests
-        Tinebase_Session::writeClose(true);
+        $this->_longRunningRequest();
 
         $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
         $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $targetApp, $targetPath);

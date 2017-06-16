@@ -56,7 +56,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
             return Ext.ComponentMgr.create({xtype: 'hidden'});
         }
         
-        var def = cfConfig.get('definition'),
+        var _ = window.lodash,
+            def = cfConfig.get('definition'),
             uiConfig = def && def.uiconfig ? def.uiconfig : {},
             fieldDef = {
                 fieldLabel: def.label,
@@ -117,6 +118,9 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                         fieldDef.hideLabel = true;
                         fieldDef.boxLabel = fieldDef.fieldLabel;
                         break;
+                    case 'textarea':
+                        fieldDef.xtype = 'textarea';
+                        break;
                     case 'string':
                     default:
                         fieldDef.xtype = 'textfield';
@@ -131,13 +135,18 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
         if (def.required) {
             fieldDef.allowBlank = false;
         }
-        
+
+        // custom code overrides
+        var overwritesKey = cfConfig.get('model').replace(/_/g, '.') + '.' + cfConfig.get('name');
+        var overwrites = _.get(Tine, overwritesKey, {});
+
         try {
-            var fieldObj = Ext.ComponentMgr.create(Ext.apply(fieldDef, config));
-            return fieldObj;
+            fieldDef = _.assign(fieldDef, config, overwrites);
+            return Ext.ComponentMgr.create(fieldDef);
         } catch (e) {
             Tine.log.debug(e);
-            Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');Tine.log.error('cfConfig empty -> skipping field');
+            Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition:');
+            Tine.log.error(fieldDef);
             return Ext.ComponentMgr.create({xtype: 'hidden'});
         }
     };

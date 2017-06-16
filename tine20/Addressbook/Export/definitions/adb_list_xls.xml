@@ -2,9 +2,11 @@
 <config>
     <model>Addressbook_Model_List</model>
     <name>adb_list_xls</name>
-    <label>Export as XLS</label>
+    <!-- _('Excel all data') -->
+    <label>Excel all data</label>
     <type>export</type>
     <plugin>Addressbook_Export_List_Xls</plugin>
     <icon_class>tinebase-action-export-xls</icon_class>
     <template>tine20:///Tinebase/folders/shared/export/templates/Addressbook/addressbook_list_export.xlsx</template>
+    <scope>multi</scope>
 </config>

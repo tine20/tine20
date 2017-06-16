@@ -27,6 +27,18 @@ Tine.widgets.printer.fieldRenderer = function(appName, record, fieldValue, label
     return html;
 };
 
+Tine.widgets.printer.fieldsRenderer = function(appName, record, fieldName){
+    var html = '';
+
+    Ext.each(fieldName, function(field) {
+        html += '<div class="rp-print-single-details-row">' +
+            '<span class="rp-print-single-value">'+ field + '</span>' +
+            '</div>';
+    }, this);
+
+    return html;
+};
+
 Tine.widgets.printer.headerRenderer = function() {
     return  '<div class="rp-print-single-logo"><img src="' + Tine.logo + '"></div>';
 }

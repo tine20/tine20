@@ -601,9 +601,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param string $name
      * @param string $model
+     * @param string $type
      * @return Tinebase_Model_CustomField_Config
+     *
+     * TODO use a single array as param that is merged with the defaults
      */
-    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact')
+    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string')
     {
         $application = substr($model, 0, strpos($model, '_'));
         $cfData = new Tinebase_Model_CustomField_Config(array(
@@ -612,7 +615,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'model'             => $model,
             'definition'        => array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
-                'type'  => 'string',
+                'type'  => $type,
+                'recordConfig' => $type === 'record'
+                    ? array('value' => array('records' => 'Tine.Addressbook.Model.Contact'))
+                    : null,
                 'uiconfig' => array(
                     'xtype'  => Tinebase_Record_Abstract::generateUID(),
                     'length' => 10,

@@ -31,61 +31,7 @@ Tine.Sales.SupplierGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.initDetailsPanel();
         Tine.Sales.SupplierGridPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * @todo: make this generally available (here its more general: Tine.HumanResources.EmployeeGridPanel)
-     * 
-     * returns additional toobar items
-     * 
-     * @return {Array} of Ext.Action
-     */
-    getActionToolbarItems: function() {
-        this.actions_export = new Ext.Action({
-            // i18n._('Export Suppliers')
-            text: this.app.i18n._hidden('Export Suppliers'),
-            iconCls: 'action_export',
-            scope: this,
-            requiredGrant: 'exportGrant',
-            disabled: true,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export selected suppliers as ODS'),
-                        singularText: this.app.i18n._('Export selected supplier as ODS'),
-                        pluralText: this.app.i18n._('Export selected suppliers as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Sales.exportSuppliers',
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
-        
-        var button = Ext.apply(new Ext.Button(this.actions_export), {
-            scale: 'medium',
-            rowspan: 2,
-            iconAlign: 'top'
-        });
-        
-        var additionalActions = [this.actions_export];
-        this.actionUpdater.addActions(additionalActions);
-        return [button];
-    },
-    
-    /**
-     * add custom items to context menu
-     * 
-     * @return {Array}
-     */
-    getContextMenuItems: function() {
-        return [
-            '-',
-            this.actions_export
-        ];
-    },
-    
+
     /**
      * @private
      */

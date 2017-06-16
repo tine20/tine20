@@ -12,6 +12,9 @@
  *
  * @package Calendar
  * @subpackage  Model
+ *
+ * @property Tinebase_DateTime dtstart
+ * @property Tinebase_DateTime dtend
  */
 class Calendar_Model_FreeBusy extends Tinebase_Record_Abstract
 {

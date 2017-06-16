@@ -2,7 +2,10 @@
 <config>
     <model>Calendar_Model_Resource</model>
     <name>cal_resource_doc</name>
-    <label>Export Resource as DOC</label>
+    <!-- _('Word details') -->
+    <label>Word details</label>
+    <favorite>true</favorite>
+    <order>100</order>
     <type>export</type>
     <plugin>Calendar_Export_Resource_Doc</plugin>
     <icon_class>tinebase-action-export-doc</icon_class>

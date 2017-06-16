@@ -362,7 +362,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PASSWORD_POLICY_FORBID_USERNAME = 'pwPolicyForbidUsername';
-    
+
+    /**
+     * PASSWORD_POLICY_CHANGE_AFTER
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_CHANGE_AFTER = 'pwPolicyChangeAfter';
+
     /**
      * AUTOMATIC_BUGREPORTS
      *
@@ -455,6 +462,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const USE_LOGINNAME_AS_FOLDERNAME = 'useLoginnameAsFoldername';
+
+    /**
+     * @var string
+     */
+    const DENY_WEBDAV_CLIENT_LIST = 'denyWebDavClientList';
 
     /**
      * @var string
@@ -1142,7 +1154,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Enable password policy')
             'description'           => 'Enable password policy',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1162,7 +1174,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum password length')
             'description'           => 'Minimum password length.',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1172,7 +1184,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum word chars in password')
             'description'           => 'Minimum word chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1182,7 +1194,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum uppercase chars in password')
             'description'           => 'Minimum uppercase chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1192,7 +1204,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum special chars in password')
             'description'           => 'Minimum special chars in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1202,7 +1214,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum numbers in password')
             'description'           => 'Minimum numbers in password',
             'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1215,6 +1227,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_CHANGE_AFTER => array(
+        //_('Change Password After ... Days')
+            'label'                 => 'Change Password After ... Days',
+        //_('Users need to change their passwords after defined number of days')
+            'description'           => 'Users need to change their passwords after defined number of days',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 0,
         ),
         self::AUTOMATIC_BUGREPORTS => array(
                                    //_('Automatic bugreports')
@@ -1380,7 +1403,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 //_('Path to custom logo.')
                 'description'           => 'Path to custom logo.',
                 'type'                  => 'string',
-                'default'               => '/images/tine_logo.png',
+                'default'               => './images/tine_logo.png',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,
@@ -1406,6 +1429,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,
+        ),
+        self::DENY_WEBDAV_CLIENT_LIST  => array(
+            //_('List of WebDav agent strings that will be denied')
+            'label'                 => 'List of WebDav agent strings that will be denied',
+            //_('List of WebDav agent strings that will be denied.')
+            'description'           => 'List of WebDav agent strings that will be denied.',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => NULL,
         ),
         self::WEBDAV_SYNCTOKEN_ENABLED => array(
         //_('Enable SyncToken plugin')

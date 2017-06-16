@@ -330,6 +330,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         Tinebase_Group::unsetInstance();
         Tinebase_Acl_Roles::unsetInstance();
         Tinebase_Core::unsetUser();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
     }
     
     /**

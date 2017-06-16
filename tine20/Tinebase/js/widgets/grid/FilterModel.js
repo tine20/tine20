@@ -227,6 +227,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             fields: ['operator', 'label'],
             data: [
                 {operator: 'contains',      label: i18n._('contains')},
+                {operator: 'wordstartswith',label: i18n._('contains word starting with')},
                 {operator: 'notcontains',   label: i18n._('contains not')},
                 {operator: 'regex',         label: i18n._('reg. exp.')},
                 {operator: 'equals',        label: i18n._('is equal to')},
@@ -255,7 +256,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (this.operators.length == 0) {
             switch (this.valueType) {
                 case 'string':
-                    this.operators.push('contains', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
+                    this.operators.push('contains', 'wordstartswith', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');

@@ -853,7 +853,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     
                 case self::USERTYPE_RESOURCE:
                     $resources = Calendar_Controller_Resource::getInstance()->getMultiple($ids, true);
-                    
+                    // NOTE: resource detail resolving is for export only - we might switch this to async in future for better performance
+                    Tinebase_Container::getInstance()->getGrantsOfRecords($resources, Tinebase_Core::getUser());
+                    $resources->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $resources->getId()));
+                    if (Tinebase_Core::isFilesystemAvailable()) {
+                        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($resources);
+                    }
+
                     foreach ($resources as $resource) {
                         self::$_resolvedAttendeesCache[$type][$resource->getId()] = $resource;
                     }
@@ -1015,6 +1021,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     break;
                 case self::USERTYPE_RESOURCE:
                     $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
+                    // NOTE: resource detail resolving is for export only - we might switch this to async in future for better performance
+                    Tinebase_Container::getInstance()->getGrantsOfRecords($typeMap[$type], Tinebase_Core::getUser());
+                    $typeMap[$type]->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $typeMap[$type]->getId()));
+                    if (Tinebase_Core::isFilesystemAvailable()) {
+                        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($typeMap[$type]);
+                    }
                     break;
                 default:
                     throw new Exception("type $type not supported");

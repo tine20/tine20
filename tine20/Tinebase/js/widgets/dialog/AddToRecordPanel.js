@@ -123,12 +123,7 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
     initButtons : function() {
         this.fbar = ['->'];
         
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.fbar.push(this.action_update, this.action_cancel);
-        }
-        else {
-            this.fbar.push(this.action_cancel, this.action_update);
-        }
+        this.fbar.push(this.action_cancel, this.action_update);
     },    
     
     /**

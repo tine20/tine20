@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -43,7 +43,8 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(100, strlen($html));
     }
 
-    public function testgetPostalXWindow() {
+    public function testgetPostalXWindow()
+    {
         if (headers_sent() || version_compare(PHPUnit_Runner_Version::id(), '3.3.0', '<')) {
             $this->markTestSkipped('phpunit version < 3.3.0 cant cope with headers');
         }

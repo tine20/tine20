@@ -349,7 +349,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     border: false,
     stateful: true,
 
-    stateIdSuffix: null,
+    stateIdSuffix: '',
 
     /**
      * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
@@ -491,10 +491,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             Tine.log.debug('init generic gridpanel with config:');
             Tine.log.debug(this.modelConfig);
-            
+
+            // TODO move to uiConfig
             if (this.modelConfig.hasOwnProperty('multipleEdit') && (this.modelConfig.multipleEdit === true)) {
                 this.multipleEdit = true;
-                this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight')) ? this.modelConfig.multipleEditRequiredRight : null;
+                this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight'))
+                    ? this.modelConfig.multipleEditRequiredRight
+                    : null;
+            }
+
+            // TODO move to uiConfig
+            if (this.modelConfig.hasOwnProperty('copyEditAction') && (this.modelConfig.copyEditAction === true)) {
+                this.copyEditAction = true;
             }
         }
         
@@ -772,8 +780,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
         });
 
-        this.initActionsImportExport();
-        
+        this.initExports();
+        this.initImports();
+
         // add actions to updater
         this.actionUpdater.addActions([
             this.action_addInNewWindow,
@@ -790,91 +799,48 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.getActionToolbar();
     },
 
-    // Generate Export button. New definitions needed!
-    initExportButton: function() {
-        var exportDefinitions = Tine[this.app.name].registry.get('exportDefinitions');
-        var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
+    initExports: function() {
+        if (this.actions_export !== undefined) return;
 
-            items = [
-                new Tine.widgets.grid.ExportButton({
-                    text: this.app.i18n._('Export as ...'),
-                    iconCls: 'tinebase-action-export-xls',
-                    exportFunction: exportFunction,
-                    showExportDialog: true,
-                    order: 1000,
-                    gridPanel: this
-                })
-            ];
+        var _ = window.lodash,
+            exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
+            additionalItems = [];
 
-        // create items from available export definitions
-        if (exportDefinitions.results) {
-            Ext.each(exportDefinitions.results, function (definition) {
-                if (definition.favorite == '1') {
-                    items.unshift(new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._hidden(definition.label ? definition.label : definition.name),
-                        format: '',
-                        definitionId: definition.id,
-                        iconCls: definition.icon_class,
-                        exportFunction: exportFunction,
-                        order: definition.order,
-                        gridPanel: this
-                    }))
-                }
-            }, this);
-        }
-
-        //apply order
-        items.sort(function(a,b) {return a.order - b.order});
-
-        return items;
-    },
-
-    initActionsImportExport: function() {
+        // create items from available export formats (depricated -> use definitions)
         if (this.modelConfig && this.modelConfig['export']) {
-            var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
-                items = [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: exportFunction,
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ];
-
-            // create items from available export formats
             if (this.modelConfig['export'].supportedFormats) {
-                Ext.each(this.modelConfig['export'].supportedFormats, function (format) {
-                    items.unshift(new Tine.widgets.grid.ExportButton({
+                Ext.each(this.modelConfig['export'].supportedFormats, function (format, i) {
+                    additionalItems.unshift(new Tine.widgets.grid.ExportButton({
                         // TODO format toUpper
-                        text: String.format(this.app.i18n._('Export as {0}'), format),
+                        text: String.format(i18n._('Export as {0}'), format),
                         format: format,
                         iconCls: 'tinebase-action-export-' + format,
                         exportFunction: exportFunction,
+                        order: i * 10,
                         gridPanel: this
-                    }))
+                    }));
                 }, this);
             }
+        }
 
-            this.actions_export = new Ext.Action({
-                text: this.app.i18n._('Export items'),
-                iconCls: 'action_export',
-                scope: this,
-                requiredGrant: 'exportGrant',
-                disabled: true,
-                allowMultiple: true,
-                menu: {
-                    items: items
-                }
-            });
+        // exports from export definitions
+        this.actions_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
+            exportFunction: exportFunction,
+            gridPanel: this
+        }, Tine.widgets.exportAction.SCOPE_MULTI, additionalItems);
 
+        if (this.actions_export) {
             this.actionUpdater.addActions([this.actions_export]);
         }
+    },
+
+    initImports: function() {
+        if (this.actions_import !== undefined) return;
 
         if (this.modelConfig && this.modelConfig['import']) {
             this.actions_import = new Ext.Action({
                 requiredGrant: 'addGrant',
-                text: this.app.i18n._('Import items'),
+                text: i18n._('Import items'),
                 disabled: false,
                 handler: this.onImport,
                 iconCls: 'action_import',
@@ -1383,7 +1349,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             gridPanel: this
         });
         this.selectionModel.on('selectionchange', function(sm) {
-            //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);
             this.actionUpdater.updateActions(sm);
 
             this.ctxNode = this.selectionModel.getSelections();
@@ -1584,33 +1549,30 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 );
             }
 
-            // only do this for generic model config import/export
-            if (this.modelConfig && (this.modelConfig['export'] || this.modelConfig['import'])) {
-                var importExportButtons = [];
+            var importExportButtons = [];
 
-                if (this.actions_export) {
-                    importExportButtons.push(Ext.apply(new Ext.Button(this.actions_export), {
-                        scale: 'small',
-                        rowspan: 1,
-                        iconAlign: 'left'
-                    }));
-                }
-                if (this.actions_import) {
-                    importExportButtons.push(Ext.apply(new Ext.Button(this.actions_import), {
-                        scale: 'small',
-                        rowspan: 1,
-                        iconAlign: 'left'
-                    }));
-                }
+            if (this.actions_export) {
+                importExportButtons.push(Ext.apply(new Ext.Button(this.actions_export), {
+                    scale: 'small',
+                    rowspan: 1,
+                    iconAlign: 'left'
+                }));
+            }
+            if (this.actions_import) {
+                importExportButtons.push(Ext.apply(new Ext.Button(this.actions_import), {
+                    scale: 'small',
+                    rowspan: 1,
+                    iconAlign: 'left'
+                }));
+            }
 
-                if (importExportButtons.length > 0) {
-                    items.push({
-                        xtype: 'buttongroup',
-                        columns: 1,
-                        frame: false,
-                        items: importExportButtons
-                    });
-                }
+            if (importExportButtons.length > 0) {
+                items.push({
+                    xtype: 'buttongroup',
+                    columns: 1,
+                    frame: false,
+                    items: importExportButtons
+                });
             }
 
             this.actionToolbar = new Ext.Toolbar({
@@ -1697,7 +1659,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.duplicateResolvable) {
                 items.push(this.action_resolveDuplicates);
             }
-            
+
+            if (this.actions_export) {
+                items.push('-', this.actions_export);
+            }
+
             if (this.action_tagsMassAttach && ! this.action_tagsMassAttach.hidden) {
                 items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }

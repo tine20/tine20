@@ -4,20 +4,17 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_User
  */
-class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCase
+class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
 {
+    use GetProtectedMethodTrait;
+
     /**
      * @var array test objects
      */
@@ -32,10 +29,10 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
     protected function setUp()
     {
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
-            $this->markTestSkipped('filesystem base path not found');
+            self::markTestSkipped('filesystem base path not found');
         }
         
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         Tinebase_FileSystem::getInstance()->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
         
@@ -50,7 +47,7 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
     }
@@ -58,18 +55,21 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
     /**
      * test adding attachments to record
      * 
-     * @todo add assertions
+     * @return Addressbook_Model_Contact
      */
     public function testAddRecordAttachments()
     {
         $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
         
         $record = new Addressbook_Model_Contact(array('n_family' => Tinebase_Record_Abstract::generateUID()));
-        $record->setId(Tinebase_Record_Abstract::generateUID());
+        $record = Addressbook_Controller_Contact::getInstance()->create($record);
         
         $recordAttachments->addRecordAttachment($record, 'Test.txt', fopen(__FILE__, 'r'));
         
         $attachments = $this->testGetRecordAttachments($record);
+        self::assertEquals(1, count($attachments));
+
+        return $record;
     }
     
     /**
@@ -86,9 +86,7 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
             $record->setId(Tinebase_Record_Abstract::generateUID());
         }
         
-        $attachments = $recordAttachments->getRecordAttachments($record);
-        
-        return $attachments;
+        return $recordAttachments->getRecordAttachments($record);
     }
     
     /**
@@ -113,7 +111,30 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends PHPUnit_Framework_TestCa
         $recordAttachments->getMultipleAttachmentsOfRecords($records);
         
         foreach ($records as $record) {
-            $this->assertEquals(1, $record->attachments->count(), 'Attachments missing');
+            self::assertEquals(1, $record->attachments->count(), 'Attachments missing');
         }
+    }
+
+    /**
+     * @see 0013032: add GRANT_DOWNLOAD
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testDownloadRecordAttachment()
+    {
+        $contactWithAttachment = $this->testAddRecordAttachments();
+        $http = new Tinebase_Frontend_Http();
+
+        $attachment = $contactWithAttachment->attachments->getFirstRecord();
+        $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
+            . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($contactWithAttachment)
+            . '/' . $attachment->name;
+
+        ob_start();
+        $reflectionMethod = $this->getProtectedMethod(Tinebase_Frontend_Http::class, '_downloadFileNode');
+        $reflectionMethod->invokeArgs($http, [$attachment, $path, null, /* ignoreAcl */ true]);
+        $output = ob_get_clean();
+
+        self::assertContains('Tinebase_FileSystem_RecordAttachmentsTest', $output);
     }
 }

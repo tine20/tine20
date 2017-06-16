@@ -38,13 +38,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      * 
      */
     const GRID_LOAD_MASK = 'gridLoadMask';
-    
-    /**
-     * order of buttons in dialogs
-     * 
-     */
-    const DIALOG_BUTTONS_ORDER_STYLE = 'dialogButtonsOrderStyle';
-    
+
     /**
      * auto search on filter change
      * 
@@ -105,7 +99,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::PAGE_SIZE,
                 self::GRID_STRIPE_ROWS,
                 self::GRID_LOAD_MASK,
-                self::DIALOG_BUTTONS_ORDER_STYLE,
                 self::FILTER_CHANGE_AUTO_SEARCH,
                 self::ADVANCED_SEARCH
             )
@@ -135,10 +128,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::GRID_LOAD_MASK  => array(
                 'label'         => $translate->_('Grid load mask'),
                 'description'   => $translate->_('Show load mask in grids'),
-            ),
-            self::DIALOG_BUTTONS_ORDER_STYLE  => array(
-                'label'         => $translate->_('Dialog buttons order style'),
-                'description'   => $translate->_('Dialog buttons order style (Windows / Mac)'),
             ),
             self::FILTER_CHANGE_AUTO_SEARCH  => array(
                 'label'         => $translate->_('Auto search on filter change'),
@@ -223,22 +212,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                   $preference->personal_only = FALSE;
-                break;
-
-            case self::DIALOG_BUTTONS_ORDER_STYLE:
-                $preference->value  = 'Macintosh'; 
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <option>
-                            <label>Windows</label>
-                            <value>Windows</value>
-                        </option>
-                        <option>
-                            <label>Macintosh</label>
-                            <value>Macintosh</value>
-                        </option>
-                    </options>';
-                $preference->personal_only = FALSE;
                 break;
             case self::FILTER_CHANGE_AUTO_SEARCH:
                 $preference->value      = 1;

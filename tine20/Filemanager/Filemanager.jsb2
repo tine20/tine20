@@ -78,6 +78,22 @@
         {
           "text": "DocumentPreview.js",
           "path": "js/"
+        },
+        {
+          "text": "FilePublishedDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "NotificationPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "NotificationGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "RevisionPanel.js",
+          "path": "js/"
         }
       ]
     },

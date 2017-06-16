@@ -218,7 +218,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     )));
 
 
-                    $existingIds = $backend->search($idFilter, null, true);
+                    // to work around Tinebase_Container, we just send one more true parameter, will be ignored by all real backends, only taken into account by Tinebase_Container
+                    $existingIds = $backend->search($idFilter, null, true, true);
 
                     if (!is_array($existingIds)) {
                         throw new Exception('search for model: ' . $model . ' returned not an array!');
@@ -1288,29 +1289,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if (method_exists($controller, 'applyReplicationModificationLog')) {
                     $controller->applyReplicationModificationLog($modification);
                 } else {
-
-                    switch ($modification->change_type) {
-                        case Tinebase_Timemachine_ModificationLog::CREATED:
-                            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                            $model = $modification->record_type;
-                            $record = new $model($diff->diff);
-                            $controller->create($record);
-                            break;
-
-                        case Tinebase_Timemachine_ModificationLog::UPDATED:
-                            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                            $record = $controller->get($modification->record_id, NULL, true, true);
-                            $record->applyDiff($diff);
-                            $controller->update($record);
-                            break;
-
-                        case Tinebase_Timemachine_ModificationLog::DELETED:
-                            $controller->delete($modification->record_id);
-                            break;
-
-                        default:
-                            throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
-                    }
+                    static::defaultApply($modification, $controller);
                 }
 
                 $state = $tinebaseApplication->state;
@@ -1350,6 +1329,37 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $this->_externalInstanceId = null;
 
         return true;
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @param Tinebase_Controller_Record_Abstract $_controller
+     * @throws Tinebase_Exception
+     */
+    public static function defaultApply(Tinebase_Model_ModificationLog $_modification, $_controller)
+    {
+        switch ($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                $record = new $model($diff->diff);
+                $_controller->create($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $record = $_controller->get($_modification->record_id, NULL, true, true);
+                $record->applyDiff($diff);
+                $_controller->update($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $_controller->delete($_modification->record_id);
+                break;
+
+            default:
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+        }
     }
 
     /**

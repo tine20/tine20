@@ -35,6 +35,7 @@
  * @property    Tinebase_Model_EmailUser    emailUser
  * @property    Tinebase_Model_EmailUser    imapUser
  * @property    Tinebase_Model_EmailUser    smtpUser
+ * @property    Tinebase_DateTime           accountLastPasswordChange      date when password was last changed
  *
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
@@ -268,7 +269,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                         . ' User ' . $this->accountLoginName . ' has to change his pw: it got never set by user');
                         
-                    return true;;
+                    return true;
                     
                 } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof DateTime) {
                     $dateToCompare = $this->sambaSAM->pwdLastSet;
@@ -295,10 +296,19 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected function _sqlPasswordChangeNeeded()
     {
-        return empty($this->accountLastPasswordChange);
+        if (empty($this->accountLastPasswordChange)) {
+            return true;
+        }
+        $passwordChangeDays = Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
+
+        if ($passwordChangeDays > 0) {
+            $now = Tinebase_DateTime::now();
+            return $this->accountLastPasswordChange->isEarlier($now->subDay($passwordChangeDays));
+        } else {
+            return false;
+        }
     }
-    
-    
+
     /**
      * return the public informations of this user only
      *

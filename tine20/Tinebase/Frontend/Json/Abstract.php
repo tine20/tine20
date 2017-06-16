@@ -627,6 +627,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $apiMethod = $matches[1];
             $model = in_array($apiMethod, array('search', 'delete')) ? substr($matches[2],0,-1) : $matches[2];
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
+            // resolve custom fields by default
+            $modelController->resolveCustomfields(true);
             switch ($apiMethod) {
                 case 'get':
                     return $this->_get($args[0], $modelController);

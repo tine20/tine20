@@ -27,12 +27,21 @@ div.page
     width: 6cm;
 }
 
+.rp-print-single-block-heading {
+    font-weight: bold;
+}
+
 .rp-print-single-block {
     margin-left: 0.5cm;
 }
 
-.rp-print-single-summary, .rp-print-single-value {
+.rp-print-single-value {
+
+}
+
+.rp-print-single-summary {
     font-weight: bold;
+    font-size: 25px;
 }
 
 .rp-print-single {

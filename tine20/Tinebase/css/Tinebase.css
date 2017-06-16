@@ -676,6 +676,16 @@ html, body {
    background-image:url(../../images/oxygen/32x32/apps/kwrite.png) !important;
 }
 
+.previewIcon {
+    background-image:url(../../images/oxygen/16x16/actions/fileview-preview.png) !important;
+}
+.x-btn-medium .previewIcon {
+    background-image:url(../../images/oxygen/22x22/actions/fileview-preview.png) !important;
+}
+.x-btn-large .previewIcon {
+    background-image:url(../../images/oxygen/32x32/actions/fileview-preview.png) !important;
+}
+
 /* ----- mainmenu ------------------------------------------------------------*/
 /*
 .tine-mainscreen-mainmenu .x-toolbar {
@@ -704,6 +714,10 @@ html, body {
 .tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc,
 .tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc button{
     text-decoration: underline;
+}
+
+.x-btn-group-bwrap .x-toolbar-cell{
+    vertical-align: top;
 }
 
 .tine-favicon {

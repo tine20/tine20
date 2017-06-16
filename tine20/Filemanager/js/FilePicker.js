@@ -160,7 +160,9 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             height: 200,
             width: 200,
             readOnly: true,
-            filterMode: 'filterToolbar'
+            filterMode: 'filterToolbar',
+            // fixme: NodeTreePanel fetches grid via app registry
+            onSelectionChange: Tine.widgets.container.TreePanel.prototype.onSelectionChange
         });
 
         treePanel.getSelectionModel().on('selectionchange', function (selectionModel) {

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -170,10 +170,14 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         
         return $id;
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
@@ -242,6 +246,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * checks if container is a personal container of given account
      * 
      * @param mixed $account
+     * @return bool
      */
     public function isPersonalOf($account)
     {
@@ -327,5 +332,13 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReplicable()
+    {
+        return true;
     }
 }

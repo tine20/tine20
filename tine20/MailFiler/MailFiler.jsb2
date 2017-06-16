@@ -36,10 +36,6 @@
           "path": "js/"
         },
         {
-          "text": "PathFilterPlugin.js",
-          "path": "js/"
-        },
-        {
           "text": "NodeEditDialog.js",
           "path": "js/"
         },
@@ -53,14 +49,6 @@
         },
         {
           "text": "NodeGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "DownloadLinkDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "DownloadLinkGridPanel.js",
           "path": "js/"
         },
         {

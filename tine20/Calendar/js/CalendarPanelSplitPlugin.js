@@ -79,7 +79,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     
     getDefaultData: function() {
         var defaultData = this.originalGetDefaultData(),
-            useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed,
+            useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn && Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed,
             centerPanel = this.app.getMainScreen().getCenterPanel(),
             activeCalPanel = centerPanel.getCalendarPanel(centerPanel.activeView),
             activeView = this.getActiveView(),
@@ -133,7 +133,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         // create view for each attendee
         var filteredAttendee = this.attendeeFilterGrid.getValue(),
             attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(filteredAttendee),
-            useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
+            useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn && Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
             
         // remove views not longer in filter
         this.calPanel.items.each(function(view) {
@@ -218,7 +218,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     
     manageSplitViews: function(filteredAttendee) {
         // create view for each attendee
-        var useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
+        var useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn && Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
         
         if (useSplit) {
             // add subviews new to filter

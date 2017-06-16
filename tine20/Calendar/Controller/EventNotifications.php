@@ -122,13 +122,13 @@
     /**
      * send notifications 
      * 
-     * @param Tinebase_Record_Interface  $_event
+     * @param Calendar_Model_Event       $_event
      * @param Tinebase_Model_FullUser    $_updater
      * @param String                     $_action
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
      */
-    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
+    public function doSendNotifications(Calendar_Model_Event $_event, $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
         if (isset($_additionalData['alarm']))
         {
@@ -138,7 +138,7 @@
         }
 
         // we only send notifications to attendee
-        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet && 'tentative' !== $_action) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Event has no attendee");
             return;
@@ -166,8 +166,10 @@
         }
         
         // lets resolve attendee once as batch to fill cache
-        $attendee = clone $_event->attendee;
-        Calendar_Model_Attender::resolveAttendee($attendee);
+        if (null !== $_event->attendee) {
+            $attendee = clone $_event->attendee;
+            Calendar_Model_Attender::resolveAttendee($attendee);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . " " . print_r($_event->toArray(), true));
@@ -225,7 +227,16 @@
                 }
                 
                 break;
-                
+
+            case 'tentative':
+                $attendee = new Calendar_Model_Attender(array(
+                    'cal_event_id'      => $_event->getId(),
+                    'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'           => $_event->organizer,
+                ), true);
+                $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                break;
+
             default:
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
@@ -248,7 +259,7 @@
      * 
      * @param Calendar_Model_Attender    $_attender
      * @param Calendar_Model_Event       $_event
-     * @param Tinebase_Model_FullAccount $_updater
+     * @param Tinebase_Model_FullUser    $_updater
      * @param string                     $_action
      * @param string                     $_notificationLevel
      * @param array                      $_updates
@@ -305,7 +316,7 @@
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organizer for external notifications
-            if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
+            if ((null !== $_updater && $attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions)
                 || ($sendLevel < $_notificationLevel && (
                         ((is_object($organizer) && method_exists($attendee, 'getPreferredEmailAddress') && $attendee->getPreferredEmailAddress() != $organizer->getPreferredEmailAddress())
                         || (is_object($organizer) && !method_exists($attendee, 'getPreferredEmailAddress') && $attendee->email != $organizer->getPreferredEmailAddress()))
@@ -517,6 +528,11 @@
                         break;
                 }
                 break;
+
+            case 'tentative':
+                $messageSubject = sprintf($translate->_('Tentative event notification for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                break;
+
             default:
                 $messageSubject = 'unknown action';
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
@@ -534,7 +550,7 @@
      * @param string $method
      * @param Calendar_Model_Event $event
      * @param string $_action
-     * @param Tinebase_Model_FullAccount $updater
+     * @param Tinebase_Model_FullUser $updater
      * @param Zend_Mime_Part $calendarPart
      * @return array
      */

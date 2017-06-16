@@ -283,13 +283,13 @@ Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
     recordsName: 'Alarms',
     getOption: function(name) {
         var encodedOptions = this.get('options'),
-            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+            options = encodedOptions ? Ext.decode(encodedOptions) : {};
         
         return options[name];
     },
     setOption: function(name, value) {
         var encodedOptions = this.get('options'),
-            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+            options = encodedOptions ? Ext.decode(encodedOptions) : {};
         
         options[name] = value;
         this.set('options', Ext.encode(options));
@@ -329,6 +329,7 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
  * Model of an export job
  */
 Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
+    {name: 'scope'                  },
     {name: 'filter'                 },
     {name: 'export_definition_id'   },
     {name: 'format'                 },
@@ -500,11 +501,15 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
     { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
+    { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
 
     { name: 'relations' },
     { name: 'customfields' },
     { name: 'notes' },
-    { name: 'tags' }
+    { name: 'tags' },
+
+    { name: 'revisionProps' },
+    { name: 'notificationProps' }
 ]);
 /**
  * @namespace   Tine.Tinebase.Model

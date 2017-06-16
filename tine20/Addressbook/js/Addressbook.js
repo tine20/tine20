@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Addressbook');
@@ -39,9 +39,10 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     getMainScreen: function() {
         var mainscreen = Tine.Addressbook.Application.superclass.getMainScreen.call(this);
 
-        if (!Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')) {
+        if (!Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')
+            && !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureResources')) {
             mainscreen.useModuleTreePanel = false;
-        };
+        }
 
         return mainscreen;
     },
@@ -135,9 +136,20 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Contact',
     contentTypes: [
-        {model: 'Contact',  requiredRight: null, singularContainerMode: false},
-        {model: 'List',  requiredRight: null, singularContainerMode: false}
-    ]
+        {model: 'Contact', requiredRight: null, singularContainerMode: false}
+    ],
+
+    initComponent: function() {
+        if(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureResources')) {
+           this.contentTypes.push({model: 'Resource', requiredRight: null, singularContainerMode: true});
+        }
+
+        if(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')) {
+            this.contentTypes.push({model: 'List', requiredRight: null, singularContainerMode: false});
+        }
+        
+        Tine.Addressbook.MainScreen.superclass.initComponent.call(this);
+    }
 });
 
 Tine.Addressbook.ContactTreePanel = function(config) {

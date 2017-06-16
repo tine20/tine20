@@ -327,7 +327,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     /**
      * test get free busy info with single event
      * 
-     * @return Tinebase_Record_Interface
+     * @return Calendar_Model_Event
      */
     public function testGetFreeBusyInfo()
     {
@@ -355,19 +355,65 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     public function testSearchFreeTime()
     {
-        $this->markTestSkipped();
-        $persistentEvent = $this->testGetFreeBusyInfo();
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
+        ));
+        $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,FR';
+        $event->originator_tz = $event->dtstart->getTimezone()->getName();
 
-        $period = new Calendar_Model_EventFilter(array(array(
-            'field'     => 'period',
-            'operator'  => 'within',
-            'value'     => array(
-                'from'      => $persistentEvent->dtstart->setHour(6),
-                'until'     => $persistentEvent->dtend->setHour(22)
-            ),
-        )));
+        $options = array(
+            'constraints' => array(array(
+                'dtstart'   => $event->dtstart->getClone()->setHour(6),
+                'dtend'     => $event->dtstart->getClone()->setHour(22),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+            )),
+        );
 
-        $this->_controller->searchFreeTime($period, $persistentEvent->attendee);
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        /** @var Calendar_Model_Event $suggestedEvent */
+        $suggestedEvent = $result->getFirstRecord();
+        $dtstartExpected = $event->dtstart->getClone()->addDay(1)->setHour(6); // '2009-04-07 06:00:00'
+        $dtendExpected = $event->dtend->getClone()->addDay(1)->setHour(6); // '2009-04-07 06:30:00'
+        static::assertEquals($dtstartExpected, $suggestedEvent->dtstart);
+        static::assertEquals($dtendExpected, $suggestedEvent->dtend);
+
+        $newEvent = clone $event;
+        $newEvent->rrule = null;
+        $newEvent->dtstart = $dtstartExpected->getClone()->addMinute(29); // '2009-04-07 06:29:00'
+        $newEvent->dtend = $dtendExpected->getClone(); // '2009-04-07 06:30:00'
+        $this->_controller->create($newEvent);
+        $newEvent->setId(null);
+        $newEvent->uid = null;
+        $newEvent->attendee->id = null;
+        $newEvent->attendee->cal_event_id = null;
+        $newEvent->dtstart->addDay(7); // '2009-04-14 06:29:00'
+        $newEvent->dtend->addDay(7); // '2009-04-14 06:30:00'
+        $this->_controller->create($newEvent);
+
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        /** @var Calendar_Model_Event $suggestedEvent */
+        $suggestedEvent = $result->getFirstRecord();
+        static::assertEquals($dtstartExpected->addMinute(30), $suggestedEvent->dtstart); // '2009-04-07 06:30:00'
+        static::assertEquals($dtendExpected->addMinute(30), $suggestedEvent->dtend); // '2009-04-07 07:00:00'
+
+        $newEvent->setId(null);
+        $newEvent->uid = null;
+        $newEvent->attendee->id = null;
+        $newEvent->attendee->cal_event_id = null;
+        $newEvent->dtstart->addMinute(1); // '2009-04-14 06:30:00'
+        $newEvent->dtend->addMinute(1); // '2009-04-14 06:31:00'
+        $this->_controller->create($newEvent);
+
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        /** @var Calendar_Model_Event $suggestedEvent */
+        $suggestedEvent = $result->getFirstRecord();
+        static::assertEquals($dtstartExpected->addMinute(15), $suggestedEvent->dtstart); // '2009-04-07 06:45:00'
+        static::assertEquals($dtendExpected->addMinute(15), $suggestedEvent->dtend); // '2009-04-07 07:15:00'
     }
     
     /**

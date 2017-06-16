@@ -46,7 +46,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         value: true
     }],
     action_bookmark: null,
-    
+
     initComponent: function() {
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
 
@@ -58,25 +58,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @private
      */
     initActions: function() {
-        this.actions_exportTimeaccount = new Ext.Action({
-            text: this.app.i18n._('Export Timeaccounts'),
-            iconCls: 'action_export',
-            scope: this,
-            requiredGrant: 'readGrant',
-            disabled: true,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Timetracker.exportTimeaccounts',
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
+        Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
 
         this.action_bookmark = new Ext.Action({
             text: i18n._('Bookmark Timeaccount'),
@@ -89,14 +71,10 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             handler: this.addBookmark
         });
 
-
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportTimeaccount,
             this.action_bookmark
         ]);
-
-        Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
     },
 
     addBookmark: function () {
@@ -133,21 +111,6 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 }
             });
         });
-    },
-
-    /**
-     * add custom items to action toolbar
-     *
-     * @return {Object}
-     */
-    getActionToolbarItems: function() {
-        return [
-            Ext.apply(new Ext.Button(this.actions_exportTimeaccount), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            })
-        ];
     },
 
     /**

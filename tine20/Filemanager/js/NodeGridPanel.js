@@ -45,6 +45,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     deferredRender: false,
     autoExpandColumn: 'name',
     showProgress: true,
+    enableDD: true,
 
     recordClass: Tine.Filemanager.Model.Node,
     listenMessageBus: true,
@@ -58,10 +59,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     currentFolderNode: null,
 
-    /**
-     * Prevent download and edit of nodes/files and so on. Only allow the selection of items
-     */
-    selectOnly: false,
+    previewsEnabled: false,
 
     /**
      * inits this cmp
@@ -80,11 +78,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
 
-        if (this.readOnly) {
+        if (this.readOnly || ! this.enableDD) {
             this.gridConfig.enableDragDrop = false;
         }
 
-        this.recordProxy = Tine.Filemanager.fileRecordBackend;
+        this.previewsEnabled = Tine.Tinebase.configManager.get('filesystem').createPreviews;
+
+        this.recordProxy = this.recordProxy || Tine.Filemanager.fileRecordBackend;
 
         this.gridConfig.cm = this.getColumnModel();
 
@@ -130,13 +130,16 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //         this.actionUpdater.updateActions(record);
         //     }
         // }, this);
-
     },
 
     /**
      * after grid renderd
      */
     initDragDrop: function () {
+        if (! this.enableDD) {
+            return;
+        }
+
         var grid = this.grid,
             view = grid.getView();
 
@@ -299,6 +302,21 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
         }
 
+        if (Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
+            columns.push({
+                id: 'isIndexed',
+                header: this.app.i18n._("Indexed"),
+                tooltip: this.app.i18n._("File contents is part of the search index"),
+                width: 40,
+                sortable: true,
+                dataIndex: 'isIndexed',
+                hidden: true,
+                renderer: function(value, i, node) {
+                    return node.get('type') == 'file' ? Tine.Tinebase.common.booleanRenderer(value) : '';
+                }
+            });
+        }
+
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
@@ -323,14 +341,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onKeyDown: function(e) {
         Tine.Filemanager.NodeGridPanel.superclass.onKeyDown.apply(this, arguments);
 
-        var sm = this.selectionModel,
-            node = sm.getSelected();
+
+        if (!this.previewsEnabled) {
+            return true;
+        }
 
         // Open preview on space if a node is selected and the node type equals file
-        if (e.getKey() === 32 && node && node.get('type') === 'file') {
-            Tine.Filemanager.DocumentPreview.openWindow({
-                record: node
-            });
+        if (e.getKey() === 32) {
+            this.action_preview.execute()
         }
     },
 
@@ -416,7 +434,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     initLayout: function() {
-        this.supr().initLayout.call(this);
+        Tine.Filemanager.NodeGridPanel.superclass.initLayout.call(this);
 
         var northPanel = lodash.find(this.items, function (i) {
             return i.region == 'north'
@@ -441,6 +459,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_moveRecord = Tine.Filemanager.nodeActionsMgr.get('move');
         this.action_publish = Tine.Filemanager.nodeActionsMgr.get('publish');
 
+        if (this.previewsEnabled) {
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview');
+        }
+
         // grid only actions - work on node which is displayed (this.currentFolderNode)
         // @TODO: fixme - ux problems with filterselect / initialData
         this.action_upload = new Ext.Action(this.getAddAction());
@@ -460,9 +482,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }.createDelegate(this)
         });
 
+        var contextActions = [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_download, 'resume', 'pause', this.action_editFile, this.action_publish];
+
+        if (this.previewsEnabled) {
+            contextActions.push(this.action_preview);
+        }
+
         this.contextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
-            actions: [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_download, 'resume', 'pause', this.action_editFile, this.action_publish],
+            actions: contextActions,
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -479,7 +507,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions(this.contextMenu.items);
         this.actionUpdater.addActions(this.folderContextMenu.items);
 
-        this.actionUpdater.addActions([
+        var actions = [
             this.action_upload,
             this.action_createFolder,
             this.action_goUpFolder,
@@ -487,7 +515,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_deleteRecord,
             this.action_editFile,
             this.action_publish
-        ]);
+        ];
+
+        if (this.previewsEnabled) {
+            actions.push(this.action_preview);
+        }
+
+        this.actionUpdater.addActions(actions);
     },
 
     /**
@@ -507,6 +541,70 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
+            var items = [
+                this.splitAddButton ?
+                    Ext.apply(new Ext.SplitButton(this.action_upload), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top',
+                        arrowAlign:'right',
+                        menu: new Ext.menu.Menu({
+                            items: [],
+                            plugins: [{
+                                ptype: 'ux.itemregistry',
+                                key:   'Tine.widgets.grid.GridPanel.addButton'
+                            }, {
+                                ptype: 'ux.itemregistry',
+                                key:   'Tinebase-MainContextMenu'
+                            }]
+                        })
+                    }) :
+                    Ext.apply(new Ext.Button(this.action_upload), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
+
+                Ext.apply(new Ext.Button(this.action_editFile), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_createFolder), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_goUpFolder), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_download), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_publish), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                })
+            ];
+
+            if (this.previewsEnabled) {
+                items.push(Ext.apply(new Ext.Button(this.action_preview), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }));
+            }
+
             this.actionToolbar = new Ext.Toolbar({
                 defaults: {height: 55},
                 items: [{
@@ -515,61 +613,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     buttonAlign: 'left',
                     columns: 8,
                     defaults: {minWidth: 60},
-                    items: [
-                        this.splitAddButton ?
-                        Ext.apply(new Ext.SplitButton(this.action_upload), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top',
-                            arrowAlign:'right',
-                            menu: new Ext.menu.Menu({
-                                items: [],
-                                plugins: [{
-                                    ptype: 'ux.itemregistry',
-                                    key:   'Tine.widgets.grid.GridPanel.addButton'
-                                }, {
-                                    ptype: 'ux.itemregistry',
-                                    key:   'Tinebase-MainContextMenu'
-                                }]
-                            })
-                        }) :
-                        Ext.apply(new Ext.Button(this.action_upload), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-
-                        Ext.apply(new Ext.Button(this.action_editFile), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_createFolder), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_goUpFolder), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_download), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_publish), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        })
-                 ]
+                    items: items
                 }, this.getActionToolbarItems()]
             });
 
@@ -591,26 +635,28 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {} row record
      * @param {Ext.EventObjet} e
      */
-    onRowDblClick: function(grid, row, e) {
+    onRowDblClick: function (grid, row, e) {
         var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
+        var _ = window.lodash;
+        var prefs = this.app.getRegistry().get('preferences');
 
-        if(rowRecord.data.type == 'file' && !this.readOnly) {
+        if (prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
             Tine.Filemanager.downloadFile(rowRecord);
-        }
-
-        else if (rowRecord.data.type == 'folder'){
+        } else if (this.previewsEnabled && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
+            this.action_preview.execute();
+        } else if (rowRecord.data.type == 'folder') {
             var treePanel = this.treePanel || app.getMainScreen().getWestPanel().getContainerTreePanel();
 
             var currentFolderNode = treePanel.getNodeById(rowRecord.id);
 
-            if(currentFolderNode) {
+            if (currentFolderNode) {
                 currentFolderNode.select();
                 currentFolderNode.expand();
                 this.currentFolderNode = currentFolderNode;
             } else {
-                // get ftb path filter
-                this.filterToolbar.filterStore.each(function(filter) {
+                // get   ftb path filter
+                this.filterToolbar.filterStore.each(function (filter) {
                     var field = filter.get('field');
                     if (field === 'path') {
                         filter.set('value', '');
@@ -706,13 +752,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var files = fileSelector.getFileList();
 
-        if(files.length > 0) {
-            grid.pagingToolbar.refresh.disable();
-        }
-
         var filePathsArray = [], uploadKeyArray = [];
 
         Ext.each(files, function (file) {
+            if ("" === file.type) {
+                return true;
+            }
+
             var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
                 filePath = targetFolderPath + '/' + fileRecord.get('name');
 
@@ -735,6 +781,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             uploadKeyArray.push(uploadKey);
 
         }, this);
+
+        if (0 === uploadKeyArray.length) {
+            return;
+        }
 
         var params = {
                 filenames: filePathsArray,

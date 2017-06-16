@@ -180,6 +180,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
         });
 
+        this.loader.on('virtualNodesSelected', this.onVirtualNodesSelected.createDelegate(this));
+
         var extraItems = this.getExtraItems();
         this.root = this.getRoot(extraItems);
         if (!this.hasPersonalContainer && ! extraItems.length) {
@@ -216,6 +218,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
+
         this.on('click', this.onClick, this);
         if (this.hasContextMenu) {
             this.on('contextmenu', this.onContextMenu, this);
@@ -228,6 +231,26 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
+    },
+
+    /**
+     *
+     * @param ids
+     */
+    onVirtualNodesSelected: function (nodes) {
+        if (0 === nodes.length) {
+            return;
+        }
+
+        this.getSelectionModel().suspendEvents();
+
+        for (var i = 0; i < nodes.length; i++) {
+            this.getSelectionModel().select(nodes[i], null, 0 !== i);
+        }
+
+        this.getSelectionModel().resumeEvents();
+
+        this.getSelectionModel().fireEvent('selectionchange', this.getSelectionModel(), nodes);
     },
 
     /**
@@ -668,10 +691,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * called when tree selection changes
      *
      * @param {} sm
-     * @param {} node
+     * @param {} nodes
      */
     onSelectionChange: function(sm, nodes) {
-                
+
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }

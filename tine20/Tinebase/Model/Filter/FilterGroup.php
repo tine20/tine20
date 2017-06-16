@@ -660,6 +660,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getModelName()
     {
+        if (null === $this->_modelName) {
+            $this->_modelName = substr(get_called_class(), 0, -6);
+        }
         return $this->_modelName;
     }
     
@@ -788,22 +791,24 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * returns true if filter for a field is set in this group
      *
      * @param string $_field
+     * @param boolean $_recursive
      * @return bool
      */
-    public function isFilterSet($_field)
+    public function isFilterSet($_field, $_recursive = false)
     {
-        $result = FALSE;
-        
         foreach ($this->_filterObjects as $object) {
             if ($object instanceof Tinebase_Model_Filter_Abstract) {
                 if ($object->getField() == $_field) {
-                    $result = TRUE;
-                    break;
+                    return true;
+                }
+            } elseif ($_recursive && $object instanceof Tinebase_Model_Filter_FilterGroup) {
+                if ($object->isFilterSet($_field, $_recursive)) {
+                    return true;
                 }
             }
         }
         
-        return $result;
+        return false;
     }
     
     /**

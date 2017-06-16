@@ -106,12 +106,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
             iconCls: 'action_applyChanges'
         }; 
         
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.fbar.push(yesBtn, noBtn);
-        }
-        else {
-            this.fbar.push(noBtn, yesBtn);
-        }
+        this.fbar.push(noBtn, yesBtn);
     },
     
     onOk: function() {

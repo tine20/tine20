@@ -33,6 +33,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * init component
      */
     initComponent: function () {
+        this.on('load', this.resolveMemberData, this);
+        this.initToolbar();
+
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
             region: "center",
             frame: true,
@@ -45,6 +48,18 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             height: 150
         });
         this.supr().initComponent.apply(this, arguments);
+    },
+
+    initToolbar: function() {
+        this.printButton = new Ext.Action({
+            text: String.format(Tine.Tinebase.appMgr.get('Addressbook').i18n._('Print {0}'), this.recordClass.getMeta('modelName')),
+            handler: this.onPrint,
+            iconCls:'action_print',
+            disabled: false,
+            scope: this
+        });
+
+        this.tbarItems = [this.printButton];
     },
 
     getFormItems: function () {
@@ -176,16 +191,13 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * onRecordLoad
      */
-    onRecordLoad: function () {
-        // NOTE: it comes again and again till
-        if (this.rendered) {
-            this.memberGridPanel.record = this.record;
-            if (this.record.id) {
-                this.memberGridPanel.setMembers();
-                this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
-            }
+    resolveMemberData: function (editDialog, record, ticketFn) {
+        this.memberGridPanel.record = this.record;
+        if (this.record.id) {
+            var ticket = ticketFn();
+            this.memberGridPanel.setMembers(ticket);
+            this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
         }
-        this.supr().onRecordLoad.apply(this, arguments);
     },
 
     /**
@@ -195,6 +207,13 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Addressbook.ListEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.record.set("members", this.memberGridPanel.getMembers());
         this.record.set("memberroles", this.memberGridPanel.getMemberRoles());
+    },
+
+    onPrint: function(printMode) {
+        this.onRecordUpdate();
+
+        var renderer = new Tine.Addressbook.Printer.ListRenderer();
+        renderer.print(this);
     }
 });
 

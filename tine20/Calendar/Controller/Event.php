@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -512,9 +512,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $this->_touch($event);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . " cannot update constraints exdates for event {$event->getId()}: " . $e->getMessage());
+                    . " cannot update constraints exdates for event {$constraintsEventId}: " . $e->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " cannot update constraints exdates for event {$event->getId()}: " . $e);
+                    . " cannot update constraints exdates for event {$constraintsEventId}: " . $e);
             }
         }
     }
@@ -571,40 +571,212 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
     }
-    
-    /**
-     * returns freeTime (suggestions) for given period of given attendee
-     * 
-     * @param  Tinebase_DateTime                                            $_from
-     * @param  Tinebase_DateTime                                            $_until
-     * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
-     * 
-     * ...
-     */
-    public function searchFreeTime($_from, $_until, $_attendee/*, $_constains, $_mode*/)
-    {
-        throw new Tinebase_Exception_NotImplemented();
 
-//        $fbInfoSet = $this->getFreeBusyInfo(array(array('from' => $_from, 'until' => $_until)), $_attendee);
-        
-//        $fromTs = $_from->getTimestamp();
-//        $untilTs = $_until->getTimestamp();
-//        $granularity = 1800;
-//        
-//        // init registry of granularity
-//        $eventRegistry = array_combine(range($fromTs, $untilTs, $granularity), array_fill(0, ceil(($untilTs - $fromTs)/$granularity)+1, ''));
-//        
-//        foreach ($fbInfoSet as $fbInfo) {
-//            $startIdx = $fromTs + $granularity * floor(($fbInfo->dtstart->getTimestamp() - $fromTs) / $granularity);
-//            $endIdx = $fromTs + $granularity * ceil(($fbInfo->dtend->getTimestamp() - $fromTs) / $granularity);
-//            
-//            for ($idx=$startIdx; $idx<=$endIdx; $idx+=$granularity) {
-//                //$eventRegistry[$idx][] = $fbInfo;
-//                $eventRegistry[$idx] .= '.';
-//            }
-//        }
-        
-        //print_r($eventRegistry);
+    /**
+     * @param Calendar_Model_Event $_event with
+     *   attendee to find free timeslot for
+     *   dtstart, dtend -> to calculate duration
+     *   originator_tz needs to be set!
+     *   rrule optional
+     * @param array $_options
+     *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
+     *  'until'        datetime (optional, defaults 2 years) until when to giveup searching
+     *  'constraints'  array    (optional, defaults to 8-20 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR') array of timespecs to limit the search with
+     *     timespec:
+     *       dtstart,
+     *       dtend,
+     *       rrule ... for example "work days" -> 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+     * @return Tinebase_Record_RecordSet record set of event sugestions
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function searchFreeTime($_event, $_options)
+    {
+        // validate $_event, originator_tz will be validated by setTimezone() call
+        if (!isset($_event->dtstart) || !$_event->dtstart instanceof Tinebase_DateTime) {
+            throw new Tinebase_Exception_UnexpectedValue('dtstart needs to be set');
+        }
+        if (!isset($_event->dtstart) || !$_event->dtstart instanceof Tinebase_DateTime) {
+            throw new Tinebase_Exception_UnexpectedValue('dtend needs to be set');
+        }
+        if (!isset($_event->attendee) || !$_event->attendee instanceof Tinebase_Record_RecordSet ||
+                $_event->attendee->count() < 1) {
+            throw new Tinebase_Exception_UnexpectedValue('attendee needs to be set and contain at least one attendee');
+        }
+
+        $_event->setTimezone($_event->originator_tz);
+
+        $from = isset($_options['from']) ? ($_options['from'] instanceof Tinebase_DateTime ? $_options['from'] :
+            new Tinebase_DateTime($_options['from'])) : clone $_event->dtstart;
+        $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
+            new Tinebase_DateTime($_options['until'])) : $_event->dtend->getClone()->addYear(2);
+
+        $from->setTimezone($_event->originator_tz);
+        $until->setTimezone($_event->originator_tz);
+
+        $currentFrom = $from->getClone()->setTime(0, 0, 0);
+        $currentUntil = $from->getClone()->addDay(6)->setTime(23, 59, 59);
+        if ($currentUntil->isLater($until)) {
+            $currentUntil = clone $until;
+        }
+        $durationSec = (int)$_event->dtend->getTimestamp() - (int)$_event->dtstart->getTimestamp();
+        $constraints = new Tinebase_Record_RecordSet('Calendar_Model_Event', array());
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event', array());
+
+        if (isset($_options['constraints'])) {
+            foreach ($_options['constraints'] as $constraint) {
+                if (!isset($constraint['dtstart']) || !isset($constraint['dtend'])) {
+                    // LOG
+                    continue;
+                }
+                $constraint['uid'] = Tinebase_Record_Abstract::generateUID();
+                $event = new Calendar_Model_Event($constraint, true);
+                $event->originator_tz = $_event->originator_tz;
+                $event->setTimezone($_event->originator_tz);
+                $constraints->addRecord($event);
+            }
+        }
+
+        if ($constraints->count() === 0) {
+            //here the timezone will come from the getClone, not need to set it
+            $constraints->addRecord(new Calendar_Model_Event(
+                array(
+                    'uid'           => Tinebase_Record_Abstract::generateUID(),
+                    'dtstart'       => $currentFrom->getClone()->setHour(8)->setMinute(0)->setSecond(0),
+                    'dtend'         => $currentFrom->getClone()->setHour(20)->setMinute(0)->setSecond(0),
+                    'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR',
+                    'originator_tz' => $_event->originator_tz
+                ), true)
+            );
+        }
+
+        do {
+            $currentConstraints = clone $constraints;
+            Calendar_Model_Rrule::mergeRecurrenceSet($currentConstraints, $currentFrom, $currentUntil);
+            $currentConstraints->sort('dtstart');
+            $remove = array();
+
+            // sort out constraints that do not fit the rrule
+            if (!empty($_event->rrule)) {
+                /** @var Calendar_Model_Event $event */
+                foreach ($currentConstraints as $event) {
+                    $recurEvent = clone $_event;
+                    $recurEvent->uid = Tinebase_Record_Abstract::generateUID();
+                    $recurEvent->dtstart = $event->dtstart->getClone()->subDay(1);
+                    $recurEvent->dtend = $recurEvent->dtstart->getClone()->addSecond($durationSec);
+                    if (null === ($recurEvent = Calendar_Model_Rrule::computeNextOccurrence($recurEvent, $exceptions, $event->dtstart))
+                            || $recurEvent->dtstart->isLater($event->dtend)) {
+                        $remove[] = $event;
+                    }
+                }
+                foreach($remove as $event) {
+                    $currentConstraints->removeRecord($event);
+                }
+            }
+
+            if ($currentConstraints->count() > 0) {
+                $periods = array();
+                /** @var Calendar_Model_Event $event */
+                foreach ($currentConstraints as $event) {
+                    $periods[] = array(
+                        'field' => 'period',
+                        'operator' => 'within',
+                        'value' => array(
+                            'from' => $event->dtstart,
+                            'until' => $event->dtend
+                        ),
+                    );
+                }
+
+                $busySlots = $this->getFreeBusyInfo(new Calendar_Model_EventFilter($periods, Tinebase_Model_Filter_FilterGroup::CONDITION_OR), $_event->attendee);
+                $busySlots->sort('dtstart');
+
+                /** @var Calendar_Model_Event $event */
+                foreach ($currentConstraints as $event) {
+                    $constraintStart = (int)$event->dtstart->getTimestamp();
+                    $constraintEnd = (int)$event->dtend->getTimestamp();
+                    $lastBusyEnd = $constraintStart;
+                    $remove = array();
+                    /** @var Calendar_Model_FreeBusy $busy */
+                    foreach ($busySlots as $busy) {
+                        $busyStart = (int)$busy->dtstart->getTimestamp();
+                        $busyEnd = (int)$busy->dtend->getTimestamp();
+
+                        if ($busyEnd < $constraintStart) {
+                            $remove[] = $busy;
+                            continue;
+                        }
+
+                        if ($lastBusyEnd + $durationSec <= $busyStart) {
+                            // check between $lastBusyEnd and $busyStart
+                            $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $busyStart, $durationSec, $until);
+                            if ($result->count() > 0) {
+                                return $result;
+                            }
+                        }
+                        $lastBusyEnd = $busyEnd;
+                        if ($busyStart > $constraintEnd - $durationSec) {
+                            break;
+                        }
+                    }
+                    foreach ($remove as $record) {
+                        $busySlots->removeRecord($record);
+                    }
+
+                    if ($lastBusyEnd + $durationSec <= $constraintEnd) {
+                        // check between $lastBusyEnd and $constraintEnd
+                        $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $constraintEnd, $durationSec, $until);
+                        if ($result->count() > 0) {
+                            return $result;
+                        }
+                    }
+                }
+            }
+
+            $currentFrom->addDay(7);
+            $currentUntil->addDay(7);
+            if ($currentUntil->isLater($until)) {
+                $currentUntil = clone $until;
+            }
+        } while ($until->isLater($currentFrom));
+
+        return new Tinebase_Record_RecordSet('Calendar_Model_Event', array());
+    }
+
+    protected function _tryForFreeSlot(Calendar_Model_Event $_event, $_startSec, $_endSec, $_durationSec, Tinebase_DateTime $_until)
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'dtstart'       => new Tinebase_DateTime($_startSec),
+            'dtend'         => new Tinebase_DateTime($_startSec + $_durationSec),
+            'originator_tz' => $_event->originator_tz
+        ), true);
+        $result = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
+
+        if (!empty($_event->rrule)) {
+            $event->rrule = $_event->rrule;
+            do {
+                $until = $event->dtstart->getClone()->addMonth(2);
+                if ($until->isLater($_until)) {
+                    $until = $_until;
+                }
+                $periods = $this->getBlockingPeriods($event, array(
+                    'from'  => $event->dtstart,
+                    'until' => $until
+                ));
+                $busySlots = $this->getFreeBusyInfo($periods, $_event->attendee);
+                $event->dtstart->addMinute(15);
+                $event->dtend->addMinute(15);
+            } while($busySlots->count() > 0 && $event->dtend->getTimestamp() <= $_endSec && $event->dtend->isEarlierOrEquals($_until));
+
+            if ($busySlots->count() > 0) {
+                $result->removeAll();
+            } else {
+                $event->dtstart->subMinute(15);
+                $event->dtend->subMinute(15);
+            }
+        }
+
+        return $result;
     }
     
     /**
@@ -619,6 +791,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
     {
+        /** @var Calendar_Model_Event $_record */
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -2763,5 +2936,36 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $updateCount;
+    }
+
+    public function sendTentativeNotifications()
+    {
+        $eventNotificationController = Calendar_Controller_EventNotifications::getInstance();
+        $calConfig = Calendar_Config::getInstance();
+        if (true !== $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
+                ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED}) {
+            return;
+        }
+
+        $days = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}->{Calendar_Config::TENTATIVE_NOTIFICATIONS_DAYS};
+        $additionalFilters = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
+            ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_FILTER};
+
+        $filter = array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => Tinebase_DateTime::now(),
+                'until' => Tinebase_DateTime::now()->addDay($days)
+            )),
+            array('field' => 'status', 'operator' => 'equals', 'value' => Calendar_Model_Event::STATUS_TENTATIVE)
+        );
+
+        if (null !== $additionalFilters) {
+            $filter = array_merge($filter, $additionalFilters);
+        }
+
+        $filter = new Calendar_Model_EventFilter($filter);
+        foreach ($this->search($filter) as $event) {
+            $eventNotificationController->doSendNotifications($event, null, 'tentative');
+        }
     }
 }

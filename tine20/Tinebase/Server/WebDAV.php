@@ -53,6 +53,16 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
         
         Tinebase_Core::initFramework();
+
+        if (null !== ($denyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) &&
+                is_array($denyList)) {
+            foreach ($denyList as $deny) {
+                if (preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
+                    header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
+                    return;
+                }
+            }
+        }
         
         if (Tinebase_Controller::getInstance()->login(
             $loginName,

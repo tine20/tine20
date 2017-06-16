@@ -251,27 +251,28 @@ class Tinebase_TagsTest extends TestCase
      * testMergeDuplicateTags
      * 
      * @see 0007354: function for merging duplicate tags
-     *
-     * TODO test should be improved: it is very dependent on the current number of contacts in the adb
      */
     public function testMergeDuplicateTags()
     {
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
-            $this->markTestSkipped('AD setup has different number of contacts');
-        }
-
         $sharedTag1 = $this->_createSharedTag();
         // sleep to make sure, $sharedTag1 is always chosen as 'master'
         sleep(1);
         $sharedTag2 = $this->_createSharedTag();
         
-        $contactIds = Addressbook_Controller_Contact::getInstance()->getAll()->getArrayOfIds();
+        $contactIds = Addressbook_Controller_Contact::getInstance()->search(
+            new Addressbook_Model_ContactFilter(),
+            new Tinebase_Model_Pagination(array(
+                'limit' => 6
+            )))->getArrayOfIds();
+
+        // attach to first 3 contacts
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 0, 3))
         ));
         $sharedTag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag1);
-        $this->assertEquals(3, $sharedTag1->occurrence);
+        self::assertEquals(3, $sharedTag1->occurrence);
 
+        // attach to next 3 contacts
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 3, 3))
         ));
@@ -280,7 +281,7 @@ class Tinebase_TagsTest extends TestCase
         $this->_instance->mergeDuplicateSharedTags('Addressbook_Model_Contact');
         
         $sharedTag1AfterMerge = $this->_instance->get($sharedTag1);
-        $this->assertEquals($sharedTag1->occurrence + 3, $sharedTag1AfterMerge->occurrence,
+        self::assertEquals($sharedTag1->occurrence + 3, $sharedTag1AfterMerge->occurrence,
             'occurrence should have been increased by three: ' . print_r($sharedTag1AfterMerge->toArray(), TRUE));
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_instance->get($sharedTag2);

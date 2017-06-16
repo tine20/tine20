@@ -121,7 +121,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     noteRenderer: function(note) {
         var editDialog = this.findParentBy(function(c){return !!c.record}),
             record = editDialog ? editDialog.record : {},
-            recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model),
+            recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model) || Tine.Tinebase.data.RecordMgr.get(this.app + '_Model_' + this.record_model),
             appName = recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
             i18n = app ? app.i18n : window.i18n;
@@ -227,7 +227,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function () {
-        
+
         // get translations
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Tinebase');

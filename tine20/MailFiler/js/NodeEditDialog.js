@@ -182,6 +182,11 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             appName: this.appName
         });
 
+        var grantsPanel = new Tine.Filemanager.GrantsPanel({
+            app: this.app,
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -299,7 +304,14 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ]
                 }]
             },
-                new Tine.widgets.activities.ActivitiesTabPanel()
+            new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: this.record.id,
+                record_model: 'Tinebase_Model_Tree_Node'
+                }),
+                // TODO include this?
+                //{xtype: 'Tine.Filemanager.UsagePanel'},
+                grantsPanel
             ]
         };
     }

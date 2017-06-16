@@ -7,13 +7,13 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @todo        use export definitions
  */
 
 /**
  * Tinebase Csv Export class
- * 
+ *
  * @package     Tinebase
  * @subpackage    Export
  */
@@ -21,28 +21,28 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
 {
     /**
      * relation types
-     * 
+     *
      * @var array
      */
     protected $_relationsTypes = array();
     
     /**
      * relation subfields
-     * 
+     *
      * @var array
      */
     protected $_relationFields = array();
     
     /**
      * special fields
-     * 
+     *
      * @var array
      */
     protected $_specialFields = array();
     
     /**
      * fields to skip
-     * 
+     *
      * @var array
      */
     protected $_skipFields = array(
@@ -58,31 +58,31 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
     
     /**
      * write export to stdout?
-     * 
+     *
      * @var boolean
      */
-    protected $_toStdout = FALSE;
+    protected $_toStdout = false;
     
     /**
      * format strings
-     * 
+     *
      * @var string
      */
     protected $_format = 'csv';
     
     /**
      * csv filehandle resource
-     * 
+     *
      * @var resource
      */
-    protected $_filehandle = NULL;
+    protected $_filehandle = null;
     
     /**
      * fields
-     * 
+     *
      * @var array
      */
-    protected $_fields = NULL;
+    protected $_fields = null;
     
     /**
      * the constructor

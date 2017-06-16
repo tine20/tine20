@@ -411,6 +411,11 @@ class Setup_Controller
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
         if ($_applications === null) {
             $_applications = Tinebase_Application::getInstance()->getApplications();
         }
@@ -1205,6 +1210,7 @@ class Setup_Controller
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
+            Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER        => 0,
         );
 
         $result = array();
@@ -1394,6 +1400,11 @@ class Setup_Controller
                     $_applications[] = $requiredApp;
                 }
             }
+        } else {
+            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+                Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+            }
         }
         
         // get xml and sort apps first
@@ -1445,7 +1456,7 @@ class Setup_Controller
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+        if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
@@ -1501,6 +1512,11 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
         $this->_clearCache();
 
         $installedApps = Tinebase_Application::getInstance()->getApplications();
@@ -1674,7 +1690,17 @@ class Setup_Controller
 
             if (file_exists($path)) {
                 $fileSystem = Tinebase_FileSystem::getInstance();
-                $templateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath('/Tinebase/folders/shared/' . strtolower($type) . '/templates/' . $_application->name);
+
+                $basepath = $fileSystem->getApplicationBasePath(
+                    'Tinebase',
+                    Tinebase_FileSystem::FOLDER_TYPE_SHARED
+                ) . '/' . strtolower($type);
+
+                if (false === $fileSystem->isDir($basepath)) {
+                    $fileSystem->createAclNode($basepath);
+                }
+
+                $templateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath($basepath . '/templates/' . $_application->name);
 
                 if (! $fileSystem->isDir($templateAppPath->statpath)) {
                     $fileSystem->mkdir($templateAppPath->statpath);
@@ -1994,7 +2020,8 @@ class Setup_Controller
         $cache = Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
         Tinebase_Application::getInstance()->resetClassCache();
-        
+        Tinebase_Cache_PerRequest::getInstance()->reset();
+
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }

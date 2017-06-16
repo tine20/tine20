@@ -282,48 +282,22 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
         }});
 
-        // deep links
-        if (window.location.hash) {
-            var route = Tine.Tinebase.router.getRoute();
+        var route = Tine.Tinebase.router.getRoute(),
+            winConfig = Ext.ux.PopupWindowMgr.get(window);
 
-            // init the app
-            Tine.Tinebase.ApplicationStarter.init();
-            Tine.Tinebase.appMgr.getAll();
+        Tine.Tinebase.ApplicationStarter.init();
+        Tine.Tinebase.appMgr.getAll();
 
+        if (winConfig) {
+            var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+                card = Tine.WindowFactory.getCenterPanel(winConfig);
+
+            mainCardPanel.add(card);
+            mainCardPanel.layout.setActiveItem(card.id);
+            card.doLayout();
+        } else {
             Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
-            return;
         }
-
-        /**
-         * register MainWindow
-         */
-        else if (window.isMainWindow) {
-            Ext.ux.PopupWindowMgr.register({
-                name: window.name,
-                popup: window,
-                contentPanelConstructor: 'Tine.Tinebase.MainScreenPanel'
-            });
-        }
-
-        Tine.log.info('renderWindow::before get window');
-        
-        // fetch window config from WindowMgr
-        var c = Ext.ux.PopupWindowMgr.get(window) || {};
-        
-        // set window title
-        window.document.title = Ext.util.Format.stripTags(c.title ? c.title : window.document.title);
-        
-        Tine.log.info('renderWindow::getCenterPanel');
-        
-        // finally render the window contents in a new card
-        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
-            card = Tine.WindowFactory.getCenterPanel(c);
-
-        mainCardPanel.add(card);
-        mainCardPanel.layout.setActiveItem(card.id);
-        card.doLayout();
-        
-        window.initializationComplete = true;
     },
 
     initAjax: function () {
@@ -825,11 +799,6 @@ Tine.Tinebase.tineInit = {
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
-
-        // init ApplicationStarter on Ext window once
-        if (windowType == 'Ext') {
-            Tine.Tinebase.ApplicationStarter.init();
-        }
     },
     /**
      * initialise state provider

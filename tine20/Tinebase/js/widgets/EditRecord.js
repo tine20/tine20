@@ -204,13 +204,9 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         ];
         
         this.buttons = [];
-        
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
-            this.buttons.push(this.action_saveAndClose, this.action_cancel);
-        }
-        else {
-            this.buttons.push(this.action_cancel, this.action_saveAndClose);
-        }
+
+        this.buttons.push(this.action_cancel, this.action_saveAndClose);
+
        
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({

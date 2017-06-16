@@ -541,6 +541,14 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, {
                 name: 'password_pwPolicyMinNumbers',
                 fieldLabel: this.app.i18n._('Minimum numbers')
+            }, {
+                name: 'password_pwPolicyChangeAfter',
+                fieldLabel: this.app.i18n._('Change password after ... days'),
+                strategy: {
+                    xtype: 'number',
+                    minValue: 0,
+                    maxValue: 365
+                },
             },
             Ext.applyIf({
                 name: 'password_pwPolicyForbidUsername',

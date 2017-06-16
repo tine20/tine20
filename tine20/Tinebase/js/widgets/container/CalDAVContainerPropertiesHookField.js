@@ -44,9 +44,10 @@ Tine.widgets.container.CalDAVContainerPropertiesHookField = Ext.extend(Ext.form.
         }
         
         this.hidden = ! this.hasCalDAVSupport;
+
         // calDAV URL
         this.value = [
-            window.location.href.replace(/\/?(index\.php.*)?$/, ''),
+            Tine.Tinebase.common.getUrl('full').replace(/\/$/, ''), // might have an trailing /, we can safely remove it!
             '/calendars/',
             Tine.Tinebase.registry.get('currentAccount').contact_id,
             '/',

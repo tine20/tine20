@@ -489,9 +489,9 @@ class Tinebase_Relations
                 . ' Relation: ' . print_r($_relation->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
         }
-        
+
         $appController = Tinebase_Core::getApplicationInstance($_relation->related_model);
-        
+
         if (! $_relation->related_record->getId()) {
             $method = 'create';
         } else {
@@ -503,10 +503,18 @@ class Tinebase_Relations
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Relation: ' . print_r($_relation->toArray(), TRUE));
 
-        /** @var Tinebase_Record_Interface $record */
-        $record = $appController->$method($_relation->related_record, $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
-        $_relation->related_id = $record->getId();
-        
+        if ($method === 'update' && $appController->doContainerACLChecks()
+            && ! Tinebase_Core::getUser()->hasGrant($_relation->related_record->container_id, Tinebase_Model_Grants::GRANT_EDIT)
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Don\'t update related record because user has no update grant');
+        } else {
+            /** @var Tinebase_Record_Interface $record */
+            $record = $appController->$method($_relation->related_record,
+                $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
+            $_relation->related_id = $record->getId();
+        }
+
         switch ($_relation->related_model) {
             case 'Addressbook_Model_Contact':
                 $_relation->related_backend = ucfirst(Addressbook_Backend_Factory::SQL);
@@ -564,7 +572,7 @@ class Tinebase_Relations
         }
 
         /** @var Tinebase_Record_RecordSet $records */
-        
+
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
             

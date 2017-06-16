@@ -423,13 +423,21 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->createTable('path', $declaration, 'Tinebase', 2);
 
-        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if ($setupUser) {
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-            Tinebase_Controller::getInstance()->rebuildPaths();
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+        try {
+            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            if ($setupUser) {
+                Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+                Tinebase_Controller::getInstance()->rebuildPaths();
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+                }
+            }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Skipping rebuildPaths: you might need to run this manually.');
         }
 
         $this->setApplicationVersion('Tinebase', '10.10');
@@ -1022,6 +1030,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>integer</type>
                     <length>64</length>
                     <notnull>true</notnull>
+                    <default>0</default>
                 </field>');
             $this->_backend->addCol('tree_filerevisions', $declaration);
             $this->setTableVersion('tree_filerevisions', 2);
@@ -1036,6 +1045,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_23()
     {
+        $this->_addNotificationProps();
+        
         // get all folder nodes with own acl
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
@@ -1076,6 +1087,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_24()
     {
+        $this->_addNotificationProps();
+        $this->setApplicationVersion('Tinebase', '10.25');
+    }
+
+    protected function _addNotificationProps()
+    {
         if (! $this->_backend->columnExists('notificationProps', 'tree_nodes')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
@@ -1087,7 +1104,65 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->_backend->addCol('tree_nodes', $declaration);
             $this->setTableVersion('tree_nodes', 3);
         }
+    }
 
-        $this->setApplicationVersion('Tinebase', '10.25');
+    /**
+     * update to 10.26
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_25()
+    {
+        if (! $this->_backend->columnExists('scope', 'importexport_definition')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>scope</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $this->_backend->addCol('importexport_definition', $declaration);
+
+            $this->setTableVersion('importexport_definition', 10);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.26');
+    }
+
+    /**
+     * update to 10.27
+     *
+     * change role_accounts id to uuid
+     */
+    public function update_26()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+        $this->_backend->alterCol('role_accounts', $declaration);
+
+        $this->setTableVersion('role_accounts', 4);
+        $this->setApplicationVersion('Tinebase', '10.27');
+    }
+
+    /**
+     * update to 10.28
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_27()
+    {
+        if (! $this->_backend->columnExists('format', 'importexport_definition')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>format</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $this->_backend->addCol('importexport_definition', $declaration);
+
+            $this->setTableVersion('importexport_definition', 11);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.28');
     }
 }

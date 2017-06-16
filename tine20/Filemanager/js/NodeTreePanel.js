@@ -33,7 +33,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         this.on('nodedragover', this.onNodeDragOver, this);
 
         if (! this.app) {
-            this.app = Tine.Tinebase.appMgr.get('Filemanager');
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }
 
         if (this.readOnly) {
@@ -58,7 +58,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         this.plugins = this.plugins || [];
 
-        if (!this.readOnly) {
+        if (!this.readOnly && this.enableDD) {
             this.plugins.push({
                 ptype : 'ux.browseplugin',
                 enableFileDialog: false,
@@ -69,7 +69,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         postal.subscribe({
             channel: "recordchange",
-            topic: 'Filemanager.Node.*',
+            topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
         });
     },
@@ -80,7 +80,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 path = data.path,
                 parentPath = path.replace(new RegExp(data.name + '$'), ''),
                 node = this.getNodeById(data.id),
-                pathChange = node && node.attributes.nodeRecord.get('path') != path;
+                pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
             if (node && e.topic.match(/\.delete/)) {
                 try {
@@ -259,14 +259,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         }
 
         var params = {
-            method: 'Filemanager.searchNodes',
+            method: this.recordClass.getMeta('appName') + '.searchNodes',
             application: this.app.appName,
             owner: owner,
             filter: [
                      {field: 'path', operator:'equals', value: newPath},
                      {field: 'type', operator:'equals', value: 'folder'}
                      ],
-            paging: {dir: 'ASC', limit: 50, sort: 'name', start: 0}
+            paging: {dir: 'ASC', sort: 'name'}
         };
 
         return params;
@@ -290,14 +290,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
 
     /**
-     * initiates tree context menues
+     * initiates tree context menus
      *
      * @private
      */
     initContextMenu: function() {
         this.ctxMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             actionMgr: Tine.Filemanager.nodeActionsMgr,
-            nodeName: Tine.Filemanager.Model.Node.getContainerName(),
+            nodeName: this.recordClass.getContainerName(),
             actions: ['reload', 'createFolder', 'delete', 'rename', 'move', 'edit', 'publish'],
             scope: this,
             backend: 'Filemanager',
@@ -318,14 +318,13 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Ext.EventObject} event
      */
     onContextMenu: function(node, event) {
-        Tine.log.debug('Tine.Filemanager.NodeTreePanel::onContextMenu - context node:');
         Tine.log.debug(node);
 
         // legacy for reload action
         this.ctxNode = node;
 
         //@TODO implement selection vs ctxNode if multiselect is allowed
-        var record = new Tine.Filemanager.Model.Node(node.attributes.nodeRecord.data);
+        var record = new this.recordClass(node.attributes.nodeRecord.data);
         this.actionUpdater.updateActions([record]);
 
         this.ctxMenu.showAt(event.getXY());
@@ -342,7 +341,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var grid = this.app.getMainScreen().getCenterPanel(),
             gridSelectionModel = grid.selectionModel,
             actionUpdater = grid.actionUpdater,
-            record = node ? new Tine.Filemanager.Model.Node(window.lodash.get(node, 'attributes.nodeRecord.data')) : null,
+            record = node ? new this.recordClass(window.lodash.get(node, 'attributes.nodeRecord.data')) : null,
             selection = record ? [record] : [];
 
         grid.currentFolderNode = node;
@@ -466,8 +465,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 nodeName = nodeName.name;
             }
 
-            var nodeData = Ext.copyTo({}, node.data, Tine.Filemanager.Model.Node.getFieldNames());
-            var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
+            var nodeData = Ext.copyTo({}, node.data, this.recordClass.getFieldNames());
+            var newNodeRecord = new this.recordClass(nodeData);
 
             newPath = targetPath + '/' + nodeName;
             copy = new Ext.tree.AsyncTreeNode({text: nodeName, path: newPath, name: node.data.name
@@ -521,6 +520,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             addToGridStore = false;
 
         Ext.each(files, function (file) {
+            if ("" === file.type) {
+                return true;
+            }
 
             var fileName = file.name || file.fileName,
                 filePath = targetNodePath + '/' + fileName;
@@ -540,6 +542,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             addToGridStore = grid.currentFolderNode.id === targetNodeId;
 
         }, this);
+
+        if (0 === uploadKeyArray.length) {
+            return;
+        }
 
         var params = {
                 filenames: filePathsArray,

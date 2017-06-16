@@ -257,6 +257,8 @@ class Tinebase_ModelConfiguration {
     /**
      * If this is true, multiple edit of records of this model is possible.
      *
+     * @todo add this to a "frontend configuration / uiConfig"
+     *
      * @var boolean
      */
     protected $_multipleEdit = NULL;
@@ -271,7 +273,7 @@ class Tinebase_ModelConfiguration {
     /**
      * if this is set to true, this model will be added to the global add splitbutton
      *
-     * @todo add this to a "frontend configuration"
+     * @todo add this to a "frontend configuration / uiConfig"
      * 
      * @var boolen
      */
@@ -698,13 +700,13 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig',
-        'hasPersonalContainer', 'copyOmitFields', 'import', 'export'
+        'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule',
+        'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton',
+        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group',
     );
 
     /**
-     * the module group (will be on the same leaf of the content type tree panel)
+     * the module group (will be on the same leaf of the content type tree panel
      * 
      * @var string
      */
@@ -803,7 +805,18 @@ class Tinebase_ModelConfiguration {
     );
 
     /**
+     * If this is true, copy of records of this model is possible.
+     *
+     * @todo add this to a "frontend configuration / uiConfig"
+     *
+     * @var boolean
+     */
+    protected $_copyEditAction = null;
+
+    /**
      * Collection of copy omit properties for frontend
+     *
+     * @todo add this to a "frontend configuration / uiConfig"
      *
      * @var array
      */

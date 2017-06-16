@@ -34,7 +34,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @cfg {Tine.Timetracker.Model.Timesheet} recordClass
      */
     recordClass: Tine.Timetracker.Model.Timesheet,
-    
+
     /**
      * @private grid cfg
      */
@@ -223,7 +223,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                     break;
                                 default:
                                     value += type;
-                            }                           
+                            }
                         } else {
                             value = Ext.util.Format.htmlEncode(value);
                         }
@@ -239,7 +239,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             })
         });
     },
-    
+
     /**
      * @private
      */
@@ -269,7 +269,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
 
-        this.actions_exportTimesheet = new Ext.Action({
+        this.actions_export = new Ext.Action({
             text: this.app.i18n._('Export Timesheets'),
             iconCls: 'action_export',
             scope: this,
@@ -306,7 +306,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportTimesheet,
+            this.actions_export,
             this.actions_massQuickTag
         ]);
         
@@ -372,7 +372,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // By default disallow export, this apply for example, if there is no selection yet
         // E.g. filter changes and so on
         var exportGrant = false;
-        
+
         // We need to go through all timeaccounts and check if the user is trying to export a timesheet of a timeaccount
         // where he has no permission to export.
         Ext.each(records, function (record) {
@@ -380,7 +380,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var c = timeaccount.container_id;
             if (c.hasOwnProperty('account_grants')) {
                 var grants = c.account_grants;
-                
+
                 if (!grants.exportGrant) {
                     exportGrant = false;
 
@@ -392,27 +392,12 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             }
         });
-        
+
         var disable = !exportGrant;
         action.setDisabled(disable);
-        
+
         // stop further events
         return false;
-    },
-
-    /**
-     * add custom items to action toolbar
-     * 
-     * @return {Object}
-     */
-    getActionToolbarItems: function() {
-        return [
-            Ext.apply(new Ext.Button(this.actions_exportTimesheet), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            })
-        ];
     },
     
     /**
@@ -424,7 +409,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var items = [
             '-',
             this.actions_massQuickTag,
-            this.actions_exportTimesheet
+            this.actions_export
         ];
         
         return items;

@@ -48,68 +48,71 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                => array(
+        'query'                 => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('name', 'content', 'description'))
         ),
-        'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
-        'parent_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'path'                  => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
+        'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
     // tree_fileobjects table
-        'last_modified_time'   => array(
+        'last_modified_time'    => array(
             'filter' => 'Tinebase_Model_Filter_Date',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'deleted_time'         => array(
+        'deleted_time'          => array(
             'filter' => 'Tinebase_Model_Filter_DateTime',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'creation_time'        => array(
+        'creation_time'         => array(
             'filter' => 'Tinebase_Model_Filter_Date',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'last_modified_by'     => array(
+        'last_modified_by'      => array(
             'filter' => 'Tinebase_Model_Filter_User',
             'options' => array('tablename' => 'tree_fileobjects'
         )),
-        'created_by'           => array(
+        'created_by'            => array(
             'filter' => 'Tinebase_Model_Filter_User',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'type'                 => array(
+        'type'                  => array(
             'filter' => 'Tinebase_Model_Filter_Text', 
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'contenttype'          => array(
+        'contenttype'           => array(
             'filter' => 'Tinebase_Model_Filter_Text',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
-        'description'          => array(
+        'description'           => array(
             'filter' => 'Tinebase_Model_Filter_FullText',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
     // tree_filerevisions table
-        'size'                 => array(
+        'size'                  => array(
             'filter' => 'Tinebase_Model_Filter_Int',
             'options' => array('tablename' => 'tree_filerevisions')
         ),
     // recursive search
-        'recursive'            => array(
+        'recursive'             => array(
             'filter' => 'Tinebase_Model_Filter_Bool'
         ),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'tree_nodes.id',
             'applicationName' => 'Tinebase',
         )),
     // fulltext search
-        'content'              => array(
-            'filter'            => 'Tinebase_Model_Filter_ExternalFullText',
-            'options'           => array(
-                'idProperty' => 'object_id',
+        'content'               => array(
+            'filter'                => 'Tinebase_Model_Filter_ExternalFullText',
+            'options'               => array(
+                'idProperty'            => 'object_id',
             )
         ),
+        'isIndexed'             => array(
+            'filter'                => 'Tinebase_Model_Tree_Node_IsIndexedFilter',
+        )
     );
 
     /**

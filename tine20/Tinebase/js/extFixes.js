@@ -173,6 +173,80 @@ Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
 });
 
 /**
+ * Expand offers a deep parameter to also expand all children as well as a callback function.
+ * Before the callback was triggered after the first children were loaded now the callback is triggered when all children
+ * are loaded of all nodes!
+ */
+Ext.override(Ext.tree.AsyncTreeNode, {
+    expand: function (deep, anim, callback, scope) {
+        if (this.loading) { // if an async load is already running, waiting til it's done
+            var timer;
+            var f = function () {
+                if (!this.loading) { // done loading
+                    clearInterval(timer);
+                    this.expand(deep, anim, callback, scope);
+                }
+            }.createDelegate(this);
+            timer = setInterval(f, 200);
+            return;
+        }
+        if (!this.loaded) {
+            if (this.fireEvent("beforeload", this) === false) {
+                return;
+            }
+            this.loading = true;
+            this.ui.beforeLoad(this);
+            var loader = this.loader || this.attributes.loader || this.getOwnerTree().getLoader();
+            if (loader) {
+                loader.load(this, this.loadComplete.createDelegate(this, [deep, anim, callback, scope]), this);
+                return;
+            }
+        }
+
+        if (!this.expanded) {
+            if (this.fireEvent('beforeexpand', this, deep, anim) === false) {
+                return;
+            }
+            if (!this.childrenRendered) {
+                this.renderChildren();
+            }
+            this.expanded = true;
+            if (!this.isHiddenRoot() && (this.getOwnerTree().animate && anim !== false) || anim) {
+                this.ui.animExpand(function () {
+                    this.fireEvent('expand', this);
+
+                    this.expandChildNodesCallback(deep, anim, callback, scope);
+                }.createDelegate(this));
+                return;
+            } else {
+                this.ui.expand();
+                this.fireEvent('expand', this);
+                this.runCallback(callback, scope || this, [this]);
+            }
+        } else {
+            this.runCallback(callback, scope || this, [this]);
+        }
+        if (deep === true) {
+            this.expandChildNodesCallback(deep, anim, callback, scope);
+        }
+    },
+
+    expandChildNodesCallback: function (deep, anim, callback, scope) {
+        var ticketFn = this.runCallback.deferByTickets(this, [callback, scope || this, [this]], false);
+        var wrapTicket = ticketFn();
+
+        if (deep === true) {
+            var cs = this.childNodes;
+            for(var i = 0, len = cs.length; i < len; i++) {
+                cs[i].expand(deep, anim, ticketFn());
+            }
+        }
+
+        wrapTicket();
+    }
+});
+
+/**
  * fix timezone handling for date picker
  * 
  * The getValue function always returns 00:00:00 as time. So if a form got filled
@@ -704,3 +778,40 @@ Ext.util.CSS = function(){
         }
     };
 }();
+
+// don't apply plugins to the menu, apply them only to the datepicker
+Ext.override(Ext.menu.DateMenu, {
+    initComponent : function(){
+        this.on('beforeshow', this.onBeforeShow, this);
+        if(this.strict = (Ext.isIE7 && Ext.isStrict)){
+            this.on('show', this.onShow, this, {single: true, delay: 20});
+        }
+        Ext.apply(this, {
+            plain: true,
+            showSeparator: false,
+            items: this.picker = new Ext.DatePicker(Ext.applyIf({
+                internalRender: this.strict || !Ext.isIE,
+                ctCls: 'x-menu-date-item',
+                id: this.pickerId
+            }, this.initialConfig))
+        });
+
+        // remove plugins from menu itself
+        this.plugins = [];
+
+        this.picker.purgeListeners();
+        Ext.menu.DateMenu.superclass.initComponent.call(this);
+        /**
+         * @event select
+         * Fires when a date is selected from the {@link #picker Ext.DatePicker}
+         * @param {DatePicker} picker The {@link #picker Ext.DatePicker}
+         * @param {Date} date The selected date
+         */
+        this.relayEvents(this.picker, ['select']);
+        this.on('show', this.picker.focus, this.picker);
+        this.on('select', this.menuHide, this);
+        if(this.handler){
+            this.on('select', this.handler, this.scope || this);
+        }
+    }
+});

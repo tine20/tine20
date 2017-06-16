@@ -30,7 +30,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * @var boolean
      */
     protected $_doContainerACLChecks = TRUE;
-    
+
+    /**
+     * @see Tinebase_Controller_Record_Abstract
+     *
+     * @var boolean
+     */
+    protected $_resolveCustomFields = TRUE;
+
     /**
      * @var Calendar_Controller_Resource
      */
