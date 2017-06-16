@@ -206,6 +206,10 @@
         {
           "text": "CalendarPanelSplitPlugin.js",
           "path": "js/"
+        },
+        {
+          "text": "RruleFilter.js",
+          "path": "js/"
         }
       ]
     },

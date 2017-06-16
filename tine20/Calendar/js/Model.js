@@ -352,7 +352,11 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
             keyfieldName: 'attendeeRoles'
         },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
-        {filtertype: 'tinebase.tag', app: app}
+        {filtertype: 'tinebase.tag', app: app},
+        {
+            filtertype: 'calendar.rrule',
+            app: app
+        }
     ];
 };
 
