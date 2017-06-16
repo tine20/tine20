@@ -361,7 +361,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
         ));
         $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,FR';
-        $event->originator_tz = $event->dtstart->getTimezone()->getName();
 
         $options = array(
             'constraints' => array(array(

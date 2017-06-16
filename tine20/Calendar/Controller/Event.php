@@ -576,7 +576,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Event $_event with
      *   attendee to find free timeslot for
      *   dtstart, dtend -> to calculate duration
-     *   originator_tz needs to be set!
      *   rrule optional
      * @param array $_options
      *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
@@ -603,15 +602,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             throw new Tinebase_Exception_UnexpectedValue('attendee needs to be set and contain at least one attendee');
         }
 
-        $_event->setTimezone($_event->originator_tz);
+        if (empty($_event->originator_tz)) {
+            $_event->originator_tz = Tinebase_Core::getUserTimezone();
+        }
 
         $from = isset($_options['from']) ? ($_options['from'] instanceof Tinebase_DateTime ? $_options['from'] :
             new Tinebase_DateTime($_options['from'])) : clone $_event->dtstart;
         $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
             new Tinebase_DateTime($_options['until'])) : $_event->dtend->getClone()->addYear(2);
-
-        $from->setTimezone($_event->originator_tz);
-        $until->setTimezone($_event->originator_tz);
 
         $currentFrom = $from->getClone()->setTime(0, 0, 0);
         $currentUntil = $from->getClone()->addDay(6)->setTime(23, 59, 59);
@@ -629,9 +627,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     continue;
                 }
                 $constraint['uid'] = Tinebase_Record_Abstract::generateUID();
-                $event = new Calendar_Model_Event($constraint, true);
+                $event = new Calendar_Model_Event(array(), true);
+                $event->setFromJsonInUsersTimezone($constraint);
                 $event->originator_tz = $_event->originator_tz;
-                $event->setTimezone($_event->originator_tz);
                 $constraints->addRecord($event);
             }
         }
@@ -748,7 +746,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'dtstart'       => new Tinebase_DateTime($_startSec),
             'dtend'         => new Tinebase_DateTime($_startSec + $_durationSec),
-            'originator_tz' => $_event->originator_tz
+            'originator_tz' => $_event->originator_tz,
         ), true);
         $result = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
 
