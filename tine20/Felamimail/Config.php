@@ -66,6 +66,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID = 'emailNotificationTemplatesContainerId';
 
     /**
+     * allow only sieve redirect rules to internal (primary/secondary) email addresses
+     *
+     * @var string
+     */
+    const SIEVE_REDIRECT_ONLY_INTERNAL = 'sieveRedirectOnlyInternal';
+
+    /**
      * user can set custom vacation message
      *
      * @var string
@@ -174,6 +181,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
             'default'               => null,
+        ),
+        self::SIEVE_REDIRECT_ONLY_INTERNAL => array(
+            //_('Sieve Redirect Only Internal')
+            'label'                 => 'Sieve Redirect Only Internal',
+            // _('Allow only sieve redirect rules to internal (primary/secondary) email addresses')
+            'description'           => 'Allow only sieve redirect rules to internal (primary/secondary) email addresses',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => false,
         ),
     );
     
