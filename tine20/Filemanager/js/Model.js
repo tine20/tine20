@@ -370,8 +370,8 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         
         var onFailure = (function(response, request) {
             
-            var nodeData = Ext.util.JSON.decode(response.responseText),
-                request = Ext.util.JSON.decode(request.jsonData);
+            var nodeData = Ext.util.JSON.decode(response.responseText);
+            request = Ext.util.JSON.decode(request.jsonData);
             
             nodeData.data.uploadKey = this.uploadKey;
             nodeData.data.addToGridStore = this.addToGridStore;
@@ -534,7 +534,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         Ext.Ajax.request({
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
             params: {
-                method: this.appName + '.createNode',
+                method: proxy.appName + '.createNode',
                 filename: upload.id,
                 type: 'file',
                 tempFileId: file.get('id'),
