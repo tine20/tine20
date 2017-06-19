@@ -52,7 +52,12 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     public function run()
     {
-        if ('Tinebase_ActionQueue_Backend_Direct' === Tinebase_ActionQueue::getInstance()->getBackendType()) {
+        $actionQueueConfig = Tinebase_Core::getConfig()->getConfigFileSection(Tinebase_Config::ACTIONQUEUE);
+        if (!is_array($actionQueueConfig) || !isset($actionQueueConfig[Tinebase_Config::ACTIONQUEUE]) ||
+                !is_array($actionQueueConfig[Tinebase_Config::ACTIONQUEUE]) ||
+                !isset($actionQueueConfig[Tinebase_Config::ACTIONQUEUE][Tinebase_Config::ACTIONQUEUE_BACKEND]) ||
+                'redis' !== strtolower(
+                    $actionQueueConfig[Tinebase_Config::ACTIONQUEUE][Tinebase_Config::ACTIONQUEUE_BACKEND])) {
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Tinebase_ActionQueue_Backend_Direct used. There is nothing to do for the worker! Configure Redis backend for example if you want to make use of the worker.');
             exit(1);
         }
