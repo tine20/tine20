@@ -166,7 +166,7 @@ Tine.Addressbook.ContactGridPanel.contactTypeRenderer = function(data, cell, rec
 
 Tine.Addressbook.ContactGridPanel.displayNameRenderer = function(data) {
     var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
-    return data ? data : ('<div class="renderer_displayNameRenderer_noName">' + i18n._('No name') + '</div>');
+    return data ?  Tine.Tinebase.EncodingHelper.encode(data) : ('<div class="renderer_displayNameRenderer_noName">' + i18n._('No name') + '</div>');
 };
 
 Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
