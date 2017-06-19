@@ -710,6 +710,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         $roleMemberships    = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($accountId);
+        // enforce string for pgsql
+        array_walk($roleMemberships, function(&$item) {$item = (string)$item;});
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
