@@ -33,14 +33,7 @@ class Addressbook_LdapSyncTest extends TestCase
     {
         parent::setUp();
 
-        $ldapOptions = array(
-            'host' => 'localhost',
-            'port' => 389,
-            'username' => 'cn=Manager,dc=example,dc=org',
-            'password' => 'tine20',
-            'bindRequiresDn' => true,
-            'baseDn' => 'dc=example,dc=org'
-        );
+        $ldapOptions = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->toArray();
 
         $this->_oldSyncBackendsConfig = Addressbook_Config::getInstance()->get('syncBackends');
         Addressbook_Config::getInstance()->set('syncBackends', array(
