@@ -524,6 +524,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_BACKEND = 'backend';
+    const ACTIONQUEUE_ACTIVE = 'active';
 
 
     /**
@@ -776,12 +777,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'Direct'
                 ),
+                self::ACTIONQUEUE_ACTIVE       => array(
+                    'type'                              => Tinebase_Config::TYPE_BOOL,
+                    'default'                           => false
+                ),
             ),
             'default'                           => array()
         ),
-        /*const ACTIONQUEUE = 'actionqueue';
-    const ACTIONQUEUE_ACTIVE = 'active';
-    const ACTIONQUEUE_BACKEND = 'backend';*/
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',

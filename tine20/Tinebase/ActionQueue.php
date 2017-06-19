@@ -83,12 +83,13 @@
         $config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
 
         /** @noinspection PhpUndefinedFieldInspection */
-        if ($config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND})) {
+        if ($config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND}) && $config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             /** @noinspection PhpUndefinedFieldInspection */
             $options = $config->toArray();
             
             $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower($options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
             unset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]);
+            unset($options[Tinebase_Config::ACTIONQUEUE_ACTIVE]);
         }
         
         $className = 'Tinebase_ActionQueue_Backend_' . $backend;
