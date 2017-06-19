@@ -396,9 +396,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
             $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
             $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-            if (empty($groupMemberships)) {
-                throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
-            }
             
             $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
         } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
@@ -419,7 +416,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             ->where($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND ' 
                 . $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', $type));
         
-        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && !empty($groupMemberships)) {
             $select->orWhere($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND '
                 .  $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
         }
