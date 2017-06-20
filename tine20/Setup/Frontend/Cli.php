@@ -383,6 +383,12 @@ class Setup_Frontend_Cli
      * Update Import Export Definitions for all applications
      */
     protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts){
+
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+
         //get all applications
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         foreach ($applications as $application) {
