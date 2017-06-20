@@ -37,6 +37,23 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $this->_body = fopen('php://temp', 'r+');
             fwrite($this->_body, $request->getContent());
             rewind($this->_body);
+            /*
+             * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
+             * client sends empty request instead empty xml-sceleton -> inject it here
+             */
+            $broken_user_agent_preg = '/^Microsoft-WebDAV-MiniRedir\/[6,10]/';
+            if (isset($_SERVER['HTTP_USER_AGENT']) && (preg_match($broken_user_agent_preg, $_SERVER['HTTP_USER_AGENT']) === 1) ) {
+                if ($request->getContent() == '') {
+                    $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
+                    $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/><D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
+                    $broken_user_agent_body.= '</D:prop></D:propfind>';
+                    fwrite($this->_body, $broken_user_agent_body);
+                    rewind($this->_body);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
+                        $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
+                }
+            }
         }
         
         try {
