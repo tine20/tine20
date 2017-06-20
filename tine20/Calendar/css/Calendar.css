@@ -292,13 +292,14 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-fbinfo-state {
-    min-width: 20px;
-    min-height: 20px;
+    min-width: 16px;
+    min-height: 16px;
     background-repeat: no-repeat;
+    opacity: 0.3;
 }
 
 .cal-fbinfo-state-free {
-    background-image:url(../../images/oxygen/16x16/actions/ok.png) !important;
+    background-image:url(../../images/oxygen/16x16/status/user-online.png) !important;
 }
 
 .cal-fbinfo-state-tentative {
@@ -306,9 +307,15 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-fbinfo-state-busy {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
+    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
 }
 
 .cal-fbinfo-state-unavailable {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-error.png) !important;
+    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
+}
+
+.x-grid3-cell .x-grid3-col-fbInfo {
+    padding-left: 2px;
+    padding-top: 1px;
+    padding-bottom: 0px;
 }

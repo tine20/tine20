@@ -39,14 +39,6 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
     onBeforeLoad: function(store, options) {
         Tine.Calendar.AttendeePickerCombo.superclass.onBeforeLoad.call(this, store, options);
 
-        // options.params._filter = [
-        //     {field: 'query', operator: 'contains', value: this.getRawValue()}
-        //     // {field: 'type', operator: 'contains', value: this.getRawValue()}
-        //     // {field: 'userFilter', value: this.getRawValue()}
-        //     // {field: 'groupFilter', value: this.getRawValue()}
-        //     // {field: 'resourceFilter', value: this.getRawValue()}
-        // ];
-
         var _ = window.lodash;
         options.params.ignoreUIDs = [];
         if (_.get(this, 'eventRecord.data.dtstart')) {
@@ -55,7 +47,6 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                 options.params.ignoreUIDs.push(this.eventRecord.get('uid'));
             }
         }
-
     },
 
     readRecords : function(resultData){

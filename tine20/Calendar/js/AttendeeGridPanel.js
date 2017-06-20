@@ -231,6 +231,19 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             renderer: this.renderAttenderName.createDelegate(this),
             editor: true
         }, {
+            id: 'fbInfo',
+            dataIndex: 'fbInfo',
+            width: 20,
+            hidden: this.showNamesOnly,
+            header: '&nbsp',
+            tooltip: this.app.i18n._('Availability of Attendee'),
+            fixed: true,
+            sortable: false,
+            renderer: function(v, m, r) {
+                // NOTE: already encoded
+                return r.get('user_id') ? v : '';
+            }
+        }, {
             id: 'status',
             dataIndex: 'status',
             width: 100,
@@ -249,7 +262,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onEditComplete: function(ed, value, startValue) {
         var _ = window.lodash,
             attendeeData = _.get(ed, 'field.selectedRecord.data.user_id'),
-            type = _.get(ed, 'field.selectedRecord.data.user_type');
+            type = _.get(ed, 'field.selectedRecord.data.user_type'),
+            fbInfo = _.get(ed, 'field.selectedRecord.data.fbInfo');
 
         // attendeePickerCombo
         if (attendeeData && type) {
@@ -282,6 +296,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             } else {
                 value = attendeeData;
                 ed.record.set('user_type', type.replace(/^sel_/, ''));
+                ed.record.set('fbInfo', fbInfo);
                 ed.record.commit();
             }
         }
@@ -381,58 +396,18 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (o.field == 'user_id') {
             // switch editor
-            var colModel = o.grid.getColumnModel();
-            switch(o.record.get('user_type')) {
-                case 'user' :
-                colModel.config[o.column].setEditor(new Tine.Addressbook.SearchCombo({
-                    allowBlank: true,
-                    blurOnSelect: true,
-                    selectOnFocus: true,
-                    forceSelection: false,
-                    renderAttenderName: this.renderAttenderName,
-                    // sort by type (users first)
-                    sortBy: 'type',
-                    sortDir: 'DESC',
-                    
-                    getValue: function() {
-                        var value = this.selectedRecord ? this.selectedRecord.data : ((this.getRawValue() && Ext.form.VTypes.email(this.getRawValue())) ? this.getRawValue() : null);
-                        return value;
-                    }
-                }));
-                break;
-                
-                case 'group':
-                case 'memberOf':
-                colModel.config[o.column].setEditor(new Tine.Addressbook.ListSearchCombo({
-                    minListWidth: 350,
-                    blurOnSelect: true,
-                    groupOnly: true,
-                    getValue: function() {
-                        return this.selectedRecord ? this.selectedRecord.data : null;
-                    }
-                }));
-                break;
-                
-                case 'resource':
-                colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                    minListWidth: 350,
-                    blurOnSelect: true,
-                    sortBy: 'name',
-                    recordClass: Tine.Calendar.Model.Resource,
-                    getValue: function() {
-                        return this.selectedRecord ? this.selectedRecord.data : null;
-                    }
-                }));
-                break;
+            var colModel = o.grid.getColumnModel(),
+                type = o.record.get('user_type');
 
-                case 'any':
-                    colModel.config[o.column].setEditor(new Tine.Calendar.AttendeePickerCombo({
-                        minListWidth: 370,
-                        blurOnSelect: true,
-                        eventRecord: this.record
-                    }));
-                    break;
-            }
+            type = type == 'memberOf' ? 'group' : type;
+
+            colModel.config[o.column].setEditor(new Tine.Calendar.AttendeePickerCombo({
+                minListWidth: 370,
+                blurOnSelect: true,
+                eventRecord: this.record,
+                additionalFilters: type != 'any' ? [{field: 'type', operator: 'oneof', value: [type]}] : null
+            }));
+            
             colModel.config[o.column].editor.selectedRecord = null;
         }
     },
@@ -623,10 +598,45 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.eventOriginator = record;
             }
         }, this);
-        
+
+        this.updateFreeBusyInfo();
+
         if (record.get('editGrant')) {
             this.addNewAttendeeRow();
         }
+    },
+
+    updateFreeBusyInfo: function() {
+        var schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
+            encodedSchedulingInfo = Ext.encode(schedulingInfo);
+
+        if (encodedSchedulingInfo == this.encodedSchedulingInfo) return;
+
+        // @TODO have load spinner?
+        this.encodedSchedulingInfo = encodedSchedulingInfo;
+
+        // clear state
+        this.store.each(function(attendee) {
+            attendee.set('fbInfo', '...');
+            attendee.commit();
+        }, this);
+
+        Tine.Calendar.getFreeBusyInfo(
+            Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
+            schedulingInfo,
+            [this.record.get('uid')],
+            function(freeBusyData) {
+                // outdated data
+                if (encodedSchedulingInfo != this.encodedSchedulingInfo) return;
+
+                var fbInfo = new Tine.Calendar.FreeBusyInfo(freeBusyData);
+
+                this.store.each(function(attendee) {
+                    attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, this.record));
+                    attendee.commit();
+                }, this);
+
+        }, this);
     },
 
     // Add new attendee
@@ -651,6 +661,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onRecordUpdate: function(record) {
         this.stopEditing(false);
 
+        this.updateFreeBusyInfo();
         Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store, record);
     },
     

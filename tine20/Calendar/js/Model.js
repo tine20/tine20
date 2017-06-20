@@ -551,6 +551,20 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     },
 
     /**
+     * returns true for external contacts
+     */
+    isExternal: function() {
+
+        var isExternal = false,
+            user_type = this.get('user_type');
+        if (user_type == 'user' || user_type == 'groupmember') {
+            isExternal = !this.getUserAccountId();
+        }
+
+        return isExternal;
+    },
+
+    /**
      * returns account_id if attender is/has a user account
      * 
      * @return {String}
