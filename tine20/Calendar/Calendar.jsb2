@@ -210,6 +210,10 @@
         {
           "text": "RruleFilter.js",
           "path": "js/"
+        },
+        {
+          "text": "EventFinderOptionsDialog.js",
+          "path": "js/"
         }
       ]
     },

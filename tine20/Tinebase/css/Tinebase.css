@@ -1093,3 +1093,27 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .x-form-radio-group .x-form-item {
     padding-left: 2px;
 }
+
+.rangeslider-component-sliderwrap {
+    border: 1px solid black;
+}
+
+.rangeslider-component-sliderBorder {
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: #cdcdcd;
+}
+
+.rangeslider-component .rangeslider-component-slider .rangeslider-component-slider-label {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.rangeslider-component .rangeslider-component-slider {
+    background-color: #b7f8bd;
+    overflow: hidden;
+}

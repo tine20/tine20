@@ -962,6 +962,10 @@
           "path": "js/"
         },
         {
+          "text": "RangeSliderComponent.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }
