@@ -66,8 +66,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['calendar.rrule'] = Tine.Calendar.RruleF
  */
 Tine.Calendar.RruleFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
-    layerAlign: 'tr-br?',
-    layerHeight: 200,
 
     lazyInit: false,
 
