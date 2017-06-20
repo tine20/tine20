@@ -1829,27 +1829,21 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
 
-    /**
-     * testSieveRulesOrder
-     *
-     * @see 0007240: order of sieve rules changes when vacation message is saved
-     */
     public function testSieveEmailNotification()
     {
         $this->_setTestScriptname();
 
-        $result = $this->_json->setSieveNotificationEmail($this->_account->getId(), 'test@test.de');
-        static::assertTrue(is_array($result) && count($result) === 1 && isset($result['success']) &&
-            true === $result['success'], print_r($result, true));
+        $this->_account->sieve_notification_email = 'test@test.de';
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
 
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         $scriptParts = $script->getScriptParts();
         static::assertEquals(1, $scriptParts->count());
         /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
         $scriptPart = $scriptParts->getFirstRecord();
-        static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"'), $scriptPart->xprops(
-            Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === 3, print_r($scriptPart->xprops(
-            Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
+        static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"', '"body"'),
+            $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === 4,
+            print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
         static::assertContains('test@test.de', $script->getSieve());
     }
     

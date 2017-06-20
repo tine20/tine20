@@ -154,6 +154,22 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
+    var editNotificationAction = {
+        text: this.app.i18n._('Notifications'),
+        iconCls: 'felamimail-action-sieve-notification',
+        scope: this,
+        handler: function() {
+            var accountId = this.ctxNode.attributes.account_id;
+            var account = this.accountStore.getById(accountId);
+
+            if (account.get('type') == 'system') {
+                var popupWindow = Tine.Felamimail.sieve.NotificationDialog.openWindow({
+                    record: account
+                });
+            }
+        }
+    };
+
     var markFolderSeenAction = {
         text: this.app.i18n._('Mark Folder as read'),
         iconCls: 'action_mark_read',
@@ -252,7 +268,15 @@ Tine.Felamimail.setTreeContextMenus = function() {
     // account ctx menu
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [addFolderToRootAction, updateFolderCacheAction, editVacationAction, editRulesAction, editAccountAction, 'delete'],
+        actions: [
+            addFolderToRootAction,
+            updateFolderCacheAction,
+            editVacationAction,
+            editRulesAction,
+            editNotificationAction,
+            editAccountAction,
+            'delete'
+        ],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'

@@ -655,22 +655,34 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setNotificationEmail($_accountId, $_email)
     {
-        $_email = trim($_email);
-        if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
-            throw new Tinebase_Exception_UnexpectedValue($_email . ' is not a valid email address');
-        }
-
         // acl check
         if (!$_accountId instanceof Felamimail_Model_Account) {
             Felamimail_Controller_Account::getInstance()->get($_accountId);
         }
 
-        $fileSystem = Tinebase_FileSystem::getInstance();
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart', array());
+        $_email = trim($_email);
+        if (empty($_email)) {
+            $this->setNotificationScripts($_accountId, $scriptParts);
+            return;
+        }
 
+        if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+            throw new Tinebase_Exception_UnexpectedValue($_email . ' is not a valid email address');
+        }
+
+        $fileSystem = Tinebase_FileSystem::getInstance();
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         $subject = $translate->_('You have new mail from ', $locale);
+        if (empty($adminBounceEmail = Felamimail_Config::getInstance()->
+                {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||
+                !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $adminBounceEmail)) {
+            $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+            $members = Tinebase_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId());
+            $firstAdminUser = Tinebase_User::getInstance()->getFullUserById($members[0]);
+            $adminBounceEmail = $firstAdminUser->accountEmailAddress;
+        }
 
         /** @var Tinebase_Model_Tree_Node $sieveNode */
         foreach ($fileSystem->getTreeNodeChildren(Felamimail_Config::getInstance()->
@@ -682,6 +694,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $sieveScript = file_get_contents($path->streamwrapperpath);
             $sieveScript = str_replace('USER_EXTERNAL_EMAIL', $_email, $sieveScript);
             $sieveScript = str_replace('TRANSLATE_SUBJECT', $subject, $sieveScript);
+            $sieveScript = str_replace('ADMIN_BOUNCE_EMAIL', $adminBounceEmail, $sieveScript);
             $scriptParts->addRecord(Felamimail_Model_Sieve_ScriptPart::createFromString(
                 Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION, $sieveNode->name, $sieveScript));
         }

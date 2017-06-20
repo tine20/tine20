@@ -170,6 +170,28 @@
     background-image:url(../../images/oxygen/32x32/actions/arrow-down.png) !important;
 }
 
+/* other actions */
+
+.felamimail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-task.png) !important;
+}
+.x-btn-medium .felamimail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/22x22/actions/mail-mark-task.png) !important;
+}
+.x-btn-large .felamimail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/32x32/actions/mail-mark-task.png) !important;
+}
+
+
+.felamimail-action-sieve-notification {
+    background-image:url(../../images/oxygen/16x16/actions/bell.png) !important;
+}
+.x-btn-medium .felamimail-action-sieve-notification {
+    background-image:url(../../images/oxygen/22x22/actions/bell.png) !important;
+}
+.x-btn-large .felamimail-action-sieve-notification {
+    background-image:url(../../images/oxygen/32x32/actions/bell.png) !important;
+}
 /***** flag classes ******/
 
 .flag_unread td{
@@ -466,16 +488,6 @@
 .felamimail-recipient-grid {
     background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
     background-repeat: no-repeat;
-}
-
-.felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/16x16/actions/mail-mark-task.png) !important;
-}
-.x-btn-medium .felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/22x22/actions/mail-mark-task.png) !important;
-}
-.x-btn-large .felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/32x32/actions/mail-mark-task.png) !important;
 }
 
 /***** sieve rules ******/

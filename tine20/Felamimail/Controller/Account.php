@@ -325,6 +325,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             'ns_shared',
             'last_modified_time',
             'last_modified_by',
+            'sieve_notification_email',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
@@ -435,6 +436,22 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         ) {
             // use imap credentials for smtp auth as well
             $_record->smtp_credentials_id = $_record->credentials_id;
+        }
+    }
+
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Felamimail_Model_Account $updatedRecord   the just updated record
+     * @param   Felamimail_Model_Account $record          the update record
+     * @param   Felamimail_Model_Account $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        if ($updatedRecord->sieve_notification_email !== $currentRecord->sieve_notification_email) {
+            Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
+                $updatedRecord->sieve_notification_email);
         }
     }
     

@@ -396,6 +396,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'sieve_port' },
     { name: 'sieve_ssl' },
     { name: 'sieve_vacation_active', type: 'bool' },
+    { name: 'sieve_notification_email' },
     { name: 'all_folders_fetched', type: 'bool', defaultValue: false } // client only
 ]), {
     appName: 'Felamimail',

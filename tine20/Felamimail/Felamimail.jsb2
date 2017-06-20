@@ -55,6 +55,10 @@
           "path": "js/sieve/"
         },
         {
+          "text": "NotificationDialog.js",
+          "path": "js/sieve/"
+        },
+        {
           "text": "TreeContextMenu.js",
           "path": "js/"
         },
