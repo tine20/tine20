@@ -52,27 +52,26 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     public function run()
     {
-        $actionQueueConfig = Tinebase_Core::getConfig()->getConfigFileSection(Tinebase_Config::ACTIONQUEUE);
-        if (!is_array($actionQueueConfig) || !isset($actionQueueConfig[Tinebase_Config::ACTIONQUEUE]) ||
-                !is_array($actionQueueConfig[Tinebase_Config::ACTIONQUEUE]) ||
-                !isset($actionQueueConfig[Tinebase_Config::ACTIONQUEUE][Tinebase_Config::ACTIONQUEUE_BACKEND]) ||
-                'redis' !== strtolower(
-                    $actionQueueConfig[Tinebase_Config::ACTIONQUEUE][Tinebase_Config::ACTIONQUEUE_BACKEND])) {
-            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Tinebase_ActionQueue_Backend_Direct used. There is nothing to do for the worker! Configure Redis backend for example if you want to make use of the worker.');
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker! Configure Redis backend if you want to make use of the worker.');
             exit(1);
         }
 
         $maxChildren = $this->_getConfig()->tine20->maxChildren;
+        $lastMaxChildren = 0;
 
         while (!$this->_stopped) {
 
             // manage the number of children
             if (count ($this->_children) >=  $maxChildren) {
 
-                // TODO this will log A LOT, add a timeout between logs...
-
-                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " reached max children limit: " . $this->_getConfig()->tine20->maxChildren);
-                $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " number of pending jobs:" . Tinebase_ActionQueue::getInstance()->getQueueSize());
+                // log only every minute
+                if (time() - $lastMaxChildren > 60) {
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " reached max children limit: " . $maxChildren);
+                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " number of pending jobs:" . $actionQueue->getQueueSize());
+                    $lastMaxChildren = time();
+                }
                 usleep(1000); // save some trees
                 pcntl_signal_dispatch();
                 continue;
@@ -80,7 +79,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " trying to fetch a job from queue " . microtime(true));
 
-            $jobId = Tinebase_ActionQueue::getInstance()->waitForJob();
+            $jobId = $actionQueue->waitForJob();
 
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " signal dispatch " . microtime(true));
 
@@ -92,14 +91,14 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             }
             
             try {
-                $job = Tinebase_ActionQueue::getInstance()->receive($jobId);
+                $job = $actionQueue->receive($jobId);
             } catch (RuntimeException $re) {
                 $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to receive message: " . $re->getMessage());
                 
                 // we are unable to process the job
                 // probably the retry count is exceeded
                 // TODO push message to dead letter queue
-                Tinebase_ActionQueue::getInstance()->delete($jobId);
+                $actionQueue->delete($jobId);
                 
                 continue;
             }
@@ -239,7 +238,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
         // execute in same process
         } else { */
-            //Zend_Registry::_unsetInstance();
+            Zend_Registry::_unsetInstance();
 
             Tinebase_Core::initFramework();
     

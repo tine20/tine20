@@ -23,12 +23,10 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        static::$oldActionQueueConfig = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
-        $actionQueueConfig = static::$oldActionQueueConfig;
+        static::$oldActionQueueConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE};
+        $actionQueueConfig = clone static::$oldActionQueueConfig;
         $actionQueueConfig->{Tinebase_Config::ACTIONQUEUE_BACKEND} = 'redis';
         $actionQueueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE} = true;
-
-        Tinebase_Core::getConfig()->set(Tinebase_Config::ACTIONQUEUE, $actionQueueConfig);
 
         if (@is_file('/etc/tine20/actionQueue.ini')) {
             static::$oldIniFileContent = file_get_contents('/etc/tine20/actionQueue.ini');
@@ -40,7 +38,7 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        Tinebase_Core::getConfig()->set(Tinebase_Config::ACTIONQUEUE, static::$oldActionQueueConfig);
+        Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE} = static::$oldActionQueueConfig;
         static::$oldActionQueueConfig = null;
 
         if (null !== static::$oldIniFileContent) {
@@ -51,6 +49,7 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
         }
 
         @unlink('/var/run/tine20/DummyController.txt');
+        Tinebase_ActionQueue::destroyInstance();
     }
 
     protected function setUp()
@@ -74,8 +73,6 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     public function testStartStop()
     {
-        static::markTestSkipped('FIXME');
-
         clearstatcache();
         $this->assertFalse(is_file('/var/run/tine20/actionQueue.pid'), 'found old pid file');
 
@@ -91,11 +88,10 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     public function testGracefulShutDown()
     {
-        static::markTestSkipped('FIXME');
-        
         $this->testStart();
 
         @unlink('/var/run/tine20/DummyController.txt');
+        Tinebase_ActionQueue::destroyInstance();
         Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_DummyController.sleepNSec', 2);
 
         // 10 ms so the daemon can pick up the job
@@ -106,6 +102,7 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
         $endTime = microtime(true);
         $totalTime = $endTime - $startTime;
 
+        clearstatcache();
         $this->assertTrue(is_file('/var/run/tine20/DummyController.txt'), 'could not find file /var/run/tine20/DummyController.txt');
         $this->assertEquals('success 2', file_get_contents('/var/run/tine20/DummyController.txt'));
         $this->assertTrue($totalTime > 1.9, 'shut down should take more than 1.9 sec: ' . $totalTime);
