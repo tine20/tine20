@@ -36,6 +36,9 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
 
     initComponent: function () {
         Tine.widgets.grid.PickerGridLayerCombo.superclass.initComponent.call(this);
+        this.store = new Ext.data.SimpleStore({
+            fields: this.gridRecordClass
+        });
 
         this.on('beforecollapse', this.onBeforeCollapse, this);
     },
@@ -44,7 +47,8 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
         this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
             recordClass: this.gridRecordClass,
             height: this.layerHeight - 40 || 'auto',
-            onStoreChange: Ext.emptyFn
+            onStoreChange: Ext.emptyFn,
+            store: this.store
         });
 
         return [this.pickerGrid];
@@ -64,12 +68,29 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return {Ext.form.Field} this
      */
     setValue: function (value) {
+        var _ = window.lodash;
+
+        this.setStoreFromArray(value);
+        if (this.rendered) {
+            var titles = _.reduce(this.store.data.items, function(result, record) {
+                return result.concat(record.getTitle());
+            }, []);
+            this.setRawValue(titles.join(', '));
+        }
         this.currentValue = value;
+
         // to string overwrite, to make sure record is changed.
         Tine.Tinebase.common.assertComparable(this.currentValue);
         return this;
     },
 
+    afterRender: function () {
+
+        Tine.widgets.grid.PickerGridLayerCombo.superclass.afterRender.apply(this, arguments);
+        if (this.currentValue) {
+            this.setValue(this.currentValue);
+        }
+    },
     /**
      * sets values to innerForm (grid)
      */
@@ -95,24 +116,16 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
      *
      * @param {Array}
      *
-     * TODO move to picker grid?
      */
     setStoreFromArray: function(data) {
         //this.pickerGrid.getStore().clearData();
-        var rawData = [];
-        this.pickerGrid.getStore().removeAll();
+        this.store.removeAll();
 
         for (var i = data.length-1; i >=0; --i) {
             var recordData = data[i],
                 newRecord = new this.gridRecordClass(recordData);
-            this.pickerGrid.getStore().insert(0, newRecord);
-            rawData.push(newRecord.getTitle());
+            this.store.insert(0, newRecord);
         }
-
-        if (rawData) {
-            this.setRawValue(rawData.join(', '));
-        }
-
     },
 
     /**
@@ -120,11 +133,10 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
      *
      * @return {Array}
      *
-     * TODO move to picker grid?
      */
     getFromStoreAsArray: function() {
         var result = [];
-        this.pickerGrid.getStore().each(function(record) {
+        this.store.each(function(record) {
             result.push(record.data);
         }, this);
 
