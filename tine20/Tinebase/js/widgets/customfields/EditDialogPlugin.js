@@ -68,12 +68,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 
                 if (field) {
                     if(field.isXType('combo') && Ext.isObject(this.customfieldsValue[name])) {
-                        var phpClassName = cfConfig.get('model').split('_Model_'),
-                            recordClass = Tine[phpClassName[0]].Model[phpClassName[1]],
-                            record = new recordClass(this.customfieldsValue[name]);
-                            
-                        field.setValue(record.getId());
-                        field.selectedRecord = record.data; 
+                        var record = new field.recordClass(this.customfieldsValue[name]);
+                        field.setValue(record);
                     } else {
                         field.setValue(this.customfieldsValue[name]);
                     }
