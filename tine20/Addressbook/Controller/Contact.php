@@ -639,7 +639,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fetch all groups and role memberships and add to path
         $listIds = Addressbook_Controller_List::getInstance()->getMemberships($record);
         foreach ($listIds as $listId) {
-            $list = Addressbook_Controller_List::getInstance()->get($listId);
+            try {
+                $list = Addressbook_Controller_List::getInstance()->get($listId);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Exception::log($tead);
+                continue;
+            }
             $listPaths = $this->_getPathsOfRecord($list);
             if (count($listPaths) === 0) {
                 // add self
