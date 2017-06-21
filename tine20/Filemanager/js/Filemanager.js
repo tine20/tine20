@@ -35,6 +35,8 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     showNode: function(path) {
         this.getMainScreen().getCenterPanel().initialLoadAfterRender = false;
         Tine.Tinebase.MainScreenPanel.show(this);
+        // NOTE: decodeURIComponent can't cope with +
+        path = Ext.ux.util.urlCoder.decodeURIComponent(path);
 
         // if file, show directory file is in
         var dirPath = path;

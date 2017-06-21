@@ -458,6 +458,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_download = Tine.Filemanager.nodeActionsMgr.get('download');
         this.action_moveRecord = Tine.Filemanager.nodeActionsMgr.get('move');
         this.action_publish = Tine.Filemanager.nodeActionsMgr.get('publish');
+        this.action_systemLink = Tine.Filemanager.nodeActionsMgr.get('systemLink');
 
         if (this.previewsEnabled) {
             this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview');
@@ -482,7 +483,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }.createDelegate(this)
         });
 
-        var contextActions = [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_download, 'resume', 'pause', this.action_editFile, this.action_publish];
+        var contextActions = [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_download, 'resume', 'pause', this.action_editFile, this.action_publish, this.action_systemLink];
 
         if (this.previewsEnabled) {
             contextActions.push(this.action_preview);
@@ -498,7 +499,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.folderContextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getContainerName(),
-            actions: [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_editFile, this.action_publish],
+            actions: [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_editFile, this.action_publish, this.action_systemLink],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -514,7 +515,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_download,
             this.action_deleteRecord,
             this.action_editFile,
-            this.action_publish
+            this.action_publish,
+            this.action_systemLink
         ];
 
         if (this.previewsEnabled) {
@@ -591,6 +593,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     iconAlign: 'top'
                 }),
                 Ext.apply(new Ext.Button(this.action_publish), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }),
+                Ext.apply(new Ext.Button(this.action_systemLink), {
                     scale: 'medium',
                     rowspan: 2,
                     iconAlign: 'top'

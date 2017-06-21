@@ -94,6 +94,16 @@ html, body {
 }
 
 
+.action_system_link {
+    background-image:url(../../images/oxygen/16x16/places/link.png) !important;
+}
+.x-btn-medium .action_system_link {
+    background-image:url(../../images/oxygen/22x22/places/link.png) !important;
+}
+.x-btn-large .action_system_link {
+    background-image:url(../../images/oxygen/32x32/places/link.png) !important;
+}
+
 .action_rename {
     background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
 }

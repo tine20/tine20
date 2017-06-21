@@ -50,6 +50,15 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         var _ = window.lodash;
 
         return _.indexOf(['/', Tine.Tinebase.container.getMyFileNodePath(), '/personal', '/shared'], this.get('path')) >= 0;
+    },
+
+    getSystemLink: function() {
+        var _ = window.lodash,
+            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
+
+        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
+
+
     }
 });
 
