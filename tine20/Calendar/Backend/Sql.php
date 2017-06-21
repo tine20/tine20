@@ -509,15 +509,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         foreach ($allGrants as $grant) {
             if (in_array($grant, $this->_recordBasedGrants)) {
-                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
+                $_select->columns(array($grant => new Zend_Db_Expr("\n MAX( CASE WHEN ( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', 'rolememberships', $grant) . " OR \n" .
                     '  /* implicit  */' . $this->_getImplicitGrantCondition($grant) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition($grant) . " \n" .
-                 ") THEN 1 ELSE 0 END ) "));
+                 ") THEN 1 ELSE 0 END ) ")));
             } else {
-                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
+                $_select->columns(array($grant => new Zend_Db_Expr("\n MAX( CASE WHEN ( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', 'rolememberships', $grant) . "\n" .
-                ") THEN 1 ELSE 0 END ) "));
+                ") THEN 1 ELSE 0 END ) ")));
             }
         }
     }
@@ -546,7 +546,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $sql = $this->_db->quoteInto(    "($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)  . " AND $quoteIdIdentifier = $userExpression)" .
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' .
-               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE) . ' AND ' . $this->_db->quoteIdentifier("$_roleMembersTableName.role_id") . " = $quoteIdIdentifier" . ')' .
+               ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql ?
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE) . ' AND CAST(' . $this->_db->quoteIdentifier("$_roleMembersTableName.role_id") . " AS text) = $quoteIdIdentifier" . ')' :
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE) . ' AND ' . $this->_db->quoteIdentifier("$_roleMembersTableName.role_id") . " = $quoteIdIdentifier" . ')') .
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
         if ($_requiredGrant) {
