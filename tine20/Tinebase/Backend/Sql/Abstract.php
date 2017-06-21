@@ -1359,11 +1359,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
         $identifier = $this->_getRecordIdentifier();
 
+        $this->_inspectBeforeSoftDelete($idArray);
+
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
         );
 
         return $this->_db->update($this->_tablePrefix . $this->_tableName, array('is_deleted' => 1), $where);
+    }
+
+    /**
+     * @param array $_ids
+     */
+    protected function _inspectBeforeSoftDelete(array $_ids)
+    {
     }
     
     /**

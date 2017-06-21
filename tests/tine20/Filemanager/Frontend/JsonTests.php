@@ -69,6 +69,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @var array
      */
     protected $_rmDir = array();
+
+    protected $_oldModLog = null;
     
     /**
      * Sets up the fixture.
@@ -80,7 +82,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         parent::setUp();
 
+        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $this->_fsController = Tinebase_FileSystem::getInstance();
+        $this->_fsController->resetBackends();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
         $this->_rmDir = array();
 
@@ -103,7 +108,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->deleteNodes($dir);
             }
         }
-        
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
+
+        Tinebase_FileSystem::getInstance()->resetBackends();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         
@@ -943,13 +951,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testMoveFolderNodesToFolderExisting()
     {
-        sleep(1);
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/dir1';
-        $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($testPath), false);
-        $dirs = $this->testCreateDirectoryNodesInShared();
+        $this->_getUit()->moveNodes(array($targetNode['path']), array($testPath), false);
+        $this->testCreateDirectoryNodesInShared();
         try {
-            $result = $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', false);
+            $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', false);
             $this->fail('Expected Filemanager_Exception_NodeExists!');
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', true);
@@ -972,7 +979,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $createdNode = $result[0];
 
         try {
-            $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), false);
+            $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), false);
             $this->fail('Expected Filemanager_Exception_NodeExists!');
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), true);
@@ -1387,7 +1394,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testDeletedFileCleanupFromFilesystem()
     {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+        $this->_fsController->resetBackends();
+
         // remove all files with size 0 first
+        // better here than below?
+        $this->testDeleteFileNodes();
+
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE),
             array('field' => 'size', 'operator' => 'equals', 'value' => 0)
@@ -1395,13 +1408,16 @@ class Filemanager_Frontend_JsonTests extends TestCase
         foreach ($size0Nodes as $node) {
             Tinebase_FileSystem::getInstance()->deleteFileNode($node);
         }
-        
-        $this->testDeleteFileNodes();
+
+        // why here?
+        //$this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
         $this->tearDown();
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+        $this->_fsController->resetBackends();
         $this->testDeleteFileNodes(true);
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');

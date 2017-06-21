@@ -112,6 +112,9 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         ),
         'isIndexed'             => array(
             'filter'                => 'Tinebase_Model_Tree_Node_IsIndexedFilter',
+        ),
+        'is_deleted'            => array(
+            'filter'                => 'Tinebase_Model_Filter_Bool'
         )
     );
 

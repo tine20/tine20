@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.30</version>
+    <version>10.31</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3461,7 +3461,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3511,6 +3511,12 @@
                     <name>notificationProps</name>
                     <type>text</type>
                     <length>65535</length>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>

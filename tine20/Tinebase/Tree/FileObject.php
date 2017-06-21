@@ -19,6 +19,8 @@
  */
 class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
     /**
      * Table name without prefix
      *
@@ -57,6 +59,16 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected $_getSelectHook = array();
 
     protected $_revision = null;
+
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_Tree_FileObject
+     */
+    public static function getInstance()
+    {
+        return Tinebase_FileSystem::getInstance()->getFileObjectBackend();
+    }
 
     /**
      * the constructor
@@ -206,40 +218,48 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if (empty($_record->hash)) {
             return;
         }
-        
+
         $createRevision = $this->_keepOldRevisions || $_mode === 'create';
-        $updateRevision = FALSE;
+        $updateRevision = false;
 
         // do not create a revision if the hash did not change! What point in creating a revision if the file in the filesystem is still the same?
         if ($_mode !== 'create') {
             /** @var Tinebase_Model_Tree_FileObject $currentRecord */
-            $currentRecord = $this->get($_record);
-            if ($currentRecord->hash !== NULL && !empty($currentRecord->revision)) {
+            $currentRecord = $this->get($_record, true);
+            if ($currentRecord->hash !== null && !empty($currentRecord->revision)) {
                 if ($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) {
                     return;
                 }
-                $updateRevision = TRUE;
+                $updateRevision = true;
                 if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
-                    $createRevision = FALSE;
+                    $createRevision = false;
                 }
             } else {
-                $createRevision = TRUE;
+                $createRevision = true;
             }
         }
-        
-        if (! $createRevision && ! $updateRevision) {
+
+        if (!$createRevision && !$updateRevision) {
             return;
+        }
+
+        if (!empty($_record->hash) && is_file($_record->getFilesystemPath())) {
+            if (false === ($_record->size = filesize($_record->getFilesystemPath()))) {
+                $_record->size = 0;
+            }
+        } elseif(empty($_record->size)) {
+            $_record->size = 0;
         }
 
         $data = array(
             'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
-            'created_by'    => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
-            'hash'          => $_record->hash,
-            'size'          => $_record->size,
+            'created_by' => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
+            'hash' => $_record->hash,
+            'size' => $_record->size,
             'preview_count' => (int)$_record->preview_count,
-            'revision'      => false === $createRevision && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type ? 1 : $this->_getNextRevision($_record),
+            'revision' => false === $createRevision && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type ? 1 : $this->_getNextRevision($_record),
         );
-            
+
         if ($createRevision) {
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
@@ -248,7 +268,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
-                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()));
+                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?',
+                        $_record->getId()));
             }
 
         } elseif ($updateRevision) {
@@ -257,11 +278,62 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             );
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type && (int)$_record->revision_size !== (int) $_record->size) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type && (int)$_record->revision_size !== (int)$_record->size) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => $_record->size),
-                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $_record->getId()));
+                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?',
+                        $_record->getId()));
+            }
+        }
+    }
+
+    /**
+     * do something after creation of record
+     *
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_recordToCreate
+     * @return void
+     */
+    protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
+    {
+        $this->_writeModLog($_newRecord, null);
+        Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
+    }
+
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param boolean $_isReplicable
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record, $_isReplicable = true)
+    {
+        $oldIsReplicable = Tinebase_Model_Tree_FileObject::setReplicable($_isReplicable);
+
+        $oldRecord = $this->get($_record->getId(), true);
+        $newRecord = parent::update($_record);
+
+        $currentMods = $this->_writeModLog($newRecord, $oldRecord);
+        if (null !== $currentMods && $currentMods->count() > 0) {
+            Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+        }
+
+        Tinebase_Model_Tree_FileObject::setReplicable($oldIsReplicable);
+
+        return $newRecord;
+    }
+
+    /**
+     * @param array $_ids
+     */
+    protected function _inspectBeforeSoftDelete(array $_ids)
+    {
+        if (!empty($_ids)) {
+            foreach($this->getMultiple($_ids) as $object) {
+                $this->_writeModLog(null, $object);
             }
         }
     }
@@ -477,5 +549,55 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         }
 
         return $stmt->rowCount();
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+        switch($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $record = new Tinebase_Model_Tree_FileObject($diff->diff);
+                $this->_prepareReplicationRecord($record);
+                $this->create($record);
+                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && null !== $record->hash &&
+                        !is_file($record->getFilesystemPath())) {
+                    Tinebase_Timemachine_ModificationLog::getInstance()->fetchBlobFromMaster($record->hash);
+                }
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                /** @var Tinebase_Model_Tree_FileObject $record */
+                $record = $this->get($_modification->record_id, true);
+                $oldHash = $record->hash;
+                $record->applyDiff($diff);
+                $this->_prepareReplicationRecord($record);
+                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $oldHash !== $record->hash &&
+                    null !== $record->hash && !is_file($record->getFilesystemPath())) {
+                    Tinebase_Timemachine_ModificationLog::getInstance()->fetchBlobFromMaster($record->hash);
+                }
+                $this->update($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $this->softDelete(array($_modification->record_id));
+                break;
+
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('change_type ' . $_modification->change_type . ' unknown');
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_FileObject $_record
+     */
+    protected function _prepareReplicationRecord(Tinebase_Model_Tree_FileObject $_record)
+    {
+        // unset properties that are maintained only locally
+        $_record->indexed_hash = null;
     }
 }

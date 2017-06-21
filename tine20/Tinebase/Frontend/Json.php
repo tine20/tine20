@@ -1438,4 +1438,27 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
+
+    /**
+     * returns the replication modification logs
+     *
+     * @param $hash
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getBlob($hash)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
+            throw new Tinebase_Exception_AccessDenied('you do not have access to blobs');
+        }
+
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        $result = '';
+        if (is_file($path)) {
+            $result = file_get_contents($path);
+        }
+
+        return $result;
+    }
 }

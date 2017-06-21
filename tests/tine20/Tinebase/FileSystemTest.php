@@ -49,6 +49,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_rmDir = array();
         $this->_oldNotification = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
         $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_oldCreatePreview = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
 
@@ -213,6 +214,18 @@ class Tinebase_FileSystemTest extends TestCase
     
         $this->assertTrue($result,                                    'wrong result for rmdir command');
         $this->assertFalse($this->_controller->fileExists($testPath), 'failed to delete directory');
+
+        return $testPath;
+    }
+
+    public function testRecreateDir()
+    {
+        $testPath = $this->testRmdir();
+
+        $node = $this->_controller->mkdir($testPath);
+        $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
+
+        $this->assertEquals(1, $node->revision);
     }
     
     public function testScandir()
@@ -453,6 +466,42 @@ class Tinebase_FileSystemTest extends TestCase
         $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
         
         $this->assertTrue(!in_array('phpunit.txt', $children));
+    }
+
+    public function testRecreateFile()
+    {
+        $this->testDeleteFile();
+
+        $path = $this->_basePath . '/PHPUNIT/phpunit.txt';
+
+        $handle = $this->_controller->fopen($path, 'w');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
+        $written = fwrite($handle, 'somethingNew');
+        $this->assertEquals(12, $written);
+        $this->_controller->fclose($handle);
+
+        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
+
+        $this->assertContains('phpunit.txt', $children);
+        $handle = $this->_controller->fopen($path, 'r');
+        $contents = stream_get_contents($handle);
+        $this->_controller->fclose($handle);
+        $this->assertEquals('somethingNew', $contents);
+    }
+
+    public function testCopyRecreateFile()
+    {
+        $destinationPath = $this->_basePath . '/TESTCOPY2/phpunit.txt';
+        $this->_controller->mkdir($this->_basePath . '/TESTCOPY2');
+        $handle = $this->_controller->fopen($destinationPath, 'w');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
+        $written = fwrite($handle, 'somethingNew');
+        $this->assertEquals(12, $written);
+        $this->_controller->fclose($handle);
+        $node = $this->_controller->stat($destinationPath);
+        $this->_controller->deleteFileNode($node);
+
+        $this->testCopyFileToExistingDirectory();
     }
     
     public function testGetFileSize()
@@ -754,7 +803,7 @@ class Tinebase_FileSystemTest extends TestCase
         // mail foo?
         // check mail
         $messages = $mailer->getMessages();
-        $this->assertEquals(2, count($messages));
+        $this->assertEquals(1, count($messages));
         $headers = $messages[0]->getHeaders();
         $this->assertEquals('filemanager notification', $headers['Subject'][0]);
         $this->assertTrue(strpos($headers['To'][0], Tinebase_Core::getUser()->accountEmailAddress) !== false);

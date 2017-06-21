@@ -40,6 +40,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected $_recordIds = array();
 
+    protected $_oldFileSystemConfig = null;
+
 
     /**
      * Runs the test methods of this class.
@@ -61,6 +63,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
 
         $now = new Tinebase_DateTime();
         $this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
@@ -155,6 +159,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function tearDown()
     {
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
+
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
@@ -734,15 +740,22 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
     public function testFileManagerReplication()
     {
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->
+            getReplicationModificationsByInstanceSeq(-1, 10000);
         $instance_seq = $modifications->getLastRecord()->instance_seq;
 
-        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/unittestTestPath';
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/unittestTestPath';
         $fmController = Filemanager_Controller_Node::getInstance();
         $filesystem = Tinebase_FileSystem::getInstance();
+        $filesystem->resetBackends();
 
         // create two folders
-        $fmController->createNodes(array($testPath, $testPath . '/subfolder'), Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $fmController->createNodes(array($testPath, $testPath . '/subfolder'),
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+
 
         // set Grants
         $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
@@ -751,16 +764,34 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $grantRecord->id = null;
         $testPathNode->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($grantRecord));
         $testPathNode->acl_node = $testPathNode->getId();
-        $fmController->update($testPathNode);
+        $testNodeGrants = $fmController->update($testPathNode);
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testNodeGrants);
 
         // unset Grants
         $testPathNode->acl_node = null;
         $fmController->update($testPathNode);
 
         // move subfolder to new name
-        /*$newSubFolderNode = */$fmController->moveNodes(array($testPath . '/subfolder'), array($testPath . '/newsubfolder'))->getFirstRecord();
+        $fmController->moveNodes(array($testPath . '/subfolder'), array($testPath . '/newsubfolder'))->getFirstRecord();
         // copy it back to old name
-        /*$subFolderNode = */$fmController->copyNodes(array($testPath . '/newsubfolder'), array($testPath . '/subfolder'))->getFirstRecord();
+        $fmController->copyNodes(array($testPath . '/newsubfolder'), array($testPath . '/subfolder'))->getFirstRecord();
+
+        // create file
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+        file_put_contents($tempPath, 'someData');
+        $fmController->createNodes(array($testPath . '/newsubfolder/testFile'),
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, array($tempFileId));
+
+        // delete file
+        $fmController->deleteNodes(array($testPath . '/newsubfolder/testFile'));
+
+        // recreate file
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+        file_put_contents($tempPath, 'otherData');
+        $fmController->createNodes(array($testPath . '/newsubfolder/testFile'),
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, array($tempFileId));
 
         //this is not supported for folders!
         //$fmController->delete($subFolderNode->getId());
@@ -770,7 +801,10 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
         $fmModifications = $modifications->filter('record_type', 'Filemanager_Model_Node');
-        $this->assertEquals($modifications->count(), $fmModifications->count(), 'other changes thatn to Filemanager_Model_Node detected');
+        $fnModifications = $modifications->filter('record_type', 'Tinebase_Model_Tree_Node');
+        $foModifications = $modifications->filter('record_type', 'Tinebase_Model_Tree_FileObject');
+        $this->assertEquals($modifications->count(), $fmModifications->count() + $fnModifications->count() +
+            $foModifications->count(), 'other changes than to Tinebase_Model_Tree_Node or Filemanager_Model_Node detected');
 
         // rollback
         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -787,43 +821,90 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertTrue($notFound, 'roll back did not work...');
 
         // create first folder
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        // create FileObject
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        // create FileNode
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        // update hash of FileObject
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        // update acl_node of FileNode
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath))->statpath);
 
         // create second folder
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        // create FileObject
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        // create FileNode
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
 
         // set grants
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $filesystem->clearStatCache();
         $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
         static::assertEquals($testPathNode->getId(), $testPathNode->acl_node, 'grants not set');
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
+        static::assertEquals($testNodeGrants->grants, $testPathNode->grants);
 
         // unset grants
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $filesystem->clearStatCache();
         $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
         static::assertNotEquals($testPathNode->getId(), $testPathNode->acl_node, 'grants still set');
 
         // move subfolder to new name
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder'))->statpath);
         $notFound = false;
         try {
+            $filesystem->clearStatCache();
             $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $notFound = true;
@@ -831,16 +912,74 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertTrue($notFound, 'move did not work...');
 
         // copy it back to old name
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder'))->statpath);
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
 
+        // create file
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder/testFile'));
+        $node = $filesystem->stat($path->statpath);
+        static::assertEquals('someData', $filesystem->getNodeContents($node->getId()));
+
+        // delete file
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder/testFile'));
+        static::assertFalse($filesystem->fileExists($path->statpath));
+
+        // recreate file
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder/testFile'));
+        $node = $filesystem->stat($path->statpath);
+        static::assertEquals('otherData', $filesystem->getNodeContents($node->getId()));
+
         // delete new subfolder
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
@@ -853,8 +992,20 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertTrue($notFound, 'delete did not work...');
 
         // delete new folder
-        $mod = $fmModifications->getFirstRecord();
-        $fmModifications->removeRecord($mod);
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplactionModLogs failed');
         $notFound = false;
@@ -871,5 +1022,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             $notFound = true;
         }
         $this->assertTrue($notFound, 'delete did not work...');
+        
+        $this->assertEquals(0, $modifications->count(), 'not all modifications processed');
     }
 }

@@ -295,4 +295,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function getFields();
+
+    /**
+     * returns modlog omit fields
+     *
+     * @return array
+     */
+    public function getModlogOmitFields();
 }

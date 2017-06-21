@@ -72,10 +72,16 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
-        // we don't use modlog here because the name is unique. If the only do a soft delete, it is not possible to create the same node again!
         if (isset($_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS]) && true === $_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS]) {
             $this->_notificationActive = $_options[Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS];
         }
+
+        if (isset($_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) && true === $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE]) {
+            $this->_modlogActive = $_options[Tinebase_Config::FILESYSTEM_MODLOGACTIVE];
+        } else {
+            $this->_omitModLog = true;
+        }
+
 
         parent::__construct($_dbAdapter, $_options);
     }
@@ -152,17 +158,18 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
+     * @param boolean                   $_doModLog
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record, $_doModLog = false)
+    public function update(Tinebase_Record_Interface $_record, $_doModLog = true)
     {
-        $oldRecord = $this->get($_record->getId());
+        $oldRecord = $this->get($_record->getId(), true);
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
             $currentMods = $this->_writeModLog($newRecord, $oldRecord);
-            if ($currentMods->count() > 0) {
+            if (null !== $currentMods && $currentMods->count() > 0) {
                 Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
         }
@@ -183,7 +190,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     public function updated(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_oldRecord)
     {
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
-        if ($currentMods->count() > 0) {
+        if (null !== $currentMods && $currentMods->count() > 0) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
@@ -194,6 +201,50 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         /** @var Tinebase_Model_Tree_Node $_newRecord */
         /** @var Tinebase_Model_Tree_Node $_oldRecord */
         $this->_inspectForPreviewCreation($_newRecord, $_oldRecord);
+    }
+
+    /**
+     * Updates multiple entries
+     *
+     * @param array $_ids to update
+     * @param array $_data
+     * @return integer number of affected rows
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     */
+    public function updateMultiple($_ids, $_data)
+    {
+        $oldRecords = null;
+        if ($this->_omitModLog === true) {
+            $oldRecords = $this->getMultiple($_ids);
+        }
+
+        $result = parent::updateMultiple($_ids, $_data);
+
+        if (null !== $oldRecords) {
+            foreach ($oldRecords as $oldRecord) {
+                $newRecord = $this->get($oldRecord->getId());
+                $currentMods = $this->_writeModLog($newRecord, $oldRecord);
+                if (null !== $currentMods && $currentMods->count() > 0) {
+                    Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(),
+                        Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $_ids
+     */
+    protected function _inspectBeforeSoftDelete(array $_ids)
+    {
+        if (!empty($_ids)) {
+            foreach($this->getMultiple($_ids) as $node) {
+                $this->_writeModLog(null, $node);
+            }
+        }
     }
 
     /**
@@ -254,10 +305,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * 
      * @param  string|Tinebase_Model_Tree_Node  $parentId   the id of the parent node
      * @param  string|Tinebase_Model_Tree_Node  $childName  the name of the child node
+     * @param  boolean                          $getDeleted = false
+     * @param  boolean                          $throw = true
      * @throws Tinebase_Exception_NotFound
      * @return Tinebase_Model_Tree_Node
      */
-    public function getChild($parentId, $childName)
+    public function getChild($parentId, $childName, $getDeleted = false, $throw = true)
     {
         $parentId  = $parentId  instanceof Tinebase_Model_Tree_Node ? $parentId->getId() : $parentId;
         $childName = $childName instanceof Tinebase_Model_Tree_Node ? $childName->name   : $childName;
@@ -274,10 +327,17 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'value'     => $childName
             )
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        if (true === $getDeleted) {
+            $searchFilter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
+                Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+        }
         $child = $this->search($searchFilter)->getFirstRecord();
         
         if (!$child || $childName !== $child->name) {
-            throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
+            if (true === $throw) {
+                throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
+            }
+            return null;
         }
         
         return $child;
@@ -488,7 +548,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     /**
      * @param Tinebase_Tree_FileObject $_fileObjectBackend
      * @param array $_folderIds
-     * @param bool
+     * @return bool
      */
     protected function _recalculateFolderSize(Tinebase_Tree_FileObject $_fileObjectBackend, array $_folderIds)
     {

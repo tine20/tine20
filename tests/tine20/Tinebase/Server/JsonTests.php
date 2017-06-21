@@ -101,7 +101,8 @@ class Tinebase_Server_JsonTests extends TestCase
 
         $smd = Tinebase_Server_Json::getServiceMap();
         $smdArray = $smd->toArray();
-        $this->assertTrue(isset($smdArray['services']['Tinebase.ping']));
+        $this->assertTrue(isset($smdArray['services']['Tinebase.ping']), 'Tinebase.ping missing from service map: '
+            . print_r($smdArray, true));
     }
 
     /**

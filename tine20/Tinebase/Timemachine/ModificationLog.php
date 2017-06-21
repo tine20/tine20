@@ -74,7 +74,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         'creation_time',
         'last_modified_by',
         'last_modified_time',
-        'is_deleted',
+        //'is_deleted',
         'deleted_time',
         'deleted_by',
         'seq',
@@ -1175,6 +1175,38 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         return array_keys($result);
+    }
+
+    public function fetchBlobFromMaster($hash)
+    {
+        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
+        // check if we are a replication slave
+        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
+            return true;
+        }
+
+        $tine20Service = new Zend_Service_Tine20($tine20Url);
+
+        $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+        if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+            throw new Tinebase_Exception_AccessDenied('login failed');
+        }
+        unset($authResponse);
+
+        $tinebaseProxy = $tine20Service->getProxy('Tinebase');
+        /** @noinspection PhpUndefinedMethodInspection */
+        $result = $tinebaseProxy->getBlob($hash);
+
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        if (!is_dir(dirname($path))) {
+            mkdir(dirname($path));
+        }
+        file_put_contents($path, $result);
     }
 
     /**

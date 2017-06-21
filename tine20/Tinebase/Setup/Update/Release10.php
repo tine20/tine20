@@ -1220,4 +1220,26 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.30');
     }
+
+    /**
+     * update to 10.31
+     *
+     * add is_deleted column to tree nodes
+     */
+    public function update_30()
+    {
+        if (! $this->_backend->columnExists('is_deleted', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>');
+            $this->_backend->addCol('tree_nodes', $declaration);
+
+            $this->setTableVersion('tree_nodes', 4);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.31');
+    }
 }

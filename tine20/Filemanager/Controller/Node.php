@@ -38,15 +38,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @var string
      */
     protected $_modelName = 'Filemanager_Model_Node';
-    
+
     /**
-     * TODO handle modlog
-     *
-     * attention, this NEEDS to be off / true for replication!
-     *
      * @var boolean
      */
-    protected $_omitModLog = true;
+    protected $_omitModLog = false;
     
     /**
      * holds the total count of the last recursive search
@@ -173,58 +169,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $_record->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $_oldRecord->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
         }
 
-        $nodePath = null;
-        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
-            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
-            $modlogNode = new Filemanager_Model_Node(array(
-                'id' => $_record->getId(),
-                'path' => $nodePath->statpath,
-                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION => $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION),
-                // do not set acl_node, this will be calculated on the client side
-            ), true);
-            if (isset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID]) &&
-                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID] === $_record->getId() &&
-                    $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $_oldRecord->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)) {
-                $revisions = $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
-                unset($revisions[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID]);
-                $modlogNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $revisions;
-            }
-            $modlogOldNode = new Filemanager_Model_Node(array(
-                'id' => $_record->getId(),
-                'path' => $nodePath->statpath,
-                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION => $_oldRecord->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION),
-            ), true);
-            $this->_omitModLog = false;
-            $this->_writeModLog($modlogNode, $modlogOldNode);
-            $this->_omitModLog = true;
-        }
-
         // update node acl
         $aclNode = $_oldRecord->acl_node;
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type
             && Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')
         ) {
+            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
             if (! $nodePath->isSystemPath()) {
 
-                $modlogOldNode = $modlogNode = null;
                 if ($_record->acl_node === null && ! $nodePath->isToplevelPath()) {
                     // acl_node === null -> remove acl
                     $node = $this->_backend->setAclFromParent($nodePath->statpath);
                     $aclNode = $node->acl_node;
-
-                    $modlogNode = new Filemanager_Model_Node(array(
-                        'id' => $_record->getId(),
-                        'path' => $nodePath->statpath,
-                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                        'grants' => 'unset'
-                        // do not set acl_node, this will be calculated on the client side
-                    ), true);
-                    $modlogOldNode = new Filemanager_Model_Node(array(
-                        'id' => $_record->getId(),
-                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
-                    ), true);
 
                 } elseif ($_record->acl_node === $_record->getId() && isset($_record->grants)) {
                     $oldGrants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($_oldRecord);
@@ -234,25 +190,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $diff = $_record->grants->diff($oldGrants);
                     if (!$diff->isEmpty() || $_oldRecord->acl_node !== $_record->acl_node) {
                         $this->_backend->setGrantsForNode($_record, $_record->grants);
-                        $modlogNode = new Filemanager_Model_Node(array(
-                            'id' => $_record->getId(),
-                            'path' => $nodePath->statpath,
-                            'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                            'grants' => $_record->grants
-                            // do not set acl_node, this will be calculated on the client side
-                        ), true);
-                        $modlogOldNode = new Filemanager_Model_Node(array(
-                            'id' => $_record->getId(),
-                            'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
-                        ), true);
                     }
                     $aclNode = $_record->acl_node;
-                }
-
-                if (null !== $modlogNode) {
-                    $this->_omitModLog = false;
-                    $this->_writeModLog($modlogNode, $modlogOldNode);
-                    $this->_omitModLog = true;
                 }
             }
         }
@@ -744,32 +683,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $newNodePath = $parentPathRecord->statpath . '/' . $path->name;
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
-        $this->_writeModlogForNewNode($newNode, /*$existingNode,*/ $_type, $_path);
 
         $this->resolvePath($newNode, $parentPathRecord);
         $this->resolveGrants($newNode);
         return $newNode;
-    }
-
-    /**
-     * @param Tinebase_Model_Tree_Node $_newNode
-     * @param string $_type
-     * @param string $_path
-     */
-    protected function _writeModlogForNewNode($_newNode, /*$_existingNode,*/ $_type, $_path)
-    {
-        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_type && false === $this->_inCopyOrMoveNode) {
-            $modlogNode = new Filemanager_Model_Node(array(
-                'id' => $_newNode->getId(),
-                'path' => ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $this->removeBasePath($_path->flatpath) : $_path,
-                'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                // no grants, no acl_node, it will all be handled on client side
-                //'grants' => Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($_newNode)
-            ), true);
-            $this->_omitModLog = false;
-            $this->_writeModLog($modlogNode, null);
-            $this->_omitModLog = true;
-        }
     }
     
     /**
@@ -1015,24 +932,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
                 if ($node instanceof Tinebase_Record_Abstract) {
                     $result->addRecord($node);
-
-                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                        $modlogNode = new Filemanager_Model_Node(array(
-                            'id' => $node->getId(),
-                            'path' => is_array($_destinationFilenames) ? array($_destinationFilenames[$idx]) : $_destinationFilenames,
-                            'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                            'name' => $_action,
-                            // do not set acl_node, this will be calculated on the client side
-                        ), true);
-                        $modlogOldNode = new Filemanager_Model_Node(array(
-                            'id' => $node->getId(),
-                            'path' => $_sourceFilenames[$idx],
-                        ), true);
-                        $this->_omitModLog = false;
-                        $this->_writeModLog($modlogNode, $modlogOldNode);
-                        $this->_omitModLog = true;
-                    }
-
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' Could not copy or move node to destination ' . $destinationPathRecord->flatpath);
@@ -1340,17 +1239,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 break;
             case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
                 $success = $this->_backend->rmdir($_path->statpath, TRUE);
-
-                if (FALSE !== $success && false === $this->_inCopyOrMoveNode) {
-                    $modlogNode = new Filemanager_Model_Node(array(
-                        'id' => $node->getId(),
-                        'path' => $_flatpath,
-                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
-                    ), true);
-                    $this->_omitModLog = false;
-                    $this->_writeModLog(null, $modlogNode);
-                    $this->_omitModLog = true;
-                }
                 break;
         }
         
@@ -1506,36 +1394,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $modification)
     {
-        switch ($modification->change_type) {
-            case Tinebase_Timemachine_ModificationLog::CREATED:
-                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                $this->createNodes(array($diff->diff['path']), $diff->diff['type']);
-                break;
-
-            case Tinebase_Timemachine_ModificationLog::UPDATED:
-                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                if (isset($diff->diff['name'])) {
-                    $this->_copyOrMoveNodes(array($diff->oldData['path']), $diff->diff['path'], $diff->diff['name']);
-                } elseif(isset($diff->diff['grants'])) {
-                    $record = $this->_backend->stat($diff->diff['path']);
-                    if ('unset' === $diff->diff['grants']) {
-                        $this->_backend->removeAclFromNode($record);
-                    } else {
-                        $this->_backend->setGrantsForNode($record, $diff->diff['grants']);
-                    }
-                } else {
-                    throw new Tinebase_Exception_InvalidArgument('update modlogs need the property name containing copy or move or grants for grants update');
-                }
-                break;
-
-            case Tinebase_Timemachine_ModificationLog::DELETED:
-                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                $this->deleteNodes(array($diff->oldData['path']));
-                break;
-
-            default:
-                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
-        }
+        Tinebase_Tree::getInstance()->applyReplicationModificationLog($modification);
     }
 
     /**
