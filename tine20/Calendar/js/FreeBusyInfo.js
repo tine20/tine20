@@ -31,6 +31,7 @@ Tine.Calendar.FreeBusyInfo = function(freeBusyInfo) {
         });
         return state;
     });
+    this.attendeeCount = _.keys(this.statusMap).length;
 };
 
 Tine.Calendar.FreeBusyInfo.states = {'FREE':0, 'BUSY_TENTATIVE':1, 'BUSY':2, 'BUSY_UNAVAILABLE':3};
@@ -53,17 +54,20 @@ Tine.Calendar.FreeBusyInfo.prototype = {
      *
      * @param {Store} attendees
      */
-    getInfoByAttendee: function(attendees) {
+    getInfoByAttendee: function(attendees, event) {
         var _ = window.lodash,
-            html = '';
+            html = '<div class="cal-conflict-eventinfos">';
 
         _.each(_.get(attendees, 'data.items', []), _.bind(function(attendee) {
-            html += ['<div class="cal-conflict-attendername">',
-                '<div style="min-width: 20px;" class="', attendee.getIconCls(),  '" />',
+            if (! this.byAttendee[attendee.getCompoundId()]) return;
+
+            html += ['<div class="cal-conflict-attendername ', attendee.getIconCls(), '">',
                 attendee.getTitle(), '</div>'].join('');
 
-            html += this.getInfoForAttendee(attendee);
+            html += this.getInfoForAttendee(attendee, event);
         }, this));
+
+        return html + '</div>';
     },
 
     /**

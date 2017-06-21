@@ -216,10 +216,13 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 .cal-conflict-attendername {
     font-weight: bold;
+    background-position: 0;
+    height: 14px;
+    padding-left: 20px;
 }
 
 .cal-conflict-eventinfos {
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .cal-conflict-eventinfos-unavailable {

@@ -1514,71 +1514,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if(this.loadMask) this.loadMask.hide();
         
         if (error.code == 901) {
-           
-            // resort fbInfo to combine all events of a attender
-            var busyAttendee = [];
-            var conflictEvents = {};
-            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee);
-            
-            Ext.each(error.freebusyinfo, function(fbinfo) {
-                attendeeStore.each(function(a) {
-                    var userType = a.get('user_type');
-                    userType = userType == 'groupmember' ? 'user' : userType;
-                    if (userType == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
-                        if (busyAttendee.indexOf(a) < 0) {
-                            busyAttendee.push(a);
-                            conflictEvents[a.id] = [];
-                        }
-                        conflictEvents[a.id].push(fbinfo);
-                    }
-                });
-            }, this);
-            
-            // generate html for each busy attender
-            var busyAttendeeHTML = '';
-            var denyIgnore = false;
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee),
+                fbInfo = new Tine.Calendar.FreeBusyInfo(error.freebusyinfo),
+                denyIgnore = fbInfo.getStateOfAllAttendees() == Tine.Calendar.FreeBusyInfo.states.BUSY_UNAVAILABLE;
 
-            Ext.each(busyAttendee, function(busyAttender) {
-                // TODO refactore name handling of attendee
-                //      -> attender model needs knowlege of how to get names!
-                //var attenderName = a.getName();
-                var attenderName = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, busyAttender.get('user_id'), false, busyAttender);
-                busyAttendeeHTML += '<div class="cal-conflict-attendername">' + attenderName + '</div>';
-                
-                var eventInfos = [];
-                Ext.each(conflictEvents[busyAttender.id], function(fbInfo) {
-                    var format = 'H:i';
-                    var eventInfo;
-                    var dateFormat = Ext.form.DateField.prototype.format;
-                    if (event.get('dtstart').format(dateFormat) != event.get('dtend').format(dateFormat) ||
-                        Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat) != Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat))
-                    {
-                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format);
-                    } else {
-                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
-                    }
-                    if (fbInfo.event && fbInfo.event.summary) {
-                        eventInfo += ' : ' + fbInfo.event.summary;
-                    }
-                    if (fbInfo.type == 'BUSY_UNAVAILABLE') {
-                        denyIgnore = true;
-                        eventInfo += '<span class="cal-conflict-eventinfos-unavailable">' + this.app.i18n._('Unavailable') + '</span>';
-                    }
-                    eventInfos.push(eventInfo);
-                }, this);
-                busyAttendeeHTML += '<div class="cal-conflict-eventinfos">' + eventInfos.join(', <br />') + '</div>';
-                
-            }, this);
-            
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
                 allowCancel: false,
-                height: 180 + 15*error.freebusyinfo.length,
+                height: 180 + fbInfo.attendeeCount*14 + 12*error.freebusyinfo.length,
                 title: this.app.i18n._('Scheduling Conflict'),
                 questionText: '<div class = "cal-conflict-heading">' +
                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
                                '</div>' +
-                               busyAttendeeHTML,
+                                fbInfo.getInfoByAttendee(attendeeStore, event),
                 options: [
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
                     {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
