@@ -51,7 +51,7 @@ class Setup_Frontend_Cli
 
         $result = 0;
         if (isset($_opts->install)) {
-            $this->_install($_opts);
+            $result = $this->_install($_opts);
         } elseif(isset($_opts->update)) {
             $result = $this->_update($_opts);
         } elseif(isset($_opts->uninstall)) {
@@ -95,31 +95,41 @@ class Setup_Frontend_Cli
      * install new applications
      *
      * @param Zend_Console_Getopt $_opts
+     * @return integer
      */
     protected function _install(Zend_Console_Getopt $_opts)
     {
         $controller = Setup_Controller::getInstance();
-        
-        if($_opts->install === true) {
+
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+
+        if ($_opts->install === true) {
+            if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+                // nothing to do
+                return 0;
+            }
             $applications = $controller->getInstallableApplications();
             $applications = array_keys($applications);
         } else {
             $applications = array();
             $applicationNames = explode(',', $_opts->install);
-            foreach($applicationNames as $applicationName) {
-                $applicationName = ucfirst(trim($applicationName));
-                try {
-                    $controller->getSetupXml($applicationName);
-                    $applications[] = $applicationName;
-                } catch (Setup_Exception_NotFound $e) {
-                    echo "Application $applicationName not found! Skipped...\n";
+            if (count($applicationNames) === 1 && strtolower($applicationNames[0]) === 'all') {
+                $applications = $controller->getInstallableApplications();
+                $applications = array_keys($applications);
+            } else {
+                foreach ($applicationNames as $applicationName) {
+                    $applicationName = ucfirst(trim($applicationName));
+                    try {
+                        $controller->getSetupXml($applicationName);
+                        $applications[] = $applicationName;
+                    } catch (Setup_Exception_NotFound $e) {
+                        echo "Application $applicationName not found! Skipped...\n";
+                    }
                 }
             }
         }
-        
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+
         $this->_promptRemainingOptions($applications, $options);
-        
         $controller->installApplications($applications, $options);
         
         if ((isset($options['acceptedTermsVersion']) || array_key_exists('acceptedTermsVersion', $options))) {
@@ -127,6 +137,7 @@ class Setup_Frontend_Cli
         }
         
         echo "Successfully installed " . count($applications) . " applications.\n";
+        return 0;
     }
 
     /**
@@ -138,7 +149,8 @@ class Setup_Frontend_Cli
      * 
      * @todo add required version server side
      */
-    protected function _promptRemainingOptions($_applications, &$_options) {
+    protected function _promptRemainingOptions($_applications, &$_options)
+    {
         if (in_array('Tinebase', $_applications)) {
             
             if (! isset($_options['acceptedTermsVersion'])) {

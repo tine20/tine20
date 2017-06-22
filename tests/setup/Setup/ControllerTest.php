@@ -220,7 +220,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(isset($activeSyncApp['id']));
+        $this->assertTrue(isset($activeSyncApp['id']), 'ActiveSync ID missing ' . print_r($apps['results'], true));
         $this->assertEquals('uptodate', $activeSyncApp['install_status']);
     }
     
