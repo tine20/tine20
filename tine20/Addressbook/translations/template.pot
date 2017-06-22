@@ -717,8 +717,12 @@ msgstr ""
 msgid "Search for Contacts ..."
 msgstr ""
 
-#: Controller/Contact.php:348
+#: Controller/Contact.php:592
 msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller/Contact.php:601
+msgid "Deleted contact image."
 msgstr ""
 
 #: Preference.php:28
