@@ -140,13 +140,36 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             scope: this,
             disabled:true
         });
-        this.actionUpdater.addActions([this.action_download]);
+
+        this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+
+        this.actionUpdater.addActions([this.action_download, this.action_preview]);
         this.getTopToolbar().addItem(this.action_download);
         this.contextMenu.addItem(this.action_download);
         
-        this.on('rowdblclick', this.onDownload.createDelegate(this), this);
+        this.on('rowdblclick', this.onRowDbClick.createDelegate(this), this);
     },
-    
+
+    onRowDbClick: function () {
+        var _ = window.lodash;
+
+        if (!Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.onDownload();
+            return;
+        }
+
+        var prefs = Tine.Tinebase.appMgr.get('Filemanager').getRegistry().get('preferences');
+
+        var selectedRows = this.getSelectionModel().getSelections(),
+            rowRecord = selectedRows[0];
+
+        if (prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly) {
+            this.onDownload();
+        } else if (Tine.Tinebase.configManager.get('filesystem').createPreviews && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
+            this.action_preview.execute();
+        }
+    },
+
     /**
      * is called from onApplyChanges of the edit dialog per save event
      * 

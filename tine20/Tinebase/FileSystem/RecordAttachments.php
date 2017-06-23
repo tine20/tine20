@@ -72,9 +72,8 @@ class Tinebase_FileSystem_RecordAttachments
         
         try {
             $record->attachments = $this->_fsController->scanDir($parentPath);
-            $fileSystem = Tinebase_FileSystem::getInstance();
             foreach($record->attachments as $node) {
-                $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($node,
+                $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($node,
                     true));
                 $node->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath,
                     $record->getApplication());

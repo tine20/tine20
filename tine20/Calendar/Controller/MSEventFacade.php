@@ -500,11 +500,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
                 Calendar_Controller_Event::getInstance()->attenderStatusCreateRecurException($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
             } else {
-                if (! $exceptionAttendee) {
+                /*if (! $exceptionAttendee) {
                     // we would need to find out the users authkey to decline him -> not allowed!?
                     if (!isset($attendeeFound)) {
                         throw new Tinebase_Exception_UnexpectedValue('not an attendee');
                     }
+                }*/
+                if (! $exceptionAttendee) {
+                    // set user status to DECLINED
+                    $exceptionAttendee = clone $attendeeFound;
+                    $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 }
                 $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
