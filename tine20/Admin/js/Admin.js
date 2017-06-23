@@ -22,7 +22,7 @@ Tine.Admin = function () {
         var tree = [{
             text: translation.ngettext('User', 'Users', 50),
             cls: 'treemain',
-            iconCls: 'admin-node-user',
+            iconCls: 'tinebase-accounttype-user',
             allowDrag: false,
             allowDrop: true,
             id: 'accounts',
@@ -35,7 +35,7 @@ Tine.Admin = function () {
         }, {
             text: translation.gettext('Groups'),
             cls: 'treemain',
-            iconCls: 'admin-node-groups',
+            iconCls: 'tinebase-accounttype-group',
             allowDrag: false,
             allowDrop: true,
             id: 'groups',
@@ -48,7 +48,7 @@ Tine.Admin = function () {
         }, {
             text: translation.gettext('Roles'),
             cls: "treemain",
-            iconCls: 'action_permissions',
+            iconCls: 'tinebase-accounttype-role',
             allowDrag: false,
             allowDrop: true,
             id: "roles",

@@ -608,12 +608,24 @@ html, body {
     background-position: 2px 2px;
 }
 
+.renderer_accountRoleIcon {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
 .renderer_accountContactIcon {
     background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
 
+
+.renderer_accountAnyoneIcon {
+    background-image: url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
 
 .tinebase-accounttype-user {
     background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
@@ -633,6 +645,16 @@ html, body {
 }
 .x-btn-large .tinebase-accounttype-group {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+}
+
+.tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
+}
+.x-btn-medium .tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/22x22/actions/view-process-users.png) !important;
+}
+.x-btn-large .tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/32x32/actions/view-process-users.png) !important;
 }
 
 .tinebase-accounttype-addanyone {

@@ -213,7 +213,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
                     try {
-                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id'])->toArray();
+                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id']);
                     } catch(Tinebase_Exception_NotFound $tenf) {
                         $role = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
                     }

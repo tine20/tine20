@@ -432,10 +432,11 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        var type, iconCls, displayName, email;
+        var _ = window.lodash,
+            type, iconCls, displayName, email;
         
         if (accountObject.accountDisplayName) {
-            type = 'user';
+            type = _.get(record, 'data.account_type', 'user');
             displayName = accountObject.accountDisplayName;
 
             // need to create a "dummy" app to call featureEnabled()
@@ -448,15 +449,17 @@ Tine.Tinebase.common = {
                 email = accountObject.accountEmailAddress;
                 displayName += ' (' + email + ')';
             }
-        } else if (accountObject.name) {
+        } else if (accountObject.name && ! _.get(record, 'data.account_type')) {
             type = 'group';
             displayName = accountObject.name;
         } else if (record && record.data.name) {
             type = record.data.type;
             displayName = record.data.name;
+
+        // so odd, - new records, picked via pickerGridPanel
         } else if (record && record.data.account_name) {
             type = record.data.account_type;
-            displayName = record.data.account_name;
+            displayName = _.get(record, 'data.account_name.name', record.data.account_name);
         }
         
         if (displayName == 'Anyone') {
@@ -464,7 +467,7 @@ Tine.Tinebase.common = {
             type = 'group';
         }
         
-        iconCls = type === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
+        iconCls = 'renderer renderer_account' + Ext.util.Format.capitalize(type) + 'Icon';
         return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName || '');
     },
     
