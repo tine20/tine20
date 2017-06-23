@@ -72,6 +72,16 @@ class Tinebase_FileSystem_RecordAttachments
         
         try {
             $record->attachments = $this->_fsController->scanDir($parentPath);
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            foreach($record->attachments as $node) {
+                $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($node,
+                    true));
+                $node->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath,
+                    $record->getApplication());
+            }
+
+            // to resolve grants... but as not needed currently we save the effort
+            //Filemanager_Controller_Node::getInstance()->resolveGrants($record->attachments);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
