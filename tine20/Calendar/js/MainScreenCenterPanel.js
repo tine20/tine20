@@ -1521,6 +1521,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
                 allowCancel: false,
+                width: 550,
                 height: 180 + fbInfo.attendeeCount*14 + 12*error.freebusyinfo.length,
                 title: this.app.i18n._('Scheduling Conflict'),
                 questionText: '<div class = "cal-conflict-heading">' +

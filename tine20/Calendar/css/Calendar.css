@@ -215,6 +215,8 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-conflict-attendername {
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-weight: bold;
     background-position: 0;
     height: 14px;

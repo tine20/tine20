@@ -496,6 +496,19 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * @param array $attendee
+     * @return array
+     */
+    public function resolveGroupMembers($attendee)
+    {
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        Calendar_Model_Attender::resolveGroupMembers($attendee);
+        Calendar_Model_Attender::resolveAttendee($attendee,false);
+
+        return $attendee->toArray();
+    }
+
+    /**
+     * @param array $attendee
      * @param array $event
      * @param array $ignoreUIDs
      * @return array

@@ -546,8 +546,11 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
         return p.renderAttenderName.call(p, this.get('user_id'), false, this);
     },
 
-    getCompoundId: function() {
-        return this.get('user_type') + '-' + this.getUserId();
+    getCompoundId: function(mapGroupmember) {
+        var type = this.get('user_type');
+        type = mapGroupmember && type == 'groupmember' ? 'user' : type;
+
+        return type + '-' + this.getUserId();
     },
 
     /**
@@ -759,6 +762,9 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
         // add groupmember for user
         if (attendeeType[0] == 'user') {
             attendeeType.push('groupmember');
+        }
+        if (attendeeType[0] == 'groupmember') {
+            attendeeType.push('user');
         }
 
         if (attendeeType.indexOf(r.get('user_type')) >= 0 && r.getUserId() == attendee.getUserId()) {

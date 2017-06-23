@@ -59,7 +59,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
             html = '<div class="cal-conflict-eventinfos">';
 
         _.each(_.get(attendees, 'data.items', []), _.bind(function(attendee) {
-            if (! this.byAttendee[attendee.getCompoundId()]) return;
+            if (! this.byAttendee[attendee.getCompoundId(true)]) return;
 
             html += ['<div class="cal-conflict-attendername ', attendee.getIconCls(), '">',
                 attendee.getTitle(), '</div>'].join('');
@@ -79,7 +79,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
         var _ = window.lodash,
             eventInfos = [];
 
-        _.each(_.get(this.byAttendee, attendee.getCompoundId(), []), _.bind(function(fbInfo) {
+        _.each(_.get(this.byAttendee, attendee.getCompoundId(true), []), _.bind(function(fbInfo) {
             var format = 'H:i';
             var eventInfo;
             var dateFormat = Ext.form.DateField.prototype.format;
@@ -112,7 +112,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
      */
     getStateOfAttendee: function(attendee, event) {
         var _ = window.lodash,
-            id = attendee.getCompoundId(),
+            id = attendee.getCompoundId(true),
             stateId = _.get(this.statusMap, id, 0),
             state = _.invert(Tine.Calendar.FreeBusyInfo.states)[stateId],
             cls = _.lowerCase(_.replace(state, /^BUSY_/, '')),
