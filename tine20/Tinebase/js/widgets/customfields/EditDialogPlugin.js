@@ -118,8 +118,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 cfConfigs.push(cfConfig);
             }
         }, this);
-
-        _.each(cfConfigs, _.bind(_.defaultsDeep, cfConfigs, _, {data: {definition: {uiconfig: {tab: 'customfields', 'group': '', sort: 0}}}}));
+        
         _.each(_.groupBy(cfConfigs, 'data.definition.uiconfig.tab'), _.bind(function(fields, tabId) {
             var tab = tabPanel.items.get(_.isNaN(+tabId) || ['', null].indexOf(tabId) >= 0? tabId : +tabId);
             if (! tab) {
