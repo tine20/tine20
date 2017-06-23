@@ -353,6 +353,39 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         return $persistentEvent;
     }
 
+    /**
+     * test get free busy info with single event
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testGetFreeBusyInfoWithGroup()
+    {
+        $event = $this->_getEvent();
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id' => Tinebase_Group::getInstance()->getDefaultGroup(),
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'role' => Calendar_Model_Attender::ROLE_OPTIONAL,
+            ),
+        ));
+        $event->attendee = clone $attendee;
+        $persistentEvent = $this->_controller->create($event);
+
+        $period = new Calendar_Model_EventFilter(array(array(
+            'field'     => 'period',
+            'operator'  => 'within',
+            'value'     => array(
+                'from'      => $persistentEvent->dtstart,
+                'until'     => $persistentEvent->dtend
+            ),
+        )));
+        $fbinfo = $this->_controller->getFreeBusyInfo($period, $attendee);
+
+        $this->assertGreaterThanOrEqual(1, count($fbinfo));
+
+        return $persistentEvent;
+    }
+
     public function testSearchFreeTime()
     {
         $event = $this->_getEvent();

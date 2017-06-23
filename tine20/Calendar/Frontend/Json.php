@@ -594,7 +594,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($result as $type => $res) {
                 foreach ($res['results'] as $r) {
                     $attendee[] = array(
-                        'user_id' => $r['id'],
+                        'user_id' => $type === 'group' ? $r['group_id'] : $r['id'],
                         'user_type' => $type
                     );
                 }

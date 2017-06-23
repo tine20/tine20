@@ -365,8 +365,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo merge overlapping events to one freebusy entry
      * 
      * @param  Calendar_Model_EventFilter                           $_periods
-     * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
-     * @param  array of UIDs                                        $_ignoreUIDs
+     * @param  Tinebase_Record_RecordSet                            $_attendee
+     * @param  array                                                $_ignoreUIDs
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
     public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
@@ -377,9 +377,26 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $attendee = clone $_attendee;
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
+        /*$groups = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        $attendee->removeRecords($groups);
+        /** @var Calendar_Model_Attender $group *
+        foreach($groups as $group) {
+            $group = Tinebase_Group::getInstance()->getGroupById($group->user_id);
+
+            // fetch list only if list_id is not NULL, otherwise we get back an empty list object
+            if (!empty($group->list_id)) {
+                $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
+                foreach ($contactList->members as $member) {
+                    $attendee->addRecord(new Calendar_Model_Attender(array(
+                        'user_id' => $member,
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER
+                    ), true));
+                }
+            }
+        }*/
         
         $conflictCriteria = new Calendar_Model_EventFilter(array(
-            array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee),
+            array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
             array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
         ));
 
@@ -388,10 +405,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // create a typemap
         $typeMap = array();
         foreach ($attendee as $attender) {
-            if (! (isset($typeMap[$attender['user_type']]) || array_key_exists($attender['user_type'], $typeMap))) {
+            if (! isset($typeMap[$attender['user_type']])) {
                 $typeMap[$attender['user_type']] = array();
             }
-            
+            if (is_object($attender['user_id'])) {
+                $attender['user_id'] = $attender['user_id']->getId();
+            }
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
