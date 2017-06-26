@@ -1117,3 +1117,8 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background-color: #b7f8bd;
     overflow: hidden;
 }
+
+.x-item-disabled.rangeslider-component .rangeslider-component-slider,
+.x-item-disabled.rangeslider-component .rangeslider-component-slider-label {
+    visibility: hidden !important;
+}

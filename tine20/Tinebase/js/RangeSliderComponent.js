@@ -103,11 +103,11 @@ Tine.Tinebase.RangeSliderComponent = Ext.extend(Ext.BoxComponent, {
             this.sliderLabel.show();
         }
 
-        var hoursStart = this.trunc(this.currentStart);
-        var minStart = this.trunc(Math.round((this.currentStart % 1) * 100) * 0.60);
+        var hoursStart = Tine.Tinebase.common.trunc(this.currentStart);
+        var minStart = Tine.Tinebase.common.trunc(Math.round((this.currentStart % 1) * 100) * 0.60);
 
-        var hoursEnd = this.trunc(this.currentEnd);
-        var minEnd = this.trunc((this.currentEnd % 1) * 100 * 0.60);
+        var hoursEnd = Tine.Tinebase.common.trunc(this.currentEnd);
+        var minEnd = Tine.Tinebase.common.trunc((this.currentEnd % 1) * 100 * 0.60);
 
         var startDate = new Date();
         startDate.setHours(hoursStart);
@@ -120,21 +120,6 @@ Tine.Tinebase.RangeSliderComponent = Ext.extend(Ext.BoxComponent, {
         var pattern = 'H:i';
 
         this.sliderLabel.update(startDate.format(pattern) + ' - ' + endDate.format(pattern));
-    },
-
-    /**
-     * @private
-     * @param x
-     * @return {*}
-     */
-    trunc: function (x) {
-        if (isNaN(x)) {
-            return NaN;
-        }
-        if (x > 0) {
-            return Math.floor(x);
-        }
-        return Math.ceil(x);
     },
 
     /**

@@ -118,35 +118,75 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
         this.window.close();
     },
 
+    /**
+     * Get a time period of a given slider range
+     *
+     *    0:0:0 - 23:59:59
+     *
+     * @param range
+     * @return {{from: *, until: *}}
+     */
+    getPeriodFromSliderRange: function (range) {
+        var hoursStart = Tine.Tinebase.common.trunc(range[0]);
+        var minStart = Tine.Tinebase.common.trunc(Math.round((range[0] % 1) * 100) * 0.60);
+
+        var hoursEnd = Tine.Tinebase.common.trunc(range[1]);
+        var minEnd = Tine.Tinebase.common.trunc((range[1] % 1) * 100 * 0.60);
+
+        var startDate = new Date();
+        startDate.setHours(hoursStart);
+        startDate.setMinutes(minStart);
+        startDate.setSeconds(0);
+
+        var endDate = new Date();
+        endDate.setHours(hoursEnd);
+        endDate.setMinutes(minEnd);
+        endDate.setSeconds((hoursEnd === 23 && minEnd === 59) ? 59 : 0);
+
+        var pattern = 'H:i:s';
+
+        return {
+            from: startDate.format(pattern),
+            until: endDate.format(pattern)
+        };
+    },
+
     onSaveAndClose: function () {
         var data = [{
             id: 'monday',
             active: this.mondayCheckbox.getValue(),
-            config: this.mondaySlider.getRange()
+            config: this.mondaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.mondaySlider.getRange())
         }, {
             id: 'tuesday',
             active: this.tuesdayCheckbox.getValue(),
-            config: this.tuesdaySlider.getRange()
+            config: this.tuesdaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.tuesdaySlider.getRange())
         }, {
             id: 'wednesday',
             active: this.wednesdayCheckbox.getValue(),
-            config: this.wednesdaySlider.getRange()
+            config: this.wednesdaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.wednesdaySlider.getRange())
         }, {
             id: 'thursday',
             active: this.thursdayCheckbox.getValue(),
-            config: this.thursdaySlider.getRange()
+            config: this.thursdaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.thursdaySlider.getRange())
         }, {
             id: 'friday',
             active: this.fridayCheckbox.getValue(),
-            config: this.fridaySlider.getRange()
+            config: this.fridaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.fridaySlider.getRange())
         }, {
             id: 'saturday',
             active: this.saturdayCheckbox.getValue(),
-            config: this.saturdaySlider.getRange()
+            config: this.saturdaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.saturdaySlider.getRange())
         }, {
             id: 'sunday',
             active: this.sundayCheckbox.getValue(),
-            config: this.sundaySlider.getRange()
+            config: this.sundaySlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.sundaySlider.getRange())
         }];
 
         Ext.state.Manager.set(this.stateId, data);
@@ -213,8 +253,8 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
      */
     getFormItems: function () {
         var wkdayItems = [];
-        for (var i=0,d; i<7; i++) {
-            d = (i+Ext.DatePicker.prototype.startDay)%7
+        for (var i = 0, d; i < 7; i++) {
+            d = (i + Ext.DatePicker.prototype.startDay) % 7;
             wkdayItems.push(this.getCheckboxSliderRowFor(this.wkdays[d]));
         }
 
@@ -230,7 +270,7 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
             items: wkdayItems
         }];
 
-        var items = {
+        return {
             xtype: 'tabpanel',
             border: false,
             plain: true,
@@ -241,7 +281,6 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
                 ptype: 'ux.tabpanelkeyplugin'
             }],
             activeTab: 0,
-            border: false,
             items: [{
                 title: this.title,
                 autoScroll: true,
@@ -256,8 +295,6 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
                 }]
             }]
         };
-
-        return items;
     }
 });
 

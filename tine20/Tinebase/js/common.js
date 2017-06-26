@@ -815,6 +815,24 @@ Tine.Tinebase.common = {
                 }
             }
         }, this);
+    },
+
+    /**
+     * Math.trunc polyfill
+     *
+     * https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc
+     *
+     * @param x
+     * @return {*}
+     */
+    trunc: function (x) {
+        if (isNaN(x)) {
+            return NaN;
+        }
+        if (x > 0) {
+            return Math.floor(x);
+        }
+        return Math.ceil(x);
     }
 };
 
