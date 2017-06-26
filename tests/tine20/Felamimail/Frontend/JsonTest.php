@@ -565,6 +565,21 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * test send message
+     *
+     * @see 0013264: Wrong name in "from:" in sent mail
+     */
+    public function testSendMessageWithFromName()
+    {
+        // send email
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['from_name'] = 'My Special Name';
+        $message = $this->_sendMessage('INBOX', array(), '', 'test', $messageToSend);
+
+        self::assertEquals($messageToSend['from_name'], $message['from_name'], print_r($message, true));
+    }
+
+    /**
      * test mail sanitize
      */
     public function testSanitizeMail()
@@ -1191,7 +1206,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->_json->saveMessage($messageData);
         $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
     }
-    
+
     /**
      * testMessageWithInvalidICS
      *
@@ -1533,7 +1548,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testGetVacationTemplates()
     {
         $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
+
         $this->_addVacationTemplateFile();
         $result = $this->_json->getVacationMessageTemplates();
         
@@ -1569,7 +1584,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testGetVacationMessage()
     {
         $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
+
         $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
@@ -1612,7 +1627,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testGetVacationWithSignature()
     {
         $this->markTestSkipped('0010194: fix felamimail webdav tests');
-        
+
         $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
         
         // set signature with <br> + linebreaks
@@ -1756,10 +1771,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * @param array $addtionalHeaders
      * @return array
      */
-    protected function _sendMessage($folderName = 'INBOX', $addtionalHeaders = array())
+    protected function _sendMessage(
+        $folderName = 'INBOX',
+        $additionalHeaders = array(),
+        $_emailFrom = '',
+        $_subject = 'test',
+        $_messageToSend = null)
     {
-        $messageToSend = $this->_getMessageData();
-        $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
+        $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
+        $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
