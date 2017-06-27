@@ -1003,6 +1003,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             emailFrom = account.get('email');
             
         this.record.set('from_email', emailFrom);
+        this.record.set('from_name', account.get('from'));
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 

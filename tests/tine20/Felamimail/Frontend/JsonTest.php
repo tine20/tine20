@@ -563,6 +563,21 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * test send message
+     *
+     * @see 0013264: Wrong name in "from:" in sent mail
+     */
+    public function testSendMessageWithFromName()
+    {
+        // send email
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['from_name'] = 'My Special Name';
+        $message = $this->_sendMessage('INBOX', array(), '', 'test', $messageToSend);
+
+        self::assertEquals($messageToSend['from_name'], $message['from_name'], print_r($message, true));
+    }
+
+    /**
      * test mail sanitize
      */
     public function testSanitizeMail()
@@ -1846,7 +1861,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
         static::assertContains('test@test.de', $script->getSieve());
     }
-    
+
     /**
      * use another name for test sieve script
      */
@@ -1938,10 +1953,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * @param array $addtionalHeaders
      * @return array
      */
-    protected function _sendMessage($folderName = 'INBOX', $addtionalHeaders = array(), $_emailFrom = '', $_subject = 'test')
+    protected function _sendMessage(
+        $folderName = 'INBOX',
+        $additionalHeaders = array(),
+        $_emailFrom = '',
+        $_subject = 'test',
+        $_messageToSend = null)
     {
-        $messageToSend = $this->_getMessageData($_emailFrom, $_subject);
-        $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
+        $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
+        $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
