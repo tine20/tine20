@@ -12,10 +12,11 @@
 /**
  * class to hold Rule data
  * 
- * @property    integer id
- * @property    array   action       array('type', 'argument')
- * @property    array   conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
- * @property    boolean enabled
+ * @property    integer $id
+ * @property    array   $conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
+ * @property    boolean $enabled
+ * @property    string  $action_argument
+ * @property    string  $action_type
  * 
  * @package     Felamimail
  */

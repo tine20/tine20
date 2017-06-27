@@ -30,7 +30,8 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
             idProperty: 'accountId'
         });
 
-        var disable = window.lodash.get(this.editDialog.record, 'data.notificationProps', []).length === 0;
+        var notificationProps = window.lodash.get(this.editDialog.record, 'data.notificationProps', []);
+        var disable = notificationProps === null || notificationProps.length === 0;
 
         this.notificationGrid = new Tine.Filemanager.NotificationGridPanel({
             store: store,
@@ -39,9 +40,19 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
             editDialog: this.editDialog
         });
 
+        var featureEnabled = _.get(Tine.Tinebase.configManager.get('filesystem'), 'enableNotifications', false);
+
+        var disabled = false;
+
+        if (!featureEnabled) {
+            disabled = true;
+        } else if (!_.get(this.editDialog, 'record.data.account_grants.adminGrant', false)) {
+            disabled = true;
+        }
+
         this.hasOwnNotificationSettings = new Ext.form.Checkbox({
             checked: !disable,
-            disabled: !_.get(this.editDialog, 'record.data.account_grants.adminGrant', false) && !disable,
+            disabled: disabled,
             boxLabel: this.app.i18n._('This folder has own notification settings'),
             listeners: {scope: this, check: this.onOwnNotificationCheck}
         });

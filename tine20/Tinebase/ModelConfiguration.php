@@ -400,8 +400,7 @@ class Tinebase_ModelConfiguration {
      * integer     seconds       Seconds             integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     minutes       Minutes             integer  integer                       int               Tinebase_Model_Filter_Int
      * float                     Float               float    float                         float             Tinebase_Model_Filter_Int
-     * float       usMoney       Dollar in Cent      float    float                         int               Tinebase_Model_Filter_Int
-     * float       euMoney       Euro in Cent        float    float                         int               Tinebase_Model_Filter_Int
+     * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag

@@ -112,14 +112,23 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 var options = pref.get('options');
                 // NOTE: some prefs have no default and only one option (e.g. std email account)
                 if (options.length > 1 || (options.length == 1 && options[0][0] !== '_default_')) {
-                    Ext.apply(fieldDef, {
-                        xtype: (this.adminMode ? 'lockCombo' : 'combo'),
-                        store: pref.get('options'),
-                        mode: 'local',
-                        forceSelection: true,
-                        allowBlank: false,
-                        triggerAction: 'all'
-                    });
+                    if (pref.get('uiconfig') && pref.get('uiconfig').xtype) {
+                        // TODO support admin mode / currently this is personal_only
+                        Ext.apply(fieldDef, {
+                            xtype: pref.get('uiconfig').xtype,
+                            recordClass: Tine[pref.get('uiconfig').appName].Model[pref.get('uiconfig').model],
+                            value: pref.get('value') === '_default_' ? [] : pref.get('value'),
+                        });
+                    } else {
+                        Ext.apply(fieldDef, {
+                            xtype: (this.adminMode ? 'lockCombo' : 'combo'),
+                            store: pref.get('options'),
+                            mode: 'local',
+                            forceSelection: true,
+                            allowBlank: false,
+                            triggerAction: 'all'
+                        });
+                    }
                 } else {
                     Ext.apply(fieldDef, {
                         xtype: (this.adminMode ? 'lockTextfield' : 'textfield'),

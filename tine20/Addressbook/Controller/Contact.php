@@ -906,8 +906,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fetch all groups and role memberships and add to path
         $listIds = Addressbook_Controller_List::getInstance()->getMemberships($record);
         foreach ($listIds as $listId) {
-            /** @var Addressbook_Model_List $list */
-            $list = Addressbook_Controller_List::getInstance()->get($listId);
+            try {
+                /** @var Addressbook_Model_List $list */
+                $list = Addressbook_Controller_List::getInstance()->get($listId);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Exception::log($tead);
+                continue;
+            }
 
             /**
              * TODO

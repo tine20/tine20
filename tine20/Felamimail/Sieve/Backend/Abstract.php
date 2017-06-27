@@ -6,7 +6,7 @@
  * @subpackage  Sieve
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -30,6 +30,13 @@ abstract class Felamimail_Sieve_Backend_Abstract
      * @var Felamimail_Sieve_Vacation
      */
     protected $_vacation = NULL;
+
+    /**
+     * recordset of Felamimail_Model_Sieve_ScriptPart
+     *
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_scriptParts = NULL;
     
     /**
      * generator string in header
@@ -57,6 +64,16 @@ abstract class Felamimail_Sieve_Backend_Abstract
     {
         return $this->_vacation;
     }
+
+    /**
+     * recordset of Felamimail_Model_Sieve_ScriptPart
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getScriptParts()
+    {
+        return $this->_scriptParts;
+    }
     
     /**
      * parse Sieve script (only pseudo scripts get loaded)
@@ -67,7 +84,6 @@ abstract class Felamimail_Sieve_Backend_Abstract
      * add rule to script
      * 
      * @param Felamimail_Sieve_Rule $rule
-     * @return Felamimail_Sieve_Vacation
      */
     public function addRule(Felamimail_Sieve_Rule $rule)
     {
@@ -91,9 +107,10 @@ abstract class Felamimail_Sieve_Backend_Abstract
     {
         $rules = $this->_getRulesString();
         $vacation = $this->_getVacationString();
-        $header = (! empty($rules) || ! empty($vacation)) ? $this->_getHeaderString() : '';
+        $scriptParts = $this->_getScriptPartsString();
+        $header = (!empty($rules) || !empty($vacation) || !empty($scriptParts)) ? $this->_getHeaderString() : '';
         
-        $sieve = $header . "\r\n\r\n" . $rules . $vacation . "\r\n\r\n";
+        $sieve = $header . "\r\n\r\n" . $rules . $vacation . $scriptParts . "\r\n\r\n";
         
         return $sieve;
     }
@@ -145,10 +162,38 @@ abstract class Felamimail_Sieve_Backend_Abstract
                 $require[] = '"relational"';
             }
         }
+
+        if (null !== $this->_scriptParts) {
+            /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
+            foreach ($this->_scriptParts as $scriptPart) {
+                $require = array_merge($require,
+                    $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES));
+            }
+        }
+
+        $require = array_unique($require);
         
         return $require;
     }
 
+    /**
+     * @return string
+     */
+    protected function _getScriptPartsString()
+    {
+        if (null === $this->_scriptParts) {
+            return '';
+        }
+
+        $result = "\r\n";
+
+        /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
+        foreach ($this->_scriptParts as $scriptPart) {
+            $result .= $scriptPart->script . "\r\n";
+        }
+
+        return $result;
+    }
     /**
      * get sieve rules string
      * 
@@ -193,6 +238,14 @@ abstract class Felamimail_Sieve_Backend_Abstract
     {
         $this->_vacation = $vacation;
     }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_scriptParts
+     */
+    public function setScriptParts(Tinebase_Record_RecordSet $_scriptParts)
+    {
+        $this->_scriptParts = $_scriptParts;
+    }
     
     /**
      * copy data from another script
@@ -203,5 +256,6 @@ abstract class Felamimail_Sieve_Backend_Abstract
     {
         $this->_vacation = $_scriptToCopyFrom->getVacation();
         $this->_rules = $_scriptToCopyFrom->getRules();
+        $this->_scriptParts = $_scriptToCopyFrom->getScriptParts();
     }
 }

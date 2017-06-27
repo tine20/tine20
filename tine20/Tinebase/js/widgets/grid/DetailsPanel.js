@@ -291,4 +291,4 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     }
 });
 
-Ext.reg('widget-detailspanel', Tine.widgets.grid.DetailsPanel)
+Ext.reg('widget-detailspanel', Tine.widgets.grid.DetailsPanel);

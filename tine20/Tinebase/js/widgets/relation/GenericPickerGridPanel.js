@@ -694,9 +694,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     /**
      * is called when selecting a record in the searchCombo (relationpickercombo)
      */
-    onAddRecordFromCombo: function() {
-        var record = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue());
-        
+    onAddRecordFromCombo: function(node) {
+        var record = null;
+
+        if (this.getActiveSearchCombo().hasOwnProperty('store')) {
+            record = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue())
+        } else {
+            record = node;
+        }
+
         if (! record) {
             return;
         }
@@ -708,14 +714,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         
         this.onAddRecord(record, relconf);
-        
-        this.getActiveSearchCombo().collapse();
-        this.getActiveSearchCombo().reset();
+
+        if (this.getActiveSearchCombo().hasOwnProperty('collapse')) {
+            this.getActiveSearchCombo().collapse();
+            this.getActiveSearchCombo().reset();
+        }
     },
 
     /**
      * call to add relation from an external component
-     * 
+     *
+     *  @todo refactor this trash
+     *
      * @param {Tine.Tinebase.data.Record} record
      * @param {Object} relconf
      */
@@ -724,16 +734,16 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             if (! relconf) {
                 relconf = {};
             }
-            if (record.data.hasOwnProperty('relations')) {
+            if (record.data && record.data.hasOwnProperty('relations')) {
                 record.data.relations = null;
                 delete record.data.relations;
             }
             var rc = this.getActiveSearchCombo().recordClass;
             var relatedPhpModel = rc.getPhpClassName();
-            
+
             var app = rc.getMeta('appName'), model = rc.getMeta('modelName'), f = app + model;
             var type = '';
-            
+
             if (this.constraintsConfig[f] && this.constraintsConfig[f].length) {
                 // per default the first defined type is used
                 var type = this.constraintsConfig[f][0].type;
@@ -747,7 +757,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 type = '';
 
             var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), Ext.apply({
-                related_record: record.data,
+                related_record: record.data || record,
                 related_id: record.id,
                 related_model: relatedPhpModel,
                 type: type,
@@ -772,10 +782,6 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 this.onAddNewRelationToStore(relationRecord, record);
             }
         }
-        
-        // reset search combo
-        this.getActiveSearchCombo().collapse();
-        this.getActiveSearchCombo().reset();
     },
     
     /**
@@ -793,7 +799,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var relatedApp = Tine.Tinebase.appMgr.get(appName); 
         var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
         var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
-        var relatedRecordProxy = Tine[appName][(model.toLowerCase() + 'Backend')];
+        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy || Tine[appName][(model.toLowerCase() + 'Backend')];
         
         if (! Ext.isFunction(record.get)) {
             record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
@@ -894,9 +900,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Tine.Tinebase.data.Record} record
      */
     onAddNewRelationToStore: function(relationRecord, record) {
-        relationRecord.data.related_record.relations = null;
-        delete relationRecord.data.related_record.relations;
-        
+        var _ = window.lodash;
+
+        if (_.get(relationRecord, 'data.related_record.relations', false)) {
+            relationRecord.data.related_record.relations = null;
+            delete relationRecord.data.related_record.relations;
+        }
+
         if (this.relationCheck(relationRecord)) {
             Tine.log.debug('Adding new relation:');
             Tine.log.debug(relationRecord);

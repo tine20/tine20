@@ -38,7 +38,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'getconfig'                 => 'Get Config value for a specify the key \' -- configkey="your_key"\'',
                 'check_requirements'        => 'Check if all requirements are met to install and run tine20',
                 'create_admin'              => 'Create new admin user (or reactivate if already exists)',
-                'install-s'                 => 'Install applications [All] or comma separated list;'
+                'install-s'                 => 'Install applications [all if nothing installed yet] or comma separated list (use "all" as parameter to install all available apps);'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
                 'update-s'                  => 'Update applications [All] or comma separated list',

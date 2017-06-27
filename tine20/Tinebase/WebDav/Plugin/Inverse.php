@@ -7,7 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @author      Gabriel Malheiros <gabriel.malheiros@serpro.gov.br>
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  *
  */
 
@@ -18,6 +19,8 @@
  *
  * @package     Tinebase
  * @subpackage  WebDAV
+ *
+ * @deprecated remove this
  */
 
 class Tinebase_WebDav_Plugin_Inverse extends Sabre\DAV\ServerPlugin {

@@ -68,12 +68,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 
                 if (field) {
                     if(field.isXType('combo') && Ext.isObject(this.customfieldsValue[name])) {
-                        var phpClassName = cfConfig.get('model').split('_Model_'),
-                            recordClass = Tine[phpClassName[0]].Model[phpClassName[1]],
-                            record = new recordClass(this.customfieldsValue[name]);
-                            
-                        field.setValue(record.getId());
-                        field.selectedRecord = record.data; 
+                        var record = new field.recordClass(this.customfieldsValue[name]);
+                        field.setValue(record);
                     } else {
                         field.setValue(this.customfieldsValue[name]);
                     }
@@ -122,8 +118,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 cfConfigs.push(cfConfig);
             }
         }, this);
-
-        _.each(cfConfigs, _.bind(_.defaultsDeep, cfConfigs, _, {data: {definition: {uiconfig: {tab: 'customfields', 'group': '', sort: 0}}}}));
+        
         _.each(_.groupBy(cfConfigs, 'data.definition.uiconfig.tab'), _.bind(function(fields, tabId) {
             var tab = tabPanel.items.get(_.isNaN(+tabId) || ['', null].indexOf(tabId) >= 0? tabId : +tabId);
             if (! tab) {

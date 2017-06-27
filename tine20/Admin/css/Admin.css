@@ -70,13 +70,13 @@
 }
 
 .admin-node-accesslog {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
+    background-image:url(../../images/oxygen/16x16/apps/utilities-log-viewer.png) !important;
 }
 .x-btn-medium .admin-node-accesslog {
-    background-image:url(../../images/oxygen/22x22/actions/view-process-own.png) !important;
+    background-image:url(../../images/oxygen/22x22/apps/utilities-log-viewer.png) !important;
 }
 .x-btn-large .admin-node-accesslog {
-    background-image:url(../../images/oxygen/32x32/actions/view-process-own.png) !important;
+    background-image:url(../../images/oxygen/32x32/apps/utilities-log-viewer.png) !important;
 }
 
 .admin-node-user {

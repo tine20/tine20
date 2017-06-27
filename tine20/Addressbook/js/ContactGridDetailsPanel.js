@@ -87,7 +87,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                         hideLabel: true,
                                         htmlEncode: false,
                                         renderer: function(value) {
-                                            return '<b>' + value + '</b>';
+                                            return '<b>' +  Tine.Tinebase.EncodingHelper.encode(value) + '</b>';
                                         }
                                     }, {
                                         xtype: 'ux.displayfield',

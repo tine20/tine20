@@ -63,93 +63,15 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         });
     },
 
-    onSelectedChange: function(state){
-        Tine.Calendar.DaysViewEventUI.superclass.onSelectedChange.call(this, state);
-        if(state){
-            this.addClass('cal-daysviewpanel-event-active');
-
-        }else{
-            this.removeClass('cal-daysviewpanel-event-active');
-        }
-    },
-
     render: function(view) {
-        this.event.view = view;
+        Tine.Calendar.DaysViewEventUI.superclass.render.call(this, view);
 
-        this.attendeeRecord = view.ownerCt && view.ownerCt.attendee ?
-            Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.event.getAttendeeStore(), view.ownerCt.attendee) :
-            this.event.getMyAttenderRecord();
-
-        this.colorSet = Tine.Calendar.colorMgr.getColor(this.event, this.attendeeRecord);
-        this.event.colorSet = this.colorSet;
-
-        this.dtStart = this.event.get('dtstart');
         this.startColNum = view.getColumnNumber(this.dtStart);
-
-        this.dtEnd = this.event.get('dtend');
-
-        if (this.event.get('editGrant')) {
-            this.extraCls = 'cal-daysviewpanel-event-editgrant';
-        }
-
-        this.extraCls += ' cal-status-' + this.event.get('status');
-
-        // 00:00 in users timezone is a spechial case where the user expects
-        // something like 24:00 and not 00:00
-        if (this.dtEnd.format('H:i') == '00:00') {
-            this.dtEnd = this.dtEnd.add(Date.MINUTE, -1);
-        }
         this.endColNum = view.getColumnNumber(this.dtEnd);
 
         // skip dates not in our diplay range
         if (this.endColNum < 0 || this.startColNum > view.numOfDays-1) {
             return;
-        }
-
-        // compute status icons
-        this.statusIcons = [];
-        if (this.event.get('class') === 'PRIVATE') {
-            this.statusIcons.push({
-                status: 'private',
-                text: this.app.i18n._('private classification')
-            });
-        }
-
-        if (this.event.get('rrule')) {
-            this.statusIcons.push({
-                status: 'recur',
-                text: this.app.i18n._('recurring event')
-            });
-        } else if (this.event.isRecurException()) {
-            this.statusIcons.push({
-                status: 'recurex',
-                text: this.app.i18n._('recurring event exception')
-            });
-        }
-
-
-
-        if (! Ext.isEmpty(this.event.get('alarms'))) {
-            this.statusIcons.push({
-                status: 'alarm',
-                text: this.app.i18n._('has alarm')
-            });
-        }
-
-        if (! Ext.isEmpty(this.event.get('attachments'))) {
-            this.statusIcons.push({
-                status: 'attachment',
-                text: this.app.i18n._('has attachments')
-            });
-        }
-
-        var attenderStatusRecord = this.attendeeRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(this.attendeeRecord.get('status')) : null;
-
-        if (attenderStatusRecord && attenderStatusRecord.get('system')) {
-            this.statusIcons.push({
-                status: this.attendeeRecord.get('status'),
-                text: attenderStatusRecord.get('i18nValue')
-            });
         }
 
         var registry = this.event.get('is_all_day_event') ? view.parallelWholeDayEventsRegistry : view.parallelScrollerEventsRegistry;

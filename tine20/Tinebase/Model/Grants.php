@@ -107,7 +107,8 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             'account_type'  => array('presence' => 'required', array('InArray', array(
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
             ))),
         );
         
@@ -192,6 +193,22 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                         . ' Grant not available for current user (account_id of grant: ' . $this->account_id . ')');
                     return false;
                 }
+                break;
+            case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                $userId = $user->getId();
+                foreach (Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->account_id) as $roleMember) {
+                    if (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $roleMember['account_type'] &&
+                            $userId === $roleMember['account_id']) {
+                        return true;
+                    }
+                    if (Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP === $roleMember['account_type'] &&
+                        in_array($user->getId(), Tinebase_Group::getInstance()->getGroupMembers($this->account_id))) {
+                        return true;
+                    }
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Current user not member of role ' . $this->account_id);
+                return false;
         }
         
         return true;

@@ -120,10 +120,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         this.loadingText = i18n._('Searching...');
         
-        this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
+        this.store = new Tine.Tinebase.data.RecordStore({
             readOnly: true,
-            proxy: this.recordProxy || undefined
-        }, this, 'totalProperty,root,recordClass'));
+            proxy: this.recordProxy || undefined,
+            totalProperty: this.totalProperty,
+            root: this.root,
+            recordClass: this.recordClass
+        });
         
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
@@ -140,7 +143,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" ext:qtip="{[this.doubleEncode(values.description)]}">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
                 getTitle: (function(id) {
                     var record = this.getStore().getById(id),
-                        title = record ? record.getTitle() : '&nbsp';
+                        title = record ? record.getTitle() : ' ';
                     
                     return Ext.util.Format.htmlEncode(title);
                 }).createDelegate(this)
@@ -168,20 +171,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
 
         this.lastStoreTransactionId = options.transactionId = Ext.id();
-        
-        var paging = {
-            // TODO do we need to set start & limit here?
+
+        Ext.apply(options.params, { paging: {
             start: options.params.start,
             limit: options.params.limit,
-            // if sort is not set, use display field as default sort
             sort: (this.sortBy) ? this.sortBy : this.displayField,
             dir: this.sortDir
-        };
-        
-        Ext.applyIf(options.params, paging);
-        
-        // TODO is this needed?
-        options.params.paging = paging;
+        }});
     },
     
     /**
@@ -216,7 +212,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.store.baseParams.filter = filter;
         this.tpl.lastQuery = qevent.query;
     },
-    
+
+    /**
+     * get last usesed query
+     *
+     * @returns {String}
+     */
+    getLastQuery: function() {
+        return this.lastQuery;
+    },
+
     /**
      * relay contextmenu events
      * 

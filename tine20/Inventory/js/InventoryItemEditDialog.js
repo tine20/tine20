@@ -246,10 +246,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     },
                     items: [
                         [{
-                            xtype: 'extuxnumberfield',
+                            xtype: 'extuxmoneyfield',
                             name: 'price',
-                            suffix: ' €',
-                            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                             fieldLabel: this.app.i18n._('Price'),
                             columnWidth: 0.5
                         }, 

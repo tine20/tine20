@@ -376,12 +376,15 @@ class Setup_Controller
     /**
      * get list of applications as found in the filesystem
      *
+     * @param boolean $getInstalled applications, too
      * @return array appName => setupXML
      */
-    public function getInstallableApplications()
+    public function getInstallableApplications($getInstalled = false)
     {
         // create Tinebase tables first
-        $applications = array('Tinebase' => $this->getSetupXml('Tinebase'));
+        $applications = $getInstalled || ! $this->isInstalled('Tinebase')
+            ? array('Tinebase' => $this->getSetupXml('Tinebase'))
+            : array();
         
         try {
             $dirIterator = new DirectoryIterator($this->_baseDir);
@@ -392,9 +395,9 @@ class Setup_Controller
         
         foreach ($dirIterator as $item) {
             $appName = $item->getFileName();
-            if($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
+            if ($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $appName . '/Setup/setup.xml' ;
-                if(file_exists($fileName)) {
+                if (file_exists($fileName) && ($getInstalled || ! $this->isInstalled($appName))) {
                     $applications[$appName] = $this->getSetupXml($appName);
                 }
             }
@@ -637,7 +640,7 @@ class Setup_Controller
     public function searchApplications()
     {
         // get installable apps
-        $installable = $this->getInstallableApplications();
+        $installable = $this->getInstallableApplications(/* $getInstalled */ true);
         
         // get installed apps
         if (Setup_Core::get(Setup_Core::CHECKDB)) {

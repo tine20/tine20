@@ -146,6 +146,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     }
                 }
             } else {
+                if (is_object($attenderValue->user_id)) {
+                    $attenderValue = array(
+                        'user_type' => $attenderValue->user_type,
+                        'user_id'   => $attenderValue->user_id->getId()
+                    );
+                }
                 $attendee = array($attenderValue);
             }
             

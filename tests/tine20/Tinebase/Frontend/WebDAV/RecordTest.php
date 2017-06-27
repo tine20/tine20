@@ -45,7 +45,10 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Calendar/records/Calendar_Model_Event/' . $savedEvent->getId() . '/' . $tempFile->name);
         $this->assertEquals('text/plain', $node->getContentType());
         $this->assertEquals(17, $node->getSize());
-        
+        $handle = $node->get();
+        self::assertTrue(is_resource($handle));
+        fclose($handle);
+
         return $savedEvent;
     }
     
@@ -59,7 +62,7 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         $this->assertEquals('text/plain', $node->getContentType());
         $this->assertEquals(17, $node->getSize());
     }
-    
+
     /**
      * 
      * @return \Sabre\DAV\ObjectTree

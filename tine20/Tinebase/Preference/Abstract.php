@@ -291,7 +291,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' ' . print_r($queryResult, true));
-        
+
         if (! $queryResult) {
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
         } else {
@@ -444,7 +444,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                     'value'             => $_value,
                     'account_id'        => $_accountId,
                     'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    'type'              => Tinebase_Model_Preference::TYPE_USER
+                    'type'              => Tinebase_Model_Preference::TYPE_USER,
+                    'recordConfig'      => $this->_getPrefRecordConfig($_preferenceName),
                 ));
                 $this->create($preference);
                 $action = 'Created';
@@ -471,13 +472,26 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $action = 'Reset';
             } else {
                 $preference->value = $_value;
+                $preference->recordConfig = $this->_getPrefRecordConfig($_preferenceName);
                 $this->update($preference);
                 $action = 'Updated';
             }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> ' . $_value);
+            . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> '
+            . (is_array($_value) ? print_r($_value, true) : $_value));
+    }
+
+    /**
+     * overwrite this in concrete classes if needed
+     *
+     * @param $_preferenceName
+     * @return array
+     */
+    public function _getPrefRecordConfig($_preferenceName)
+    {
+        return array();
     }
 
     /**
@@ -525,6 +539,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 }
             }
             // add default setting to the top of options
+            if (is_array($valueLabel)) {
+                $valueLabel = implode(',', $valueLabel);
+            }
             $defaultLabel = Tinebase_Translation::getTranslation('Tinebase')->_('default') . 
                 ' (' . $valueLabel . ')';
             
@@ -532,6 +549,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 Tinebase_Model_Preference::DEFAULT_VALUE,
                 $defaultLabel,
             ));
+
+            if (isset($default->uiconfig)) {
+                $_preference->uiconfig = $default->uiconfig;
+            }
         }
         
         $_preference->options = $options;
@@ -790,7 +811,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             case self::DEFAULTCONTAINER_OPTIONS:
                 $result = $this->_getDefaultContainerOptions();
                 break;
-                
+
             case self::DEFAULTPERSISTENTFILTER:
                 $result = Tinebase_PersistentFilter::getPreferenceValues($this->_application);
                 break;
@@ -827,7 +848,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         return $result;
     }
-    
+
     /**
      * adds defaults to default container pref
      * 

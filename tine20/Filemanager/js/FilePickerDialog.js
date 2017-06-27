@@ -68,6 +68,8 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      */
     constraint: null,
 
+    cls: 'tw-editdialog',
+
     /**
      * Constructor.
      */
@@ -97,7 +99,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
             scope: this
         });
 
-        this.bbar = [
+        this.fbar = [
             '->',
             this.okAction
         ];

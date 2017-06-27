@@ -119,22 +119,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array(
                 'name' => '10 Port 100 MBit Ethernet Switch',
                 'description' => '10 Port Fast Ethernet Switch, RJ45',
-                'price' => '28.13',
+                'price' => 28.13,
             ),
             array(
                 'name' => '28 Port 100 MBit Ethernet Switch PoE',
                 'description' => '28 Port Fast Ethernet Switch, PoE, RJ45',
-                'price' => '1029.99',
+                'price' => 1029.99,
             ),
             array(
                 'name' => '10 Port Gigabit Ethernet Switch',
                 'description' => '10 Port 1 Gigabit Switch, RJ45',
-                'price' => '78.87',
+                'price' => 78.87,
             ),
             array(
                 'name' => '28 Port Gigabit Ethernet Switch PoE',
                 'description' => '28 Port 1 Gigabit Ethernet Switch PoE',
-                'price' => '3496.45',
+                'price' => 3496.45,
             )
         );
         
@@ -151,22 +151,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array(
                 'name' => self::$_en ? '10m Cat. 5a red' : '10m Kat. 5a rot',
                 'description' => self::$_en ? '10m Cat. 5a red cable up to 100MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
-                'price' => '5.99',
+                'price' => 5.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 5a blue' : '10m Kat. 5a blau',
                 'description' => self::$_en ? '10m Cat. 5a blue cable up to 100MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
-                'price' => '5.99',
+                'price' => 5.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 6 red' : '10m Kat. 6 rot',
                 'description' => self::$_en ? '10m Cat. 6 red cable up to 1000MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
-                'price' => '9.99',
+                'price' => 9.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 6 blue' : '10m Kat. 6 blau',
                 'description' => self::$_en ? '10m Cat. 6 blue cable up to 1000MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
-                'price' => '9.99',
+                'price' => 9.99,
             ),
         );
         

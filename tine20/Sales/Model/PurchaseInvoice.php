@@ -136,32 +136,28 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             ),
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')
-                'type'  => 'float',
-                'specialType' => 'euMoney',
+                'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'price_gross' => array(
                 'label' => 'Price Gross', // _('Price Gross')
-                'type'  => 'float',
-                'specialType' => 'euMoney',
+                'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'price_gross2' => array(
                 'label' => 'Additional Price Gross', // _('Additional Price Gross')
-                'type'  => 'float',
-                'specialType' => 'euMoney',
+                'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'price_tax' => array(
                 'label' => 'Price Tax', // _('Price Tax')
-                'type'  => 'float',
-                'specialType' => 'euMoney',
+                'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
@@ -176,8 +172,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             ),
             'price_total' => array(
                 'label' => 'Total Price', // _('Total Price')
-                'type'  => 'float',
-                'specialType' => 'euMoney',
+                'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
             ),

@@ -153,7 +153,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     // TODO hardcode separator or get it from locale?
                     decimalSeparator: ','
                 }),
-                renderer: Ext.util.Format.euMoney
+                renderer: Ext.util.Format.money
             }, {
                 header: this.app.i18n._("Quantity"),
                 id: 'remark_quantity',

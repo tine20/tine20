@@ -58,6 +58,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
     /**
      * @cfg {bool}
+     * add role selection
+     */
+    selectRole: false,
+
+    /**
+     * @cfg {bool}
      * show hidden (user) contacts / (group) lists
      */
     showHidden: false,
@@ -95,7 +101,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         
         this.recordClass = this.recordClass || Tine.Tinebase.Model.Account;
         this.groupRecordClass = this.groupRecordClass || Tine.Addressbook.Model.List;
-        
+        this.roleRecordClass = this.roleRecordClass || Tine.Tinebase.Model.Role;
+
         if (Tine.Tinebase.configManager.get('anyoneAccountDisabled')) {
             Tine.log.info('Tine.widgets.account.PickerGridPanel::initComponent() -> select anyone disabled in config');
             this.selectAnyone = false;
@@ -110,28 +117,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      */
     initTbar: function() {
         this.accountTypeSelector = this.getAccountTypeSelector();
-        this.contactSearchCombo = this.getContactSearchCombo();
-        this.groupSearchCombo = this.getGroupSearchCombo();
-        
-        var items = [];
-        switch (this.selectType) 
-        {
-        case 'both':
-            items = items.concat([this.contactSearchCombo, this.groupSearchCombo]);
-            if (this.selectTypeDefault === 'user') {
-                this.groupSearchCombo.hide();
-            } else {
-                this.contactSearchCombo.hide();
-            }
-            break;
-        case 'user':
-            items = this.contactSearchCombo;
-            break;
-        case 'group':
-            items = this.groupSearchCombo;
-            break;
-        }
-        
+
+        var items = [this.getSearchCombo('user'), this.getSearchCombo('group'), this.getSearchCombo('role')];
+
+        this.getSearchCombo(this.selectTypeDefault).show();
+
         this.comboPanel = new Ext.Panel({
             layout: 'hfit',
             border: false,
@@ -166,6 +156,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             iconCls: 'tinebase-accounttype-group',
             handler: this.onSwitchCombo.createDelegate(this, ['group', 'tinebase-accounttype-group'])
         };
+        var roleActionCfg = {
+            text: i18n._('Search Role'),
+            scope: this,
+            iconCls: 'tinebase-accounttype-role',
+            handler: this.onSwitchCombo.createDelegate(this, ['role', 'tinebase-accounttype-role'])
+        };
         var anyoneActionCfg = {
             text: i18n._('Add Anyone'),
             scope: this,
@@ -175,10 +171,14 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         
         // set items
         var items = [];
+
         switch (this.selectType) 
         {
         case 'both':
             items = items.concat([userActionCfg, groupActionCfg]);
+            if (this.selectRole) {
+                items.push(roleActionCfg)
+            }
             if (this.selectAnyone) {
                 items.push(anyoneActionCfg);
             }
@@ -219,40 +219,72 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             this.store.add([record]);
         }
     },
-    
+
+    getSearchCombo: function(type) {
+        type = type == 'user' ? 'contact' : type;
+        return this['get' + Ext.util.Format.capitalize(type) + 'SearchCombo']();
+    },
+
     /**
      * @return {Tine.Addressbook.SearchCombo}
      */
     getContactSearchCombo: function () {
-        return new Tine.Addressbook.SearchCombo({
-            accountsStore: this.store,
-            emptyText: i18n._('Search for users ...'),
-            newRecordClass: this.recordClass,
-            newRecordDefaults: this.recordDefaults,
-            recordPrefix: this.recordPrefix,
-            userOnly: true,
-            onSelect: this.onAddRecordFromCombo,
-            additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
-        });
+        if (! this.contactSearchCombo) {
+            this.contactSearchCombo = new Tine.Addressbook.SearchCombo({
+                hidden: true,
+                accountsStore: this.store,
+                emptyText: i18n._('Search for users ...'),
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                userOnly: true,
+                onSelect: this.onAddRecordFromCombo,
+                additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
+            });
+        }
+
+        return this.contactSearchCombo;
     },
     
     /**
      * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
      */
     getGroupSearchCombo: function () {
-        return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-            //anchor: '100%',
-            accountsStore: this.store,
-            blurOnSelect: true,
-            recordClass: this.groupRecordClass,
-            newRecordClass: this.recordClass,
-            newRecordDefaults: this.recordDefaults,
-            recordPrefix: this.recordPrefix,
-            emptyText: i18n._('Search for groups ...'),
-            onSelect: this.onAddRecordFromCombo
-        });
+        if (! this.groupSearchCombo) {
+            this.groupSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                hidden: true,
+                accountsStore: this.store,
+                blurOnSelect: true,
+                recordClass: this.groupRecordClass,
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                emptyText: i18n._('Search for groups ...'),
+                onSelect: this.onAddRecordFromCombo
+            });
+        }
+
+        return this.groupSearchCombo;
     },
-    
+
+    getRoleSearchCombo: function() {
+        if (! this.roleSearchCombo) {
+            this.roleSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                hidden: true,
+                accountsStore: this.store,
+                blurOnSelect: true,
+                recordClass: this.roleRecordClass,
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                emptyText: i18n._('Search for roles ...'),
+                onSelect: this.onAddRecordFromCombo
+            });
+        }
+
+        return this.roleSearchCombo;
+    },
+
     /**
      * @return Ext.grid.ColumnModel
      * @private
@@ -284,28 +316,34 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      */
     onAddRecordFromCombo: function (recordToAdd) {
         var recordData = {},
-            record;
-        
+            record,
+            type = String(recordToAdd.constructor.getMeta('modelName')).toLowerCase();
+
+        // role record selected
+        if (type == 'role') {
+            recordData[this.recordPrefix + 'id'] = recordToAdd.data.id;
+            recordData[this.recordPrefix + 'type'] = 'role';
+            recordData[this.recordPrefix + 'name'] = recordToAdd.data.name;
+            recordData[this.recordPrefix + 'data'] = recordToAdd.data;
+        }
         // account record selected
-        if (recordToAdd.data.account_id) {
+        else if (recordToAdd.data.account_id) {
             // user account record
             recordData[this.recordPrefix + 'id'] = recordToAdd.data.account_id;
             recordData[this.recordPrefix + 'type'] = 'user';
             recordData[this.recordPrefix + 'name'] = recordToAdd.data.n_fileas;
             recordData[this.recordPrefix + 'data'] = recordToAdd.data;
-
-            record = new this.newRecordClass(Ext.applyIf(recordData, this.newRecordDefaults), recordToAdd.data.account_id);
-        } 
+        }
         // group or addressbook list record selected
         else if (recordToAdd.data.group_id || recordToAdd.data.id) {
             recordData[this.recordPrefix + 'id'] = recordToAdd.data.group_id || recordToAdd.data.id;
             recordData[this.recordPrefix + 'type'] = 'group';
             recordData[this.recordPrefix + 'name'] = recordToAdd.data.name;
             recordData[this.recordPrefix + 'data'] = recordToAdd.data;
-            
-            record = new this.newRecordClass(Ext.applyIf(recordData, this.newRecordDefaults), recordToAdd.id);
         }
-        
+
+        record = new this.newRecordClass(Ext.applyIf(recordData, this.newRecordDefaults), recordData[this.recordPrefix + 'id']);
+
         // check if already in
         if (! this.accountsStore.getById(record.id)) {
             this.accountsStore.add([record]);
@@ -320,24 +358,15 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      * @param {String} show
      * @param {String} iconCls
      * 
-     * TODO fix width hack (extjs bug?)
      */
     onSwitchCombo: function (show, iconCls) {
-        var showCombo = (show === 'contact') ? this.contactSearchCombo : this.groupSearchCombo;
-        var hideCombo = (show === 'contact') ? this.groupSearchCombo : this.contactSearchCombo;
-        
-        if (! showCombo.isVisible()) {
-            var width = hideCombo.getWidth();
-            
-            hideCombo.hide();
-            showCombo.show();
-            
-            // adjust width
-            showCombo.setWidth(width - 1);
-            showCombo.setWidth(showCombo.getWidth() + 1);
-            
-            this.accountTypeSelector.setIconClass(iconCls);
-        }
+        Ext.each(['contact', 'group', 'role'], function(type) {
+            this.getSearchCombo(type).setVisible(show == type);
+        }, this);
+
+        this.getSearchCombo(show).setWidth('auto');
+        this.accountTypeSelector.setIconClass(iconCls);
+
     }
 });
 Ext.reg('tinerecordpickergrid', Tine.widgets.account.PickerGridPanel);

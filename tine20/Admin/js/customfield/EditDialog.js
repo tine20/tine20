@@ -55,7 +55,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * type of field with stores
      * @type {Array}
      */
-    fieldsWithStore: ['record', 'keyField'],
+    fieldsWithStore: ['record', 'keyField',  'recordList'],
     
     /**
      * currently selected field type
@@ -162,7 +162,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */ 
     onStoreWindowOK: function () {
         if (this[this.fieldType + 'Store'].isValid()) {
-            if (this.fieldType == 'record') {
+            if (this.fieldType == 'record' || this.fieldType == 'recordList') {
                 this[this.fieldType + 'Config'] = {
                     value: {
                         records: this[this.fieldType + 'Store'].getValue()
@@ -291,6 +291,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         return this[this.fieldType + 'Store'];
+    },
+
+    initRecordListStore: function () {
+        return this.initRecordStore();
     },
     
     /**
@@ -436,8 +440,8 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ['boolean', this.app.i18n._('Boolean')],
                             ['searchcombo', this.app.i18n._('Search Combo')],
                             ['keyField', this.app.i18n._('Key Field')],
-                            ['record', this.app.i18n._('Record')]
-                            
+                            ['record', this.app.i18n._('Record')],
+                            ['recordList', this.app.i18n._('Record List')]
                         ],
                         name: 'type',
                         fieldLabel: this.app.i18n._('Type'),
