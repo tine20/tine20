@@ -396,10 +396,12 @@ class Tinebase_ModelConfiguration {
      * fulltext                  Text with lnbr.     text     string                        string            Tinebase_Model_Filter_FullText
      * boolean                   Boolean             boolean  bool                          bool              Tinebase_Model_Filter_Bool
      * integer                   Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 number
+     * integer     percent       Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 extuxnumberfield
      * integer     bytes         Bytes               integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     seconds       Seconds             integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     minutes       Minutes             integer  integer                       int               Tinebase_Model_Filter_Int
-     * float                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * float                     Float               float    float                         float             Tinebase_Model_Filter_Int                 extuxnumberfield
+     * float       percent       Float               float    float                         float             Tinebase_Model_Filter_Int
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel

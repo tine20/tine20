@@ -91,12 +91,37 @@ Tine.widgets.form.FieldManager = function() {
                 case 'integer':
                     field.xtype = 'numberfield';
                     field.allowDecimals = false;
-                    // min max ???
+
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
+                        field.xtype = 'extuxnumberfield';
+                        field.useThousandSeparator = false;
+                        field.suffix = ' %';
+                    }
+
+                    if (fieldDefinition.max) {
+                        field.maxValue = fieldDefinition.max;
+                    }
+
+                    if (fieldDefinition.min) {
+                        field.minValue = fieldDefinition.min;
+                    }
                     break;
                 case 'float':
                     field.xtype = 'numberfield';
-                    field.decimalPrecision = 2; //???
-                    // min max ???
+                    field.decimalPrecision = 2;
+
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
+                        field.xtype = 'extuxnumberfield';
+                        field.suffix = ' %';
+                    }
+
+                    if (fieldDefinition.max) {
+                        field.maxValue = fieldDefinition.max;
+                    }
+
+                    if (fieldDefinition.min) {
+                        field.minValue = fieldDefinition.min;
+                    }
                     break;
                 case 'user':
                     field.xtype = 'addressbookcontactpicker';
