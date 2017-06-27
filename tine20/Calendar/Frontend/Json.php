@@ -291,15 +291,41 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $eventRecord = new Calendar_Model_Event(array(), TRUE);
         $eventRecord->setFromJsonInUsersTimezone($_event);
 
-        $records = Calendar_Controller_Event::getInstance()->searchFreeTime($eventRecord, $_options);
+        if (isset($_options['from']) || isset($_options['until'])) {
+            $tmpData = array();
+            if (isset($_options['from'])) {
+                $tmpData['dtstart'] = $_options['from'];
+            }
+            if (isset($_options['until'])) {
+                $tmpData['dtend'] = $_options['until'];
+            }
+            $tmpEvent = new Calendar_Model_Event(array(), TRUE);
+            $tmpEvent->setFromJsonInUsersTimezone($tmpData);
+            if (isset($_options['from'])) {
+                $_options['from'] = $tmpEvent->dtstart;
+            }
+            if (isset($_options['until'])) {
+                $_options['until'] = $tmpEvent->dtend;
+            }
+        }
+
+        $timeSearchStopped = null;
+        try {
+            $records = Calendar_Controller_Event::getInstance()->searchFreeTime($eventRecord, $_options);
+        } catch (Calendar_Exception_AttendeeBusy $ceab) {
+            $event = $this->_recordToJson($ceab->getEvent());
+            $timeSearchStopped = $event['dtend'];
+            $records = new Tinebase_Record_RecordSet('Calendar_Model_Event', array());
+        }
 
         $records->attendee = array();
         $result = $this->_multipleRecordsToJson($records, null, null);
 
         return array(
-            'results'       => $result,
-            'totalcount'    => count($result),
-            'filter'        => array(),
+            'results'           => $result,
+            'totalcount'        => count($result),
+            'filter'            => array(),
+            'timeSearchStopped' => $timeSearchStopped,
         );
     }
     

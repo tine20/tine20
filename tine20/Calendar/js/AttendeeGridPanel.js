@@ -278,8 +278,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     height: 170,
                     scope: this,
                     options: [
-                        {text: 'Group', name: 'sel_group'},
-                        {text: 'Member of Group', name: 'sel_memberOf'}
+                        {text: this.app.i18n._('Group'), name: 'sel_group'},
+                        {text: this.app.i18n._('Member of Group'), name: 'sel_memberOf'}
                     ],
 
                     handler: function(option) {

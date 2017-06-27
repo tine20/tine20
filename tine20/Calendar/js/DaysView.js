@@ -148,6 +148,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * deny drag action if edit grant for event is missing
      */
     denyDragOnMissingEditGrant: true,
+    /**
+     * @cfg {Boolean} readOnly
+     * no dd acionts if read only
+     */
+    readOnly: false,
 
 
     /**
@@ -196,7 +201,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         this.startDate = period.from;
         
         var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
-        if (tbar) {
+        if (tbar && tbar.periodPicker) {
             tbar.periodPicker.update(this.startDate);
             this.startDate = tbar.periodPicker.getPeriod().from;
         }
@@ -237,7 +242,9 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
 
         this.initTimeScale();
 
-        this.mon(Tine.Tinebase.MainScreen, 'appactivate', this.onAppActivate, this);
+        if (Tine.Tinebase.MainScreen) {
+            this.mon(Tine.Tinebase.MainScreen, 'appactivate', this.onAppActivate, this);
+        }
 
         // apply preferences
         var prefs = this.app.getRegistry().get('preferences'),
@@ -420,7 +427,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
-                    if (! event || event.dirty || (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
+                    if (! event || event.dirty || this.readOnly || (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     
@@ -894,7 +901,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         var dtStart = this.getTargetDateTime(e),
             dtEnd = this.getTargetDateTime(e, this.timeIncrement, 's');
 
-        if (dtStart) {
+        if (dtStart && !this.readOnly) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,

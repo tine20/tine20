@@ -192,6 +192,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     }
 
     var data = {
+        id: 'new-' + Ext.id(),
         summary: '',
         'class': eventClass,
         dtstart: dtstart,

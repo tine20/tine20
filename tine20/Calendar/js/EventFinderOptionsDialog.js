@@ -18,13 +18,13 @@ Ext.ns('Tine.Calendar');
  */
 Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
     defaultOptions: [
-        {id: 'monday', active: true, config: [8, 18.00]},
-        {id: 'tuesday', active: true, config: [8, 18.00]},
-        {id: 'wednesday', active: true, config: [8, 18.00]},
-        {id: 'thursday', active: true, config: [8, 18.00]},
-        {id: 'friday', active: true, config: [8, 18.00]},
-        {id: 'monday', active: false, config: [8, 18.00]},
-        {id: 'monday', active: false, config: [8, 18.00]}
+        {id: 'MO', active: true, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'TU', active: true, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'WE', active: true, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'TH', active: true, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'FR', active: true, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'SA', active: false, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }},
+        {id: 'SU', active: false, config: [8, 18.00], period: {from: '08:00:00', until: '18:00:00' }}
     ],
 
     windowNamePrefix: 'eventfinderoptionsdialog_',
@@ -36,23 +36,23 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
 
     layout: 'fit',
 
-    wkdays: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+    wkdays: ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'],
 
-    mondaySlider: null,
-    tuesdaySlider: null,
-    wednesdaySlider: null,
-    thursdaySlider: null,
-    fridaySlider: null,
-    saturdaySlider: null,
-    sundaySlider: null,
+    MOSlider: null,
+    TUSlider: null,
+    WESlider: null,
+    THSlider: null,
+    FRSlider: null,
+    SASlider: null,
+    SUSlider: null,
 
-    mondayCheckbox: null,
-    tuesdayCheckbox: null,
-    wednesdayCheckbox: null,
-    thursdayCheckbox: null,
-    fridayCheckbox: null,
-    saturdayCheckbox: null,
-    sundayCheckbox: null,
+    MOCheckbox: null,
+    TUCheckbox: null,
+    WECheckbox: null,
+    THCheckbox: null,
+    FRCheckbox: null,
+    SACheckbox: null,
+    SUCheckbox: null,
 
     stateId: 'eventFinderOptions',
     stateConfig: [],
@@ -153,44 +153,44 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
 
     onSaveAndClose: function () {
         var data = [{
-            id: 'monday',
-            active: this.mondayCheckbox.getValue(),
-            config: this.mondaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.mondaySlider.getRange())
+            id: 'MO',
+            active: this.MOCheckbox.getValue(),
+            config: this.MOSlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.MOSlider.getRange())
         }, {
-            id: 'tuesday',
-            active: this.tuesdayCheckbox.getValue(),
-            config: this.tuesdaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.tuesdaySlider.getRange())
+            id: 'TU',
+            active: this.TUCheckbox.getValue(),
+            config: this.TUSlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.TUSlider.getRange())
         }, {
-            id: 'wednesday',
-            active: this.wednesdayCheckbox.getValue(),
-            config: this.wednesdaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.wednesdaySlider.getRange())
+            id: 'WE',
+            active: this.WECheckbox.getValue(),
+            config: this.WESlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.WESlider.getRange())
         }, {
-            id: 'thursday',
-            active: this.thursdayCheckbox.getValue(),
-            config: this.thursdaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.thursdaySlider.getRange())
+            id: 'TH',
+            active: this.THCheckbox.getValue(),
+            config: this.THSlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.THSlider.getRange())
         }, {
-            id: 'friday',
-            active: this.fridayCheckbox.getValue(),
-            config: this.fridaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.fridaySlider.getRange())
+            id: 'FR',
+            active: this.FRCheckbox.getValue(),
+            config: this.FRSlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.FRSlider.getRange())
         }, {
-            id: 'saturday',
-            active: this.saturdayCheckbox.getValue(),
-            config: this.saturdaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.saturdaySlider.getRange())
+            id: 'SA',
+            active: this.SACheckbox.getValue(),
+            config: this.SASlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.SASlider.getRange())
         }, {
-            id: 'sunday',
-            active: this.sundayCheckbox.getValue(),
-            config: this.sundaySlider.getRange(),
-            period: this.getPeriodFromSliderRange(this.sundaySlider.getRange())
+            id: 'SU',
+            active: this.SUCheckbox.getValue(),
+            config: this.SUSlider.getRange(),
+            period: this.getPeriodFromSliderRange(this.SUSlider.getRange())
         }];
 
         Ext.state.Manager.set(this.stateId, data);
-        this.fireEvent('apply', this, data);
+        this.fireEvent('apply', this, Ext.encode(data));
         this.window.close();
     },
 
@@ -216,7 +216,7 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
                 {
                     xtype: 'checkbox',
                     checked: !!config && config.active,
-                    boxLabel: _.capitalize(id),
+                    boxLabel: Date.dayNames[this.wkdays.indexOf(id)],
                     name: id,
                     anchor: '95%',
                     flex: 1,

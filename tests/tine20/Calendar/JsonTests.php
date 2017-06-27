@@ -2051,6 +2051,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->originator_tz = $event->dtstart->getTimezone()->getName();
 
         $options = array(
+            'from'        => $event->dtstart->getClone()->addDay(2)->setHour(12),
             'constraints' => array(array(
                 'dtstart'   => $event->dtstart->getClone()->setHour(10),
                 'dtend'     => $event->dtstart->getClone()->setHour(22),
@@ -2058,11 +2059,78 @@ class Calendar_JsonTests extends Calendar_TestCase
             )),
         );
 
-        $expectedDtStart = new Tinebase_DateTime('2009-03-27 10:00:00', $event->originator_tz);
+        $expectedDtStart = new Tinebase_DateTime('2009-03-27 12:00:00', $event->originator_tz);
         $expectedDtStart->setTimezone(Tinebase_Core::getUserTimezone());
 
         $result = $this->_uit->searchFreeTime($event->toArray(), $options);
-        static::assertTrue(is_array($result) && count($result) === 3 && count($result['results']) === 1);
+        static::assertTrue(is_array($result) && count($result) === 4 && count($result['results']) === 1);
+        static::assertEquals($expectedDtStart->toString(), $result['results'][0]['dtstart']);
+    }
+
+    public function testSearchFreeTime1()
+    {
+        // 2009-03-25 => Mittwoch
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
+        ));
+        $event->originator_tz = $event->dtstart->getTimezone()->getName();
+
+        $options = array(
+            'constraints' => array(array(
+                'dtstart'   => $event->dtstart->getClone()->subDay(1)->setHour(10),
+                'dtend'     => $event->dtstart->getClone()->subDay(1)->setHour(22),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU'
+            ), array(
+                'dtstart'   => $event->dtstart->getClone()->subDay(1)->setHour(13),
+                'dtend'     => $event->dtstart->getClone()->subDay(1)->setHour(16),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH,FR'
+            )),
+        );
+
+        $expectedDtStart = new Tinebase_DateTime('2009-03-26 13:00:00', $event->originator_tz);
+        $expectedDtStart->setTimezone(Tinebase_Core::getUserTimezone());
+
+        $result = $this->_uit->searchFreeTime($event->toArray(), $options);
+        static::assertTrue(is_array($result) && count($result) === 4 && count($result['results']) === 1);
+        static::assertEquals($expectedDtStart->toString(), $result['results'][0]['dtstart']);
+    }
+
+    public function testSearchFreeTime2()
+    {
+        // 2009-03-25 => Mittwoch
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
+        ));
+        $event->originator_tz = $event->dtstart->getTimezone()->getName();
+
+        $options = array(
+            'constraints' => array(array(
+                'dtstart'   => $event->dtstart->getClone()->subDay(1)->setHour(10),
+                'dtend'     => $event->dtstart->getClone()->subDay(1)->setHour(22),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU'
+            ), array(
+                'dtstart'   => $event->dtstart->getClone()->subDay(1)->setHour(13),
+                'dtend'     => $event->dtstart->getClone()->subDay(1)->setHour(16),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH,FR'
+            )),
+        );
+
+        $expectedDtStart = new Tinebase_DateTime('2009-03-27 13:00:00', $event->originator_tz);
+        $expectedDtStart->setTimezone(Tinebase_Core::getUserTimezone());
+
+        $event->dtstart->addDay(1)->setTime(16, 0 ,0);
+        $event->dtend->addDay(1)->setTime(17, 0 ,0);
+
+        $createEvent = new Calendar_Model_Event(array(), true);
+        $createEvent->setFromJsonInUsersTimezone($event->toArray());
+        Calendar_Controller_Event::getInstance()->create($createEvent);
+
+        $result = $this->_uit->searchFreeTime($event->toArray(), $options);
+        static::assertTrue(is_array($result) && count($result) === 4 && count($result['results']) === 1);
         static::assertEquals($expectedDtStart->toString(), $result['results'][0]['dtstart']);
     }
 }

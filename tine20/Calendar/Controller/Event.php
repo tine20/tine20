@@ -360,6 +360,40 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
 
     /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @return array
+     */
+    public function mergeFreeBusyInfo(Tinebase_Record_RecordSet $_records)
+    {
+        $_records->sort('dtstart');
+        $result = array();
+        /** @var Calendar_Model_Event $event */
+        foreach($_records as $event) {
+            foreach($result as $key => &$period) {
+                if ($event->dtstart->isEarlierOrEquals($period['dtend'])) {
+                    if ($event->dtend->isLaterOrEquals($period['dtstart'])) {
+                        if ($event->dtstart->isEarlier($period['dtstart'])) {
+                            $period['dtstart'] = clone $event->dtstart;
+                        }
+                        if ($event->dtend->isLater($period['dtend'])) {
+                            $period['dtend'] = clone $event->dtend;
+                        }
+                        continue 2;
+                    } else {
+                        throw new Tinebase_Exception_UnexpectedValue('record set sort by dtstart did not work!');
+                    }
+                }
+            }
+            $result[] = array(
+                'dtstart' => $event->dtstart,
+                'dtend' => $event->dtend
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * returns freebusy information for given period and given attendee
      * 
      * @todo merge overlapping events to one freebusy entry
@@ -609,6 +643,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function searchFreeTime($_event, $_options)
     {
+        $functionTime = time();
+
         // validate $_event, originator_tz will be validated by setTimezone() call
         if (!isset($_event->dtstart) || !$_event->dtstart instanceof Tinebase_DateTime) {
             throw new Tinebase_Exception_UnexpectedValue('dtstart needs to be set');
@@ -630,7 +666,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
             new Tinebase_DateTime($_options['until'])) : $_event->dtend->getClone()->addYear(2);
 
-        $currentFrom = $from->getClone()->setTime(0, 0, 0);
+        $currentFrom = $from->getClone();
         $currentUntil = $from->getClone()->addDay(6)->setTime(23, 59, 59);
         if ($currentUntil->isLater($until)) {
             $currentUntil = clone $until;
@@ -667,6 +703,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         do {
+            if (time() - $functionTime > 23) {
+                $exception = new Calendar_Exception_AttendeeBusy();
+                $exception->setEvent(new Calendar_Model_Event(array('dtend' => $currentFrom), true));
+                throw $exception;
+            }
+
             $currentConstraints = clone $constraints;
             Calendar_Model_Rrule::mergeRecurrenceSet($currentConstraints, $currentFrom, $currentUntil);
             $currentConstraints->sort('dtstart');
@@ -679,7 +721,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $recurEvent = clone $_event;
                     $recurEvent->uid = Tinebase_Record_Abstract::generateUID();
                     $recurEvent->dtstart = $event->dtstart->getClone()->subDay(1);
-                    $recurEvent->dtend = $recurEvent->dtstart->getClone()->addSecond($durationSec);
+                    if ($_event->is_all_day_event) {
+                        $recurEvent->dtend = $event->dtend->getClone()->subDay(1);
+                    } else {
+                        $recurEvent->dtend = $recurEvent->dtstart->getClone()->addSecond($durationSec);
+                    }
                     if (null === ($recurEvent = Calendar_Model_Rrule::computeNextOccurrence($recurEvent, $exceptions, $event->dtstart))
                             || $recurEvent->dtstart->isLater($event->dtend)) {
                         $remove[] = $event;
@@ -705,51 +751,75 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
 
                 $busySlots = $this->getFreeBusyInfo(new Calendar_Model_EventFilter($periods, Tinebase_Model_Filter_FilterGroup::CONDITION_OR), $_event->attendee);
-                $busySlots->sort('dtstart');
+                $busySlots = $this->mergeFreeBusyInfo($busySlots);
 
                 /** @var Calendar_Model_Event $event */
                 foreach ($currentConstraints as $event) {
+                    if ($event->dtend->isEarlierOrEquals($currentFrom)) {
+                        continue;
+                    }
+
+                    if ($_event->is_all_day_event) {
+                        $durationSec = (int)$event->dtend->getTimestamp() - (int)$event->dtstart->getTimestamp();
+                    }
+
                     $constraintStart = (int)$event->dtstart->getTimestamp();
+                    if ($constraintStart < (int)$currentFrom->getTimestamp()) {
+                        $constraintStart = (int)$currentFrom->getTimestamp();
+                    }
                     $constraintEnd = (int)$event->dtend->getTimestamp();
+                    if ($constraintEnd > (int)$currentUntil->getTimestamp()) {
+                        $constraintEnd = (int)$currentUntil->getTimestamp();
+                    }
                     $lastBusyEnd = $constraintStart;
                     $remove = array();
                     /** @var Calendar_Model_FreeBusy $busy */
-                    foreach ($busySlots as $busy) {
-                        $busyStart = (int)$busy->dtstart->getTimestamp();
-                        $busyEnd = (int)$busy->dtend->getTimestamp();
+                    foreach ($busySlots as $key => $busy) {
+                        $busyStart = (int)$busy['dtstart']->getTimestamp();
+                        $busyEnd = (int)$busy['dtend']->getTimestamp();
 
                         if ($busyEnd < $constraintStart) {
-                            $remove[] = $busy;
+                            $remove[] = $key;
                             continue;
                         }
 
-                        if ($lastBusyEnd + $durationSec <= $busyStart) {
+                        if ($busyStart > ($constraintEnd - $durationSec)) {
+                            $lastBusyEnd = $busyEnd;
+                            break;
+                        }
+
+                        if (($lastBusyEnd + $durationSec) <= $busyStart) {
                             // check between $lastBusyEnd and $busyStart
                             $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $busyStart, $durationSec, $until);
                             if ($result->count() > 0) {
+                                if ($_event->is_all_day_event) {
+                                    $result->getFirstRecord()->dtstart = $_event->dtstart;
+                                    $result->getFirstRecord()->dtend = $_event->dtend;
+                                }
                                 return $result;
                             }
                         }
                         $lastBusyEnd = $busyEnd;
-                        if ($busyStart > $constraintEnd - $durationSec) {
-                            break;
-                        }
                     }
-                    foreach ($remove as $record) {
-                        $busySlots->removeRecord($record);
+                    foreach ($remove as $key) {
+                        unset($busySlots[$key]);
                     }
 
-                    if ($lastBusyEnd + $durationSec <= $constraintEnd) {
+                    if (($lastBusyEnd + $durationSec) <= $constraintEnd) {
                         // check between $lastBusyEnd and $constraintEnd
                         $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $constraintEnd, $durationSec, $until);
                         if ($result->count() > 0) {
+                            if ($_event->is_all_day_event) {
+                                $result->getFirstRecord()->dtstart = $_event->dtstart;
+                                $result->getFirstRecord()->dtend = $_event->dtend;
+                            }
                             return $result;
                         }
                     }
                 }
             }
 
-            $currentFrom->addDay(7);
+            $currentFrom->addDay(7)->setTime(0, 0, 0);
             $currentUntil->addDay(7);
             if ($currentUntil->isLater($until)) {
                 $currentUntil = clone $until;

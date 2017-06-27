@@ -181,6 +181,7 @@ Tine.Calendar.AbstractView = Ext.extend(Ext.Container, {
             return;
         }
 
+        this.removeEvent(event);
         var registry = this.getParallelEventRegistry(event);
         var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
         for (var j=0; j<parallelEvents.length; j++) {

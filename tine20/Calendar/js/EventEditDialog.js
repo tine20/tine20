@@ -10,6 +10,8 @@
  
 Ext.ns('Tine.Calendar');
 
+require('./FreeTimeSearchDialog');
+
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.EventEditDialog
@@ -291,6 +293,22 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     },
 
+    onFreeTimeSearch: function() {
+        this.onRecordUpdate();
+        Tine.Calendar.FreeTimeSearchDialog.openWindow({
+            record: this.record,
+            listeners: {
+                scope: this,
+                apply: this.onFreeTimeSearchApply
+            }
+        });
+    },
+
+    onFreeTimeSearchApply: function(dialog, recordData) {
+        this.record = this.recordProxy.recordReader({responseText: recordData});
+        this.onRecordLoad();
+    },
+
     /**
      * mute first alert
      * 
@@ -318,6 +336,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         );
 
         this.tbarItems = [new Ext.Button(new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
+            handler: this.onFreeTimeSearch,
+            iconCls: 'action_fretimesearch',
+            disabled: false,
+            scope: this
+        })), new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'notes_noteIcon',
