@@ -50,9 +50,10 @@ Tine.widgets.form.FieldManager = function() {
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {String} category {editDialog|propertyGrid} optional.
+         * @param {Object} config
          * @return {Object}
          */
-        getByModelConfig: function(appName, modelName, fieldName, category) {
+        getByModelConfig: function(appName, modelName, fieldName, category, config) {
             var field = {},
                 recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
@@ -141,6 +142,8 @@ Tine.widgets.form.FieldManager = function() {
                     break;
             }
 
+            Ext.applyIf(field, config);
+
             return field;
         },
 
@@ -151,13 +154,15 @@ Tine.widgets.form.FieldManager = function() {
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {String} category {editDialog|propertyGrid} optional.
+         * @param {Object} config
          * @return {Object}
          */
-        get: function(appName, modelName, fieldName, category) {
+        get: function(appName, modelName, fieldName, category, config) {
             var appName = this.getAppName(appName),
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
-                genericKey = this.getKey([appName, modelName, fieldName]);
+                genericKey = this.getKey([appName, modelName, fieldName]),
+                config = config || {};
 
             // check for registered renderer
             var field = fields[categoryKey] ? fields[categoryKey] : fields[genericKey];
@@ -169,7 +174,7 @@ Tine.widgets.form.FieldManager = function() {
 
             // check for known datatypes
             if (! field) {
-                field = this.getByModelConfig(appName, modelName, fieldName, category);
+                field = this.getByModelConfig(appName, modelName, fieldName, category, config);
             }
 
             return field;
