@@ -368,6 +368,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     resolveListMembers: function() {
+        if (this.showMemberOfType) return;
+
         var _ = window.lodash,
             members = Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
             fbInfoUpdate = [];
@@ -633,25 +635,36 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onRecordLoad: function(record) {
         this.record = record;
         this.store.removeAll();
-        var attendee = record.get('attendee');
-        Ext.each(attendee, function(attender) {
+        var attendee = record.get('attendee'),
+            resolveListMembers = false;
 
+        Ext.each(attendee, function(attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id);
             this.store.addSorted(record);
             
             if (attender.displaycontainer_id  && this.record.get('container_id') && attender.displaycontainer_id.id == this.record.get('container_id').id) {
                 this.eventOriginator = record;
             }
+
+            if (String(record.get('user_type')).match(/^group/)) {
+                resolveListMembers = true;
+            }
         }, this);
 
         this.updateFreeBusyInfo();
 
-        if (record.get('editGrant')) {
+        if (resolveListMembers) {
+            this.resolveListMembers();
+        }
+
+        else if (record.get('editGrant')) {
             this.addNewAttendeeRow();
         }
     },
 
     updateFreeBusyInfo: function(force) {
+        if (this.showMemberOfType) return;
+
         var schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
