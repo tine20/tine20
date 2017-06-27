@@ -343,7 +343,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
 
                     // resolve groupmembers
-                    if (o.record.get('user_type') == 'group') {
+                    if (o.record.get('user_type') == 'group' && !this.showMemberOfType) {
                         this.resolveListMembers(o.record.get('user_id'));
                     } else {
                         this.addNewAttendeeRow();
@@ -505,7 +505,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 disabled: ! this.record.get('editGrant') || type == 'groupmember',
                 handler: function() {
                     this.store.remove(attender);
-                    if (type == 'group') {
+                    if (type == 'group' && !this.showMemberOfType) {
                         this.resolveListMembers()
                     }
                 }
