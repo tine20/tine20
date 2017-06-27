@@ -49,7 +49,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     modelName: null,
     
     /**
-     * record definition class  (required)
+     * record definition class  (required if no modelconfig! don't declare for modelconfig!!)
      * 
      * @cfg {Ext.data.Record} recordClass
      */
