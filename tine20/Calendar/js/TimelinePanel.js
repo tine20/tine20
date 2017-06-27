@@ -142,10 +142,16 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
     onStoreLoad: function(store, records, options) {
         this.groupingMetadataCache = {};
 
-        var fixedGroups = [];
-        var attendeeFilterValue = Tine.Calendar.AttendeeFilterGrid.prototype.extractFilterValue(options.params.filter);
-        if (attendeeFilterValue) {
-            Tine.Calendar.Model.Attender.getAttendeeStore(attendeeFilterValue).each(function(attendee) {
+        var fixedGroups = [],
+            attendeeFilterValue = Tine.Calendar.AttendeeFilterGrid.prototype.extractFilterValue(options.params.filter),
+            attendeeStore = attendeeFilterValue ? Tine.Calendar.Model.Attender.getAttendeeStore(attendeeFilterValue) : null;
+
+        if (attendeeStore) {
+            attendeeStore.each(function(attendee) {
+                // NOTE: we can't cope yet with memberOf entries as we would nee to know
+                //       the listmembers of the list to add them to the group
+                if (attendee.get('user_type') == 'memberOf') return;
+
                 var groupName = attendee.getCompoundId();
                 fixedGroups.push(groupName);
                 this.groupingMetadataCache[groupName] = attendee;
