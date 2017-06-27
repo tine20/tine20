@@ -524,4 +524,49 @@ class Tinebase_Frontend_CliTest extends TestCase
         }
         $this->assertEquals($realDataCustomFields, $sum, 'customfields not completely cleaned');
     }
+
+
+    /**
+     * testUserReport
+     *
+     * TODO maybe set locale to EN to ease string testing
+     */
+    public function testUserReport()
+    {
+        ob_start();
+        $result = $this->_cli->userReport();
+        $out = ob_get_clean();
+        $this->assertEquals(0, $result);
+
+        preg_match('/Number of users \(total\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches), $out);
+        $this->assertGreaterThanOrEqual(1, $matches[1], 'at least unittest user should be in users: ' . $out);
+
+        preg_match('/Number of users \(enabled\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(1, $matches[1], 'at least unittest user should be in users');
+
+        preg_match('/Number of users \(disabled\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(0, $matches[1]);
+
+        preg_match('/Number of users \(blocked\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(0, $matches[1]);
+
+        preg_match('/Number of users \(expired\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(0, $matches[1]);
+
+        preg_match('/Number of distinct users \(lastmonth\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(1, $matches[1]);
+
+        preg_match('/Number of distinct users \(last 3 months\): (\d+)/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(1, $matches[1]);
+
+        $this->assertContains(Tinebase_Core::getUser()->accountLoginName, $out, 'unittest login name should be found');
+        $this->assertContains('Unit Test Client', $out, 'unittest should have a user agent');
+    }
 }

@@ -350,10 +350,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         $userController = Tinebase_User::getInstance();
-        
+
         // deactivate user plugins (like postfix/dovecot email backends) for async job user
         $userController->unregisterAllPlugins();
-        
+
         try {
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -793,11 +793,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * add new customfield config
-     * 
+     *
      * needs args like this:
      * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datefield"
-     * @see Tinebase_Model_CustomField_Config for full list 
-     * 
+     * @see Tinebase_Model_CustomField_Config for full list
+     *
      * @param $_opts
      * @return boolean success
      */
@@ -1142,7 +1142,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
-    
+
     /**
      * repair a table
      * 
@@ -1325,11 +1325,77 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function repairContainerOwner()
     {
         if (! $this->_checkAdminRight()) {
-            return -1;
+            return 2;
         }
 
         $this->_addOutputLogWriter(6);
         Tinebase_Container::getInstance()->setContainerOwners();
+
+        return 0;
+    }
+
+    /**
+     * show user report (number of enabled, disabled, ... users)
+     *
+     * TODO add system user count
+     * TODO use twig?
+     */
+    public function userReport()
+    {
+        if (! $this->_checkAdminRight()) {
+            return 2;
+        }
+
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+
+        $userStatus = array(
+            'total' => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_ENABLED => array(/* 'showUserNames' => true, 'showClients' => true */),
+            Tinebase_Model_User::ACCOUNT_STATUS_DISABLED => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED => array(),
+            //'system' => array(),
+            'lastmonth' => array('lastMonths' => 1, 'showUserNames' => true, 'showClients' => true),
+            'last 3 months' => array('lastMonths' => 3),
+        );
+
+        foreach ($userStatus as $status => $options) {
+            switch ($status) {
+                case 'lastmonth':
+                case 'last 3 months':
+                    $userCount = Tinebase_User::getInstance()->getActiveUserCount($options['lastMonths']);
+                    $text = $translation->_("Number of distinct users") . " (" . $status . "): " . $userCount . "\n";
+                    break;
+                case 'system':
+                    $text = "TODO add me\n";
+                    break;
+                default:
+                    $userCount = Tinebase_User::getInstance()->getUserCount($status);
+                    $text = $translation->_("Number of users") . " (" . $status . "): " . $userCount . "\n";
+            }
+            echo $text;
+
+            if (isset($options['showUserNames']) && $options['showUserNames']
+                && in_array($status, array('lastmonth', 'last 3 months'))
+                && isset($options['lastMonths'])
+            ) {
+                // TODO allow this for other status
+                echo $translation->_("  User Accounts:\n");
+                $userIds = Tinebase_User::getInstance()->getActiveUserIds($options['lastMonths']);
+                foreach ($userIds as $userId) {
+                    $user = Tinebase_User::getInstance()->getUserByProperty('accountId', $userId, 'Tinebase_Model_FullUser');
+                    echo "  * " . $user->accountLoginName . ' / ' . $user->accountDisplayName . "\n";
+                    if (isset($options['showClients']) && $options['showClients']) {
+                        $userClients = Tinebase_AccessLog::getInstance()->getUserClients($user, $options['lastMonths']);
+                        echo "    Clients: \n";
+                        foreach ($userClients as $client) {
+                            echo "     - $client\n";
+                        }
+                    }
+                }
+            }
+            echo "\n";
+        }
 
         return 0;
     }

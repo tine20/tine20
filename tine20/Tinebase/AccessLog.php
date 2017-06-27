@@ -103,26 +103,62 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     protected function _tooManyUserAgents($_user, $numberOfAllowedUserAgents = 3)
     {
         $result = false;
+
+        $userAgents = $this->_getUserAgentsByInterval($_user);
+        if (count($userAgents) > $numberOfAllowedUserAgents) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' More than ' . $numberOfAllowedUserAgents . ' different UserAgents? we don\'t trust you!');
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * @param        $_user
+     * @param string $_unit
+     * @param int    $_interval
+     * @return array
+     * @throws Tinebase_Exception_Backend_Database
+     *
+     * TODO move to backend
+     */
+    protected function _getUserAgentsByInterval($_user, $_unit = 'HOUR', $_interval = 1, $_onlyInvalidLogins = true)
+    {
         $db = $this->_backend->getAdapter();
         $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
         $select = $db->select()
             ->distinct(true)
             ->from($this->_backend->getTablePrefix() . $this->_backend->getTableName(), 'user_agent')
             ->where( $db->quoteIdentifier('account_id') . ' = ?', $_user->getId() )
-            ->where( $db->quoteIdentifier('li') . ' > NOW() - ' . $dbCommand->getInterval('HOUR', '1'))
-            ->where( $db->quoteIdentifier('result') . ' <> ?', Tinebase_Auth::SUCCESS, Zend_Db::PARAM_INT)
-            ->limit(10);
+            ->where( $db->quoteIdentifier('li') . ' > NOW() - ' . $dbCommand->getInterval($_unit, $_interval))
+            ->limit(20);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+        if ($_onlyInvalidLogins) {
+            $select->where( $db->quoteIdentifier('result') . ' <> ?', Tinebase_Auth::SUCCESS, Zend_Db::PARAM_INT);
+        }
 
         $stmt = $db->query($select);
-
-        if ($stmt->columnCount() > $numberOfAllowedUserAgents) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' More than ' . $numberOfAllowedUserAgents . ' different UserAgents? we don\'t trust you!');
-            $result = true;
-        }
+        $result = $stmt->fetchAll();
         $stmt->closeCursor();
+
+        return $result;
+    }
+
+    /**
+     * @param     $user
+     * @param int $lastMonths
+     * @return array of user clients
+     */
+    public function getUserClients($user, $lastMonths = 1)
+    {
+        $userAgents = $this->_getUserAgentsByInterval($user, 'MONTH', $lastMonths, /* $_onlyInvalidLogins */ false);
+        $result = array();
+        foreach ($userAgents as $row) {
+            // TODO maybe _getUserAgentsByInterval could already do this ...
+            if (isset($row['user_agent']) && $row['user_agent']) {
+                $result[] = $row['user_agent'];
+            }
+        }
         return $result;
     }
 
