@@ -115,10 +115,10 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
                 {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', dataIndex: 'leadsource_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.ux.PercentRenderer },
-                {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney },
+                {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.money },
 
                 {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', dataIndex: 'end_scheduled', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
-                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney, sortable: false },
+                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.money, sortable: false },
                 {header: this.app.i18n._('Resubmission Date'), id: 'resubmission_date', dataIndex: 'resubmission_date', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true }
                 
             ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))

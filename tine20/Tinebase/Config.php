@@ -458,6 +458,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_WEBURL = 'branding_weburl';
     const BRANDING_DESCRIPTION = 'branding_description';
 
+    const CURRENCY_SYMBOL = 'currencySymbol';
+
     /**
      * @var string
      */
@@ -1460,6 +1462,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => NULL,
+        ),
+        self::CURRENCY_SYMBOL => array(
+            //_('currency symbol')
+            'label' => 'urrency symbol',
+            //_('Path to custom favicon.')
+            'description' => 'Define currency symbol to be used.',
+            'type' => 'string',
+            'default' => '€',
+            'clientRegistryInclude' => true,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
         ),
         self::FILESYSTEM => array(
             //_('Filesystem settings')

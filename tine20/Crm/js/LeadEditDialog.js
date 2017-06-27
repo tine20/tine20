@@ -418,14 +418,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     border:false,
                                     items: [
                                     {
-                                        xtype:'extuxnumberfield',
-                                        suffix: ' €',
-                                        fieldLabel: this.app.i18n._('Expected turnover'), 
+                                        xtype:'extuxmoneyfield',
+                                        fieldLabel: this.app.i18n._('Expected turnover'),
                                         name: 'turnover',
                                         selectOnFocus: true,
                                         anchor: '95%',
-                                        minValue: 0,
-                                        decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                                        minValue: 0
                                     },  
                                         this.combo_probability,
                                         new Ext.ux.form.ClearableDateField({

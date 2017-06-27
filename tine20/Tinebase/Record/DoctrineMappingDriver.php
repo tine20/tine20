@@ -42,6 +42,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         // NOTE 1: smallint is not working somehow ...
         // NOTE 2: we need int here because otherwise we need to typecast values for pgsql
         'boolean'       => 'integer',
+        'money'         => 'float'
     );
 
     /**

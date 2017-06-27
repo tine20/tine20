@@ -155,11 +155,11 @@ Tine.Sales.PurchaseInvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPan
                             var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);
                             return renderer(that.record.get('relations'));
                         case 'price_total':
-                            return Ext.util.Format.euMoney(value.price_total);
+                            return Ext.util.Format.money(value.price_total);
                         case 'price_net':
-                            return Ext.util.Format.euMoney(value.price_net);
+                            return Ext.util.Format.money(value.price_net);
                         case 'price_tax':
-                            return Ext.util.Format.euMoney(value.price_tax);
+                            return Ext.util.Format.money(value.price_tax);
                     }
 
                     var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);

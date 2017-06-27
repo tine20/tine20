@@ -763,6 +763,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $symbols['group'],
             'decimalSeparator'  => $symbols['decimal'],
+            'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
             'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),

@@ -98,20 +98,14 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Manufacturer'),
                         name: 'manufacturer'
                     }], [{
-                        xtype: 'extuxnumberfield',
+                        xtype: 'extuxmoneyfield',
                         fieldLabel: this.app.i18n._('Purchaseprice'),
-                        decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                        decimalPrecision: 2,
-                        suffix: ' €',
                         name: 'purchaseprice',
                         allowNegative: false,
                         allowBlank: true
                     }, {
-                        xtype: 'extuxnumberfield',
+                        xtype: 'extuxmoneyfield',
                         fieldLabel: this.app.i18n._('Salesprice'),
-                        decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                        decimalPrecision: 2,
-                        suffix: ' €',
                         name: 'salesprice',
                         allowNegative: false,
                         allowBlank: true

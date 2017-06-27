@@ -230,6 +230,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "MoneyField.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "LayerCombo.js",
           "path": "js/ux/form/"
         },
