@@ -1320,13 +1320,12 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * updates HTML of day headers
      */
     updateDayHeaders: function() {
-        if (! this.rendered) {
-            return;
-        }
+        if (! this.rendered) return;
+
         var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd),
-            dayWidth = Ext.get(dayHeaders[0]).getWidth(),
+            dayWidth = dayHeaders ? Ext.get(dayHeaders[0]).getWidth() : [],
             headerString;
-            
+
         for (var i=0, date, isToDay, headerEl, dayColEl; i<dayHeaders.length; i++) {
             
             date = this.startDate.add(Date.DAY, i);

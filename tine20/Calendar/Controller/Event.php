@@ -1637,9 +1637,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        if (preg_match('/^fakeid/', $_id)) {
-            // get base event when trying to fetch a non-persistent recur instance
-            return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
+        if (preg_match('/^fakeid(.*):(.*)/', $_id, $matches)) {
+            $baseEvent = $this->get($matches[1]);
+            $exceptions = $this->getRecurExceptions($baseEvent);
+            $originalDtStart = new Tinebase_DateTime($matches[2]);
+
+            $exdates = $exceptions->getOriginalDtStart();
+            $exdate = array_search($originalDtStart, $exdates);
+
+            return $exdate !== false ? $exceptions[$exdate] :
+                Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $originalDtStart);
         } else {
             return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         }

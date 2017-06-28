@@ -65,8 +65,14 @@ if ((isset($this->updates['attendee']) || array_key_exists('attendee', $this->up
 ?>
 
 <?php endif;?>
+<?php if ($this->attendeeAccountId): ?>
+
+<?php echo $this->translate->_('Link') ?>: <?php echo $this->event->getDeepLink();?>
+
+
+<?php endif;?>
 <?php echo $this->translate->_('Event details') ?>:
-<?php 
+<?php
 $orderedFields = array('dtstart', 'dtend', 'summary', 'location', 'description', 'rrule');
 
 foreach($orderedFields as $field) {

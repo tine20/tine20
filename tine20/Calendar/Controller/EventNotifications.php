@@ -353,6 +353,8 @@
             $view->event        = $_event;
             $view->updater      = $_updater;
             $view->updates      = $_updates;
+
+            $view->attendeeAccountId = $attendeeAccountId;
             
             $messageBody = $view->render('eventNotification.php');
             
