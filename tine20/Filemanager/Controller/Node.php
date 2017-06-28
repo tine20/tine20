@@ -1398,6 +1398,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @param bool $_dryRun
+     */
+    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $_modification, $_dryRun)
+    {
+        Tinebase_Tree::getInstance()->undoReplicationModificationLog($_modification, $_dryRun);
+    }
+
+    /**
      * Return usage array of a folder
      *
      * @param $_id

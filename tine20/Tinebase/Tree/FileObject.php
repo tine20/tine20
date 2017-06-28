@@ -60,6 +60,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
     protected $_revision = null;
 
+    protected $_allowSetRevision = false;
+
     /**
      * the singleton pattern
      *
@@ -165,24 +167,32 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        $select = $this->_db->select()
-            ->from($this->_tablePrefix . $this->_tableName)
+        // lock row first
+        $select = $this->_db->select()->from($this->_tablePrefix . $this->_tableName)
             ->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $objectId);
-        
-        // lock row
         $stmt = $this->_db->query($select);
         $stmt->fetchAll();
-        
-        // increase revision
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
-        $data  = array('revision' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision') . ' + 1'));
-        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
 
-        // fetch updated revision
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . $this->_revisionsTableName, new Zend_Db_Expr('MAX(' .
+                $this->_db->quoteIdentifier('revision') . ') + 1 AS ' . $this->_db->quoteIdentifier('revision')))
+            ->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_revisionsTableName . '.id') . ' = ?', $objectId);
+
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
-        
-        $revision = $queryResult[0]['revision'];
+        if (empty($queryResult)) {
+            $revision = 1;
+        } else {
+            $revision = (int)$queryResult[0]['revision'];
+            if (0 === $revision) {
+                $revision = 1;
+            }
+        }
+
+        // increase revision
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
+        $data  = array('revision' => $revision);
+        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
         
         // store new revisionid and unlock row
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -199,9 +209,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $record = parent::_recordToRawData($_record);
-        
-        // get updated by _getNextRevision only
-        unset($record['revision']);
+
+        if (false === $this->_allowSetRevision) {
+            // get updated by _getNextRevision only
+            unset($record['revision']);
+        }
         
         return $record;
     }
@@ -226,6 +238,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($_mode !== 'create') {
             /** @var Tinebase_Model_Tree_FileObject $currentRecord */
             $currentRecord = $this->get($_record, true);
+            if (true === $this->_allowSetRevision && $_record->revision < $currentRecord->revision) {
+                return;
+            }
             if ($currentRecord->hash !== null && !empty($currentRecord->revision)) {
                 if ($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) {
                     return;
@@ -599,5 +614,59 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     {
         // unset properties that are maintained only locally
         $_record->indexed_hash = null;
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @param bool $_dryRun
+     */
+    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $_modification, $_dryRun)
+    {
+        switch($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                if (true === $_dryRun) {
+                    return;
+                }
+                $this->softDelete($_modification->record_id);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $object = $this->get($_modification->record_id);
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $object->undo($diff);
+
+                if (true !== $_dryRun) {
+                    $oldAllowSetRevision = $this->setAllowRevisionUpdate(true);
+                    try {
+                        $this->update($object);
+                    } finally {
+                        $this->_allowSetRevision = $oldAllowSetRevision;
+                    }
+                }
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                if (true === $_dryRun) {
+                    return;
+                }
+                $object = $this->get($_modification->record_id, true);
+                $object->is_deleted = false;
+                $this->update($object);
+                break;
+
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('change_type ' . $_modification->change_type . ' unknown');
+        }
+    }
+
+    /**
+     * @param bool $_value
+     * @return bool
+     */
+    public function setAllowRevisionUpdate($_value)
+    {
+        $oldValue = $this->_allowSetRevision;
+        $this->_allowSetRevision = $_value;
+        return $oldValue;
     }
 }

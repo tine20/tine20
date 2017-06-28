@@ -472,6 +472,9 @@ class Tinebase_FileSystemTest extends TestCase
     {
         $this->testDeleteFile();
 
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(0, 10000);
+        $instanceSeq = $modifications->getLastRecord()->instance_seq - 2;
+
         $path = $this->_basePath . '/PHPUNIT/phpunit.txt';
 
         $handle = $this->_controller->fopen($path, 'w');
@@ -483,6 +486,41 @@ class Tinebase_FileSystemTest extends TestCase
         $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
 
         $this->assertContains('phpunit.txt', $children);
+        $handle = $this->_controller->fopen($path, 'r');
+        $contents = stream_get_contents($handle);
+        $this->_controller->fclose($handle);
+        $this->assertEquals('somethingNew', $contents);
+
+        $node = $this->_controller->stat($path);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'record_id', 'operator' => 'in', 'value' => array($node->getId(), $node->object_id)),
+            array('field' => 'instance_seq', 'operator' => 'greater', 'value' => $instanceSeq)
+        )));
+
+        clearstatcache();
+        $this->_controller->clearStatCache();
+        $handle = $this->_controller->fopen($path, 'r');
+        $contents = stream_get_contents($handle);
+        $this->_controller->fclose($handle);
+        $this->assertEquals('phpunit', $contents);
+
+        $handle = $this->_controller->fopen($path, 'w');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
+        $written = fwrite($handle, 'somethingVeryNew');
+        $this->assertEquals(16, $written);
+        $this->_controller->fclose($handle);
+
+        $handle = $this->_controller->fopen($path, 'r');
+        $contents = stream_get_contents($handle);
+        $this->_controller->fclose($handle);
+        $this->assertEquals('somethingVeryNew', $contents);
+
+        $handle = $this->_controller->fopen($path, 'w');
+        $this->assertEquals('resource', gettype($handle), 'opening file failed');
+        $written = fwrite($handle, 'somethingNew');
+        $this->assertEquals(12, $written);
+        $this->_controller->fclose($handle);
+
         $handle = $this->_controller->fopen($path, 'r');
         $contents = stream_get_contents($handle);
         $this->_controller->fclose($handle);

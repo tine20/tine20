@@ -109,4 +109,43 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
         // unset properties that are maintained only locally
         $_record->preview_count = null;
     }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @param bool $_dryRun
+     */
+    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $_modification, $_dryRun)
+    {
+        $treeBackend = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend();
+        switch($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                if (true === $_dryRun) {
+                    return;
+                }
+                $treeBackend->softDelete($_modification->record_id);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $node = $treeBackend->get($_modification->record_id);
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $node->undo($diff);
+
+                if (true !== $_dryRun) {
+                    $treeBackend->update($node);
+                }
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                if (true === $_dryRun) {
+                    return;
+                }
+                $node = $treeBackend->get($_modification->record_id, true);
+                $node->is_deleted = false;
+                $treeBackend->update($node);
+                break;
+
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('change_type ' . $_modification->change_type . ' unknown');
+        }
+    }
 }

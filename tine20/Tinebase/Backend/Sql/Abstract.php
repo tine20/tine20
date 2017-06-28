@@ -733,9 +733,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _checkTracing(Zend_Db_Select $select)
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $config = Tinebase_Core::getConfig();
-        if ( Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config && isset($config->logger)) {
-            if ($config->logger->traceQueryOrigins) {
+        $config = Tinebase_Config::getInstance();
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config && isset($config->logger)) {
+            if (isset($config->logger->traceQueryOrigins) && $config->logger->traceQueryOrigins) {
                 $e = new Exception();
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "\n" . 
                     "BACKTRACE: \n" . $e->getTraceAsString() . "\n" . 

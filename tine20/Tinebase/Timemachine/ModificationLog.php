@@ -994,33 +994,41 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             }
 
             try {
-                $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
 
                 if (empty($modifiedAttribute)) {
                     // new handling using diff!
 
                     $updateCount++;
 
-                    if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
-                        if (!$dryrun) {
-                            $controller->delete($record->getId());
-                        }
-                    } elseif (true === $isDeleted) {
-                        if (!$dryrun) {
-                            $controller->unDelete($record);
-                        }
+                    if (method_exists($controller, 'undoReplicationModificationLog')) {
+                        $controller->undoReplicationModificationLog($modlog, $dryrun);
                     } else {
-                        /** TODO this is not finished YET! see $notUndoableFields below etc.! */
-                        $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
-                        $record->undo($diff);
 
-                        if (!$dryrun) {
-                            $controller->update($record);
+                        $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
+
+                        if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
+                            if (!$dryrun) {
+                                $controller->delete($record->getId());
+                            }
+                        } elseif (true === $isDeleted) {
+                            if (!$dryrun) {
+                                $controller->unDelete($record);
+                            }
+                        } else {
+                            /** TODO this is not finished YET! see $notUndoableFields below etc.! */
+                            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
+                            $record->undo($diff);
+
+                            if (!$dryrun) {
+                                $controller->update($record);
+                            }
                         }
                     }
 
                     // this is the legacy code for old data in existing installations
                 } else {
+
+                    $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
 
                     if (!in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->seq === $modlog->seq)) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

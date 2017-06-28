@@ -146,7 +146,7 @@ class Tinebase_FileSystem implements
 
     public function resetBackends()
     {
-        $config = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM};
+        $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
         $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_notificationActive = true === $config->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
@@ -154,7 +154,7 @@ class Tinebase_FileSystem implements
 
         $this->_treeNodeBackend = null;
 
-        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject(null, array(
+        $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
             Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
         ));
     }

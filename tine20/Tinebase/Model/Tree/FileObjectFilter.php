@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -39,5 +39,8 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'is_deleted'            => array(
+            'filter'                => 'Tinebase_Model_Filter_Bool'
+        )
     );
 }
