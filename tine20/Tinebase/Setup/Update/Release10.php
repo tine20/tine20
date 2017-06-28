@@ -1165,4 +1165,18 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.28');
     }
+
+    /**
+     * update to 10.29
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_28()
+    {
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            Setup_Controller::getInstance()->createImportExportDefinitions($application);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.29');
+    }
 }
