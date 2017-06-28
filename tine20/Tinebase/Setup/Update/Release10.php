@@ -1567,8 +1567,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </index>'));
         }
 
-        if ($this->_backend->tableExists('cal_events')) {
-            $this->_backend->addForeignKey('cal_events', new Setup_Backend_Schema_Index_Xml('<index>
+        if ($this->_backend->tableExists('cal_resources')) {
+            $this->_backend->addForeignKey('cal_resources', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>cal_resources::container_id--container::id</name>
                     <field>
                         <name>container_id</name>
@@ -1708,5 +1708,27 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '10.33');
+    }
+
+    /**
+     * update to 10.34
+     *
+     * add pin column to accounts
+     */
+    public function update_33()
+    {
+        if (! $this->_backend->columnExists('pin', 'accounts')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>pin</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('accounts', $declaration);
+
+            $this->setTableVersion('accounts', 12);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.34');
     }
 }

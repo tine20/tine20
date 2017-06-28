@@ -676,6 +676,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *      'url'                   => 'https://localhost/validate/check',
          *      'allow_self_signed'     => true,
          *      'ignorePeerName'        => true,
+         *      'login'                 => true, // validate during login + show field on login screen
          * )
          */
         self::AUTHENTICATIONSECONDFACTOR => array(

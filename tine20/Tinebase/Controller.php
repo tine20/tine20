@@ -723,7 +723,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // 2nd factor
         $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
 
-        if ($secondFactorConfig && $secondFactorConfig->active && $accessLog->clienttype === 'JSON-RPC') {
+        if ($secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login && $accessLog->clienttype === 'JSON-RPC') {
             $context = $this->getRequestContext();
             if (Tinebase_Auth::validateSecondFactor($user->accountLoginName,
                 $context['otp'],

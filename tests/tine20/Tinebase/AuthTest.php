@@ -215,8 +215,22 @@ class Tinebase_AuthTest extends TestCase
     {
         $result = Tinebase_Auth::validateSecondFactor('phil', 'phil', array(
             'active' => true,
-            'provider'              => 'Mock',
+            'provider' => 'Mock',
             'url' => 'https://localhost/validate/check',
+        ));
+        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
+    }
+
+    /**
+     * @see 0013272: add pin column, backend and config
+     */
+    public function testSecondFactorTine20()
+    {
+        $user = Tinebase_Core::getUser();
+        Tinebase_User::getInstance()->setPin($user, '1234');
+        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, '1234', array(
+            'active' => true,
+            'provider' => 'Tine20',
         ));
         $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
     }

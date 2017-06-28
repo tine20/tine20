@@ -686,7 +686,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $authBackend->setIdentity($replicationUser->accountLoginName);
         $authBackend->setCredential('ssha256Password');
         $authResult = $authBackend->authenticate();
-        $this->assertEquals(Zend_Auth_Result::SUCCESS, $authResult->getCode(), 'changing password did not work');
+        $this->assertEquals(Zend_Auth_Result::SUCCESS, $authResult->getCode(), 'changing password did not work: '
+            . print_r($authResult->getMessages(), true));
 
         // set status to expired
         $mod = $userModifications->getFirstRecord();

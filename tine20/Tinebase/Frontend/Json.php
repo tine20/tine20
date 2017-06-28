@@ -739,7 +739,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-            'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active,
+            'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
