@@ -809,7 +809,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         $node = Filemanager_Controller_Node::getInstance()->get($_attachment['id']);
 
-        $this->_insertDownloadLinkIntoMailBody(Filemanager_Model_node::getDeepLink($node), $_message);
+        $this->_insertDownloadLinkIntoMailBody(Filemanager_Model_Node::getDeepLink($node), $_message);
 
         return true;
     }
