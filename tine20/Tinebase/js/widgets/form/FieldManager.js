@@ -72,6 +72,9 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             switch(fieldType) {
+                case 'money':
+                    field.xtype = 'extuxmoneyfield';
+                    break;
                 case 'date':
                     field.xtype = 'datefield';
                     if (fieldDefinition.dateFormat) {
