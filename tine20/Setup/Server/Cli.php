@@ -68,6 +68,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'compare'                   => 'compare schemas with another database
                         Examples:
                            setup.php --compare -- otherdb=tine20other',
+                'setpassword'               => 'set system user password
+                        Examples:
+                           setup.php --setpassword -- username=myusername password=myrandompw',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -93,6 +96,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&
+            empty($opts->setpassword) &&
             empty($opts->getconfig)))
         {
             echo $opts->getUsageMessage();
@@ -107,10 +111,10 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
         
         Setup_Core::initFramework();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . $this->getRequestMethod());
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Is cli request. method: ' . $this->getRequestMethod());
+
         $setupServer = new Setup_Frontend_Cli();
-        #$setupServer->authenticate($opts->username, $opts->password);
         return $setupServer->handle($opts);
     }
     
