@@ -1773,7 +1773,25 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
-            result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+            var cfDefinition = cfConfig.get('definition');
+            switch (cfDefinition.type) {
+                case 'record':
+                    result.push({
+                        filtertype: 'foreignrecord',
+                        app: this.app,
+                        ownRecordClass: this.recordClass,
+                        foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                        linkType: 'foreignId',
+                        ownField: 'customfield:' + cfConfig.id
+                    });
+                    break;
+                case 'keyfield':
+                    // @TODO implement me
+                    break;
+                default:
+                    result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                    break;
+            }
         }, this);
 
         return result;

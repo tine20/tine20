@@ -429,6 +429,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
     }
 
+    public static function getModelNameFromDefinition($definition)
+    {
+        $modelParts = explode('.', $definition[$definition['type'] . 'Config']['value']['records']);
+        return $modelParts[1] . '_Model_' . $modelParts[3];
+    }
+
     /**
      * @param $_record
      * @param $_customField
@@ -439,8 +445,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     protected function _getValueForRecordOrListCf($_record, $_customField, $_value)
     {
         // get model parts from saved record class e.g. Tine.Admin.Model.Group
-        $modelParts = explode('.', $_customField->definition[$_customField->definition['type'] . 'Config']['value']['records']);
-        $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
+        $modelName = self::getModelNameFromDefinition($_customField->definition);
         $model = new $modelName(array(), true);
         $idProperty = $model->getIdProperty();
         if (is_array($_value)) {

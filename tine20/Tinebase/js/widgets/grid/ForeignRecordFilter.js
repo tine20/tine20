@@ -173,7 +173,19 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (! this.operators) {
             this.operators = ['equals', 'not', 'definedBy'];
         }
-        
+
+        // NOTE: Tine.widgets.grid.FilterModel can't cope with custom operators/values yet
+        // // get operators from registry
+        // Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function(def) {
+        //     // translate label
+        //     var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
+        //         appName = foreignRecordClass.getMeta('appName'),
+        //         app = Tine.Tinebase.appMgr.get(appName),
+        //         label = app ? app.i18n._hidden(def.label) : def.label;
+        //
+        //     this.operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
+        // }, this);
+
         if (! this.defaultOperator) {
             this.defaultOperator = 'equals';
         }
