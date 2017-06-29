@@ -2088,6 +2088,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule_constraints) {
             $this->setConstraintsExdates($_record);
         }
+
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
+            'observable' => $_record
+        )));
     }
 
     /**
