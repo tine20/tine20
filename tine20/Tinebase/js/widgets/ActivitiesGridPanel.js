@@ -65,7 +65,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: 'container_id',
             evalGrants: false
         });
 
@@ -189,9 +188,13 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @param {Function} ticketFn
      */
     onLoadRecord: function (activities, record, ticketFn) {
+        var _ = window.lodash,
+            interceptor = ticketFn(),
+            notes = record.get('notes'),
+            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.store.removeAll();
-        var interceptor = ticketFn();
-        var notes = record.get('notes');
+
         if (notes && notes.length > 0) {
             this.updateTitle(notes.length);
             var notesRecords = [];
@@ -212,9 +215,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         }
         interceptor();
 
-        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
-            this.setReadOnly(true);
-        }
+        this.setReadOnly(! hasRequiredGrant);
     },
 
     setReadOnly: function(readOnly) {

@@ -14,6 +14,10 @@
     config.actions = [];
     
     Ext.apply(this, config);
+
+    if (this.recordClass) {
+        this.grantsPath = this.recordClass.getMeta('grantsPath');
+    }
     this.addActions(actions);
  };
 
@@ -29,18 +33,10 @@
      * should grants of a grant-aware records be evaluated (defaults to true)
      */
     evalGrants: true,
-    
-    /**
-     * @cfg {String} grantsProperty
-     * property in the record to find the grants in
-     */
-    grantsProperty: 'account_grants',
-    
-    /**
-     * @cfg {String} containerProperty
-     * container property of records (if set, grants are expected to be  a property of the container)
-     */
-    containerProperty: 'container_id',
+
+    recordClass: null,
+
+    grantsPath: null,
     
     /**
      * add actions to update
@@ -221,16 +217,17 @@
      */
     getGrantsSum: function(records) {
 
-        var defaultGrant = records.length == 0 ? false : true;
-        var grants = {
-            addGrant:       defaultGrant,
-            adminGrant:     defaultGrant,
-            deleteGrant:    defaultGrant,
-            editGrant:      defaultGrant,
-            readGrant:      defaultGrant,
-            exportGrant:    defaultGrant,
-            syncGrant:      defaultGrant
-        };
+        var _ = window.lodash,
+            defaultGrant = records.length == 0 ? false : true,
+            grants = {
+                addGrant:       defaultGrant,
+                adminGrant:     defaultGrant,
+                deleteGrant:    defaultGrant,
+                editGrant:      defaultGrant,
+                readGrant:      defaultGrant,
+                exportGrant:    defaultGrant,
+                syncGrant:      defaultGrant
+            };
         
         if (! this.evalGrants) {
             return grants;
@@ -238,9 +235,7 @@
         
         var recordGrants;
         for (var i=0; i<records.length; i++) {
-            recordGrants = this.containerProperty ? 
-                records[i].get(this.containerProperty)[this.grantsProperty] : this.grantsProperty ? 
-                records[i].get(this.grantsProperty) : records[i].data;
+            recordGrants = _.get(records[i], this.grantsPath);
             
             for (var grant in grants) {
                 if (grants.hasOwnProperty(grant) && recordGrants && recordGrants.hasOwnProperty(grant)) {

@@ -360,9 +360,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         
         this.actionUpdater = new  Tine.widgets.ActionUpdater({
-            actions: this.recordActions,
-            grantsProperty: false,
-            containerProperty: false
+            actions: this.recordActions
         });
     },
 

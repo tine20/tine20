@@ -1150,9 +1150,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Record} record
      */
     loadRecord: function(dialog, record, ticketFn) {
-        this.store.removeAll();
-        var interceptor = ticketFn();
+        var _ = window.lodash,
+            interceptor = ticketFn(),
+            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
+        this.store.removeAll();
 
         if (dialog.mode == 'local') {
             // if dialog is local, relations must be fetched async
@@ -1166,10 +1168,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             this.loadRelations(relations, interceptor);
         }
 
-        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
-            this.setReadOnly(true);
-        }
-
+        this.setReadOnly(! hasRequiredGrant);
     },
 
     loadRelations: function(relations, interceptor) {

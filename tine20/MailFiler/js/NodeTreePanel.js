@@ -31,8 +31,6 @@ Tine.MailFiler.NodeTreePanel = Ext.extend(Tine.Filemanager.NodeTreePanel, {
         });
 
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: this.recordClass.getMeta('containerProperty'),
-            evalGrants: true,
             actions: this.ctxMenu.items
         });
     }

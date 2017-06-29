@@ -35,6 +35,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     displayNotes: true,
+    requiredSaveGrant: 'readGrant',
     
     /**
      * @type Tine.Filemanager.DownloadLinkGridPanel
@@ -58,6 +59,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
     },
+
     /**
      * folder or file?
      */
@@ -160,6 +162,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             formDefaults: formFieldDefaults,
                             items: [[{
                                     fieldLabel: this.app.i18n._('Name'),
+                                    requiredGrant: 'editGrant',
                                     name: 'name',
                                     allowBlank: false,
                                     readOnly: false,

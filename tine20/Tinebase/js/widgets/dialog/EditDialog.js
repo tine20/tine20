@@ -69,6 +69,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     evalGrants: true,
     /**
+     * @cfg {String} requiredSaveGrant
+     * required grant for apply/save
+     */
+    requiredSaveGrant: 'editGrant',
+
+    /**
      * @cfg {Ext.data.Record} record
      * record in edit process.
      */
@@ -104,12 +110,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * do duplicate check when saving record (mode remote only)
      */
     doDuplicateCheck: true,
-    
-    /**
-     * required grant for apply/save
-     * @type String
-     */
-    editGrant: 'editGrant',
 
     /**
      * when a record has the relations-property the relations-panel can be disabled here
@@ -307,7 +307,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
             this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
         }
-        
+
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
@@ -578,7 +578,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
-            requiredGrant: this.editGrant,
+            requiredGrant: this.requiredSaveGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : i18n._('Ok'),
             minWidth: 70,
             ref: '../btnSaveAndClose',
@@ -589,7 +589,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
     
         this.action_applyChanges = new Ext.Action({
-            requiredGrant: this.editGrant,
+            requiredGrant: this.requiredSaveGrant,
             text: i18n._('Apply'),
             minWidth: 70,
             ref: '../btnApplyChanges',
@@ -622,7 +622,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: this.recordClass ? this.recordClass.getMeta('containerProperty') : null,
+            recordClass: this.recordClass,
             evalGrants: this.evalGrants
         });
 
@@ -862,7 +862,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     // finally load the record into the form
     onAfterRecordLoad: function() {
-        var form = this.getForm();
+        var _ = window.lodash,
+            form = this.getForm();
         
         if (form) {
             form.loadRecord(this.record);
@@ -876,6 +877,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // add current timestamp as id, if this is a dependent record 
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
             this.record.set('id', (new Date()).getTime());
+        }
+
+        // apply grants to fields with requiredGrant prop
+        if (this.evalGrants) {
+            this.getForm().items.each(function (f) {
+                if (f.isFormField && f.requiredGrant !== undefined) {
+                    var hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.' + f.requiredGrant);
+                    f.setDisabled(!hasRequiredGrant);
+                }
+            }, this);
         }
 
         this.checkStates.defer(100, this);
@@ -933,8 +944,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         var form = this.getForm().items.each(function(item) {
             this.relayEvents(item, ['change', 'select']);
         }, this);
-        this.on('change', this.checkStates, this);
-        this.on('select', this.checkStates, this);
+        this.on('change', this.checkStates, this, {buffer: 100});
+        this.on('select', this.checkStates, this, {buffer: 100});
     },
     
     /**

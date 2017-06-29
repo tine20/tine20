@@ -61,6 +61,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     recordsName: 'records',
     /**
+     * @cfg {String} grantsPath
+     * path (see _.get() to find grants
+     */
+    grantsPath: null,
+    /**
      * @cfg {String} containerProperty
      * name of the container property
      */
@@ -320,6 +325,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         if (field) {
             field.label = p.containerName;
         }
+    }
+    if (!p.grantsPath) {
+        p.grantsPath = 'data' + (containerProperty ? ('.' + containerProperty) : '') + '.account_grants';
     }
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;

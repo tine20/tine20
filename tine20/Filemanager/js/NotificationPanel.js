@@ -14,6 +14,8 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
     layout: 'fit',
     border: false,
 
+    requiredGrant: 'readGrant',
+
     notificationGrid: null,
 
     initComponent: function () {
@@ -30,29 +32,16 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
             idProperty: 'accountId'
         });
 
-        var notificationProps = window.lodash.get(this.editDialog.record, 'data.notificationProps', []);
-        var disable = notificationProps === null || notificationProps.length === 0;
-
         this.notificationGrid = new Tine.Filemanager.NotificationGridPanel({
             store: store,
-            readOnly: disable,
+            readOnly: true,
             flex: 1,
             editDialog: this.editDialog
         });
 
-        var featureEnabled = _.get(Tine.Tinebase.configManager.get('filesystem'), 'enableNotifications', false);
-
-        var disabled = false;
-
-        if (!featureEnabled) {
-            disabled = true;
-        } else if (!_.get(this.editDialog, 'record.data.account_grants.adminGrant', false)) {
-            disabled = true;
-        }
-
         this.hasOwnNotificationSettings = new Ext.form.Checkbox({
-            checked: !disable,
-            disabled: disabled,
+            checked: false,
+            disabled: true,
             boxLabel: this.app.i18n._('This folder has own notification settings'),
             listeners: {scope: this, check: this.onOwnNotificationCheck}
         });
@@ -87,7 +76,22 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordLoad: function (editDialog, record, ticketFn) {
-        this.notificationGrid.getStore().loadData(window.lodash.get(record, 'data.notificationProps', []), false);
+        var _ = window.lodash,
+            featureEnabled = _.get(Tine.Tinebase.configManager.get('filesystem'), 'enableNotifications', false),
+            notificationProps = window.lodash.get(record, 'data.notificationProps', []),
+            hasOwnNotificationSettings = !!notificationProps.length,
+            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
+            hasAdminGrant = _.get(this.editDialog, 'record.data.account_grants.adminGrant', false);
+
+        this.notificationGrid.getStore().loadData(_.get(record, 'data.notificationProps', []), false);
+        this.hasOwnNotificationSettings.setValue(hasOwnNotificationSettings);
+
+        // @TODO: enable box for non admins if not hasOwnNotificationSettings
+        //        atm. the server can't cope with it -> see #490, #484
+        // this.hasOwnNotificationSettings.setDisabled(!featureEnabled || !hasRequiredGrant || (hasOwnNotificationSettings && !hasAdminGrant))
+        this.hasOwnNotificationSettings.setDisabled(!hasAdminGrant);
+
+        this.notificationGrid.setReadOnly(!featureEnabled || !hasRequiredGrant);
     },
 
     onSave: function (editDialog, record, ticketFn) {

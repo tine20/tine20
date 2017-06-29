@@ -71,6 +71,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     recordName: 'Event',
     recordsName: 'Events',
     containerProperty: 'container_id',
+    grantsPath: 'data',
     // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
     containerName: 'Calendar',
     containersName: 'Calendars',

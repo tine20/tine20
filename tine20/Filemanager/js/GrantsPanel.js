@@ -24,6 +24,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
      */
     recordClass: Tine.Filemanager.Model.Node,
 
+    requiredGrant: 'editGrant',
     layout: 'fit',
     border: false,
 
@@ -83,6 +84,9 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');
         this.hasOwnGrantsCheckbox.setValue(record.get('acl_node') == record.id);
@@ -90,7 +94,13 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
 
-        // this.ownerCt[(record.get('type') == 'folder' ? 'un' : '') + 'hideTabStripItem'](this);
+        this.setReadOnly(! hasRequiredGrant);
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+        this.grantsGrid.setReadOnly(readOnly);
+        this.hasOwnGrantsCheckbox.setDisabled(readOnly);
     },
 
     onRecordUpdate: function(editDialog, record) {

@@ -202,9 +202,13 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * @param {Function} ticketFn
      */
     onLoadRecord: function(dialog, record, ticketFn) {
+        var _ = window.lodash,
+            interceptor = ticketFn(),
+            attachments = record.get('attachments'),
+            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.store.removeAll();
-        var interceptor = ticketFn();
-        var attachments = record.get('attachments');
+
         if (attachments && attachments.length > 0) {
             this.updateTitle(attachments.length);
             var attachmentRecords = [];
@@ -225,9 +229,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
         interceptor();
 
-        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
-            this.setReadOnly(true);
-        }
+        this.setReadOnly(! hasRequiredGrant);
     },
 
     /**
