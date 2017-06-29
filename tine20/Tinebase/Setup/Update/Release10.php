@@ -1179,4 +1179,45 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.29');
     }
+
+    /**
+     * update to 10.30
+     *
+     * add scope column to importexport_definition
+     */
+    public function update_29()
+    {
+        $this->_backend->dropIndex('record_observer', 'observable-observer-event');
+
+        $this->_backend->alterCol('record_observer', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>observable_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+
+        $this->_backend->addIndex('record_observer', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>observable-observer-event</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>observable_model</name>
+                    </field>
+                    <field>
+                        <name>observed_event</name>
+                    </field>
+                    <field>
+                        <name>observable_identifier</name>
+                    </field>
+                    <field>
+                        <name>observer_model</name>
+                    </field>
+                    <field>
+                        <name>observer_identifier</name>
+                    </field>
+                </index>'));
+
+        $this->setTableVersion('record_observer', 5);
+
+        $this->setApplicationVersion('Tinebase', '10.30');
+    }
 }

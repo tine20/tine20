@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.29</version>
+    <version>10.30</version>
     <tables>
         <table>
             <name>applications</name>
@@ -914,7 +914,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -931,7 +931,7 @@
                     <name>observable_identifier</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>observer_model</name>
@@ -975,6 +975,9 @@
                         <name>observable_model</name>
                     </field>
                     <field>
+                        <name>observed_event</name>
+                    </field>
+                    <field>
                         <name>observable_identifier</name>
                     </field>
                     <field>
@@ -982,9 +985,6 @@
                     </field>
                     <field>
                         <name>observer_identifier</name>
-                    </field>
-                    <field>
-                        <name>observed_event</name>
                     </field>
                 </index>
                 <index>

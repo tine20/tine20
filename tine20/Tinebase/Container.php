@@ -1112,7 +1112,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
 
-            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($deletedContainer, 'Tinebase_Event_Record_Delete');
+            $event = new Tinebase_Event_Record_Delete();
+            $event->observable = $deletedContainer;
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         } catch (Exception $e) {
             $tm->rollBack();
             throw $e;
@@ -1948,7 +1950,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         unset($oldContainer->account_grants);
         $this->_writeModLog($result, $oldContainer);
 
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($result, 'Tinebase_Event_Record_Update');
+        $event = new Tinebase_Event_Record_Update();
+        $event->observable = $result;
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
