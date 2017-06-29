@@ -268,4 +268,6 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
             Calendar_Controller_Event::getInstance()->delete($missingEvents->id);
         }
     }
+
+    protected function _getRawData(&$_resource) {}
 }
