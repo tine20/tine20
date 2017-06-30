@@ -220,10 +220,14 @@ class Tinebase_Auth
         }
         
         $this->_backend->setCredential($_password);
-        
-        if (Tinebase_Session::isStarted()) {
-            Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
-        } else {
+
+        try {
+            if (Tinebase_Session::isStarted()) {
+                Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
+            } else {
+                Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
+            }
+        } catch (Zend_Session_Exception $e) {
             Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
