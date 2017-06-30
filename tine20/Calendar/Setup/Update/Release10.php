@@ -176,4 +176,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '10.7');
     }
+
+    public function update_7()
+    {}
 }

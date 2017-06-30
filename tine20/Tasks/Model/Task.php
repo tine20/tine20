@@ -58,7 +58,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         // tine record fields
-        'container_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int' ),
+        'container_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Alnum'),
         'created_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,        ),
         'creation_time'        => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'last_modified_by'     => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),

@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -65,7 +65,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

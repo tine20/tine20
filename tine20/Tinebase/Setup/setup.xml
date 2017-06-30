@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.31</version>
+    <version>10.32</version>
     <tables>
         <table>
             <name>applications</name>
@@ -520,12 +520,13 @@
         </table>
         <table>
             <name>container</name>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -670,7 +671,7 @@
         </table>
         <table>
             <name>container_acl</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -680,8 +681,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -752,7 +753,7 @@
         </table>
         <table>
             <name>container_content</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -762,8 +763,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

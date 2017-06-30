@@ -35,7 +35,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         'numberableStr' => 'string',
         'float'         => 'float',
         'json'          => 'text',
-        'container'     => 'integer',
+        'container'     => 'string',
         'record'        => 'string',
         'keyfield'      => 'string',
         'user'          => 'string',
@@ -101,6 +101,9 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
     {
         $config['doctrineIgnore'] = true;
         if (isset(self::$_typeMap[$config['type']])) {
+            if ($config['type'] === 'container') {
+                $config['length'] = 40;
+            }
             $config['type'] = self::$_typeMap[$config['type']];
             $config['doctrineIgnore'] = false;
         }

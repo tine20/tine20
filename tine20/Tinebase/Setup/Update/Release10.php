@@ -369,7 +369,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_9()
     {
         $this->_addIsDeletedToTreeNodes();
-        
+
         $this->dropTable('path');
 
         $declaration = new Setup_Backend_Schema_Table_Xml('<table>
@@ -1053,7 +1053,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $this->_addNotificationProps();
         $this->_addIsDeletedToTreeNodes();
-        
+
         // get all folder nodes with own acl
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
@@ -1255,5 +1255,374 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
             $this->setTableVersion('tree_nodes', 4);
         }
+    }
+
+    /**
+     * update to 10.32
+     *
+     * change container id from int to uuid
+     */
+    public function update_31()
+    {
+        //ATTENTION foreign constraints
+
+        try {
+            $this->_backend->dropForeignKey('container_acl', 'container_acl::container_id--container::id');
+        } catch (Exception $e) {}
+        try {
+            $this->_backend->dropForeignKey('container_content', 'container_content::container_id--container::id');
+        } catch (Exception $e) {}
+
+        if ($this->_backend->tableExists('addressbook')) {
+            try {
+                $this->_backend->dropForeignKey('addressbook', 'addressbook::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('cal_events')) {
+            try {
+                $this->_backend->dropForeignKey('cal_events', 'cal_events::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('cal_resources')) {
+            try {
+                $this->_backend->dropForeignKey('cal_resources', 'cal_resources::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('cal_attendee')) {
+            try {
+                $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('metacrm_lead')) {
+            try {
+                $this->_backend->dropForeignKey('metacrm_lead', 'metacrm_lead::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('sales_contracts')) {
+            try {
+                $this->_backend->dropForeignKey('sales_contracts', 'sales_contracts::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+        if ($this->_backend->tableExists('timetracker_timeaccount')) {
+            try {
+                $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
+            } catch (Exception $e) {}
+        }
+
+        if (version_compare($this->getApplicationVersion('Tinebase'), '10.31') < 0 ) {
+            if ($this->getTableVersion('container') < 13) {
+                $this->_backend->alterCol('container', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+                $this->setTableVersion('container', 13);
+            }
+
+            if ($this->getTableVersion('container_acl') < 4) {
+                $this->_backend->alterCol('container_acl', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>container_id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+                $this->setTableVersion('container_acl', 4);
+            }
+
+            if ($this->getTableVersion('container_content') < 3) {
+                $this->_backend->alterCol('container_content', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>container_id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+                $this->setTableVersion('container_content', 3);
+            }
+        }
+
+        if (version_compare($this->getApplicationVersion('Addressbook'), '10.6') < 0 ) {
+            if ($this->getTableVersion('addressbook') < 25) {
+                $this->_backend->alterCol('addressbook', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('addressbook', 25);
+            }
+
+            if ($this->getTableVersion('addressbook_lists') < 6) {
+                $this->_backend->alterCol('addressbook_lists', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('addressbook_lists', 25);
+            }
+
+            $this->setApplicationVersion('Addressbook', '10.6');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar') &&
+                version_compare($this->getApplicationVersion('Calendar'), '10.8') < 0 ) {
+            if ($this->getTableVersion('cal_events') < 14) {
+                $this->_backend->alterCol('cal_events', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('cal_events', 14);
+            }
+
+            if ($this->getTableVersion('cal_attendee') < 6) {
+                $this->_backend->alterCol('cal_attendee', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>displaycontainer_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('cal_attendee', 6);
+            }
+
+            if ($this->getTableVersion('cal_resources') < 6) {
+                $this->_backend->alterCol('cal_resources', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('cal_resources', 6);
+            }
+
+            $this->setApplicationVersion('Calendar', '10.8');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Crm') &&
+            version_compare($this->getApplicationVersion('Crm'), '10.2') < 0 ) {
+            if ($this->getTableVersion('metacrm_lead') < 10) {
+                $this->_backend->alterCol('metacrm_lead', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('metacrm_lead', 10);
+            }
+            $this->setApplicationVersion('Crm', '10.2');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Events') &&
+            version_compare($this->getApplicationVersion('Events'), '10.2') < 0 ) {
+            if ($this->getTableVersion('events_event') < 3) {
+                $this->_backend->alterCol('events_event', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('events_event', 3);
+            }
+            $this->setApplicationVersion('Events', '10.2');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Projects') &&
+            version_compare($this->getApplicationVersion('Projects'), '10.2') < 0 ) {
+            if ($this->getTableVersion('projects_project') < 4) {
+                $this->_backend->alterCol('projects_project', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('projects_project', 4);
+            }
+            $this->setApplicationVersion('Projects', '10.2');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Sales') &&
+            version_compare($this->getApplicationVersion('Sales'), '10.9') < 0 ) {
+            if ($this->getTableVersion('sales_contracts') < 10) {
+                $this->_backend->alterCol('sales_contracts', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>'));
+                $this->setTableVersion('sales_contracts', 10);
+            }
+            $this->setApplicationVersion('Sales', '10.9');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('SimpleFAQ') &&
+            version_compare($this->getApplicationVersion('SimpleFAQ'), '10.1') < 0 ) {
+            if ($this->getTableVersion('simple_faq') < 3) {
+                $this->_backend->alterCol('simple_faq', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('simple_faq', 3);
+            }
+            $this->setApplicationVersion('SimpleFAQ', '10.1');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Tasks') &&
+            version_compare($this->getApplicationVersion('Tasks'), '10.2') < 0 ) {
+            if ($this->getTableVersion('tasks') < 10) {
+                $this->_backend->alterCol('tasks', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('tasks', 10);
+            }
+            $this->setApplicationVersion('Tasks', '10.2');
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Timetracker') &&
+            version_compare($this->getApplicationVersion('Timetracker'), '10.3') < 0 ) {
+            if ($this->getTableVersion('timetracker_timeaccount') < 12) {
+                $this->_backend->alterCol('timetracker_timeaccount', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>container_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'));
+                $this->setTableVersion('timetracker_timeaccount', 12);
+            }
+            $this->setApplicationVersion('Timetracker', '10.3');
+        }
+
+        $this->_backend->addForeignKey('container_content', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>container_content::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>'));
+
+        $this->_backend->addForeignKey('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>container_acl::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <!-- add onupdate? -->
+                    </reference>
+                </index>'));
+
+        if ($this->_backend->tableExists('timeaccount')) {
+            $this->_backend->addForeignKey('timeaccount', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>timeaccount::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('sales_contracts')) {
+            $this->_backend->addForeignKey('sales_contracts', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>sales_contracts::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('metacrm_lead')) {
+            $this->_backend->addForeignKey('metacrm_lead', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>metacrm_lead::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('cal_events')) {
+            $this->_backend->addForeignKey('cal_events', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>cal_resources::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('cal_events')) {
+            $this->_backend->addForeignKey('cal_events', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>cal_events::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('cal_attendee')) {
+            $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>cal_attendee::displaycontainer_id--container::id</name>
+                    <field>
+                        <name>displaycontainer_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('addressbook')) {
+            $this->_backend->addForeignKey('addressbook', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>addressbook::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>'));
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.32');
     }
 }

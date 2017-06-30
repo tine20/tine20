@@ -265,7 +265,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function addGrants($_containerId, $_accountType, $_accountId, array $_grants, $_ignoreAcl = FALSE)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         
         if($_ignoreAcl !== TRUE and !$this->hasGrant(Tinebase_Core::getUser(), $_containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
@@ -482,7 +482,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function getContainerById($_containerId, $_getDeleted = FALSE)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         
         $cacheId = $containerId . 'd' . (int)$_getDeleted;
         
@@ -1077,7 +1077,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function deleteContainer($_containerId, $_ignoreAcl = FALSE, $_tryAgain = TRUE)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         $this->checkSystemContainer($containerId);
 
@@ -1255,7 +1255,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         try {
-            $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+            $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getTraceAsString());
@@ -1306,7 +1306,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         
         $select = $this->_getAclSelectByContainerId($containerId)
             ->group(array('container_acl.container_id', 'container_acl.account_type', 'container_acl.account_id'));
@@ -1364,7 +1364,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function getGrantsOfAccount($_accountId, $_containerId, $_grantModel = 'Tinebase_Model_Grants') 
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId        = Tinebase_Model_Container::convertContainerId($_containerId);
         $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
         $classCacheId = $accountId . $containerId . $container->seq . $_grantModel;
@@ -1448,8 +1448,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $containerIds = array();
         foreach ($_records as $record) {
-            if (isset($record[$_containerProperty]) && !isset($containerIds[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
-                $containerIds[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = null;
+            if (isset($record[$_containerProperty]) && !isset($containerIds[Tinebase_Model_Container::convertContainerId($record[$_containerProperty])])) {
+                $containerIds[Tinebase_Model_Container::convertContainerId($record[$_containerProperty])] = null;
             }
         }
         
@@ -1513,7 +1513,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE, $_failSafe = TRUE) 
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         
         if($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -1655,7 +1655,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     protected function _clearCache($containerId) 
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($containerId);
         $cache = Tinebase_Core::getCache();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -1724,7 +1724,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function increaseContentSequence($containerId, $action = NULL, $recordId = NULL)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
+        $containerId = Tinebase_Model_Container::convertContainerId($containerId);
 
         $newContentSeq = NULL;
         try {
@@ -1789,7 +1789,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function getContentHistory($containerId, $lastContentSeq = -1)
     {
         $filter = new Tinebase_Model_ContainerContentFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals',  'value' => Tinebase_Model_Container::convertContainerIdToInt($containerId)),
+            array('field' => 'container_id', 'operator' => 'equals',  'value' => Tinebase_Model_Container::convertContainerId($containerId)),
             array('field' => 'content_seq',  'operator' => 'greater', 'value' => ($lastContentSeq == -1 ? $lastContentSeq : $lastContentSeq - 1)),
         ));
         $pagination = new Tinebase_Model_Pagination(array(
@@ -1824,7 +1824,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         $containerIds = (! is_array($containerIds))
-            ? Tinebase_Model_Container::convertContainerIdToInt($containerIds)
+            ? Tinebase_Model_Container::convertContainerId($containerIds)
             : $containerIds;
         
         $select = $this->_getSelect(array('id', 'content_seq'), TRUE);

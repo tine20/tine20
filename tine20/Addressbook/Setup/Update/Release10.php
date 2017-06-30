@@ -104,4 +104,7 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '10.5');
     }
+
+    public function update_5()
+    {}
 }

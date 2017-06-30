@@ -150,24 +150,23 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * converts a int, string or Tinebase_Model_Container to a containerid
      *
      * @param   int|string|Tinebase_Model_Container $_containerId the containerid to convert
-     * @return  int
+     * @return  string
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    static public function convertContainerIdToInt($_containerId)
+    static public function convertContainerId($_containerId)
     {
+        // null will be string casted to empty string
         if($_containerId instanceof Tinebase_Model_Container) {
-            if($_containerId->getId() === NULL) {
-                throw new Tinebase_Exception_InvalidArgument('No container id set.');
-            }
-            $id = (int) $_containerId->getId();
+            $id = (string)$_containerId->getId();
         } else {
-            $id = (int) $_containerId;
+            $id = (string)$_containerId;
         }
-        
-        if ($id === 0) {
-            throw new Tinebase_Exception_InvalidArgument('Container id can not be 0 (' . $_containerId . ').');
+
+        // ctype_alnum returns false on empty string
+        if(false === ctype_alnum($id)) {
+            throw new Tinebase_Exception_InvalidArgument('No container id set.');
         }
-        
+
         return $id;
     }
 

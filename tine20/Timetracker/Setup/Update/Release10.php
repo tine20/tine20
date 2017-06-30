@@ -63,4 +63,7 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('timetracker_timeaccount', '11');
         $this->setApplicationVersion('Timetracker', '10.2');
     }
+
+    public function update_2()
+    {}
 }
