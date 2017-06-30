@@ -189,4 +189,24 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('sales_offers', 2);
         $this->setApplicationVersion('Sales', '10.8');
     }
+
+    /**
+     * update to 10.9
+     *
+     * Add fulltext index for description field of sales_offers
+     */
+    public function update_8()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('<index>
+                <name>description</name>
+                <fulltext>true</fulltext>
+                <field>
+                <name>description</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('sales_orderconf', $declaration);
+
+        $this->setTableVersion('sales_orderconf', 2);
+        $this->setApplicationVersion('Sales', '10.9');
+    }
 }
