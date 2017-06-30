@@ -29,6 +29,8 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
             incrementValue : 15
         });
         this.format = this.strategy.format;
+
+        this.on('focus', function(field) {field.focus(true, 10)});
     },
 
     setValue: function(value) {
