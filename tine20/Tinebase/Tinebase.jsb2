@@ -662,10 +662,6 @@
           "path": "js/widgets/grid/"
         },
         {
-          "text": "PickerGridLayerCombo.js",
-          "path": "js/widgets/grid/"
-        },
-        {
           "text": "LinkGridPanel.js",
           "path": "js/widgets/grid/"
         },
@@ -860,6 +856,14 @@
         {
           "text": "PickerCombo.js",
           "path": "js/widgets/relation/"
+        },
+        {
+          "text": "RecordsPickerCombo.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "PickerGridLayerCombo.js",
+          "path": "js/widgets/grid/"
         },
         {
           "text": "ConfigPanel.js",
