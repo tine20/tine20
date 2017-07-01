@@ -59,7 +59,7 @@ module.exports = {
         proxy: [
             {
                 context: ['**', '!/webpack-dev-server'],
-                target: 'http://localhost/',
+                target: 'http://tine20debug.out-world.com/',
                 secure: false
             }
         ],
