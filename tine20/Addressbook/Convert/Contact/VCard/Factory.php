@@ -26,6 +26,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_EMCLIENT7      = 'emclient7';
     const CLIENT_COLLABORATOR   = 'WebDAVCollaborator';
     const CLIENT_AKONADI        = 'akonadi';
+    const CLIENT_EVOLUTION      = 'evolution';
     const CLIENT_TELEFONBUCH    = 'telefonbuch';
     const CLIENT_DAVDROID       = 'davdroid';
     const CLIENT_CARDDAVSYNC    = 'org.dmfs.carddav.sync';
@@ -106,7 +107,10 @@ class Addressbook_Convert_Contact_VCard_Factory
 
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
                 return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
-        }
+
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EVOLUTION:
+                return new Addressbook_Convert_Contact_VCard_Evolution($_version);
+	}
     }
     
     /**
@@ -168,6 +172,11 @@ class Addressbook_Convert_Contact_VCard_Factory
         // DMFS CardDAVSync
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardDAVSync::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC;
+            $version = $matches['version'];
+
+        // Evolution 
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EVOLUTION;
             $version = $matches['version'];
         
         // CalDAVSynchronizer
