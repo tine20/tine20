@@ -24,6 +24,7 @@ class Tasks_Convert_Task_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
+    const CLIENT_EVOLUTION   = 'evolution';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     const CLIENT_DAVDROID    = 'davdroid';
     
@@ -62,13 +63,16 @@ class Tasks_Convert_Task_VCalendar_Factory
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Tasks_Convert_Task_VCalendar_EMClient($_version);
 
+            case Tasks_Convert_Task_VCalendar_Factory::CLIENT_EVOLUTION:
+                 return new Tasks_Convert_Task_VCalendar_Evolution($_version);
+
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
                 return new Tasks_Convert_Task_VCalendar_CalDAVSynchronizer($_version);
 
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_DAVDROID:
                 return new Tasks_Convert_Task_VCalendar_DavDroid($_version);
         }
-		return new Tasks_Convert_Task_VCalendar_Generic($_version);
+	return new Tasks_Convert_Task_VCalendar_Generic($_version);
     }
     
     /**
@@ -115,6 +119,11 @@ class Tasks_Convert_Task_VCalendar_Factory
         // DavDroid
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_DAVDROID;
+            $version = $matches['version'];
+        
+         // Evolution       
+        } elseif (preg_match(Tasks_Convert_Task_VCalendar_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EVOLUTION;
             $version = $matches['version'];
         
         } else {
