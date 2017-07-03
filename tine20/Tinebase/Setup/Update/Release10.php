@@ -17,6 +17,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
+        $this->_addIsDeletedToTreeNodes();
+
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
         $release9->update_9();
         $this->setApplicationVersion('Tinebase', '10.1');
@@ -366,6 +368,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_9()
     {
+        $this->_addIsDeletedToTreeNodes();
+        
         $this->dropTable('path');
 
         $declaration = new Setup_Backend_Schema_Table_Xml('<table>
@@ -774,6 +778,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
+        $this->_addIsDeletedToTreeNodes();
+
         // this is needed for filesystem operations
         $this->_addRevisionPreviewCountCol();
 
@@ -1046,6 +1052,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_23()
     {
         $this->_addNotificationProps();
+        $this->_addIsDeletedToTreeNodes();
         
         // get all folder nodes with own acl
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
@@ -1173,6 +1180,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_28()
     {
+        $this->_addIsDeletedToTreeNodes();
+
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
             Setup_Controller::getInstance()->createImportExportDefinitions($application);
         }
@@ -1228,6 +1237,13 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_30()
     {
+        $this->_addIsDeletedToTreeNodes();
+
+        $this->setApplicationVersion('Tinebase', '10.31');
+    }
+
+    protected function _addIsDeletedToTreeNodes()
+    {
         if (! $this->_backend->columnExists('is_deleted', 'tree_nodes')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>is_deleted</name>
@@ -1239,7 +1255,5 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
             $this->setTableVersion('tree_nodes', 4);
         }
-
-        $this->setApplicationVersion('Tinebase', '10.31');
     }
 }
