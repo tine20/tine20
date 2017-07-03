@@ -764,7 +764,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Duplicate check fields: ' . print_r($this->_duplicateCheckFields, TRUE));
-        
+
         $filters = array();
         foreach ($this->_duplicateCheckFields as $group) {
             $addFilter = array();
@@ -772,23 +772,45 @@ abstract class Tinebase_Controller_Record_Abstract
                 $group = array($group);
             }
             foreach ($group as $field) {
-                if (! empty($_record->{$field})) {
-                    if ($field === 'relations') {
-                        $relationFilter = $this->_getRelationDuplicateFilter($_record);
-                        if ($relationFilter) {
-                            $addFilter[] = $relationFilter;
+                $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+                    $this->_applicationName,
+                    $field,
+                    $this->_modelName
+                );
+
+                if ($customFieldConfig && isset($_record->customfields[$field])) {
+                    $value = $_record->customfields[$field];
+                    if (! empty($value)) {
+                        $addFilter[] = array(
+                            'field' => 'customfield',
+                            'operator' => 'equals',
+                            'value' => array(
+                                'value' => $value,
+                                'cfId' => $customFieldConfig->getId()
+                            )
+                        );
+                    } else {
+                        // empty: go to next group
+                        continue 2;
+                    }
+
+                } else {
+                    if (! empty($_record->{$field})) {
+                        if ($field === 'relations') {
+                            $relationFilter = $this->_getRelationDuplicateFilter($_record);
+                            if ($relationFilter) {
+                                $addFilter[] = $relationFilter;
+                            }
+                        } else {
+                            $addFilter[] = array(
+                                'field' => $field,
+                                'operator' => 'equals',
+                                'value' => $_record->{$field}
+                            );
                         }
                     } else {
-                        $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
-                    }
-                    
-                } else if (isset($_record->customfields[$field])) {
-                    $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($this->_applicationName, $field, $this->_modelName);
-                    if ($customFieldConfig) {
-                        $addFilter[] = array('field' => 'customfield', 'operator' => 'equals', 'value' => array(
-                            'value' => $_record->customfields[$field],
-                            'cfId'  => $customFieldConfig->getId()
-                        ));
+                        // empty: go to next group
+                        continue 2;
                     }
                 }
             }
