@@ -53,11 +53,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
-        
-        if (Tinebase_User::getConfiguredBackend() == Tinebase_User::ACTIVEDIRECTORY) {
-           $this->_manageSAM = array(); 
-        }
-        
+
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE;

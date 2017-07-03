@@ -60,7 +60,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         if (!Tinebase_Core::getConfig()->samba) {
             throw new Admin_Exception('No samba settings defined in config.');
         }
-        if(Tinebase_User::getConfiguredBackend() != Tinebase_User::LDAP) {
+        if (Tinebase_User::getConfiguredBackend() != Tinebase_User::LDAP) {
             throw new Admin_Exception('Works only with LDAP user backend.');
         }
         
