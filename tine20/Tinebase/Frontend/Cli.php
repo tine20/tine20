@@ -1395,6 +1395,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         foreach ($userClients as $client) {
                             echo "     - $client\n";
                         }
+                        echo "\n";
                     }
                 }
             }
