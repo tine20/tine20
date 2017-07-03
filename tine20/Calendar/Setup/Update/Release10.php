@@ -32,7 +32,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * fix displaycontainer in organizers attendee records
+     * add type and max_number_of_people columns to resources
      */
     public function update_2()
     {
@@ -58,14 +58,20 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $resourceController = Calendar_Controller_Resource::getInstance();
         $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        if ($user) {
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $resources = $resourceController->getAll();
-        foreach ($resources as $resource) {
-            if ($resource->is_location) {
-                $resource->type = 'ROOM';
+            $resources = $resourceController->getAll();
+            foreach ($resources as $resource) {
+                if ($resource->is_location) {
+                    $resource->type = 'ROOM';
 
-                $resourceController->update($resource);
+                    try {
+                        $resourceController->update($resource);
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        Tinebase_Exception::log($tead);
+                    }
+                }
             }
         }
 
