@@ -1625,4 +1625,88 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.32');
     }
+
+    /**
+     * update to 10.33
+     *
+     * change role id from int to uuid
+     */
+    public function update_32()
+    {
+        try {
+            $this->_backend->dropForeignKey('role_rights', 'role_rights::role_id--roles::id');
+        } catch (Exception $e) {}
+        try {
+            $this->_backend->dropForeignKey('role_accounts', 'role_accounts::role_id--roles::id');
+        } catch (Exception $e) {}
+
+        if ($this->getTableVersion('roles') < 3) {
+            $this->_backend->alterCol('roles', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+            $this->setTableVersion('roles', 3);
+        }
+
+        if ($this->getTableVersion('role_rights') < 3) {
+            $this->_backend->alterCol('role_rights', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+
+            $this->_backend->alterCol('role_rights', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>role_id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+            $this->setTableVersion('role_rights', 3);
+        }
+
+        if ($this->getTableVersion('role_accounts') < 5) {
+            $this->_backend->alterCol('role_accounts', new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>role_id</name>
+                            <type>text</type>
+                            <length>40</length>
+                            <notnull>true</notnull>
+                        </field>'));
+            $this->setTableVersion('role_accounts', 5);
+        }
+
+        if ($this->_backend->tableExists('role_rights')) {
+            $this->_backend->addForeignKey('role_rights', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>role_rights::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>'));
+        }
+
+        if ($this->_backend->tableExists('role_accounts')) {
+            $this->_backend->addForeignKey('role_accounts', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>role_accounts::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>'));
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.33');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.32</version>
+    <version>10.33</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1618,12 +1618,13 @@
 
         <table>
             <name>roles</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -1694,17 +1695,18 @@
 
         <table>
             <name>role_rights</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>role_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1767,7 +1769,7 @@
 
         <table>
             <name>role_accounts</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1776,8 +1778,8 @@
                 </field>
                 <field>
                     <name>role_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

@@ -1373,7 +1373,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
     {
-        /** @var Tinebase_Record_Abstract_GetPathPartDecorator $delegate */
+        /** @var Tinebase_Record_Abstract_GetPathPartDelegatorInterface $delegate */
         $delegate = Tinebase_Core::getDelegate($this->_application, 'getPathPartDelegate_' . get_called_class() ,
                                                 'Tinebase_Record_Abstract_GetPathPartDelegatorInterface');
         if (false !== $delegate) {
@@ -1434,7 +1434,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * extended properties getter
      *
      * @param string $_property
-     * @return &array
+     * @return array
      */
     public function &xprops($_property = 'xprops')
     {
