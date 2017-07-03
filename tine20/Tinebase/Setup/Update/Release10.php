@@ -1309,7 +1309,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             } catch (Exception $e) {}
         }
 
-        if (version_compare($this->getApplicationVersion('Tinebase'), '10.31') < 0 ) {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '10.32') < 0 ) {
             if ($this->getTableVersion('container') < 13) {
                 $this->_backend->alterCol('container', new Setup_Backend_Schema_Field_Xml('<field>
                             <name>id</name>
