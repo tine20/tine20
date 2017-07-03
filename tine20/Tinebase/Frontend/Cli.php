@@ -348,8 +348,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * process given queue job
      *  --message json encoded task
      *
-     * @TODO rework user management, jobs should be executed as the right user in future
-     * 
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
      */
@@ -369,8 +367,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (! $message) {
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "message" is missing');
         }
+
+        if (null === ($job = json_decode($message, true))) {
+            throw new Tinebase_Exception_InvalidArgument('parameter "message" can not be json decoded');
+        }
+
+        if (isset($job['account_id'])) {
+            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
+        }
         
-        Tinebase_ActionQueue::getInstance()->executeAction($message);
+        Tinebase_ActionQueue::getInstance()->executeAction($job);
         
         return TRUE;
     }
