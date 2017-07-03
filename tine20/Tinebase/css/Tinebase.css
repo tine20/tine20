@@ -94,6 +94,16 @@ html, body {
 }
 
 
+.action_system_link {
+    background-image:url(../../images/oxygen/16x16/places/link.png) !important;
+}
+.x-btn-medium .action_system_link {
+    background-image:url(../../images/oxygen/22x22/places/link.png) !important;
+}
+.x-btn-large .action_system_link {
+    background-image:url(../../images/oxygen/32x32/places/link.png) !important;
+}
+
 .action_rename {
     background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
 }
@@ -598,12 +608,24 @@ html, body {
     background-position: 2px 2px;
 }
 
+.renderer_accountRoleIcon {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
 .renderer_accountContactIcon {
     background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
 
+
+.renderer_accountAnyoneIcon {
+    background-image: url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
 
 .tinebase-accounttype-user {
     background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
@@ -623,6 +645,16 @@ html, body {
 }
 .x-btn-large .tinebase-accounttype-group {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+}
+
+.tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
+}
+.x-btn-medium .tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/22x22/actions/view-process-users.png) !important;
+}
+.x-btn-large .tinebase-accounttype-role {
+    background-image:url(../../images/oxygen/32x32/actions/view-process-users.png) !important;
 }
 
 .tinebase-accounttype-addanyone {
@@ -1078,4 +1110,37 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .x-form-field-trigger-wrap input {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+}
+
+.x-form-radio-group .x-form-item {
+    padding-left: 2px;
+}
+
+.rangeslider-component-sliderwrap {
+    border: 1px solid black;
+}
+
+.rangeslider-component-sliderBorder {
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: #cdcdcd;
+}
+
+.rangeslider-component .rangeslider-component-slider .rangeslider-component-slider-label {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.rangeslider-component .rangeslider-component-slider {
+    background-color: #b7f8bd;
+    overflow: hidden;
+}
+
+.x-item-disabled.rangeslider-component .rangeslider-component-slider,
+.x-item-disabled.rangeslider-component .rangeslider-component-slider-label {
+    visibility: hidden !important;
 }

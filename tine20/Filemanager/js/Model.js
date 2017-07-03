@@ -50,6 +50,15 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         var _ = window.lodash;
 
         return _.indexOf(['/', Tine.Tinebase.container.getMyFileNodePath(), '/personal', '/shared'], this.get('path')) >= 0;
+    },
+
+    getSystemLink: function() {
+        var _ = window.lodash,
+            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
+
+        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
+
+
     }
 });
 
@@ -370,8 +379,8 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         
         var onFailure = (function(response, request) {
             
-            var nodeData = Ext.util.JSON.decode(response.responseText),
-                request = Ext.util.JSON.decode(request.jsonData);
+            var nodeData = Ext.util.JSON.decode(response.responseText);
+            request = Ext.util.JSON.decode(request.jsonData);
             
             nodeData.data.uploadKey = this.uploadKey;
             nodeData.data.addToGridStore = this.addToGridStore;
@@ -534,7 +543,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         Ext.Ajax.request({
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
             params: {
-                method: this.appName + '.createNode',
+                method: proxy.appName + '.createNode',
                 filename: upload.id,
                 type: 'file',
                 tempFileId: file.get('id'),

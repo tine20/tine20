@@ -482,7 +482,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @param  string|array $_fieldOrData
      * @param  string $_operator
      * @param  mixed  $_value
-     * @return Tinebase_Model_Filter_Abstract
+     * @return Tinebase_Model_Filter_Abstract|Tinebase_Model_Filter_FilterGroup
      * 
      * @todo remove legacy code + obsolete params sometimes
      */

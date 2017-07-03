@@ -38,8 +38,31 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         $this->assertTrue(array_reduce($children, function($result, $container){
             return $result || $container instanceof Tasks_Frontend_WebDAV_Container;
         }, FALSE), 'tasks container is missing');
-        
+
         return $children;
+    }
+
+    public function testGetUserDirectory()
+    {
+        $grants = Tinebase_Model_Grants::getPersonalGrants($this->_personas['sclever']->getId());
+        $grants->merge(new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_EXPORT => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+        ))));
+        $scleverTestCal = $this->_getCalendarTestContainer(Tinebase_Model_Container::TYPE_PERSONAL, $grants);
+
+        $_SERVER['HTTP_USER_AGENT'] = 'xxx';
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
+        $children = $collection->getChildren();
+
+        $containerIds = [];
+        foreach ($children as $child) {
+            $containerIds[] = $child->getName();
+        }
+        self::assertTrue(in_array($scleverTestCal->getId(), $containerIds));
     }
     
     /**
@@ -366,7 +389,7 @@ END:VCALENDAR&#13;
      *
      * @return Tinebase_Model_Container
      */
-    protected function _getCalendarTestContainer($type = Tinebase_Model_Container::TYPE_PERSONAL)
+    protected function _getCalendarTestContainer($type = Tinebase_Model_Container::TYPE_PERSONAL, $grants = null)
     {
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
@@ -374,7 +397,7 @@ END:VCALENDAR&#13;
             'type'              => $type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-        )));
+        )), $grants);
         
         return $container;
     }

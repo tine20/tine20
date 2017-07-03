@@ -144,8 +144,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'hidden'     => TRUE
             ),
             'price' => array(
-                'type'         => 'float',
-                'specialType'  => 'euMoney',
+                'type'         => 'money',
                 'nullable'     => true,
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'        => 'Price', // _('Price')

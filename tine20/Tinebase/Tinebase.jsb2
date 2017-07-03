@@ -90,6 +90,10 @@
           "path": "js/ux/util/"
         },
         {
+          "text": "urlCoder.js",
+          "path": "js/ux/util/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },
@@ -223,6 +227,10 @@
         },
         {
           "text": "NumberField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "MoneyField.js",
           "path": "js/ux/form/"
         },
         {
@@ -375,6 +383,10 @@
         },
         {
           "text": "RecordStore.js",
+          "path": "js/data/"
+        },
+        {
+          "text": "GroupedStoreCollection.js",
           "path": "js/data/"
         },
         {
@@ -951,6 +963,10 @@
         },
         {
           "text": "PasswordGenerator.js",
+          "path": "js/"
+        },
+        {
+          "text": "RangeSliderComponent.js",
           "path": "js/"
         },
         {

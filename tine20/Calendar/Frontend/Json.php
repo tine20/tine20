@@ -275,7 +275,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $_event
      *   attendee to find free timeslot for
      *   dtstart, dtend -> to calculate duration
-     *   originator_tz needs to be set!
      *   rrule optional
      * @param array $_options
      *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
@@ -289,7 +288,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFreeTime($_event, $_options)
     {
-        $records = Calendar_Controller_Event::getInstance()->searchFreeTime(new Calendar_Model_Event($_event, true), $_options);
+        $eventRecord = new Calendar_Model_Event(array(), TRUE);
+        $eventRecord->setFromJsonInUsersTimezone($_event);
+
+        $records = Calendar_Controller_Event::getInstance()->searchFreeTime($eventRecord, $_options);
 
         $records->attendee = array();
         $result = $this->_multipleRecordsToJson($records, null, null);
@@ -317,8 +319,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
         // find out if fixed calendars should be used
-        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS);
-        $useFixedCalendars = is_array($fixedCalendars) && ! empty($fixedCalendars);
+        $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
+        $useFixedCalendars = is_array($fixedCalendarIds) && ! empty($fixedCalendarIds);
         
         $periodFilter = $filter->getFilter('period');
         
@@ -334,7 +336,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // add fixed calendar on demand
         if ($useFixedCalendars) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
-            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
+            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendarIds));
             
             $fixed->addFilter($periodFilter);
             
@@ -356,7 +358,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'filter'        => $clientFilter->toArray(TRUE),
         );
     }
-    
+
     /**
      * get default period filter
      * 
@@ -493,38 +495,58 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param array $_attendee
-     * @param array $_periods
-     * @param array $_ignoreUIDs
+     * @param array $attendee
      * @return array
      */
-    public function getFreeBusyInfo($_attendee, $_periods, $_ignoreUIDs = array())
+    public function resolveGroupMembers($attendee)
     {
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_attendee);
-        $periods = new Calendar_Model_EventFilter($_periods);
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        Calendar_Model_Attender::resolveGroupMembers($attendee);
+        Calendar_Model_Attender::resolveAttendee($attendee,false);
 
-        $fbInfo = Calendar_Controller_Event::getInstance()->getFreeBusyInfo($periods, $attendee, $_ignoreUIDs);
+        return $attendee->toArray();
+    }
+
+    /**
+     * @param array $attendee
+     * @param array $event
+     * @param array $ignoreUIDs
+     * @return array
+     */
+    public function getFreeBusyInfo($attendee, $event, $ignoreUIDs = array())
+    {
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        $calendarController = Calendar_Controller_Event::getInstance();
+        $eventRecord = new Calendar_Model_Event(array(), TRUE);
+        $eventRecord->setFromJsonInUsersTimezone($event);
+
+        $periods = $calendarController->getBlockingPeriods($eventRecord, array(
+            'from'  => $eventRecord->dtstart,
+            'until' => $eventRecord->dtstart->getClone()->addMonth(2)
+        ));
+
+        $fbInfo = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs);
 
         return $fbInfo->toArray();
     }
 
     /**
-     * @param array $_filter
-     * @param array $_paging
-     * @param array $_periods
-     * @param array $_ignoreUIDs
+     * @param array $filter
+     * @param array $paging
+     * @param array $event
+     * @param array $ignoreUIDs
      * @return array
      */
-    public function searchAttendee($_filter, $_paging, $_periods, $_ignoreUIDs)
+    public function searchAttenders($filter, $paging, $event, $ignoreUIDs)
     {
         $filters = array();
-        foreach($_filter as $filter) {
-            switch($filter['field']) {
+        foreach($filter as $f) {
+            switch($f['field']) {
                 case 'query':
-                    $filters['query'] = $filter;
+                    $filters['query'] = $f;
                     break;
                 default:
-                    $filters[$filter['field']] = $filter['value'];
+                    $filters[$f['field']] = $f['value'];
                     break;
             }
         }
@@ -540,7 +562,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (isset($filters['userFilter'])) {
                 $contactFilter[] = $filters['userFilter'];
             }
-            $contactPaging = $_paging;
+            $contactPaging = $paging;
             $contactPaging['sort'] = 'type';
             $result[Calendar_Model_Attender::USERTYPE_USER] = $addressBookFE->searchContacts($contactFilter, $contactPaging);
         }
@@ -554,7 +576,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $groupFilter[] = $filters['groupFilter'];
             }
             $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
-            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $_paging);
+            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $paging);
         }
 
         if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_RESOURCE, $filters['type'])) {
@@ -562,20 +584,24 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (isset($filters['resourceFilter'])) {
                 $resourceFilter[] = $filters['resourceFilter'];
             }
-            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $_paging);
+            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $paging);
         }
 
-        $attendee = array();
-        foreach ($result as $type => $res) {
-            foreach ($res['results'] as $r) {
-                $attendee[] = array(
-                    'user_id'   => $r['id'],
-                    'user_type' => $type
-                );
+        if (empty($event)) {
+            $result['freeBusyInfo'] = array();
+        } else {
+            $attendee = array();
+            foreach ($result as $type => $res) {
+                foreach ($res['results'] as $r) {
+                    $attendee[] = array(
+                        'user_id' => $type === 'group' ? $r['group_id'] : $r['id'],
+                        'user_type' => $type
+                    );
+                }
             }
-        }
 
-        $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $_periods, $_ignoreUIDs);
+            $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $event, $ignoreUIDs);
+        }
 
         return $result;
     }

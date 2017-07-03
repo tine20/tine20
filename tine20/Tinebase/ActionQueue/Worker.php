@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+
 /**
  * Daemon to check the job queue and process jobs in separate processes
  * 
@@ -18,6 +19,8 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 {
     const EXECUTION_METHOD_DISPATCH = 'dispatch';
     const EXECUTION_METHOD_EXEC_CLI = 'exec_cli';
+
+    protected $_stopped = false;
     
     /** 
      * default configurations of this daemon
@@ -33,6 +36,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             'executionMethod' => self::EXECUTION_METHOD_DISPATCH,
             'maxRetry'        => 10,
             'maxChildren'     => 10,
+            'shutDownWait'    => 60,
         )
     );
     
@@ -48,50 +52,69 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     public function run()
     {
-        if ('Tinebase_ActionQueue_Backend_Direct' === Tinebase_ActionQueue::getInstance()->getBackendType()) {
-            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Tinebase_ActionQueue_Backend_Direct used. There is nothing to do for the worker! Configure Redis backend for example if you want to make use of the worker.');
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker! Configure Redis backend if you want to make use of the worker.');
             exit(1);
         }
 
-        while (true) {
-            
+        $maxChildren = $this->_getConfig()->tine20->maxChildren;
+        $lastMaxChildren = 0;
+
+        while (!$this->_stopped) {
+
             // manage the number of children
-            if (count ($this->_children) >= $this->_getConfig()->tine20->maxChildren ) {
-                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " reached max children limit: " . $this->_getConfig()->tine20->maxChildren);
-                $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " number of pending jobs:" . Tinebase_ActionQueue::getInstance()->getQueueSize());
-                usleep(100); // save some trees
+            if (count ($this->_children) >=  $maxChildren) {
+
+                // log only every minute
+                if (time() - $lastMaxChildren > 60) {
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " reached max children limit: " . $maxChildren);
+                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " number of pending jobs:" . $actionQueue->getQueueSize());
+                    $lastMaxChildren = time();
+                }
+                usleep(1000); // save some trees
+                pcntl_signal_dispatch();
                 continue;
             }
             
-            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " trying to fetch a job from queue");
+            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " trying to fetch a job from queue " . microtime(true));
 
-            $jobId = Tinebase_ActionQueue::getInstance()->waitForJob();
+            $jobId = $actionQueue->waitForJob();
+
+            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " signal dispatch " . microtime(true));
+
+            pcntl_signal_dispatch();
 
             // no job found
-            if ($jobId === FALSE) {
+            if ($jobId === FALSE || $this->_stopped) {
                 continue;
             }
             
             try {
-                $job = Tinebase_ActionQueue::getInstance()->receive($jobId);
+                $job = $actionQueue->receive($jobId);
             } catch (RuntimeException $re) {
                 $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to receive message: " . $re->getMessage());
                 
                 // we are unable to process the job
-                Tinebase_ActionQueue::getInstance()->delete($jobId);
+                // probably the retry count is exceeded
+                // TODO push message to dead letter queue
+                $actionQueue->delete($jobId);
                 
                 continue;
             }
             
             $this->_getLogger()->info (__METHOD__ . '::' . __LINE__ . " forking to process job {$job['action']} with id $jobId");
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($job, TRUE)); 
-            
+
+
+            // TODO fork may not work!!!
             $childPid = $this->_forkChild();
             
             if ($childPid == 0) { // executed in child process
                 try {
                     $this->_executeAction($job);
 
+                    $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exiting...");
                     exit(0); // message will be deleted in parent process
                     
                 } catch (Exception $e) {
@@ -106,6 +129,42 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 $this->_jobScoreBoard[$childPid] = $jobId;
             }
         }
+
+        $this->_shutDown();
+    }
+
+    protected function _shutDown()
+    {
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " shutting down... " . microtime(true));
+
+        $timeStart = time();
+        $timeElapsed = 0;
+        $shutDownWait = (int)($this->_getConfig()->tine20->shutDownWait);
+
+        while ($timeElapsed < $shutDownWait) {
+
+            pcntl_signal_dispatch();
+
+            if (count($this->_children) === 0) {
+                break;
+            }
+
+            // 10ms
+            usleep(10000);
+
+            $timeElapsed = time() - $timeStart;
+        }
+
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " parent shut down... " . microtime(true));
+
+        parent::_shutDown();
+    }
+
+    protected function _gracefulShutDown()
+    {
+        $this->_stopped = true;
+
+        return true;
     }
 
     /**
@@ -130,20 +189,30 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     protected function _childTerminated($pid, $status)
     {
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " with pid $pid");
+
+        $jobId = $this->_jobScoreBoard[$pid];
+        unset($this->_jobScoreBoard[$pid]);
+
+        if (true !== pcntl_wifexited($status)) {
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " child $pid did not finish successfully!");
+
+            Tinebase_ActionQueue::getInstance()->reschedule($jobId);
+
+            return;
+        }
         parent::_childTerminated($pid, $status);
         
         $status = pcntl_wexitstatus($status);
         
-        $jobId = $this->_jobScoreBoard[$pid];
-        unset($this->_jobScoreBoard[$pid]);
-        
+
         if ($status > 0) { // failure
-            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " job $jobId did not finish successfully. Will be rescheduled!"); 
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " job $jobId in pid $pid did not finish successfully. Will be rescheduled!");
             
             Tinebase_ActionQueue::getInstance()->reschedule($jobId);
             
         } else {           // success
-            $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " job $jobId finished successfully");
+            $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " job $jobId in pid $pid finished successfully");
             
             Tinebase_ActionQueue::getInstance()->delete($jobId);
         }
@@ -158,6 +227,8 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     protected function _executeAction($job)
     {
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " with isChild: " . var_export($this->_isChild, true));
+
         // execute in subprocess
         /*if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
             $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($job), $exitCode );
@@ -167,11 +238,17 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
         // execute in same process
         } else { */
+            Zend_Registry::_unsetInstance();
+
             Tinebase_Core::initFramework();
     
             Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
-            
-            Tinebase_ActionQueue::getInstance()->executeAction($job);
+
+        if (true !== ($result = Tinebase_ActionQueue::getInstance()->executeAction($job))) {
+            throw new Tinebase_Exception_UnexpectedValue('action queue job execution did not return true: ' . var_export($result, true));
+        }
         //}
+
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " result: " . var_export($result, true));
     }
 }

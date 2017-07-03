@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -441,6 +441,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* table  */ array('groupmemberships' => $this->_tablePrefix . 'group_members'), 
             /* on     */ $this->_db->quoteInto($this->_db->quoteIdentifier('groupmemberships.account_id') . ' = ?' , Tinebase_Core::getUser()->getId()),
             /* select */ array());
+
+        $_select->joinLeft(
+            /* table  */ array('rolememberships' => $this->_tablePrefix . 'role_accounts'),
+            /* on     */ $this->_db->quoteInto($this->_db->quoteIdentifier('rolememberships.account_id') . ' = ?' , Tinebase_Core::getUser()->getId())
+                        . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('rolememberships.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+            /* select */ array());
         
         // attendee joins the attendee we need to compute the curr users effective grants
         // NOTE: 2010-04 the behaviour changed. Now, only the attendee the client filters for are 
@@ -480,13 +486,18 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* table  */ array('attendeegroupmemberships' => $this->_tablePrefix . 'group_members'), 
             /* on     */ $this->_db->quoteIdentifier('attendeegroupmemberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendeeaccounts.contact_id'),
             /* select */ array());
-        
+
+        $_select->joinLeft(
+        /* table  */ array('attendeerolememberships' => $this->_tablePrefix . 'role_accounts'),
+            /* on     */ $this->_db->quoteIdentifier('attendeerolememberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendeeaccounts.id')
+                         . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendeerolememberships.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+            /* select */ array());
 
         
         $_select->joinLeft(
             /* table  */ array('dispgrants' => $this->_tablePrefix . 'container_acl'), 
             /* on     */ $this->_db->quoteIdentifier('dispgrants.container_id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id') . 
-                           ' AND ' . $this->_getContainGrantCondition('dispgrants', 'groupmemberships'),
+                           ' AND ' . $this->_getContainGrantCondition('dispgrants', 'groupmemberships', 'rolememberships'),
             /* select */ array());
         
         $_select->joinLeft(
@@ -498,15 +509,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         foreach ($allGrants as $grant) {
             if (in_array($grant, $this->_recordBasedGrants)) {
-                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . " OR \n" . 
+                $_select->columns(array($grant => new Zend_Db_Expr("\n MAX( CASE WHEN ( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', 'rolememberships', $grant) . " OR \n" .
                     '  /* implicit  */' . $this->_getImplicitGrantCondition($grant) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition($grant) . " \n" .
-                 ") THEN 1 ELSE 0 END ) "));
+                 ") THEN 1 ELSE 0 END ) ")));
             } else {
-                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
-                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . "\n" .
-                ") THEN 1 ELSE 0 END ) "));
+                $_select->columns(array($grant => new Zend_Db_Expr("\n MAX( CASE WHEN ( \n" .
+                    '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', 'rolememberships', $grant) . "\n" .
+                ") THEN 1 ELSE 0 END ) ")));
             }
         }
     }
@@ -516,11 +527,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      *
      * @param  string                               $_aclTableName
      * @param  string                               $_groupMembersTableName
+     * @param  string                               $_roleMembersTableName
      * @param  string|array                         $_requiredGrant (defaults none)
      * @param  Zend_Db_Expr|int|Tinebase_Model_User $_user (defaults current user)
      * @return string
      */
-    protected function _getContainGrantCondition($_aclTableName, $_groupMembersTableName, $_requiredGrant=NULL, $_user=NULL )
+    protected function _getContainGrantCondition($_aclTableName, $_groupMembersTableName, $_roleMembersTableName, $_requiredGrant=NULL, $_user=NULL )
     {
         $quoteTypeIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_type');
         $quoteIdIdentifier = $this->_db->quoteIdentifier($_aclTableName . '.account_id');
@@ -533,7 +545,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         $sql = $this->_db->quoteInto(    "($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)  . " AND $quoteIdIdentifier = $userExpression)" .
-               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' . 
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) . ' AND ' . $this->_db->quoteIdentifier("$_groupMembersTableName.group_id") . " = $quoteIdIdentifier" . ')' .
+               ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql ?
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE) . ' AND CAST(' . $this->_db->quoteIdentifier("$_roleMembersTableName.role_id") . " AS text) = $quoteIdIdentifier" . ')' :
+               $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE) . ' AND ' . $this->_db->quoteIdentifier("$_roleMembersTableName.role_id") . " = $quoteIdIdentifier" . ')') .
                $this->_db->quoteInto(" OR ($quoteTypeIdentifier = ?)", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
         if ($_requiredGrant) {
@@ -586,14 +601,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _getInheritedGrantCondition($_requiredGrant)
     {
         // current user needs to have grant on display calendar
-        $sql = $this->_getContainGrantCondition('dispgrants', 'groupmemberships', $_requiredGrant);
+        $sql = $this->_getContainGrantCondition('dispgrants', 'groupmemberships', 'rolememberships', $_requiredGrant);
         
         // _AND_ attender(admin) of display calendar needs to have grant on phys calendar
         // @todo include implicit inherited grants
         if (! in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_FREEBUSY))) {
             $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendeeaccounts.id'));
             
-            $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', $_requiredGrant, $userExpr);
+            $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', 'attendeerolememberships', $_requiredGrant, $userExpr);
             // NOTE: this condition is weak! Not some attendee must have implicit grant.
             //       -> an attender we have reqired grants for his diplay cal must have implicit grants
             //$attenderImplicitGrantCond = $this->_getImplicitGrantCondition($_requiredGrant, $userExpr);

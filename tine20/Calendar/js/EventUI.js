@@ -17,6 +17,8 @@ Tine.Calendar.EventUI = function(event) {
 };
 
 Tine.Calendar.EventUI.prototype = {
+    zIndex: 100,
+    
     addClass: function(cls) {
         Ext.each(this.getEls(), function(el){
             el.addClass(cls);
@@ -87,7 +89,7 @@ Tine.Calendar.EventUI.prototype = {
         }else{
             //this.blur();
             this.removeClass('cal-event-active');
-            this.setStyle({'z-index': 100});
+            this.setStyle({'z-index': this.zIndex});
         }
     },
     
@@ -114,8 +116,32 @@ Tine.Calendar.EventUI.prototype = {
         });
     },
     
-    render: function() {
-        // do nothing
+    render: function(view) {
+        this.event.view = view;
+
+        this.attendeeRecord = view.ownerCt && view.ownerCt.attendee ?
+            Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.event.getAttendeeStore(), view.ownerCt.attendee) :
+            this.event.getMyAttenderRecord();
+
+        this.colorSet = Tine.Calendar.colorMgr.getColor(this.event, this.attendeeRecord);
+        this.event.colorSet = this.colorSet;
+
+        this.dtStart = this.event.get('dtstart');
+        this.dtEnd = this.event.get('dtend');
+        // 00:00 in users timezone is a spechial case where the user expects
+        // something like 24:00 and not 00:00
+        if (this.dtEnd.format('H:i') == '00:00') {
+            this.dtEnd = this.dtEnd.add(Date.MINUTE, -1);
+        }
+        
+        if (this.event.get('editGrant')) {
+            this.extraCls = 'cal-daysviewpanel-event-editgrant';
+        }
+
+        this.extraCls += ' cal-status-' + this.event.get('status');
+
+        // compute status icons
+        this.statusIcons = Tine.Calendar.EventUI.getStatusInfo(this.event, this.attendeeRecord);
     },
     
     setOpacity: function(v) {
@@ -128,7 +154,65 @@ Tine.Calendar.EventUI.prototype = {
         Ext.each(this.getEls(), function(el){
             el.setStyle(style);
         });
+    },
+
+    getStyle: function(property) {
+        var value;
+        Ext.each(this.getEls(), function(el){
+            value = el.getStyle(property);
+            return false;
+        });
+
+        return value;
     }
     
 };
 
+Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {
+    var app = Tine.Tinebase.appMgr.get('Calendar'),
+        statusInfo = [];
+    
+    if (event.get('class') === 'PRIVATE') {
+        statusInfo.push({
+            status: 'private',
+            text: app.i18n._('private classification')
+        });
+    }
+
+    if (event.get('rrule')) {
+        statusInfo.push({
+            status: 'recur',
+            text: app.i18n._('recurring event')
+        });
+    } else if (event.isRecurException()) {
+        statusInfo.push({
+            status: 'recurex',
+            text: app.i18n._('recurring event exception')
+        });
+    }
+
+    if (! Ext.isEmpty(event.get('alarms'))) {
+        statusInfo.push({
+            status: 'alarm',
+            text: app.i18n._('has alarm')
+        });
+    }
+
+    if (! Ext.isEmpty(event.get('attachments'))) {
+        statusInfo.push({
+            status: 'attachment',
+            text: app.i18n._('has attachments')
+        });
+    }
+
+    var attenderStatusRecord = attendeeRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(attendeeRecord.get('status')) : null;
+
+    if (attenderStatusRecord && attenderStatusRecord.get('system')) {
+        statusInfo.push({
+            status: attendeeRecord.get('status'),
+            text: attenderStatusRecord.get('i18nValue')
+        });
+    }
+    
+    return statusInfo;
+}

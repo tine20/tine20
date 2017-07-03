@@ -6,9 +6,11 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
     
     generateBody: function(view) {
         var mode = Ext.util.Format.capitalize(this.printMode),
-            method = 'generate' + mode + 'HTML';
-        
-        return this[method](view);
+            method = 'generate' + mode + 'HTML',
+            me = this;
+        return new Promise(function (fulfill, reject) {
+            fulfill(me[method](view));
+        });
     },
     
     /**

@@ -70,9 +70,11 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
                                 '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
                             '</tr>',
                         '</table>',
-                        '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
+                        '{[Tine.widgets.path.pathsRenderer(values.paths, this.getLastQuery())]}',
                     '</div>',
-                '</tpl>'
+                '</tpl>', {
+                    getLastQuery: this.getLastQuery.createDelegate(this)
+                }
             );
         }
     }

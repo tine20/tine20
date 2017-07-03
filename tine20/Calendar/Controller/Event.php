@@ -365,8 +365,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo merge overlapping events to one freebusy entry
      * 
      * @param  Calendar_Model_EventFilter                           $_periods
-     * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
-     * @param  array of UIDs                                        $_ignoreUIDs
+     * @param  Tinebase_Record_RecordSet                            $_attendee
+     * @param  array                                                $_ignoreUIDs
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
     public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
@@ -377,9 +377,26 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $attendee = clone $_attendee;
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
+        /*$groups = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        $attendee->removeRecords($groups);
+        /** @var Calendar_Model_Attender $group *
+        foreach($groups as $group) {
+            $group = Tinebase_Group::getInstance()->getGroupById($group->user_id);
+
+            // fetch list only if list_id is not NULL, otherwise we get back an empty list object
+            if (!empty($group->list_id)) {
+                $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
+                foreach ($contactList->members as $member) {
+                    $attendee->addRecord(new Calendar_Model_Attender(array(
+                        'user_id' => $member,
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER
+                    ), true));
+                }
+            }
+        }*/
         
         $conflictCriteria = new Calendar_Model_EventFilter(array(
-            array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee),
+            array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
             array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
         ));
 
@@ -388,10 +405,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // create a typemap
         $typeMap = array();
         foreach ($attendee as $attender) {
-            if (! (isset($typeMap[$attender['user_type']]) || array_key_exists($attender['user_type'], $typeMap))) {
+            if (! isset($typeMap[$attender['user_type']])) {
                 $typeMap[$attender['user_type']] = array();
             }
-            
+            if (is_object($attender['user_id'])) {
+                $attender['user_id'] = $attender['user_id']->getId();
+            }
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
@@ -576,7 +595,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Event $_event with
      *   attendee to find free timeslot for
      *   dtstart, dtend -> to calculate duration
-     *   originator_tz needs to be set!
      *   rrule optional
      * @param array $_options
      *  'from'         datetime (optional, defaults event->dtstart) from where to start searching
@@ -603,15 +621,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             throw new Tinebase_Exception_UnexpectedValue('attendee needs to be set and contain at least one attendee');
         }
 
-        $_event->setTimezone($_event->originator_tz);
+        if (empty($_event->originator_tz)) {
+            $_event->originator_tz = Tinebase_Core::getUserTimezone();
+        }
 
         $from = isset($_options['from']) ? ($_options['from'] instanceof Tinebase_DateTime ? $_options['from'] :
             new Tinebase_DateTime($_options['from'])) : clone $_event->dtstart;
         $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
             new Tinebase_DateTime($_options['until'])) : $_event->dtend->getClone()->addYear(2);
-
-        $from->setTimezone($_event->originator_tz);
-        $until->setTimezone($_event->originator_tz);
 
         $currentFrom = $from->getClone()->setTime(0, 0, 0);
         $currentUntil = $from->getClone()->addDay(6)->setTime(23, 59, 59);
@@ -629,9 +646,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     continue;
                 }
                 $constraint['uid'] = Tinebase_Record_Abstract::generateUID();
-                $event = new Calendar_Model_Event($constraint, true);
+                $event = new Calendar_Model_Event(array(), true);
+                $event->setFromJsonInUsersTimezone($constraint);
                 $event->originator_tz = $_event->originator_tz;
-                $event->setTimezone($_event->originator_tz);
                 $constraints->addRecord($event);
             }
         }
@@ -748,7 +765,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'dtstart'       => new Tinebase_DateTime($_startSec),
             'dtend'         => new Tinebase_DateTime($_startSec + $_durationSec),
-            'originator_tz' => $_event->originator_tz
+            'originator_tz' => $_event->originator_tz,
         ), true);
         $result = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
 
@@ -2967,5 +2984,28 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($this->search($filter) as $event) {
             $eventNotificationController->doSendNotifications($event, null, 'tentative');
         }
+    }
+
+    /**
+     * returns active fixed calendars for users (combines config and preference)
+     *
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFixedCalendarIds()
+    {
+        $fixedCalendars = (array) Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS);
+
+        // add fixed calendars from user preference
+        $fixedCalendarsPref = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::FIXED_CALENDARS);
+        if (is_array($fixedCalendarsPref)) {
+            foreach ($fixedCalendarsPref as $container) {
+                if (isset($container['id'])) {
+                    $fixedCalendars[] = $container['id'];
+                }
+            }
+        }
+
+        return $fixedCalendars;
     }
 }

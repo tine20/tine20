@@ -67,6 +67,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     case 'display_format':
                     case 'compose_format':
                     case 'preserve_format':
+                    case 'sieve_notification_email':
                     case 'reply_to':
                         break;
                     default:
@@ -282,6 +283,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')]
                     ]
+                }, {
+                    fieldLabel: this.app.i18n._('Notification Email'),
+                    name: 'sieve_notification_email',
+                    vtype: 'email'
                 }]]
             }, {
                 title: this.app.i18n._('Other Settings'),

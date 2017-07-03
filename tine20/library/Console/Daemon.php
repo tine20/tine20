@@ -4,14 +4,9 @@
  * 
  * @package     Console
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-// TODO move this to helper script? where is the right place for this?
-set_time_limit(0);
-ob_implicit_flush();
-declare(ticks = 1);
 
 
 /**
@@ -36,6 +31,8 @@ abstract class Console_Daemon
      * @var Zend_Config
      */
     protected $_config;
+
+    protected $_isChild = false;
     
     /**
      * @var array $_defaultConfig
@@ -145,10 +142,10 @@ abstract class Console_Daemon
     /**
      * handle terminated children
      *
-     * @param unknown $pid
-     * @param unknown $status
+     * @param string $pid
+     * @param string $status
      */
-    protected function _childTerminated($pid, $status)
+    protected function _childTerminated($pid, /** @noinspection PhpUnusedParameterInspection */$status)
     {
         unset($this->_children[$pid]);
     }
@@ -218,7 +215,7 @@ abstract class Console_Daemon
         $childPid = pcntl_fork();
         
         if($childPid < 0) {
-            #fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
+            fwrite(STDERR, "Something went wrong while forking new child" . PHP_EOL);
             exit(1);
         }
         
@@ -231,6 +228,7 @@ abstract class Console_Daemon
         } else {
             // a child has no children
             $this->_children = array();
+            $this->_isChild = true;
         }
         
         return $childPid;
@@ -270,7 +268,7 @@ abstract class Console_Daemon
         $childPid = pcntl_fork();
         
         if ($childPid < 0) {
-            #fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
+            fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
             exit;
         }
         
@@ -338,22 +336,37 @@ abstract class Console_Daemon
      */
     public function handleSigTERM()
     {
-        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGTERM received");
-        
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGTERM received, is child: " . var_export($this->_isChild, true) . " " . microtime(true));
+
+        // do we want to gracefully shut down?
+        if (true === $this->_gracefulShutDown()) {
+            return;
+        }
+
+        $this->_shutDown();
+    }
+
+    protected function _shutDown()
+    {
         foreach($this->_children as $pid) {
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " send SIGTERM to child " . $pid);
             posix_kill($pid, SIGTERM);
         }
-        
+
         $pidFile = $this->getPidFile();
-        
+
         if ($pidFile) {
             @unlink($pidFile);
         }
-        
+
         exit(0);
     }
-    
+
+    protected function _gracefulShutDown()
+    {
+        return false;
+    }
+
     /**
      * handle signal SIGCHILD
      */
@@ -365,22 +378,18 @@ abstract class Console_Daemon
     }
     
     /**
-     * handle signal SIGINT
+     * handle signal SIGHUP
      */
     public function handleSigHUP()
     {
-        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGHUP received");
-        
-        $this->_config = null;
-        $this->_logger = null;
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGHUP received, but we don't do anything in this case");
     }
     
     /**
      * handle signal SIGINT
-     * @param int $signal  the signal
      */
-    public function handleSigINT($signal)
+    public function handleSigINT()
     {
-        $this->handleSigTERM($signal);
+        $this->handleSigTERM();
     }
 }

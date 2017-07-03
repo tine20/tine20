@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        update account credentials if user password changed
  * @todo        use generic (JSON encoded) field for 'other' settings like folder names
@@ -26,6 +26,8 @@
  * @property  string    signature_position
  * @property  string    email
  * @property  string    user_id
+ * @property  string    sieve_notification_email
+ *
  * @package   Felamimail
  * @subpackage    Model
  */
@@ -132,6 +134,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             array('InArray', array(self::SECURE_NONE, self::SECURE_TLS)),
         ),
         'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'sieve_notification_email' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'sieve_credentials_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'sieve_user'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'sieve_password'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),

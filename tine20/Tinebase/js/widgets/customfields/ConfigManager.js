@@ -14,7 +14,18 @@ Tine.widgets.customfields.ConfigManager = function() {
     var getStore = function(app) {
         app = Tine.Tinebase.appMgr.get(app);
         if (! stores[app.appName]) {
-            var allCfs = (Ext.isFunction(app.getRegistry)) ? app.getRegistry().get('customfields') : null;
+            var _ = window.lodash,
+                allCfs = (Ext.isFunction(app.getRegistry)) ? app.getRegistry().get('customfields') : null;
+
+            // set defaults -- uiconfig are empty strings :-(
+            _.each(allCfs, function(cfConfig) {
+                _.each({tab: 'customfields', 'group': '', sort: 0}, function(defaultValue, field) {
+                    if (_.get(cfConfig, 'definition.uiconfig.' + field, '') == '') {
+                        _.set(cfConfig, 'definition.uiconfig.' + field, defaultValue);
+                    }
+                });
+            });
+
             stores[app.appName] = new Ext.data.JsonStore({
                 fields: Tine.Tinebase.Model.Customfield,
                 data: allCfs ? allCfs : []

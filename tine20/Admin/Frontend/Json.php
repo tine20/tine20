@@ -505,6 +505,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $item[$prefix . 'name'] = 'Unknown group';
                     }
                     break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                    try {
+                        $item[$prefix . 'name'] = Tinebase_Acl_Roles::getInstance()->getRoleById($item[$prefix . 'id'])->name;
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        $item[$prefix . 'name'] = 'Unknown role';
+                    }
+                    break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $item[$prefix . 'name'] = 'Anyone';
                     break;

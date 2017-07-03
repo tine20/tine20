@@ -75,6 +75,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     containerName: 'Calendar',
     containersName: 'Calendars',
     copyOmitFields: ['uid', 'recurid'],
+    allowBlankContainer: false,
     
     /**
      * mark record out of current filter
@@ -220,7 +221,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
-        defaultAttendee = []
+        defaultAttendee = [],
         calendarResources = app.getRegistry().get('calendarResources');
         
     // shift -> change intelligent <-> me
@@ -351,7 +352,11 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
             keyfieldName: 'attendeeRoles'
         },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
-        {filtertype: 'tinebase.tag', app: app}
+        {filtertype: 'tinebase.tag', app: app},
+        {
+            filtertype: 'calendar.rrule',
+            app: app
+        }
     ];
 };
 
@@ -516,7 +521,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'status_authkey'},
     {name: 'displaycontainer_id'},
     {name: 'transp'},
-    {name: 'checked'} // filter grid helper field
+    {name: 'checked'}, // filter grid helper field
+    {name: 'fbInfo'}   // helper field
 ], {
     appName: 'Calendar',
     modelName: 'Attender',
@@ -534,17 +540,33 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
      * gets name of attender
      * 
      * @return {String}
-     *
-    getName: function() {
-        var user_id = this.get('user_id');
-        if (! user_id) {
-            return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
-        }
-        
-        var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
+     */
+    getTitle: function() {
+        var p = Tine.Calendar.AttendeeGridPanel.prototype;
+        return p.renderAttenderName.call(p, this.get('user_id'), false, this);
     },
-    */
-    
+
+    getCompoundId: function(mapGroupmember) {
+        var type = this.get('user_type');
+        type = mapGroupmember && type == 'groupmember' ? 'user' : type;
+
+        return type + '-' + this.getUserId();
+    },
+
+    /**
+     * returns true for external contacts
+     */
+    isExternal: function() {
+
+        var isExternal = false,
+            user_type = this.get('user_type');
+        if (user_type == 'user' || user_type == 'groupmember') {
+            isExternal = !this.getUserAccountId();
+        }
+
+        return isExternal;
+    },
+
     /**
      * returns account_id if attender is/has a user account
      * 
@@ -592,7 +614,7 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
         }
         
         var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
-        
+
         if (!userData) {
             return null;
         }
@@ -623,6 +645,25 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                 return userData.id
                 break;
         }
+    },
+
+    getIconCls: function() {
+        var type = this.get('user_type'),
+            cls = 'cal-attendee-type-';
+
+        switch(type) {
+            case 'user':
+                cls = 'renderer_typeAccountIcon';
+                break;
+            case 'group':
+                cls = 'renderer_accountGroupIcon';
+                break;
+            default:
+                cls += type;
+                break;
+        }
+
+        return cls;
     }
 });
 
@@ -636,7 +677,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
  */ 
 Tine.Calendar.Model.Attender.getDefaultData = function() {
     return {
-        user_type: 'user',
+        // @TODO have some config here? user vs. default?
+        user_type: 'any',
         role: 'REQ',
         quantity: 1,
         status: 'NEEDS-ACTION'
@@ -678,6 +720,9 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     Ext.each(attendeeData, function(attender) {
         if (attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id && Ext.isString(attender.id) ? attender.id : Ext.id());
+            if (record.get('user_id') == "currentContact") {
+                record.set('user_id', Tine.Tinebase.registry.get('userContact'));
+            }
             attendeeStore.addSorted(record);
         }
     });
@@ -717,6 +762,9 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
         // add groupmember for user
         if (attendeeType[0] == 'user') {
             attendeeType.push('groupmember');
+        }
+        if (attendeeType[0] == 'groupmember') {
+            attendeeType.push('user');
         }
 
         if (attendeeType.indexOf(r.get('user_type')) >= 0 && r.getUserId() == attendee.getUserId()) {

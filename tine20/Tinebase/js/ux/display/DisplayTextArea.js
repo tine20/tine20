@@ -20,6 +20,8 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
     nl2br: true,
     linkify: true,
 
+    autoScroll: true,
+
     layout: 'fit',
     cls: 'x-ux-display-textarea',
 

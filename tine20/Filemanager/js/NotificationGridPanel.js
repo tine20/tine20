@@ -152,21 +152,22 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     },
 
     getContactSearchCombo: function () {
-        var combo = new Tine.Addressbook.SearchCombo({
-            accountsStore: this.store,
-            emptyText: i18n._('Search for users ...'),
-            newRecordClass: this.recordClass,
-            newRecordDefaults: this.recordDefaults,
-            recordPrefix: this.recordPrefix,
-            userOnly: true,
-            additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
-        });
+        if (! this.userCombo) {
+            this.userCombo = new Tine.Addressbook.SearchCombo({
+                hidden: true,
+                accountsStore: this.store,
+                emptyText: i18n._('Search for users ...'),
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                userOnly: true,
+                additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
+            });
 
-        combo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [combo], true);
+            this.userCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.userCombo], true);
+        }
 
-        this.userCombo = combo;
-
-        return combo;
+        return this.userCombo;
     },
 
     onRemove: function () {
@@ -179,21 +180,22 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     },
 
     getGroupSearchCombo: function () {
-        var combo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-            accountsStore: this.store,
-            blurOnSelect: true,
-            recordClass: this.groupRecordClass,
-            newRecordClass: this.recordClass,
-            newRecordDefaults: this.recordDefaults,
-            recordPrefix: this.recordPrefix,
-            emptyText: i18n._('Search for groups ...')
-        });
+        if (! this.groupCombo) {
+            this.groupCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                hidden: true,
+                accountsStore: this.store,
+                blurOnSelect: true,
+                recordClass: this.groupRecordClass,
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                emptyText: i18n._('Search for groups ...')
+            });
 
-        combo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [combo], true);
+            this.groupCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.groupCombo], true);
+        }
 
-        this.groupCombo = combo;
-
-        return combo;
+        return this.groupCombo;
     }
 })
 ;

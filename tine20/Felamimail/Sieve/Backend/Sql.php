@@ -6,7 +6,7 @@
  * @subpackage  Sieve
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        allow multiple scripts with different names for one account?
  */
@@ -32,6 +32,13 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      * @var Tinebase_Backend_Sql
      */
     protected $_vacationBackend = NULL;
+
+    /**
+     * script part backend
+     *
+     * @var Tinebase_Backend_Sql
+     */
+    protected $_scriptPartBackend = NULL;
     
     /**
      * email account id
@@ -39,12 +46,13 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      * @var string
      */
     protected $_accountId = NULL;
-    
+
     /**
      * constructor
-     * 
-     * @param   string|Felamimail_Model_Account  $_accountId     the felamimail account id
+     *
+     * @param   string|Felamimail_Model_Account $_accountId the felamimail account id
      * @param   boolean $_readData
+     * @throws Felamimail_Exception
      */
     public function __construct($_accountId, $_readData = TRUE)
     {
@@ -56,6 +64,11 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $this->_vacationBackend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Felamimail_Model_Sieve_Vacation', 
             'tableName' => 'felamimail_sieve_vacation',
+        ));
+
+        $this->_scriptPartBackend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Felamimail_Model_Sieve_ScriptPart',
+            'tableName' => 'felamimail_sieve_scriptpart',
         ));
         
         $this->_accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
@@ -78,12 +91,18 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     {
         $this->_getRules();
         $this->_getVacation();
+        $this->_getScriptParts();
         
-        if (count($this->_rules) === 0 && $this->_vacation === NULL) {
+        if (count($this->_rules) === 0 && $this->_vacation === NULL && $this->_scriptParts->count() === 0) {
             throw new Tinebase_Exception_NotFound('No sieve data found in database for this account.');
         }
     }
-    
+
+    protected function _getScriptParts()
+    {
+        $this->_scriptParts = $this->_scriptPartBackend->getMultipleByProperty($this->_accountId, 'account_id', FALSE, 'id');
+    }
+
     /**
      * get rules
      */
@@ -108,6 +127,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     protected function _getVacation()
     {
         try {
+            /** @var Felamimail_Model_Sieve_Vacation $vacationRecord */
             $vacationRecord = $this->_vacationBackend->getByProperty($this->_accountId, 'account_id');
             $vacationRecord->addresses = Zend_Json::decode($vacationRecord->addresses);
             
@@ -141,6 +161,35 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     {
         $this->_saveRules();
         $this->_saveVacation();
+        $this->_saveScriptParts();
+    }
+
+    /**
+     * persist script parts data in db
+     *
+     * @throws Exception
+     */
+    protected function _saveScriptParts()
+    {
+        if (empty($this->_scriptParts)) {
+            $this->_scriptPartBackend->deleteByProperty($this->_accountId, 'account_id');
+            return;
+        }
+
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            $this->_scriptPartBackend->deleteByProperty($this->_accountId, 'account_id');
+            /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
+            foreach ($this->_scriptParts as $scriptPart) {
+                $this->_scriptPartBackend->create($scriptPart);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
     }
     
     /**
@@ -195,7 +244,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
             . ' Saving vacation in DB: ' . print_r($vacationRecord->toArray(), TRUE));
         
         try {
-            $oldVac = $this->_vacationBackend->get($vacationRecord->getId());
+            $this->_vacationBackend->get($vacationRecord->getId());
             $this->_vacationBackend->update($vacationRecord);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $this->_vacationBackend->create($vacationRecord);
@@ -211,11 +260,12 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_rulesBackend->deleteByProperty($this->_accountId, 'account_id');
             $this->_vacationBackend->deleteByProperty($this->_accountId, 'account_id');
+            $this->_scriptPartBackend->deleteByProperty($this->_accountId, 'account_id');
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            throw Exception;
+            throw $e;
         }
     }
 }

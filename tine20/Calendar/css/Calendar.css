@@ -51,6 +51,16 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-list.png) !important;
 }
 
+.cal-timeline-view-type {
+    background-image:url(../../images/oxygen/16x16/actions/view-calendar-timeline.png) !important;
+}
+.x-btn-medium .cal-timeline-view-type {
+    background-image:url(../../images/oxygen/22x22/actions/view-calendar-timeline.png) !important;
+}
+.x-btn-large .cal-timeline-view-type {
+    background-image:url(../../images/oxygen/32x32/actions/view-calendar-timeline.png) !important;
+}
+
 .cal-grid-view-color {
     background-image:url(../../images/oxygen/16x16/actions/color-fill.png) !important;
 }
@@ -205,11 +215,16 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-conflict-attendername {
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-weight: bold;
+    background-position: 0;
+    height: 14px;
+    padding-left: 20px;
 }
 
 .cal-conflict-eventinfos {
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .cal-conflict-eventinfos-unavailable {
@@ -275,4 +290,37 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .inline input,
 .inline table {
     display: inline-block;
+}
+
+.cal-attendee-picker-combo-list-item .x-combo-list-item {
+    border: none;
+}
+
+.cal-fbinfo-state {
+    min-width: 16px;
+    min-height: 16px;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+
+.cal-fbinfo-state-free {
+    background-image:url(../../images/oxygen/16x16/status/user-online.png) !important;
+}
+
+.cal-fbinfo-state-tentative {
+    background-image:url(../../images/calendar-response-tentative.png) !important;
+}
+
+.cal-fbinfo-state-busy {
+    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
+}
+
+.cal-fbinfo-state-unavailable {
+    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
+}
+
+.x-grid3-cell .x-grid3-col-fbInfo {
+    padding-left: 2px;
+    padding-top: 1px;
+    padding-bottom: 0px;
 }

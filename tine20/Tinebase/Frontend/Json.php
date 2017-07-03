@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -157,10 +157,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'  => 0
         );
         
-        $filter = new Tinebase_Model_RoleFilter(array(
-            'name'        => '%' . $filter[0]['value'] . '%',
-            'description' => '%' . $filter[0]['value'] . '%'
-        ));
+        $filter = new Tinebase_Model_RoleFilter($filter);
         
         $paging['sort'] = isset($paging['sort']) ? $paging['sort'] : 'name';
         $paging['dir'] = isset($paging['dir']) ? $paging['dir'] : 'ASC';
@@ -766,6 +763,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $symbols['group'],
             'decimalSeparator'  => $symbols['decimal'],
+            'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
             'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),
@@ -810,6 +808,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
+        $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+
         $userRegistryData = array(
             'timeZone'           => Tinebase_Core::getUserTimezone(),
             'currentAccount'     => $user->toArray(),
@@ -825,6 +825,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'persistentFilters'  => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
             'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
+            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -861,7 +863,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             foreach ($userApplications as $application) {
                 $appRegistry = array();
-                $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                try {
+                    $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                } catch (Tinebase_Exception $te) {
+                    // no rights -> continue + skip app
+                    Tinebase_Exception::log($te);
+                    continue;
+                }
                 $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
                 $appRegistry['config'] = isset($clientConfig[$application->name])
                     ? $clientConfig[$application->name]->toArray()

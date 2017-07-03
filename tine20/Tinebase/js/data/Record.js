@@ -228,6 +228,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         return field.name;
     });
     for(var i = 0, len = o.length; i < len; i++) {
+        if (o[i]['name'] == meta.containerProperty && meta.allowBlankContainer === false) {
+            o[i]['allowBlank'] = false;
+        }
         p.fields.add(new Ext.data.Field(o[i]));
     }
     f.getField = function(name) {

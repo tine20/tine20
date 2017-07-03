@@ -41,7 +41,7 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
      * @param integer $number
      * @return integer
      */
-    public function setNumberZerofill(integer $number = NULL)
+    public function setNumberZerofill($number = NULL)
     {
         $this->_numberZerofill = $number;
         
@@ -54,7 +54,7 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
      * @param string $prefix
      * @return string
      */
-    public function setNumberPrefix(string $prefix = NULL)
+    public function setNumberPrefix($prefix = NULL)
     {
         $this->_numberPrefix = $prefix;
         

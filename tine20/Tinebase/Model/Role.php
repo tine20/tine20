@@ -15,8 +15,11 @@
  * @package     Tinebase
  * @subpackage  Acl
  *
+ * @property string                     $id
  * @property Tinebase_Record_RecordSet  $members
- *  */
+ * @property string                     $name
+ *
+ */
 class Tinebase_Model_Role extends Tinebase_Record_Abstract
 {
     /**
@@ -105,5 +108,19 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
     public function isReplicable()
     {
         return true;
+    }
+
+    /**
+     * converts a int, string or Tinebase_Model_Role to a roleid
+     *
+     * @param   int|string|Tinebase_Model_Role $_roleId the roleid to convert
+     * @return  string
+     * @throws  Tinebase_Exception_InvalidArgument
+     *
+     * @todo rename this function because we now have string ids
+     */
+    static public function convertRoleIdToInt($_roleId)
+    {
+        return self::convertId($_roleId, 'Tinebase_Model_Role');
     }
 }

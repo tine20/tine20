@@ -46,6 +46,9 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
             if ((int)$response->getStatus() === 200) {
                 $responseJson = json_decode($response->getBody(), true);
                 break;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                    . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getMessage());
             }
             $run = time() - $lastRun;
             if ($run < 5) {

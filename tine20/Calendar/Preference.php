@@ -93,6 +93,16 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const FIRSTDAYOFWEEK = 'firstdayofweek';
 
     /**
+     * default calendar strategy
+     */
+    const DEFAULT_CALENDAR_STRATEGY = 'defaultCalendarStrategy';
+
+    /**
+     * fixedCalendars
+     */
+    const FIXED_CALENDARS = 'fixedCalendars';
+
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -121,7 +131,9 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_TIMEINCREMENT,
             self::DEFAULTATTENDEE_STRATEGY,
             self::DEFAULT_EVENTS_RRIVATE,
-            self::FIRSTDAYOFWEEK
+            self::FIRSTDAYOFWEEK,
+            self::DEFAULT_CALENDAR_STRATEGY,
+            self::FIXED_CALENDARS,
         );
         
         if ($cropDays) {
@@ -195,11 +207,19 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULT_EVENTS_RRIVATE => array(
                 'label'         => $translate->_('Default set Events to privat'),
-                'description'   => $translate->_('If enabled every created event is always privat.'),
+                'description'   => $translate->_('If enabled every created event is always privat'),
             ),
             self::FIRSTDAYOFWEEK => array(
                 'label'         => $translate->_('First Day of Week'),
                 'description'   => $translate->_('On what day the week should be starting'),
+            ),
+            self::DEFAULT_CALENDAR_STRATEGY => array(
+                'label'         => $translate->_('Default calendar strategy'),
+                'description'   => $translate->_('The calendar for new events if no container is selected'),
+            ),
+            self::FIXED_CALENDARS => array(
+                'label'         => $translate->_('Fixed Calendars'),
+                'description'   => $translate->_('Calendars always selected regardless of all filter parameters.'),
             ),
         );
         
@@ -411,10 +431,59 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                     </options>';
                 break;
+            case self::DEFAULT_CALENDAR_STRATEGY:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->value = 'default';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>' . $translate->_('Default Calendar') . '</label>
+                            <value>default</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('None') . '</label>
+                            <value>none</value>
+                        </option>
+                    </options>';
+                break;
+            case self::FIXED_CALENDARS:
+                $preference->value = array();
+                // TODO set better (?) options / maybe this could be removed
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::DEFAULTCONTAINER_OPTIONS . '</special>
+                    </options>';
+
+                $preference->uiconfig = array(
+                    'xtype'       => 'containerspicker',
+                    'appName'     => 'Calendar',
+                    'model'       => 'Event',
+                );
+                $preference->personal_only = true;
+                break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
         return $preference;
+    }
+
+    /**
+     * overwrite this in concrete classes if needed
+     *
+     * @param $_preferenceName
+     * @return array
+     */
+    public function _getPrefRecordConfig($_preferenceName)
+    {
+        switch ($_preferenceName) {
+            case self::FIXED_CALENDARS:
+                return array(
+                    'modelName'      => 'Tinebase_Model_Container',
+                );
+                break;
+            default:
+                return parent::_getPrefRecordConfig($_preferenceName);
+        }
     }
 }

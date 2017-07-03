@@ -14,6 +14,8 @@ if (PHP_SAPI != 'cli') {
 
 require_once 'bootstrap.php';
 
+set_time_limit(0);
+
 $daemon = new Tinebase_ActionQueue_Worker();
 $daemon->run();
 

@@ -73,6 +73,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
@@ -200,13 +201,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $mail = new Tinebase_Mail('UTF-8');
         $mail->setSubject($_message->subject);
         
-        $this->_setMailBody($mail, $_message);
         $this->_setMailFrom($mail, $_account, $_message);
         $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
+
         $this->_setMailHeaders($mail, $_account, $_message);
-        
         $this->_addAttachments($mail, $_message);
-        
+        $this->_setMailBody($mail, $_message);
+
         return $mail;
     }
     
@@ -424,7 +425,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $_mail->clearFrom();
         
-        $from = $this->_getSenderName($_account);
+        $from = $this->_getSenderName($_message, $_account);
         
         $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
         
@@ -433,11 +434,20 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $_mail->setFrom($email, $from);
     }
 
-    protected function _getSenderName($account)
+    /**
+     * @param $_message
+     * @param $_account
+     * @return string
+     */
+    protected function _getSenderName($_message, $_account)
     {
-        return (isset($_account->from) && ! empty($_account->from))
-            ? $_account->from
-            : Tinebase_Core::getUser()->accountFullName;
+        $messageFrom = ($_message && ! empty($_message->from_name)) ? $_message->from_name : null;
+
+        return $messageFrom
+            ? $messageFrom
+            : (isset($_account->from) && ! empty($_account->from)
+                ? $_account->from
+                : Tinebase_Core::getUser()->accountFullName);
     }
     
     /**
@@ -525,7 +535,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         // add reply-to
         if (! empty($_account->reply_to)) {
-            $_mail->setReplyTo($_account->reply_to, $this->_getSenderName($_account));
+            $_mail->setReplyTo($_account->reply_to, $this->_getSenderName($_message, $_account));
         }
         
         // set message-id (we could use Zend_Mail::createMessageId() here)
@@ -625,33 +635,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $totalSize = 0;
 
         foreach ($_message->attachments as $attachment) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
+            $part = $this->_getAttachmentPartByType($attachment, $_message);
 
-            if (isset($attachment['type'])
-                && $attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
-                && $_message->original_id instanceof Felamimail_Model_Message
-            ) {
-                $part = $this->_getRfc822Attachment($attachment, $_message);
-
-            } else if (isset($attachment['type'])
-                && $attachment['type'] == 'filenode'
-            ) {
-                $part = $this->_getFileNodeAttachment($attachment);
-
-            } else if ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
-                $part = $this->_getTempFileAttachment($attachment);
-
-            } else {
-                $part = $this->_getMessagePartAttachment($attachment);
-            }
-
-            if (! $part || empty($attachment['type'])) {
+            if (! $part || ! isset($attachment['type'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Skipping attachment ' . print_r($attachment, true));
                 continue;
             }
-            
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
+
             $part->setTypeAndDispositionForAttachment($attachment['type'], $attachment['name']);
 
             if (! empty($attachment['size'])) {
@@ -673,6 +667,71 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
 
     /**
+     * @param $attachment
+     * @return null|Zend_Mime_Part
+     */
+    protected function _getAttachmentPartByType(&$attachment, $_message)
+    {
+        $part = null;
+
+        $attachmentType = $this->_getAttachmentType($attachment, $_message);
+
+        switch ($attachmentType) {
+            case 'rfc822':
+                $part = $this->_getRfc822Attachment($attachment, $_message);
+                break;
+            case 'systemlink_fm':
+                $this->_setSystemlinkAttachment($attachment, $_message);
+                break;
+            case 'download_public':
+            case 'download_public_fm':
+                // no attachment part
+                $this->_setDownloadLinkAttachment($attachment, $_message);
+                break;
+            case 'download_protected':
+            case 'download_protected_fm':
+                // no attachment part
+                $this->_setDownloadLinkAttachment($attachment, $_message, /* protected */ true);
+                break;
+            case 'filenode':
+                $part = $this->_getFileNodeAttachment($attachment);
+                break;
+            case 'tempfile':
+                $part = $this->_getTempFileAttachment($attachment);
+                break;
+            default:
+                $part = $this->_getMessagePartAttachment($attachment);
+        }
+
+        return $part;
+    }
+
+    protected function _getAttachmentType($attachment, $_message)
+    {
+        // Determine if it's a tempfile attachment or a filenode attachment
+        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && $attachment['tempFile']) {
+            $attachment['attachment_type'] = 'tempfile';
+        }
+
+        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && !$attachment['tempFile']) {
+            $attachment['attachment_type'] = 'filenode';
+        }
+
+        if (isset($attachment['attachment_type'])) {
+            return $attachment['attachment_type'];
+        } elseif (isset($attachment['type'])
+            && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            && $_message->original_id instanceof Felamimail_Model_Message
+        ) {
+            return 'rfc822';
+        } elseif ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
+            return 'tempfile';
+        }
+
+        return null;
+    }
+
+    /**
      * get attachment of type CONTENT_TYPE_MESSAGE_RFC822
      *
      * @param $attachment
@@ -691,21 +750,117 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
 
     /**
+     * @param            $_attachment
+     * @param            $_message
+     * @param bool|false $_protected
+     * @return boolean success
+     */
+    protected function _setDownloadLinkAttachment($_attachment, $_message, $_protected = false)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' No right to run Filemanager');
+            return false;
+        }
+
+        $password = $_protected && isset($_attachment['password']) ? $_attachment['password'] : '';
+        $tempFile = $this->_getTempFileFromAttachment($_attachment);
+        if ($tempFile) {
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            $downloadLinkFolder = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+                . '/' . Tinebase_Core::getUser()->getId()
+                . '/' . $translate->_('.My Mail Download Links');
+            $downloadLink = Filemanager_Controller_Node::getInstance()->createNodeWithDownloadLinkFromTempFile(
+                $tempFile,
+                $downloadLinkFolder,
+                $password
+            );
+        } else {
+            $node = Filemanager_Controller_Node::getInstance()->get($_attachment['id']);
+
+            if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_PUBLISH)) {
+                return false;
+            }
+
+            $downloadLink = Filemanager_Controller_DownloadLink::getInstance()->create(new Filemanager_Model_DownloadLink(array(
+                'node_id'       => $node->getId(),
+                'expiry_date'   => Tinebase_DateTime::now()->addDay(30)->toString(),
+                'password'      => $password
+            )));
+        }
+
+        $this->_insertDownloadLinkIntoMailBody($downloadLink->url, $_message);
+
+        return true;
+    }
+
+    /**
+     * @param $_attachment
+     * @param $_message
+     * @return bool
+     */
+    protected function _setSystemlinkAttachment($_attachment, $_message)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' No right to run Filemanager');
+            return false;
+        }
+
+        $node = Filemanager_Controller_Node::getInstance()->get($_attachment['id']);
+
+        $this->_insertDownloadLinkIntoMailBody(Filemanager_Model_node::getDeepLink($node), $_message);
+
+        return true;
+    }
+
+    /**
+     * @param $_link
+     * @param $_message
+     *
+     * TODO insert above signature
+     */
+    protected function _insertDownloadLinkIntoMailBody($_link, $_message)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Inserting download link into mail body: ' . $_link);
+        }
+
+        if ('text/html' === $_message->content_type) {
+            $_message->body .= sprintf(
+                '<br />%s<br />',
+                $_link
+            );
+        } else {
+            $_message->body .= "\n" . $_link . "\n";
+        }
+    }
+
+    /**
      * get attachment defined by a file node (mailfiler or filemanager)
      *
      * @param $attachment
      * @return null|Zend_Mime_Part
      * @throws Tinebase_Exception_NotFound
      *
-     * TODO support Filemanager files
-     * TODO allow to omit $messageuid, $partId
-     * TODO write a test for this
      */
     protected function _getFileNodeAttachment(&$attachment)
     {
-        list($appname, $path, $messageuid, $partId) = explode('|', $attachment['id']);
+        if (isset($attachment['path'])) {
+            // allow Filemanager?
+            $appname = 'Filemanager';
+            $path = $attachment['path'];
+        } else {
+            list($appname, $path, $messageuid, $partId) = explode('|', $attachment['id']);
+        }
 
-        $nodeController = Tinebase_Core::getApplicationInstance($appname . '_Model_Node');
+        try {
+            $nodeController = Tinebase_Core::getApplicationInstance($appname . '_Model_Node');
+        } catch (Tinebase_Exception $te) {
+            Tinebase_Exception::log($te);
+            return null;
+        }
 
         // remove filename from path
         // TODO remove DRY with \MailFiler_Frontend_Http::downloadAttachment
@@ -713,31 +868,50 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         array_pop($pathParts);
         $path = implode('/', $pathParts);
 
-        $filter = array(
-            array(
-                'field'    => 'path',
-                'operator' => 'equals',
-                'value'    => $path
-            ),
-            array(
-                'field'    => 'messageuid',
-                'operator' => 'equals',
-                'value'    => $messageuid
-            ));
-        $node = $nodeController->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
+        if ($appname === 'MailFiler') {
+            $filter = array(
+                array(
+                    'field' => 'path',
+                    'operator' => 'equals',
+                    'value' => $path
+                ),
+                array(
+                    'field' => 'messageuid',
+                    'operator' => 'equals',
+                    'value' => $messageuid
+                )
+            );
+            $node = $nodeController->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
+        } else {
+            $nodeController = Filemanager_Controller_Node::getInstance();
+            $node = $nodeController->get($attachment['id']);
+
+            if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+                return null;
+            }
+
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
+                Filemanager_Controller_Node::getInstance()->addBasePath($node->path)
+            );
+        }
+
         if ($node) {
             if ($appname === 'MailFiler') {
                 $mailpart = MailFiler_Controller_Message::getInstance()->getPartFromNode($node, $partId);
-
-                // TODO use streams
+                // TODO use stream
                 $content = Felamimail_Message::getDecodedContent($mailpart);
-                $part = new Zend_Mime_Part($content);
-                $part->encoding = Zend_Mime::ENCODING_BASE64;
+
+            } elseif ($appname === 'Filemanager') {
+                $content = fopen($pathRecord->streamwrapperpath, 'r');
 
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' We don\'t support ' . $appname . ' nodes as attachment yet.');
             }
+
+            $part = new Zend_Mime_Part($content);
+            $part->encoding = Zend_Mime::ENCODING_BASE64;
+
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not find file node attachment');
@@ -756,11 +930,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getTempFileAttachment(&$attachment)
     {
-        $tempFileBackend = Tinebase_TempFile::getInstance();
-        $tempFile = ($attachment instanceof Tinebase_Model_TempFile)
-            ? $attachment
-            : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
-
+        $tempFile = $this->_getTempFileFromAttachment($attachment);
         if ($tempFile === null) {
             return null;
         }
@@ -785,6 +955,21 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         return $part;
+    }
+
+    /**
+     * @param $attachment
+     * @return null|Tinebase_Model_TempFile|Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getTempFileFromAttachment($attachment)
+    {
+        $tempFileBackend = Tinebase_TempFile::getInstance();
+        $tempFile = ($attachment instanceof Tinebase_Model_TempFile)
+            ? $attachment
+            : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
+
+        return $tempFile;
     }
 
     /**

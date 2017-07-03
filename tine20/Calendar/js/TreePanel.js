@@ -211,5 +211,20 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         if (abort) {
             return false;
         }
+    },
+
+    getSelectedContainer: function(requiredGrants, defaultContainer, onlySingle) {
+        var prefs = this.app.getRegistry().get('preferences');
+
+        if ('none' === prefs.get('defaultCalendarStrategy')) {
+            var sm = this.getSelectionModel(),
+                selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+
+            if (selection.length > 1 || selection.length === 0) {
+                return null;
+            }
+        }
+
+        return this.supr().getSelectedContainer(requiredGrants, defaultContainer, onlySingle);
     }
 });

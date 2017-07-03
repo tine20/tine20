@@ -583,16 +583,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
         
-        if (isset($_record->jpegphoto) && ! empty($_record->jpegphoto)) {
-            // add system note when jpegphoto gets updated
-            $translate = $translate = Tinebase_Translation::getTranslation('Addressbook');
-            $noteMessage = $translate->_('Uploaded new contact image.');
+        if (isset($_record->jpegphoto)){
+            // add system note when jpegphoto gets changed
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+            $noteMessage = "";
+
+            if (! empty($_record->jpegphoto)) {
+                // new or updated contact image supplied
+                $noteMessage = $translate->_('Uploaded new contact image.');
+            } else {
+                // contact image deleted
+                $noteMessage = $translate->_('Deleted contact image.');
+            }
             $traceException = new Exception($noteMessage);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' ' . $traceException);
             Tinebase_Notes::getInstance()->addSystemNote($_record, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
         }
-        
+
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
@@ -906,8 +914,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fetch all groups and role memberships and add to path
         $listIds = Addressbook_Controller_List::getInstance()->getMemberships($record);
         foreach ($listIds as $listId) {
-            /** @var Addressbook_Model_List $list */
-            $list = Addressbook_Controller_List::getInstance()->get($listId);
+            try {
+                /** @var Addressbook_Model_List $list */
+                $list = Addressbook_Controller_List::getInstance()->get($listId);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Exception::log($tead);
+                continue;
+            }
 
             /**
              * TODO

@@ -18,6 +18,9 @@
         {
           "text": "GridPanelHook.js",
           "path": "js/"
+        }, {
+          "text": "AttachmentUploadGrid.js",
+          "path": "js/"
         },
         {
           "text": "FolderStore.js",
@@ -49,6 +52,10 @@
         },
         {
           "text": "RuleConditionsPanel.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "NotificationDialog.js",
           "path": "js/sieve/"
         },
         {

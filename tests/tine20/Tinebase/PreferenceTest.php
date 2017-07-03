@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_PreferenceTest
  */
-class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
+class Tinebase_PreferenceTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -288,6 +288,50 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         } catch (Tinebase_Exception_AccessDenied $tead) {
             $this->assertEquals('You are not allowed to change the locked preference.', $tead->getMessage());
         }
+    }
+
+    /**
+     * @see 0013214: allow to set fixed calendars as user preference
+     */
+    public function testSetFixedCalendarsPreference()
+    {
+        $personalContainer = $this->_getPersonalContainer('Calendar');
+        $data =
+          array (
+            'Calendar' =>
+            array (
+              'fixedCalendars' =>
+              array (
+                'value' =>
+                array (
+                  0 =>
+                      $personalContainer->toArray()
+                ),
+              ),
+            ),
+        );
+
+        $frontend = new Tinebase_Frontend_Json();
+        $result = $frontend->savePreferences($data, /* adminMode */ false);
+        self::assertEquals('success', $result['status']);
+
+        $preferences = $frontend->searchPreferencesForApplication('Calendar', array());
+        $fixedCalendarsPref = false;
+        foreach ($preferences['results'] as $preference) {
+            if ($preference['name'] == 'fixedCalendars') {
+                $fixedCalendarsPref = $preference;
+            }
+        }
+        self::assertTrue(is_array($fixedCalendarsPref), print_r($preferences['results'], true));
+        self::assertEquals(1, count($fixedCalendarsPref['value']), 'did not find personal container in value: '
+            . print_r($fixedCalendarsPref, true));
+        $container = $fixedCalendarsPref['value'][0];
+        self::assertTrue(is_array($container));
+        self::assertEquals($personalContainer->getId(), $container['id']);
+        self::assertTrue(isset($fixedCalendarsPref['uiconfig']), 'uiconfig missing: '
+            . print_r($fixedCalendarsPref, true));
+        $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
+        self::assertTrue(in_array($personalContainer->getId(), $fixedCalendarIds));
     }
 
     /******************** protected helper funcs ************************/

@@ -383,7 +383,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * get list of role memberships
      *
-     * @param int $accountId
+     * @param int|Tinebase_Model_User $accountId
      * @param string $type
      * @return array of array with role ids
      * @throws Tinebase_Exception_InvalidArgument
@@ -396,9 +396,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
             $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
             $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-            if (empty($groupMemberships)) {
-                throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
-            }
             
             $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
         } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
@@ -419,7 +416,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             ->where($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND ' 
                 . $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', $type));
         
-        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && !empty($groupMemberships)) {
             $select->orWhere($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND '
                 .  $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
         }
@@ -958,5 +955,23 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $rs = new Tinebase_Record_RecordSet($this->_modelName, array($result));
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs, $modelConf);
         return $rs->getFirstRecord();
+    }
+
+    /**
+     * get dummy role record
+     *
+     * @param integer $_id [optional]
+     * @return Tinebase_Model_Role
+     */
+    public function getNonExistentRole($_id = NULL)
+    {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+
+        $result = new Tinebase_Model_Role(array(
+            'id'        => $_id,
+            'name'      => $translate->_('unknown'),
+        ), TRUE);
+
+        return $result;
     }
 }

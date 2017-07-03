@@ -28,7 +28,7 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @constructor Create a new  Tine.widgets.grid.FileUploadGrid
  */
-Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
+Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     /**
      * @cfg filesProperty
@@ -79,8 +79,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.initStore();
         this.initColumnModel();
         this.initSelectionModel();
-        
-        this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
+
+
+        if (!this.plugins) {
+            this.plugins = [];
+        }
+
+        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+
         this.enableHdMenu = false;
       
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
@@ -94,8 +100,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             this.contextMenu.showAt(e.getXY());
         }, this);
 
-        if (! this.record || this.record.id == 0) {
-            this.on('rowdblclick', function (grid, row, e) {
+        if (! this.record || this.record.id === 0) {
+            this.on('celldblclick', function (grid, rowIndex, columnIndex, e) {
+                // Don't download if the cell has an editor, just go on with the event
+                if (grid.getColumns()[columnIndex].hasOwnProperty('editor')) {
+                    return true;
+                }
+
+                // In case cell has no editor, just assume a download is intended
                 e.stopEvent();
                 this.onDownload()
             }, this);
@@ -301,7 +313,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 xhr.onprogress = function (e) {
                     var progress = Math.floor(100 * e.loaded / e.total) + '% loaded';
                     console.log(e);
-                }
+                };
 
 
                 xhr.onload = function (e) {
@@ -388,7 +400,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * init cm
-     * @private
      */
     initColumnModel: function () {
         this.cm = new Ext.grid.ColumnModel(this.getColumns());

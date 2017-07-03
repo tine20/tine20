@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -54,5 +54,149 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
             // do nothing
         }
         $this->setApplicationVersion('Felamimail', '10.3');
+    }
+
+    /**
+     * update to 10.4
+     *
+     * add sieve script part table
+     */
+    public function update_3()
+    {
+        $tableDefinition = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>felamimail_sieve_scriptpart</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>60</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>script</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <field>
+                    <name>requires</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id-type-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>type</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        if (! $this->_backend->tableExists('felamimail_sieve_scriptpart')) {
+            $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_sieve_scriptpart');
+        }
+
+        $this->setApplicationVersion('Felamimail', '10.4');
+    }
+
+    /**
+     * update to 10.5
+     *
+     * add sieve_notification_email column
+     * update sieve script in FS
+     */
+    public function update_4()
+    {
+        if (! $this->_backend->columnExists('sieve_notification_email', 'felamimail_account')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>sieve_notification_email</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>');
+            $this->_backend->addCol('felamimail_account', $declaration);
+            $this->setTableVersion('felamimail_account', 24);
+        }
+
+        $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            'Felamimail',
+            Tinebase_FileSystem::FOLDER_TYPE_SHARED
+        );
+        $templatePath = $basepath . '/Email Notification Templates';
+        if (! Tinebase_FileSystem::getInstance()->fileExists($templatePath)) {
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($templatePath);
+        } else {
+            $node = Tinebase_FileSystem::getInstance()->stat($templatePath);
+        }
+        Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
+
+        if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create defaultForwarding.sieve file');
+            throw new Tinebase_Exception('could not update email notification tempalte');
+        }
+
+        fwrite($fh, <<<'sieveFile'
+require ["enotify", "variables", "copy", "body"];
+
+if header :contains "Return-Path" "<>" {
+    if body :raw :contains "X-Tine20-Type: Notification" {
+        notify :message "there was a notification bounce"
+              "mailto:ADMIN_BOUNCE_EMAIL";
+    }
+} elsif header :contains "X-Tine20-Type" "Notification" {
+    redirect :copy "USER_EXTERNAL_EMAIL"; 
+} else {
+    if header :matches "Subject" "*" {
+        set "subject" "${1}";
+    }
+    if header :matches "From" "*" {
+        set "from" "${1}";
+    }
+    notify :message "TRANSLATE_SUBJECT${from}: ${subject}"
+              "mailto:USER_EXTERNAL_EMAIL";
+}
+sieveFile
+        );
+
+        if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create defaultForwarding.sieve file');
+            throw new Tinebase_Exception('could not update email notification tempalte');
+        }
+
+        $this->setApplicationVersion('Felamimail', '10.5');
     }
 }
