@@ -202,7 +202,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                         return true;
                     }
                     if (Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP === $roleMember['account_type'] &&
-                        in_array($user->getId(), Tinebase_Group::getInstance()->getGroupMembers($this->account_id))) {
+                        in_array($user->getId(), Tinebase_Group::getInstance()->getGroupMembers($roleMember['account_id']))) {
                         return true;
                     }
                 }

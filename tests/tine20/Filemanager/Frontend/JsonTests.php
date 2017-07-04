@@ -1808,6 +1808,47 @@ class Filemanager_Frontend_JsonTests extends TestCase
             . print_r($childWithoutPersonalGrants['grants'], true));
     }
 
+    /**
+     * testNodeRoleAcl for personal folders
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testNodeRoleAcl()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+
+        // give sclever role the grants to add nodes
+        $secretaryRole = Tinebase_Role::getInstance()->getRoleByName('secretary role');
+        $node['grants'][] = array(
+            'account_id' => $secretaryRole->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+            Tinebase_Model_Grants::GRANT_EDIT => false,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+            Tinebase_Model_Grants::GRANT_EXPORT => false,
+            Tinebase_Model_Grants::GRANT_SYNC => false,
+            Tinebase_Model_Grants::GRANT_ADMIN => false,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+            Tinebase_Model_Grants::GRANT_PRIVATE => false,
+            Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
+            Tinebase_Model_Grants::GRANT_PUBLISH => false,
+        );
+        $result = $this->_getUit()->saveNode($node);
+        self::assertEquals(2, count($result['grants']));
+
+        // switch to sclever
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+
+        // add a subfolder
+        $subfolderPath = $node['path'] . '/subfolder';
+        $this->_getUit()->createNode($subfolderPath, 'folder');
+
+        // delete subfolder
+        $result = $this->_getUit()->deleteNodes(array($subfolderPath));
+        self::assertEquals($result['status'], 'success');
+    }
+
     public function testRecursiveFilter()
     {
         $folders = $this->testCreateDirectoryNodesInPersonal();

@@ -1906,7 +1906,7 @@ class Tinebase_FileSystem implements
             'ignoreAcl' => $_ignoreAcl,
         ));
         if (null !== $_requiredGrants) {
-            $searchFilter->setRequiredGrants($_requiredGrants);
+            $searchFilter->setRequiredGrants((array) $_requiredGrants);
         }
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
@@ -2261,7 +2261,11 @@ class Tinebase_FileSystem implements
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
                 if ($_path->containerOwner && ($_topLevelAllowed || ! $_path->isToplevelPath())) {
-                    $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                    if ($_path->isToplevelPath()) {
+                        $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                    } else {
+                        $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                    }
                 } else {
                     $hasPermission = ($_action === 'get');
                 }
