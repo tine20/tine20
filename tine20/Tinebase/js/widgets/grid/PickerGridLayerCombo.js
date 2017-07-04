@@ -70,6 +70,9 @@ Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
     setValue: function (value) {
         var _ = window.lodash;
 
+        if (!value) {
+            value = [];
+        }
         this.setStoreFromArray(value);
         if (this.rendered) {
             var titles = _.reduce(this.store.data.items, function(result, record) {
