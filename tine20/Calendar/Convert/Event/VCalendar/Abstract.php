@@ -326,10 +326,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     'SIZE'       => $attachment->size,
                     'FILENAME'   => $filename
                 ), 'TEXT');
-                
+
                 $vevent->add($attach);
             }
-            
+            if (isset($this->_options['addAttachmentsURL']) && $this->_options['addAttachmentsURL']) {
+                $vevent->add($vcalendar->createProperty('URL', $baseUrl));
+            }
         }
         
         $vcalendar->add($vevent);

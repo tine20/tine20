@@ -135,6 +135,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             foreach($args['containerIds'] as $id) {
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
+                $containerData = $container->get($id);
+                $recordsBackend = Tinebase_Core::getApplicationInstance($containerData->model)->getBackend();
+                $recordsBackend->increaseSeqsForContainerId($id);
+
                 $container->increaseContentSequence($id);
                 $resultStr .= ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
 
