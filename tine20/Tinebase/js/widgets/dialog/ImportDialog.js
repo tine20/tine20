@@ -178,7 +178,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 tempFileId: this.uploadButton.getTempFileId(),
                 definitionId: this.definitionCombo.getValue(),
                 importOptions: Ext.apply({
-                    container_id: this.containerCombo.getValue(),
+                    container_id: this.containerCombo ? this.containerCombo.getValue() : null,
                     autotags: this.tagsPanel.getFormField().getValue()
                 }, importOptions || {}),
                 clientRecordData: clientRecordData
@@ -356,16 +356,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         if (this.optionsPanel) {
             return this.optionsPanel;
         }
-        
-        return {
-            title: i18n._('Set Import Options'),
-            layout: 'fit',
-            border: false,
-            xtype: 'form',
-            frame: true,
-            ref: '../optionsPanel',
-            canonicalName: 'ImportOptions',
-            items: [{
+
+        var items = [];
+
+        if (null !== this.recordClass.getContainerName()) {
+            items = items.concat([{
                 xtype: 'label',
                 html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
             }, new Tine.widgets.container.SelectionComboBox({
@@ -380,20 +375,33 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 value: this.defaultImportContainer,
                 listeners: {
                     scope: this,
-                    select: function() {
+                    select: function () {
                         this.manageButtons();
                     }
                 },
                 requiredGrant: false // 'add' ?
-            }), new Tine.widgets.tags.TagPanel({
-                canonicalName: 'ImportTags',
-                app: this.appName,
-                ref: '../tagsPanel',
-                style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
-                border: true,
-                collapsible: false,
-                height: 200
-            })],
+            })]);
+        }
+
+        items.push(new Tine.widgets.tags.TagPanel({
+            canonicalName: 'ImportTags',
+            app: this.appName,
+            ref: '../tagsPanel',
+            style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
+            border: true,
+            collapsible: false,
+            height: 200
+        }));
+
+        return {
+            title: i18n._('Set Import Options'),
+            layout: 'fit',
+            border: false,
+            xtype: 'form',
+            frame: true,
+            ref: '../optionsPanel',
+            canonicalName: 'ImportOptions',
+            items: items,
             
             listeners: {
                 scope: this,
@@ -410,8 +418,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                         
                         this.tagsPanel.getFormField().setValue(tags);
                     }
-                    
-                    this.containerCombo.setValue(options.container_id ? options.container_id : this.defaultImportContainer);
+
+                    if (this.containerCombo) {
+                        this.containerCombo.setValue(options.container_id ? options.container_id : this.defaultImportContainer);
+                    }
                 }
             },
             
@@ -419,7 +429,11 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
              * check if next button is allowed
              */
             nextIsAllowed: (function() {
-                return this.containerCombo && this.containerCombo.getValue();
+                if (null !== this.recordClass.getContainerName()) {
+                    return this.containerCombo && this.containerCombo.getValue();
+                }
+
+                return true;
             }).createDelegate(this),
             
             /**
@@ -778,10 +792,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         }, this);
         
         var tags = this.tagsPanel.getFormField().getValue(),
-            container = this.containerCombo.selectedContainer,
+            container = this.containerCombo ? this.containerCombo.selectedContainer : null,
             info = [String.format(i18n._('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
             
-            if (totalcount) {
+            if (totalcount && null !== this.recordClass.getContainerName()) {
                 info.push(String.format(i18n._('{0} of them will be added as new records into: "{1}".'),
                     totalcount, 
                     Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')

@@ -857,11 +857,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
-        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel(),
+            _ = window.lodash;
+
+        var container = _.get(this.modelConfig, 'import.defaultImportContainerRegistryKey', false);
+
+        if (container) {
+            container = treePanel.getDefaultContainer(container);
+        }
+
+        Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: treePanel.getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
+            defaultImportContainer: container,
             listeners: {
                 scope: this,
                 'finish': function() {
@@ -1257,34 +1265,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // hide current records from store.loadRecords()
         // @see 0008210: email grid: set flag does not work sometimes
         this.store.clearData();
-    },
-
-    /**
-     * import records
-     *
-     * @param {Button} btn
-     */
-    onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
-        Tine.widgets.dialog.ImportDialog.openWindow({
-            appName: this.app.appName,
-            modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
-                ? this.getDefaultContainer()
-                : treePanel.getDefaultContainer(),
-            // update grid after import
-            listeners: {
-                scope: this,
-                'finish': function() {
-                    this.loadGridData({
-                        preserveCursor:     false,
-                        preserveSelection:  false,
-                        preserveScroller:   false,
-                        removeStrategy:     'default'
-                    });
-                }
-            }
-        });
     },
 
     /**
