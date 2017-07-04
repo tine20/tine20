@@ -78,9 +78,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         'deleted_time',
         'deleted_by',
         'seq',
-    // @todo allow notes modlog
-        'notes',
-    // record specific properties / no meta properties 
+    // record specific properties / no meta properties
     // @todo to be moved to (contact) record definition
         'jpegphoto',
     );
@@ -781,12 +779,21 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $notNullRecord = $_newRecord;
         } else {
             if (null !== $_newRecord) {
-                $diff = new Tinebase_Record_Diff(array('diff' => $_newRecord->toArray()));
                 $notNullRecord = $_newRecord;
+                $diffProp = 'diff';
             } else {
-                $diff = new Tinebase_Record_Diff(array('oldData' => $_curRecord->toArray()));
                 $notNullRecord = $_curRecord;
+                $diffProp = 'oldData';
             }
+            $diffData = $notNullRecord->toArray();
+
+            foreach (array_merge($this->_metaProperties, $notNullRecord->getModlogOmitFields()) as $omit) {
+                if (isset($diffData[$omit])) {
+                    unset($diffData[$omit]);
+                }
+            }
+
+            $diff = new Tinebase_Record_Diff(array($diffProp => $diffData));
         }
 
         if (! $diff->isEmpty()) {
@@ -988,10 +995,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             /* TODO $overwrite check in new code path! */
 
             $modifiedAttribute = $modlog->modified_attribute;
-            $isDeleted = false;
-            if (empty($modifiedAttribute)) {
-                $isDeleted = Tinebase_Timemachine_ModificationLog::DELETED === $modlog->change_type;
-            }
 
             try {
 
@@ -1004,18 +1007,19 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                         $controller->undoReplicationModificationLog($modlog, $dryrun);
                     } else {
 
-                        $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
-
                         if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
                             if (!$dryrun) {
-                                $controller->delete($record->getId());
+                                $controller->delete($modlog->record_id);
                             }
-                        } elseif (true === $isDeleted) {
+                        } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modlog->change_type) {
+                            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
+                            $model = $modlog->record_type;
+                            $record = new $model($diff->oldData, true);
                             if (!$dryrun) {
                                 $controller->unDelete($record);
                             }
                         } else {
-                            /** TODO this is not finished YET! see $notUndoableFields below etc.! */
+                            $record = $controller->get($modlog->record_id, null, true, true);
                             $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
                             $record->undo($diff);
 
@@ -1028,7 +1032,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     // this is the legacy code for old data in existing installations
                 } else {
 
-                    $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
+                    $record = $controller->get($modlog->record_id);
 
                     if (!in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->seq === $modlog->seq)) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -1113,7 +1117,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             case 'undelete':
                 $_newRecord->deleted_by   = null;
                 $_newRecord->deleted_time = null;
-                $_newRecord->is_deleted   = false;
+                $_newRecord->is_deleted   = 0;
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:

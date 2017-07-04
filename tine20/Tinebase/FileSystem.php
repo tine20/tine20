@@ -1393,6 +1393,56 @@ class Tinebase_FileSystem implements
     /**
      * delete file node
      *
+     * @param string $id
+     * @param bool $updateDirectoryNodesHash
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function unDeleteFileNode($id, $updateDirectoryNodesHash = true)
+    {
+        if (false === $this->_modLogActive ) {
+            return;
+        }
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $node = $this->get($id, true);
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($node, 'undelete', $node);
+            $this->_getTreeNodeBackend()->update($node);
+
+            /** @var Tinebase_Model_Tree_FileObject $object */
+            $object = $this->_fileObjectBackend->get($node->object_id, true);
+
+            if ($object->is_deleted) {
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($object, 'undelete', $object);
+                $object->indexed_hash = '';
+                $this->_fileObjectBackend->update($object);
+            }
+
+            if (true === $updateDirectoryNodesHash) {
+                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
+                    (int)$node->size, (int)$node->revision_size);
+
+                try {
+                    $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->getPathOfNode($node, true));
+                    $this->_updateDirectoryNodesHash(dirname($path->statpath));
+
+                    // Tinebase_Model_Tree_Node_Path::_getContainerType may find that is not a personal or shared container (for example it may be a records container)
+                } catch (Tinebase_Exception_InvalidArgument $teia) {}
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+    }
+
+    /**
+     * delete file node
+     *
      * @param Tinebase_Model_Tree_Node $node
      * @param bool $updateDirectoryNodesHash
      * @throws Tinebase_Exception_InvalidArgument

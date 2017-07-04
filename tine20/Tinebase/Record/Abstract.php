@@ -1312,7 +1312,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         foreach((array)($diff->oldData) as $property => $oldValue)
         {
-            if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+            if ('customfields' === $property) {
+                if (!is_array($oldValue)) {
+                    $oldValue = array();
+                }
+                if (isset($diff->diff['customfields']) && is_array($diff->diff['customfields'])) {
+                    foreach (array_keys($diff->diff['customfields']) as $unSetProperty) {
+                        if (!isset($oldValue[$unSetProperty])) {
+                            $oldValue[$unSetProperty] = null;
+                        }
+                    }
+                }
+            } elseif (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
                 $oldValue = new Tinebase_DateTime($oldValue);
             }
             $this->$property = $oldValue;

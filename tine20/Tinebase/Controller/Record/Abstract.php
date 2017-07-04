@@ -427,10 +427,6 @@ abstract class Tinebase_Controller_Record_Abstract
             // get related data only on request (defaults to TRUE)
             if ($_getRelatedData) {
                 $this->_getRelatedData($record);
-                
-                if ($record->has('notes')) {
-                    $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
-                }
             }
         }
         
@@ -483,6 +479,9 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+        }
+        if ($record->has('notes')) {
+            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
         }
     }
 
@@ -587,8 +586,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectAfterCreate($createdRecord, $_record);
             $this->_setRelatedData($createdRecord, $_record, null, TRUE);
             $this->_writeModLog($createdRecord, null);
-            $this->_setNotes($createdRecord, $_record);
-            
+            $this->_setSystemNotes($createdRecord);
+
             if ($this->sendNotifications()) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
             }
@@ -992,9 +991,9 @@ abstract class Tinebase_Controller_Record_Abstract
             $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, $currentRecord, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
-            
+
             $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
-            $this->_setNotes($updatedRecordWithRelatedData, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            $this->_setSystemNotes($updatedRecordWithRelatedData, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($updatedRecordWithRelatedData, Tinebase_Core::getUser(), 'changed', $currentRecord);
@@ -1105,6 +1104,12 @@ abstract class Tinebase_Controller_Record_Abstract
             $updatedRecord->attachments = $record->attachments;
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
         }
+        if ($record->has('notes') && $this->_setNotes !== false) {
+            if (isset($record->notes) && is_array($record->notes)) {
+                $updatedRecord->notes = $record->notes;
+                Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
+            }
+        }
         
         if ($returnUpdatedRelatedData) {
             $this->_getRelatedData($updatedRecord);
@@ -1118,25 +1123,20 @@ abstract class Tinebase_Controller_Record_Abstract
         return $updatedRecord;
     }
 
-
     /**
-     * set notes
-     * 
+     * set system notes
+     *
      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $_record          the update record
      * @param   string $_systemNoteType
      * @param   Tinebase_Record_RecordSet $_currentMods
      */
-    protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
+    protected function _setSystemNotes($_updatedRecord, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
     {
-        if (! $_record->has('notes') || $this->_setNotes === false) {
+        if (! $_updatedRecord->has('notes') || $this->_setNotes === false) {
             return;
         }
 
-        if (isset($_record->notes) && is_array($_record->notes)) {
-            $_updatedRecord->notes = $_record->notes;
-            Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
-        }
         Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, Tinebase_Core::getUser(), $_systemNoteType, $_currentMods);
     }
     
@@ -1486,9 +1486,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_checkRight('delete');
             
             foreach ($records as $record) {
-                if ($this->sendNotifications()) {
-                    $this->_getRelatedData($record);
-                }
+                $this->_getRelatedData($record);
                 $this->_deleteRecord($record);
             }
 
@@ -1632,7 +1630,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $originalRecord = clone $_record;
 
-        //$this->_unDeleteLinkedObjects($_record);
+        $this->_unDeleteLinkedObjects($_record);
 
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'undelete', $_record);
         $this->_backend->update($_record);
@@ -1657,22 +1655,22 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $this->_deleteLinkedObjects($_record);
 
-        // we do this here, before the record MetaData will be set. As we need the unchanged record!
-        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
-        $this->_writeModLog(null, $_record);
-
         if (! $this->_purgeRecords && $_record->has('created_by')) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);
             $this->_backend->update($_record);
         } else {
             $this->_backend->delete($_record);
         }
+
+        // needs to be done after setRecordMetaData so the sequence increase is done, though this tampers with the
+        // meta data. But better that than having two modlog entries withe the same sequence...
+        $this->_writeModLog(null, $_record);
         
         $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
     }
 
     /**
-     * delete linked objects (notes, relations, ...) of record
+     * delete linked objects (notes, relations, attachments) of record
      *
      * @param Tinebase_Record_Interface $_record
      */
@@ -1690,6 +1688,32 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
+        }
+    }
+
+    /**
+     * unDelete linked objects (notes, relations, attachments) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _unDeleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->has('notes') && count($_record->notes) > 0) {
+            $ids = array();
+            foreach($_record['notes'] as $val) {
+                $ids[] = $val['id'];
+            }
+            Tinebase_Notes::getInstance()->unDeleteNotes($ids);
+        }
+
+        if ($_record->has('relations') && count($_record->relations) > 0) {
+            Tinebase_Relations::getInstance()->undeleteRelations($_record->relations);
+        }
+
+        if ($_record->has('attachments') && count($_record->attachments) > 0 && Tinebase_Core::isFilesystemAvailable()) {
+            foreach ($_record->attachments as $attachment) {
+                Tinebase_FileSystem::getInstance()->unDeleteFileNode($attachment['id']);
+            }
         }
     }
     

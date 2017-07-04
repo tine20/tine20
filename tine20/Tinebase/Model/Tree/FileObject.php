@@ -18,6 +18,7 @@
  * @property  string   contenttype
  * @property  integer  size
  * @property  integer  revision_size
+ * @property  string   indexed_hash
  * @property  string   hash
  * @property  string   type
  * @property  integer  preview_count

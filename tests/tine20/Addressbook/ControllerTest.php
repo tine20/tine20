@@ -40,6 +40,8 @@ class Addressbook_ControllerTest extends TestCase
         parent::setUp();
         $this->_instance = Addressbook_Controller_Contact::getInstance();
 
+        $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
+
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -154,6 +156,8 @@ class Addressbook_ControllerTest extends TestCase
             $this->_instance->delete($this->objects['contact']);
         }
 
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
+
         parent::tearDown();
     }
     
@@ -165,7 +169,7 @@ class Addressbook_ControllerTest extends TestCase
     protected function _addContact()
     {
         $contact = $this->objects['initialContact'];
-        $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
+        $contact->notes = array($this->objects['note']);
         $contact = $this->_instance->create($contact);
         $this->objects['contact'] = $contact;
         
@@ -500,5 +504,141 @@ class Addressbook_ControllerTest extends TestCase
         Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
 
         $this->assertTrue(Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW));
+    }
+
+    public function testModLogUndo()
+    {
+        // move this code to \Tinebase_Timemachine_ModificationLogTest::testFileManagerReplication etc.
+        //$instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        // activate ModLog in FileSystem!
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+        $filesystem = Tinebase_FileSystem::getInstance();
+        $filesystem->resetBackends();
+        Tinebase_Core::clearAppInstanceCache();
+
+        $cField1 = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        )));
+        $cField2 = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        )));
+        $user = Tinebase_Core::getUser();
+        /** @var Addressbook_Model_Contact $contact */
+        $contact = $this->objects['initialContact'];
+
+        // create contact with notes, relations, tags, attachments, customfield
+        $contact->notes = array($this->objects['note']);
+        $contact->relations = array(array(
+            'related_id'        => $user->contact_id,
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'type'              => 'foo'
+        ));
+        $contact->tags = array(array('name' => 'testtag1'));
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'testAttachementData');
+        $contact->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
+            array(
+                'name'      => 'testAttachementData.txt',
+                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+            )
+        ), true);
+        $contact->customfields = array(
+            $cField1->name => 'test field1'
+        );
+
+        $createdContact = $this->_instance->create($contact);
+
+        // update contact, add more notes, relations, tags, attachements, customfields
+        /** @var Addressbook_Model_Contact $updateContact */
+        $updateContact = $this->objects['updatedContact'];
+        $updateContact->setId($createdContact->getId());
+        $notes = $createdContact->notes->toArray();
+        $notes[] = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note 2',
+        );
+        $updateContact->notes = $notes;
+        $relations = $createdContact->relations->toArray();
+        $relations[] = array(
+            'related_id'        => $user->contact_id,
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_CHILD,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'type'              => 'bar'
+        );
+        $updateContact->relations = $relations;
+        $updateContact->tags = clone $createdContact->tags;
+        $updateContact->tags->addRecord(new Tinebase_Model_Tag(array('name' => 'testtag2'), true));
+        $updateContact->attachments = clone $createdContact->attachments;
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'moreTestAttachementData');
+        $updateContact->attachments->addRecord(new Tinebase_Model_Tree_Node(array(
+                'name'      => 'moreTestAttachementData.txt',
+                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+        ), true));
+        $updateContact->xprops('customfields')[$cField2->name] = 'test field2';
+
+        $contact = $this->_instance->update($updateContact);
+
+        // delete it
+        $this->_instance->delete($contact->getId());
+
+        $contact->seq = 0;
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationById('Addressbook')->getId(), $contact, 10000);
+
+        // undelete it
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedContact = $this->_instance->get($contact->getId());
+        static::assertEquals(2, $undeletedContact->notes->count());
+        static::assertEquals(2, $undeletedContact->relations->count());
+        static::assertEquals(2, $undeletedContact->tags->count());
+        static::assertEquals(2, $undeletedContact->attachments->count());
+        static::assertEquals(2, count($undeletedContact->customfields));
+
+        // undo update
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidContact = $this->_instance->get($contact->getId());
+        static::assertEquals(1, $undidContact->notes->count());
+        static::assertEquals(1, $undidContact->relations->count());
+        static::assertEquals(1, $undidContact->tags->count());
+        static::assertEquals(1, $undidContact->attachments->count());
+        static::assertEquals(1, count($undidContact->customfields));
     }
 }
