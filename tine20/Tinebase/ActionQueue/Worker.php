@@ -232,6 +232,10 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         // execute in subprocess
         //if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
         chdir(__DIR__);
+            if (is_object($job)) {
+                /** @var Tinebase_Record_Interface $job */
+                $job = $job->toArray(true);
+            }
             exec('php -d include_path=' . escapeshellarg(get_include_path()) .
                 ' ./../../tine20.php --method Tinebase.executeQueueJob message=' .
                 escapeshellarg(json_encode($job)), $output, $exitCode);
