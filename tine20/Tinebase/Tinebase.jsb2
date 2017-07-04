@@ -230,6 +230,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "PeriodPicker.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "MoneyField.js",
           "path": "js/ux/form/"
         },
@@ -1062,6 +1066,10 @@
         },
         {
           "text": "LayerCombo.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "PeriodPicker.css",
           "path": "css/ux/form/"
         },
         {
