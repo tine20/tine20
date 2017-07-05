@@ -483,10 +483,21 @@ class Tinebase_User
             }
             
             if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
-                self::createContactForSyncedUser($user);
+                $contact = self::createContactForSyncedUser($user);
+            } else {
+                $contact = null;
             }
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
-            $syncedUser = $userBackend->addUserInSqlBackend($user);
+            try {
+                $syncedUser = $userBackend->addUserInSqlBackend($user);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+                // something happened during user creation: rolling back contact
+                if ($contact) {
+                    $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                    $addressbook->delete($contact->getId());
+                }
+            }
             $userBackend->addPluginUser($syncedUser, $user);
         }
         
@@ -702,11 +713,12 @@ class Tinebase_User
      * create contact in addressbook
      * 
      * @param Tinebase_Model_FullUser $user
+     * @return Addressbook_Model_Contact|null
      */
     public static function createContactForSyncedUser($user)
     {
         if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
-            return;
+            return null;
         }
         
         $contact = self::_user2Contact($user);
@@ -721,6 +733,8 @@ class Tinebase_User
             . " Added contact " . $contact->n_given);
         
         $user->contact_id = $contact->getId();
+
+        return $contact;
     }
     
     /**
