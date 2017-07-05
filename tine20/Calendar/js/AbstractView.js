@@ -284,8 +284,9 @@ Tine.Calendar.AbstractView = Ext.extend(Ext.Container, {
 
         if (el.hasClass(this.eventCls) || (el = el.up('[id*=event:]', 10))) {
             var parts = el.dom.id.split(':');
+            parts.shift();
 
-            return this.store.getById(parts[1]);
+            return this.store.getById(parts.join(':'));
         }
     },
 
