@@ -403,4 +403,39 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = Calendar_Controller_Event::getInstance()->repairAttendee($args['cal'], $from, $until, $dry);
         echo "Repaired " . $result . " events\n";
     }
+
+    /**
+     * remove future fallout exdates for events in given calendars
+     * 
+     * @param $_opts
+     */
+    public function restoreFallouts($_opts)
+    {
+        $now = Tinebase_DateTime::now();
+        $args = $this->_parseArgs($_opts, array('cal'));
+        $events = Calendar_Controller_MSEventFacade::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $args['cal']),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => 0),
+        )));
+
+        $events->sort('dtstart');
+        foreach($events as $event) {
+            if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+                $fallouts = $event->exdate->filter('id', null);
+                if ($fallouts->count()) {
+                    $dates = [];
+                    foreach($fallouts as $fallout) {
+                        if ($fallout->dtstart > $now) {
+                            $dates[] = $fallout->dtstart->format('d.m.Y');
+                            $event->exdate->removeRecord($fallout);
+                        }
+                    }
+                    if (! empty($dates)) {
+                        echo "restoring " . implode($dates,',') . ' for event ' . "'{$event->summary}' ({$event->id})\n";
+                        Calendar_Controller_MSEventFacade::getInstance()->update($event);
+                    }
+                }
+            }
+        }
+    }
 }
