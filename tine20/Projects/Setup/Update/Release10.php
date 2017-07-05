@@ -34,5 +34,7 @@ class Projects_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     public function update_1()
-    {}
+    {
+        $this->setApplicationVersion('Projects', '10.2');
+    }
 }

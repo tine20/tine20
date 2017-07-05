@@ -34,5 +34,7 @@ class Crm_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     public function update_1()
-    {}
+    {
+        $this->setApplicationVersion('Crm', '10.2');
+    }
 }

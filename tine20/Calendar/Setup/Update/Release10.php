@@ -184,5 +184,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     public function update_7()
-    {}
+    {
+        $this->setApplicationVersion('Calendar', '10.8');
+    }
 }
