@@ -378,6 +378,10 @@
           "path": "js/ux/Printer/renderers/"
         },
         {
+          "text": "EditDialogRenderer.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
           "text": "TitleRendererManager.js",
           "path": "js/data/"
         },

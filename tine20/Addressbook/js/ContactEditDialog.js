@@ -485,7 +485,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onPrint: function(printMode) {
         this.onRecordUpdate();
         var renderer = new Tine.Addressbook.Printer.ContactRenderer();
-        renderer.print(this.record);
+        renderer.print(this);
     },
 
     /**

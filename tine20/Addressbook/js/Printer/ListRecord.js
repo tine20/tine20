@@ -1,6 +1,6 @@
 Ext.ns('Tine.Addressbook.Printer');
 
-Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
+Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
 
     stylesheetPath: 'Tinebase/css/widgets/RecordPrinter.css',
 
@@ -17,7 +17,7 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, 
         });
     },
 
-    generateBody: function(component) {
+    generateBody: function(component, data) {
         var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
         var me = this;
 
@@ -67,88 +67,8 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, 
                                 return '<div class="rp-print-single-block-heading">' + i18n._('Related to') + '</div></div>' + relations  + '</br>';
                             }
                         }
-                    }).apply(component.record.data));
+                    }).apply(data));
             });
         });
-
-
-
-
     }
 });
-
-        /*
-        var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
-        var bodyTpl = new Ext.XTemplate(
-            '<div class="rp-print-single">',
-            '{[Tine.widgets.printer.headerRenderer()]}',
-            '<div class="rp-print-single-block">',
-                '<div class="rp-print-single-summary">',
-                    '<span class="adb-print-single-value">{name}</span>',
-                '</div>',
-                '<div class="rp-print-single-details-row">',
-                '{[this.fieldRenderer("", "List type")]}',
-                '{[this.keyFieldRenderer("listType", values.list_type)]}',
-                '</div>',
-                '<div class="rp-print-single-details-row">',
-                '{[this.fieldRenderer(values.description, "Description")]}',
-                '</div>',
-            '</div>',
-            '</br>',
-            '<div class="rp-print-single-block-heading">', i18n._('Members'), '</div>',
-            '<div class="rp-print-single-block">',
-            '{[this.memberRenderer()]}',
-            '</div>',
-            '</br>',
-            '{[this.customFieldRenderer(values.customfields)]}',
-            '<div class="rp-print-single-block-heading">', i18n._('Related to'), '</div>',
-            '<div class="rp-print-single-block">',
-            '{[this.relationRenderer(values.relations)]}',
-            '</div>',
-            '</div>',
-
-        {
-            keyFieldRenderer: function (keyField, values) {
-                return Tine.Tinebase.widgets.keyfield.Renderer.render('Addressbook', keyField, values);
-            },
-            customFieldRenderer: function(values) {
-                var html = '';
-
-                if (values) {
-                    html = '<div class="rp-print-single-block-heading">' + i18n._('Customfields') + '</div>' +
-                    Tine.widgets.customfields.Renderer.renderAll('Addressbook', Tine.Addressbook.Model.List, values) + '</br>';
-                }
-
-                return html
-            },
-            fieldRenderer: function(fieldValue, label) {
-                return Tine.widgets.printer.fieldRenderer('Addressbook', Tine.Addressbook.Model.list, fieldValue, label);
-            },
-            relationRenderer: function(values) {
-                return Tine.widgets.relation.Renderer.renderAll(values);
-
-            },
-            memberRenderer: function() {
-                this.generateMemberGrid(list.memberGridPanel).then(function(html) {
-                    return html;
-                });
-
-            },
-
-            generateMemberGrid: function(component) {
-                var renderer = new Ext.ux.Printer.GridPanelRenderer();
-
-                return new Promise(function (fulfill, reject) {
-                    renderer.prepareData(component).then(function(data) {
-                        fulfill(new Ext.XTemplate(
-
-                            renderer.generateBody(component)
-
-                        ).apply(data));
-                    });
-                });
-            }
-        });
-        return bodyTpl.apply(record.data);
-        */
-

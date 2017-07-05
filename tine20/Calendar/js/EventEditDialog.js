@@ -323,7 +323,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onPrint: function(printMode) {
         this.onRecordUpdate();
         var renderer = new Tine.Calendar.Printer.EventRenderer();
-        renderer.print(this.record);
+        renderer.print(this);
     },
 
     initComponent: function() {
