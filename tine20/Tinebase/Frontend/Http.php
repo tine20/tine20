@@ -572,7 +572,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
     public static function getAssetHash()
     {
-        return sha1(self::getAssetsMap(true) . TINE20_BUILDTYPE);
+        $installedApps = Tinebase_Application::getInstance()->getApplications();
+        $map = self::getAssetsMap();
+        foreach($map as $asset => $ressources) {
+            if (! $installedApps->filter('name', basename($asset))->count()) {
+                unset($map[$asset]);
+            }
+        }
+
+        return sha1(json_encode($map) . TINE20_BUILDTYPE);
     }
 
     /**
