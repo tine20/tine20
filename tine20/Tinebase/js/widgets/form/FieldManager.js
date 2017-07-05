@@ -131,6 +131,12 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'addressbookcontactpicker';
                     field.userOnly = true;
                     break;
+                case 'record':
+                    if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        var picker = Tine.widgets.form.RecordPickerManager.get(fieldDefinition.config.appName, fieldDefinition.config.modelName, Ext.apply(field, config));
+                        field = picker;
+                    }
+                    break;
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
                     field.app = app;
@@ -145,7 +151,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
             }
 
-            Ext.applyIf(field, config);
+            Ext.apply(field, config);
 
             return field;
         },
