@@ -715,8 +715,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.onAddRecord(record, relconf);
 
-        if (this.getActiveSearchCombo().hasOwnProperty('collapse')) {
+        if (Ext.isFunction(this.getActiveSearchCombo().collapse)) {
             this.getActiveSearchCombo().collapse();
+        }
+        if (Ext.isFunction(this.getActiveSearchCombo().reset)) {
             this.getActiveSearchCombo().reset();
         }
     },
