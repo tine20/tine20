@@ -42,7 +42,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      */
     initComponent: function() {
         if (!this.app && this.recordClass) {
-            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getAppName());
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }
 
         this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, Ext.applyIf({},this));
