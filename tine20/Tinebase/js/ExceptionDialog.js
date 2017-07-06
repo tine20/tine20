@@ -58,7 +58,17 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             
             this.exception.traceHTML = trace;
         }
-        
+
+        if (Ext.isString(this.exception.trace)) {
+            this.exception.traceHTML = Ext.util.Format.nl2br(
+                Ext.util.Format.htmlEncode(
+                    this.exception.trace
+                )
+                .replace(/ /g, '&nbsp;')
+                .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+            );
+        }
+
         this.title = i18n._('Abnormal End');
         this.items = this.getReportForm();
         
