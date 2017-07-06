@@ -120,6 +120,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function forceSyncTokenResync($_opts)
     {
         $args = $this->_parseArgs($_opts, array());
+        $container = Tinebase_Container::getInstance();
+
+        if (isset($args['userIds'])) {
+            $args['userIds'] = !is_array($args['userIds']) ? array($args['userIds']) : $args['userIds'];
+            $args['containerIds'] = $container->search(new Tinebase_Model_ContainerFilter(array(
+                array('field' => 'owner_id', 'operator' => 'in', 'value' => $args['userIds'])
+            )))->getId();
+        }
 
         if (isset($args['containerIds'])) {
             $resultStr = '';
@@ -130,18 +138,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $db = Tinebase_Core::getDb();
 
-            $container = Tinebase_Container::getInstance();
+
             $contentBackend = $container->getContentBackend();
             foreach($args['containerIds'] as $id) {
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
                 $containerData = $container->get($id);
                 $recordsBackend = Tinebase_Core::getApplicationInstance($containerData->model)->getBackend();
-                $recordsBackend->increaseSeqsForContainerId($id);
+                if (method_exists($recordsBackend, 'increaseSeqsForContainerId')) {
+                    $recordsBackend->increaseSeqsForContainerId($id);
 
-                $container->increaseContentSequence($id);
-                $resultStr .= ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
-
+                    $container->increaseContentSequence($id);
+                    $resultStr .= ($resultStr !== '' ? ', ' : '') . $id . '(' . $contentBackend->deleteByProperty($id,
+                            'container_id') . ')';
+                }
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
 

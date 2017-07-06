@@ -986,11 +986,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             SELECT cal_event_id FROM tine20_cal_attendee WHERE displaycontainer_id = ' . $this->_db->quote($containerId) . ')) GROUP BY ev.id');
 
         $result = $stmt->fetchAll();
-        print_r($result);
 
         $seq = $this->_db->quoteIdentifier('seq');
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $result);
-        echo $where;
         $this->_db->query("UPDATE {$this->_tablePrefix}{$this->_tableName} SET $seq = $seq +1 WHERE $where");
     }
 
