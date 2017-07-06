@@ -132,6 +132,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);
         this.on('afteredit', this.onAfterAttenderEdit, this);
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         this.addEvents('beforenewattendee');
 
         this.initColumns();
@@ -143,7 +144,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         };
         
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
-        
+
         this.initPhoneGridPanelHook();
     },
     
@@ -472,13 +473,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             //this.stopEditing();
         }
     },
-    
-    // NOTE: Ext docu seems to be wrong on arguments here
-    onContextMenu: function(e, target) {
-        e.preventDefault();
+
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
 
         var me = this,
-            row = this.getView().findRowIndex(target),
             attender = this.store.getAt(row),
             type = attender.get('user_type');
 
@@ -577,24 +576,24 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 items = items.concat(exportAction);
             }
 
-            var plugins = [];
+            var plugins = [{
+                ptype: 'ux.itemregistry',
+                key:   'Attendee-GridPanel-ContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }];
+
+            // add phone call action via item registry
             if (this.phoneHook && attender.get('user_type') == 'user') {
                 var contact = new Tine.Addressbook.Model.Contact(attender.get('user_id'));
                 this.phoneHook.setContactAndUpdateAction(contact);
-                plugins = [{
-                    ptype: 'ux.itemregistry',
-                    key:   'Attendee-GridPanel-ContextMenu'
-                }, {
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }];
             }
             
             Tine.log.debug(items);
             
             this.ctxMenu = new Ext.menu.Menu({
                 items: items,
-                // add phone call action via item registry
                 plugins: plugins,
                 listeners: {
                     scope: this,

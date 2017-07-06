@@ -164,7 +164,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 this.dataView.clearSelections();
                 this.dataView.select(selectedIdx);
             }
-            event.preventDefault();
+            event.stopEvent();
             
             var selectedTags = this.dataView.getSelectedRecords();
             var selectedTag = selectedTags.length == 1 ? selectedTags[0] : null;
