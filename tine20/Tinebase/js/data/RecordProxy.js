@@ -331,9 +331,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     callback.call(scope||this, records, arg, true);
                 },
                 failure: function(exception) {
-                    //@todo compute traditional options/request/response here -> dont' waste time ondepricated stuff
                     //this.fireEvent('exception', this, 'remote', 'read', options, response, arg);
                     this.fireEvent('loadexception', this, 'remote',  exception, arg);
+                    callback.call(scope||this, exception, arg, false);
                 }
             });
             
