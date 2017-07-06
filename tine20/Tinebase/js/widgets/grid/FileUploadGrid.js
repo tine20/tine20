@@ -102,7 +102,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (! this.record || this.record.id === 0) {
             this.on('celldblclick', function (grid, rowIndex, columnIndex, e) {
                 // Don't download if the cell has an editor, just go on with the event
-                if (grid.getColumns()[columnIndex].hasOwnProperty('editor')) {
+                if (grid.getColumns()[columnIndex] && grid.getColumns()[columnIndex].editor) {
                     return true;
                 }
 

@@ -18,13 +18,12 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
      * @return {Array} Data suitable for use in the XTemplate
      */
     prepareData: function (editDialog) {
-        var me = this;
         return new Promise(function (fulfill, reject) {
             var form = editDialog.getForm(),
                 recordData = Ext.util.JSON.decode(Ext.util.JSON.encode(editDialog.record.data));
 
             form.items.each(function (field) {
-                if (field.hasOwnProperty('selectedRecord')) {
+                if ((field instanceof Ext.form.ComboBox) && field.selectedRecord) {
                     recordData[field.getName()] = field.getRawValue();
                 }
             });
