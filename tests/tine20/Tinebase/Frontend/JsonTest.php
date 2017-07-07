@@ -710,7 +710,22 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $this->assertEquals(0, $result['totalCount']);
     }
-    
+
+    /**
+     * @see 0013314: allow users to change pin
+     */
+    public function testChangePin()
+    {
+        $result = $this->_instance->changePin('', '1234');
+        self::assertTrue($result['success']);
+
+        $result = $this->_instance->changePin('', '1234');
+        self::assertFalse($result['success']);
+
+        $result = $this->_instance->changePin('1234', '5678');
+        self::assertTrue($result['success']);
+    }
+
     /******************** protected helper funcs ************************/
     
     /**

@@ -177,22 +177,45 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function changePassword($oldPassword, $newPassword)
     {
+        return $this->_changePwOrPin($oldPassword, $newPassword);
+    }
+
+    /**
+     * @param        $oldPassword
+     * @param        $newPassword
+     * @param string $pwType
+     * @return array
+     */
+    protected function _changePwOrPin($oldPassword, $newPassword, $pwType = 'password')
+    {
         $response = array(
             'success'      => TRUE
         );
-        
+
         try {
-            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword);
+            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $pwType);
         } catch (Tinebase_Exception $e) {
             $response = array(
                 'success'      => FALSE,
                 'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
             );
         }
-        
+
         return $response;
     }
-    
+
+    /**
+     * change pin of user
+     *
+     * @param  string $oldPassword the old password
+     * @param  string $newPassword the new password
+     * @return array
+     */
+    public function changePin($oldPassword, $newPassword)
+    {
+        return $this->_changePwOrPin($oldPassword, $newPassword, 'pin');
+    }
+
     /**
      * clears state
      *
@@ -740,6 +763,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
+            'secondFactorPinChangeAllowed' => $secondFactorConfig
+                && $secondFactorConfig->active && $secondFactorConfig->provider && $secondFactorConfig->provider === 'Tine20',
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),

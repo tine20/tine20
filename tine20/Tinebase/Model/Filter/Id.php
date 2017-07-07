@@ -192,7 +192,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
             } elseif (isset($this->_options['modelName'])) {
                 $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['modelName']);
             } else {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
                     . ' No modelName or controller defined in filter options, can not resolve record.');
                 return null;
             }
