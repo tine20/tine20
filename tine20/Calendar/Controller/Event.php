@@ -2469,13 +2469,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 Tinebase_Alarm::getInstance()->setAlarmsOfRecord($_event);
             }
+
+            $event->attendee->removeRecord($currentAttender);
+            $event->attendee->addRecord($updatedAttender);
             
             $this->_increaseDisplayContainerContentSequence($updatedAttender, $event);
 
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
+                'observable' => $event
+            )));
+
             if ($currentAttender->status != $updatedAttender->status) {
-                $this->_touch($event, TRUE);
+                $this->_touch($event, true);
             }
-            
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
