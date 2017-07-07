@@ -316,6 +316,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Ext.EventObject} event
      */
     onContextMenu: function(node, event) {
+        event.stopEvent();
         Tine.log.debug(node);
 
         // legacy for reload action
