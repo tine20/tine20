@@ -75,10 +75,11 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
         value = value || [];
         this.setStoreFromArray(value);
         if (this.rendered) {
-            var titles = _.reduce(this.store.data.items, function(result, record) {
+            var text = _.reduce(this.store.data.items, function(result, record) {
                 return result.concat(record.getTitle());
-            }, []);
-            this.setRawValue(titles.join(', ') || this.emptyText);
+            }, []).join(', ');
+            this.setRawValue(text || this.emptyText);
+            this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
         }
         this.currentValue = value;
 
