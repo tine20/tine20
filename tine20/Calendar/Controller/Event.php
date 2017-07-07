@@ -2479,9 +2479,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 'observable' => $event
             )));
 
-            if ($currentAttender->status != $updatedAttender->status) {
-                $this->_touch($event, true);
-            }
+            $this->_touch($event, true);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
