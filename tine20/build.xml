@@ -477,11 +477,29 @@
                 }
 
                 foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+                    // TODO do this for all apps??
+                    /*
+                    if ($this->appName !== $appName) {
+                        continue;
+                    }
+                    */
                     foreach (scandir($translationPath) as $poFile) {
                         if (substr($poFile, -3) == '.po') {
                             $langName = substr($poFile, 0, -3);
                             `cd "$translationPath"
                             msgfmt -o $langName.mo $poFile`;
+                        } else if (substr($poFile, -5) == 'extra') {
+                            // TODO improve detection of files/directories
+                            $extraTranslationPath = $translationPath . '/extra';
+                            foreach (scandir($extraTranslationPath) as $app) {
+                                foreach (scandir($extraTranslationPath . '/' . $app) as $extraPoFile) {
+                                    if (substr($extraPoFile, -3) == '.po') {
+                                        $langName = substr($extraPoFile, 0, -3);
+                                        `cd "$extraTranslationPath/$app"
+                                        msgfmt -o $langName.mo $extraPoFile`;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
