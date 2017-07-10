@@ -64,9 +64,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @var array
      * 
-     * @todo move 'toOmit' fields to record (getModlogOmitFields)
-     * @todo allow notes modlog
-     * 
      * @see 0007494: add changes in notes to modlog/history
      */
     protected $_metaProperties = array(
@@ -74,13 +71,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         'creation_time',
         'last_modified_by',
         'last_modified_time',
+        //do NOT add is_deleted!
         //'is_deleted',
         'deleted_time',
         'deleted_by',
         'seq',
-    // record specific properties / no meta properties
-    // @todo to be moved to (contact) record definition
-        'jpegphoto',
     );
     
     /**

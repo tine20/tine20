@@ -616,12 +616,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
     public function testUserReplication()
     {
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
-        if ($modifications->count() > 0) {
-            $instance_seq = $modifications->getLastRecord()->instance_seq;
-        } else {
-            $instance_seq = -1;
-        }
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $userController = Tinebase_User::getInstance();
 
@@ -743,10 +738,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
             ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
-        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->
-            getReplicationModificationsByInstanceSeq(-1, 10000);
-        $instance_seq = $modifications->getLastRecord()->instance_seq;
-
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
         $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
             . '/unittestTestPath';
         $fmController = Filemanager_Controller_Node::getInstance();

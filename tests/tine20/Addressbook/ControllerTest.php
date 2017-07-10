@@ -508,9 +508,6 @@ class Addressbook_ControllerTest extends TestCase
 
     public function testModLogUndo()
     {
-        // move this code to \Tinebase_Timemachine_ModificationLogTest::testFileManagerReplication etc.
-        //$instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
-
         // activate ModLog in FileSystem!
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
             ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
