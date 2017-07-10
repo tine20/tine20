@@ -188,8 +188,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
             if (! $nodePath->isSystemPath()) {
 
-                if ($_record->acl_node === null && ! $nodePath->isToplevelPath()) {
-                    // acl_node === null -> remove acl
+                if (empty($_record->acl_node) && ! $nodePath->isToplevelPath()) {
+                    // acl_node empty -> remove acl
                     $node = $this->_backend->setAclFromParent($nodePath->statpath);
                     $aclNode = $node->acl_node;
 
