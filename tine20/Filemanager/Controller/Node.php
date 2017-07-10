@@ -103,11 +103,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        if (! $this->_backend->checkACLNode($_record, 'update')) {
+        // we allow only notification updates for the current user itself if not admin right
+        if (! $this->_backend->checkACLNode($_record, 'admin')) {
             if (! $this->_backend->checkACLNode($_record, 'get')) {
                 throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
             }
-            // we allow only notification updates for the current user itself
+
             $usersNotificationSettings = null;
             $currentUserId = Tinebase_Core::getUser()->getId();
             foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
@@ -120,8 +121,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 }
             }
 
-            // we reset all input and then just apply the notification settings for the current user
-            $_record = $this->get($_record->getId());
+            $currentRecord = $this->get($_record->getId());
+
+            if (! $this->_backend->checkACLNode($_record, 'update')) {
+                // we reset all input and then just apply the notification settings for the current user
+                $_record = $currentRecord;
+                $hasUpdateGrant = false;
+            } else {
+                // we just reset the notification settings
+                $_record->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = $currentRecord->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
+                $hasUpdateGrant = true;
+            }
+
             $found = false;
             foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
                 if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
@@ -141,7 +152,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
             }
 
-            if (false === $found && null === $usersNotificationSettings){
+            if (false === $hasUpdateGrant && false === $found && null === $usersNotificationSettings){
                 throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
             }
         }

@@ -2322,6 +2322,8 @@ class Tinebase_FileSystem implements
             case 'delete':
                 $requiredGrant = Tinebase_Model_Grants::GRANT_DELETE;
                 break;
+            case 'admin':
+                return false;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
