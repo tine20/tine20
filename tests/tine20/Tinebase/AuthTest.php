@@ -234,4 +234,40 @@ class Tinebase_AuthTest extends TestCase
         ));
         $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
     }
+
+    /**
+     * @see 0013328: protect applications with second factor
+     */
+    public function testSecondFactorAppProtection()
+    {
+        // set configs
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SECONDFACTORPROTECTEDAPPS, array(
+            'Tasks'
+        ));
+        Tinebase_Config::getInstance()->set(Tinebase_Config::AUTHENTICATIONSECONDFACTOR, array(
+            'active' => true,
+            'provider' => 'Tine20',
+        ));
+
+        // set pin
+        $user = Tinebase_Core::getUser();
+        Tinebase_User::getInstance()->setPin($user, '1234');
+
+        // try to access app
+        try {
+            $tasks = Tasks_Controller_Task::getInstance()->getAll();
+            self::fail('it should not be possible to access app without PIN');
+        } catch (Tinebase_Exception $te) {
+            // check exception
+            self::assertTrue($te instanceof Tinebase_Exception_SecondFactorRequired);
+        }
+
+        // validate pin
+        $json = new Tinebase_Frontend_Json();
+        $json->validateSecondFactor('1234');
+
+        // try to access app again
+        $result = Tasks_Controller_Task::getInstance()->getAll();
+        self::assertGreaterThanOrEqual(0, count($result));
+    }
 }

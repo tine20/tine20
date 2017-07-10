@@ -50,6 +50,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doRightChecks = TRUE;
 
     /**
+     * only do second factor validation once
+     *
+     * @var boolean
+     */
+    protected $_secondFactorValidated = false;
+
+    /**
      * use notes - can be enabled/disabled by useNotes
      *
      * @var boolean
@@ -1823,15 +1830,45 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * overwrite this function to check rights
+     * overwrite this function to check rights / don't forget to call parent
      *
      * @param string $_action {get|create|update|delete}
+     * @return void
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_SecondFactorRequired
      */
     protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
                                     $_action)
     {
-        return;
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $this->_checkSecondFactor();
+    }
+
+    /**
+     * check second factor
+     *
+     * @throws Tinebase_Exception_SecondFactorRequired
+     */
+    protected function _checkSecondFactor()
+    {
+        if ($this->_secondFactorValidated) {
+            return;
+        }
+
+        // TODO only check with json frontend? maybe we should enable this only from json frontends
+
+        $protectedApps = Tinebase_Config::getInstance()->get(Tinebase_Config::SECONDFACTORPROTECTEDAPPS, array());
+        if (in_array($this->_applicationName, $protectedApps)) {
+            if (! Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+                throw new Tinebase_Exception_SecondFactorRequired('Second Factor required for application '
+                    . $this->_applicationName);
+            } else {
+                $this->_secondFactorValidated = true;
+            }
+        }
     }
 
     /**

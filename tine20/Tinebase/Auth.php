@@ -444,8 +444,15 @@ class Tinebase_Auth
      * @return int
      * @throws Tinebase_Exception_Backend
      */
-    public static function validateSecondFactor($username, $password, $options)
+    public static function validateSecondFactor($username, $password, $options = null)
     {
+        if (! $options) {
+            $options = Tinebase_Config::getInstance()->get(
+                Tinebase_Config::AUTHENTICATIONSECONDFACTOR,
+                new Tinebase_Config_Struct()
+            )->toArray();
+        }
+
         if (isset($options['provider'])) {
             $authProviderClass = 'Tinebase_Auth_SecondFactor_' . $options['provider'];
             if (class_exists($authProviderClass)) {

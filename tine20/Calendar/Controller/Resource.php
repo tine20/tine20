@@ -207,6 +207,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             default;
                break;
         }
+
+        parent::_checkRight($_action);
     }
     
     /**

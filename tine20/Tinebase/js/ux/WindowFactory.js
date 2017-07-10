@@ -96,9 +96,8 @@ Ext.ux.WindowFactory.prototype = {
                 items: [this.getCenterPanel(c)]
             };
 
-            // we can only handle one window yet
+            // NOTE: is this still true ?? -> we can only handle one window yet
             c.modal = true;
-
 
             win = new Ext.Window(c);
             c.items.items[0].window = win;
@@ -186,7 +185,7 @@ Ext.ux.WindowFactory.prototype = {
      * brings window to front
      */
     getWindow: function (config) {
-        var windowType = (config.modal) ? 'Ext' : this.windowType;
+        var windowType = config.windowType || ((config.modal) ? 'Ext' : this.windowType);
         
         // Names are only allowed to be alnum
         config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;

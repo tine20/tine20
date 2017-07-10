@@ -174,7 +174,8 @@ Tine.Tinebase.tineInit = {
         };
         postal.fedx.addFilter( [
             { channel: 'thirdparty', topic: '#', direction: 'both' },
-            { channel: 'recordchange', topic: '#', direction: 'both' }
+            { channel: 'recordchange', topic: '#', direction: 'both' },
+            { channel: 'messagebus', topic: '#', direction: 'both' }
             //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
         ] );
         postal.fedx.signalReady();

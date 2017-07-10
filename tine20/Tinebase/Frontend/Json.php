@@ -205,6 +205,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * validate second factor
+     *
+     * @param $password
+     * @return array
+     * @throws Tinebase_Exception_Backend
+     */
+    public function validateSecondFactor($password)
+    {
+        $user = Tinebase_Core::getUser();
+        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, $password);
+        $success = Tinebase_Auth::SUCCESS === $result;
+
+        if ($success) {
+            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
+        }
+
+        return array(
+            'success' => $success
+        );
+    }
+
+    /**
      * change pin of user
      *
      * @param  string $oldPassword the old password

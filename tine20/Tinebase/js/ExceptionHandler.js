@@ -279,7 +279,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                     msg: i18n._('Your user account has no role memberships. Please contact your administrator.')
                 }));
                 break;
-                
+
+            // second factor validation required
+            case 630:
+                // TODO add more actions depending on request?
+                window.postal.publish({
+                    channel: "messagebus",
+                    topic: 'secondfactor.invalid'
+                });
+                break;
+
             // Tinebase_Exception_InvalidRelationConstraints
             case 912: 
                 Ext.MessageBox.show(Ext.apply(defaults, {

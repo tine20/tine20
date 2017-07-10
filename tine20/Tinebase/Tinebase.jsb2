@@ -894,6 +894,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "SecondFactorDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "RecordForm.js",
           "path": "js/widgets/form/"
         },

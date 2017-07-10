@@ -42,6 +42,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
 
     /**
+     * authentication second factor protection for apps
+     *
+     * @var string
+     */
+    const SECONDFACTORPROTECTEDAPPS = 'Tinebase_Authentication_SecondFactor_Protected_Apps';
+
+    /**
      * save automatic alarms when creating new record
      *
      * @var string
@@ -695,6 +702,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::SECONDFACTORPROTECTEDAPPS => array(
+            //_('Second Factor Protected Applications')
+            'label'                 => 'Second Factor Protected Applications',
+            //_('Second Factor Authentication is needed to access these applications')
+            'description'           => 'Second Factor Authentication is needed to access these applications',
+            'type'                  => 'array',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
         ),
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')

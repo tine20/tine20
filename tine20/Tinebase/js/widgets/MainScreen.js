@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets');
 
@@ -45,8 +45,76 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         this.initLayout();
+        this.initMessageBus();
 
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
+    },
+
+    initMessageBus: function() {
+        // check config, only subscribe in protected apps
+        var protectedApps = Tine.Tinebase.configManager.get('Tinebase_Authentication_SecondFactor_Protected_Apps');
+        if (protectedApps && protectedApps.indexOf(this.app.appName) !== -1) {
+            postal.subscribe({
+                channel: "messagebus",
+                topic: 'secondfactor.*',
+                callback: this.onSecondFactorValidation.createDelegate(this)
+            });
+        }
+    },
+
+    /**
+     * validate second factor
+     *
+     * @param data
+     * @param e
+     *
+     * @refactor use/create layer helper
+     */
+    onSecondFactorValidation: function(data, e) {
+        if (! this.rendered) {
+            return;
+        }
+        switch (e.topic) {
+            case 'secondfactor.invalid':
+                // recycle old layer + dialog
+                if (! this.secondfactorDialogLayer) {
+                    this.getEl().mask();
+
+                    this.secondfactorDialog = new Tine.Tinebase.widgets.dialog.SecondFactorDialog();
+                    this.secondfactorDialogLayer = new Ext.Layer({
+                        items: [this.secondfactorDialog]
+                    });
+
+                    // create layer for sf dialog
+                    var layerParent = this.getEl(); // Ext.getDom(this.getLayerParent() || Ext.getBody());
+                    this.secondfactorDialogLayer = new Ext.Layer({
+                        parentEl: layerParent,
+                        shadow: true,
+                        constrain: false
+                    });
+
+                    this.innerLayer = this.secondfactorDialogLayer.createChild({});
+                    this.innerLayer.setWidth(400);
+
+                    this.secondfactorDialog.render(this.innerLayer);
+
+                    var height = 120;
+                    this.innerLayer.dom.style.height = '';
+                    this.innerLayer.setHeight(height);
+
+                    this.secondfactorDialogLayer.beginUpdate();
+                    this.secondfactorDialogLayer.setHeight(height);
+                    this.secondfactorDialogLayer.alignTo(this.getEl(), 'c', [-100, -50]);
+                    this.secondfactorDialogLayer.endUpdate();
+                }
+                this.secondfactorDialogLayer.show();
+
+                break;
+            case 'secondfactor.valid':
+                this.getEl().unmask();
+                this.secondfactorDialogLayer.hide();
+                break;
+        }
     },
 
     /**
