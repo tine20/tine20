@@ -619,6 +619,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *
          * useSystemAccount (bool)
          * domain (string)
+         * instanceName (string)
          * useEmailAsUsername (bool)
          * host (string)
          * port (integer)

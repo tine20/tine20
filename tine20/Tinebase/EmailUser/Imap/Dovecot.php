@@ -399,16 +399,18 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         }
         
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        
-        if ($this->_config['domain'] !== null) {
-            $emailUsername = $this->_appendDomain($_user->accountLoginName);
-        } else {
-            $emailUsername = $_newUserProperties->accountEmailAddress;
+
+        $emailUsername = $this->_getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
+
+        list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+        $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+
+        if (isset($this->_config['instanceName'])) {
+            $rawData['instancename'] = $this->_config['instanceName'];
         }
-        
-        list($localPart, $domain) = explode('@', $emailUsername, 2);
+
         $rawData['domain'] = $domain;
-        
+
         // replace home wildcards when storing to db
         // %d = domain
         // %n = user

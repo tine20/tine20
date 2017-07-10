@@ -134,6 +134,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         return $result;
     }
+
+    /**
+     * @param $classname
+     * @return Tinebase_User_Plugin_SqlInterface
+     */
+    public function getSqlPlugin($classname)
+    {
+        return $this->_sqlPlugins[$classname];
+    }
     
     /**
      * unregisterAllPlugins

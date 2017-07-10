@@ -620,7 +620,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
 
         $userController = Tinebase_User::getInstance();
 
-        $newUser = $userController->addUser(Tinebase_User_SqlTest::getTestRecord());
+        $newUser = Tinebase_User_SqlTest::getTestRecord();
+        $newUser->accountEmailAddress = Tinebase_Record_Abstract::generateUID(5) . $newUser->accountEmailAddress;
+        $newUser = $userController->addUser($newUser);
         $userController->setPassword($newUser->getId(), 'ssha256Password');
         $userController->setStatus($newUser->getId(), Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
         $userController->setStatus($newUser->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
