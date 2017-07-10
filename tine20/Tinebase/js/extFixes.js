@@ -36,6 +36,30 @@ Ext.override(Ext.data.Store, {
      */
     indexOfId : function(id){
         return this.data.indexOfKey(String(id));
+    },
+
+    /**
+     * promisified store load
+     */
+    promiseLoad: function(options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.load(Ext.apply(options || {}, {
+                    callback: function (r, options, success) {
+                        if (success) {
+                            fulfill(r, options);
+                        } else if (Ext.isFunction(reject)) {
+                            reject(new Error(options));
+                        }
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
     }
 });
 
