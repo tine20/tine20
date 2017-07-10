@@ -73,11 +73,22 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_password',
             scope: this
         });
-        
+
+        this.actionResetPin = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Reset Pin'),
+            disabled: true,
+            handler: this.resetPinHandler,
+            iconCls: 'action_password',
+            hidden: ! Tine.Tinebase.registry.get('secondFactorPinChangeAllowed'),
+            scope: this
+        });
+
         this.actionUpdater.addActions([
             this.actionEnable,
             this.actionDisable,
-            this.actionResetPassword
+            this.actionResetPassword,
+            this.actionResetPin
         ]);
         
         Tine.Admin.user.GridPanel.superclass.initActions.call(this);
@@ -123,6 +134,11 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 scale: 'medium',
                 rowspan: 2,
                 iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.actionResetPin), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
             })
         ];
     },
@@ -138,7 +154,8 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.actionEnable,
             this.actionDisable,
             '-',
-            this.actionResetPassword
+            this.actionResetPassword,
+            this.actionResetPin
         ];
         
         return items;
@@ -248,6 +265,33 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         account   : accountObject,
                         password  : _text,
                         mustChange: false
+                    },
+                    scope: this,
+                    callback : function(_options, _success, _response) {
+                        if(_success === true) {
+                            var result = Ext.util.JSON.decode(_response.responseText);
+                            if(result.success === true) {
+                                this.grid.getStore().reload();
+                            }
+                        } else {
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(_response);
+                        }
+                    }
+                });
+            }
+        }, this);
+    },
+
+    resetPinHandler: function(_button, _event) {
+        Ext.MessageBox.prompt(this.app.i18n._('Set new pin'), this.app.i18n._('Please enter the new pin:'), function(_button, _text) {
+            if(_button == 'ok') {
+                var accountObject = this.grid.getSelectionModel().getSelected().data;
+
+                Ext.Ajax.request( {
+                    params: {
+                        method    : 'Admin.resetPin',
+                        account   : accountObject,
+                        password  : _text
                     },
                     scope: this,
                     callback : function(_options, _success, _response) {

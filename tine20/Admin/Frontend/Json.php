@@ -467,7 +467,31 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         return $result;
     }
-    
+
+    /**
+     * reset password for given account
+     *
+     * @param array|string $account Tinebase_Model_FullUser data or account id
+     * @param string $password the new password
+     * @return array
+     */
+    public function resetPin($account, $password)
+    {
+        if (is_array($account)) {
+            $account = new Tinebase_Model_FullUser($account);
+        } else {
+            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+        }
+
+        $controller = Admin_Controller_User::getInstance();
+        $controller->setAccountPin($account, $password);
+
+        $result = array(
+            'success' => TRUE
+        );
+        return $result;
+    }
+
     /**
      * adds the name of the account to each item in the name property
      * 

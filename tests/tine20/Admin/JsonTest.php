@@ -390,7 +390,26 @@ class Admin_JsonTest extends TestCase
         $authResult = Tinebase_Auth::getInstance()->authenticate($this->objects['user']->accountLoginName, $pw);
         $this->assertTrue($authResult->isValid());
     }
-    
+
+    /**
+     * try to reset pin
+     *
+     * @see 0013320: allow admin to reset pin for accounts
+     */
+    public function testResetPin()
+    {
+        $userArray = $this->testSaveAccount();
+
+        $pw = '1234';
+        $this->_json->resetPin($userArray, $pw);
+
+        $result = Tinebase_Auth::validateSecondFactor($userArray['accountLoginName'], '1234', array(
+            'active' => true,
+            'provider' => 'Tine20',
+        ));
+        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
+    }
+
     /**
      * testAccountContactModlog
      * 
