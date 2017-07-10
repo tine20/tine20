@@ -528,6 +528,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
 
+    const QUOTA = 'quota';
+    const QUOTA_INCLUDE_REVISION = 'includeRevision';
+    const QUOTA_TOTALINMB = 'totalInMB';
+    const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
+    const QUOTA_SOFT_QUOTA = 'softQuota';
+    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
+
 
     /**
      * (non-PHPdoc)
@@ -1566,7 +1573,78 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
+        self::QUOTA => array(
+            //_('Quota settings')
+            'label'                 => 'Quota settings',
+            //_('Quota settings')
+            'description'           => 'Quota settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'content'               => array(
+                self::QUOTA_INCLUDE_REVISION => array(
+                    //_('Include revisions')
+                    'label'                 => 'Include revisions',
+                    //_('Should all revisions be used to calculate total usage?')
+                    'description'           => 'Should all revisions be used to calculate total usage?',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
+                ),
+                self::QUOTA_TOTALINMB => array(
+                    //_('Total quota in MB')
+                    'label'                 => 'Total quota in MB',
+                    //_('Total quota in MB (0 for unlimited)')
+                    'description'           => 'Total quota in MB (0 for unlimited)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 0,
+                ),
+                self::QUOTA_TOTALBYUSERINMB => array(
+                    //_('Total quota by user in MB')
+                    'label'                 => 'Total quota by user in MB',
+                    //_('Total quota by user in MB (0 for unlimited)')
+                    'description'           => 'Total quota by user in MB (0 for unlimited)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 0,
+                ),
+                self::QUOTA_SOFT_QUOTA => array(
+                    //_('Soft quota in %')
+                    'label'                 => 'Soft quota in %',
+                    //_('Soft quota in % (0-100, 0 means off)')
+                    'description'           => 'Soft quota in % (0-100, 0 means off)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 90,
+                ),
+                self::QUOTA_SQ_NOTIFICATION_ROLE => array(
+                    //_('Soft quota notification role')
+                    'label'                 => 'Soft quota notification role',
+                    //_('Name of the role to notify if soft quote is exceeded')
+                    'description'           => 'Name of the role to notify if soft quote is exceeded',
+                    'type'                  => 'string',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 'soft quota notification',
+                ),
+            ),
+            'default'               => array(),
+        ),
+        /*
 
+    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';*/
     );
     
     /**
