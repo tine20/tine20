@@ -341,6 +341,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             code: -1000
             // appName: this.app.appName,
         });
+        console.error(exception.trace);
         handleRequestException(exception);
     };
 
