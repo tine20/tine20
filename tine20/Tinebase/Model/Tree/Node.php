@@ -32,6 +32,7 @@
  * @property    array              revisionProps
  * @property    array              notificationProps
  * @property    string             preview_count
+ * @property    integer            quota
  * @property    Tinebase_Record_RecordSet grants
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
@@ -118,6 +119,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
+        'quota'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

@@ -759,6 +759,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $personalContainerNode['revisionProps']['keep'] = true;
         $personalContainerNode['revisionProps']['keepNum'] = 3;
         $personalContainerNode['revisionProps']['keepMonth'] = 4;
+        $personalContainerNode['quota'] = 10 * 1024 * 1024 * 1024; // 10 GB -> exceeds 32bit integer
         $updatedNode = $this->_getUit()->saveNode($personalContainerNode);
 
         static::assertTrue(isset($updatedNode['customfields']) && isset($updatedNode['customfields'][$cf->name]),
@@ -773,6 +774,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
         static::assertEquals($personalContainerNode['revisionProps']['keep'], true);
         static::assertEquals($personalContainerNode['revisionProps']['keepNum'], 3);
         static::assertEquals($personalContainerNode['revisionProps']['keepMonth'], 4);
+        static::assertEquals($personalContainerNode['quota'], 10 * 1024 * 1024 * 1024);
+
+        return $updatedNode;
+    }
+
+    public function testUnsetQuota()
+    {
+        $node = $this->testUpdateNodeWithCustomfield();
+        $node['quota'] = null;
+        $updatedNode = $this->_getUit()->saveNode($node);
+        static::assertTrue(!isset($updatedNode['quota']), 'unset of quota did not work');
     }
     
     /**

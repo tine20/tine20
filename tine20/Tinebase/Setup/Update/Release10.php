@@ -1749,4 +1749,35 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '10.35');
     }
+
+    /**
+     * update to 10.36
+     *
+     * add quota column to tree_nodes
+     */
+    public function update_35()
+    {
+        if (! $this->_backend->columnExists('quota', 'tree_nodes')) {
+            $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>quota</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>'));
+            $this->setTableVersion('tree_nodes', 5);
+        }
+
+        if ($this->getTableVersion('tree_fileobjects') < 6) {
+            $this->_backend->alterCol('tree_fileobjects', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>revision_size</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'));
+            $this->setTableVersion('tree_fileobjects', 6);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.36');
+    }
 }
