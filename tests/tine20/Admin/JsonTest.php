@@ -107,6 +107,7 @@ class Admin_JsonTest extends TestCase
         $accountData = $this->_getUserArrayWithPw();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId();
         $accountData['accountFirstName'] = 'PHPUnitup';
+        $accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] = 100;
         
         $account = $this->_createUser($accountData);
         
@@ -117,6 +118,9 @@ class Admin_JsonTest extends TestCase
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
         $this->assertTrue($authResult->isValid());
+        $this->assertTrue(isset($accountData['configuration']) && isset($accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA])
+            && $accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] === 100,
+            'failed to set/get account configuration');
         
         $account['accountPrimaryGroup'] = $accountData['accountPrimaryGroup'];
         return $account;

@@ -1731,4 +1731,22 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.34');
     }
+
+    /**
+     * update to 10.35
+     *
+     * add configuration column to accounts
+     */
+    public function update_34()
+    {
+        if (! $this->_backend->columnExists('configuration', 'accounts')) {
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>configuration</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+            $this->setTableVersion('accounts', 13);
+        }
+        $this->setApplicationVersion('Tinebase', '10.35');
+    }
 }
