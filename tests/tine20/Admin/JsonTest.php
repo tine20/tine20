@@ -1285,4 +1285,29 @@ class Admin_JsonTest extends TestCase
         $result = Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
         $this->assertEquals(1, $result);
     }
+
+    public function testSearchQuotaNodes()
+    {
+        $filterNullResult = $this->_json->searchQuotaNodes();
+        $filterRootResult = $this->_json->searchQuotaNodes(array(array(
+            'field'     => 'path',
+            'operator'  => 'equals',
+            'value'     => '/'
+        )));
+
+        static::assertEquals($filterNullResult['totalcount'], $filterRootResult['totalcount']);
+        static::assertGreaterThan(0, $filterNullResult['totalcount']);
+        foreach ($filterNullResult['results'] as $node) {
+            Tinebase_Application::getInstance()->getApplicationById($node['name']);
+        }
+
+        $filterAppResult = $this->_json->searchQuotaNodes(array(array(
+            'field'     => 'path',
+            'operator'  => 'equals',
+            'value'     => '/' . $filterNullResult['results'][0]['name']
+        )));
+
+        static::assertEquals(1, $filterAppResult['totalcount']);
+        static::assertEquals('folders', $filterAppResult['results'][0]['name']);
+    }
 }

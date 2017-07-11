@@ -1320,7 +1320,70 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'html' => $phpinfo
         );
     }
-    
+
+    public function searchQuotaNodes($filter = null)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::VIEW_QUOTA_USAGE)) {
+            return FALSE;
+        }
+
+        $path = '';
+        if (null !== $filter) {
+            array_walk($filter, function ($val) use (&$path) {
+                if ('path' === $val['field']) {
+                    $path = $val['value'];
+                }
+            });
+        }
+        $filter = $this->_decodeFilter($filter, 'Tinebase_Model_Tree_Node_Filter');
+        // ATTENTION sadly the pathfilter to Array does path magic, returns the flatpath and not the statpath
+        // etc. this is Filemanager path magic. We don't want that here!
+        $filterArray = $filter->toArray();
+        array_walk($filterArray, function (&$val) use($path) {
+            if('path' === $val['field']) {
+                $val['value'] = $path;
+            }
+        });
+        $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
+
+        $pathFilters = $filter->getFilter('path', TRUE);
+        if (count($pathFilters) !== 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . 'Exactly one path filter required.');
+            $pathFilter = $filter->createFilter(array(
+                    'field'     => 'path',
+                    'operator'  => 'equals',
+                    'value'     => '/',)
+            );
+            $filter->removeFilter('path');
+            $filter->addFilter($pathFilter);
+            $path = '/';
+        }
+
+        $filter->removeFilter('type');
+        $filter->addFilter($filter->createFilter(array(
+                    'field'     => 'type',
+                    'operator'  => 'equals',
+                    'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                )));
+
+        $records = Tinebase_FileSystem::getInstance()->search($filter);
+
+        $result = $this->_multipleRecordsToJson($records, $filter);
+
+        $filterArray = $filter->toArray();
+        array_walk($filterArray, function (&$val) use($path) {
+            if('path' === $val['field']) {
+                $val['value'] = $path;
+            }
+        });
+        return array(
+            'results'       => array_values($result),
+            'totalcount'    => count($result),
+            'filter'        => $filterArray
+        );
+    }
+
     /****************************** common ******************************/
     
     /**
