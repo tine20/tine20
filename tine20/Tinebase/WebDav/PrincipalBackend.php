@@ -46,6 +46,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 foreach ($lists as $list) {
                     $principals[] = $this->_listToPrincipal($list, $prefixPath);
                 }
+
+                foreach (Tinebase_Acl_Roles::getInstance()->getAll() as $role) {
+                    $principals[] = $this->_roleToPrincipal($role, $prefixPath);
+                }
                 
                 break;
                 
@@ -122,28 +126,45 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
             case self::PREFIX_GROUPS:
             case self::PREFIX_INTELLIGROUPS:
-                $filter = new Addressbook_Model_ListFilter(array(
-                    array(
-                        'field'     => 'type',
-                        'operator'  => 'equals',
-                        'value'     => Addressbook_Model_List::LISTTYPE_GROUP
-                    ),
-                    array(
-                        'field'     => 'id',
-                        'operator'  => 'equals',
-                        'value'     => $id
-                    ),
-                ));
-                
-                $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
-                
-                if (! $list) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . ' Group/list principal does not exist: ' . $id);
-                    return null;
+                if (0 === strpos($id, 'role-')) {
+                    try {
+                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById(substr($id, 5));
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Role(group) principal does not exist: ' . $id);
+                        }
+                        return null;
+                    }
+
+                    $principal = $this->_roleToPrincipal($role, $prefix);
+
+                } else {
+                    $filter = new Addressbook_Model_ListFilter(array(
+                        array(
+                            'field' => 'type',
+                            'operator' => 'equals',
+                            'value' => Addressbook_Model_List::LISTTYPE_GROUP
+                        ),
+                        array(
+                            'field' => 'id',
+                            'operator' => 'equals',
+                            'value' => $id
+                        ),
+                    ));
+
+                    $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
+
+                    if (!$list) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Group/list principal does not exist: ' . $id);
+                        }
+                        return null;
+                    }
+
+                    $principal = $this->_listToPrincipal($list, $prefix);
                 }
-                
-                $principal = $this->_listToPrincipal($list, $prefix);
                 
                 break;
                 
@@ -223,11 +244,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             case 'calendar-proxy-read':
                 return array();
                 
-                break;
-                
             case 'calendar-proxy-write':
-                $result = array();
-                
                 $applications = array(
                     'Calendar' => 'Calendar_Model_Event',
                     'Tasks'    => 'Tasks_Model_Task'
@@ -236,7 +253,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 foreach ($applications as $application => $model) {
                     if ($id === self::SHARED) {
                         // check if account has the right to run the calendar at all
-                        if (!Tinebase_Acl_Roles::getInstance()->hasRight($application, Tinebase_Core::getUser(), Tinebase_Acl_Rights::RUN)) {
+                        if (!Tinebase_Acl_Roles::getInstance()->hasRight($application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights::RUN)) {
                             continue;
                         }
                         
@@ -286,27 +303,49 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
             case self::PREFIX_GROUPS:
             case self::PREFIX_INTELLIGROUPS:
-                $filter = new Addressbook_Model_ListFilter(array(
-                    array(
-                        'field'     => 'type',
-                        'operator'  => 'equals',
-                        'value'     => Addressbook_Model_List::LISTTYPE_GROUP
-                    ),
-                    array(
-                        'field'     => 'id',
-                        'operator'  => 'equals',
-                        'value'     => $id
-                    ),
-                ));
-                
-                $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
-                
-                if (!$list) {
-                    return array();
-                }
-                
-                foreach ($list->members as $member) {
-                    $result[] = self::PREFIX_USERS . '/' . $member;
+                if (0 === strpos($id, 'role-')) {
+                    $accounts = array();
+                    $groups = array();
+                    foreach (Tinebase_Acl_Roles::getInstance()->getRoleMembers(substr($id, 5)) as $roleMember) {
+                        if (Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP === $roleMember['account_type']) {
+                            $groups[] = $roleMember['account_id'];
+                        } elseif (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $roleMember['account_type']) {
+                            $accounts[] = $roleMember['account_id'];
+                        } else {
+                            Tinebase_Core::getLogger()->err($id .
+                                ' has a member of unknown type: ' . print_r($roleMember));
+                            continue;
+                        }
+                    }
+
+                    if (count($groups) > 0) {
+                        /** @var Tinebase_Model_Group $group */
+                        foreach (Tinebase_Group::getInstance()->getMultiple($groups) as $group) {
+                            if (empty($group->list_id) ||
+                                    $group->visibility !== Tinebase_Model_Group::VISIBILITY_DISPLAYED) {
+                                continue;
+                            }
+                            $result =
+                                array_merge($result, $this->_resolveListToUserPrincipals($group->list_id));
+                        }
+                    }
+
+
+                    if (count($accounts) > 0) {
+                        /** @var Tinebase_Model_FullUser $user */
+                        foreach (Tinebase_User::getInstance()->getMultiple($accounts, 'Tinebase_Model_FullUser') as $user) {
+                            if (Tinebase_Model_User::VISIBILITY_DISPLAYED !== $user->visibility ||
+                                    Tinebase_Model_User::ACCOUNT_STATUS_DISABLED === $user->accountStatus) {
+                                continue;
+                            }
+                            $result[] = self::PREFIX_USERS . '/' . $user->contact_id;
+                        }
+                    }
+
+                    $result = array_unique($result);
+
+                } else {
+                    $result = $this->_resolveListToUserPrincipals($id);
                 }
                 
                 break;
@@ -314,7 +353,39 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         return $result;
     }
-    
+
+    /**
+     * @param string $id
+     * @return array
+     */
+    protected function _resolveListToUserPrincipals($id)
+    {
+        $filter = new Addressbook_Model_ListFilter(array(
+            array(
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => Addressbook_Model_List::LISTTYPE_GROUP
+            ),
+            array(
+                'field' => 'id',
+                'operator' => 'equals',
+                'value' => $id
+            ),
+        ));
+
+        $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
+
+        if (!$list) {
+            return array();
+        }
+
+        $result = array();
+        foreach ($list->members as $member) {
+            $result[] = self::PREFIX_USERS . '/' . $member;
+        }
+        return $result;
+    }
+
     /**
      * (non-PHPdoc)
      * @see Sabre\DAVACL\IPrincipalBackend::getGroupMembership()
@@ -357,11 +428,19 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     
                     $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
                     $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
-                    
+
+                    /** @var Tinebase_Model_Group $group */
                     foreach ($groups as $group) {
                         if ($group->list_id && $group->visibility == Tinebase_Model_Group::VISIBILITY_DISPLAYED) {
                             $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
                         }
+                    }
+
+                    $roleIds = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->getId());
+                    //$roles   = Tinebase_Acl_Roles::getInstance()->getMultiple($roleIds);
+
+                    foreach ($roleIds as $role) {
+                        $result[] = self::PREFIX_GROUPS . '/role-' . $role;
                     }
                     
                     if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
@@ -468,7 +547,33 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 foreach ($result as $listId) {
                     $principalUris[] = $prefixPath . '/' . $listId;
                 }
-                
+
+                $filter = null;
+                if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
+                    $filter = new Tinebase_Model_RoleFilter(array(array(
+                        'field'     => 'query',
+                        'operator'  => 'contains',
+                        'value'     => $searchProperties['{http://calendarserver.org/ns/}search-token']
+                    )));
+                }
+
+                if (!empty($searchProperties['{DAV:}displayname'])) {
+                    if (null === $filter) {
+                        $filter = new Tinebase_Model_RoleFilter(array());
+                    }
+                    $filter->addFilter($filter->createFilter(array(
+                        'field'     => 'name',
+                        'operator'  => 'contains',
+                        'value'     => $searchProperties['{DAV:}displayname']
+                    )));
+                }
+
+                if (null !== $filter) {
+                    foreach (Tinebase_Acl_Roles::getInstance()->search($filter, null, false, true) as $roleId) {
+                        $principalUris[] = $prefixPath . '/role-' . $roleId;
+                    }
+                }
+
                 break;
                 
             case self::PREFIX_USERS:
@@ -606,23 +711,49 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
                 foreach ($grants as $grant) {
                     switch ($grant->account_type) {
-                        case 'group':
-                            $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
-                            if ($group->list_id) {
-                                $containerPrincipals[] = self::PREFIX_GROUPS . '/' . $group->list_id;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                            try {
+                                $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                                if ($group->list_id) {
+                                    $containerPrincipals[] = self::PREFIX_GROUPS . '/' . $group->list_id;
+                                }
+                            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                                // skip group
+                                continue 2;
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // skip group
+                                continue 2;
                             }
                             break;
-                            
-                        case 'user':
+
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                             // skip if grant belongs to the owner of the calendar
                             if ($container->owner_id == $grant->account_id) {
                                 continue 2;
                             }
-                            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
-                            if ($user->contact_id) {
-                                $containerPrincipals[] = self::PREFIX_USERS . '/' . $user->contact_id;
+                            try {
+                                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
+                                if ($user->contact_id) {
+                                    $containerPrincipals[] = self::PREFIX_USERS . '/' . $user->contact_id;
+                                }
+                            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                                // skip group
+                                continue 2;
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // skip user
+                                continue 2;
                             }
                             
+                            break;
+
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                            try {
+                                $role = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
+                                $containerPrincipals[] = self::PREFIX_GROUPS . '/role-' . $role->id;
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // skip role
+                                continue 2;
+                            }
                             break;
                     }
                 }
@@ -665,6 +796,37 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         if ($calUserType == 'INTELLIGROUP') {
             // OSX needs an email adress to send the attendee
             $principal['{http://sabredav.org/ns}email-address'] = 'urn:uuid:' . $prefix . '/' . $list->getId();
+        }
+
+        return $principal;
+    }
+
+    /**
+     * convert role model to principal array
+     *
+     * @param Tinebase_Model_Role $role
+     * @param string $prefix
+     * @return array
+     */
+    protected function _roleToPrincipal(Tinebase_Model_Role $role, $prefix)
+    {
+        $calUserType = $prefix == self::PREFIX_INTELLIGROUPS ? 'INTELLIGROUP' : 'GROUP';
+
+        $principal = array(
+            'uri'                     => $prefix . '/role-' . $role->getId(),
+            '{DAV:}displayname'       => $role->name . ' (' . $translation = Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')',
+            '{DAV:}alternate-URI-set' => array('urn:uuid:' . $prefix . '/role-' . $role->getId()),
+
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
+
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $role->name,
+        );
+
+        if ($calUserType == 'INTELLIGROUP') {
+            // OSX needs an email adress to send the attendee
+            $principal['{http://sabredav.org/ns}email-address'] = 'urn:uuid:' . $prefix . '/role-' . $role->getId();
         }
 
         return $principal;

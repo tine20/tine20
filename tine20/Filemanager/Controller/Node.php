@@ -809,7 +809,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * check file existance
+     * check file existence
      * 
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param Tinebase_Model_Tree_Node $_node
@@ -1585,5 +1585,43 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
 
         return array('createdBy' => $createdBy, 'type' => $type);
+    }
+
+    /**
+     * creates a node from a tempfile with download link in a defined folder
+     *
+     * - create folder path in Filemanager if it does not exist
+     * - create new file node from temp file
+     * - create download link for temp file
+     *
+     * @param Tinebase_Model_TempFile $tempFile
+     * @param string $_path
+     * @param string $_password
+     * @return Filemanager_Model_DownloadLink
+     */
+    public function createNodeWithDownloadLinkFromTempFile(Tinebase_Model_TempFile $_tempFile, $_path, $_password = '')
+    {
+        // check if path exists, if not: create
+        $folderPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
+        if (! $this->_backend->fileExists($folderPathRecord->statpath)) {
+            $this->_createNode($folderPathRecord, Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        }
+
+        $filePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path . '/' . $_tempFile->name));
+        $filenode = $this->_createNode(
+            $filePathRecord,
+            Tinebase_Model_Tree_FileObject::TYPE_FILE,
+            $_tempFile->getId(),
+        // TODO always overwrite?
+            /* $_forceOverwrite */ true
+        );
+
+        $downloadLink = Filemanager_Controller_DownloadLink::getInstance()->create(new Filemanager_Model_DownloadLink(array(
+            'node_id'       => $filenode->getId(),
+            'expiry_date'   => Tinebase_DateTime::now()->addDay(30)->toString(),
+            'password'      => $_password
+        )));
+
+        return $downloadLink;
     }
 }

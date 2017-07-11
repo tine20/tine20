@@ -79,6 +79,12 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const ACCOUNT_TYPE_GROUP    = 'group';
+
+    /**
+     * account type role
+     * @staticvar string
+     */
+    const ACCOUNT_TYPE_ROLE     = 'role';
     
     /**
      * holds the instance of the singleton

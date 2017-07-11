@@ -499,7 +499,17 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);
     },
-    
+
+    /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        if (String(this.record.id).match(/new-ext-gen/)) {
+            this.record.set('id', '');
+        }
+        Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
+    },
+
     /**
      * is called after all subpanels have been loaded
      */

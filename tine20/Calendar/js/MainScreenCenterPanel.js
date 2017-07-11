@@ -58,7 +58,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     defaultPrintMode: 'sheet',
     
     periodRe: /^(day|week|month|year)/i,
-    presentationRe: /(sheet|grid)$/i,
+    presentationRe: /(sheet|grid|timeline)$/i,
     
     calendarPanels: {},
     
@@ -136,14 +136,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             requiredGrant: 'readGrant',
             text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(i18n._hidden('Edit {0}'), this.i18nRecordName),
             disabled: true,
-            handler: this.onEditInNewWindow.createDelegate(this, ["edit"]),
+            handler: this.onEditInNewWindow.createDelegate(this, ["edit"], 0),
             iconCls: 'action_edit'
         });
         
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._hidden('Add {0}'), this.i18nRecordName),
-            handler: this.onEditInNewWindow.createDelegate(this, ["add"]),
+            handler: this.onEditInNewWindow.createDelegate(this, ["add"], 0),
             iconCls: 'action_add'
         });
         
@@ -230,6 +230,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             text: this.app.i18n._('Grid'),
             handler: this.changeView.createDelegate(this, ["grid"]),
             iconCls:'cal-grid-view-type',
+            xtype: 'tbbtnlockedtoggle',
+            toggleGroup: 'Calendar_Toolbar_tgViewTypes',
+            scope: this
+        });
+
+        this.showTimelineView = new Ext.Button({
+            pressed: this.isActiveView('Timeline'),
+            scale: 'medium',
+            minWidth: 60,
+            rowspan: 2,
+            iconAlign: 'top',
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Timeline'),
+            handler: this.changeView.createDelegate(this, ["timeline"]),
+            iconCls:'cal-timeline-view-type',
             xtype: 'tbbtnlockedtoggle',
             toggleGroup: 'Calendar_Toolbar_tgViewTypes',
             scope: this
@@ -354,25 +369,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     isActiveView: function(view)
     {
-        switch (view) {
-            case 'Grid':
-                return String(this.activeView).match(/grid$/i);
-                break;
-            case 'Day':
-                return String(this.activeView).match(/day/i);
-                break;
-            case 'Week':
-                return String(this.activeView).match(/week/i);
-                break;
-            case 'Month':
-                return String(this.activeView).match(/month/i);
-                break;
-            case 'Sheet':
-                return String(this.activeView).match(/sheet/i);
-                break;
-            default:
-                return false;
-        }
+        var re = new RegExp(String(view).toLowerCase(), 'i');
+        return String(this.activeView).match(re);
     },
     
     /**
@@ -414,6 +412,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }],
             items: [
                 this.showSheetView,
+                this.showTimelineView,
                 this.showGridView
             ]
         }];
@@ -1311,9 +1310,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Object} default properties for new items
      */
     onEditInNewWindow: function (action, event, plugins, defaults) {
-        if (! event) {
+        if (! (event && Ext.isFunction(event.beginEdit))) {
             event = null;
         }
+
         // needed for addToEventPanel
         if (Ext.isObject(action)) {
             action = action.actionType;
@@ -1327,12 +1327,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         }
 
-        if (action === 'edit' && (! event || event.dirty)) {
+        if (action === 'edit' && ! event) {
             return;
         }
-        
+
         if (! event) {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
+
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
                 event.set('dtend', defaults.dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')));
@@ -1342,7 +1343,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::onEditInNewWindow() - Opening event edit dialog with action: ' + action);
 
         Tine.Calendar.EventEditDialog.openWindow({
-            plugins: plugins ? Ext.encode(plugins) : null,
+            plugins: Ext.isArray(plugins) ? Ext.encode(plugins) : null,
             record: Ext.encode(event.data),
             recordId: event.data.id,
             copyRecord: (action == 'copy'),
@@ -1513,71 +1514,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if(this.loadMask) this.loadMask.hide();
         
         if (error.code == 901) {
-           
-            // resort fbInfo to combine all events of a attender
-            var busyAttendee = [];
-            var conflictEvents = {};
-            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee);
-            
-            Ext.each(error.freebusyinfo, function(fbinfo) {
-                attendeeStore.each(function(a) {
-                    var userType = a.get('user_type');
-                    userType = userType == 'groupmember' ? 'user' : userType;
-                    if (userType == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
-                        if (busyAttendee.indexOf(a) < 0) {
-                            busyAttendee.push(a);
-                            conflictEvents[a.id] = [];
-                        }
-                        conflictEvents[a.id].push(fbinfo);
-                    }
-                });
-            }, this);
-            
-            // generate html for each busy attender
-            var busyAttendeeHTML = '';
-            var denyIgnore = false;
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee),
+                fbInfo = new Tine.Calendar.FreeBusyInfo(error.freebusyinfo),
+                denyIgnore = fbInfo.getStateOfAllAttendees() == Tine.Calendar.FreeBusyInfo.states.BUSY_UNAVAILABLE;
 
-            Ext.each(busyAttendee, function(busyAttender) {
-                // TODO refactore name handling of attendee
-                //      -> attender model needs knowlege of how to get names!
-                //var attenderName = a.getName();
-                var attenderName = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, busyAttender.get('user_id'), false, busyAttender);
-                busyAttendeeHTML += '<div class="cal-conflict-attendername">' + attenderName + '</div>';
-                
-                var eventInfos = [];
-                Ext.each(conflictEvents[busyAttender.id], function(fbInfo) {
-                    var format = 'H:i';
-                    var eventInfo;
-                    var dateFormat = Ext.form.DateField.prototype.format;
-                    if (event.get('dtstart').format(dateFormat) != event.get('dtend').format(dateFormat) ||
-                        Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat) != Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat))
-                    {
-                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format);
-                    } else {
-                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
-                    }
-                    if (fbInfo.event && fbInfo.event.summary) {
-                        eventInfo += ' : ' + fbInfo.event.summary;
-                    }
-                    if (fbInfo.type == 'BUSY_UNAVAILABLE') {
-                        denyIgnore = true;
-                        eventInfo += '<span class="cal-conflict-eventinfos-unavailable">' + this.app.i18n._('Unavailable') + '</span>';
-                    }
-                    eventInfos.push(eventInfo);
-                }, this);
-                busyAttendeeHTML += '<div class="cal-conflict-eventinfos">' + eventInfos.join(', <br />') + '</div>';
-                
-            }, this);
-            
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
                 allowCancel: false,
-                height: 180 + 15*error.freebusyinfo.length,
+                width: 550,
+                height: 180 + fbInfo.attendeeCount*14 + 12*error.freebusyinfo.length,
                 title: this.app.i18n._('Scheduling Conflict'),
                 questionText: '<div class = "cal-conflict-heading">' +
                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
                                '</div>' +
-                               busyAttendeeHTML,
+                                fbInfo.getInfoByAttendee(attendeeStore, event),
                 options: [
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
                     {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
@@ -1782,7 +1732,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         });
                         break;
                 }
-                
+
                 view.on('changeView', this.changeView, this);
                 view.on('changePeriod', function (period) {
                     this.startDate = period.from;
@@ -1806,12 +1756,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     store: store,
                     canonicalName: ['Event', 'Grid']
                 });
+            }  else if (whichParts.presentation.match(/timeline/i)) {
+                this.calendarPanels[which] = new Tine.Calendar.TimelinePanel({
+                    tbar: tbar,
+                    period: tbar.periodPicker.getPeriod(),
+                    viewType: whichParts.period,
+                    store: store,
+                    canonicalName: ['Event', 'Timeline']
+                });
             }
 
             this.calendarPanels[which]['canonicalName'].push(Ext.util.Format.capitalize(which.match(/[a-z]+/)[0]));
             this.calendarPanels[which]['canonicalName'] = this.calendarPanels[which]['canonicalName'].join(Tine.Tinebase.CanonicalPath.separator);
 
-            this.calendarPanels[which].on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"]));
+            this.calendarPanels[which].on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"], 0));
             this.calendarPanels[which].on('contextmenu', this.onContextMenu, this);
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
             this.calendarPanels[which].on('keydown', this.onKeyDown, this);

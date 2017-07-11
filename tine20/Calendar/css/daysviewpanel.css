@@ -419,6 +419,7 @@
     bottom: 4px;
 }
 
+.cal-event-active,
 .cal-daysviewpanel-event-active {
     border-width: 2px;
 }

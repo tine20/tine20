@@ -63,16 +63,14 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
             'purchaseprice' => array(
                 'label'        => 'Purchaseprice', // _('Purchaseprice')
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-                'type'         => 'float',
-                'specialType'  => 'euMoney',
+                'type'         => 'money',
                 'default'      => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
             ),
             'salesprice'    => array(
                 'label'        => 'Salesprice',   // _('Salesprice')
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-                'type'         => 'float',
-                'specialType'  => 'euMoney',
+                'type'         => 'money',
                 'default'      => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
             ),

@@ -218,24 +218,8 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
      * @param {Array} filter
      */
     setFilterValue: function(filters) {
-        var value = [];
-        
-        // use first OR panel in case of filterPanel
-        Ext.each(filters, function(filterData) {
-            if (filterData.condition && filterData.condition == 'OR') {
-                filters = filterData.filters[0].filters;
-                return false;
-            }
-        }, this);
-        
-        // use first attedee filter
-        Ext.each(filters, function(filter) {
-            if (filter.field == 'attender') {
-                value = filter.value;
-                return false;
-            }
-        }, this);
-        
+        var value = this.extractFilterValue(filters) || [];
+
         // save west panel scrolling position so we can restore it after selecting nodes
         if (this.app.getMainScreen().getWestPanel().body) {
             this.leftPanelScrollTop = this.app.getMainScreen().getWestPanel().body.getScroll().top;
@@ -243,7 +227,34 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.setValue(value);
     },
-    
+
+    /**
+     * extract attendee filter from filters
+     *
+     * @param {Array} filter
+     */
+    extractFilterValue: function(filters) {
+        var value = [];
+
+        // use first OR panel in case of filterPanel
+        Ext.each(filters, function(filterData) {
+            if (filterData.condition && filterData.condition == 'OR') {
+                filters = filterData.filters[0].filters;
+                return false;
+            }
+        }, this);
+
+        // use first attedee filter
+        Ext.each(filters, function(filter) {
+            if (filter.field == 'attender') {
+                value = filter.value;
+                return false;
+            }
+        }, this);
+
+        return value;
+    },
+
     /**
      * set attendee value
      * 

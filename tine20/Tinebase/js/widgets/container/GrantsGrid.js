@@ -37,6 +37,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
      */
     selectType: 'both',
     selectTypeDefault: 'group',
+    selectRole: true,
     hasAccountPrefix: true,
     recordClass: Tine.Tinebase.Model.Grant,
     

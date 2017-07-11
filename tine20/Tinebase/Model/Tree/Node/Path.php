@@ -58,6 +58,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     const FOLDERS_PART = 'folders';
 
     /**
+     * records path part
+     */
+    const RECORDS_PART = 'records';
+
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -453,6 +458,18 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             && $this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
             && ($parts[3] === $account->getId() || $parts[3] === $account->accountLoginName)
         );
+    }
+
+    /**
+     * returns true if path belongs to a record or record attachment
+     *
+     * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function isRecordPath()
+    {
+        $parts = $this->_getPathParts();
+        return (count($parts) > 2 && $parts[2] === self::RECORDS_PART);
     }
 
     /**

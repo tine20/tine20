@@ -1,9 +1,4 @@
 <?php
-
-use Sabre\VObject;
-use Sabre\DAVACL;
-use Sabre\CalDAV;
-
 /**
  * Tine 2.0
  *
@@ -11,8 +6,11 @@ use Sabre\CalDAV;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Sabre\DAVACL;
+use Sabre\CalDAV;
 
 /**
  * class to handle containers in CalDAV tree
@@ -361,13 +359,13 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         foreach ($grants as $grant) {
             
             switch ($grant->account_type) {
-                case 'anyone':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     // was: '/principals/groups/anyone'
                     $href       = 'urn:uuid:anyone';
                     $commonName = 'Anyone';
                     break;
                 
-                case 'group':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     try {
                         $list       = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
@@ -379,8 +377,21 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     $commonName = $list->name;
                     
                     break;
+
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                    try {
+                        $role       = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue 2;
+                    }
+
+                    // was: '/principals/groups/'
+                    $href       = 'urn:uuid:role-' . $role->id;
+                    $commonName = $role->name;
+
+                    break;
                     
-                case 'user':
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     // apple clients don't want own shares ...
                     if ((string)$this->_container->owner_id === (string)$grant->account_id) {
                         continue 2;

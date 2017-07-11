@@ -320,9 +320,15 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $users = $contactController->search($filter);
         
         $userids = $users->getId();
+
         
         // remove admin user
-        $users->removeRecord($users->getById(Tinebase_Core::getUser()->contact_id));
+        $currentUser = $users->getById(Tinebase_Core::getUser()->contact_id);
+
+        if ($currentUser) {
+            $users->removeRecord($currentUser);
+        }
+        
         $userCount = $users->count();
         
         $lastOrgName = NULL;

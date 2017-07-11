@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_CustomField
  */
-class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
+class Tinebase_CustomFieldTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -25,13 +25,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     protected $_instance;
 
     /**
-     * transaction id if test is wrapped in an transaction
-     */
-    protected $_transactionId = NULL;
-    
-    protected $_user = NULL;
-    
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -39,30 +32,13 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         $this->_instance = Tinebase_CustomField::getInstance();
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        if ($this->_transactionId) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-        }
-        
-        if ($this->_user) {
-            Tinebase_Core::set(Tinebase_Core::USER, $this->_user);
-        }
-    }
-    
     /**
      * test add customfield to the same record
      * #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
@@ -225,13 +201,46 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($contact->customfields));
         
         // change user and check cfs
-        $this->_user = Tinebase_Core::getUser();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         Tinebase_Core::set(Tinebase_Core::USER, $sclever);
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $this->assertEquals(array($anotherCustomField->name => 'test value 2'), $contact->customfields, 'cf should be hidden: ' . print_r($contact->customfields, TRUE));
     }
 
+    /**
+     * testMultiRecordCustomField
+     */
+    public function testMultiRecordCustomField()
+    {
+        $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
+            'name'              => 'test',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'recordList', "recordListConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
+        )));
+
+        //Customfield record 1
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'org_name'     => 'contact 1'
+        )));
+        //Customfield record 2
+        $contact2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'org_name'     => 'contact 2'
+        )));
+
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'contact'
+        )));
+
+        $cfValue = array($createdCustomField->name => array($contact1, $contact2));
+        $contact->customfields = $cfValue;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        self::assertTrue(is_array($contact->customfields['test']),
+            'cf not saved: ' . print_r($contact->toArray(), TRUE));
+        self::assertEquals(2, count($contact->customfields['test']));
+        self::assertTrue(in_array($contact->customfields['test'][0]['org_name'], array('contact 1', 'contact 2')));
+    }
     /**
      * @see 0012222: customfields with space in name are not shown
      */

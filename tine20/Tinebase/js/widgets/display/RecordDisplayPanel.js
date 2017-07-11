@@ -178,7 +178,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
     },
 
     titleRenderer: function(title) {
-        return this.record ? this.record.getTitle() : title;
+        return this.record ? Tine.Tinebase.EncodingHelper.encode(this.record.getTitle()) : Tine.Tinebase.EncodingHelper.encode(title);
     }
 });
 

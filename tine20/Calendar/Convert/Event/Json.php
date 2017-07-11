@@ -132,7 +132,20 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
-        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
+
+        $skipRruleComputation = false;
+
+        if (null !== $_filter) {
+            $rruleFilter = $_filter->getFilter('rrule', false, true);
+            if ($rruleFilter && in_array($rruleFilter->getOperator(), ['in', 'notin'])) {
+                $skipRruleComputation = true;
+            }
+
+            if (!$skipRruleComputation) {
+                Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
+            }
+        }
+
         $_records->sortByPagination($_pagination);
         
         Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, array('container_id'));

@@ -153,16 +153,10 @@ Tine.Tinebase.ApplicationStarter = {
                             case 'seconds':
                                 gridRenderer = Tine.Tinebase.common.secondsRenderer;
                                 break;
-                            case 'usMoney':
-                                gridRenderer = Ext.util.Format.usMoney;
-                                break;
-                            case 'euMoney':
-                                gridRenderer = Ext.util.Format.euMoney;
-                                break;
                             case 'percent':
                                 gridRenderer = function(value, cell, record) {
                                     return Tine.Tinebase.common.percentRenderer(value, config.type);
-                                }
+                                };
                                 break;
                             default:
                                 gridRenderer = Ext.util.Format.htmlEncode;
@@ -192,6 +186,9 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'boolean':
                     gridRenderer = Tine.Tinebase.common.booleanRenderer;
+                    break;
+                case 'money':
+                    gridRenderer = Ext.util.Format.money;
                     break;
                 case 'relation':
                     var cc = config.config;
@@ -223,7 +220,7 @@ Tine.Tinebase.ApplicationStarter = {
                 filter.valueType = 'user';
                 break;
             case 'boolean': 
-                filter.valueType = 'bool'
+                filter.valueType = 'bool';
                 filter.defaultValue = false;
                 break;
             case 'record':

@@ -66,6 +66,20 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID = 'emailNotificationTemplatesContainerId';
 
     /**
+     * the email address to notifify about notification bounces
+     *
+     * @var string
+     */
+    const SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL = 'sieveAdminBounceNotificationEmail';
+
+    /**
+     * allow only sieve redirect rules to internal (primary/secondary) email addresses
+     *
+     * @var string
+     */
+    const SIEVE_REDIRECT_ONLY_INTERNAL = 'sieveRedirectOnlyInternal';
+
+    /**
      * user can set custom vacation message
      *
      * @var string
@@ -192,6 +206,28 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => false,
+        ),
+        self::SIEVE_REDIRECT_ONLY_INTERNAL => array(
+            //_('Sieve Redirect Only Internal')
+            'label'                 => 'Sieve Redirect Only Internal',
+            // _('Allow only sieve redirect rules to internal (primary/secondary) email addresses')
+            'description'           => 'Allow only sieve redirect rules to internal (primary/secondary) email addresses',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'default'               => false,
+        ),
+        self::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL => array(
+            //_('Sieve Notification Bounces Reporting Email')
+            'label'                 => 'Sieve Notification Bounces Reporting Email',
+            // _('Sieve Notification Bounces Reporting Email')
+            'description'           => 'Sieve Notification Bounces Reporting Email',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'default'               => null,
         ),
     );
     

@@ -59,7 +59,7 @@ Tine.widgets.exportAction.getExportMenuItems = function (recordClass, exportConf
 };
 
 Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, scope, additionalItems) {
-    if (! recordClass) return;
+    if (!recordClass || !Tine.Tinebase.appMgr.isEnabled(recordClass.getMeta('appName'))) return;
 
     var _ = window.lodash,
         appName = recordClass.getMeta('appName'),

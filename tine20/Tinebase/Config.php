@@ -458,6 +458,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_WEBURL = 'branding_weburl';
     const BRANDING_DESCRIPTION = 'branding_description';
 
+    const CURRENCY_SYMBOL = 'currencySymbol';
+
     /**
      * @var string
      */
@@ -528,6 +530,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+
+    const ACTIONQUEUE = 'actionqueue';
+    const ACTIONQUEUE_BACKEND = 'backend';
+    const ACTIONQUEUE_ACTIVE = 'active';
+
 
     /**
      * (non-PHPdoc)
@@ -760,6 +767,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
                 self::FULLTEXT_TIKAJAR          => array(
                     'type'                              => Tinebase_Config::TYPE_STRING,
+                ),
+            ),
+            'default'                           => array()
+        ),
+        self::ACTIONQUEUE => array(
+            //_('Action queue configuration')
+            'label'                 => 'Action queue configuration',
+            //_('Action queue configuration.')
+            'description'           => 'Action queue configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::ACTIONQUEUE_BACKEND       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'Direct'
+                ),
+                self::ACTIONQUEUE_ACTIVE       => array(
+                    'type'                              => Tinebase_Config::TYPE_BOOL,
+                    'default'                           => false
                 ),
             ),
             'default'                           => array()
@@ -1451,6 +1480,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
             'default'               => TRUE,
+        ),
+        self::CURRENCY_SYMBOL => array(
+            //_('currency symbol')
+            'label' => 'urrency symbol',
+            //_('Path to custom favicon.')
+            'description' => 'Define currency symbol to be used.',
+            'type' => 'string',
+            'default' => '€',
+            'clientRegistryInclude' => true,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
         ),
         self::FILESYSTEM => array(
             //_('Filesystem settings')

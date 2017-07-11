@@ -6,7 +6,7 @@
  * @subpackage  Sieve
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -31,7 +31,7 @@ class Felamimail_Sieve_Backend_Script extends Felamimail_Sieve_Backend_Abstract
     /**
      * constructor
      * 
-     * @param   string  $script     the Sieve script or null
+     * @param   string  $_script     the Sieve script or null
      */
     public function __construct($_script = null)
     {

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo add caching? we could use the record seq for this.
  */
@@ -109,7 +109,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * 
      * @param Tinebase_Record_Interface $record
      * @param string $grant
-     * @param
+     * @param Tinebase_Model_User $account
      * @return boolean
      */
     public function hasGrant($record, $grant, Tinebase_Model_User $account = null)
@@ -320,7 +320,8 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         if (empty($record->grants)) {
             $this->_getGrants($record);
         }
-        
+
+        $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
         $accountGrants = new $this->_grantsModel(array(
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
@@ -337,7 +338,8 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
                     (
                         $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE ||
                         $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP && in_array($grantRecord->account_id, $groupMemberships) ||
-                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $user->getId() === $grantRecord->account_id 
+                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $user->getId() === $grantRecord->account_id ||
+                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE && in_array($grantRecord->account_id, $roleMemberships)
                     )
                 ) {
                     $accountGrants->{$grant} = true;

@@ -1996,24 +1996,16 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent = $this->_eventController->create($event);
+        $persistentEvent->setTimezone(Tinebase_Core::getUserTimezone());
 
-        $period = array(array(
-            'field'     => 'period',
-            'operator'  => 'within',
-            'value'     => array(
-                'from'      => $persistentEvent->dtstart,
-                'until'     => $persistentEvent->dtend
-            ),
-        ));
-
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $period);
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $persistentEvent->toArray());
         $this->assertEquals(2, count($fbinfo));
 
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $period, array($persistentEvent->uid));
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $persistentEvent->toArray(), array($persistentEvent->uid));
         $this->assertEquals(0, count($fbinfo));
     }
 
-    public function testSearchAttendee()
+    public function testSearchAttenders()
     {
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -2021,20 +2013,12 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent = $this->_eventController->create($event);
-
-        $period = array(array(
-            'field'     => 'period',
-            'operator'  => 'within',
-            'value'     => array(
-                'from'      => $persistentEvent->dtstart,
-                'until'     => $persistentEvent->dtend
-            ),
-        ));
+        $persistentEvent->setTimezone(Tinebase_Core::getUserTimezone());
 
         $filter = array(array('field' => 'query', 'operator' => 'contains', 'value' => 'l'));
         $paging = array('sort' => 'name', 'dir' => 'ASC', 'start' => 0, 'limit' => 50);
 
-        $result = $this->_uit->searchAttendee($filter, $paging, $period, array());
+        $result = $this->_uit->searchAttenders($filter, $paging, $persistentEvent->toArray(), array());
         $this->assertTrue(
             isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
             count($result[Calendar_Model_Attender::USERTYPE_USER]) === 3 &&
@@ -2045,7 +2029,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             count($result['freeBusyInfo']) === 2, print_r($result, true));
 
         $filter[] = array('field' => 'type', 'value' => array(Calendar_Model_Attender::USERTYPE_RESOURCE));
-        $result = $this->_uit->searchAttendee($filter, $paging, $period, array());
+        $result = $this->_uit->searchAttenders($filter, $paging, $persistentEvent->toArray(), array());
         $this->assertTrue(
             !isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
             !isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&

@@ -153,6 +153,37 @@ Tine.Filemanager.nodeActions.Rename = {
 };
 
 /**
+ * single file or directory node with editGrant
+ */
+Tine.Filemanager.nodeActions.SystemLink = {
+    app: 'Filemanager',
+    requiredGrant: 'readGrant',
+    allowMultiple: false,
+    text: 'System Link', // _('System Link')
+    iconCls: 'action_system_link',
+    disabled: true,
+    // actionType: 'edit',
+    scope: this,
+    handler: function () {
+        var _ = window.lodash,
+            app = this.initialConfig.app,
+            record = this.initialConfig.selections[0];
+
+        Ext.MessageBox.show({
+            title: i18n._('System Link'),
+            // minWidth:
+            maxWidth: screen.availWidth,
+            msg: '<b>' + i18n._('Use this link to share the entry with other system users') + ':</b><br>'
+                    + record.getSystemLink(),
+            buttons: Ext.MessageBox.OK,
+            // value: record.getSystemLink(),
+            // prompt: true,
+            icon: Ext.MessageBox.INFO
+        });
+    }
+};
+
+/**
  * one or multiple nodes, all need deleteGrant
  */
 Tine.Filemanager.nodeActions.Delete = {

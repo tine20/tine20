@@ -548,6 +548,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         )
                     );
                 } else {
+                    // NOTE: seems to be the expected behavior for non-delegation clients
                     $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_getApplicationName(),  array(
                         Tinebase_Model_Grants::GRANT_READ,
                         Tinebase_Model_Grants::GRANT_SYNC

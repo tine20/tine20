@@ -281,6 +281,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                 $accountId = '0';
                 break;
+            case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                $accountId = Tinebase_Model_Role::convertRoleIdToInt($_accountId);
+                break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('invalid $_accountType');
                 break;
@@ -689,6 +692,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $grants = is_array($_grant) ? $_grant : array($_grant);
 
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+        $roleMemberships    = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($accountId);
+        // enforce string for pgsql
+        array_walk($roleMemberships, function(&$item) {$item = (string)$item;});
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
@@ -696,7 +702,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
             ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $accountId)
-            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships);
+            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships)
+            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE), empty($roleMemberships) ? ' ' : $roleMemberships);
         
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
             $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
