@@ -13,21 +13,21 @@ Ext.ns('Tine.Calendar');
 
 /**
  * event selection combo box
- * 
+ *
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.SearchCombo
  * @extends     Ext.form.ComboBox
- * 
+ *
  * <p>Event Search Combobox</p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <alex@stintzing.net>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Calendar.SearchCombo
- * 
+ *
  * @TODO        Extend Tine.Tinebase.widgets.form.RecordPickerComboBox once this class
  *              is rewritten to use beforeload/load events
  */
@@ -35,7 +35,7 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     anchor: '100% 100%',
     margins: '10px 10px',
-    
+
     app: null,
     appName: 'Calendar',
 
@@ -44,24 +44,29 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     triggerAction: 'all',
     itemSelector: 'div.search-item',
     minChars: 3,
-    
+
     forceSelection: true,
-    
+
     /*
      * shows date pager on bottom of the resultlist
      */
     showDatePager: true,
-    
-    /*
+
+    /**
      * shows an reload button in the datepager
      */
     showReloadBtn: null,
-    
-    /*
+
+    /**
      * shows an today button in the datepager
      */
     showTodayBtn: null,
-    
+
+    /**
+     * To show or hide the paging toolbar
+     */
+    hasPaging: true,
+
     initComponent: function() {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
@@ -77,10 +82,10 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.valueField = this.recordClass.getMeta('idProperty');
 
         this.fieldLabel = this.app.i18n._('Event'),
-        this.emptyText = this.app.i18n._('Search Event'),
+        this.emptyText = this.app.i18n._('Search Event');
 
         this.disableClearer = ! this.allowBlank;
-        
+
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
             sortInfo: {
@@ -99,7 +104,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     },
 
     setValue: Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setValue,
-    
+
     /**
      * is called, when records has been fetched
      * records without edit grant are removed
@@ -111,30 +116,38 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             if(!record.data.editGrant) store.remove(record);
         });
     },
-    
+
     /**
      * sets period ans searchword as query parameter
      * @param {} store
      */
     onBeforeStoreLoad: function(store) {
         store.baseParams.filter = [
-            {field: 'period', operator: 'within', value: this.pageTb.getPeriod()},
             {field: 'query', operator: 'contains', value: this.getRawValue()}
         ];
+
+        if (this.hasPaging && this.pageTb) {
+            store.baseParams.filter.push({field: 'period', operator: 'within', value: this.pageTb.getPeriod()});
+        }
     },
-    
+
+    expand: function () {
+        this.pageTb.setVisible(this.hasPaging);
+        this.supr().expand.apply(this, arguments);
+    },
+
     /**
      * collapses the result list only when periodpicker is not active
      * @return {Boolean}
      */
     collapse: function() {
-        if(this.pageTb.periodPickerActive == true) {
+        if(this.hasPaging && this.pageTb.periodPickerActive == true) {
             return false;
         } else {
             Tine.Calendar.SearchCombo.superclass.collapse.call(this);
         }
     },
-    
+
     /**
      * is called, when list is initialized, appends a date-paging-toolbar instead a normal one
      */
@@ -162,10 +175,10 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
 
         this.assetHeight += this.footer.getHeight();
     },
-    
+
     onBlur: Ext.emptyFn,
     assertValue: Ext.emptyFn,
-    
+
     /**
      * init template
      * @private
@@ -181,13 +194,13 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                             '<td width="60%">',
                                 '{[this.encodeDate(values)]}',
                             '</td>',
-                            
+
                         '</tr>',
                     '</table>',
                 '</div></tpl>',
                 {
                     encode: function(value) {
-                        
+
                         if (value) {
                             return Ext.util.Format.htmlEncode(value);
                         } else {
@@ -207,12 +220,12 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                             end = new Date(end);
                         }
 
-                        var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') : 
+                        var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') :
                                        Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}', 'i');
-                        
+
                         var startYear = start.getYear() + 1900;
                         return start.getDate() + '.' + (start.getMonth() + 1) + '.' + startYear + ' ' + duration;
-                        
+
                     }
                 }
             );
