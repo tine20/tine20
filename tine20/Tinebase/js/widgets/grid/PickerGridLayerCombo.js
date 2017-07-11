@@ -13,9 +13,9 @@ Ext.ns('Tine.widgets.grid');
  *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.PickerGridLayerCombo
- * @extends     Tine.Tinebase.widgets.form.RecordPickerComboBox
+ * @extends     Tine.Tinebase.widgets.form.RecordsPickerCombo
  */
-Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
+Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordsPickerCombo, {
 
     /**
      * @cfg {Record} gridRecordClass

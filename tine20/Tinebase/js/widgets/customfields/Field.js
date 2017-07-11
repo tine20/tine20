@@ -49,8 +49,6 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
      * @return {Ext.form.Field}
      */
     Tine.widgets.customfields.Field.get = function (app, cfConfig, config, editDialog) {
-        Tine.log.debug(cfConfig);
-        
         if (! cfConfig) {
             Tine.log.error('cfConfig empty -> skipping field');
             return Ext.ComponentMgr.create({xtype: 'hidden'});
@@ -101,10 +99,10 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                             recordListConfig = def.recordListConfig ? def.recordListConfig : null;
 
                         Ext.apply(fieldDef, {
-                            xtype: 'tinepickergridlayercombo',
+                            xtype: 'tinerecordspickercombobox',
                             app: options.app ? options.app : app,
                             resizable: true,
-                            gridRecordClass: eval(recordListConfig.value.records),
+                            recordClass: eval(recordListConfig.value.records),
                             allowLinkingItself: false,
                             editDialog: editDialog
                         });
