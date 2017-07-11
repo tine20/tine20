@@ -1158,7 +1158,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
         this.store.removeAll();
 
-        if (dialog.mode == 'local') {
+        if (dialog.mode == 'local' && this.editDialog.recordClass.getMeta('phpClassName') === 'Calendar_Model_Event') {
             // if dialog is local, relations must be fetched async
             Tine.Tinebase.getRelations('Calendar_Model_Event', record.get('id'), null, [], null, function (response, request) {
                 if(response) {
