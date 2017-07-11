@@ -1328,7 +1328,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     static::defaultApply($modification, $controller);
                 }
 
-                $tinebaseApplication->xprops['state'][Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
+                $tinebaseApplication->xprops('state')[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
                     $modification->instance_seq;
                 $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
 
@@ -1405,16 +1405,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         $tinebase = $applicationController->getApplicationByName('Tinebase');
 
-        $state = $tinebase->state;
-        if (!is_array($state)) {
-            $state = array();
-        }
+        $state = $tinebase->xprops('state');
         if (!isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
             $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = 0;
         }
 
         $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] += intval($count);
-        $tinebase->state = $state;
 
         $applicationController->updateApplication($tinebase);
     }
