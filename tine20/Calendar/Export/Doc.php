@@ -49,10 +49,11 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
      */
     protected function _getTwigContext(array $context)
     {
+        $tz = Tinebase_Core::getUserTimezone();
         return array_merge(parent::_getTwigContext($context), array(
             'calendar'      => array(
-                'from'          => $this->_from,
-                'until'         => $this->_until,
+                'from'          => null !== $this->_from ? $this->_from->getClone()->setTimezone($tz) : null,
+                'until'         => null !== $this->_until ? $this->_until->getClone()->setTimezone($tz) : null,
             )
         ));
     }

@@ -832,7 +832,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $this->_logoPath = '/' . $this->_logoPath;
                 }
 
-                $this->_logoPath = 'file://' . dirname(dirname(__DIR__)) . $this->_logoPath;
+                $baseDir = dirname(dirname(__DIR__));
+                if (0 === strpos($this->_logoPath, $baseDir)) {
+                    $this->_logoPath = 'file://' . $this->_logoPath;
+                } else {
+                    $this->_logoPath = 'file://' . $baseDir . $this->_logoPath;
+                }
 
                 if (!is_file($this->_logoPath)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not find branding logo. Config: ' . Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO} . ' path: ' . $this->_logoPath);
