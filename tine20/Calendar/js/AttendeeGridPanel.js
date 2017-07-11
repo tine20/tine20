@@ -443,12 +443,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
             type = type == 'memberOf' ? 'group' : type;
 
-            colModel.config[o.column].setEditor(new Tine.Calendar.AttendeePickerCombo({
+            var attendeePickerCombo = new Tine.Calendar.AttendeePickerCombo({
                 minListWidth: 370,
                 blurOnSelect: true,
                 eventRecord: this.record,
                 additionalFilters: type != 'any' ? [{field: 'type', operator: 'oneof', value: [type]}] : null
-            }));
+            });
+
+            this.fireEvent('beforenewattendeepickercombo', this, attendeePickerCombo, o);
+            colModel.config[o.column].setEditor(attendeePickerCombo);
+
+
             
             colModel.config[o.column].editor.selectedRecord = null;
         }
