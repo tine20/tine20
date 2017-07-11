@@ -379,7 +379,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                         this.manageButtons();
                     }
                 },
-                requiredGrant: false // 'add' ?
+                requiredGrant: false, // 'add' ?
+                style: 'margin-bottom: 15px;'
             })]);
         }
 
@@ -387,7 +388,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             canonicalName: 'ImportTags',
             app: this.appName,
             ref: '../tagsPanel',
-            style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
+            style: 'border: 1px solid silver; border-top: none;',
             border: true,
             collapsible: false,
             height: 200
