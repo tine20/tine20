@@ -752,7 +752,12 @@ class Tinebase_FileSystem implements
             $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
             $personalNode = null;
             if (true === $sizeIncrease && $applicationController->isInstalled('Filemanager')) {
-                $personalNode = $this->stat('/Filemanager/folders/personal');
+                try {
+                    $personalNode = $this->stat('/Filemanager/folders/personal');
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->initializeApplication('Filemanager');
+                    $personalNode = $this->stat('/Filemanager/folders/personal');
+                }
             }
 
             /** @var Tinebase_Model_Tree_FileObject $fileObject */
