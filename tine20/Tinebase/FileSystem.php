@@ -693,6 +693,101 @@ class Tinebase_FileSystem implements
         return $newFileObject;
     }
 
+    public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $effectiveQuota = $total;
+        $localQuota = null !== $node->quota ? (int)$node->quota : null;
+        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+            $localSize = $node->size;
+        } else {
+            $localSize = $node->revision_size;
+        }
+        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $personalNode = null;
+        if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $personalNode = $this->stat('/Filemanager/folders/personal');
+        }
+
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $tinebaseState = $tinebaseApplication->xprops('state');
+
+        $totalUsage = 0;
+        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
+                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+            }
+        } else {
+            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
+                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
+            }
+        }
+        $effectiveUsage = $totalUsage;
+
+
+        $effectiveFree = $effectiveQuota > 0 ? $effectiveQuota - $effectiveUsage : null;
+
+        foreach ($this->_getTreeNodeBackend()->getAllFolderNodes(new Tinebase_Record_RecordSet(
+                'Tinebase_Model_Tree_Node', array($node))) as $parentNode) {
+            if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                $size = $parentNode->size;
+            } else {
+                $size = $parentNode->revision_size;
+            }
+
+            // folder quota
+            if (null !== $parentNode->quota && 0 !== (int)$parentNode->quota) {
+                if (null === $localQuota) {
+                    $localQuota = $parentNode->quota;
+                    $localSize = $size;
+                }
+                $free = $parentNode->quota - $size;
+                if (null === $effectiveFree || $free < $effectiveFree) {
+                    $effectiveFree = $free;
+                    $effectiveQuota = $parentNode->quota;
+                    $effectiveUsage = $size;
+                }
+            }
+
+            //personal quota
+            if (null !== $personalNode && $parentNode->parent_id === $personalNode->getId()) {
+                $user = Tinebase_User::getInstance()->getFullUserById($parentNode->name);
+                $quota = isset(
+                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
+                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                    $totalByUser;
+                if ($quota > 0) {
+                    if (null === $localQuota) {
+                        $localQuota = $quota;
+                        $localSize = $size;
+                    }
+                    $free = $quota - $size;
+                    if (null === $effectiveFree || $free < $effectiveFree) {
+                        $effectiveFree = $free;
+                        $effectiveQuota = $quota;
+                        $effectiveUsage = $size;
+                    }
+                }
+            }
+        }
+
+        if (null === $localQuota) {
+            $localQuota = $total;
+            $localSize = $totalUsage;
+        }
+
+        return array(
+            'localQuota'        => $localQuota,
+            'localUsage'        => $localSize,
+            'localFree'         => $localQuota > $localSize ? $localQuota - $localSize : 0,
+            'effectiveQuota'    => $effectiveQuota,
+            'effectiveUsage'    => $effectiveUsage,
+            'effectiveFree'     => $effectiveFree,
+        );
+    }
+
     /**
      * @param Tinebase_Record_RecordSet $_nodes
      * @param int $_sizeDiff

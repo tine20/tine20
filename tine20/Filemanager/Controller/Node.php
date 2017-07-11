@@ -291,8 +291,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
-        } else if ($path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && ! $path->containerOwner) {
-            if (! file_exists($path->statpath)) {
+        } elseif ($path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && ! $path->containerOwner) {
+            if (! $this->_backend->fileExists($path->statpath)) {
                 $this->_backend->mkdir($path->statpath);
             }
             $result = $this->_getOtherUserNodes();
@@ -319,9 +319,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 }
             }
             $this->resolvePath($result, $path);
-            // TODO still needed?
-            //$this->_sortContainerNodes($result, $path, $_pagination);
         }
+
+        $parentNode = $this->_backend->stat($path->statpath);
+        $quota = $this->_backend->getEffectiveAndLocalQuota($parentNode);
+        $context = $this->getRequestContext();
+        if (!is_array($context)) {
+            $context = array();
+        }
+        $context['quotaResult'] = $quota;
+        $this->setRequestContext($quota);
+
         $this->resolveGrants($result);
         return $result;
     }
