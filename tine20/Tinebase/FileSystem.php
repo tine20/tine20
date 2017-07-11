@@ -751,7 +751,7 @@ class Tinebase_FileSystem implements
             $userController = Tinebase_User::getInstance();
             $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
             $personalNode = null;
-            if (true === $sizeIncrease) {
+            if (true === $sizeIncrease && $applicationController->isInstalled('Filemanager')) {
                 $personalNode = $this->stat('/Filemanager/folders/personal');
             }
 
@@ -785,7 +785,7 @@ class Tinebase_FileSystem implements
                         }
 
                         //personal quota
-                        if ($folderNode->parent_id === $personalNode->getId()) {
+                        if (null !== $personalNode && $folderNode->parent_id === $personalNode->getId()) {
                             $user = $userController->getFullUserById($folderNode->name);
                             $quota = isset(
                                 $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
