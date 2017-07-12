@@ -124,7 +124,14 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
                 /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
             )->group($this->_tableName . '.object_id'
-            );
+        );
+
+        // NOTE: we need to do it here as $this->_modlogActive is false
+        if (!$_getDeleted) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+        }
+
         if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             $select->columns('CAST(MIN(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ') = MIN(' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS int) AS isIndexed');
         } else {
