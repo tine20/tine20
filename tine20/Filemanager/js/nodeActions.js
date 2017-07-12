@@ -140,7 +140,7 @@ Tine.Filemanager.nodeActions.Rename = {
                     }
 
                     // @TODO validate filename
-                    var targetPath = record.get('path').replace(new RegExp(record.get('name') +'$'), text);
+                    var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
                     Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
 
                 }

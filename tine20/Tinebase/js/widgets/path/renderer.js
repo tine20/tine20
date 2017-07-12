@@ -51,7 +51,7 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
             search = '';
 
         Ext.each(queryParts, function(queryPart, idx) {
-            search += (search ? '|(' :'(') + Ext.util.Format.htmlEncode(queryPart) + ')';
+            search += (search ? '|(' :'(') + window.lodash.escapeRegExp(queryPart) + ')';
         });
 
         pathName = pathName.replace(new RegExp(search,'gi'), function(match) {

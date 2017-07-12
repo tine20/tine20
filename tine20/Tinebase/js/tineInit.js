@@ -146,7 +146,7 @@ Tine.Tinebase.tineInit = {
             var target = e.getTarget('a',1 ,true);
             if (target && target.getAttribute('target') == '_blank') {
                 var href = String(target.getAttribute('href'));
-                    if (href.match(new RegExp('^' + Tine.Tinebase.common.getUrl()))) {
+                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"

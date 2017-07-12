@@ -891,7 +891,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         this.checkStates.defer(100, this);
 
-        if (this.loadMask) {
+        if (this.loadMask && !this.saving) {
             this.loadMask.hide();
         }
     },
@@ -1108,13 +1108,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     onAfterApplyChanges: function(closeWindow) {
         this.window.rename(this.windowNamePrefix + this.record.id);
-        this.loadMask.hide();
         this.saving = false;
         
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
             this.purgeListeners();
             this.window.close();
+        } else {
+            this.loadMask.hide();
         }
     },
     

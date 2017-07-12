@@ -76,9 +76,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     onRecordChanges: function(data, e) {
         if (data.type == 'folder') {
-            var me = this,
+            var _ = window.lodash,
+                me = this,
                 path = data.path,
-                parentPath = path.replace(new RegExp(data.name + '$'), ''),
+                parentPath = path.replace(new RegExp(_.escapeRegExp(data.name) + '$'), ''),
                 node = this.getNodeById(data.id),
                 pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
@@ -366,8 +367,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @return {String} tree path
      */
     getTreePath: function(containerPath) {
-        var treePath = '/' + this.getRootNode().id + containerPath
-            .replace(new RegExp('^' + Tine.Tinebase.container.getMyFileNodePath()), '/myUser')
+        var _ = window.lodash,
+            treePath = '/' + this.getRootNode().id + containerPath
+            .replace(new RegExp('^' + _.escapeRegExp(Tine.Tinebase.container.getMyFileNodePath())), '/myUser')
             .replace(/^\/personal/, '/otherUsers')
             .replace(/\/$/, '');
 
