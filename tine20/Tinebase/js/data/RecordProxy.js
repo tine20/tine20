@@ -39,11 +39,11 @@ Tine.Tinebase.data.RecordProxy = function(c) {
              This might change in future, but as long as we do so, we also need
              the reader/writer here.
      */
-    this.jsonReader = new Ext.data.JsonReader({
+    this.jsonReader = new Ext.data.JsonReader(Ext.apply({
         id: this.idProperty,
         root: 'results',
         totalProperty: 'totalcount'
-    }, this.recordClass);
+    }, c.readerConfig || {}), this.recordClass);
 };
 
 Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {

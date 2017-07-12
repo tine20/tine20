@@ -26,14 +26,21 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
      */
     eventRecord: null,
 
+    /**
+     * @property {Tine.Calendar.Model.AttenderProxy} recordProxy
+     */
+    recordProxy: null,
+
     recordClass: Tine.Calendar.Model.Attender,
+
     itemSelector: '.cal-attendee-picker-combo-list-item',
 
     initComponent: function() {
         this.typeTemplates = {};
 
+        this.recordProxy = new Tine.Calendar.Model.AttenderProxy({});
+
         Tine.Calendar.AttendeePickerCombo.superclass.initComponent.call(this);
-        this.store.proxy.jsonReader.readRecords = this.readRecords.createDelegate(this);
     },
 
     onBeforeLoad: function(store, options) {
@@ -47,44 +54,8 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                 options.params.ignoreUIDs.push(this.eventRecord.get('uid'));
             }
         }
-    },
 
-    readRecords : function(resultData){
-        // Tine.Calendar.AttendeePickerCombo.superclass.onStoreBeforeLoadRecords.apply(this, arguments);
-
-        var _ = window.lodash,
-            totalcount = 0,
-            eventRecord = this.eventRecord,
-            records = [],
-            fbInfo = new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo)
-
-        _.each(['user', 'group', 'resource'], function(type) {
-            var typeResult = _.get(resultData, type, {}),
-                typeCount = _.get(typeResult, 'totalcount', 0),
-                typeData = _.get(typeResult, 'results', []);
-
-            totalcount += +typeCount;
-            _.each(typeData, function(userData) {
-                var id = type + '-' + userData.id,
-                    attendeeData = _.assign(Tine.Calendar.Model.Attender.getDefaultData(), {
-                        id: id,
-                        user_type: type,
-                        user_id: userData
-                    }),
-                    attendee = new Tine.Calendar.Model.Attender(attendeeData, id);
-
-                if (_.get(eventRecord, 'data.dtstart')) {
-                    attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, eventRecord));
-                }
-                records.push(attendee);
-            });
-        });
-
-        return {
-            success : true,
-            records: records,
-            totalRecords: totalcount
-        };
+        this.recordProxy.eventRecord = this.eventRecord
     },
 
     /**

@@ -805,6 +805,56 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, 
     return attendeeData;
 };
 
+// PROXY
+Tine.Calendar.Model.AttenderProxy = function(config) {
+    Tine.Calendar.Model.AttenderProxy.superclass.constructor.call(this, config);
+    this.jsonReader.readRecords = this.readRecords.createDelegate(this);
+};
+Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
+    /**
+     * @cfg {Tine.Calendar.Model.Event} eventRecord
+     */
+    eventRecord: null,
+
+    recordClass: Tine.Calendar.Model.Attender,
+
+    readRecords : function(resultData){
+        var _ = window.lodash,
+            totalcount = 0,
+            eventRecord = this.eventRecord,
+            records = [],
+            fbInfo = new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo)
+
+        _.each(['user', 'group', 'resource'], function(type) {
+            var typeResult = _.get(resultData, type, {}),
+                typeCount = _.get(typeResult, 'totalcount', 0),
+                typeData = _.get(typeResult, 'results', []);
+
+            totalcount += +typeCount;
+            _.each(typeData, function(userData) {
+                var id = type + '-' + userData.id,
+                    attendeeData = _.assign(Tine.Calendar.Model.Attender.getDefaultData(), {
+                        id: id,
+                        user_type: type,
+                        user_id: userData
+                    }),
+                    attendee = new Tine.Calendar.Model.Attender(attendeeData, id);
+
+                if (_.get(eventRecord, 'data.dtstart')) {
+                    attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, eventRecord));
+                }
+                records.push(attendee);
+            });
+        });
+
+        return {
+            success : true,
+            records: records,
+            totalRecords: totalcount
+        };
+    }
+});
+
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resource
