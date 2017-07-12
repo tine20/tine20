@@ -1303,6 +1303,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 $this->_backend->dropForeignKey('sales_contracts', 'sales_contracts::container_id--container::id');
             } catch (Exception $e) {}
         }
+        if ($this->_backend->tableExists('sales_contracts')) {
+            try {
+                $this->_backend->dropForeignKey('sales_contracts', 'tine20_erp_contracts::container_id--container::id');
+            } catch (Exception $e) {}
+        }
         if ($this->_backend->tableExists('timetracker_timeaccount')) {
             try {
                 $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
