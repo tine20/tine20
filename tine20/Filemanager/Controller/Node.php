@@ -1053,6 +1053,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         try {
             $this->_checkIfExists($_destination);
+            // check if there is a node our user can't see
+            if (null !== $this->_backend->_getTreeNodeBackend()->getChild($_destination->getParent()->getNode(),
+                    $_destination->name, false, false)) {
+                throw new Tinebase_Exception_SystemGeneric('The destination already exists, but you don\'t have the right to see it.');
+            }
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite && $_source->statpath !== $_destination->statpath) {
                 // delete old node
@@ -1167,6 +1172,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         //if ($source->getParent()->flatpath != $destinationParentPathRecord->flatpath) {
             try {
                 $this->_checkIfExists($destination);
+                // check if there is a node our user can't see
+                if (null !== $this->_backend->_getTreeNodeBackend()->getChild($destinationParentPathRecord->getNode(),
+                        $destination->name, false, false)) {
+                    throw new Tinebase_Exception_SystemGeneric('The destination already exists, but you don\'t have the right to see it.');
+                }
             } catch (Filemanager_Exception_NodeExists $fene) {
                 if ($_forceOverwrite && $source->statpath !== $destination->statpath) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
