@@ -602,9 +602,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 case 'js':
                     if (isset($fileMap["{$application}/js/{$application}"])) {
                         $jsFile = $fileMap["{$application}/js/{$application}"]['js'];
+                    } else {
+                        break;
                     }
 
-                    if (TINE20_BUILDTYPE =='DEBUG') {
+                    if (TINE20_BUILDTYPE === 'DEBUG') {
                         $jsFile = preg_replace('/\.js$/', '.debug.js', $jsFile);
                     }
 
