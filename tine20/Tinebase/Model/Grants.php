@@ -14,7 +14,11 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
- *  
+ * @property string         id
+ * @property string         record_id
+ * @property string         account_grant
+ * @property string         account_id
+ * @property string         account_type
  */
 class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 {
@@ -300,5 +304,93 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             'account_id'     => $accountId,
             'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
         ), $grants)));
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
+     * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
+    {
+        $model = $_recordSetDiff->model;
+        if ($_recordSet->getRecordClassName() !== $model) {
+            throw new Tinebase_Exception_InvalidArgument('try to apply record set diff on a record set of different model!' .
+                'record set model: ' . $_recordSet->getRecordClassName() . ', record set diff model: ' . $model);
+        }
+
+        /** @var Tinebase_Record_Abstract $modelInstance */
+        $modelInstance = new $model(array(), true);
+        $idProperty = $modelInstance->getIdProperty();
+
+        foreach($_recordSetDiff->removed as $data) {
+            if (!isset($data[$idProperty])) {
+                throw new Tinebase_Exception_InvalidArgument('failed to apply record set diff because removed data contained bad data, id property missing (' . $idProperty . '): ' . print_r($data, true));
+            }
+            if (false !== ($record = $_recordSet->getById($data[$idProperty]))) {
+                $_recordSet->removeRecord($record);
+            }
+            $found = false;
+            /** @var Tinebase_Model_Grants $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->record_id      === $data['record_id']      &&
+                        $record->account_id     === $data['account_id']     &&
+                        $record->account_type   === $data['account_type']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
+                $_recordSet->removeRecord($record);
+            }
+        }
+
+        foreach($_recordSetDiff->modified as $data) {
+            $diff = new Tinebase_Record_Diff();
+            $diff->id = $data[$idProperty];
+            $diff->diff = $data;
+            if (false !== ($record = $_recordSet->getById($diff->getId()))) {
+                $record->applyDiff($diff);
+            } else {
+                $found = false;
+                /** @var Tinebase_Model_Grants $record */
+                foreach ($_recordSet as $record) {
+                    if (    $record->record_id      === $data['record_id']      &&
+                            $record->account_id     === $data['account_id']     &&
+                            $record->account_type   === $data['account_type']) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (true === $found) {
+                    $record->applyDiff($diff);
+                } else {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+                    throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+                }
+            }
+        }
+
+        foreach($_recordSetDiff->added as $data) {
+            $found = false;
+            /** @var Tinebase_Model_Grants $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->record_id      === $data['record_id']      &&
+                        $record->account_id     === $data['account_id']     &&
+                        $record->account_type   === $data['account_type']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
+                $_recordSet->removeRecord($record);
+            }
+            $newRecord = new $model($data);
+            $_recordSet->addRecord($newRecord);
+        }
+
+        return true;
     }
 }

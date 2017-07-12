@@ -880,7 +880,12 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
         static::assertEquals($testPathNode->getId(), $testPathNode->acl_node, 'grants not set');
         Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
-        static::assertEquals($testNodeGrants->grants, $testPathNode->grants);
+        static::assertEquals($testNodeGrants->grants->count(), $testPathNode->grants->count());
+        $oldGrants = $testNodeGrants->grants->getFirstRecord()->toArray();
+        unset($oldGrants['id']);
+        $newGrants = $testPathNode->grants->getFirstRecord()->toArray();
+        unset($newGrants['id']);
+        static::assertEquals($oldGrants, $newGrants);
 
         // unset grants
         $mod = $modifications->getFirstRecord();

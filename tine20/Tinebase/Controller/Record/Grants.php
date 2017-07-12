@@ -185,6 +185,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             foreach ($record->grants as $newGrant) {
                 foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
                     if ($newGrant->{$grant}) {
+                        $newGrant->id = null;
                         $newGrant->account_grant = $grant;
                         $newGrant->record_id = $recordId;
                         $this->_grantsBackend->create($newGrant);

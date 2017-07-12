@@ -1357,7 +1357,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         is_array($this->$property)?$this->$property:array());
                 }
 
-                $this->$property->applyRecordSetDiff($recordSetDiff);
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $recordSetDiff->model;
+                if (true !== $model::applyRecordSetDiff($this->$property, $recordSetDiff)) {
+                    $this->$property->applyRecordSetDiff($recordSetDiff);
+                }
             } else {
                 if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
                     $oldValue = new Tinebase_DateTime($oldValue);
@@ -1365,6 +1369,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $this->$property = $oldValue;
             }
         }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
+     * @return bool
+     */
+    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
+    {
+        return false;
     }
 
     /**

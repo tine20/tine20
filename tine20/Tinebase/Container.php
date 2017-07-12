@@ -293,12 +293,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $containerGrants->addIndices(array('account_type', 'account_id'));
         $existingGrants = $containerGrants->filter('account_type', $_accountType)->filter('account_id', $_accountId)->getFirstRecord();
         
-        $id = Tinebase_Record_Abstract::generateUID();
-        
         foreach($_grants as $grant) {
             if ($existingGrants === NULL || ! $existingGrants->{$grant}) {
                 $data = array(
-                    'id'            => $id,
+                    'id'            => Tinebase_Record_Abstract::generateUID(),
                     'container_id'  => $containerId,
                     'account_type'  => $_accountType,
                     'account_id'    => $accountId,
@@ -1546,17 +1544,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             
             foreach ($_grants as $recordGrants) {
                 $data = array(
-                    'id'            => $recordGrants->getId(),
                     'container_id'  => $containerId,
                     'account_id'    => $recordGrants['account_id'],
                     'account_type'  => $recordGrants['account_type'],
                 );
-                if (empty($data['id'])) {
-                    $data['id'] = $recordGrants->generateUID();
-                }
                 
                 foreach ($recordGrants as $grantName => $grant) {
                     if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
+                        $data['id'] = $recordGrants->generateUID();
                         $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
                     }
                 }

@@ -1785,4 +1785,135 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.36');
     }
+
+    /**
+     * update to 10.37
+     *
+     * add quota column to tree_nodes
+     */
+    public function update_36()
+    {
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl')->query(Zend_DB::FETCH_ASSOC);
+        $quotedId = $this->_db->quoteIdentifier('id');
+        $quotedContainerId = $this->_db->quoteIdentifier('container_id');
+        $quotedAccountType = $this->_db->quoteIdentifier('account_type');
+        $quotedAccountId = $this->_db->quoteIdentifier('account_id');
+        $quotedAccountGrant = $this->_db->quoteIdentifier('account_grant');
+        foreach ($result->fetchAll() as $row) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'container_acl',
+                array('id' => Tinebase_Record_Abstract::generateUID()),
+                $quotedId           . ' = ' . $this->_db->quote($row['id'])           . ' AND ' .
+                $quotedContainerId  . ' = ' . $this->_db->quote($row['container_id']) . ' AND ' .
+                $quotedAccountType  . ' = ' . $this->_db->quote($row['account_type']) . ' AND ' .
+                $quotedAccountId    . ' = ' . $this->_db->quote($row['account_id'])   . ' AND ' .
+                $quotedAccountGrant . ' = ' . $this->_db->quote($row['account_grant'])
+            );
+        }
+
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl')->query(Zend_DB::FETCH_ASSOC);
+        $quotedRecordId = $this->_db->quoteIdentifier('record_id');
+        foreach ($result->fetchAll() as $row) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'tree_node_acl',
+                array('id' => Tinebase_Record_Abstract::generateUID()),
+                $quotedId           . ' = ' . $this->_db->quote($row['id'])           . ' AND ' .
+                $quotedRecordId     . ' = ' . $this->_db->quote($row['record_id'])    . ' AND ' .
+                $quotedAccountType  . ' = ' . $this->_db->quote($row['account_type']) . ' AND ' .
+                $quotedAccountId    . ' = ' . $this->_db->quote($row['account_id'])   . ' AND ' .
+                $quotedAccountGrant . ' = ' . $this->_db->quote($row['account_grant'])
+            );
+        }
+
+        /** @var Tinebase_Backend_Sql_Command_Interface $command */
+        $command = Tinebase_Backend_Sql_Command::factory($this->_db);
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl', array($command->getAggregate('id'),
+            new Zend_Db_Expr('count(*) AS c')))
+            ->group(array('container_id', 'account_type', 'account_id', 'account_grant'))
+            ->having('c > 1')->query(Zend_DB::FETCH_NUM);
+        foreach ($result->fetchAll() as $row) {
+            $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
+            array_pop($ids);
+            $this->_db->delete(SQL_TABLE_PREFIX . 'container_acl', $this->_db->quoteInto($quotedId . ' in (?)', $ids));
+        }
+
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl', array($command->getAggregate('id'),
+            new Zend_Db_Expr('count(*) AS c')))
+            ->group(array('record_id', 'account_type', 'account_id', 'account_grant'))
+            ->having('c > 1')->query(Zend_DB::FETCH_NUM);
+        foreach ($result->fetchAll() as $row) {
+            $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
+            array_pop($ids);
+            $this->_db->delete(SQL_TABLE_PREFIX . 'tree_node_acl', $this->_db->quoteInto($quotedId . ' in (?)', $ids));
+        }
+
+        if ($this->getTableVersion('container_acl') < 5) {
+            if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $this->_backend->dropIndex('container_acl', 'container_id-account-type-account_id-account_grant');
+            } else {
+                $this->_backend->dropIndex('container_acl', 'PRIMARY');
+            }
+            $this->_backend->addIndex('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            '));
+            $this->_backend->addIndex('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>container_id-account_type-account_id-acount_grant</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+            '));
+            $this->_backend->dropIndex('container_acl', 'id-account_type-account_id');
+            $this->setTableVersion('container_acl', 5);
+        }
+
+        if ($this->getTableVersion('tree_node_acl') < 2) {
+            if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $this->_backend->dropIndex('tree_node_acl', 'record_id-account-type-account_id-account_grant');
+            } else {
+                $this->_backend->dropIndex('tree_node_acl', 'PRIMARY');
+            }
+            $this->_backend->addIndex('tree_node_acl', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            '));
+            $this->_backend->addIndex('tree_node_acl', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+            '));
+            $this->_backend->dropIndex('tree_node_acl', 'id-account_type-account_id');
+            $this->setTableVersion('tree_node_acl', 2);
+        }
+        $this->setApplicationVersion('Tinebase', '10.37');
+    }
 }

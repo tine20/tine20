@@ -302,4 +302,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function getModlogOmitFields();
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
+     * @return bool
+     */
+    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff);
 }
