@@ -888,6 +888,40 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     recordsName: 'Resources'
 });
 
+Tine.Calendar.Model.Resource.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Calendar');
+
+    return [
+        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Name'), field: 'name'},
+        {label: app.i18n._('Email'), field: 'email'},
+        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+        {label: app.i18n._('Maximum number of attendee'), field: 'max_number_of_people'},
+        {
+            label: app.i18n._('Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'resourceTypes'
+        },
+        {
+            label: app.i18n._('Default attendee status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'attendeeStatus'
+        },
+        {
+            label: app.i18n._('Busy Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'freebusyTypes'
+        },
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+};
+
 /**
  * @namespace   Tine.Calendar.Model
  * @class       Tine.Calendar.Model.iMIP
