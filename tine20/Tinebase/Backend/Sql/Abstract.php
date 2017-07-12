@@ -1749,7 +1749,21 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         return $result;
     }
-    
+
+    /**
+     * increases seq by one for all records for given container
+     *
+     * @param string $containerId
+     * @return void
+     */
+    public function increaseSeqsForContainerId($containerId)
+    {
+        $seq = $this->_db->quoteIdentifier('seq');
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+
+        $this->_db->query("UPDATE {$this->_tablePrefix}{$this->_tableName} SET $seq = $seq +1 WHERE $where");
+    }
+
     /**
      * save value in in-class cache
      * 

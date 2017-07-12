@@ -989,6 +989,25 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
+     * increases seq by one for all records for given container
+     *
+     * @param string $containerId
+     * @return void
+     */
+    public function increaseSeqsForContainerId($containerId)
+    {
+        $stmt = $this->_db->query('SELECT ev.id FROM tine20_cal_events AS ev WHERE ev.is_deleted = 0 AND ' .
+            'ev.recurid IS NULL AND (ev.container_id = ' . $this->_db->quote($containerId) . ' OR ev.id IN (
+            SELECT cal_event_id FROM tine20_cal_attendee WHERE displaycontainer_id = ' . $this->_db->quote($containerId) . ')) GROUP BY ev.id');
+
+        $result = $stmt->fetchAll();
+
+        $seq = $this->_db->quoteIdentifier('seq');
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $result);
+        $this->_db->query("UPDATE {$this->_tablePrefix}{$this->_tableName} SET $seq = $seq +1 WHERE $where");
+    }
+
+    /**
      * returns the seq of one event
      *
      * @param string $eventId

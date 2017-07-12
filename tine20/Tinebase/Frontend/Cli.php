@@ -95,6 +95,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function forceSyncTokenResync($_opts)
     {
         $args = $this->_parseArgs($_opts, array());
+        $container = Tinebase_Container::getInstance();
+
+        if (isset($args['userIds'])) {
+            $args['userIds'] = !is_array($args['userIds']) ? array($args['userIds']) : $args['userIds'];
+            $args['containerIds'] = $container->search(new Tinebase_Model_ContainerFilter(array(
+                array('field' => 'owner_id', 'operator' => 'in', 'value' => $args['userIds'])
+            )))->getId();
+        }
 
         if (isset($args['containerIds'])) {
             $resultStr = '';
@@ -105,14 +113,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $db = Tinebase_Core::getDb();
 
-            $container = Tinebase_Container::getInstance();
+
             $contentBackend = $container->getContentBackend();
             foreach($args['containerIds'] as $id) {
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-                $container->increaseContentSequence($id);
-                $resultStr .= ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
+                $containerData = $container->get($id);
+                $recordsBackend = Tinebase_Core::getApplicationInstance($containerData->model)->getBackend();
+                if (method_exists($recordsBackend, 'increaseSeqsForContainerId')) {
+                    $recordsBackend->increaseSeqsForContainerId($id);
 
+                    $container->increaseContentSequence($id);
+                    $resultStr .= ($resultStr !== '' ? ', ' : '') . $id . '(' . $contentBackend->deleteByProperty($id,
+                            'container_id') . ')';
+                }
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
 
@@ -375,7 +389,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (isset($job['account_id'])) {
             Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
         }
-        
+
         Tinebase_ActionQueue::getInstance()->executeAction($job);
         
         return TRUE;
@@ -1172,7 +1186,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
-    
+
     /**
      * repair a table
      * 
@@ -1355,11 +1369,78 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function repairContainerOwner()
     {
         if (! $this->_checkAdminRight()) {
-            return -1;
+            return 2;
         }
 
         $this->_addOutputLogWriter(6);
         Tinebase_Container::getInstance()->setContainerOwners();
+
+        return 0;
+    }
+
+    /**
+     * show user report (number of enabled, disabled, ... users)
+     *
+     * TODO add system user count
+     * TODO use twig?
+     */
+    public function userReport()
+    {
+        if (! $this->_checkAdminRight()) {
+            return 2;
+        }
+
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+
+        $userStatus = array(
+            'total' => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_ENABLED => array(/* 'showUserNames' => true, 'showClients' => true */),
+            Tinebase_Model_User::ACCOUNT_STATUS_DISABLED => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED => array(),
+            Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED => array(),
+            //'system' => array(),
+            'lastmonth' => array('lastMonths' => 1, 'showUserNames' => true, 'showClients' => true),
+            'last 3 months' => array('lastMonths' => 3),
+        );
+
+        foreach ($userStatus as $status => $options) {
+            switch ($status) {
+                case 'lastmonth':
+                case 'last 3 months':
+                    $userCount = Tinebase_User::getInstance()->getActiveUserCount($options['lastMonths']);
+                    $text = $translation->_("Number of distinct users") . " (" . $status . "): " . $userCount . "\n";
+                    break;
+                case 'system':
+                    $text = "TODO add me\n";
+                    break;
+                default:
+                    $userCount = Tinebase_User::getInstance()->getUserCount($status);
+                    $text = $translation->_("Number of users") . " (" . $status . "): " . $userCount . "\n";
+            }
+            echo $text;
+
+            if (isset($options['showUserNames']) && $options['showUserNames']
+                && in_array($status, array('lastmonth', 'last 3 months'))
+                && isset($options['lastMonths'])
+            ) {
+                // TODO allow this for other status
+                echo $translation->_("  User Accounts:\n");
+                $userIds = Tinebase_User::getInstance()->getActiveUserIds($options['lastMonths']);
+                foreach ($userIds as $userId) {
+                    $user = Tinebase_User::getInstance()->getUserByProperty('accountId', $userId, 'Tinebase_Model_FullUser');
+                    echo "  * " . $user->accountLoginName . ' / ' . $user->accountDisplayName . "\n";
+                    if (isset($options['showClients']) && $options['showClients']) {
+                        $userClients = Tinebase_AccessLog::getInstance()->getUserClients($user, $options['lastMonths']);
+                        echo "    Clients: \n";
+                        foreach ($userClients as $client) {
+                            echo "     - $client\n";
+                        }
+                        echo "\n";
+                    }
+                }
+            }
+            echo "\n";
+        }
 
         return 0;
     }
