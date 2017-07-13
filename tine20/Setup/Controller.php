@@ -1517,12 +1517,13 @@ class Setup_Controller
     protected function _replaceTinebaseidInDump($mysqlBackupFile)
     {
         // fetch old Tinebase ID
-        $cmd = "bzcat $mysqlBackupFile | grep \",'Tinebase',\"";
+        $cmd = "bzcat $mysqlBackupFile | grep \",'Tinebase','enabled'\"";
         $result = exec($cmd);
         if (! preg_match("/'([0-9a-f]+)','Tinebase'/", $result, $matches)) {
             throw new Setup_Exception('could not find Tinebase ID in dump');
         }
         $oldTinebaseId = $matches[1];
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Replacing old Tinebase id: ' . $oldTinebaseId);
 
         $cmd = "bzcat $mysqlBackupFile | sed s/"
             . $oldTinebaseId . '/'

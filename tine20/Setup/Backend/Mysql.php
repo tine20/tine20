@@ -476,10 +476,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     protected function _createMyConf($path, $config)
     {
+        $port = $config->port ? $config->port : 3306;
+
         $mycnfData = <<<EOT
 [client]
 host = {$config->host}
-port = {$config->port}
+port = {$port}
 user = {$config->username}
 password = {$config->password}
 EOT;
