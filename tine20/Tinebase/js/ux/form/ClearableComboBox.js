@@ -94,7 +94,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     clearValue: function () {
         Ext.ux.form.ClearableComboBox.superclass.clearValue.apply(this, arguments);
-        this.fireEvent('select', this, this.getRawValue(), this.startValue);
+        this.fireEvent('select', this, '', this.startValue);
         this.startValue = this.getRawValue();
         if (this.triggers && this.disableClearer !== true) {
             this.triggers[0].hide();
