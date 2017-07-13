@@ -531,6 +531,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $twig->addFunction(new Twig_SimpleFunction('translate', function ($str) use($locale, $translate) {
             return $translate->_($str, $locale);
         }));
+        $twig->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
+        }));
 
         $this->_twigTemplate = $twig->load($this->_templateFileName);
     }

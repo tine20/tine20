@@ -56,6 +56,11 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_dataSources = array();
 
     /**
+     * @var string
+     */
+    protected $_currentDataSource = null;
+
+    /**
      * @var boolean
      */
     protected $_skip = false;
@@ -154,6 +159,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $this->_firstIteration = true;
         $this->_currentProcessor = $this->_dataSources[$_name];
+        $this->_currentDataSource = $_name;
         $this->_rowCount = 0;
     }
 
