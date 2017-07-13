@@ -1778,6 +1778,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 case 'record':
                     result.push({
                         filtertype: 'foreignrecord',
+                        label: cfDefinition.label,
                         app: this.app,
                         ownRecordClass: this.recordClass,
                         foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
