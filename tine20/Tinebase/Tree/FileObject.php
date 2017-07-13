@@ -138,6 +138,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             /* select */ array('available_revisions' => Tinebase_Backend_Sql_Command::factory($select->getAdapter())->getAggregate('tree_filerevisions2.revision'))
         )->group($this->_tableName . '.id');
 
+        // NOTE: we need to do it here if $this->_modlogActive is false
+        if (false === $this->_modlogActive && !$_getDeleted) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+        }
+
         if (count($this->_getSelectHook) > 0) {
             foreach($this->_getSelectHook as $hook) {
                 call_user_func_array($hook, array($select));

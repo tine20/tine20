@@ -126,8 +126,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             )->group($this->_tableName . '.object_id'
         );
 
-        // NOTE: we need to do it here as $this->_modlogActive is false
-        if (!$_getDeleted) {
+        // NOTE: we need to do it here if $this->_modlogActive is false
+        if (false === $this->_modlogActive && !$_getDeleted) {
             // don't fetch deleted objects
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
         }
