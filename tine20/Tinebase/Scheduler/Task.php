@@ -400,6 +400,30 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
             . ' Saved task Tinebase_FileSystem::checkIndexing in scheduler.');
     }
 
+
+    /**
+     * add file system index checking task to scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addFileSystemNotifyQuotaTask(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystemNotifyQuota')) {
+            return;
+        }
+
+        $task = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_FileSystem',
+            'action'        => 'notifyQuota',
+        ));
+
+        $_scheduler->addTask('Tinebase_FileSystemNotifyQuota', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::notifyQuota in scheduler.');
+    }
+
     /**
      * add file system size recalculation task to scheduler
      *

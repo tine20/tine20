@@ -3346,4 +3346,134 @@ class Tinebase_FileSystem implements
 
         return $_alarm;
     }
+
+    public function notifyQuota()
+    {
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $quotaIncludesRevisions = $quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION};
+        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
+
+        if ($total > 0) {
+            /** @var Tinebase_Model_Application $tinebaseApplication */
+            $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+            $tinebaseState = $tinebaseApplication->xprops('state');
+
+            $totalUsage = 0;
+            if ($quotaIncludesRevisions) {
+                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
+                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+                }
+            } else {
+                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
+                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
+                }
+            }
+
+            if ($totalUsage >= ($total * 0.99)) {
+                $this->_sendQuotaNotification(null, false);
+            } elseif($softQuota > 0 && $totalUsage > ($total * $softQuota / 100)) {
+                $this->_sendQuotaNotification();
+            }
+        }
+
+        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $personalNode = null;
+        if ($totalByUser > 0 && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $personalNode = $this->stat('/Filemanager/folders/personal');
+            /** @var Tinebase_Model_Tree_Node $node */
+            foreach ($treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(
+                        array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
+                        array('field' => 'parent_id', 'operator' => 'quals', 'value' => $personalNode->getId())
+                    ), '', array('ignoreAcl' => true))) as $node) {
+                if ($quotaIncludesRevisions) {
+                    $size = $node->revision_size;
+                } else {
+                    $size = $node->size;
+                }
+                if ($size >= ($totalByUser * 0.99)) {
+                    $this->_sendQuotaNotification($node, false);
+                } elseif($softQuota > 0 && $size > ($totalByUser * $softQuota / 100)) {
+                    $this->_sendQuotaNotification($node);
+                }
+            }
+        }
+
+        foreach ($treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(
+                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
+                    array('field' => 'quota', 'operator' => 'greater', 'value' => 0)
+                ), '', array('ignoreAcl' => true))) as $node) {
+            if ($quotaIncludesRevisions) {
+                $size = $node->revision_size;
+            } else {
+                $size = $node->size;
+            }
+            if ($size >= ($node->quota * 0.99)) {
+                $this->_sendQuotaNotification($node, false);
+            } elseif($softQuota > 0 && $size > ($node->quota * $softQuota / 100)) {
+                $this->_sendQuotaNotification($node);
+            }
+        }
+    }
+
+    protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
+    {
+        try {
+            $path = $this->getPathOfNode($node, true);
+            if (null === $node || null === $node->acl_node) {
+                $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
+            } else {
+                $accountIds = array();
+                $acl_node = $node;
+                if ($node->acl_node !== $node->getId()) {
+                    $acl_node = $this->get($node->acl_node);
+                }
+                /** @var Tinebase_Model_Grants $grants */
+                foreach ($this->getGrantsOfContainer($acl_node, true) as $grants) {
+                    if (!$grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                        continue;
+                    }
+                    switch($grants->account_type) {
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                            $accountIds[] = $grants->account_id;
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                            $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($grants->account_id));
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                            foreach (Tinebase_Role::getInstance()->getRoleMembers($grants->account_id) as $role) {
+                                switch($role['account_type']) {
+                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                                        $accountIds[] = $role['account_id'];
+                                        break;
+                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                                        $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                $accountIds = array_unique($accountIds);
+            }
+
+            /** @var Tinebase_Model_User $user */
+            foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
+                $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                    $user->accountId));
+                $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+
+                // _('filemanager quota notification')
+                // _('filemanager soft quota notification')
+                $translatedSubject = $translate->_('filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification');
+
+                Tinebase_Notification::getInstance()->send($user->accountId, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
+            }
+        } catch(Exception $e) {
+            // LOG
+        }
+    }
 }
