@@ -718,7 +718,11 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
         fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
         sortInfo: {field: 'user_id', direction: 'ASC'}
     });
-    
+
+    if (Ext.isString(attendeeData)) {
+        attendeeData = Ext.decode(attendeeData);
+    }
+
     Ext.each(attendeeData, function(attender) {
         if (attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id && Ext.isString(attender.id) ? attender.id : Ext.id());
@@ -757,7 +761,11 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord = function(att
  */
 Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(attendeeStore, attendee) {
     var attendeeRecord = false;
-    
+
+    if (! Ext.isFunction(attendee.beginEdit)) {
+        attendee = new Tine.Calendar.Model.Attender(attendee, attendee.id);
+    }
+
     attendeeStore.each(function(r) {
         var attendeeType = [attendee.get('user_type')];
 
