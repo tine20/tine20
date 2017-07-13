@@ -58,7 +58,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
         this.freeTimeSlots = [];
 
         this.tbar = [{
-            text: i18n._('Back'),
+            text: this.app.i18n._('Back'),
             minWidth: 70,
             ref: '../buttonBack',
             iconCls: 'action_previous',
@@ -66,14 +66,14 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
             disabled: true,
             handler: this.onButtonBack
         }, {
-            text: i18n._('Next'),
+            text: this.app.i18n._('Next'),
             minWidth: 70,
             ref: '../buttonNext',
             iconCls: 'action_next',
             scope: this,
             handler: this.onButtonNext
         }, '-', {
-            text: i18n._('Options'),
+            text: this.app.i18n._('Options'),
             minWidth: 70,
             ref: '../buttonOptions',
             iconCls: 'action_options',

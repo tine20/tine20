@@ -25,7 +25,7 @@ msgstr ""
 msgid "Application Data"
 msgstr ""
 
-#: js/CoreData.js:73
+#: js/CoreData.js:87
 msgid "Please select core data from tree ..."
 msgstr ""
 

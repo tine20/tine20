@@ -173,7 +173,7 @@ Tine.Filemanager.nodeActions.SystemLink = {
             title: i18n._('System Link'),
             // minWidth:
             maxWidth: screen.availWidth,
-            msg: '<b>' + i18n._('Use this link to share the entry with other system users') + ':</b><br>'
+            msg: '<b>' + app.i18n._('Use this link to share the entry with other system users') + ':</b><br>'
                     + record.getSystemLink(),
             buttons: Ext.MessageBox.OK,
             // value: record.getSystemLink(),
