@@ -89,8 +89,11 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'bool':
                 case 'boolean':
-                    field.xtype = category == 'editDialg' ? 'checkbox' : 'booleancombo';
-                    field.boxLabel = field.fieldLabel;
+                    if (category === 'editDialog') {
+                        field.xtype = 'checkbox';
+                    } else {
+                        field.xtype = 'booleancombo';
+                    }
                     break;
                 case 'integer':
                     field.xtype = 'numberfield';
