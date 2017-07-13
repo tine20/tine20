@@ -149,6 +149,14 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     },
 
     /**
+     * Reload store when combobox is cleared
+     */
+    clearValue: function () {
+        this.supr().clearValue.apply(this, arguments);
+        this.store.reload();
+    },
+
+    /**
      * is called, when list is initialized, appends a date-paging-toolbar instead a normal one
      */
     initList: function() {
