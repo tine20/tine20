@@ -35,7 +35,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     recordClass: null,
 
     initComponent: function () {
-        this.emptyText = this.emptyText || i18n._('Search for records ...')
+        this.emptyText = this.emptyText || i18n._('Search for records ...');
+        this.currentValue = this.currentValue || [];
 
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);
         this.store = new Ext.data.SimpleStore({
@@ -81,10 +82,15 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
             this.setRawValue(text || this.emptyText);
             this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
         }
-        this.currentValue = value;
 
-        // to string overwrite, to make sure record is changed.
+        var oldValue = this.currentValue;
+        this.currentValue = value;
         Tine.Tinebase.common.assertComparable(this.currentValue);
+
+        if (JSON.stringify(value) != JSON.stringify(oldValue)){
+            this.fireEvent('change', this, value, oldValue);
+        }
+
         return this;
     },
 
