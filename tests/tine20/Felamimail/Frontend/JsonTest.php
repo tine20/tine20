@@ -2166,6 +2166,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testAttachmentMethodPublicDownloadLinkUpload()
     {
+        Zend_Registry::set('locale', new Zend_Locale('en'));
         $message = $this->_testAttachmentType('download_public');
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
@@ -2198,6 +2199,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testAttachmentMethodProtectedDownloadLink()
     {
+        Zend_Registry::set('locale', new Zend_Locale('en'));
         $message = $this->_testAttachmentType('download_protected');
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));

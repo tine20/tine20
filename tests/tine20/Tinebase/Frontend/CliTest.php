@@ -526,6 +526,7 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testUserReport()
     {
+        Zend_Registry::set('locale', new Zend_Locale('en'));
         ob_start();
         $result = $this->_cli->userReport();
         $out = ob_get_clean();

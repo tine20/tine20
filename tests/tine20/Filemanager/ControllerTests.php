@@ -68,6 +68,8 @@ class Filemanager_ControllerTests extends TestCase
 
     public function testNotificationUpdateForReadOnly()
     {
+        Zend_Registry::set('locale', new Zend_Locale('en'));
+        
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
