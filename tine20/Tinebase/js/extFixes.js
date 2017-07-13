@@ -356,6 +356,13 @@ Ext.grid.GridPanel.prototype.applyState  = Ext.grid.GridPanel.prototype.applySta
 });
 
 /**
+ * fix for table in cell
+ */
+Ext.grid.GridView.prototype.getCell  =  function(row, col){
+    return this.fly(this.getRow(row)).query('td.x-grid3-cell')[col];
+};
+
+/**
  * fix interpretation of ISO-8601  formatcode (Date.patterns.ISO8601Long) 
  * 
  * Browsers do not support timezones and also javascripts Date object has no 
