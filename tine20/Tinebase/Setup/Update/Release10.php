@@ -1793,7 +1793,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_36()
     {
-        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl')->query(Zend_DB::FETCH_ASSOC);
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl')->query(Zend_Db::FETCH_ASSOC);
         $quotedId = $this->_db->quoteIdentifier('id');
         $quotedContainerId = $this->_db->quoteIdentifier('container_id');
         $quotedAccountType = $this->_db->quoteIdentifier('account_type');
@@ -1810,7 +1810,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             );
         }
 
-        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl')->query(Zend_DB::FETCH_ASSOC);
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl')->query(Zend_Db::FETCH_ASSOC);
         $quotedRecordId = $this->_db->quoteIdentifier('record_id');
         foreach ($result->fetchAll() as $row) {
             $this->_db->update(SQL_TABLE_PREFIX . 'tree_node_acl',
@@ -1828,7 +1828,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl', array($command->getAggregate('id'),
             new Zend_Db_Expr('count(*) AS c')))
             ->group(array('container_id', 'account_type', 'account_id', 'account_grant'))
-            ->having('c > 1')->query(Zend_DB::FETCH_NUM);
+            ->having('c > 1')->query(Zend_Db::FETCH_NUM);
         foreach ($result->fetchAll() as $row) {
             $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
             array_pop($ids);
@@ -1838,7 +1838,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl', array($command->getAggregate('id'),
             new Zend_Db_Expr('count(*) AS c')))
             ->group(array('record_id', 'account_type', 'account_id', 'account_grant'))
-            ->having('c > 1')->query(Zend_DB::FETCH_NUM);
+            ->having('c > 1')->query(Zend_Db::FETCH_NUM);
         foreach ($result->fetchAll() as $row) {
             $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
             array_pop($ids);
@@ -1915,5 +1915,59 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->setTableVersion('tree_node_acl', 2);
         }
         $this->setApplicationVersion('Tinebase', '10.37');
+    }
+
+    /**
+     * update to 10.38
+     *
+     * set shared folders acl not if not set
+     */
+    public function update_37()
+    {
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $inheritPropertyMethod = $this->_getProtectedMethod($fileSystem, '_recursiveInheritPropertyUpdate');
+        if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            try {
+                $node = $fileSystem->stat('/Filemanager/folders/shared');
+                if (null === $node->acl_node) {
+                    $fileSystem->setGrantsForNode($node, Tinebase_Model_Grants::getDefaultGrants(array(
+                        Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                    ), array(
+                        Tinebase_Model_Grants::GRANT_PUBLISH => true
+                    )));
+                    $inheritPropertyMethod->invoke($fileSystem, $node, 'acl_node', $node->acl_node, null);
+                }
+            } catch(Tinebase_Exception_NotFound $tenf) {}
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('MailFiler')) {
+            try {
+                $node = $fileSystem->stat('/MailFiler/folders/shared');
+                if (null === $node->acl_node) {
+                    $fileSystem->setGrantsForNode($node, Tinebase_Model_Grants::getDefaultGrants(array(
+                        Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                    ), array(
+                        Tinebase_Model_Grants::GRANT_PUBLISH => true
+                    )));
+                    $inheritPropertyMethod->invoke($fileSystem, $node, 'acl_node', $node->acl_node, null);
+                }
+            } catch(Tinebase_Exception_NotFound $tenf) {}
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.38');
+    }
+
+    /**
+     * GetProtectedMethod constructor.
+     * @param $object
+     * @param $method
+     * @return ReflectionMethod
+     */
+    protected function _getProtectedMethod($object, $method)
+    {
+        $class = new ReflectionClass($object);
+        $method = $class->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method;
     }
 }
