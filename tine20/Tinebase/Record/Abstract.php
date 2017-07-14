@@ -1471,4 +1471,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         return $this->_properties[$_property];
     }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return null|Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        return null;
+    }
 }

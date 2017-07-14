@@ -658,6 +658,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         if ($this->getRecordClassName() !== $recordSet->getRecordClassName()) {
             throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
         }
+
+        /** @var Tinebase_Record_Interface $model */
+        $model = $this->getRecordClassName();
+        if (null !== ($result = $model::recordSetDiff($this, $recordSet))) {
+            return $result;
+        }
         
         $existingRecordsIds = $this->getArrayOfIds();
         $toCompareWithRecordsIds = $recordSet->getArrayOfIds();

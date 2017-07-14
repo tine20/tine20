@@ -774,7 +774,28 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $testPathNode->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($grantRecord));
         $testPathNode->acl_node = $testPathNode->getId();
         $testNodeGrants = $fmController->update($testPathNode);
+        $testNodeGrants->grants = null;
         Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testNodeGrants);
+
+        // update Grants 1
+        $testPathNode->grants = null;
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
+        foreach (Tinebase_Model_Grants::getAllGrants() as $grant) {
+            $testPathNode->grants->getFirstRecord()->$grant = false;
+        }
+        $testPathNode->grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_ADMIN} = true;
+        $testPathNode->grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_EDIT} = true;
+        $updatedNodeGrants = $fmController->update($testPathNode);
+        $updatedNodeGrants->grants = null;
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($updatedNodeGrants);
+
+        // update Grants 2
+        $testPathNode->grants = null;
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
+        $testPathNode->grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_EDIT} = false;
+        $updatedTwoNodeGrants = $fmController->update($testPathNode);
+        $updatedTwoNodeGrants->grants = null;
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($updatedTwoNodeGrants);
 
         // unset Grants
         $testPathNode->acl_node = null;
@@ -884,6 +905,52 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
         static::assertEquals($testNodeGrants->grants->count(), $testPathNode->grants->count());
         $oldGrants = $testNodeGrants->grants->getFirstRecord()->toArray();
+        unset($oldGrants['id']);
+        $newGrants = $testPathNode->grants->getFirstRecord()->toArray();
+        unset($newGrants['id']);
+        static::assertEquals($oldGrants, $newGrants);
+
+        // update grants 1
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $filesystem->clearStatCache();
+        $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
+        static::assertEquals($updatedNodeGrants->grants->count(), $testPathNode->grants->count());
+        $oldGrants = $updatedNodeGrants->grants->getFirstRecord()->toArray();
+        unset($oldGrants['id']);
+        $newGrants = $testPathNode->grants->getFirstRecord()->toArray();
+        unset($newGrants['id']);
+        static::assertEquals($oldGrants, $newGrants);
+
+        // update grants 2
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $filesystem->clearStatCache();
+        $testPathNode = $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($testPathNode);
+        static::assertEquals($updatedTwoNodeGrants->grants->count(), $testPathNode->grants->count());
+        $oldGrants = $updatedTwoNodeGrants->grants->getFirstRecord()->toArray();
         unset($oldGrants['id']);
         $newGrants = $testPathNode->grants->getFirstRecord()->toArray();
         unset($newGrants['id']);

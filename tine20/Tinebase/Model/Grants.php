@@ -325,18 +325,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         $idProperty = $modelInstance->getIdProperty();
 
         foreach($_recordSetDiff->removed as $data) {
-            if (!isset($data[$idProperty])) {
-                throw new Tinebase_Exception_InvalidArgument('failed to apply record set diff because removed data contained bad data, id property missing (' . $idProperty . '): ' . print_r($data, true));
-            }
-            if (false !== ($record = $_recordSet->getById($data[$idProperty]))) {
-                $_recordSet->removeRecord($record);
-            }
             $found = false;
             /** @var Tinebase_Model_Grants $record */
             foreach ($_recordSet as $record) {
                 if (    $record->record_id      === $data['record_id']      &&
                         $record->account_id     === $data['account_id']     &&
-                        $record->account_type   === $data['account_type']) {
+                        $record->account_type   === $data['account_type']       ) {
                     $found = true;
                     break;
                 }
@@ -347,29 +341,23 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         }
 
         foreach($_recordSetDiff->modified as $data) {
-            $diff = new Tinebase_Record_Diff();
-            $diff->id = $data[$idProperty];
-            $diff->diff = $data;
-            if (false !== ($record = $_recordSet->getById($diff->getId()))) {
+            $diff = new Tinebase_Record_Diff($data);
+            $found = false;
+            /** @var Tinebase_Model_Grants $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->record_id      === $diff->diff['record_id']      &&
+                        $record->account_id     === $diff->diff['account_id']     &&
+                        $record->account_type   === $diff->diff['account_type']       ) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
                 $record->applyDiff($diff);
             } else {
-                $found = false;
-                /** @var Tinebase_Model_Grants $record */
-                foreach ($_recordSet as $record) {
-                    if (    $record->record_id      === $data['record_id']      &&
-                            $record->account_id     === $data['account_id']     &&
-                            $record->account_type   === $data['account_type']) {
-                        $found = true;
-                        break;
-                    }
-                }
-                if (true === $found) {
-                    $record->applyDiff($diff);
-                } else {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                        . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
-                    throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
-                }
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+                throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
             }
         }
 
@@ -379,7 +367,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             foreach ($_recordSet as $record) {
                 if (    $record->record_id      === $data['record_id']      &&
                         $record->account_id     === $data['account_id']     &&
-                        $record->account_type   === $data['account_type']) {
+                        $record->account_type   === $data['account_type']       ) {
                     $found = true;
                     break;
                 }
@@ -392,5 +380,66 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         }
 
         return true;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return null|Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        $shallowCopyTwo = new Tinebase_Record_RecordSet(self::class);
+        $removed = new Tinebase_Record_RecordSet(self::class);
+        $added = new Tinebase_Record_RecordSet(self::class);
+        $modified = new Tinebase_Record_RecordSet('Tinebase_Record_Diff');
+
+        foreach ($_recordSetTwo as $grantTwo) {
+            $shallowCopyTwo->addRecord($grantTwo);
+        }
+
+        /** @var Tinebase_Model_Grants $grantOne */
+        foreach ($_recordSetOne as $grantOne) {
+            $found = false;
+            /** @var Tinebase_Model_Grants $grantTwo */
+            foreach ($shallowCopyTwo as $grantTwo) {
+                if (    $grantOne->record_id      === $grantTwo->record_id      &&
+                        $grantOne->account_id     === $grantTwo->account_id     &&
+                        $grantOne->account_type   === $grantTwo->account_type       ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (true === $found) {
+                $shallowCopyTwo->removeRecord($grantTwo);
+                $diff = $grantOne->diff($grantTwo, array('id', 'account_grant'));
+                if (!$diff->isEmpty()) {
+                    $diff->xprops('diff')['record_id']    = $grantTwo->record_id;
+                    $diff->xprops('diff')['account_id']   = $grantTwo->account_id;
+                    $diff->xprops('diff')['account_type'] = $grantTwo->account_type;
+                    $diff->xprops('oldData')['record_id']    = $grantTwo->record_id;
+                    $diff->xprops('oldData')['account_id']   = $grantTwo->account_id;
+                    $diff->xprops('oldData')['account_type'] = $grantTwo->account_type;
+                    $modified->addRecord($diff);
+                }
+            } else {
+                $added->addRecord($grantOne);
+            }
+        }
+
+        /** @var Tinebase_Model_Grants $grantTwo */
+        foreach ($shallowCopyTwo as $grantTwo) {
+            $removed->addRecord($grantTwo);
+        }
+
+        $result = new Tinebase_Record_RecordSetDiff(array(
+            'model'    => self::class,
+            'added'    => $added,
+            'removed'  => $removed,
+            'modified' => $modified,
+        ));
+
+        return $result;
     }
 }
