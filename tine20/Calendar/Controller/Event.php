@@ -909,7 +909,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                             . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
                     }
                 }
-                
+
+                $eventUpdateEvent = new Calendar_Event_EventUpdateEvent();
+                $eventUpdateEvent->observable = $_record;
+                Tinebase_Record_PersistentObserver::getInstance()->fireEvent($eventUpdateEvent);
+
                 parent::update($_record);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
