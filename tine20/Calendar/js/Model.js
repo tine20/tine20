@@ -786,6 +786,24 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
     return attendeeRecord;
 };
 
+Tine.Calendar.Model.Attender.getAttendeeStore.getSignature = function(attendee) {
+    var _ = window.lodash;
+
+    attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id, attendee.role].join('/');
+};
+
+Tine.Calendar.Model.Attender.getAttendeeStore.fromSignature = function(signatureId) {
+    var ids = signatureId.split('/');
+
+    return new Tine.Calendar.Model.Attender({
+        cal_event_id: ids[0],
+        user_type: ids[1],
+        user_id: ids[2],
+        role: ids[3]
+    });
+}
+
 /**
  * returns attendee data
  * optinally fills into event record
