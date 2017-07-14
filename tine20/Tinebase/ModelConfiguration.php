@@ -498,7 +498,7 @@ class Tinebase_ModelConfiguration {
      * 
      * @var array
      */
-    protected $_virtualFields = NULL;
+    protected $_virtualFields = [];
     
     /**
      * maps fieldgroup keys to their names
@@ -1553,5 +1553,14 @@ class Tinebase_ModelConfiguration {
                 }
             }
         }
+    }
+
+    /**
+     * Returns all virtual fields
+     *
+     * @return array
+     */
+    public function getVirtualFields() {
+        return $this->_virtualFields;
     }
 }

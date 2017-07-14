@@ -84,6 +84,10 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
         $metadata->setPrimaryTable($table);
         foreach ($modelConfig->getFields() as $fieldName => $config) {
+            if (in_array($config, $modelConfig->getVirtualFields(), true)) {
+                continue;
+            }
+
             self::mapTypes($config);
 
             if (! $config['doctrineIgnore']) {
