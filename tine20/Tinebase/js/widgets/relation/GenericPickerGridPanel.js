@@ -1154,7 +1154,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     loadRecord: function(dialog, record, ticketFn) {
         var _ = window.lodash,
             interceptor = ticketFn(),
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = dialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.store.removeAll();
 

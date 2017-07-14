@@ -62,7 +62,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                 name: 'customfield_' + cfConfig.get('name'),
                 xtype: (def.value_search == 1) ? 'customfieldsearchcombo' : uiConfig.xtype,
                 customfieldId: cfConfig.id,
-                readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0
+                readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0,
+                requiredGrant: 'editGrant'
             };
             
             // auto xtype per data type

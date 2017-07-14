@@ -85,7 +85,8 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
     onRecordLoad: function(editDialog, record, ticketFn) {
         var _ = window.lodash,
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');

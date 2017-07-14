@@ -183,15 +183,16 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     /**
      * populate store
      *
-     * @param {EditDialog} activities
+     * @param {EditDialog} editDialog
      * @param {Record} record
      * @param {Function} ticketFn
      */
-    onLoadRecord: function (activities, record, ticketFn) {
+    onLoadRecord: function (editDialog, record, ticketFn) {
         var _ = window.lodash,
             interceptor = ticketFn(),
             notes = record.get('notes'),
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.store.removeAll();
 

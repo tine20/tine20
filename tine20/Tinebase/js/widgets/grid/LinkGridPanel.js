@@ -36,6 +36,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     clicksToEdit: 1,
     selectRowAfterAdd: false,
 
+    editDialog: null,
+
     /**
      * the record
      * @type Record 
@@ -203,7 +205,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
      */
     onRecordLoad: function(record) {
         var _ = window.lodash,
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = this.editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
 
         if (this.record) {

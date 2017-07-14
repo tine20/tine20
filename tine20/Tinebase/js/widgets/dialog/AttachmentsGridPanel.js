@@ -197,15 +197,16 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     /**
      * populate store
      * 
-     * @param {EditDialog} dialog
+     * @param {EditDialog} editDialog
      * @param {Record} record
      * @param {Function} ticketFn
      */
-    onLoadRecord: function(dialog, record, ticketFn) {
+    onLoadRecord: function(editDialog, record, ticketFn) {
         var _ = window.lodash,
             interceptor = ticketFn(),
             attachments = record.get('attachments'),
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.store.removeAll();
 

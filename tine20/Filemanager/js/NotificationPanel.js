@@ -80,7 +80,8 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
             featureEnabled = _.get(Tine.Tinebase.configManager.get('filesystem'), 'enableNotifications', false),
             notificationProps = window.lodash.get(record, 'data.notificationProps', []),
             hasOwnNotificationSettings = !!notificationProps.length,
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
             hasAdminGrant = _.get(this.editDialog, 'record.data.account_grants.adminGrant', false);
 
         this.notificationGrid.getStore().loadData(_.get(record, 'data.notificationProps', []), false);

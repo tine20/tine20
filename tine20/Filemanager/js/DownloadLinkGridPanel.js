@@ -42,7 +42,8 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initComponent: function() {
         var _ = window.lodash,
             record = this.editDialog.record,
-            hasRequiredGrant = _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            evalGrants = this.editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.recordProxy = Tine.Filemanager.downloadLinkRecordBackend;
         this.recordClass = Tine.Filemanager.Model.DownloadLink;
