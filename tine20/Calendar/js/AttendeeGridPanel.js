@@ -710,7 +710,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     setDefaultAttendeeRole:function(role) {
         this.defaultAttendeeRole = role;
-        this.newAttendee.set('role', role);
+        if (this.newAttendee) {
+            this.newAttendee.set('role', role);
+        }
     },
 
     /**
