@@ -65,6 +65,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         this.value = Ext.ux.form.PeriodPicker.getPeriod(this.value ? this.value.from : this.startDate || new Date(), this.range);
         this.startDate = this.value.from;
+        this.startValue = this.value;
     },
 
     /**
@@ -104,6 +105,15 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         }
         this.setPeriodText(dateString);
 
+        if (JSON.stringify(this.value) != JSON.stringify(this.startValue)){
+            this.fireEvent('change', this, this.value, this.startValue);
+        }
+    },
+
+    reset : function() {
+        this.originalValue = this.startValue;
+
+        Ext.ux.form.PeriodPicker.superclass.reset.apply(this, arguments);
     },
 
     setStartDate: function(startDate) {
@@ -118,7 +128,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     // private
     onRangeComboChange: function() {
         this.setValue(Ext.ux.form.PeriodPicker.getPeriod(this.startDate, this.getRangeCombo().getValue()));
-        this.fireEvent('change', this, this.value, this.startValue);
     },
 
     // private
@@ -129,10 +138,8 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         if (next) {
             this.setStartDate(this.value.until.add(Date.DAY, 1));
-            this.fireEvent('change', this, this.value, this.startValue);
         } else if (prev) {
             this.setStartDate(this.value.from.add(Date.DAY, -1));
-            this.fireEvent('change', this, this.value, this.startValue);
         } else if (period) {
             this.getDatePickerMenu().show(period);
         }
@@ -176,7 +183,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 // value: this.range,
                 listeners: {
                     scope: this,
-                    change: this.onRangeComboChange,
                     select: this.onRangeComboChange
                 }
             });
@@ -205,7 +211,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                             me.range = 'month';
                             me.setStartDate(this.activeDate);
                             this.destroy();
-                            me.fireEvent('change', me, me.value, me.startValue);
                             return false;
                         }
                     }
@@ -216,7 +221,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                         this.getRangeCombo().setValue(weekNumber ? 'week' : 'day');
                         this.range = weekNumber ? 'week' : 'day';
                         this.setStartDate(value);
-                        this.fireEvent('change', this, this.value, this.startValue);
                     }
                 }
             });

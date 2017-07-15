@@ -94,6 +94,12 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
         return this;
     },
 
+    reset : function() {
+        this.currentValue = this.originalValue;
+
+        Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.reset.apply(this, arguments);
+    },
+
     afterRender: function () {
 
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.afterRender.apply(this, arguments);
