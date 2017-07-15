@@ -160,13 +160,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app:   'Calendar',
-                keyFieldName: 'attendeeRoles',
-                listeners: {
-                    scope: this,
-                    change: function (field, newValue) {
-                        this.setDefaultAttendeeRole(newValue);
-                    }
-                }
+                keyFieldName: 'attendeeRoles'
             }
         }, {
             id: 'displaycontainer_id',
@@ -353,10 +347,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
                 break;
                 
-            case 'user_type' :
-                this.startEditing(o.row, o.column +1);
+            case 'user_type':
+                this.startEditing(o.row, this.getColumnModel().getIndexById('user_id'));
                 break;
-            
+
+            case 'role':
+                if (o.row == this.store.getCount()-1) {
+                    this.setDefaultAttendeeRole(o.record.get('role'));
+                    this.startEditing(o.row, this.getColumnModel().getIndexById('user_id'));
+                }
+
+                break;
             case 'container_id':
                 // check if displaycontainer of owner got changed
                 if (o.record == this.eventOriginator) {
