@@ -558,7 +558,7 @@ Tine.Tinebase.ApplicationStarter = {
                     var gridPanelName = modelName + 'GridPanel', 
                         gpConfig = {
                             modelConfig: modelConfig,
-                            app: Tine[appName], 
+                            app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
                             recordClass: Tine[appName].Model[modelName]
                         };
