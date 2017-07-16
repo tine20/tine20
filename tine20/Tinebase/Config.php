@@ -534,6 +534,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_HOST = 'host';
+    const ACTIONQUEUE_PORT = 'port';
+    const ACTIONQUEUE_NAME = 'queueName';
 
     const QUOTA = 'quota';
     const QUOTA_INCLUDE_REVISION = 'includeRevision';
@@ -808,6 +811,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_ACTIVE       => array(
                     'type'                              => Tinebase_Config::TYPE_BOOL,
                     'default'                           => false
+                ),
+                self::ACTIONQUEUE_HOST       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'localhost'
+                ),
+                self::ACTIONQUEUE_PORT       => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 6379
+                ),
+                self::ACTIONQUEUE_NAME       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'TinebaseQueue'
                 ),
             ),
             'default'                           => array()
