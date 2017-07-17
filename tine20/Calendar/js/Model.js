@@ -446,7 +446,27 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         
         return this.doXHTTPRequest(options);
     },
-    
+
+    promiseCreateRecurException: function(event, deleteInstance, deleteAllFollowing, checkBusyConflicts, options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.createRecurException(event, deleteInstance, deleteAllFollowing, checkBusyConflicts, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
     /**
      * delete a recuring event series
      * 
