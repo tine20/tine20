@@ -514,19 +514,27 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param Tinebase_Record_Interface $record
      * @param Tinebase_Model_CustomField_Value $customField
      * @param Tinebase_Record_RecordSet $configs
+     * @param bool $extendedResolving
      */
-    protected function _setCfValueInRecord(Tinebase_Record_Interface $record, Tinebase_Model_CustomField_Value $customField, Tinebase_Record_RecordSet $configs)
+    protected function _setCfValueInRecord(Tinebase_Record_Interface $record, Tinebase_Model_CustomField_Value $customField, Tinebase_Record_RecordSet $configs, $extendedResolving = false)
     {
         $recordCfs = $record->customfields;
         $idx = $configs->getIndexById($customField->customfield_id);
         if ($idx !== FALSE) {
+            /** @var Tinebase_Model_CustomField_Config $config */
             $config = $configs[$idx];
             if (strtolower($config->definition->type) == 'record' || strtolower($config->definition->type) == 'recordlist') {
                 $value = $this->_getRecordTypeCfValue($config, $customField->value, strtolower($config->definition['type']));
             } else {
                 $value = $customField->value;
             }
-            $recordCfs[$config->name] = $value;
+            if (true === $extendedResolving) {
+                $definition = is_object($config->definition) ? $config->definition->toArray() : (array)$config->definition;
+                $definition['value'] = $value;
+                $recordCfs[$config->name] = $definition;
+            } else {
+                $recordCfs[$config->name] = $value;
+            }
         }
 
         // sort customfields by key
@@ -572,8 +580,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * get all customfields of all given records
      * 
      * @param  Tinebase_Record_RecordSet $_records     records to get customfields for
+     * @param  bool                      $_extendedResolving
      */
-    public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
+    public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records, $_extendedResolving = false)
     {
         if (count($_records) == 0) {
             return;
@@ -598,7 +607,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             if (! $record || $record->getId() !== $customField->record_id) {
                 $record = $_records->getById($customField->record_id);
             }
-            $this->_setCfValueInRecord($record, $customField, $configs);
+            $this->_setCfValueInRecord($record, $customField, $configs, $_extendedResolving);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

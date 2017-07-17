@@ -201,6 +201,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected $_additionalRecords = array();
 
+    protected $_keyFields = array();
+
+    protected $_virtualFields = array();
+
+    protected $_foreignIdFields = array();
+
     /**
      * the constructor
      *
@@ -281,6 +287,43 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $this->_additionalRecords[$key] = $record;
             }
         }
+
+        if ($this->_config->keyFields) {
+            foreach ($this->_config->keyFields as $keyFields) {
+                if ($keyFields->propertyName) {
+                    $keyFields = array($keyFields);
+                }
+                foreach($keyFields as $keyField) {
+                    $this->_keyFields[$keyField->propertyName] = $keyField->name;
+                }
+            }
+        }
+
+        if ($this->_config->foreignIds) {
+            foreach ($this->_config->foreignIds as $foreignIds) {
+                if ($foreignIds->controller) {
+                    $foreignIds = array($foreignIds);
+                }
+                foreach($foreignIds as $foreignId) {
+                    $this->_foreignIdFields[$foreignId->name] = $foreignId->controller;
+                }
+            }
+        }
+
+        if ($this->_config->virtualFields) {
+            foreach ($this->_config->virtualFields as $virtualFields) {
+                if ($virtualFields->relatedModel) {
+                    $virtualFields = array($virtualFields);
+                }
+                foreach($virtualFields as $virtualField) {
+                    $this->_virtualFields[$virtualField->name] = array(
+                        'relatedModel' => $virtualField->relatedModel,
+                        'relatedDegree' => $virtualField->relatedDegree,
+                        'type' => $virtualField->type
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -332,21 +375,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         return $config;
-    }
-
-    /**
-     * get custom field names for this app
-     *
-     * @return array
-     */
-    protected function _getCustomFieldNames()
-    {
-        if ($this->_customFieldNames === null) {
-            $this->_customFieldNames = Tinebase_CustomField::getInstance()->
-                getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
-        }
-
-        return $this->_customFieldNames;
     }
 
     protected function _getTemplateFilename()
@@ -705,6 +733,60 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // add container
         if (in_array('container_id', $types)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
+        }
+
+        $_records->customfields = array();
+        Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+
+        /** @var Tinebase_Record_Abstract $modelName */
+        $modelName = $_records->getRecordClassName();
+
+        $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql', $_records->getArrayOfIds());
+
+        $appConfig = Tinebase_Config::factory($this->_applicationName);
+        if (null === ($modelConfig = $modelName::getConfiguration())) {
+            /** @var Tinebase_Record_Abstract $record */
+            foreach ($_records as $idx => $record) {
+                if (isset($relations[$idx])) {
+                    $record->relations = $relations[$idx];
+                }
+
+                foreach ($this->_keyFields as $name => $keyField) {
+                    /** @var Tinebase_Config_KeyField $keyField */
+                    $keyField = $appConfig->{$keyField};
+                    $record->{$name} = $keyField->getTranslatedValue($record->{$name});
+                }
+
+                foreach ($this->_virtualFields as $name => $virtualField) {
+                    $value = null;
+                    if (!empty($record->relations)) {
+                        /** @var Tinebase_Model_Relation $relation */
+                        foreach($record->relations as $relation) {
+                            if (    $relation->related_model  === $virtualField['relatedModel']  &&
+                                    $relation->related_degree === $virtualField['relatedDegree'] &&
+                                    $relation->type           === $virtualField['type']) {
+                                $value = $relation->related_record;
+                                break;
+                            }
+                        }
+                    }
+                    $record->{$name} = $value;
+                }
+
+                foreach ($this->_foreignIdFields as $name => $controller) {
+                    if (!empty($record->{$name})) {
+                        $controller = $controller::getInstance();
+                        $record->{$name} = $controller->get($record->{$name});
+                    }
+                }
+            }
+        } else {
+            /** @var Tinebase_Record_Abstract $record */
+            /*foreach ($_records as $record) {
+                foreach ($modelConfig->getVirtualFields() as $field) {
+                    $modelConfig->
+                }
+            }*/
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
