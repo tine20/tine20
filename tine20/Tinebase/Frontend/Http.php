@@ -570,12 +570,17 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return $asJson ? $json : json_decode($json, true);
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public static function getAssetHash()
     {
-        $installedApps = Tinebase_Application::getInstance()->getApplications();
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         $map = self::getAssetsMap();
         foreach($map as $asset => $ressources) {
-            if (! $installedApps->filter('name', basename($asset))->count()) {
+            if (! $enabledApplications->filter('name', basename($asset))->count()) {
                 unset($map[$asset]);
             }
         }
