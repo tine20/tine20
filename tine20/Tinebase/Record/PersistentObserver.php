@@ -170,6 +170,21 @@ class Tinebase_Record_PersistentObserver
     }
 
     /**
+     * Remove observer by it's identifier
+     *
+     * @param $identifier
+     */
+    public function removeObserverByIdentifier($identifier)
+    {
+        $where = array(
+            $this->_db->quoteIdentifier('observer_identifier') . ' = ' . $this->_db->quote($identifier)
+        );
+
+        $this->_table->delete($where);
+    }
+
+
+    /**
      * unregisters all observables of a given observer 
      * 
      * @param Tinebase_Record_Interface $_observer 
