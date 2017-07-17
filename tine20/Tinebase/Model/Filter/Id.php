@@ -65,7 +65,11 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
                      . ' Empty value with "' . $this->_operator . '"" operator (model: '
                      . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options'). ')');
                  $_select->where('1=0');
-             }
+             } else if ($this->_operator == 'not') {
+
+                 $field = $this->_getQuotedFieldName($_backend);
+                 $_select->where($field . " != '' AND " . $field . " IS NOT NULL");
+            }
         } else if ($this->_operator == 'equals' && is_array($this->_value)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                  . ' Unexpected array value with "equals" operator (model: ' 
