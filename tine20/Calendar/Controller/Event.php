@@ -921,10 +921,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
                 foreach ($_record->attendee as $attender) {
                     if ($attender->status_authkey) {
-                        $eventUpdateEvent = new Calendar_Event_EventUpdateEvent();
-                        $eventUpdateEvent->observable = $_record;
-                        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($eventUpdateEvent);
-
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
                     }
                 }
