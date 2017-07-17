@@ -195,13 +195,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE)
+    public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $skipEvent = false)
     {
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->_inspectEvent($_record);
+            $this->_inspectEvent($_record, $skipEvent);
             
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -876,7 +876,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
+    public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS, $skipEvent = false)
     {
         /** @var Calendar_Model_Event $_record */
         try {
@@ -895,24 +895,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-                $this->_inspectEvent($_record);
+                $this->_inspectEvent($_record, $skipEvent);
                
                 if ($_checkBusyConflicts) {
                     if ($event->isRescheduled($_record) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
-                       ) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " Ensure that all attendee are free with free/busy check ... ");
+                        count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
+                    ) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Ensure that all attendee are free with free/busy check ... ");
+                        }
                         $this->checkBusyConflicts($_record);
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
+                        }
                     }
                 }
-
-                $eventUpdateEvent = new Calendar_Event_EventUpdateEvent();
-                $eventUpdateEvent->observable = $_record;
-                Tinebase_Record_PersistentObserver::getInstance()->fireEvent($eventUpdateEvent);
 
                 parent::update($_record);
                 
@@ -921,6 +921,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
                 foreach ($_record->attendee as $attender) {
                     if ($attender->status_authkey) {
+                        $eventUpdateEvent = new Calendar_Event_EventUpdateEvent();
+                        $eventUpdateEvent->observable = $_record;
+                        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($eventUpdateEvent);
+
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
                     }
                 }
@@ -2021,7 +2025,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @TODO move stuff from other places here
      * @param   Calendar_Model_Event $_record      the record to inspect
      */
-    protected function _inspectEvent($_record)
+    protected function _inspectEvent($_record, $skipEvent = false)
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
@@ -2093,9 +2097,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->setConstraintsExdates($_record);
         }
 
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
-            'observable' => $_record
-        )));
+        if (!$skipEvent) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
+                'observable' => $_record
+            )));
+        }
     }
 
     /**
