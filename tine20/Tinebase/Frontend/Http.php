@@ -592,8 +592,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _getFilesToWatch($_fileType)
     {
         $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
         $filesToWatch = array();
         $fileMap = $this->getAssetsMap();
 
