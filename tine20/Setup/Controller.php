@@ -1445,7 +1445,8 @@ class Setup_Controller
         $this->_clearCache();
 
         if ($this->isInstalled('Tinebase')) {
-            throw new Setup_Exception('Tinebase already installed!');
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tinebase is already installed.');
+            return false;
         }
 
         $mysqlBackupFile = null;

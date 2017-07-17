@@ -783,13 +783,16 @@ class Setup_Frontend_Cli
     }
 
     /**
+     * install tine20 from a dump (local dir or remote dir)
+     *
      * @param Zend_Console_Getopt $_opts
-     * @throws Exception
      */
     protected function _installDump(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->installFromDump($options);
+
+        return 0;
     }
 
     /**
