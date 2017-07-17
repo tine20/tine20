@@ -70,6 +70,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_LOCALE = 'defaultLocale';
 
     /**
+     * default user role
+     */
+    const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
+
+    /**
+     * default user role
+     */
+    const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -1020,6 +1030,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SEARCH_PATH           => true,
 
             ),
+        ),
+        self::DEFAULT_ADMIN_ROLE_NAME => array(
+            //_('Default Admin Role Name')
+            'label'                 => 'Default Admin Role Name',
+            'description'           => 'Default Admin Role Name',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'admin role'
+        ),
+        self::DEFAULT_USER_ROLE_NAME => array(
+            //_('Default User Role Name')
+            'label'                 => 'Default User Role Name',
+            'description'           => 'Default User Role Name',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'user role'
         ),
         self::CRONUSERID => array(
                                    //_('Cronuser ID')

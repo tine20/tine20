@@ -128,10 +128,12 @@ class Setup_Initialize
         if (in_array(Tinebase_Acl_Rights::USE_PERSONAL_TAGS, $allRights)) {
             $userRights[] = Tinebase_Acl_Rights::USE_PERSONAL_TAGS;
         }
-        
+
+        $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
+        $adminRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_ADMIN_ROLE_NAME);
         $roleRights = array(
-            'user role'     => $userRights,
-            'admin role'    => $allRights
+            $userRoleName     => $userRights,
+            $adminRoleName    => $allRights
         );
         
         foreach ($roleRights as $roleName => $rights) {
