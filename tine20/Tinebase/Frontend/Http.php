@@ -577,7 +577,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public static function getAssetHash()
     {
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $map = self::getAssetsMap();
         foreach($map as $asset => $ressources) {
             if (! $enabledApplications->filter('name', basename($asset))->count()) {
