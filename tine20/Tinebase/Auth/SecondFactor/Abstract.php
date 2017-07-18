@@ -44,9 +44,19 @@ abstract class Tinebase_Auth_SecondFactor_Abstract
      */
     public static function hasValidSecondFactor()
     {
+
         if (! Tinebase_Session::isStarted()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' No session started to check second factor in session');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' No session started to check second factor in session');
+            }
+            return true;
+        }
+        if (! Tinebase_Session::getSessionEnabled()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Session not enabled to check second factor in session');
+            }
             return true;
         }
         $currentValidUntil = Tinebase_Session::getSessionNamespace()->secondFactorValidUntil;

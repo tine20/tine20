@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.38</version>
+    <version>10.39</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3466,7 +3466,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3528,6 +3528,12 @@
                     <type>integer</type>
                     <notnull>false</notnull>
                     <length>64</length>
+                </field>
+                <field>
+                    <name>pin_protected</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>

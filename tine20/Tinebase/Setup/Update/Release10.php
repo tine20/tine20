@@ -1970,4 +1970,23 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         return $method;
     }
+
+    /**
+     * update to 10.39
+     *
+     * tree_nodes add
+     */
+    public function update_38()
+    {
+        if (! $this->_backend->columnExists('pin_protected', 'tree_nodes')) {
+            $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>pin_protected</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>'));
+            $this->setTableVersion('tree_nodes', 6);
+        }
+        $this->setApplicationVersion('Tinebase', '10.39');
+    }
 }

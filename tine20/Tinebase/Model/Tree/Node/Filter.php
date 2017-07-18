@@ -130,6 +130,10 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     {
         parent::_appendGrantsFilter($select, $backend, $user);
 
+        if (!Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            $select->where('pin_protected = 0');
+        }
+
         // TODO do something when acl_node = NULL?
     }
 

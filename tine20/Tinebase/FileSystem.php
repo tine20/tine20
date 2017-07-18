@@ -2588,6 +2588,16 @@ class Tinebase_FileSystem implements
     {
         // always refetch node to have current acl_node value
         $node = $this->get($_containerId);
+        if (null !== $node->acl_node && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            if ($node->getId() !== $node->acl_node) {
+                $acl_node = $this->get($node->acl_node);
+            } else {
+                $acl_node = $node;
+            }
+            if ($acl_node->pin_protected) {
+                return false;
+            }
+        }
         /** @noinspection PhpUndefinedMethodInspection */
         $account = $_accountId instanceof Tinebase_Model_FullUser
             ? $_accountId
