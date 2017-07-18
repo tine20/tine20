@@ -88,7 +88,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, Tinebase_DateTime::now());
 
         $deepLink = $nextOccurance->getDeepLink();
-        $id = basename($deepLink);
+        preg_match('/fakeid.*$/', $deepLink, $matches);
+        $id = $matches[0];
 
         $recurInstance = $this->_controller->get($id);
         $this->assertTrue($recurInstance->isRecurInstance());
