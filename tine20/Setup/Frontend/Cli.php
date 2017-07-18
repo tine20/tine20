@@ -367,7 +367,8 @@ class Setup_Frontend_Cli
         }
         
         //get set rights
-        $users = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
+        $users = Tinebase_Acl_Roles::getInstance()->getRoleByName($userRoleName);
         $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($users->getId());
         
         //Uninstall Applications

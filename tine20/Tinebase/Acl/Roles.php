@@ -779,9 +779,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     
     /**
      * Create initial Roles
-     * 
-     * @todo make hard coded role names ('user role' and 'admin role') configurable
-     * 
+     *
      * @return void
      */
     public function createInitialRoles()
@@ -798,10 +796,13 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $oldSetNotes = $this->_setNotes;
         $this->_omitModLog = true;
         $this->_setNotes = false;
+
+        $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
+        $adminRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_ADMIN_ROLE_NAME);
         
         // add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(
-            'name'                  => 'admin role',
+            'name'                  => $adminRoleName,
             'description'           => 'admin role for tine. this role has all rights per default.',
         ));
         $adminRole = $this->createRole($adminRole);
@@ -813,7 +814,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         ));
         
         $userRole = new Tinebase_Model_Role(array(
-            'name'                  => 'user role',
+            'name'                  => $userRoleName,
             'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
         ));
         $userRole = $this->createRole($userRole);

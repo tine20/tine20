@@ -112,8 +112,6 @@ class Setup_Initialize
     /**
      * create inital rights
      * 
-     * @todo make hard coded role names ('user role' and 'admin role') configurable
-     * 
      * @param Tinebase_Application $application
      * @return void
      */
