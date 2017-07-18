@@ -130,10 +130,12 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'default'               => 'hours',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             ),
-            'price'             => array(
-                'type'                  => 'integer',
-                'inputFilters'          => array('Zend_Filter_PregReplace' => array('/,/', '.'), 'Zend_Filter_Empty' => NULL),
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            'price' => array(
+                'type'         => 'money',
+                'nullable'     => true,
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'        => 'Price', // _('Price')
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'price_unit'        => array(
                 'shy'                   => TRUE,
