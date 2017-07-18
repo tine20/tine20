@@ -57,6 +57,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'acl_node'              => array('filter' => 'Tinebase_Model_Filter_Text'),
     // tree_fileobjects table
         'last_modified_time'    => array(
             'filter' => 'Tinebase_Model_Filter_Date',
