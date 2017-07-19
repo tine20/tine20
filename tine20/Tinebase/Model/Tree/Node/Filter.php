@@ -55,7 +55,10 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'                  => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
         'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'name'                  => array(
+            'filter' => 'Tinebase_Model_Filter_Text',
+            'options' => array('binary' => true)
+        ),
         'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'acl_node'              => array('filter' => 'Tinebase_Model_Filter_Text'),
     // tree_fileobjects table
@@ -118,6 +121,19 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
             'filter'                => 'Tinebase_Model_Filter_Bool'
         )
     );
+
+    /**
+     * set options
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        if (isset($_options['nameCaseInSensitive']) && $_options['nameCaseInSensitive']) {
+            $this->_filterModel['name']['options']['caseSensitive'] = false;
+        }
+        parent::_setOptions($_options);
+    }
 
     /**
      * append grants acl filter

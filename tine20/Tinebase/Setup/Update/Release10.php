@@ -1974,7 +1974,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 10.39
      *
-     * tree_nodes add
+     * tree_nodes add pin_protected
      */
     public function update_38()
     {
@@ -1988,5 +1988,27 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 6);
         }
         $this->setApplicationVersion('Tinebase', '10.39');
+    }
+
+    /**
+     * update to 10.40
+     *
+     * tree_nodes make name column case sensitive
+     */
+    public function update_39()
+    {
+        if ($this->getTableVersion('tree_nodes') < 7) {
+            if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                $this->_backend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>true</notnull>
+                        <collation>utf8_bin</collation>
+                    </field>'));
+            }
+            $this->setTableVersion('tree_nodes', 7);
+        }
+        $this->setApplicationVersion('Tinebase', '10.40');
     }
 }

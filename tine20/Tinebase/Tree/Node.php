@@ -340,7 +340,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
         $child = $this->search($searchFilter)->getFirstRecord();
         
-        if (!$child || $childName !== $child->name) {
+        if (!$child) {
             if (true === $throw) {
                 throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
             }

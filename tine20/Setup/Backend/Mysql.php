@@ -505,4 +505,12 @@ EOT;
         }
         return false;
     }
+
+    protected function _addDeclarationCollation(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->collation)) {
+            $_buffer[] = 'COLLATE ' . $_field->collation;
+        }
+        return $_buffer;
+    }
 }

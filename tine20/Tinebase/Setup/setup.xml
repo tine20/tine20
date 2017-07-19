@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.39</version>
+    <version>10.40</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3466,7 +3466,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3490,6 +3490,7 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
+                    <collation>utf8_bin</collation>
                 </field>
                 <field>
                     <name>islink</name>

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -82,6 +82,13 @@ interface Tinebase_Backend_Sql_Command_Interface
      * @return string
      */
     public function getLike();
+
+    /**
+     * get case sensitive like keyword
+     *
+     * @return string
+     */
+    public function getCsLike();
     
     /**
      * prepare value for case insensitive search

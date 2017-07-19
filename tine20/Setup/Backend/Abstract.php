@@ -546,6 +546,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 
         $buffer = $this->_addDeclarationFieldType($buffer, $_field, $_tableName);
         $buffer = $this->_addDeclarationUnsigned($buffer, $_field);
+        $buffer = $this->_addDeclarationCollation($buffer, $_field);
         $buffer = $this->_addDeclarationDefaultValue($buffer, $_field);
         $buffer = $this->_addDeclarationNotNull($buffer, $_field);
         $buffer = $this->_addDeclarationAutoincrement($buffer, $_field);
@@ -553,7 +554,12 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         
         return $buffer;
     }
-    
+
+    protected function _addDeclarationCollation(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        return $_buffer;
+    }
+
     protected function _addDeclarationFieldType(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
         $typeMapping = $this->getTypeMapping($_field->type);

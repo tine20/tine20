@@ -346,14 +346,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
-        $_filter->removeFilter('path');
-        $_filter->removeFilter('recursive');
-        $_filter->removeFilter('type');
-        $_filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+        $filter = clone $_filter;
+        $filter->removeFilter('path');
+        $filter->removeFilter('recursive');
+        $filter->removeFilter('type');
+        $filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
 
-        $result = $this->_backend->searchNodes($_filter, $_pagination);
+        $filter = new Tinebase_Model_Tree_Node_Filter($filter->toArray(), '', array('nameCaseInSensitive' => true));
 
-        $_filter->addFilter($_filter->createFilter('recursive', 'equals', 'true'));
+        $result = $this->_backend->searchNodes($filter, $_pagination);
 
         // resolve path
         $parents = array();
@@ -556,9 +557,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if ($_filter->getFilter('recursive')) {
-            $_filter->removeFilter('recursive');
-            $result = $this->_backend->searchNodesCount($_filter);
-            $_filter->addFilter($_filter->createFilter('recursive', 'equals', 'true'));
+            $filter = clone $_filter;
+            $filter->removeFilter('path');
+            $filter->removeFilter('recursive');
+            $filter->removeFilter('type');
+            $filter->addFilter($filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+            $filter = new Tinebase_Model_Tree_Node_Filter($filter->toArray(), '', array('nameCaseInSensitive' => true));
+            $result = $this->_backend->searchNodesCount($filter);
         } else {
             $path = $this->_checkFilterACL($_filter, $_action);
             if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
