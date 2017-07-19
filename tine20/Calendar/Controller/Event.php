@@ -2135,6 +2135,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
+
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectDeleteEvent([
+                'observable' => $event,
+                'deletedIds' => $_ids
+            ]));
         }
         
         $this->_deleteAlarmsForIds($_ids);
