@@ -436,10 +436,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
             Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
         } else {
-            $validateOldPin = Tinebase_Auth::validateSecondFactor($loginName, $_oldPassword, array(
-                'active' => true,
-                'provider' => 'Tine20',
-            ));
+            $validateOldPin = Tinebase_Auth::validateSecondFactor(
+                $loginName,
+                $_oldPassword,
+                array(
+                    'active' => true,
+                    'provider' => 'Tine20',
+                ),
+                /* $allowEmpty */ true
+            );
             if ($validateOldPin !== Tinebase_Auth::SUCCESS) {
                 throw new Tinebase_Exception_InvalidArgument('Old pin is wrong.');
             }

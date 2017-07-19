@@ -441,10 +441,11 @@ class Tinebase_Auth
      * @param string $username
      * @param string $password
      * @param array $options
+     * @param boolean $allowEmpty
      * @return int
      * @throws Tinebase_Exception_Backend
      */
-    public static function validateSecondFactor($username, $password, $options = null)
+    public static function validateSecondFactor($username, $password, $options = null, $allowEmpty = false)
     {
         if (! $options) {
             $options = Tinebase_Config::getInstance()->get(
@@ -457,7 +458,7 @@ class Tinebase_Auth
             $authProviderClass = 'Tinebase_Auth_SecondFactor_' . $options['provider'];
             if (class_exists($authProviderClass)) {
                 $authProvider = new $authProviderClass($options);
-                return $authProvider->validate($username, $password);
+                return $authProvider->validate($username, $password, $allowEmpty);
             }
         }
         throw new Tinebase_Exception_Backend('Second factor backend not recognized / misconfigured');

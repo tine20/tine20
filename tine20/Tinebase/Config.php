@@ -705,6 +705,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *      'allow_self_signed'     => true,
          *      'ignorePeerName'        => true,
          *      'login'                 => true, // validate during login + show field on login screen
+         *      'sessionLifetime'       => 15 // minutes
          * )
          */
         self::AUTHENTICATIONSECONDFACTOR => array(

@@ -11,12 +11,21 @@
 class Tinebase_Auth_SecondFactor_Tine20 extends Tinebase_Auth_SecondFactor_Abstract
 {
     /**
-     * @param $username
-     * @param $password
-     * @return Zend_Auth_Result
+     * validate second factor
+     *
+     * @param string $username
+     * @param string $password
+     * @param boolean $allowEmpty
+     * @return integer (Tinebase_Auth::FAILURE|Tinebase_Auth::SUCCESS)
      */
-    public function validate($username, $password)
+    public function validate($username, $password, $allowEmpty = false)
     {
+        if (! $allowEmpty && empty($password)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Empty password given');
+            return Tinebase_Auth::FAILURE;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Options: ' . print_r($this->_options, true));
 

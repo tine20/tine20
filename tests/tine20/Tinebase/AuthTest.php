@@ -229,6 +229,12 @@ class Tinebase_AuthTest extends TestCase
     public function testSecondFactorTine20()
     {
         $user = Tinebase_Core::getUser();
+        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, '', array(
+            'active' => true,
+            'provider' => 'Tine20',
+        ));
+        $this->assertEquals(Tinebase_Auth::FAILURE, $result, 'empty password should always fail');
+
         Tinebase_User::getInstance()->setPin($user, '1234');
         $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, '1234', array(
             'active' => true,

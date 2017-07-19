@@ -20,19 +20,28 @@ abstract class Tinebase_Auth_SecondFactor_Abstract
     /**
      * validate second factor
      *
-     * @param $username
-     * @param $password
-     * @return mixed
+     * @param string $username
+     * @param string $password
+     * @param boolean $allowEmpty
+     * @return integer (Tinebase_Auth::FAILURE|Tinebase_Auth::SUCCESS)
      */
-    abstract public function validate($username, $password);
+    abstract public function validate($username, $password, $allowEmpty = false);
 
     /**
-     * @param int $lifetimeMinutes
+     * @param int|null $lifetimeMinutes
      * @throws Exception
-     * @throws Zend_Session_Exception
+     * @throws Zend_Session_Exception,
      */
-    public static function saveValidSecondFactor($lifetimeMinutes = 15)
+    public static function saveValidSecondFactor($lifetimeMinutes = null)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' saveValidSecondFactor for ' . $lifetimeMinutes);
+
+        if ($lifetimeMinutes === null) {
+            $sfConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
+            $lifetimeMinutes = $sfConfig->sessionLifetime ? $sfConfig->sessionLifetime : 15;
+        }
+
         Tinebase_Session::getSessionNamespace()->secondFactorValidUntil =
             Tinebase_DateTime::now()->addMinute($lifetimeMinutes)->toString();
     }

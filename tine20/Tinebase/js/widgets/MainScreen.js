@@ -74,11 +74,20 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this.rendered) {
             return;
         }
+
+        // get grid for removing or reloading data from grid depending on valid second factor
+        var cp = this.getCenterPanel(),
+            grid = cp ? cp.getGrid() : null;
+
         switch (e.topic) {
             case 'secondfactor.invalid':
-                // recycle old layer + dialog
+
+                this.getEl().mask();
+                if (grid) {
+                    grid.getStore().removeAll();
+                }
+
                 if (! this.secondfactorDialogLayer) {
-                    this.getEl().mask();
 
                     this.secondfactorDialog = new Tine.Tinebase.widgets.dialog.SecondFactorDialog();
                     this.secondfactorDialogLayer = new Ext.Layer({
@@ -101,17 +110,23 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     var height = 120;
                     this.innerLayer.dom.style.height = '';
                     this.innerLayer.setHeight(height);
-
-                    this.secondfactorDialogLayer.beginUpdate();
-                    this.secondfactorDialogLayer.setHeight(height);
-                    this.secondfactorDialogLayer.alignTo(this.getEl(), 'c', [-100, -50]);
-                    this.secondfactorDialogLayer.endUpdate();
                 }
+
+                // align layer
+                this.secondfactorDialogLayer.beginUpdate();
+                this.secondfactorDialogLayer.setHeight(height);
+                this.secondfactorDialogLayer.alignTo(this.getEl(), 'c', [-100, -50]);
+                this.secondfactorDialogLayer.endUpdate();
+
                 this.secondfactorDialogLayer.show();
 
                 break;
             case 'secondfactor.valid':
                 this.getEl().unmask();
+                if (grid) {
+                    grid.getStore().reload();
+                }
+
                 this.secondfactorDialogLayer.hide();
                 break;
         }

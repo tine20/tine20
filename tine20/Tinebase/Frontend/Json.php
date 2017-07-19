@@ -784,9 +784,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
+
+            // secondfactor config
+            // TODO pass sf config as array (but don't send everything to client)
             'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
+            'secondFactorSessionLifetime'  => $secondFactorConfig && $secondFactorConfig->sessionLifetime
+                ? $secondFactorConfig->sessionLifetime
+                : 15,
             'secondFactorPinChangeAllowed' => $secondFactorConfig
                 && $secondFactorConfig->active && $secondFactorConfig->provider && $secondFactorConfig->provider === 'Tine20',
+
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
@@ -1507,5 +1514,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $lastPresence
+     */
+    public function reportPresence($lastPresence)
+    {
+        if (Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
+            $result = true;
+        } else {
+            $result = false;
+        }
+
+        return array(
+            'success' => $result
+        );
     }
 }

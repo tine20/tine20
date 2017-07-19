@@ -46,6 +46,27 @@ Tine.Tinebase.widgets.dialog.SecondFactorDialog = Ext.extend(Tine.Tinebase.widge
                             channel: "messagebus",
                             topic: 'secondfactor.valid'
                         });
+
+                        if (! Tine.Tinebase.widgets.dialog.SecondFactorDialog.presenceObserver) {
+                            var secondFactorLifetime = Tine.Tinebase.registry.get('secondFactorSessionLifetime') || 15;
+                            Tine.Tinebase.widgets.dialog.SecondFactorDialog.presenceObserver = new Tine.Tinebase.PresenceObserver({
+                                maxAbsenseTime: secondFactorLifetime / 3, // ping server each secondFactorLifetime / 3 minutes
+                                absenceCallback: function (lastPresence, po) {
+                                    window.postal.publish({
+                                        channel: "messagebus",
+                                        topic: 'secondfactor.invalid'
+                                    });
+                                },
+                                presenceCallback: function (lastPresence) {
+                                    // report presence to server
+                                    Tine.Tinebase.reportPresence(Ext.encode(lastPresence));
+                                }
+                            });
+
+                        } else {
+                            Tine.Tinebase.widgets.dialog.SecondFactorDialog.presenceObserver.startChecking();
+                        }
+
                     } else {
                         window.postal.publish({
                             channel: "messagebus",

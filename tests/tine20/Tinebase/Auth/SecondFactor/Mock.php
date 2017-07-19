@@ -10,7 +10,7 @@
  */
 class Tinebase_Auth_SecondFactor_Mock extends Tinebase_Auth_SecondFactor_Abstract
 {
-    public function validate($username, $password)
+    public function validate($username, $password, $allowEmpty = false)
     {
         return Tinebase_Auth::SUCCESS;
     }
