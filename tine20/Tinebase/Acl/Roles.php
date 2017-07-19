@@ -371,6 +371,30 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * get list of role members account ids, resolves groups to account ids
+     *
+     * @param   string $_roleId
+     * @return  array with account ids
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function getRoleMembersAccounts($_roleId)
+    {
+        $accountIds = array();
+        foreach ($this->getRoleMembers($_roleId) as $role) {
+		    switch($role['account_type']) {
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                    $accountIds[] = $role['account_id'];
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                    $accountIds = array_merge($accountIds,
+                        Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
+                    break;
+            }
+        }
+        return $accountIds;
+    }
+
+    /**
      * get list of role memberships
      *
      * @param int|Tinebase_Model_User $accountId

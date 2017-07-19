@@ -54,6 +54,9 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _setFilterGroup()
     {
+        if ($this->_valueIsNull) {
+            return;
+        }
         $filters = $this->_getRelationFilters();
         $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
     }
@@ -65,11 +68,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _setOptions(array $_options)
     {
-        if (! (isset($_options['related_model']) || array_key_exists('related_model', $_options))) {
+        if (! isset($_options['related_model'])) {
             throw new Tinebase_Exception_UnexpectedValue('related model is needed in options');
         }
 
-        if (! (isset($_options['filtergroup']) || array_key_exists('filtergroup', $_options))) {
+        if (! isset($_options['filtergroup'])) {
             $_options['filtergroup'] = $_options['related_model'] . 'Filter';
         }
         
@@ -91,17 +94,27 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
             . 'Adding Relation filter: ' . $ownModel . ' <-> ' . $this->_options['related_model']);
-        
-        $this->_resolveForeignIds();
-        $ownIds = $this->_getOwnIds($ownModel);
-        
+
         $idField = (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id';
         $db = $_backend->getAdapter();
         $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
-        if (empty($ownIds)) {
-            $_select->where('1=0');
+
+        if (!$this->_valueIsNull) {
+            $this->_resolveForeignIds();
+            $ownIds = $this->_getOwnIds($ownModel);
+
+            if (empty($ownIds)) {
+                $_select->where('1=0');
+            } else {
+                $_select->where($db->quoteInto("$qField IN (?)", $ownIds));
+            }
         } else {
-            $_select->where($db->quoteInto("$qField IN (?)", $ownIds));
+            $ownIds = $this->_getOwnIds($ownModel);
+            if (empty($ownIds)) {
+                $_select->where('1=1');
+            } else {
+                $_select->where($db->quoteInto("$qField NOT IN (?)", $ownIds));
+            }
         }
     }
     
@@ -128,11 +141,18 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _getOwnIds($_modelName)
     {
-        $relationFilter = new Tinebase_Model_RelationFilter(array(
+        $filter = array(
             array('field' => 'own_model',     'operator' => 'equals', 'value' => $_modelName),
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
-            array('field' => 'related_id',    'operator' => 'in'    , 'value' => $this->_foreignIds)
-        ));
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model'])
+        );
+        if (null !== $this->_foreignIds) {
+            $filter[] = array('field' => 'related_id', 'operator' => 'in'    , 'value' => $this->_foreignIds);
+        }
+        if (isset($this->_options['type'])) {
+            $filter[] = array('field' => 'type',       'operator' => 'equals', 'value' => $this->_options['type']);
+        }
+
+        $relationFilter = new Tinebase_Model_RelationFilter($filter);
         
         if ($this->_relationTypeFilter) {
             $typeValue = $this->_relationTypeFilter['value'];
