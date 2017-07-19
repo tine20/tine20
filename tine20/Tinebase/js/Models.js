@@ -121,6 +121,8 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'privateGrant', type: 'boolean'},
     {name: 'exportGrant',  type: 'boolean'},
     {name: 'syncGrant',    type: 'boolean'},
+    {name: 'downloadGrant',type: 'boolean'},
+    {name: 'publishGrant', type: 'boolean'},
     {name: 'adminGrant',   type: 'boolean'}
 ]);
 

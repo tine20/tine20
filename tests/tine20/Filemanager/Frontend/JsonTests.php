@@ -1843,11 +1843,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
             Tinebase_Model_Grants::GRANT_ADMIN => false,
             Tinebase_Model_Grants::GRANT_FREEBUSY => false,
             Tinebase_Model_Grants::GRANT_PRIVATE => false,
-            Tinebase_Model_Grants::GRANT_DOWNLOAD => false,
+            Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
             Tinebase_Model_Grants::GRANT_PUBLISH => false,
         );
         $result = $this->_getUit()->saveNode($node);
         self::assertEquals(2, count($result['grants']));
+        self::assertEquals(1, count($result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+
+        $savedNode = $this->_getUit()->getNode($result['id']);
+        self::assertEquals(1, count($savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
 
         // switch to sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
