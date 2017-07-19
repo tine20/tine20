@@ -271,7 +271,7 @@ Tine.Tinebase.tineInit = {
             var sessionLifeTime = Tine.Tinebase.registry.get('sessionLifeTime') || 86400,
                 presenceObserver = new Tine.Tinebase.PresenceObserver({
                     maxAbsenseTime: sessionLifeTime / 60,
-                    callback: function(lastPresence, po) {
+                    absenceCallback: function(lastPresence, po) {
                         Tine.Tinebase.MainMenu.prototype._doLogout()
                     }
                 });
