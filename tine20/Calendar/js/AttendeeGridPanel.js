@@ -667,7 +667,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     updateFreeBusyInfo: function(force) {
         if (this.showMemberOfType) return;
 
-        var schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
+        var _ = window.lodash,
+            schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
         if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) return;
@@ -685,13 +686,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         Tine.Calendar.getFreeBusyInfo(
             Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
-            schedulingInfo,
+            [schedulingInfo],
             [this.record.get('uid')],
             function(freeBusyData) {
                 // outdated data
                 if (encodedSchedulingInfo != this.encodedSchedulingInfo) return;
 
-                var fbInfo = new Tine.Calendar.FreeBusyInfo(freeBusyData);
+                var fbInfo = new Tine.Calendar.FreeBusyInfo(_.values(freeBusyData)[0]);
 
                 this.store.each(function(attendee) {
                     attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, this.record));

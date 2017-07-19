@@ -36,26 +36,17 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
     itemSelector: '.cal-attendee-picker-combo-list-item',
 
     initComponent: function() {
+        _ = window.lodash;
+
         this.typeTemplates = {};
 
-        this.recordProxy = new Tine.Calendar.Model.AttenderProxy({});
+        this.recordProxy = new Tine.Calendar.Model.AttenderProxy({
+            freeBusyEventsProvider: _.bind(function() {
+                return [this.eventRecord];
+            }, this)
+        });
 
         Tine.Calendar.AttendeePickerCombo.superclass.initComponent.call(this);
-    },
-
-    onBeforeLoad: function(store, options) {
-        Tine.Calendar.AttendeePickerCombo.superclass.onBeforeLoad.call(this, store, options);
-
-        var _ = window.lodash;
-        options.params.ignoreUIDs = [];
-        if (_.get(this, 'eventRecord.data.dtstart')) {
-            options.params.event = this.eventRecord.data;
-            if (this.eventRecord.get('uid')) {
-                options.params.ignoreUIDs.push(this.eventRecord.get('uid'));
-            }
-        }
-
-        this.recordProxy.eventRecord = this.eventRecord
     },
 
     /**

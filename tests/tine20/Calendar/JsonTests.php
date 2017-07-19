@@ -1998,11 +1998,12 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentEvent = $this->_eventController->create($event);
         $persistentEvent->setTimezone(Tinebase_Core::getUserTimezone());
 
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $persistentEvent->toArray());
-        $this->assertEquals(2, count($fbinfo));
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), [$persistentEvent->toArray()]);
+        $this->assertEquals(1, count($fbinfo));
+        $this->assertEquals(2, count(array_pop($fbinfo)));
 
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $persistentEvent->toArray(), array($persistentEvent->uid));
-        $this->assertEquals(0, count($fbinfo));
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), [$persistentEvent->toArray()], array($persistentEvent->uid));
+        $this->assertEquals(0, count(array_pop($fbinfo)));
     }
 
     public function testSearchAttenders()
@@ -2018,7 +2019,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $filter = array(array('field' => 'query', 'operator' => 'contains', 'value' => 'l'));
         $paging = array('sort' => 'name', 'dir' => 'ASC', 'start' => 0, 'limit' => 50);
 
-        $result = $this->_uit->searchAttenders($filter, $paging, $persistentEvent->toArray(), array());
+        $result = $this->_uit->searchAttenders($filter, $paging, [$persistentEvent->toArray()], array());
         $this->assertTrue(
             isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
             count($result[Calendar_Model_Attender::USERTYPE_USER]) === 3 &&
@@ -2026,10 +2027,10 @@ class Calendar_JsonTests extends Calendar_TestCase
             isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
             isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE]) &&
             isset($result['freeBusyInfo']) &&
-            count($result['freeBusyInfo']) === 2, print_r($result, true));
+            count(array_pop($result['freeBusyInfo'])) === 2, print_r($result, true));
 
         $filter[] = array('field' => 'type', 'value' => array(Calendar_Model_Attender::USERTYPE_RESOURCE));
-        $result = $this->_uit->searchAttenders($filter, $paging, $persistentEvent->toArray(), array());
+        $result = $this->_uit->searchAttenders($filter, $paging, [$persistentEvent->toArray()], array());
         $this->assertTrue(
             !isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
             !isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
@@ -2037,7 +2038,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             count($result[Calendar_Model_Attender::USERTYPE_RESOURCE]) === 3 &&
             count($result[Calendar_Model_Attender::USERTYPE_RESOURCE]['results']) === 0 &&
             isset($result['freeBusyInfo']) &&
-            count($result['freeBusyInfo']) === 0, print_r($result, true));
+            count(array_pop($result['freeBusyInfo'])) === 0, print_r($result, true));
     }
 
     public function testSearchFreeTime()

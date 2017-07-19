@@ -858,18 +858,32 @@ Tine.Calendar.Model.AttenderProxy = function(config) {
 };
 Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
     /**
-     * @cfg {Tine.Calendar.Model.Event} eventRecord
+     * provide events to do an freeBusy info checkup for when searching attendee
+     *
+     * @cfg {Function} freeBusyEventsProvider
      */
-    eventRecord: null,
+    freeBusyEventsProvider: Ext.emptyFn,
 
     recordClass: Tine.Calendar.Model.Attender,
+
+    searchRecords: function(filter, paging, options) {
+        var _ = window.lodash,
+            fbEvents = _.union([].concat(this.freeBusyEventsProvider()));
+
+        _.set(options, 'params.ignoreUIDs', _.union(_.map(fbEvents, 'data.uid')));
+        _.set(options, 'params.events', _.map(fbEvents, 'data'));
+
+        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.apply(this, arguments);
+    },
 
     readRecords : function(resultData){
         var _ = window.lodash,
             totalcount = 0,
-            eventRecord = this.eventRecord,
+            fbEvents = _.union([].concat(this.freeBusyEventsProvider())),
             records = [],
-            fbInfo = new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo)
+            fbInfos = _.map(fbEvents, function(fbEvent) {
+                return new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo[fbEvent.get('id')]);
+            });
 
         _.each(['user', 'group', 'resource'], function(type) {
             var typeResult = _.get(resultData, type, {}),
@@ -886,8 +900,10 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
                     }),
                     attendee = new Tine.Calendar.Model.Attender(attendeeData, id);
 
-                if (_.get(eventRecord, 'data.dtstart')) {
-                    attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, eventRecord));
+                if (fbEvents.length) {
+                    attendee.set('fbInfo', _.map(fbInfos, function(fbInfo, idx) {
+                        return fbInfo.getStateOfAttendee(attendee, fbEvents[idx]);
+                    }).join('<br >'));
                 }
                 records.push(attendee);
             });

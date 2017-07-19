@@ -120,7 +120,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
             qtip = stateId ? ('ext:qtip="' + info + '" ') : '';
 
         // @TODO impelment hover
-        return ['<div class="cal-fbinfo-state cal-fbinfo-state-', cls, '"', qtip, ' />'].join('');
+        return ['<div class="cal-fbinfo-state cal-fbinfo-state-', cls, '"', ' tine:calendar-event-id="', event.get('id'), '" ', qtip, ' />'].join('');
     },
 
     /**

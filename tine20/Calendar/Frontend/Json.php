@@ -535,25 +535,29 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * @param array $attendee
-     * @param array $event
+     * @param array $events single event or set of events
      * @param array $ignoreUIDs
-     * @return array
+     * @return array single fbInfo or array of eventid => fbinfo
      */
-    public function getFreeBusyInfo($attendee, $event, $ignoreUIDs = array())
+    public function getFreeBusyInfo($attendee, $events, $ignoreUIDs = array())
     {
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
         $calendarController = Calendar_Controller_Event::getInstance();
-        $eventRecord = new Calendar_Model_Event(array(), TRUE);
-        $eventRecord->setFromJsonInUsersTimezone($event);
+        $fbInfo = [];
 
-        $periods = $calendarController->getBlockingPeriods($eventRecord, array(
-            'from'  => $eventRecord->dtstart,
-            'until' => $eventRecord->dtstart->getClone()->addMonth(2)
-        ));
+        foreach($events as $event) {
+            $eventRecord = new Calendar_Model_Event(array(), TRUE);
+            $eventRecord->setFromJsonInUsersTimezone($event);
 
-        $fbInfo = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs);
+            $periods = $calendarController->getBlockingPeriods($eventRecord, array(
+                'from'  => $eventRecord->dtstart,
+                'until' => $eventRecord->dtstart->getClone()->addMonth(2)
+            ));
 
-        return $fbInfo->toArray();
+            $fbInfo[$eventRecord->getId()] = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs)->toArray();
+        }
+
+        return $fbInfo;
     }
 
     /**
@@ -563,7 +567,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $ignoreUIDs
      * @return array
      */
-    public function searchAttenders($filter, $paging, $event, $ignoreUIDs)
+    public function searchAttenders($filter, $paging, $events, $ignoreUIDs)
     {
         $filters = array();
         foreach($filter as $f) {
@@ -613,7 +617,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $paging);
         }
 
-        if (empty($event)) {
+        if (empty($events)) {
             $result['freeBusyInfo'] = array();
         } else {
             $attendee = array();
@@ -626,7 +630,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
 
-            $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $event, $ignoreUIDs);
+            $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $events, $ignoreUIDs);
         }
 
         return $result;
