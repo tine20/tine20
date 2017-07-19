@@ -325,7 +325,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
             this.i18nRecordsName = this.app.i18n._hidden(this.recordClass.getMeta('recordsName'));
         }
-    
+
+        // auto record proxy
         if (! this.recordProxy && this.recordClass) {
             Tine.log.debug('no record proxy given, creating a new one...');
             this.recordProxy = new Tine.Tinebase.data.RecordProxy({
@@ -333,11 +334,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
 
-        var grantsField = this.recordClass.getMeta('grantsPath')
-            .replace(/^data\./, '')
-            .replace(/\.+/g, '');
+        // auto eval grants
+        if (this.recordClass) {
+            var grantsField = this.recordClass.getMeta('grantsPath')
+                .replace(/^data\./, '')
+                .replace(/\.+/g, '');
 
-        this.evalGrants = this.evalGrants && (grantsField == 'data' || this.recordClass.hasField(grantsField));
+            this.evalGrants = this.evalGrants && (grantsField == 'data' || this.recordClass.hasField(grantsField));
+        }
 
         // init plugins
         this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? this.plugins.concat(Ext.decode(this.initialConfig.plugins)) : [];
