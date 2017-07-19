@@ -879,7 +879,7 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
     readRecords : function(resultData){
         var _ = window.lodash,
             totalcount = 0,
-            fbEvents = _.union([].concat(this.freeBusyEventsProvider())),
+            fbEvents = _.compact([].concat(this.freeBusyEventsProvider())),
             records = [],
             fbInfos = _.map(fbEvents, function(fbEvent) {
                 return new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo[fbEvent.get('id')]);
