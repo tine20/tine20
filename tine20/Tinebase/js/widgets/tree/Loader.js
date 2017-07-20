@@ -116,7 +116,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                 if (! child) {
                     child = {
                         'name': part,
-                        'id': part,
+                        'id': Ext.id(),
                         'children': [],
                         'leaf': false,
                         'editable': false,
@@ -178,7 +178,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      */
     findNodeByName: function (name, nodes) {
         var ret = false;
-        Ext.each(nodes, function (node, idx) {
+        Ext.each(nodes, function (node) {
             if (node && node.name && node.name == name && Ext.isArray(node.children)) {
                 ret = node;
             }

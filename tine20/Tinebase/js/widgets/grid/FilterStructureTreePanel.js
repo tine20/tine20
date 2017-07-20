@@ -182,6 +182,11 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onFilterPanelActivate: function(filterToolbar, filterPanel) {
         var node = this.getNodeById(filterPanel.id);
+
+        if (this.getSelectionModel().isSelected(node)) {
+            return;
+        }
+
         if (node) {
             this.suspendEvents();
             node.select();

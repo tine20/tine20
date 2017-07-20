@@ -234,23 +234,37 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
 
     /**
-     *
-     * @param ids
+     * @param nodes
      */
     onVirtualNodesSelected: function (nodes) {
+        this.suspendEvents();
+
         if (0 === nodes.length) {
             return;
         }
 
-        this.getSelectionModel().suspendEvents();
+
+        var sm = this.getSelectionModel();
+
+        sm.suspendEvents();
+        sm.clearSelections(true);
 
         for (var i = 0; i < nodes.length; i++) {
-            this.getSelectionModel().select(nodes[i], null, 0 !== i);
+            var node = nodes[i];
+
+            if (sm.isSelected(node)) {
+                sm.lastSelNode = node;
+                continue;
+            }
+
+            sm.selNodes.push(node);
+            sm.selMap[node.id] = node;
+            sm.lastSelNode = node;
+            node.ui.onSelectedChange(true);
         }
 
-        this.getSelectionModel().resumeEvents();
-
-        this.getSelectionModel().fireEvent('selectionchange', this.getSelectionModel(), nodes);
+        this.onFilterChange();
+        this.resumeEvents();
     },
 
     /**
@@ -686,6 +700,30 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         node.loaded = false;
     },
 
+    onFilterChange: function() {
+        // get filterToolbar
+        var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+
+        // in case of filterPanel
+        ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
+
+        // remove all ftb container and /toberemoved/ filters
+        ftb.supressEvents = true;
+        ftb.filterStore.each(function(filter) {
+            var field = filter.get('field');
+            // @todo find criteria what to remove
+            if (field === 'container_id' || field === 'attender' || field === 'path') {
+                ftb.deleteFilter(filter);
+            }
+        }, this);
+        ftb.supressEvents = false;
+
+        // set ftb filters according to tree selection
+        var containerFilter = this.getFilterPlugin().getFilter();
+        ftb.addFilter(new ftb.record(containerFilter));
+
+        ftb.onFiltertrigger();
+    },
 
     /**
      * called when tree selection changes
@@ -699,28 +737,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin.onFilterChange();
         }
         if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            // get filterToolbar
-            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
-            
-            // in case of filterPanel
-            ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
 
-            // remove all ftb container and /toberemoved/ filters
-            ftb.supressEvents = true;
-            ftb.filterStore.each(function(filter) {
-                var field = filter.get('field');
-                // @todo find criteria what to remove
-                if (field === 'container_id' || field === 'attender' || field === 'path') {
-                    ftb.deleteFilter(filter);
-                }
-            }, this);
-            ftb.supressEvents = false;
-
-            // set ftb filters according to tree selection
-            var containerFilter = this.getFilterPlugin().getFilter();
-            ftb.addFilter(new ftb.record(containerFilter));
-
-            ftb.onFiltertrigger();
+            this.onFilterChange();
 
             // finally select the selected node, as filtertrigger clears all selections
             sm.suspendEvents();
