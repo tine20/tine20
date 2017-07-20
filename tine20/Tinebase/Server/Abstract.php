@@ -38,7 +38,14 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
      * @var boolean
      */
     protected $_supportsSessions = false;
-    
+
+    /**
+     * cache for modelconfig methods by frontend
+     *
+     * @var array
+     */
+    protected static $_modelConfigMethods = array();
+
     /**
      * 
      */
@@ -128,12 +135,15 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     /**
      * get default modelconfig methods
      *
+     * @param string $frontend
      * @return array of Zend_Server_Method_Definition
-     *
-     * // TODO add caching?
      */
     protected static function _getModelConfigMethods($frontend)
     {
+        if (array_key_exists($frontend, Tinebase_Server_Abstract::$_modelConfigMethods)) {
+            return Tinebase_Server_Abstract::$_modelConfigMethods[$frontend];
+        }
+
         // get all apps user has RUN right for
         try {
             $userApplications = Tinebase_Core::getUser() ? Tinebase_Core::getUser()->getApplications() : array();
@@ -186,8 +196,10 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
+
+        Tinebase_Server_Abstract::$_modelConfigMethods[$frontend] = $definitions;
 
         return $definitions;
     }
