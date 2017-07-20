@@ -2122,7 +2122,7 @@ class Setup_Controller
             throw new Exception("$backupDir could  not be created");
         }
 
-        if ($options['config']) {
+        if (isset($options['config']) && $options['config']) {
             $configFile = stream_resolve_include_path('config.inc.php');
             $configDir = dirname($configFile);
 
@@ -2130,7 +2130,7 @@ class Setup_Controller
             `cd $configDir; tar cjf $backupDir/tine20_config.tar.bz2 $files`;
         }
 
-        if ($options['db']) {
+        if (isset($options['db']) && $options['db']) {
             if (! $this->_backend) {
                 throw new Exception('db not configured, cannot backup');
             }
