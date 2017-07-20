@@ -346,11 +346,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
+        $_filter->removeFilter('type');
+        $_filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
         $filter = clone $_filter;
+        // prepend base path to original $_filter object! it is required for toArray() in the response array
+        $this->_prependBasePathToPathFilter($_filter);
         $filter->removeFilter('path');
         $filter->removeFilter('recursive');
-        $filter->removeFilter('type');
-        $filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
 
         $filter = new Tinebase_Model_Tree_Node_Filter($filter->toArray(), '', array('nameCaseInSensitive' => true));
 
@@ -383,25 +385,38 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        $path = $this->_prependBasePathToPathFilter($_filter);
+        
+        $this->_backend->checkPathACL($path, $_action);
+        
+        return $path;
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    protected function _prependBasePathToPathFilter(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
         if ($_filter === NULL) {
             $_filter = new Tinebase_Model_Tree_Node_Filter();
         }
-        
+
         $pathFilters = $_filter->getFilter('path', TRUE);
         if (count($pathFilters) !== 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . 'Exactly one path filter required.');
             $pathFilter = (count($pathFilters) > 1) ? $pathFilters[0] : new Tinebase_Model_Tree_Node_PathFilter(array(
-                'field'     => 'path',
-                'operator'  => 'equals',
-                'value'     => '/',)
+                    'field'     => 'path',
+                    'operator'  => 'equals',
+                    'value'     => '/',)
             );
             $_filter->removeFilter('path');
             $_filter->addFilter($pathFilter);
         } else {
             $pathFilter = $pathFilters[0];
         }
-        
+
         // add base path and check grants
         try {
             $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
@@ -411,9 +426,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath('/'));
         }
         $pathFilter->setValue($path);
-        
-        $this->_backend->checkPathACL($path, $_action);
-        
+
         return $path;
     }
     
