@@ -13,6 +13,7 @@
  * Model of a resource
  * 
  * @package Calendar
+ * @property grants
  */
 class Calendar_Model_Resource extends Tinebase_Record_Abstract
 {

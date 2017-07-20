@@ -950,6 +950,29 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     recordsName: 'Resources'
 });
 
+/**
+ * get default data for a new resource
+ *
+ * @return {Object} default data
+ * @static
+ */
+Tine.Calendar.Model.Resource.getDefaultData = function() {
+    var data = {
+        grants: [{
+            account_id: "0",
+            account_type: "anyone",
+            account_name: i18n._('Anyone'),
+            exportGrant: true,
+            readGrant: true,
+            syncGrant: true
+        }
+            // don't add account/group/role with admin grants here as manage_resource right is enough
+        ]
+    };
+
+    return data;
+};
+
 Tine.Calendar.Model.Resource.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
 

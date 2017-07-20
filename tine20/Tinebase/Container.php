@@ -827,7 +827,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $select = $this->_getSelect()
             ->distinct()
-            ->join(array(
+            ->joinLeft(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 array()
@@ -843,10 +843,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $select->order($sortOrder);
 
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
+        if ($meta['appName'] === 'Calendar' && Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+            $where = join(' ', $select->getPart(Zend_Db_Select::WHERE));
+            $select->reset(Zend_Db_Select::WHERE);
+            $select->where($where);
+            $select->orWhere(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('container.application_id') .' = ?', $application->getId()) . ' AND ' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
+                $this->_db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
+            );
+        }
         
-        $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
+        $data = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select)->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $data, TRUE);
         
         $this->saveInClassCache(__FUNCTION__, $classCacheId, $containers);
         

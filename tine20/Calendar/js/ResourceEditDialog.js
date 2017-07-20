@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -25,8 +25,22 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     tbarItems: [],
-    //mode: 'local',
-    
+
+    /**
+     * overwritten to activate action_saveAndClose if user has manage_resource right
+     */
+    updateToolbars: function(record, containerField) {
+        Tine.Calendar.ResourceEditDialog.superclass.updateToolbars.call(this, record, containerField);
+
+        if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
+            this.action_saveAndClose.setDisabled(false);
+        }
+    },
+
+    /**
+     *
+     * @returns {{xtype: string, border: boolean, plain: boolean, activeTab: number, border: boolean, items: [null,null,null]}}
+     */
     getFormItems: function() {
         this.grantsGridPanel = new Tine.widgets.container.GrantsGrid({
             grantContainer: {
