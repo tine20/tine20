@@ -338,7 +338,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.recordClass) {
             var grantsField = this.recordClass.getMeta('grantsPath')
                 .replace(/^data\./, '')
-                .replace(/\.+/g, '');
+                .replace(/\..+/g, '');
 
             this.evalGrants = this.evalGrants && (grantsField == 'data' || this.recordClass.hasField(grantsField));
         }
