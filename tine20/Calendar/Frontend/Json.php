@@ -539,8 +539,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $ignoreUIDs
      * @return array single fbInfo or array of eventid => fbinfo
      */
-    public function getFreeBusyInfo($attendee, $events, $ignoreUIDs = array())
+    public function getFreeBusyInfo($attendee, $events = [], $ignoreUIDs = array())
     {
+        $events = array_filter($events);
+
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
         $calendarController = Calendar_Controller_Event::getInstance();
         $fbInfo = [];
@@ -548,6 +550,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach($events as $event) {
             $eventRecord = new Calendar_Model_Event(array(), TRUE);
             $eventRecord->setFromJsonInUsersTimezone($event);
+
+            if ($eventRecord->dtstart === null) {
+                continue;
+            }
 
             $periods = $calendarController->getBlockingPeriods($eventRecord, array(
                 'from'  => $eventRecord->dtstart,
