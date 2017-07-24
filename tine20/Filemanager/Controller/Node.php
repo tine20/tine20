@@ -938,7 +938,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
             $destinationPathRecord = $this->_getDestinationPath($_destinationFilenames, $idx, $sourcePathRecord);
             
-            if ($this->_backend->fileExists($destinationPathRecord->statpath) && $sourcePathRecord->flatpath == $destinationPathRecord->flatpath) {
+            if ($this->_backend->fileExists($destinationPathRecord->statpath) && $sourcePathRecord->flatpath === $destinationPathRecord->flatpath) {
                 throw new Filemanager_Exception_DestinationIsSameNode();
             }
             
@@ -1015,6 +1015,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 throw new Filemanager_Exception('No destination path found.');
             }
         } else {
+            // borken!!! should be refactored. Side effects? Who knows...
             $isdir = TRUE;
             $destination = $_destinationFilenames;
         }

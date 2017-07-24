@@ -1798,7 +1798,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 10.37
      *
-     * add quota column to tree_nodes
+     * fix tree_node_acl and container_acl tables re primary / unique keys
      */
     public function update_36()
     {
@@ -1834,20 +1834,31 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         /** @var Tinebase_Backend_Sql_Command_Interface $command */
         $command = Tinebase_Backend_Sql_Command::factory($this->_db);
-        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl', array($command->getAggregate('id'),
-            new Zend_Db_Expr('count(*) AS c')))
-            ->group(array('container_id', 'account_type', 'account_id', 'account_grant'))
-            ->having('c > 1')->query(Zend_Db::FETCH_NUM);
+        $quotedC = $this->_db->quoteIdentifier('c');
+        $stmt = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container_acl', array($command->getAggregate('id'),
+            new Zend_Db_Expr('count(*) AS ' . $quotedC)))
+            ->group(array('container_id', 'account_type', 'account_id', 'account_grant'));
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $stmt->having('count(*) > 1');
+        } else {
+            $stmt->having('c > 1');
+        }
+        $result = $stmt->query(Zend_Db::FETCH_NUM);
         foreach ($result->fetchAll() as $row) {
             $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
             array_pop($ids);
             $this->_db->delete(SQL_TABLE_PREFIX . 'container_acl', $this->_db->quoteInto($quotedId . ' in (?)', $ids));
         }
 
-        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl', array($command->getAggregate('id'),
-            new Zend_Db_Expr('count(*) AS c')))
-            ->group(array('record_id', 'account_type', 'account_id', 'account_grant'))
-            ->having('c > 1')->query(Zend_Db::FETCH_NUM);
+        $stmt = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl', array($command->getAggregate('id'),
+            new Zend_Db_Expr('count(*) AS '. $quotedC)))
+            ->group(array('record_id', 'account_type', 'account_id', 'account_grant'));
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $stmt->having('count(*) > 1');
+        } else {
+            $stmt->having('c > 1');
+        }
+        $result = $stmt->query(Zend_Db::FETCH_NUM);
         foreach ($result->fetchAll() as $row) {
             $ids = explode(',', ltrim(rtrim($row[0], '}'), '{'));
             array_pop($ids);
@@ -1855,11 +1866,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
 
         if ($this->getTableVersion('container_acl') < 5) {
-            if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-                $this->_backend->dropIndex('container_acl', 'container_id-account-type-account_id-account_grant');
-            } else {
-                $this->_backend->dropIndex('container_acl', 'PRIMARY');
-            }
+            $this->_backend->dropPrimaryKey('container_acl');
             $this->_backend->addIndex('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1885,16 +1892,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </field>
                 </index>
             '));
-            $this->_backend->dropIndex('container_acl', 'id-account_type-account_id');
+            try {
+                $this->_backend->dropIndex('container_acl', 'id-account_type-account_id');
+            } catch(Exception $e) {}
             $this->setTableVersion('container_acl', 5);
         }
 
         if ($this->getTableVersion('tree_node_acl') < 2) {
-            if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-                $this->_backend->dropIndex('tree_node_acl', 'record_id-account-type-account_id-account_grant');
-            } else {
-                $this->_backend->dropIndex('tree_node_acl', 'PRIMARY');
-            }
+            $this->_backend->dropPrimaryKey('tree_node_acl');
             $this->_backend->addIndex('tree_node_acl', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1920,7 +1925,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </field>
                 </index>
             '));
-            $this->_backend->dropIndex('tree_node_acl', 'id-account_type-account_id');
+            try {
+                $this->_backend->dropIndex('tree_node_acl', 'id-account_type-account_id');
+            } catch(Exception $e) {}
             $this->setTableVersion('tree_node_acl', 2);
         }
         $this->setApplicationVersion('Tinebase', '10.37');
@@ -2015,5 +2022,31 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 7);
         }
         $this->setApplicationVersion('Tinebase', '10.40');
+    }
+
+    /**
+     * update to 10.41
+     *
+     * pgsql - fix bigint issue
+     */
+    public function update_40()
+    {
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        /** @var Tinebase_Model_Application $application */
+        foreach ($applications as $application) {
+            $setupXml = Setup_Controller::getInstance()->getSetupXml($application->name);
+            foreach ($setupXml->tables->table as $key => $table) {
+                /** @var SimpleXMLElement $field */
+                foreach ($table->declaration->field as $field) {
+                    if ($field->type == 'integer' && !empty($field->length) && $field->length > 19) {
+                        $this->_backend->alterCol($table->name, new Setup_Backend_Schema_Field_Xml(
+                            $field->asXML()
+                        ));
+                    }
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.41');
     }
 }

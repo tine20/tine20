@@ -62,6 +62,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
+        $_options = isset($_fieldOrData['options']) ? $_fieldOrData['options'] : $_options;
         if (isset($_options['caseSensitive']) && $_options['caseSensitive']) {
             $this->_caseSensitive = true;
         }
