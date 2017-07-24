@@ -427,7 +427,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onContextMenu: function(node, event) {
         this.ctxNode = node;
-        
+
+        event.stopEvent();
+
         var folder = this.app.getFolderStore().getById(node.id),
             account = folder ? this.accountStore.getById(folder.get('account_id')) :
                                this.accountStore.getById(node.id);

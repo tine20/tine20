@@ -191,6 +191,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 });
           
                 child.on('contextmenu', function(node, event) {
+                    event.stopEvent();
                     if(node.leaf) {
                         this.ctxNode = node;
                         this['contextMenu' + modelName].showAt(event.getXY());

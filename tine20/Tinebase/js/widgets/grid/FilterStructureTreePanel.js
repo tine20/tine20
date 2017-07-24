@@ -91,6 +91,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onContextMenu: function(node, e) {
+        e.stopEvent();
         if (this.getRootNode().childNodes.length > 2 && node.id != 'addFilterPanel') {
             this.contextMenu.contextNode = node;
             this.contextMenu.showAt(e.getXY());
