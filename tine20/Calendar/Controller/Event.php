@@ -1286,7 +1286,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $dtStart = new Tinebase_DateTime($dtStart);
         }
         $dtStart->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
-        $dtEnd = $_recurInstance->dtEnd;
+        $dtEnd = $_recurInstance->dtend;
         if (! $dtEnd instanceof Tinebase_DateTime) {
             $dtEnd = new Tinebase_DateTime($dtEnd);
         }
