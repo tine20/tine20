@@ -62,6 +62,12 @@ Tine.widgets.form.FieldManager = function() {
                 app = Tine.Tinebase.appMgr.get(appName),
                 i18n = fieldDefinition.useGlobalTranslation ? i18n : app.i18n;
 
+
+            if (fieldType === 'virtual' && fieldDefinition.config) {
+                fieldType = fieldDefinition.config.type || 'textfield';
+                fieldDefinition = fieldDefinition.config;
+            }
+
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             field.name = fieldName;
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
