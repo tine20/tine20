@@ -1933,6 +1933,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_37()
     {
+        $this->_addIsDeletedToTreeNodes();
         $fileSystem = Tinebase_FileSystem::getInstance();
         $inheritPropertyMethod = $this->_getProtectedMethod($fileSystem, '_recursiveInheritPropertyUpdate');
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
@@ -1988,6 +1989,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_38()
     {
         if ($this->getTableVersion('tree_nodes') < 6) {
+            $this->_addIsDeletedToTreeNodes();
             $this->setTableVersion('tree_nodes', 6);
         }
         $this->setApplicationVersion('Tinebase', '10.39');
