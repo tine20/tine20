@@ -599,7 +599,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $contactFilter[] = $filters['userFilter'];
             }
             $contactPaging = $paging;
-            $contactPaging['sort'] = 'type';
+            $contactPaging['sort'] = 'n_fileas';
             $result[Calendar_Model_Attender::USERTYPE_USER] = $addressBookFE->searchContacts($contactFilter, $contactPaging);
         }
 
@@ -612,7 +612,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $groupFilter[] = $filters['groupFilter'];
             }
             $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
-            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $paging);
+            $groupPaging = $paging;
+            $groupPaging['sort'] = 'name';
+            $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $groupPaging);
         }
 
         if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_RESOURCE, $filters['type'])) {
@@ -620,7 +622,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (isset($filters['resourceFilter'])) {
                 $resourceFilter[] = $filters['resourceFilter'];
             }
-            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $paging);
+            $resourcePaging = $paging;
+            $resourcePaging['sort'] = 'name';
+            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $resourcePaging);
         }
 
         if (empty($events)) {
