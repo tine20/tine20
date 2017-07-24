@@ -569,12 +569,15 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @param array $filter
      * @param array $paging
-     * @param array $event
+     * @param array $events
      * @param array $ignoreUIDs
      * @return array
      */
-    public function searchAttenders($filter, $paging, $events, $ignoreUIDs)
+    public function searchAttenders($filter = [], $paging = [], $events = [], $ignoreUIDs = [])
     {
+        // Might contain an empty value, array filter should clean it up
+        $events = array_filter($events);
+
         $filters = array();
         foreach($filter as $f) {
             switch($f['field']) {
