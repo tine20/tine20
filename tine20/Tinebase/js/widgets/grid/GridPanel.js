@@ -545,7 +545,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.each(this.modelConfig.fieldKeys, function(key) {
                 var fieldConfig = this.modelConfig.fields[key];
                     globalI18n = (fieldConfig && fieldConfig.hasOwnProperty('useGlobalTranslation'));
-                
+
+                if (fieldConfig.type === 'virtual') {
+                    fieldConfig = fieldConfig.config;
+                }
+
                 // don't show multiple record fields
                 if (fieldConfig.type == 'records') {
                     return true;
