@@ -194,6 +194,10 @@
           "path": "js/ux/grid/"
         },
         {
+          "text": "MultiCellSelectionModel.js",
+          "path": "js/ux/grid/"
+        },
+        {
           "text": "UploadManager.js",
           "path": "js/ux/file/"
         },
