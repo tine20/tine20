@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <model>Calendar_Model_Event</model>
-    <name>cal_default_doc_sheet</name>
+    <name>cal_default_doc_single</name>
     <type>export</type>
     <plugin>Calendar_Export_Doc</plugin>
     <favorite>true</favorite>

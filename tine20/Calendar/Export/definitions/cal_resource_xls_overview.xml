@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <model>Calendar_Model_Resource</model>
-    <name>cal_resource_xls</name>
+    <name>cal_resource_overview_xls</name>
     <!-- _('Excel overview') -->
     <label>Excel overview</label>
     <favorite>true</favorite>
