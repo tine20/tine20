@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>cal_default_doc_sheet</name>
+    <type>export</type>
+    <plugin>Calendar_Export_Doc</plugin>
+    <favorite>true</favorite>
+    <!-- <scope>multi</scope> -->
+    <template>tine20:///Tinebase/folders/shared/export/templates/Calendar/calendar_export.docx</template>
+    <!-- _('Word details') -->
+    <label>Word details</label>
+</config>
