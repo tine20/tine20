@@ -420,6 +420,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates/updates an event / recur
      *
+     * WARNING: the Calendar_Controller_Event::create method is not conform to the regular interface!
+     *          The parent's _save method doesn't work here!
+     *
      * @param   array   $recordData
      * @param   bool    $checkBusyConflicts
      * @param   string  $range
@@ -427,9 +430,21 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEvent($recordData, $checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
     {
-        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConflicts, $range));
+        $record = new Calendar_Model_Event([], true);
+        $record->setFromJsonInUsersTimezone($recordData);
+
+        // if there are dependent records, set the timezone of them and add them to a recordSet
+        $this->_dependentRecordsFromJson($record);
+
+        if ((empty($record->id))) {
+            $savedRecord = Calendar_Controller_Event::getInstance()->create($record, $checkBusyConflicts, false);
+        } else {
+            $savedRecord = Calendar_Controller_Event::getInstance()->update($record, $checkBusyConflicts, $range, false);
+        }
+
+        return $this->_recordToJson($savedRecord);
     }
-    
+
     /**
      * creates/updates a Resource
      *
