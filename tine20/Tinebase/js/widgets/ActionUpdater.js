@@ -43,21 +43,16 @@
      * @param {Array|Toolbar} actions
      */
     addActions: function(actions) {
-        switch (typeof(actions)) {
-            case 'object':
-                if (typeof(actions.each) == 'function') {
-                    actions.each(this.addAction, this);
-                } else {
-                    for (var action in actions) {
-                        this.addAction(actions[action]);
-                    }
-                }
-            break;
-            case 'array':
-                for (var i=0; i<actions.length; i++) {
-                    this.addAction(actions[i]);
-                }
-            break;
+        if (Ext.isArray(actions)) {
+            for (var i=0; i<actions.length; i++) {
+                this.addAction(actions[i]);
+            }
+        } else if (Ext.isFunction(actions.each)) {
+            actions.each(this.addAction, this);
+        } else if (Ext.isObject(actions)) {
+            for (var action in actions) {
+                this.addAction(actions[action]);
+            }
         }
     },
     

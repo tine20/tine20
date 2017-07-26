@@ -575,10 +575,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     Tine.widgets.exportAction.SCOPE_SINGLE
                 );
 
-                var actionUpdater = new Tine.widgets.ActionUpdater();
-                actionUpdater.addAction(exportAction);
-                actionUpdater.updateActions([resource]);
-
                 items = items.concat(exportAction);
             }
 
@@ -608,6 +604,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 }
             });
+
+            var actionUpdater = new Tine.widgets.ActionUpdater();
+            actionUpdater.addAction(exportAction);
+            actionUpdater.updateActions([resource]);
+
             this.ctxMenu.showAt(e.getXY());
         }
     },
