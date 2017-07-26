@@ -246,7 +246,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         var sm = this.getSelectionModel();
 
-        sm.suspendEvents();
         sm.clearSelections(true);
 
         for (var i = 0; i < nodes.length; i++) {
