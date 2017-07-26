@@ -45,6 +45,11 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     protected $_aclIdColumn = 'acl_node';
 
     /**
+     * @var bool
+     */
+    protected $_ignorePinProtection = false;
+
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
@@ -146,11 +151,22 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     {
         parent::_appendGrantsFilter($select, $backend, $user);
 
-        if (!Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-            $select->where('pin_protected = 0');
+        if (!$this->_ignorePinProtection && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            $db = $backend->getAdapter();
+            $select->joinLeft(array(
+                /* table  */ 'pinProtected' => SQL_TABLE_PREFIX . $backend->getTableName()),
+                /* on     */ "{$db->quoteIdentifier('pinProtected.id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
+                /* select */ array()
+            );
+            $select->where("{$db->quoteIdentifier('pinProtected.pin_protected')} = 0 OR {$db->quoteIdentifier('pinProtected.pin_protected')} IS NULL");
         }
 
         // TODO do something when acl_node = NULL?
+    }
+
+    public function ignorePinProtection($_value = true)
+    {
+        $this->_ignorePinProtection = $_value;
     }
 
     /**

@@ -41,8 +41,13 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_removeAppIdFromPathFilter($result);
 
         $context = $controller->getRequestContext();
-        if (is_array($context) && isset($context['quotaResult'])) {
-            $result['quota'] = $context['quotaResult'];
+        if (is_array($context)) {
+            if (isset($context['quotaResult'])) {
+                $result['quota'] = $context['quotaResult'];
+            }
+            if (isset($context['pinProtectedData'])) {
+                $result['pinProtectedData'] = true;
+            }
         }
         
         return $result;

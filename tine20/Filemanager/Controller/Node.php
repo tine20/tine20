@@ -329,7 +329,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $context = array();
         }
         $context['quotaResult'] = $quota;
-        $this->setRequestContext($quota);
+        /** @var Tinebase_Model_Tree_Node_Filter $_filter */
+        $_filter->ignorePinProtection();
+        if ((int)$this->_backend->searchNodesCount($_filter) !== $result->count()) {
+            $context['pinProtectedData'] = true;
+        }
+        $this->setRequestContext($context);
+        $_filter->ignorePinProtection(false);
 
         $this->resolveGrants($result);
         return $result;
@@ -370,6 +376,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
 
             $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+        }
+
+        $filter->ignorePinProtection();
+        if ((int)$this->_backend->searchNodesCount($filter) !== $result->count()) {
+            $context = $this->getRequestContext();
+            if (!is_array($context)) {
+                $context = array();
+            }
+            $context['pinProtectedData'] = true;
+            $this->setRequestContext($context);
         }
         
         return $result;
