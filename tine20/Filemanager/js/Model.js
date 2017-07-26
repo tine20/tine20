@@ -223,6 +223,9 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                 targetPath = target.attributes.path + '/';
                 treeIsTarget = true;
             }
+            else if (target.path) {
+                targetPath = target.path + (target.type == 'folder' ? '/' : '');
+            }
 
             for(var i=0; i<items.length; i++) {
                 var item = items[i];

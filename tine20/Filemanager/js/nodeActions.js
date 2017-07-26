@@ -270,11 +270,11 @@ Tine.Filemanager.nodeActions.Move = {
 
         filePickerDialog.on('selected', function(nodes) {
             var node = nodes[0];
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node.path, true);
+            Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
         });
 
         filePickerDialog.openWindow();
-    },
+    }
 };
 
 /**

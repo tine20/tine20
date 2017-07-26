@@ -106,18 +106,21 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             // add / remount node
-            me.expandPath(parentPath, '', function(sucess, parentNode) {
-                var childNode = parentNode.findChild('name', data.name);
-                if (! childNode) {
-                    parentNode.appendChild(node || me.loader.createNode(data));
-                } else if (childNode != node) {
-                    // node got duplicated by expand load
-                    try {
-                        node.cancelExpand();
-                        node.remove(true);
-                    } catch (e) {}
-                }
-            });
+            try {
+                me.expandPath(parentPath, '', function (sucess, parentNode) {
+                    var childNode = parentNode.findChild('name', data.name);
+                    if (!childNode) {
+                        parentNode.appendChild(node || me.loader.createNode(data));
+                    } else if (childNode != node) {
+                        // node got duplicated by expand load
+                        try {
+                            node.cancelExpand();
+                            node.remove(true);
+                        } catch (e) {
+                        }
+                    }
+                });
+            } catch (e) {}
         }
     },
 

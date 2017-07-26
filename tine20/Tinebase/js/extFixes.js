@@ -846,3 +846,18 @@ Ext.override(Ext.menu.DateMenu, {
         }
     }
 });
+
+Ext.override(Ext.tree.TreePanel, {
+    /**
+     * Gets a node in this tree by its id
+     * @param {String} id
+     * @return {Node}
+     */
+    getNodeById : function(id){
+        try {
+            return this.nodeHash[id];
+        } catch(e) {
+            return null;
+        }
+    }
+});
