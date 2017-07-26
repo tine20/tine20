@@ -1066,14 +1066,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      *
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   boolean $_ignoreAcl
-     * @param   boolean $_tryAgain
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_SystemContainer
      * @throws  Tinebase_Exception_InvalidArgument
      * 
      * @todo move records in deleted container to personal container?
      */
-    public function deleteContainer($_containerId, $_ignoreAcl = FALSE, $_tryAgain = TRUE)
+    public function deleteContainer($_containerId, $_ignoreAcl = false)
     {
         $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
@@ -1928,16 +1927,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * Updates existing container and clears the cache entry of the container
      *
      * @param Tinebase_Record_Interface $_record
+     * @param boolean $_updateDeleted = false;
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false)
     {
         $this->_clearCache($_record);
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         //use get (avoids cache) or getContainerById, guess its better to avoid the cache
-        $oldContainer = $this->get($_record->getId());
+        $oldContainer = $this->get($_record->getId(), $_updateDeleted);
 
         $result = parent::update($_record);
 
@@ -1993,6 +1993,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
     {
+
         switch ($_modification->change_type) {
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
@@ -2008,12 +2009,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 } else {
                     $record = $this->get($_modification->record_id, true);
                     $record->applyDiff($diff);
-                    $this->update($record);
+                    $this->update($record, true);
                 }
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $this->delete($_modification->record_id);
+                $this->deleteContainer($_modification->record_id, true);
                 break;
 
             default:
