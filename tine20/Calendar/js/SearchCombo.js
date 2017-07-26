@@ -108,15 +108,11 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     setValue: Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setValue,
 
     /**
-     * is called, when records has been fetched
-     * records without edit grant are removed
      * @param {} store
      * @param {} records
      */
     onStoreLoad: function(store, records) {
-        store.each(function(record) {
-            if(!record.data.editGrant) store.remove(record);
-        });
+        // override, when required.
     },
 
     /**
