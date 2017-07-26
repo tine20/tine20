@@ -19,5 +19,7 @@
  */
 class Addressbook_Export_List_Doc extends Tinebase_Export_Doc
 {
+    use Addressbook_Export_List_Trait;
+
     protected $_defaultExportname = 'adb_list_doc';
 }

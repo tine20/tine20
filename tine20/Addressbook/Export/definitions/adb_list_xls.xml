@@ -11,4 +11,10 @@
     <scope>multi</scope>
     <favorite>true</favorite>
     <order>300</order>
+    <keyFields>
+        <keyField>
+            <name>listType</name>
+            <propertyName>list_type</propertyName>
+        </keyField>
+    </keyFields>
 </config>

@@ -997,6 +997,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             'export'            => array(
                 'timestamp'         => $this->_exportTimeStamp,
                 'account'           => Tinebase_Core::getUser(),
+                'contact'           => Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()
+                                        ->contact_id),
                 'groupdata'         => $this->_lastGroupValue,
             ),
             'additionalRecords' => $this->_additionalRecords,

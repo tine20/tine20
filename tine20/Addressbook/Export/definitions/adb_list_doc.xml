@@ -10,4 +10,10 @@
     <template>tine20:///Tinebase/folders/shared/export/templates/Addressbook/addressbook_list_export.docx</template>
     <favorite>true</favorite>
     <order>100</order>
+    <keyFields>
+        <keyField>
+            <name>listType</name>
+            <propertyName>list_type</propertyName>
+        </keyField>
+    </keyFields>
 </config>
