@@ -449,6 +449,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 removeStrategy: 'keepBuffered'
             });
         }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.grid.getSelectionModel());
     },
 
     /**
