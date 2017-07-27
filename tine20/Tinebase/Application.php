@@ -125,7 +125,12 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
 
-        $application = $this->getApplications()->find('name', $_applicationName);
+        $applications = $this->getApplications();
+        if ($applications) {
+            $application = $applications->find('name', $_applicationName);
+        } else {
+            $application = false;
+        }
         
         if (!$application) {
             throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
