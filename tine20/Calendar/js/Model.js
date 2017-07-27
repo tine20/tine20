@@ -740,7 +740,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     });
 
     if (Ext.isString(attendeeData)) {
-        attendeeData = Ext.decode(attendeeData);
+        attendeeData = Ext.decode(attendeeData || null);
     }
 
     Ext.each(attendeeData, function(attender) {
