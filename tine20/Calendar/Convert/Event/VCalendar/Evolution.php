@@ -5,8 +5,8 @@
  * @package     Calendar
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Christoph Elisabeth Hintermüller <christoph@out-world.com>
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,7 @@
  */
 class Calendar_Convert_Event_VCalendar_Evolution extends Calendar_Convert_Event_VCalendar_Abstract
 {
+    // Evolution/3.18.5
     const HEADER_MATCH = '/Evolution\/(?P<version>.*)/';
         
     protected $_supportedFields = array(
