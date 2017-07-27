@@ -369,7 +369,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $this->_clearCache($container);
         
-        return $this->update($container);
+        return $this->update($container, true);
     }
 
     /**
@@ -1075,7 +1075,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function deleteContainer($_containerId, $_ignoreAcl = false)
     {
         $containerId = Tinebase_Model_Container::convertContainerId($_containerId);
-        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
+        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId, $_ignoreAcl);
         $this->checkSystemContainer($containerId);
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
