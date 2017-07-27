@@ -45,9 +45,8 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             disabled: true,
+            hidden: ! Tine.Tinebase.registry.get('secondFactor'),
             boxLabel: this.app.i18n._('This folder is pin protected')
-            // TODO needed?
-            //listeners: {scope: this, check: this.onPinProtectionCheck}
         });
         this.pinProtectionDescription = new Ext.form.Label({
             text: this.app.i18n._("If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents.")

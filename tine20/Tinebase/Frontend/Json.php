@@ -787,8 +787,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             // secondfactor config
             // TODO pass sf config as array (but don't send everything to client)
-            'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
-            'secondFactorSessionLifetime'  => $secondFactorConfig && $secondFactorConfig->sessionLifetime
+            'secondFactor' => $secondFactorConfig && $secondFactorConfig->active,
+            'secondFactorLogin' => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
+            'secondFactorSessionLifetime' => $secondFactorConfig && $secondFactorConfig->sessionLifetime
                 ? $secondFactorConfig->sessionLifetime
                 : 15,
             'secondFactorPinChangeAllowed' => $secondFactorConfig
