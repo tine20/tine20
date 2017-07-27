@@ -5,8 +5,8 @@
  * @package     Addressbook
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Christoph Elisabeth Hintermüller <christoph@out-world.com>
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,64 +17,64 @@
  */
 class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Contact_VCard_Abstract
 {
-    // Mozilla/5.0 (X11; Linux i686) KHTML/4.7.3 (like Gecko) Konqueror/4.7
-    // KDE DAV groupware client
+    // Evolution/3.18.5
+
     const HEADER_MATCH = '/Evolution\/(?P<version>.*)/';
     
     protected $_emptyArray = array(
-        'adr_one_countryname'   => null,# 1 1
-        'adr_one_locality'      => null,# 1 1
-        'adr_one_postalcode'    => null,# 1 1
-        'adr_one_region'        => null,# 1 1
-        'adr_one_street'        => null,# 1 1
-        'adr_one_street2'       => null,# 1 1
-        'adr_two_countryname'   => null,# 1 1
-        'adr_two_locality'      => null,# 1 1
-        'adr_two_postalcode'    => null,# 1 1
-        'adr_two_region'        => null,# 1 1
-        'adr_two_street'        => null,# 1 1
-        'adr_two_street2'       => null,# 1 1
-        'assistent'             => null,# 1 1
-        'bday'                  => null,# 1 1
-        'calendar_uri'          => null,# 1 1
-        'email'                 => null,# 1 1
-        'email_home'            => null,# 1 1
-        'jpegphoto'             => null,# 1 1
-        'freebusy_uri'          => null,# 1 1
-        'note'                  => null,# 1 1
-        'role'                  => null,# 1 1
+        'adr_one_countryname'   => null,
+        'adr_one_locality'      => null,
+        'adr_one_postalcode'    => null,
+        'adr_one_region'        => null,
+        'adr_one_street'        => null,
+        'adr_one_street2'       => null,
+        'adr_two_countryname'   => null,
+        'adr_two_locality'      => null,
+        'adr_two_postalcode'    => null,
+        'adr_two_region'        => null,
+        'adr_two_street'        => null,
+        'adr_two_street2'       => null,
+        'assistent'             => null,
+        'bday'                  => null,
+        'calendar_uri'          => null,
+        'email'                 => null,
+        'email_home'            => null,
+        'jpegphoto'             => null,
+        'freebusy_uri'          => null,
+        'note'                  => null,
+        'role'                  => null,
         #'salutation'            => null,
-        'title'                 => null,# 1 1
-        'url'                   => null,# 1 1
-        'url_home'              => null,# 1 1
-        'n_family'              => null,# 1 1
-        'n_fileas'              => null,# 1 1
-        'n_fn'                  => null,# 1 1
-        'n_given'               => null,# 1 1
-        'n_middle'              => null,# 1 1
-        'n_prefix'              => null,# 1 1
-        'n_suffix'              => null,# 1 1 
-        'org_name'              => null,# 1 1
-        'org_unit'              => null,# 1 1
+        'title'                 => null,
+        'url'                   => null,
+        'url_home'              => null,
+        'n_family'              => null,
+        'n_fileas'              => null,
+        'n_fn'                  => null,
+        'n_given'               => null,
+        'n_middle'              => null,
+        'n_prefix'              => null,
+        'n_suffix'              => null, 
+        'org_name'              => null,
+        'org_unit'              => null,
         #'pubkey'                => null,
         'room'                  => null,
-        'tel_assistent'         => null,# 1 1
-        'tel_car'               => null,# 1 1
-        'tel_cell'              => null,# 1 1
-        'tel_cell_private'      => null,# 0 0
-        'tel_fax'               => null,# 1 1
-        'tel_fax_home'          => null,# 1 1
-        'tel_home'              => null,# 1 1
-        'tel_pager'             => null,# 1 1
-        'tel_work'              => null,# 1 1
-        'tel_other'             => null,# 1 1
-        'tel_prefer'            => null,# 1 1
+        'tel_assistent'         => null,
+        'tel_car'               => null,
+        'tel_cell'              => null,
+        'tel_cell_private'      => null,
+        'tel_fax'               => null,
+        'tel_fax_home'          => null,
+        'tel_home'              => null,
+        'tel_pager'             => null,
+        'tel_work'              => null,
+        'tel_other'             => null,
+        'tel_prefer'            => null,
         #'tz'                    => null,
         #'geo'                   => null,
         #'lon'                   => null,
         #'lat'                   => null,
-        'tags'                  => null,# 1 1
-        'notes'                 => null,# 1
+        'tags'                  => null,
+        'notes'                 => null,
     );
         
     /**
