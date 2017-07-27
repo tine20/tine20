@@ -560,13 +560,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsonFileUri = $devServerURL . '/' . $jsonFile;
             $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
             if (! $json) {
-                $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'https://localhost:10443');
-                $jsonFileUri = $devServerURL . '/' . $jsonFile;
-                $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
-                if (! $json) {
-                    Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
-                    throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
-                }
+                Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
+                throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
         } else {
             $json = file_get_contents(dirname(dirname(__DIR__)) . '/' . $jsonFile);
