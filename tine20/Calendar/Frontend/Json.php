@@ -604,6 +604,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     break;
             }
         }
+        if (!isset($filters['query'])) {
+            $filters['query'] = array('field' => 'query', 'operator' => 'contains', 'value' => '');
+        }
 
         $result = array();
         $addressBookFE = new Addressbook_Frontend_Json();
