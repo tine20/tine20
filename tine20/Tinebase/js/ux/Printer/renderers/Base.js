@@ -142,7 +142,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
      */
     doPrintOnStylesheetLoad: function(win, component) {
         var me = this;
-        var styleLoaded = new Promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
             var checkcss = function(win, component) {
                 var el = win.document.getElementById('csscheck'),
                     comp = el.currentStyle || getComputedStyle(el, null);
@@ -153,12 +153,13 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                 fulfill();
             };
             checkcss(win, component);
-        });
-
-        return styleLoaded.then(function() {
-            me.onBeforePrint(win.document, component);
-            return me.doPrint(win);
-        });
+        })
+            .then(function() {
+                me.onBeforePrint(win.document, component);
+            })
+            .then(function() {
+                return me.doPrint(win);
+            });
     },
 
     doPrint: function(win) {
@@ -188,7 +189,11 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                 }, 'Tinebase/js/html2canvas');
 
             } else {
-                win.print();
+                try {
+                    win.document.execCommand('print', false, null);
+                } catch(e) {
+                    win.print();
+                }
                 if (!me.debug) {
                     win.close();
                 }
