@@ -189,8 +189,15 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     {
         $userId = $_user->getId();
 
-        $select = $this->_getSelect()
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $userId);
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+        );
+        $this->_appendClientIdOrDomain($where);
+
+        $select = $this->_getSelect();
+        foreach ($where as $w) {
+            $select->where($w);
+        }
 
         // Perform query - retrieve user from database
         $stmt = $this->_db->query($select);
@@ -454,10 +461,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     }
     
     /**
-     * check if user exists already in email backjend user table
+     * check if user exists already in email backend user table
      * 
      * @param  Tinebase_Model_FullUser  $_user
      * @throws Tinebase_Exception_Backend_Database
+     * @return boolean
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
