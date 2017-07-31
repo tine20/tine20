@@ -33,7 +33,8 @@ class Tinebase_Model_PathFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('path'))),
+        //'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('path'))),
+        //ATTENTION query does its own split! we do not want that split
         'path'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
         'shadow_path'    => array('filter' => 'Tinebase_Model_Filter_StrictFullText'),
     );

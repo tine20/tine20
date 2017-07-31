@@ -80,8 +80,8 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
     protected function _resolvePathIds($_model)
     {
         if (! is_array($this->_pathRecordIds)) {
-             $paths = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
-                array('field' => 'query', 'operator' => $this->_operator, 'value' => $this->_value)
+            $paths = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
+                array('field' => 'path', 'operator' => $this->_operator, 'value' => $this->_value)
             )));
 
             $this->_pathRecordIds = array();
@@ -99,61 +99,63 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
                 }
 
                 if (count($searchTerms) < 1) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                        ' found paths, but search terms array is empty. value: ' . print_r($this->_value, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                            ' found paths, but search terms array is empty. value: ' . print_r($this->_value, true));
+                    }
                     return;
                 }
 
-                array_walk($searchTerms, function(&$val) {$val = mb_strtolower($val);});
-                $hitNeighbours = array();
+                array_walk($searchTerms, function (&$val) {
+                    $val = mb_strtolower($val);
+                });
                 $hitIds = array();
 
                 /** @var Tinebase_Model_Path $path */
-                foreach($paths as $path) {
+                foreach ($paths as $path) {
+                    $sT = $searchTerms;
                     $pathParts = explode('/', trim($path->path, '/'));
                     $shadowPathParts = explode('/', trim($path->shadow_path, '/'));
                     $offset = 0;
-                    $hit = false;
-                    foreach($pathParts as $pathPart) {
+                    foreach ($pathParts as $pathPart) {
                         $pathPart = mb_strtolower($pathPart);
-
-                        $shadowPathPart = $shadowPathParts[$offset++];
-                        $model = substr($shadowPathPart, 1, strpos($shadowPathPart, '}') - 1);
-                        $id = substr($shadowPathPart, strpos($shadowPathPart, '}') + 1);
-                        if (false !== ($pos = strpos($id, '{'))) {
-                            $id = substr($id, 0, $pos - 1);
-                        }
-
-                        $newHit = true;
-                        foreach($searchTerms as $searchTerm) {
-                            if (false === strpos($pathPart, $searchTerm)) {
-                                $newHit = false;
+                        $found = false;
+                        foreach ($sT as $key => $term) {
+                            if (strpos($pathPart, $term) !== false) {
+                                $found = true;
                                 break;
                             }
                         }
-                        if (true === $newHit) {
-                            $hitIds[] = $id;
-                            $hit = true;
+                        if (false === $found) {
+                            ++$offset;
                             continue;
                         }
-                        if (false === $hit) {
-                            continue;
+                        unset($sT[$key]);
+                        if (count($sT) === 0) {
+                            break;
                         }
-
-                        if ($model !== $_model) {
-                            continue;
+                        ++$offset;
+                    }
+                    if (count($sT) === 0) {
+                        $hits = array_slice($shadowPathParts, $offset);
+                        foreach ($hits as $shadowPathPart) {
+                            $model = substr($shadowPathPart, 1, strpos($shadowPathPart, '}') - 1);
+                            if ($_model !== $model) {
+                                continue;
+                            }
+                            $id = substr($shadowPathPart, strpos($shadowPathPart, '}') + 1);
+                            if (false !== ($pos = strpos($id, '{'))) {
+                                $id = substr($id, 0, $pos - 1);
+                            }
+                            $hitIds[$id] = true;
                         }
-
-                        $hitNeighbours[] = $id;
-                        $hit = false;
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                            ' found path, but not all search terms were found in it: ' . print_r($searchTerms, true) . ' path: ' . $path->path);
                     }
                 }
 
-                if (count($hitNeighbours) > 0) {
-                    $this->_pathRecordIds = $hitNeighbours;
-                } else {
-                    $this->_pathRecordIds = $hitIds;
-                }
+                $this->_pathRecordIds = array_keys($hitIds);
             }
         }
 
