@@ -86,6 +86,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('VIEW_ACCOUNTS');
         
         $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
+
+        $emailUser = Tinebase_EmailUser::getInstance();
+        foreach ($result as $user) {
+            $emailUser->inspectGetUserByProperty($user);
+        }
         
         return $result;
     }
