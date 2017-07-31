@@ -2035,6 +2035,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         /** @var Tinebase_Model_Application $application */
         foreach ($applications as $application) {
             $setupXml = Setup_Controller::getInstance()->getSetupXml($application->name);
+            if (!$setupXml || !$setupXml->tables || !$setupXml->tables->table) {
+                continue;
+            }
             foreach ($setupXml->tables->table as $key => $table) {
                 /** @var SimpleXMLElement $field */
                 foreach ($table->declaration->field as $field) {
