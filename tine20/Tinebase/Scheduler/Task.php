@@ -47,7 +47,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $request = new Zend_Controller_Request_Simple();
         $request->setControllerName($_requestOptions['controller']);
         $request->setActionName($_requestOptions['action']);
-        if ((isset($_requestOptions['params']) || array_key_exists('params', $_requestOptions))) {
+        if (isset($_requestOptions['params']) && is_array($_requestOptions['params'])) {
             foreach ($_requestOptions['params'] as $key => $value) {
                 $request->setParam($key, $value);
             }
@@ -485,8 +485,11 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
                 if(true === $request->getUserParam('static')) {
                     $request->setParam('static', null);
                     $controller = $controllerName;
+                    $userParam = $request->getUserParams();
+                    $request->setParam('static', true);
                 } else {
                     $controller = Tinebase_Controller_Abstract::getController($controllerName);
+                    $userParam = $request->getUserParams();
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -495,7 +498,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
                 continue;
             }
 
-            $return[] = call_user_func_array(array($controller, $request->getActionName()), $request->getUserParams());
+            $return[] = call_user_func_array(array($controller, $request->getActionName()), $userParam);
         }
 
         switch(count($return)) {

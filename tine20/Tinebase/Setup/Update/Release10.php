@@ -2052,4 +2052,17 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.41');
     }
+
+    /**
+     * update to 10.42
+     *
+     * fix static scheduler issue
+     */
+    public function update_41()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '10.42');
+    }
 }
