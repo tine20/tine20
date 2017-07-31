@@ -337,7 +337,7 @@ class Tinebase_FileSystemTest extends TestCase
             array('field' => 'isIndexed',   'operator' => 'equals',     'value' => 1),
         ), /* $_condition = */ '', /* $_options */ array('ignoreAcl' => true));
         $result = $this->_controller->search($filter);
-        $this->assertEquals(1, $result->count(), 'didn\'t find file');
+        $this->assertEquals(1, $result->count(), 'didn\'t find file (is tika.jar installed?)');
 
 
         $filter = new Tinebase_Model_Tree_Node_Filter(array(

@@ -1866,6 +1866,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     public function testRecursiveFilter()
     {
+        // check for tika installation
+        if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
+            self::markTestSkipped('no tika.jar found');
+        }
+
         $folders = $this->testCreateDirectoryNodesInPersonal();
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
 
@@ -1901,7 +1906,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             ),
         ), null);
 
-        $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files: ' . print_r($result, true));
+        $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files (is tika.jar installed?): ' . print_r($result, true));
         foreach($result['results'] as $result) {
             $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true) . print_r($paths, true));
         }
