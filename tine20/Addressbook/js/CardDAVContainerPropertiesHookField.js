@@ -46,7 +46,7 @@ Tine.Addressbook.CardDAVContainerPropertiesHookField = Ext.extend(Ext.form.TextF
         this.hidden = ! this.isAddressbook;
         // cardDAV URL
         this.value = [
-            window.location.href.replace(/\/?(index\.php.*)?$/, ''),
+            Tine.Tinebase.common.getUrl('full').replace(/\/$/, ''), // might have an trailing /, we can safely remove it!
             '/addressbooks/',
             Tine.Tinebase.registry.get('currentAccount').contact_id,
             '/',
