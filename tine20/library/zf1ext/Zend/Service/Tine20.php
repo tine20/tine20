@@ -23,8 +23,15 @@
  * @category   Zend
  * @package    Zend_Service
  * @author     Lars Kneschke <l.kneschke@metaways.de>
- * @copyright  Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ *
+ * pass some options to Zend_Http_Client like this:
+ *
+ *   $tineService = new Zend_Service_Tine20(null, new Zend_Http_Client(null, array(
+ *       'verify_peer' => false,
+ *       'verify_peer_name' => false,
+ *   )));
  */
 class Zend_Service_Tine20 extends Zend_Json_Client
 {

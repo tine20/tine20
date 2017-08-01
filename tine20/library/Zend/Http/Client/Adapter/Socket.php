@@ -62,10 +62,12 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      * @var array
      */
     protected $config = array(
-        'persistent'    => false,
-        'ssltransport'  => 'ssl',
-        'sslcert'       => null,
-        'sslpassphrase' => null
+        'persistent'        => false,
+        'ssltransport'      => 'ssl',
+        'sslcert'           => null,
+        'sslpassphrase'     => null,
+        'verify_peer'       => true,
+        'verify_peer_name'  => true,
     );
 
     /**
@@ -181,18 +183,12 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
         if (! is_resource($this->socket) || ! $this->config['keepalive']) {
             $context = $this->getStreamContext();
             if ($secure) {
-                if ($this->config['sslcert'] !== null) {
-                    if (! stream_context_set_option($context, 'ssl', 'local_cert',
-                                                    $this->config['sslcert'])) {
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
-                        throw new Zend_Http_Client_Adapter_Exception('Unable to set sslcert option');
-                    }
-                }
-                if ($this->config['sslpassphrase'] !== null) {
-                    if (! stream_context_set_option($context, 'ssl', 'passphrase',
-                                                    $this->config['sslpassphrase'])) {
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
-                        throw new Zend_Http_Client_Adapter_Exception('Unable to set sslpassphrase option');
+                foreach (array('sslcert', 'sslpassphrase', 'verify_peer', 'verify_peer_name') as $sslOption) {
+                    if (isset($this->config[$sslOption]) && $this->config[$sslOption] !== null) {
+                        if (! stream_context_set_option($context, 'ssl', $sslOption, $this->config[$sslOption])) {
+                            require_once 'Zend/Http/Client/Adapter/Exception.php';
+                            throw new Zend_Http_Client_Adapter_Exception('Unable to set ' . $sslOption .' option');
+                        }
                     }
                 }
             }
