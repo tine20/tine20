@@ -46,6 +46,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     protected $_propertyMapping = array();
 
     /**
+     * @var array
+     */
+    protected $_tableMapping = array();
+
+    /**
      * config key (IMAP/SMTP)
      * 
      * @var string
@@ -516,4 +521,43 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * @return array
      */
     abstract protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties);
+
+    /**
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_EmailUser
+     */
+    public function getAllEmailUsers()
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_EmailUser', array());
+        foreach ($this->_getSelect()->limit(0)->query()->fetchAll() as $row) {
+            $result->addRecord($this->_rawDataToRecord($row));
+        }
+        return $result;
+    }
+
+    /**
+     * returns array with keys mailQuota and mailSize
+     * @return array
+     */
+    public function getTotalUsageQuota()
+    {
+        $data = $this->_getSelect(
+            array(
+                new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailQuota'] . '.' .
+                        $this->_propertyMapping['emailMailQuota']) . ') as mailQuota'),
+                new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailSize']  . '.' .
+                        $this->_propertyMapping['emailMailSize'])  . ') as mailSize'),
+                //new Zend_Db_Expr('SUM(' . $this->_propertyMapping['emailSieveSize'] . ') as sieveSize'),
+            ))->query()->fetchAll();
+        return $data[0];
+    }
+
+    protected function _replaceValue(array &$array, array $replacements)
+    {
+        foreach($array as &$value) {
+            if (isset($replacements[$value])) {
+                $value = $replacements[$value];
+            }
+        }
+    }
+
 }

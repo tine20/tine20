@@ -1308,10 +1308,44 @@ class Admin_JsonTest extends TestCase
         $filterAppResult = $this->_json->searchQuotaNodes(array(array(
             'field'     => 'path',
             'operator'  => 'equals',
-            'value'     => '/' . $filterNullResult['results'][0]['name']
+            'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
         )));
 
         static::assertEquals(1, $filterAppResult['totalcount']);
+        static::assertEquals('folders', $filterAppResult['results'][0]['name']);
+
+        $filterAppResult = $this->_json->searchQuotaNodes(array(array(
+            'field'     => 'path',
+            'operator'  => 'equals',
+            'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId()
+        )));
+
+        $imapBackend = Tinebase_EmailUser::getInstance();
+        if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            static::assertEquals(2, $filterAppResult['totalcount']);
+            static::assertEquals('Emails', $filterAppResult['results'][1]['name']);
+
+            $dovecotResult = $this->_json->searchQuotaNodes(array(array(
+                'field'     => 'path',
+                'operator'  => 'equals',
+                'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
+                    '/Emails'
+            )));
+            static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
+
+            /** ATTENTION as the third part of a path needs to be 'personal' or 'shared' below would error!
+            $dovecotResult = $this->_json->searchQuotaNodes(array(array(
+                'field'     => 'path',
+                'operator'  => 'equals',
+                'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
+                    '/Emails/' . $dovecotResult['results'][0]['parent_id']
+            )));
+            static::assertEquals(0, $dovecotResult['totalcount']);
+             *  */
+
+        } else {
+            static::assertEquals(1, $filterAppResult['totalcount']);
+        }
         static::assertEquals('folders', $filterAppResult['results'][0]['name']);
     }
 }
