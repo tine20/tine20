@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -792,5 +792,24 @@ class Crm_JsonTest extends Crm_AbstractTest
         );
         $searchLeads = $this->_getUit()->searchLeads($filter, '');
         $this->assertEquals(1, $searchLeads['totalcount']);
+    }
+
+    /**
+     * @see 0012680: CRM can't store leads
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testCreateLeadWithoutPermissionToInternalContacts()
+    {
+        // switch to jsmith
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['jsmith']);
+        $scleverContact = Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id);
+        $lead = $this->_getLead();
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => 'PARTNER', 'related_record' => $scleverContact->toArray()),
+        );
+        $newLead = $this->_getUit()->saveLead($leadData);
+
+        self::assertEquals(1, count($newLead['relations']), 'two relations expected');
     }
 }
