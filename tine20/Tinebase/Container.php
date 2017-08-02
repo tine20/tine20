@@ -1654,10 +1654,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Removing all cache entries for container id ' . $containerId);
-        
+
+        $null = null;
         $idsToDelete = array(
-            'getContainerById' . $containerId . 'd0',
-            'getContainerById' . $containerId . 'd1',
+            sha1($this->_getInClassCacheIdentifier() . 'getContainerById' . sha1($containerId . 'd0') . $null),
+            sha1($this->_getInClassCacheIdentifier() . 'getContainerById' . sha1($containerId . 'd1') . $null),
         );
         
         foreach ($idsToDelete as $id) {
