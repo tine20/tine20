@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c9f4588350bdb69d46c2e0da0a44a9e",
+    "content-hash": "473d313778517cbd85fcde5ca936717d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -352,7 +352,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2016-01-05T22:11:12+00:00"
+            "time": "2016-09-09T19:13:33+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -603,7 +603,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2016-01-05T21:34:58+00:00"
+            "time": "2016-09-10T18:51:13+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1293,7 +1293,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29T07:02:31+00:00"
+            "time": "2016-08-19T06:48:39+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1356,11 +1356,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "dev-master",
+            "version": "1.4",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "7a130976f93cce5035ec9a455f65b5b7134a7142"
+                "reference": "6cfa78353eadd29685086587ada9f66ccef7479f"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1384,7 +1384,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2017-01-03T16:14:20+00:00"
+            "time": "2017-08-02T09:27:40+00:00"
         },
         {
             "name": "tine20/composerapploader",
@@ -1788,7 +1788,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "40d2f288999a5e1a23051e90352d6f15fed50b5a"
+                "reference": "d695a820a69d9d675d97a67ba79db4e8045dc5aa"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2312,7 +2312,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29T05:29:29+00:00"
+            "time": "2016-09-02T01:57:56+00:00"
         },
         {
             "name": "tedivm/jshrink",
