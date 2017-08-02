@@ -37,4 +37,9 @@ class Tasks_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tasks', '10.2');
     }
+
+    public function update_2()
+    {
+        $this->setApplicationVersion('Tasks', '11.0');
+    }
 }

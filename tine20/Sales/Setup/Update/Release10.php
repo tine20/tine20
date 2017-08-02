@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -208,5 +208,13 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setTableVersion('sales_orderconf', 2);
         $this->setApplicationVersion('Sales', '10.9');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_9()
+    {
+        $this->setApplicationVersion('Sales', '11.0');
     }
 }
