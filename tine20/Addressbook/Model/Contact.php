@@ -217,7 +217,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_prefer_normalized'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'geo'                           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'preferred_address'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'preferred_address'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // modlog fields
         'created_by'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -308,6 +308,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         foreach ($geoFields as $geoField) {
             $this->_filters[$geoField]        = new Zend_Filter_Empty(NULL);
         }
+        $this->_filters['preferred_address']        = new Zend_Filter_Empty(0);
     
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }

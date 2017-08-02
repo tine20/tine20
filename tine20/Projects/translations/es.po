@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Jose Maria Muntane <munta@muntane.es>, 2013
 # Juan Fortuna <jfortuna@antel.com.uy>, 2014
@@ -9,33 +9,56 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Proyectos personales de %s"
+#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Asistentes"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Gestionar proyectos favoritos compartidos"
+#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "Cargo"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Crear un nuevo proyecto compartido favorito"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119 js/Model.js:35
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Proyecto"
 msgstr[1] "Proyectos"
+
+#: js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128 js/Model.js:74
+msgid "Title"
+msgstr "Título"
+
+#: js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121 js/Model.js:75
+msgid "Number"
+msgstr "Número"
+
+#: js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134 js/Model.js:78
+msgid "Status"
+msgstr "Estado"
+
+#: js/ProjectEditDialog.js:177 js/Model.js:76
+msgid "Description"
+msgstr "Descripción"
+
+#: js/ProjectEditDialog.js:191
+msgid "Enter description"
+msgstr "Escribir descripción"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Buscar FAQ"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Etiquetas"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -50,22 +73,6 @@ msgstr "Listas de Proyectos"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Título"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Número"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
-msgid "Description"
-msgstr "Descripción"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Estado"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -83,17 +90,9 @@ msgstr "Fecha de Creación"
 msgid "Created By"
 msgstr "Creado por"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr "Asistentes"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Cargo"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Escribir descripción"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Proyectos"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -120,38 +119,12 @@ msgstr "Seleccionar Cargo"
 msgid "Adding {0} Participants to project"
 msgstr "Agregar {0} participantes al proyecto"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Proyectos"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Buscar FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Etiquetas"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Todos mis proyectos"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Favorito por defecto"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "El favorito por defecto se carga al iniciar los proyectos"
-
 #: Config.php:38
 msgid "Project Status Available"
 msgstr "Estado del Proyecto Disponible"
 
 #: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
 msgstr "Posible estado del proyecto. Tenga en cuenta que el estado del asistente podría afectar otros sistemas de proyectos en la exportación o la sincronización."
 
 #: Config.php:47
@@ -175,10 +148,7 @@ msgid "Project Attendee Role Available"
 msgstr "Cargos de los Asistentes al Proyecto Disponibles"
 
 #: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
 msgstr "Posible estado de los asistentes al proyecto. Tenga en cuenta que el estado del asistente adicional podría afectar a otros sistemas de proyectos en la exportación o la sincronización."
 
 #: Config.php:65
@@ -208,3 +178,28 @@ msgstr "Mis proyectos a la espera"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Mis proyectos que están en espera"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Proyectos personales de %s"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Gestionar proyectos favoritos compartidos"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Crear un nuevo proyecto compartido favorito"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Todos mis proyectos"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Favorito por defecto"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "El favorito por defecto se carga al iniciar los proyectos"

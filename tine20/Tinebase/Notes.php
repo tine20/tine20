@@ -356,8 +356,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         }
                     }
                 }
-                
             }
+            $_record->$_notesProperty = $notesToSet;
         }
         
         //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
@@ -572,6 +572,27 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         foreach($notes as $note) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($note, 'delete', $note);
+            $sqlBackend->update($note);
+        }
+    }
+
+    /**
+     * undelete notes
+     *
+     * @param array $ids
+     */
+    public function unDeleteNotes(array $ids)
+    {
+        $sqlBackend = new Tinebase_Backend_Sql(
+            array(
+                'tableName' => $this->getTableName(),
+                'modelName' => 'Tinebase_Model_Note'
+            ),
+            $this->getAdapter());
+
+        $notes = $sqlBackend->getMultiple($ids);
+        foreach($notes as $note) {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($note, 'undelete', $note);
             $sqlBackend->update($note);
         }
     }

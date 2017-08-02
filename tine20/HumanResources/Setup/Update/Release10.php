@@ -43,4 +43,19 @@ class HumanResources_Setup_Update_Release10 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('HumanResources', '10.2');
     }
+
+    public function update_2()
+    {
+        $this->_backend->alterCol('humanresources_contract', new Setup_Backend_Schema_Field_Xml('<field>
+            <name>feast_calendar_id</name>
+            <type>text</type>
+            <length>40</length>
+            <default>null</default>
+            <notnull>false</notnull>
+        </field>'));
+
+        $this->setTableVersion('humanresources_contract', 3);
+
+        $this->setApplicationVersion('HumanResources', '10.3');
+    }
 }

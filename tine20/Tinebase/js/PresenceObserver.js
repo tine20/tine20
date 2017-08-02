@@ -33,10 +33,15 @@ Tine.Tinebase.PresenceObserver.prototype = {
     /**
      * @cfg {Function} callback to be called when absence is detected
      */
-    callback: Ext.emptyFn,
+    absenceCallback: Ext.emptyFn,
 
     /**
-     * @cfg {Object} scope to the callback is called in
+     * @cfg {Function} callback to be called each time presence is detected
+     */
+    presenceCallback: Ext.emptyFn,
+
+    /**
+     * @cfg {Object} scope to the callbacks are called in
      */
     scope: window,
 
@@ -74,12 +79,12 @@ Tine.Tinebase.PresenceObserver.prototype = {
 
         if (lastPresence + this.maxAbsenseTime * 60000 < nowTS) {
             Tine.log.info('Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenseTime + ' minutes');
-            // this.fireEvent('absence', lastPresence, this);
-            this.callback.call(this.scope, lastPresence, this);
+            this.absenceCallback.call(this.scope, lastPresence, this);
         } else {
             var nextCheck = this.maxAbsenseTime * 60000 - (nowTS - lastPresence);
             Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence next presence check at ' + now.add(Date.MILLI, nextCheck));
             this.checkTask.delay(nextCheck);
+            this.absenceCallback.call(this.scope, nextCheck, this);
         }
     },
 

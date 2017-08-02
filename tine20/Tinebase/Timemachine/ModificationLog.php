@@ -64,9 +64,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @var array
      * 
-     * @todo move 'toOmit' fields to record (getModlogOmitFields)
-     * @todo allow notes modlog
-     * 
      * @see 0007494: add changes in notes to modlog/history
      */
     protected $_metaProperties = array(
@@ -74,15 +71,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         'creation_time',
         'last_modified_by',
         'last_modified_time',
-        'is_deleted',
+        //do NOT add is_deleted!
+        //'is_deleted',
         'deleted_time',
         'deleted_by',
         'seq',
-    // @todo allow notes modlog
-        'notes',
-    // record specific properties / no meta properties 
-    // @todo to be moved to (contact) record definition
-        'jpegphoto',
     );
     
     /**
@@ -781,12 +774,21 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $notNullRecord = $_newRecord;
         } else {
             if (null !== $_newRecord) {
-                $diff = new Tinebase_Record_Diff(array('diff' => $_newRecord->toArray()));
                 $notNullRecord = $_newRecord;
+                $diffProp = 'diff';
             } else {
-                $diff = new Tinebase_Record_Diff(array('oldData' => $_curRecord->toArray()));
                 $notNullRecord = $_curRecord;
+                $diffProp = 'oldData';
             }
+            $diffData = $notNullRecord->toArray();
+
+            foreach (array_merge($this->_metaProperties, $notNullRecord->getModlogOmitFields()) as $omit) {
+                if (isset($diffData[$omit])) {
+                    unset($diffData[$omit]);
+                }
+            }
+
+            $diff = new Tinebase_Record_Diff(array($diffProp => $diffData));
         }
 
         if (! $diff->isEmpty()) {
@@ -988,39 +990,44 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             /* TODO $overwrite check in new code path! */
 
             $modifiedAttribute = $modlog->modified_attribute;
-            $isDeleted = false;
-            if (empty($modifiedAttribute)) {
-                $isDeleted = Tinebase_Timemachine_ModificationLog::DELETED === $modlog->change_type;
-            }
 
             try {
-                $record = $controller->get($modlog->record_id, NULL, TRUE, $isDeleted);
 
                 if (empty($modifiedAttribute)) {
                     // new handling using diff!
 
                     $updateCount++;
 
-                    if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
-                        if (!$dryrun) {
-                            $controller->delete($record->getId());
-                        }
-                    } elseif (true === $isDeleted) {
-                        if (!$dryrun) {
-                            $controller->unDelete($record);
-                        }
+                    if (method_exists($controller, 'undoReplicationModificationLog')) {
+                        $controller->undoReplicationModificationLog($modlog, $dryrun);
                     } else {
-                        /** TODO this is not finished YET! see $notUndoableFields below etc.! */
-                        $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
-                        $record->undo($diff);
 
-                        if (!$dryrun) {
-                            $controller->update($record);
+                        if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
+                            if (!$dryrun) {
+                                $controller->delete($modlog->record_id);
+                            }
+                        } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modlog->change_type) {
+                            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
+                            $model = $modlog->record_type;
+                            $record = new $model($diff->oldData, true);
+                            if (!$dryrun) {
+                                $controller->unDelete($record);
+                            }
+                        } else {
+                            $record = $controller->get($modlog->record_id, null, true, true);
+                            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
+                            $record->undo($diff);
+
+                            if (!$dryrun) {
+                                $controller->update($record);
+                            }
                         }
                     }
 
                     // this is the legacy code for old data in existing installations
                 } else {
+
+                    $record = $controller->get($modlog->record_id);
 
                     if (!in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->seq === $modlog->seq)) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -1105,7 +1112,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             case 'undelete':
                 $_newRecord->deleted_by   = null;
                 $_newRecord->deleted_time = null;
-                $_newRecord->is_deleted   = false;
+                $_newRecord->is_deleted   = 0;
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:
@@ -1175,6 +1182,38 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         return array_keys($result);
+    }
+
+    public function fetchBlobFromMaster($hash)
+    {
+        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
+        // check if we are a replication slave
+        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
+            return true;
+        }
+
+        $tine20Service = new Zend_Service_Tine20($tine20Url);
+
+        $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+        if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+            throw new Tinebase_Exception_AccessDenied('login failed');
+        }
+        unset($authResponse);
+
+        $tinebaseProxy = $tine20Service->getProxy('Tinebase');
+        /** @noinspection PhpUndefinedMethodInspection */
+        $result = $tinebaseProxy->getBlob($hash);
+
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        if (!is_dir(dirname($path))) {
+            mkdir(dirname($path));
+        }
+        file_put_contents($path, $result);
     }
 
     /**
@@ -1264,9 +1303,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        if (!is_array($tinebaseApplication->state)) {
-            $tinebaseApplication->state = array();
-        }
 
         /** @var Tinebase_Model_ModificationLog $modification */
         foreach($modifications as $modification)
@@ -1292,9 +1328,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     static::defaultApply($modification, $controller);
                 }
 
-                $state = $tinebaseApplication->state;
-                $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = $modification->instance_seq;
-                $tinebaseApplication->state = $state;
+                $tinebaseApplication->xprops('state')[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
+                    $modification->instance_seq;
                 $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
 
                 $transactionManager->commitTransaction($transactionId);
@@ -1370,16 +1405,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         $tinebase = $applicationController->getApplicationByName('Tinebase');
 
-        $state = $tinebase->state;
-        if (!is_array($state)) {
-            $state = array();
-        }
+        $state = $tinebase->xprops('state');
         if (!isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
             $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = 0;
         }
 
         $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] += intval($count);
-        $tinebase->state = $state;
 
         $applicationController->updateApplication($tinebase);
     }

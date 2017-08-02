@@ -134,6 +134,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         return $result;
     }
+
+    /**
+     * @param $classname
+     * @return Tinebase_User_Plugin_SqlInterface
+     */
+    public function getSqlPlugin($classname)
+    {
+        return $this->_sqlPlugins[$classname];
+    }
     
     /**
      * unregisterAllPlugins
@@ -455,28 +464,45 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($userId);
         $this->checkPasswordPolicy($_password, $user);
-        
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        
-        $accountData['password'] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
-        $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-        
-        $where = array(
-            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $userId)
-        );
-        
-        $result = $accountsTable->update($accountData, $where);
-        
-        if ($result != 1) {
-            throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
-        }
-        
+
+        $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt);
         $this->_setPluginsPassword($userId, $_password, $_encrypt);
 
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
         $newPassword = new Tinebase_Model_UserPassword($accountData, true);
         $this->_writeModLog($newPassword, $oldPassword);
+    }
+
+    /**
+     * @param        $_userId
+     * @param        $_password
+     * @param string $_property
+     * @param boolean  $_encrypt
+     * @return array $accountData
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _updatePasswordProperty($_userId, $_password, $_property = 'password', $_encrypt = true)
+    {
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
+
+        $accountData = array();
+        $accountData[$_property] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
+        if ($_property === 'password') {
+            $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        }
+
+        $where = array(
+            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $_userId)
+        );
+
+        $result = $accountsTable->update($accountData, $where);
+
+        if ($result != 1) {
+            throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
+        }
+
+        return $accountData;
     }
 
     /**

@@ -933,7 +933,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * returns filter for given model
      *
-     * @param        $_modelOrFilterName model or model filter class name
+     * @param string $_modelOrFilterName model or model filter class name
      * @param array  $_data
      * @param string $_condition
      * @param array  $_options

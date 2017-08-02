@@ -15,6 +15,8 @@
  * This class handles all requests from cli scripts
  *
  * @package     Tinebase
+ *
+ * TODO extend TFCliAbstract
  */
 class Setup_Frontend_Cli
 {
@@ -47,7 +49,15 @@ class Setup_Frontend_Cli
      */
     public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
-        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        // always set real setup user if Tinebase is installed
+        if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            if (!Setup_Core::getUser() instanceof Tinebase_Model_User) {
+                Setup_Core::set(Tinebase_Core::USER, $setupUser);
+            }
+        } else {
+            Setup_Core::set(Setup_Core::USER, 'setupuser');
+        }
 
         $result = 0;
         if (isset($_opts->install)) {
@@ -84,6 +94,8 @@ class Setup_Frontend_Cli
             $this->_restore($_opts);
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
+        } elseif(isset($_opts->setpassword)) {
+            $this->_setPassword($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -206,7 +218,33 @@ class Setup_Frontend_Cli
         
         return $password1;
     }
-    
+
+    /**
+     * set system user password
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return integer
+     */
+    protected function _setPassword(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (empty($options['username']) || empty($options['password'])) {
+            echo "username and password parameters required\n";
+            return 2;
+        }
+
+        $username = $options['username'];
+        $password = $options['password'];
+        if (! in_array($username, Tinebase_User::getSystemUsernames(), /* strict */ true)) {
+            echo "it's only allowed to set system user passwords here\n";
+            return 2;
+        }
+
+        $user = Tinebase_User::getInstance()->getUserByLoginName($username);
+        Tinebase_User::getInstance()->setPassword($user, $password);
+        return 0;
+    }
+
     /**
      * update existing applications
      *
@@ -329,7 +367,8 @@ class Setup_Frontend_Cli
         }
         
         //get set rights
-        $users = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
+        $users = Tinebase_Acl_Roles::getInstance()->getRoleByName($userRoleName);
         $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($users->getId());
         
         //Uninstall Applications
@@ -395,11 +434,6 @@ class Setup_Frontend_Cli
      * Update Import Export Definitions for all applications
      */
     protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts){
-
-        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-        }
 
         //get all applications
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -617,11 +651,6 @@ class Setup_Frontend_Cli
             die('Install Tinebase first.');
         }
 
-        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-        }
-
         echo "Please enter a username. An existing user is reactivated and you can reset the password.\n";
         $username = strtolower(Tinebase_Server_Cli::promptInput('Username'));
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
@@ -755,13 +784,16 @@ class Setup_Frontend_Cli
     }
 
     /**
+     * install tine20 from a dump (local dir or remote dir)
+     *
      * @param Zend_Console_Getopt $_opts
-     * @throws Exception
      */
     protected function _installDump(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->installFromDump($options);
+
+        return 0;
     }
 
     /**
@@ -841,6 +873,12 @@ class Setup_Frontend_Cli
         return $options;
     }
 
+    /**
+     * compare shema of two tine databases
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @throws Exception
+     */
     protected function _compare(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());

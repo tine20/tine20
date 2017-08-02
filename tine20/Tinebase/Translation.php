@@ -200,7 +200,7 @@ class Tinebase_Translation
         try {
             $locale = new Zend_Locale($_localeString);
             
-            // check if we suppot the locale
+            // check if we support the locale
             $supportedLocales = array();
             $availableTranslations = self::getAvailableTranslations();
             foreach ($availableTranslations as $translation) {
@@ -210,7 +210,7 @@ class Tinebase_Translation
             if (! in_array($_localeString, $supportedLocales)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
                 
-                // check if we find suiteable fallback
+                // check if we find suitable fallback
                 $language = $locale->getLanguage();
                 switch ($language) {
                     case 'zh':
@@ -266,12 +266,18 @@ class Tinebase_Translation
             'disableNotices' => true
         ));
 
-        foreach($translationFiles as $appName => $translationFiles) {
+        foreach ($translationFiles as $appName => $translationFiles) {
             foreach ($translationFiles as $translationFile) {
-                $translate->getAdapter()->addTranslation(array(
-                    'content' => $adapter == 'gettext' ? str_replace('.po', '.mo', $translationFile) : $translationFile,
-                    'locale'  => (string) $locale
-                ));
+                $filename = $adapter == 'gettext' ? str_replace('.po', '.mo', $translationFile) : $translationFile;
+                try {
+                    $translate->getAdapter()->addTranslation(array(
+                        'content' => $filename,
+                        'locale' => (string)$locale
+                    ));
+                } catch (Zend_Translate_Exception $zte) {
+                    // skip translation file
+                    Tinebase_Exception::log($zte);
+                }
             }
         }
 

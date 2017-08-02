@@ -181,6 +181,7 @@ Tine.Calendar.AbstractView = Ext.extend(Ext.Container, {
             return;
         }
 
+        this.removeEvent(event);
         var registry = this.getParallelEventRegistry(event);
         var parallelEvents = registry.getEvents(event.get('dtstart'), event.get('dtend'));
         for (var j=0; j<parallelEvents.length; j++) {
@@ -283,8 +284,9 @@ Tine.Calendar.AbstractView = Ext.extend(Ext.Container, {
 
         if (el.hasClass(this.eventCls) || (el = el.up('[id*=event:]', 10))) {
             var parts = el.dom.id.split(':');
+            parts.shift();
 
-            return this.store.getById(parts[1]);
+            return this.store.getById(parts.join(':'));
         }
     },
 

@@ -40,6 +40,11 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function() {
+        var _ = window.lodash,
+            record = this.editDialog.record,
+            evalGrants = this.editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.recordProxy = Tine.Filemanager.downloadLinkRecordBackend;
         this.recordClass = Tine.Filemanager.Model.DownloadLink;
         
@@ -61,7 +66,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.actionCreate = new Ext.Action({
             text: this.app.i18n._('Create Public Link'),
-            disabled: false,
+            disabled: !hasRequiredGrant,
             scope: this,
             handler: this.onCreate,
             iconCls: 'action_add'
@@ -69,7 +74,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.actionRemove = new Ext.Action({
             text: i18n._('Remove record'),
-            disabled: true,
+            disabled: !hasRequiredGrant,
             scope: this,
             handler: this.onRemove,
             iconCls: 'action_delete'

@@ -38,7 +38,7 @@ class Tinebase_Model_PersistentObserver extends Tinebase_Record_Abstract
         'created_by'             => array('allowEmpty' => true,        ),
         'creation_time'          => array('allowEmpty' => true         ),
         'observable_model'       => array('presence' => 'required', 'allowEmpty' => false),
-        'observable_identifier'  => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
+        'observable_identifier'  => array('allowEmpty' => true, 'Alnum'),
         'observer_model'         => array('presence' => 'required', 'allowEmpty' => false),
         'observer_identifier'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
         'observed_event'         => array('presence' => 'required', 'allowEmpty' => false)

@@ -95,4 +95,16 @@ class Setup_CliTest extends TestCase
 (
 )", $result);
     }
+
+    /**
+     * Test setpassword of replicationuser
+     */
+    public function testSetPassword()
+    {
+        $this->testSetConfig();
+        $result = $this->_cliHelper('setpassword', array('--setpassword','--','username=replicationuser', 'password=xxxx1234'));
+        self::assertEmpty($result);
+        $auth = Tinebase_Auth::getInstance()->authenticate('replicationuser', 'xxxx1234');
+        self::assertTrue($auth->isValid(), print_r($auth, true));
+    }
 }

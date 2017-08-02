@@ -264,7 +264,7 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
         });
     },
     update: function(dtStart) {
-        this.dtStart = dtStart.clone();
+        this.dtStart = dtStart.clearTime(true);
         if (this.button && this.button.rendered) {
             this.button.setText(dtStart.format(Ext.DatePicker.prototype.format));
         }
@@ -369,7 +369,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
     },
     update: function(dtStart) {
         //recalculate dtstart begin of week 
-        var from = dtStart.add(Date.DAY, -1 * dtStart.getDay());
+        var from = dtStart.clearTime(true).add(Date.DAY, -1 * dtStart.getDay());
         if (Ext.DatePicker.prototype.startDay) {
             from = from.add(Date.DAY, Ext.DatePicker.prototype.startDay - (dtStart.getDay() == 0 ? 7 : 0));
         }
@@ -518,7 +518,7 @@ Tine.Calendar.PagingToolbar.YearPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         
     },
     update: function(dtStart) {
-        this.dtStart = dtStart.clone();
+        this.dtStart = dtStart.clearTime(true);
         if (this.field && this.field.rendered) {
             this.field.setValue(dtStart.format('Y'));
         }

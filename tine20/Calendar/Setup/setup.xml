@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>10.7</version>
+    <version>10.8</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -19,7 +19,9 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -307,7 +309,7 @@
         <!-- attendee -->
         <table>
             <name>cal_attendee</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -362,7 +364,9 @@
                 </field>
                 <field>
                     <name>displaycontainer_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>transp</name>
@@ -469,7 +473,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -479,7 +483,9 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>created_by</name>

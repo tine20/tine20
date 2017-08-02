@@ -177,22 +177,67 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function changePassword($oldPassword, $newPassword)
     {
+        return $this->_changePwOrPin($oldPassword, $newPassword);
+    }
+
+    /**
+     * @param        $oldPassword
+     * @param        $newPassword
+     * @param string $pwType
+     * @return array
+     */
+    protected function _changePwOrPin($oldPassword, $newPassword, $pwType = 'password')
+    {
         $response = array(
             'success'      => TRUE
         );
-        
+
         try {
-            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword);
+            Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword, $pwType);
         } catch (Tinebase_Exception $e) {
             $response = array(
                 'success'      => FALSE,
                 'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
             );
         }
-        
+
         return $response;
     }
-    
+
+    /**
+     * validate second factor
+     *
+     * @param $password
+     * @return array
+     * @throws Tinebase_Exception_Backend
+     */
+    public function validateSecondFactor($password)
+    {
+        $user = Tinebase_Core::getUser();
+        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, $password);
+        $success = Tinebase_Auth::SUCCESS === $result;
+
+        if ($success) {
+            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
+        }
+
+        return array(
+            'success' => $success
+        );
+    }
+
+    /**
+     * change pin of user
+     *
+     * @param  string $oldPassword the old password
+     * @param  string $newPassword the new password
+     * @return array
+     */
+    public function changePin($oldPassword, $newPassword)
+    {
+        return $this->_changePwOrPin($oldPassword, $newPassword, 'pin');
+    }
+
     /**
      * clears state
      *
@@ -739,7 +784,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-            'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active,
+
+            // secondfactor config
+            // TODO pass sf config as array (but don't send everything to client)
+            'secondFactor' => $secondFactorConfig && $secondFactorConfig->active,
+            'secondFactorLogin' => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
+            'secondFactorSessionLifetime' => $secondFactorConfig && $secondFactorConfig->sessionLifetime
+                ? $secondFactorConfig->sessionLifetime
+                : 15,
+            'secondFactorPinChangeAllowed' => $secondFactorConfig
+                && $secondFactorConfig->active && $secondFactorConfig->provider && $secondFactorConfig->provider === 'Tine20',
+
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
@@ -1437,5 +1492,45 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['totalcount'] = count($result['results']);
         
         return $result;
+    }
+
+    /**
+     * returns the replication modification logs
+     *
+     * @param $hash
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getBlob($hash)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
+            throw new Tinebase_Exception_AccessDenied('you do not have access to blobs');
+        }
+
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        $result = '';
+        if (is_file($path)) {
+            $result = file_get_contents($path);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $lastPresence
+     */
+    public function reportPresence($lastPresence)
+    {
+        if (Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
+            $result = true;
+        } else {
+            $result = false;
+        }
+
+        return array(
+            'success' => $result
+        );
     }
 }

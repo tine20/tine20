@@ -55,20 +55,20 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     {
         $result = parent::toArray($_valueToJson);
         
-        if (! $this->_path) {
+        if (! $this->_path && '/' !== $this->_value) {
             $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
         }
         
-        if ($this->_path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+        if ('/' === $this->_value || $this->_path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $node = new Tinebase_Model_Tree_Node(array(
                 'name' => 'root',
                 'path' => '/',
-            ), TRUE);
+            ), true);
         } else {
             $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
             $node->path = $this->_path->flatpath;
         }
-        
+
         $result['value'] = $node->toArray();
         
         return $result;
@@ -92,6 +92,13 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _parsePath()
     {
+        if ('/' === $this->_value) {
+            if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::VIEW_QUOTA_USAGE)) {
+                throw new Tinebase_Exception_AccessDenied('You don\'t have the right to run this application');
+            }
+            return;
+        }
+
         $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
         
         if (! $this->_options['ignoreAcl'] && ! Tinebase_Core::getUser()->hasRight($this->_path->application->name, Tinebase_Acl_Rights_Abstract::RUN)) {
@@ -107,9 +114,12 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _addParentIdFilter($_select, $_backend)
     {
-        $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
-
-        $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
+        if ('/' === $this->_value) {
+            $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'isnull', '');
+        } else {
+            $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
+            $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
+        }
         $parentIdFilter->appendFilterSql($_select, $_backend);
     }
 }

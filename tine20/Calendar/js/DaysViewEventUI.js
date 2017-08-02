@@ -150,7 +150,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             eventEl.setOpacity(0.5);
         }
 
-        if (! (this.endColNum > view.numOfDays) && this.event.get('editGrant')) {
+        if (! (this.endColNum > view.numOfDays) && this.event.get('editGrant') && !view.readOnly) {
             this.resizeable = new Ext.Resizable(eventEl, {
                 handles: 'e',
                 disableTrackOver: true,
@@ -219,7 +219,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 eventEl.setOpacity(0.5);
             }
 
-            if (currColNum == this.endColNum && this.event.get('editGrant')) {
+            if (currColNum == this.endColNum && this.event.get('editGrant') && !view.readOnly) {
                 this.resizeable = new Ext.Resizable(eventEl, {
                     handles: 's',
                     disableTrackOver: true,

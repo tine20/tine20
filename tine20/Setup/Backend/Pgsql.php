@@ -609,15 +609,17 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
 
         $fieldDeclarations = parent::getFieldDeclarations($_field, $_tableName);
         
-        $fieldTypes = array ('tinyint', 'mediumint', 'bigint', 'int', 'integer');
-        foreach ($fieldTypes as $fieldType) {
-            $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', ' integer', $fieldDeclarations);
-        }
-        
-        $fieldDeclarations = preg_replace('/ smallint\(\d*\)/', ' smallint', $fieldDeclarations);
+        $fieldTypes = array ('tinyint', 'smallint', 'mediumint', 'bigint', 'int', 'integer');
 
         if(strpos($fieldDeclarations, 'auto_increment') !== false) {
+            foreach ($fieldTypes as $fieldType) {
+                $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', ' integer', $fieldDeclarations);
+            }
             $fieldDeclarations = str_replace('integer NOT NULL auto_increment', 'SERIAL NOT NULL', $fieldDeclarations);
+        } else {
+            foreach ($fieldTypes as $fieldType) {
+                $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', ' ' . $fieldType, $fieldDeclarations);
+            }
         }
         
         return $fieldDeclarations;

@@ -55,7 +55,7 @@ trait Calendar_Export_GenericTrait
 
         if ($periodFilter) {
             $this->_from = $periodFilter->getFrom();
-            $this->_until = $periodFilter->getUntil();
+            $this->_until = $periodFilter->getUntil()->subSecond(1);
         }
 
         parent::__construct($_filter, $_controller, $_additionalOptions);

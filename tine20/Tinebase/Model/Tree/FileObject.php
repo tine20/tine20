@@ -18,6 +18,7 @@
  * @property  string   contenttype
  * @property  integer  size
  * @property  integer  revision_size
+ * @property  string   indexed_hash
  * @property  string   hash
  * @property  string   type
  * @property  integer  preview_count
@@ -115,6 +116,15 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+
+    /**
+     * name of fields that should be omitted from modlog
+     *
+     * @var array list of modlog omit fields
+     */
+    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'revision_size', 'available_revisions');
+
+    protected static $_isReplicable = true;
     
     /**
      * converts a string or Addressbook_Model_List to a list id
@@ -169,5 +179,26 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         }
 
         parent::runConvertToRecord();
+    }
+
+    /**
+     * @param bool $value
+     * @return bool
+     */
+    public static function setReplicable($value)
+    {
+        $return = static::$_isReplicable;
+        static::$_isReplicable = $value;
+        return $return;
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return bool
+     */
+    public function isReplicable()
+    {
+        return static::$_isReplicable && (self::TYPE_FILE === $this->type || self::TYPE_FOLDER === $this->type);
     }
 }

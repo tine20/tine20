@@ -419,20 +419,37 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function changePassword($_oldPassword, $_newPassword)
+    public function changePassword($_oldPassword, $_newPassword, $_pwType = 'password')
     {
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
+        if ($_pwType === 'password' && ! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');
         }
-        
-        $loginName = Tinebase_Core::getUser()->accountLoginName;
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " change password for $loginName");
-        
-        if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
-            throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
+
+        $user = Tinebase_Core::getUser();
+        $loginName = $user->accountLoginName;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " change $_pwType for $loginName");
+
+        if ($_pwType === 'password') {
+            if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+                throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
+            }
+            Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
+        } else {
+            $validateOldPin = Tinebase_Auth::validateSecondFactor(
+                $loginName,
+                $_oldPassword,
+                array(
+                    'active' => true,
+                    'provider' => 'Tine20',
+                ),
+                /* $allowEmpty */ true
+            );
+            if ($validateOldPin !== Tinebase_Auth::SUCCESS) {
+                throw new Tinebase_Exception_InvalidArgument('Old pin is wrong.');
+            }
+            Tinebase_User::getInstance()->setPin($user, $_newPassword);
         }
-        
-        Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_newPassword, true, false);
     }
     
     /**
@@ -723,7 +740,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // 2nd factor
         $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
 
-        if ($secondFactorConfig && $secondFactorConfig->active && $accessLog->clienttype === 'JSON-RPC') {
+        if ($secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login && $accessLog->clienttype === 'JSON-RPC') {
             $context = $this->getRequestContext();
             if (Tinebase_Auth::validateSecondFactor($user->accountLoginName,
                 $context['otp'],

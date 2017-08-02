@@ -140,7 +140,7 @@ Tine.Filemanager.nodeActions.Rename = {
                     }
 
                     // @TODO validate filename
-                    var targetPath = record.get('path').replace(new RegExp(record.get('name') +'$'), text);
+                    var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
                     Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
 
                 }
@@ -173,7 +173,7 @@ Tine.Filemanager.nodeActions.SystemLink = {
             title: i18n._('System Link'),
             // minWidth:
             maxWidth: screen.availWidth,
-            msg: '<b>' + i18n._('Use this link to share the entry with other system users') + ':</b><br>'
+            msg: '<b>' + app.i18n._('Use this link to share the entry with other system users') + ':</b><br>'
                     + record.getSystemLink(),
             buttons: Ext.MessageBox.OK,
             // value: record.getSystemLink(),
@@ -270,11 +270,11 @@ Tine.Filemanager.nodeActions.Move = {
 
         filePickerDialog.on('selected', function(nodes) {
             var node = nodes[0];
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node.path, true);
+            Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
         });
 
         filePickerDialog.openWindow();
-    },
+    }
 };
 
 /**
@@ -321,7 +321,8 @@ Tine.Filemanager.nodeActions.Preview = {
 
             if (selection && selection.get('type') === 'file') {
                 Tine.Filemanager.DocumentPreview.openWindow({
-                    record: selection
+                    record: selection,
+                    initialApp: this.initialConfig.initialApp || null
                 });
             }
         }

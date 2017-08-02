@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # Samuel Barbera <samuel.barbera@email.it>, 2013
@@ -9,74 +9,64 @@ msgstr ""
 "PO-Revision-Date: 2015-04-27 11:21+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/tine20/tine20/language/it/)\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Attività personali di %s"
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Vuoi veramente cancellare l'attività selezionate?"
+msgstr[1] "Vuoi veramente cancellare le attività selezionate?"
 
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr "gestisci la lista di attività condivise"
+#: js/TaskGridPanel.js:82
+msgid "Tags"
+msgstr "Tag"
 
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr "Crea una nuova lista di attività condivise"
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
+msgstr ""
 
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr "gestisci attività condivise preferite"
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:185 js/Models.js:107
+msgid "Summary"
+msgstr "Sommario"
 
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
-msgstr "Crea o aggiorna le attività condivise preferite"
+#: js/TaskGridPanel.js:101
+msgid "Add a task..."
+msgstr "Aggiungi un'attività..."
 
-#: Model/Task.php:207
-msgid "Due"
-msgstr "Scadenza"
+#: js/TaskGridPanel.js:105 js/Models.js:108
+msgid "Due Date"
+msgstr "Data di scadenza"
 
-#: Model/Task.php:208 js/TaskEditDialog.js:204
-msgid "Organizer"
-msgstr "Organizzatore"
-
-#: Model/Task.php:209
-msgid "Description"
-msgstr "Descrizione"
-
-#: Model/Task.php:210 js/TaskEditDialog.js:196 js/TaskGridPanel.js:119
+#: js/TaskGridPanel.js:119 js/TaskEditDialog.js:196 Model/Task.php:210
 msgid "Priority"
 msgstr "Priorità"
 
-#: Model/Task.php:211 js/TaskEditDialog.js:226 js/TaskGridPanel.js:148
-#: js/Models.js:110 js/Models.js:168
+#: js/TaskGridPanel.js:135 Model/Task.php:212
+msgid "Percent"
+msgstr "Percento"
+
+#: js/TaskGridPanel.js:148 js/TaskEditDialog.js:226 js/Models.js:110
+#: js/Models.js:168 Model/Task.php:211
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Stato"
 msgstr[1] "Stato"
 
-#: Model/Task.php:212 js/TaskGridPanel.js:135
-msgid "Percent"
-msgstr "Percento"
+#: js/TaskGridPanel.js:164 js/TaskEditDialog.js:235 Config.php:48
+#: Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Completato"
 
-#: Model/Task.php:219
-msgid "Lead"
-msgstr "Cliente potenziale"
-
-#: Model/Task.php:225
-msgid "Telephone"
-msgstr "Telefono"
-
-#: Model/Task.php:226
-msgid "Email"
-msgstr "Email"
+#: js/TaskGridPanel.js:171 js/Models.js:118
+msgid "Responsible"
+msgstr "Responsabile"
 
 #: js/TaskEditDialog.js:89
 msgid "Add New Task"
@@ -86,13 +76,13 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "È necessario fornire una data di scadenza, perché è impostato un avviso!"
 
-#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
-msgid "Summary"
-msgstr "Sommario"
-
 #: js/TaskEditDialog.js:192
 msgid "Due date"
 msgstr "Data di scadenza"
+
+#: js/TaskEditDialog.js:204 Model/Task.php:208
+msgid "Organizer"
+msgstr "Organizzatore"
 
 #: js/TaskEditDialog.js:205
 msgid "Add Responsible ..."
@@ -109,45 +99,6 @@ msgstr "Inserisci descrizione..."
 #: js/TaskEditDialog.js:219
 msgid "Percentage"
 msgstr "Percentuale"
-
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Config.php:48
-#: Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr "Completato"
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Vuoi veramente cancellare l'attività selezionate?"
-msgstr[1] "Vuoi veramente cancellare le attività selezionate?"
-
-#: js/TaskGridPanel.js:82
-msgid "Tags"
-msgstr "Tag"
-
-#: js/TaskGridPanel.js:87
-msgid "Lead name"
-msgstr ""
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Aggiungi un'attività..."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Data di scadenza"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Data di creazione"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Responsabile"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Nuova Attività"
 
 #: js/Models.js:66
 msgid "Task"
@@ -181,42 +132,28 @@ msgstr "Ultima modifica"
 msgid "Last Modified By"
 msgstr "Ultima modifica di"
 
+#: js/Models.js:122
+msgid "Creation Time"
+msgstr "Data di creazione"
+
 #: js/Models.js:123
 msgid "Created By"
 msgstr "Creata da"
 
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "Nuova Attività"
+
 #: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Notifica per Attività "
-
-#: Preference.php:24
-msgid "All my tasks"
-msgstr "Tutte le mie attività"
-
-#: Preference.php:66
-msgid "Default Favorite"
-msgstr "Preferiti predefiniti"
-
-#: Preference.php:67
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Il preferito di default che è caricato all'apertura delle attività"
-
-#: Preference.php:70
-msgid "Default Task List"
-msgstr "Elenco Attività predefinito"
-
-#: Preference.php:71
-msgid "The default task list to create new tasks in."
-msgstr "Lista predefinita di attività in cui crearne una nuova."
 
 #: Config.php:38
 msgid "Tasks status available"
 msgstr "Stato Attività Disponibili"
 
 #: Config.php:40
-msgid ""
-"Possible tasks status. Please note that additional attendee status might "
-"impact other Tasks systems on export or syncronisation."
+msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr "Possibili stati attività. Si prega di notare che lo stato di participanti aggiuntivi potrebbe influire sulle altre attività, sull'esportazione o sincronizzazione."
 
 #: Config.php:47 Setup/Update/Release5.php:74
@@ -236,9 +173,7 @@ msgid "Task priorities available"
 msgstr "Priorità attività diponibile"
 
 #: Config.php:58
-msgid ""
-"Possible task priorities. Please note that additional priorities might "
-"impact other Tasks systems on export or syncronisation."
+msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
 msgstr "Possibili stati attività. Si prega di notare che priorità aggiuntive potrebbero influire su altri sistemi di attività, sull'esportazione o sincronizzazione."
 
 #: Config.php:65 Setup/Update/Release5.php:167
@@ -288,3 +223,64 @@ msgstr "Tutti le attività che ho modificato"
 #: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "Attività senza incaricati"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Attività personali di %s"
+
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr "gestisci la lista di attività condivise"
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr "Crea una nuova lista di attività condivise"
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr "gestisci attività condivise preferite"
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr "Crea o aggiorna le attività condivise preferite"
+
+#: Model/Task.php:207
+msgid "Due"
+msgstr "Scadenza"
+
+#: Model/Task.php:209
+msgid "Description"
+msgstr "Descrizione"
+
+#: Model/Task.php:219
+msgid "Lead"
+msgstr "Cliente potenziale"
+
+#: Model/Task.php:225
+msgid "Telephone"
+msgstr "Telefono"
+
+#: Model/Task.php:226
+msgid "Email"
+msgstr "Email"
+
+#: Preference.php:24
+msgid "All my tasks"
+msgstr "Tutte le mie attività"
+
+#: Preference.php:66
+msgid "Default Favorite"
+msgstr "Preferiti predefiniti"
+
+#: Preference.php:67
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Il preferito di default che è caricato all'apertura delle attività"
+
+#: Preference.php:70
+msgid "Default Task List"
+msgstr "Elenco Attività predefinito"
+
+#: Preference.php:71
+msgid "The default task list to create new tasks in."
+msgstr "Lista predefinita di attività in cui crearne una nuova."

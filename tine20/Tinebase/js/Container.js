@@ -87,7 +87,7 @@ Tine.Tinebase.container = {
      * @return {Boolean}
      */
     pathIsMyPersonalContainer: function(path) {
-        var regExp = new RegExp('^' + Tine.Tinebase.container.getMyNodePath() + '\/([0-9a-z_\-]+)$');
+        var regExp = new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.container.getMyNodePath()) + '\/([0-9a-z_\-]+)$');
         var matches = String(path).match(regExp);
         
         return !!matches;

@@ -36,6 +36,30 @@ Ext.override(Ext.data.Store, {
      */
     indexOfId : function(id){
         return this.data.indexOfKey(String(id));
+    },
+
+    /**
+     * promisified store load
+     */
+    promiseLoad: function(options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.load(Ext.apply(options || {}, {
+                    callback: function (r, options, success) {
+                        if (success) {
+                            fulfill(r, options);
+                        } else if (Ext.isFunction(reject)) {
+                            reject(new Error(options));
+                        }
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
     }
 });
 
@@ -330,6 +354,13 @@ Ext.grid.GridPanel.prototype.applyState  = Ext.grid.GridPanel.prototype.applySta
         delete state.sort;
     }
 });
+
+/**
+ * fix for table in cell
+ */
+Ext.grid.GridView.prototype.getCell  =  function(row, col){
+    return this.fly(this.getRow(row)).query('td.x-grid3-cell')[col];
+};
 
 /**
  * fix interpretation of ISO-8601  formatcode (Date.patterns.ISO8601Long) 
@@ -812,6 +843,21 @@ Ext.override(Ext.menu.DateMenu, {
         this.on('select', this.menuHide, this);
         if(this.handler){
             this.on('select', this.handler, this.scope || this);
+        }
+    }
+});
+
+Ext.override(Ext.tree.TreePanel, {
+    /**
+     * Gets a node in this tree by its id
+     * @param {String} id
+     * @return {Node}
+     */
+    getNodeById : function(id){
+        try {
+            return this.nodeHash[id];
+        } catch(e) {
+            return null;
         }
     }
 });

@@ -39,11 +39,11 @@ Tine.Tinebase.data.RecordProxy = function(c) {
              This might change in future, but as long as we do so, we also need
              the reader/writer here.
      */
-    this.jsonReader = new Ext.data.JsonReader({
+    this.jsonReader = new Ext.data.JsonReader(Ext.apply({
         id: this.idProperty,
         root: 'results',
         totalProperty: 'totalcount'
-    }, this.recordClass);
+    }, c.readerConfig || {}), this.recordClass);
 };
 
 Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
@@ -149,11 +149,31 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         
         var p = options.params;
         p.method = this.appName + '.get' + this.modelName;
-        p.id = record.get(this.idProperty);
+        p.id = Ext.isString(record) ? record : record.get(this.idProperty);
         
         return this.doXHTTPRequest(options);
     },
-    
+
+    promiseLoadRecord: function(record, options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.loadRecord(record, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
     /**
      * searches all (lightweight) records matching filter
      * 
@@ -213,7 +233,27 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         
         return this.doXHTTPRequest(options);
     },
-    
+
+    promiseSaveRecord: function(record, options, additionalArguments) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.saveRecord(record, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }), additionalArguments);
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
     /**
      * deletes multiple records identified by their ids
      * 
@@ -331,9 +371,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     callback.call(scope||this, records, arg, true);
                 },
                 failure: function(exception) {
-                    //@todo compute traditional options/request/response here -> dont' waste time ondepricated stuff
                     //this.fireEvent('exception', this, 'remote', 'read', options, response, arg);
                     this.fireEvent('loadexception', this, 'remote',  exception, arg);
+                    callback.call(scope||this, exception, arg, false);
                 }
             });
             

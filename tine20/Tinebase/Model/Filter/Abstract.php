@@ -144,7 +144,7 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function getOpSqlMap()
     {
-        if($this->_opSqlMap) {
+        if ($this->_opSqlMap) {
             return $this->_opSqlMap;
         }
         return NULL;

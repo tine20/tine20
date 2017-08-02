@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.28</version>
+    <version>10.42</version>
     <tables>
         <table>
             <name>applications</name>
@@ -249,7 +249,7 @@
 
         <table>
             <name>accounts</name>
-            <version>11</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -265,6 +265,12 @@
                 </field>
                 <field>
                     <name>password</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>pin</name>
                     <type>text</type>
                     <length>100</length>
                     <notnull>false</notnull>
@@ -369,6 +375,11 @@
                     <name>contact_id</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>configuration</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -520,12 +531,13 @@
         </table>
         <table>
             <name>container</name>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -670,7 +682,7 @@
         </table>
         <table>
             <name>container_acl</name>
-            <version>3</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -680,8 +692,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -703,13 +715,16 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
-
                 <index>
-                    <name>container_id-account-type-account_id-account_grant</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
                     </field>
+                </index>
+                <index>
+                    <name>container_id-account_type-account_id-acount_grant</name>
+                    <unique>true</unique>
                     <field>
                         <name>container_id</name>
                     </field>
@@ -721,18 +736,6 @@
                     </field>
                     <field>
                         <name>account_grant</name>
-                    </field>
-                </index>
-                <index>
-                    <name>id-account_type-account_id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <field>
-                        <name>account_type</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
                     </field>
                 </index>
                 <index>
@@ -752,7 +755,7 @@
         </table>
         <table>
             <name>container_content</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -762,8 +765,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -914,7 +917,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -931,7 +934,7 @@
                     <name>observable_identifier</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>observer_model</name>
@@ -975,6 +978,9 @@
                         <name>observable_model</name>
                     </field>
                     <field>
+                        <name>observed_event</name>
+                    </field>
+                    <field>
                         <name>observable_identifier</name>
                     </field>
                     <field>
@@ -982,9 +988,6 @@
                     </field>
                     <field>
                         <name>observer_identifier</name>
-                    </field>
-                    <field>
-                        <name>observed_event</name>
                     </field>
                 </index>
                 <index>
@@ -1617,12 +1620,13 @@
 
         <table>
             <name>roles</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -1693,17 +1697,18 @@
 
         <table>
             <name>role_rights</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>role_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1766,7 +1771,7 @@
 
         <table>
             <name>role_accounts</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1775,8 +1780,8 @@
                 </field>
                 <field>
                     <name>role_id</name>
-                    <type>integer</type>
-                    <unsigned>true</unsigned>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -3262,7 +3267,7 @@
         
         <table>
             <name>tree_fileobjects</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3333,6 +3338,7 @@
                 <field>
                     <name>revision_size</name>
                     <type>integer</type>
+                    <length>64</length>
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>
@@ -3401,7 +3407,6 @@
                 <field>
                     <name>preview_count</name>
                     <type>integer</type>
-                    <length>64</length>
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>
@@ -3461,7 +3466,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>3</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3485,6 +3490,7 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
+                    <collation>utf8_bin</collation>
                 </field>
                 <field>
                     <name>islink</name>
@@ -3511,6 +3517,24 @@
                     <name>notificationProps</name>
                     <type>text</type>
                     <length>65535</length>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>quota</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>pin_protected</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>
@@ -3559,7 +3583,7 @@
         </table>
         <table>
             <name>tree_node_acl</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3592,13 +3616,16 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
-
                 <index>
-                    <name>record_id-account-type-account_id-account_grant</name>
+                    <name>id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
                     </field>
+                </index>
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <unique>true</unique>
                     <field>
                         <name>record_id</name>
                     </field>
@@ -3610,18 +3637,6 @@
                     </field>
                     <field>
                         <name>account_grant</name>
-                    </field>
-                </index>
-                <index>
-                    <name>id-account_type-account_id</name>
-                    <field>
-                        <name>record_id</name>
-                    </field>
-                    <field>
-                        <name>account_type</name>
-                    </field>
-                    <field>
-                        <name>account_id</name>
                     </field>
                 </index>
                 <index>

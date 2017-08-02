@@ -108,9 +108,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             this.userActions = [
                 this.action_editProfile,
                 this.action_showPreferencesDialog,
-                this.action_changePassword,
-                this.action_notificationPermissions
+                this.action_notificationPermissions,
+                this.action_changePassword
             ];
+
+            if (Tine.Tinebase.registry.get('secondFactorPinChangeAllowed')) {
+                this.userActions = this.userActions.concat(this.action_changePin);
+            }
             
             if (Tine.Tinebase.registry.get('userAccountChanged')) {
                 this.action_returnToOriginalUser = new Tine.widgets.account.ChangeAccountAction({
@@ -187,7 +191,14 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             disabled: (! Tine.Tinebase.configManager.get('changepw')),
             iconCls: 'action_password'
         });
-        
+
+        this.action_changePin = new Ext.Action({
+            text: i18n._('Change PIN'),
+            handler: this.onChangePin,
+            //disabled: (! Tine.Tinebase.configManager.get('changepin')),
+            iconCls: 'action_password'
+        });
+
         this.action_logout = new Ext.Action({
             text: i18n._('Logout'),
             tooltip:  String.format(i18n._('Logout from {0}'), Tine.title),
@@ -246,7 +257,17 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         var passwordDialog = new Tine.Tinebase.PasswordChangeDialog();
         passwordDialog.show();
     },
-    
+
+    /**
+     * @private
+     */
+    onChangePin: function() {
+        var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
+            pwType: 'pin',
+        });
+        passwordDialog.show();
+    },
+
     /**
      * @private
      */

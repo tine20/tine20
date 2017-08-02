@@ -46,6 +46,10 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array();
 
+    protected $_caseSensitive = false;
+
+    protected $_binary = false;
+
     /**
      * get a new single filter action
      *
@@ -58,6 +62,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
+        $_options = isset($_fieldOrData['options']) ? $_fieldOrData['options'] : $_options;
+        if (isset($_options['caseSensitive']) && $_options['caseSensitive']) {
+            $this->_caseSensitive = true;
+        }
+        if (isset($_options['binary']) && $_options['binary']) {
+            $this->_binary = true;
+            if (!isset($_options['caseSensitive'])) {
+                $this->_caseSensitive = true;
+            }
+        }
         $this->_setOpSqlMap();
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
     }
@@ -69,20 +83,38 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         $db = Tinebase_Core::getDb();
         $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
-        $this->_opSqlMap = array(
-            'equals'            => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
-            'contains'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?%'),
-            'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '%?%'),
-            'startswith'        => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?%' ),
-            'endswith'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?' ),
-            'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '?'  ),
-            'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
-            'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
-            'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
-            'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
-            'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getLike() . "  ''",    'wildcards' => '?'  ),
-            'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
-        );
+
+        if ($this->_caseSensitive) {
+            $this->_opSqlMap = array(
+                'equals'            => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?'  ),
+                'contains'          => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '%?%'),
+                'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getCsLike() .' (?)',      'wildcards' => '%?%'),
+                'startswith'        => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?%' ),
+                'endswith'          => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '%?' ),
+                'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getCsLike() .' (?)',      'wildcards' => '?'  ),
+                'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
+                'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
+                'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
+                'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
+                'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getCsLike() . "  ''",    'wildcards' => '?'  ),
+                'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?'  ),
+            );
+        } else {
+            $this->_opSqlMap = array(
+                'equals'            => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
+                'contains'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?%'),
+                'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '%?%'),
+                'startswith'        => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?%' ),
+                'endswith'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?' ),
+                'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '?'  ),
+                'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
+                'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
+                'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
+                'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
+                'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getLike() . "  ''",    'wildcards' => '?'  ),
+                'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
+            );
+        }
     }
 
     /**
@@ -96,6 +128,11 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
+        if (!$this->_binary && $this->_caseSensitive && Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $field = 'BINARY ' . $field;
+        } elseif ($this->_binary && !$this->_caseSensitive && Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $field .= ' COLLATE utf8_general_ci';
+        }
         
         if (! (isset($this->_opSqlMap[$this->_operator]) || array_key_exists($this->_operator, $this->_opSqlMap))) {
             throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . get_class($this));
@@ -141,7 +178,11 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         }
         
         if (! in_array($this->_operator, array('in', 'notin'))) {
-            $where = Tinebase_Core::getDb()->quoteInto(Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($field) . ' ' . $action['sqlop'], $value);
+            if ($this->_caseSensitive) {
+                $where = Tinebase_Core::getDb()->quoteInto($field . ' ' . $action['sqlop'], $value);
+            } else {
+                $where = Tinebase_Core::getDb()->quoteInto(Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($field) . ' ' . $action['sqlop'], $value);
+            }
         } else {
             $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         }

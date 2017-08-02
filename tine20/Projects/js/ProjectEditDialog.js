@@ -74,6 +74,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
             app: this.app,
+            editDialog: this,
             searchRecordClass: Tine.Addressbook.Model.Contact,
             newRecordClass: Tine.Addressbook.Model.Contact,
             title: this.app.i18n._('Attendee'),

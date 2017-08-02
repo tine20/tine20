@@ -715,8 +715,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.onAddRecord(record, relconf);
 
-        if (this.getActiveSearchCombo().hasOwnProperty('collapse')) {
+        if (Ext.isFunction(this.getActiveSearchCombo().collapse)) {
             this.getActiveSearchCombo().collapse();
+        }
+        if (Ext.isFunction(this.getActiveSearchCombo().reset)) {
             this.getActiveSearchCombo().reset();
         }
     },
@@ -1150,11 +1152,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Record} record
      */
     loadRecord: function(dialog, record, ticketFn) {
+        var _ = window.lodash,
+            interceptor = ticketFn(),
+            evalGrants = dialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.store.removeAll();
-        var interceptor = ticketFn();
 
-
-        if (dialog.mode == 'local') {
+        if (dialog.mode == 'local' && this.editDialog.recordClass.getMeta('phpClassName') === 'Calendar_Model_Event') {
             // if dialog is local, relations must be fetched async
             Tine.Tinebase.getRelations('Calendar_Model_Event', record.get('id'), null, [], null, function (response, request) {
                 if(response) {
@@ -1166,10 +1171,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             this.loadRelations(relations, interceptor);
         }
 
-        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
-            this.setReadOnly(true);
-        }
-
+        this.setReadOnly(! hasRequiredGrant);
     },
 
     loadRelations: function(relations, interceptor) {

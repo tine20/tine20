@@ -86,6 +86,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('VIEW_ACCOUNTS');
         
         $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
+
+        $emailUser = Tinebase_EmailUser::getInstance();
+        foreach ($result as $user) {
+            $emailUser->inspectGetUserByProperty($user);
+        }
         
         return $result;
     }
@@ -167,7 +172,25 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
     }
-    
+
+    /**
+     * set the pin for a given account
+     *
+     * @param  Tinebase_Model_FullUser  $_account the account
+     * @param  string                   $_password the new password
+     * @return void
+     */
+    public function setAccountPin(Tinebase_Model_FullUser $_account, $_password)
+    {
+        $this->checkRight('MANAGE_ACCOUNTS');
+
+        $this->_userBackend->setPin($_account, $_password);
+
+        Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ .
+            ' Set new pin for user ' . $_account->accountLoginName);
+    }
+
     /**
      * update user
      *

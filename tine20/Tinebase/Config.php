@@ -42,6 +42,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
 
     /**
+     * authentication second factor protection for apps
+     *
+     * @var string
+     */
+    const SECONDFACTORPROTECTEDAPPS = 'Tinebase_Authentication_SecondFactor_Protected_Apps';
+
+    /**
      * save automatic alarms when creating new record
      *
      * @var string
@@ -61,6 +68,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_LOCALE = 'defaultLocale';
+
+    /**
+     * default user role
+     */
+    const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
+
+    /**
+     * default user role
+     */
+    const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
     /**
      * INTERNET_PROXY
@@ -534,6 +551,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_HOST = 'host';
+    const ACTIONQUEUE_PORT = 'port';
+    const ACTIONQUEUE_NAME = 'queueName';
+
+    const QUOTA = 'quota';
+    const QUOTA_INCLUDE_REVISION = 'includeRevision';
+    const QUOTA_TOTALINMB = 'totalInMB';
+    const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
+    const QUOTA_SOFT_QUOTA = 'softQuota';
+    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
 
 
     /**
@@ -612,6 +639,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *
          * useSystemAccount (bool)
          * domain (string)
+         * instanceName (string)
          * useEmailAsUsername (bool)
          * host (string)
          * port (integer)
@@ -683,6 +711,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *      'url'                   => 'https://localhost/validate/check',
          *      'allow_self_signed'     => true,
          *      'ignorePeerName'        => true,
+         *      'login'                 => true, // validate during login + show field on login screen
+         *      'sessionLifetime'       => 15 // minutes
          * )
          */
         self::AUTHENTICATIONSECONDFACTOR => array(
@@ -694,6 +724,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::SECONDFACTORPROTECTEDAPPS => array(
+            //_('Second Factor Protected Applications')
+            'label'                 => 'Second Factor Protected Applications',
+            //_('Second Factor Authentication is needed to access these applications')
+            'description'           => 'Second Factor Authentication is needed to access these applications',
+            'type'                  => 'array',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
         ),
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')
@@ -789,6 +829,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_ACTIVE       => array(
                     'type'                              => Tinebase_Config::TYPE_BOOL,
                     'default'                           => false
+                ),
+                self::ACTIONQUEUE_HOST       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'localhost'
+                ),
+                self::ACTIONQUEUE_PORT       => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 6379
+                ),
+                self::ACTIONQUEUE_NAME       => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'TinebaseQueue'
                 ),
             ),
             'default'                           => array()
@@ -986,6 +1038,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SEARCH_PATH           => true,
 
             ),
+        ),
+        self::DEFAULT_ADMIN_ROLE_NAME => array(
+            //_('Default Admin Role Name')
+            'label'                 => 'Default Admin Role Name',
+            'description'           => 'Default Admin Role Name',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'admin role'
+        ),
+        self::DEFAULT_USER_ROLE_NAME => array(
+            //_('Default User Role Name')
+            'label'                 => 'Default User Role Name',
+            'description'           => 'Default User Role Name',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'user role'
         ),
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
@@ -1583,7 +1655,78 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
+        self::QUOTA => array(
+            //_('Quota settings')
+            'label'                 => 'Quota settings',
+            //_('Quota settings')
+            'description'           => 'Quota settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'content'               => array(
+                self::QUOTA_INCLUDE_REVISION => array(
+                    //_('Include revisions')
+                    'label'                 => 'Include revisions',
+                    //_('Should all revisions be used to calculate total usage?')
+                    'description'           => 'Should all revisions be used to calculate total usage?',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
+                ),
+                self::QUOTA_TOTALINMB => array(
+                    //_('Total quota in MB')
+                    'label'                 => 'Total quota in MB',
+                    //_('Total quota in MB (0 for unlimited)')
+                    'description'           => 'Total quota in MB (0 for unlimited)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 0,
+                ),
+                self::QUOTA_TOTALBYUSERINMB => array(
+                    //_('Total quota by user in MB')
+                    'label'                 => 'Total quota by user in MB',
+                    //_('Total quota by user in MB (0 for unlimited)')
+                    'description'           => 'Total quota by user in MB (0 for unlimited)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 0,
+                ),
+                self::QUOTA_SOFT_QUOTA => array(
+                    //_('Soft quota in %')
+                    'label'                 => 'Soft quota in %',
+                    //_('Soft quota in % (0-100, 0 means off)')
+                    'description'           => 'Soft quota in % (0-100, 0 means off)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 90,
+                ),
+                self::QUOTA_SQ_NOTIFICATION_ROLE => array(
+                    //_('Soft quota notification role')
+                    'label'                 => 'Soft quota notification role',
+                    //_('Name of the role to notify if soft quote is exceeded')
+                    'description'           => 'Name of the role to notify if soft quote is exceeded',
+                    'type'                  => 'string',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 'soft quota notification',
+                ),
+            ),
+            'default'               => array(),
+        ),
+        /*
 
+    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';*/
     );
     
     /**

@@ -38,5 +38,17 @@ class Calendar_Model_ResourceFilter extends Tinebase_Model_Filter_FilterGroup
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'max_number_of_people'  => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
+        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
+            'idProperty' => 'cal_resources.id'
+        )),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'cal_resources.id',
+            'applicationName' => 'Calendar',
+        )),
     );
 }

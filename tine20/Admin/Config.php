@@ -82,6 +82,11 @@ class Admin_Config extends Tinebase_Config_Abstract
         
         return self::$_instance;
     }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
+    }
     
     /**
      * (non-PHPdoc)

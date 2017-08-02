@@ -146,7 +146,7 @@ Tine.Tinebase.tineInit = {
             var target = e.getTarget('a',1 ,true);
             if (target && target.getAttribute('target') == '_blank') {
                 var href = String(target.getAttribute('href'));
-                    if (href.match(new RegExp('^' + Tine.Tinebase.common.getUrl()))) {
+                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"
@@ -174,7 +174,8 @@ Tine.Tinebase.tineInit = {
         };
         postal.fedx.addFilter( [
             { channel: 'thirdparty', topic: '#', direction: 'both' },
-            { channel: 'recordchange', topic: '#', direction: 'both' }
+            { channel: 'recordchange', topic: '#', direction: 'both' },
+            { channel: 'messagebus', topic: '#', direction: 'both' }
             //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
         ] );
         postal.fedx.signalReady();
@@ -270,7 +271,7 @@ Tine.Tinebase.tineInit = {
             var sessionLifeTime = Tine.Tinebase.registry.get('sessionLifeTime') || 86400,
                 presenceObserver = new Tine.Tinebase.PresenceObserver({
                     maxAbsenseTime: sessionLifeTime / 60,
-                    callback: function(lastPresence, po) {
+                    absenceCallback: function(lastPresence, po) {
                         Tine.Tinebase.MainMenu.prototype._doLogout()
                     }
                 });

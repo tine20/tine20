@@ -483,6 +483,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             default;
                break;
         }
+
+        parent::_checkRight($_action);
     }
     
     /**

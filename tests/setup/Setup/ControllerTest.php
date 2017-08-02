@@ -331,6 +331,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         Tinebase_Acl_Roles::unsetInstance();
         Tinebase_Core::unsetUser();
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        Admin_Config::unsetInstance();
     }
     
     /**
@@ -348,6 +349,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        Admin_Config::unsetInstance();
         $installableApplications = $this->_uit->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
         $this->_uit->installApplications($installableApplications, $_options);

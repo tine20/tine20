@@ -570,9 +570,22 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return $asJson ? $json : json_decode($json, true);
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public static function getAssetHash()
     {
-        return sha1(self::getAssetsMap(true) . TINE20_BUILDTYPE);
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $map = self::getAssetsMap();
+        foreach($map as $asset => $ressources) {
+            if (! $enabledApplications->filter('name', basename($asset))->count()) {
+                unset($map[$asset]);
+            }
+        }
+
+        return sha1(json_encode($map) . TINE20_BUILDTYPE);
     }
 
     /**
@@ -584,8 +597,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _getFilesToWatch($_fileType)
     {
         $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
         $filesToWatch = array();
         $fileMap = $this->getAssetsMap();
 
@@ -594,9 +607,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 case 'js':
                     if (isset($fileMap["{$application}/js/{$application}"])) {
                         $jsFile = $fileMap["{$application}/js/{$application}"]['js'];
+                    } else {
+                        break;
                     }
 
-                    if (TINE20_BUILDTYPE =='DEBUG') {
+                    if (TINE20_BUILDTYPE === 'DEBUG') {
                         $jsFile = preg_replace('/\.js$/', '.debug.js', $jsFile);
                     }
 
@@ -837,5 +852,45 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         echo $view->render('postal.xwindow.php');
         exit();
+    }
+
+    /**
+     * download file
+     *
+     * @param string $_path
+     * @param string $_appId
+     * @param string $_type
+     * @param int $_num
+     * @param string $_revision
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function downloadPreview($_path, $_appId, $_type, $_num = 0, $_revision = null)
+    {
+        $_revision = $_revision ?: null;
+
+        if ($_path) {
+            $path = ltrim($_path, '/');
+
+            if (strpos($path, 'records/') === 0) {
+                $pathParts = explode('/', $path);
+                $controller = Tinebase_Core::getApplicationInstance($pathParts[1]);
+
+                // ACL Check
+                $controller->get($pathParts[2]);
+
+                //$pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath();
+                $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
+            } else {
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
+                $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+            }
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');
+        }
+
+        $this->_downloadPreview($node, $_type, $_num);
+
+        exit;
     }
 }

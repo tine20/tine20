@@ -20,8 +20,6 @@ class Admin_Setup_Initialize extends Setup_Initialize
     /**
      * Override method because admin app requires special rights
      * @see tine20/Setup/Setup_Initialize::createInitialRights($_application)
-     * 
-     * @todo make hard coded role name ('admin role') configurable
      */
     public static function createInitialRights(Tinebase_Model_Application $_application)
     {
@@ -31,7 +29,8 @@ class Admin_Setup_Initialize extends Setup_Initialize
         $oldNotesValue = $roles->useNotes(false);
         $oldModLogValue = $roles->modlogActive(false);
 
-        $adminRole = $roles->getRoleByName('admin role');
+        $adminRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_ADMIN_ROLE_NAME);
+        $adminRole = $roles->getRoleByName($adminRoleName);
         $allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
         foreach ( $allRights as $right ) {
             $roles->addSingleRight(

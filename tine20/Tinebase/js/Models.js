@@ -121,6 +121,8 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'privateGrant', type: 'boolean'},
     {name: 'exportGrant',  type: 'boolean'},
     {name: 'syncGrant',    type: 'boolean'},
+    {name: 'downloadGrant',type: 'boolean'},
+    {name: 'publishGrant', type: 'boolean'},
     {name: 'adminGrant',   type: 'boolean'}
 ]);
 
@@ -503,6 +505,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
     { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
     { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
+    { name: 'pin_protected', label: 'Pin Protected' }, // _('Pin Protected')
 
     { name: 'relations' },
     { name: 'customfields' },

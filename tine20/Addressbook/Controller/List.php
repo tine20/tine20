@@ -136,7 +136,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             . print_r($hiddenMemberids, TRUE));
 
         foreach ($lists as $list) {
-            $list->members = array_diff($list->members, $hiddenMemberids);
+            // use array_values to make sure we have numeric index starting with 0 again
+            $list->members = array_values(array_diff($list->members, $hiddenMemberids));
         }
     }
 

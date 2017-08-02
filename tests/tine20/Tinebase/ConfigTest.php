@@ -214,6 +214,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testComposeConfigDir()
     {
+        $this->markTestSkipped('FIXME: should be reactivated');
+
         $confdfolder = Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER);
         if (empty($confdfolder) || !is_readable($confdfolder)) {
             $this->markTestSkipped('no confdfolder configured/readable');

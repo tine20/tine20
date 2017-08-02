@@ -69,6 +69,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @var array
      */
     protected $_rmDir = array();
+
+    protected $_oldModLog = null;
     
     /**
      * Sets up the fixture.
@@ -80,7 +82,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         parent::setUp();
 
+        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $this->_fsController = Tinebase_FileSystem::getInstance();
+        $this->_fsController->resetBackends();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
         $this->_rmDir = array();
 
@@ -103,7 +108,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->deleteNodes($dir);
             }
         }
-        
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
+
+        Tinebase_FileSystem::getInstance()->resetBackends();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         
@@ -751,6 +759,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $personalContainerNode['revisionProps']['keep'] = true;
         $personalContainerNode['revisionProps']['keepNum'] = 3;
         $personalContainerNode['revisionProps']['keepMonth'] = 4;
+        $personalContainerNode['quota'] = 10 * 1024 * 1024 * 1024; // 10 GB -> exceeds 32bit integer
         $updatedNode = $this->_getUit()->saveNode($personalContainerNode);
 
         static::assertTrue(isset($updatedNode['customfields']) && isset($updatedNode['customfields'][$cf->name]),
@@ -765,6 +774,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
         static::assertEquals($personalContainerNode['revisionProps']['keep'], true);
         static::assertEquals($personalContainerNode['revisionProps']['keepNum'], 3);
         static::assertEquals($personalContainerNode['revisionProps']['keepMonth'], 4);
+        static::assertEquals($personalContainerNode['quota'], 10 * 1024 * 1024 * 1024);
+
+        return $updatedNode;
+    }
+
+    public function testUnsetQuota()
+    {
+        $node = $this->testUpdateNodeWithCustomfield();
+        $node['quota'] = null;
+        $updatedNode = $this->_getUit()->saveNode($node);
+        static::assertTrue(!isset($updatedNode['quota']), 'unset of quota did not work');
     }
     
     /**
@@ -943,13 +963,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testMoveFolderNodesToFolderExisting()
     {
-        sleep(1);
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/dir1';
-        $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($testPath), false);
-        $dirs = $this->testCreateDirectoryNodesInShared();
+        $this->_getUit()->moveNodes(array($targetNode['path']), array($testPath), false);
+        $this->testCreateDirectoryNodesInShared();
         try {
-            $result = $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', false);
+            $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', false);
             $this->fail('Expected Filemanager_Exception_NodeExists!');
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', true);
@@ -972,7 +991,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $createdNode = $result[0];
 
         try {
-            $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), false);
+            $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), false);
             $this->fail('Expected Filemanager_Exception_NodeExists!');
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), true);
@@ -1375,11 +1394,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
             array('field' => 'recursive', 'operator' => 'equals',   'value' => 1),
             array('field' => 'path',      'operator' => 'equals',   'value' => '/'),
             array('field' => 'query',     'operator' => 'contains', 'value' => 'color'),
-            array('field' => 'isIndexed', 'operator' => 'equals',   'value' => 0),
         'AND');
         
         $result = $this->_getUit()->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
-        $this->assertEquals(3, count($result), '3 files should have been found!');
+        $this->assertEquals(3, count($result['results']), '3 files should have been found!');
     }
     
     /**
@@ -1387,7 +1405,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testDeletedFileCleanupFromFilesystem()
     {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+        $this->_fsController->resetBackends();
+
         // remove all files with size 0 first
+        // better here than below?
+        $this->testDeleteFileNodes();
+
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE),
             array('field' => 'size', 'operator' => 'equals', 'value' => 0)
@@ -1395,13 +1419,16 @@ class Filemanager_Frontend_JsonTests extends TestCase
         foreach ($size0Nodes as $node) {
             Tinebase_FileSystem::getInstance()->deleteFileNode($node);
         }
-        
-        $this->testDeleteFileNodes();
+
+        // why here?
+        //$this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
         $this->tearDown();
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+        $this->_fsController->resetBackends();
         $this->testDeleteFileNodes(true);
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
@@ -1785,15 +1812,65 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals(1, count($child['grants']), 'node should have only personal grants - '
             . print_r($child['grants'], true));
 
-        $child['acl_node'] = null;
+        $child['acl_node'] = '';
         $childWithoutPersonalGrants = $this->_getUit()->saveNode($child);
 
         self::assertEquals(2, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
             . print_r($childWithoutPersonalGrants['grants'], true));
     }
 
+    /**
+     * testNodeRoleAcl for personal folders
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testNodeRoleAcl()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+
+        // give sclever role the grants to add nodes
+        $secretaryRole = Tinebase_Role::getInstance()->getRoleByName('secretary role');
+        $node['grants'][] = array(
+            'account_id' => $secretaryRole->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+            Tinebase_Model_Grants::GRANT_EDIT => false,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+            Tinebase_Model_Grants::GRANT_EXPORT => false,
+            Tinebase_Model_Grants::GRANT_SYNC => false,
+            Tinebase_Model_Grants::GRANT_ADMIN => false,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+            Tinebase_Model_Grants::GRANT_PRIVATE => false,
+            Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
+            Tinebase_Model_Grants::GRANT_PUBLISH => false,
+        );
+        $result = $this->_getUit()->saveNode($node);
+        self::assertEquals(2, count($result['grants']));
+        self::assertEquals(1, count($result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+
+        $savedNode = $this->_getUit()->getNode($result['id']);
+        self::assertEquals(1, count($savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+
+        // switch to sclever
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+
+        // add a subfolder
+        $subfolderPath = $node['path'] . '/subfolder';
+        $this->_getUit()->createNode($subfolderPath, 'folder');
+
+        // delete subfolder
+        $result = $this->_getUit()->deleteNodes(array($subfolderPath));
+        self::assertEquals($result['status'], 'success');
+    }
+
     public function testRecursiveFilter()
     {
+        // check for tika installation
+        if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
+            self::markTestSkipped('no tika.jar found');
+        }
+
         $folders = $this->testCreateDirectoryNodesInPersonal();
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
 
@@ -1829,7 +1906,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             ),
         ), null);
 
-        $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files: ' . print_r($result, true));
+        $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files (is tika.jar installed?): ' . print_r($result, true));
         foreach($result['results'] as $result) {
             $this->assertTrue(in_array($result['path'], $paths), 'result doesn\'t match expected paths: ' . print_r($result, true) . print_r($paths, true));
         }

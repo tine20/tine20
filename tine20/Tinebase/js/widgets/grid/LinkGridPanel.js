@@ -36,6 +36,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     clicksToEdit: 1,
     selectRowAfterAdd: false,
 
+    editDialog: null,
+
     /**
      * the record
      * @type Record 
@@ -202,10 +204,15 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
      * @param {Record} record
      */
     onRecordLoad: function(record) {
+        var _ = window.lodash,
+            evalGrants = this.editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
+
         if (this.record) {
             return;
         }
-        
+
         this.record = record;
 
         Tine.log.debug('Loading relations into store...');
@@ -229,9 +236,7 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
 
         // TODO perhaps we should filter all that do not match the model
 
-        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
-            this.setReadOnly(true);
-        }
+        this.setReadOnly(hasRequiredGrant);
 
     },
     

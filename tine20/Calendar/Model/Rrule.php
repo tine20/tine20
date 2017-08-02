@@ -526,7 +526,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     protected static function addRecurrence($_recurrence, $_eventSet)
     {
-        $_recurrence->setId('fakeid' . $_recurrence->uid . $_recurrence->dtstart->getTimeStamp());
+        $_recurrence->setId('fakeid' . $_recurrence->base_event_id . '/' . $_recurrence->dtstart->getTimeStamp());
         
         // adjust alarms
         if ($_recurrence->alarms instanceof Tinebase_Record_RecordSet) {

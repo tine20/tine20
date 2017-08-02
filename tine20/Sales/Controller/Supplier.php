@@ -192,5 +192,7 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
             default;
             break;
         }
+
+        parent::_checkRight($_action);
     }
 }

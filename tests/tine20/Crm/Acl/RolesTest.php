@@ -42,12 +42,12 @@ class Crm_Acl_RolesTest extends TestCase
             'accountEmailAddress'   => 'crmphpunit@metaways.de'
         ));
         $this->objects['role'] = new Tinebase_Model_Role(array(
-            'id'                    => 10,
+            'id'                    => '10',
             'name'                  => 'phpunitrole',
             'description'           => 'test role for phpunit',
         ));
         $this->objects['role_2'] = new Tinebase_Model_Role(array(
-            'id'                    => 11,
+            'id'                    => '11',
             'name'                  => 'phpunitrole 2',
             'description'           => 'test role 2 for phpunit',
         ));

@@ -85,7 +85,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             fieldLabel: this.app.i18n._('Unit'),
             name: 'price_unit'
         }, {
-            xtype: 'numberfield',
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Unit Price'),
             name: 'price',
             allowNegative: false

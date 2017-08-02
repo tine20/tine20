@@ -4,7 +4,7 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -60,6 +60,12 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             $this->notnull = (strtolower($_declaration->notnull) == 'true') ? true : false;
         } else {
             $this->notnull = false;
+        }
+
+        if(isset($_declaration->collation)) {
+            $this->collation = $_declaration->collation;
+        } else {
+            $this->collation = NULL;
         }
 
         switch ($this->type) {

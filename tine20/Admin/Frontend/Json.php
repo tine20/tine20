@@ -53,11 +53,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
-        
-        if (Tinebase_User::getConfiguredBackend() == Tinebase_User::ACTIVEDIRECTORY) {
-           $this->_manageSAM = array(); 
-        }
-        
+
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE;
@@ -471,7 +467,31 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         return $result;
     }
-    
+
+    /**
+     * reset password for given account
+     *
+     * @param array|string $account Tinebase_Model_FullUser data or account id
+     * @param string $password the new password
+     * @return array
+     */
+    public function resetPin($account, $password)
+    {
+        if (is_array($account)) {
+            $account = new Tinebase_Model_FullUser($account);
+        } else {
+            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+        }
+
+        $controller = Admin_Controller_User::getInstance();
+        $controller->setAccountPin($account, $password);
+
+        $result = array(
+            'success' => TRUE
+        );
+        return $result;
+    }
+
     /**
      * adds the name of the account to each item in the name property
      * 
@@ -1300,7 +1320,70 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'html' => $phpinfo
         );
     }
-    
+
+    public function searchQuotaNodes($filter = null)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::VIEW_QUOTA_USAGE)) {
+            return FALSE;
+        }
+
+        $path = '';
+        if (null !== $filter) {
+            array_walk($filter, function ($val) use (&$path) {
+                if ('path' === $val['field']) {
+                    $path = $val['value'];
+                }
+            });
+        }
+        $filter = $this->_decodeFilter($filter, 'Tinebase_Model_Tree_Node_Filter');
+        // ATTENTION sadly the pathfilter to Array does path magic, returns the flatpath and not the statpath
+        // etc. this is Filemanager path magic. We don't want that here!
+        $filterArray = $filter->toArray();
+        array_walk($filterArray, function (&$val) use($path) {
+            if('path' === $val['field']) {
+                $val['value'] = $path;
+            }
+        });
+        $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
+
+        $pathFilters = $filter->getFilter('path', TRUE);
+        if (count($pathFilters) !== 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . 'Exactly one path filter required.');
+            $pathFilter = $filter->createFilter(array(
+                    'field'     => 'path',
+                    'operator'  => 'equals',
+                    'value'     => '/',)
+            );
+            $filter->removeFilter('path');
+            $filter->addFilter($pathFilter);
+            $path = '/';
+        }
+
+        $filter->removeFilter('type');
+        $filter->addFilter($filter->createFilter(array(
+                    'field'     => 'type',
+                    'operator'  => 'equals',
+                    'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                )));
+
+        $records = Tinebase_FileSystem::getInstance()->search($filter);
+
+        $result = $this->_multipleRecordsToJson($records, $filter);
+
+        $filterArray = $filter->toArray();
+        array_walk($filterArray, function (&$val) use($path) {
+            if('path' === $val['field']) {
+                $val['value'] = $path;
+            }
+        });
+        return array(
+            'results'       => array_values($result),
+            'totalcount'    => count($result),
+            'filter'        => $filterArray
+        );
+    }
+
     /****************************** common ******************************/
     
     /**

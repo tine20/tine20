@@ -396,10 +396,12 @@ class Tinebase_ModelConfiguration {
      * fulltext                  Text with lnbr.     text     string                        string            Tinebase_Model_Filter_FullText
      * boolean                   Boolean             boolean  bool                          bool              Tinebase_Model_Filter_Bool
      * integer                   Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 number
+     * integer     percent       Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 extuxnumberfield
      * integer     bytes         Bytes               integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     seconds       Seconds             integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     minutes       Minutes             integer  integer                       int               Tinebase_Model_Filter_Int
-     * float                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * float                     Float               float    float                         float             Tinebase_Model_Filter_Int                 extuxnumberfield
+     * float       percent       Float               float    float                         float             Tinebase_Model_Filter_Int
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
@@ -496,7 +498,7 @@ class Tinebase_ModelConfiguration {
      * 
      * @var array
      */
-    protected $_virtualFields = NULL;
+    protected $_virtualFields = [];
     
     /**
      * maps fieldgroup keys to their names
@@ -863,7 +865,7 @@ class Tinebase_ModelConfiguration {
         self::$_availableApplications[$this->_appName] = TRUE;
         
         $this->_modelName   = $modelClassConfiguration['modelName'];
-        $this->_idProperty  = $this->_identifier = (isset($modelClassConfiguration['idProperty']) || array_key_exists('idProperty', $modelClassConfiguration)) ? $modelClassConfiguration['idProperty'] : 'id';
+        $this->_idProperty  = $this->_identifier = isset($modelClassConfiguration['idProperty']) ? $modelClassConfiguration['idProperty'] : 'id';
 
         $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
         $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
@@ -993,18 +995,18 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
-            } else if ($fieldDef['type'] == 'virtual') {
-                $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
-                $fieldDef['key'] = $fieldKey;
-                $fieldDef['sortable'] = FALSE;
-                if ((isset($fieldDef['default']))) {
+            } elseif ($fieldDef['type'] == 'virtual') {
+                $virtualField = isset($fieldDef['config']) ? $fieldDef['config'] : array();
+                $virtualField['key'] = $fieldKey;
+                $virtualField['sortable'] = FALSE;
+                if ((isset($virtualField['default']))) {
                     // @todo: better handling of virtualfields
-                    $this->_defaultData[$fieldKey] = $fieldDef['default'];
+                    $this->_defaultData[$fieldKey] = $virtualField['default'];
                 }
-                $this->_virtualFields[] = $fieldDef;
-                continue;
+                $this->_virtualFields[] = $virtualField;
+                $fieldDef['modlogOmit'] = true;
 
-            } else if ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
+            } elseif ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
             }
 
@@ -1039,12 +1041,12 @@ class Tinebase_ModelConfiguration {
             
             $this->_setFieldFilterModel($fieldDef, $fieldKey);
 
-            if ((isset($fieldDef['queryFilter']) || array_key_exists('queryFilter', $fieldDef))) {
+            if (isset($fieldDef['queryFilter'])) {
                 $queryFilters[] = $fieldKey;
             }
 
             // set validators
-            if ((isset($fieldDef['validators']) || array_key_exists('validators', $fieldDef))) {
+            if (isset($fieldDef['validators'])) {
                 // use _validators from definition
                 $this->_validators[$fieldKey] = $fieldDef['validators'];
             } else if ((isset($this->_validatorMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_validatorMapping))) {
@@ -1055,7 +1057,7 @@ class Tinebase_ModelConfiguration {
             }
             
             // set input filters, append defined if any or use defaults from _inputFilterDefaultMapping 
-            if ((isset($fieldDef['inputFilters']) || array_key_exists('inputFilters', $fieldDef))) {
+            if (isset($fieldDef['inputFilters'])) {
                 foreach ($fieldDef['inputFilters'] as $if => $val) {
                     if (is_array($val)) {
                         $reflect  = new ReflectionClass($if);
@@ -1064,14 +1066,14 @@ class Tinebase_ModelConfiguration {
                         $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                     }
                 }
-            } else if ((isset($this->_inputFilterDefaultMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_inputFilterDefaultMapping))) {
+            } elseif (isset($this->_inputFilterDefaultMapping[$fieldDef['type']])) {
                 foreach ($this->_inputFilterDefaultMapping[$fieldDef['type']] as $if => $val) {
                     $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                 }
             }
             
             // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && (isset($fieldDef['modlogOmit']) || array_key_exists('modlogOmit', $fieldDef))) {
+            if ($this->_modlogActive && isset($fieldDef['modlogOmit'])) {
                 $this->_modlogOmitFields[] = $fieldKey;
             }
 
@@ -1104,20 +1106,43 @@ class Tinebase_ModelConfiguration {
      */
     protected function _setFieldFilterModel($fieldDef, $fieldKey)
     {
-        if ((isset($fieldDef['filterDefinition']) || array_key_exists('filterDefinition', $fieldDef))) {
+        if (isset($fieldDef['filterDefinition'])) {
             // use filter from definition
             $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
+            if (isset($this->_filterModel[$key])) {
+                return;
+            }
             $this->_filterModel[$key] = $fieldDef['filterDefinition'];
-        } else if ((isset($this->_filterModelMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_filterModelMapping))) {
-            // if no filterDefinition is given, try to use the default one
-            $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$fieldDef['type']]);
-            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))) {
-                $this->_filterModel[$fieldKey]['options'] = $fieldDef['config'];
+        } else {
+            if (isset($this->_filterModel[$fieldKey])) {
+                return;
+            }
+            $type = $fieldDef['type'];
+            $config = isset($fieldDef['config']) ? $fieldDef['config'] : null;
+            if ('virtual' === $type && isset($fieldDef['config']) && isset($fieldDef['config']['type']) &&
+                    'relation' === $fieldDef['config']['type']) {
+                $type = 'relation';
+                if (isset($config['config'])) {
+                    $config = $config['config'];
+                }
+                if (isset($config['appName']) && isset($config['modelName'])) {
+                    $config['related_model'] = $config['appName'] . '_Model_' . $config['modelName'];
+                }
+                if (!isset($config['own_model'])) {
+                    $config['own_model'] = $this->_getPhpClassName();
+                }
+            }
+            if (isset($this->_filterModelMapping[$type])) {
+                // if no filterDefinition is given, try to use the default one
+                $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$type]);
+                if (null !== $config) {
+                    $this->_filterModel[$fieldKey]['options'] = $config;
 
-                // set id filter controller
-                if ($fieldDef['type'] == 'record') {
-                    $this->_filterModel[$fieldKey]['options']['filtergroup'] = $fieldDef['config']['appName'] . '_Model_' . $fieldDef['config']['modelName'] . 'Filter';
-                    $this->_filterModel[$fieldKey]['options']['controller']  = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
+                    // set id filter controller
+                    if ($type === 'record') {
+                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = $config['appName'] . '_Model_' . $config['modelName'] . 'Filter';
+                        $this->_filterModel[$fieldKey]['options']['controller']  = $config['appName'] . '_Controller_' . $config['modelName'];
+                    }
                 }
             }
         }
@@ -1224,7 +1249,7 @@ class Tinebase_ModelConfiguration {
         return $this->_version;
     }
 
-    public function getApplName()
+    public function getAppName()
     {
         return $this->_appName;
     }
@@ -1551,5 +1576,14 @@ class Tinebase_ModelConfiguration {
                 }
             }
         }
+    }
+
+    /**
+     * Returns all virtual fields
+     *
+     * @return array
+     */
+    public function getVirtualFields() {
+        return $this->_virtualFields;
     }
 }

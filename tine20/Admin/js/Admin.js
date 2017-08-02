@@ -68,7 +68,8 @@ Tine.Admin = function () {
             children: [],
             leaf: null,
             expanded: true,
-            dataPanelType: 'computers', 
+            dataPanelType: 'computers',
+            hidden: ! Tine.Admin.registry.get('manageSAM'),
             viewRight: 'computers'
         }, {
             text: translation.gettext('Applications'),

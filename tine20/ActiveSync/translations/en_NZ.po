@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Ingo Ratsdorf, 2014-2015
 msgid ""
@@ -8,22 +8,24 @@ msgstr ""
 "PO-Revision-Date: 2015-05-29 11:07+0000\n"
 "Last-Translator: Ingo Ratsdorf\n"
 "Language-Team: English (New Zealand) (http://www.transifex.com/tine20/tine20/language/en_NZ/)\n"
+"Language: en_NZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_NZ\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:104
-msgid "Manage ActiveSync devices"
-msgstr "Manage ActiveSync devices"
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Device"
+msgstr[1] "Devices"
 
-#: Acl/Rights.php:105
-msgid "See, edit and delete ActiveSync devices"
-msgstr "Show, edit and delete ActiveSync devices"
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Devices"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -118,15 +120,11 @@ msgstr "Last ping"
 msgid "Quicksearch"
 msgstr "Quicksearch"
 
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Device"
-msgstr[1] "Devices"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Devices"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] "SyncDevice"
+msgstr[1] "SyncDevices"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -161,36 +159,6 @@ msgstr "reset"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Set sync filter"
-
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "SyncDevice"
-msgstr[1] "SyncDevices"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Default addressbook"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "The default addressbook for new contacts."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Default calendar"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "The default calendar for new events"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Default task list"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "The default task list for new tasks"
 
 #: Config.php:52
 msgid "Default policy for new devices"
@@ -231,3 +199,35 @@ msgstr "Default policy"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Default policy installed during setup"
+
+#: Acl/Rights.php:104
+msgid "Manage ActiveSync devices"
+msgstr "Manage ActiveSync devices"
+
+#: Acl/Rights.php:105
+msgid "See, edit and delete ActiveSync devices"
+msgstr "Show, edit and delete ActiveSync devices"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Default addressbook"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "The default addressbook for new contacts."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Default calendar"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "The default calendar for new events"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Default task list"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "The default task list for new tasks"

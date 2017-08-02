@@ -75,7 +75,8 @@ Tine.Tinebase.ExceptionHandler = function() {
             code       : 'unknown',
             description: 'unknown',
             url        : 'unknown',
-            line       : 'unknown'
+            line       : 'unknown',
+            trace      : 'unknown'
         };
         
         // NOTE: Arguments is not always a real Array
@@ -89,7 +90,8 @@ Tine.Tinebase.ExceptionHandler = function() {
             error.message     = args[0].message;
             error.code        = args[0].number & 0xFFFF; //Apply binary arithmetic for IE number, firefox returns message string in element array element 0
             error.description = args[0].description;
-            
+            error.trace       = args[0].stack;
+
         } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
             error.name    = 'catchable exception';
             error.message = args[0];
@@ -277,7 +279,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                     msg: i18n._('Your user account has no role memberships. Please contact your administrator.')
                 }));
                 break;
-                
+
+            // second factor validation required
+            case 630:
+                // TODO add more actions depending on request?
+                window.postal.publish({
+                    channel: "messagebus",
+                    topic: 'secondfactor.invalid'
+                });
+                break;
+
             // Tinebase_Exception_InvalidRelationConstraints
             case 912: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
@@ -330,13 +341,26 @@ Tine.Tinebase.ExceptionHandler = function() {
             Tine.Tinebase.exceptionDlg.show();
         }
     };
-    
+
+    var handleException = function(exception) {
+        exception = getNormalisedError(exception);
+
+        // for the fast :-)
+        Ext.applyIf(exception, {
+            code: -1000
+            // appName: this.app.appName,
+        });
+        console.error(exception.trace);
+        handleRequestException(exception);
+    };
+
     // init window error handler
     window.onerror = window.onerror && Ext.isFunction(window.onerror) && Ext.isFunction(window.onerror.createSequence) ?
         window.onerror.createSequence(onWindowError) :
         onWindowError;
 
     return {
+        handleException: handleException,
         handleRequestException: handleRequestException
     };
 }();

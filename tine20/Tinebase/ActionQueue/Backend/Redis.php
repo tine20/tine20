@@ -76,7 +76,9 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $this->_queueStructName  = $this->_options['queueName'] . $this->_options['redisQueueSuffix'];
         $this->_dataStructName   = $this->_options['queueName'] . $this->_options['redisDataSuffix'];
         $this->_daemonStructName = $this->_options['queueName'] . $this->_options['redisDaemonSuffix'] . $this->_options['redisDaemonNumber'];
-        
+
+        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' options: ' . print_r($this->_options, true));
+
         $this->connect();
     }
 
@@ -100,6 +102,8 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         
         $this->_redis = new Redis;
         if (! $this->_redis->connect($host, $port, $timeout)) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not connect to redis server at ' . $host);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' options: ' . print_r($this->_options, true));
             throw new Tinebase_Exception_Backend('Could not connect to redis server at ' . $host);
         }
     }
@@ -207,6 +211,11 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             ->hMset($this->_dataStructName . ':' . $jobId, $data)
             ->lPush($this->_queueStructName, $jobId)
             ->exec();
+
+        Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " queued job " . $jobId . " on queue " . $this->_queueStructName
+            . " (datastructname: " . $this->_dataStructName . ")"
+        );
 
         return $jobId;
     }

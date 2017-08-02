@@ -215,5 +215,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
             default;
             break;
         }
+
+        parent::_checkRight($_action);
     }
 }

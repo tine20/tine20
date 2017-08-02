@@ -45,6 +45,11 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     protected $_aclIdColumn = 'acl_node';
 
     /**
+     * @var bool
+     */
+    protected $_ignorePinProtection = false;
+
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
@@ -55,8 +60,12 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'                  => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
         'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'name'                  => array(
+            'filter' => 'Tinebase_Model_Filter_Text',
+            'options' => array('binary' => true)
+        ),
         'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'acl_node'              => array('filter' => 'Tinebase_Model_Filter_Text'),
     // tree_fileobjects table
         'last_modified_time'    => array(
             'filter' => 'Tinebase_Model_Filter_Date',
@@ -112,8 +121,24 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         ),
         'isIndexed'             => array(
             'filter'                => 'Tinebase_Model_Tree_Node_IsIndexedFilter',
+        ),
+        'is_deleted'            => array(
+            'filter'                => 'Tinebase_Model_Filter_Bool'
         )
     );
+
+    /**
+     * set options
+     *
+     * @param array $_options
+     */
+    protected function _setOptions(array $_options)
+    {
+        if (isset($_options['nameCaseInSensitive']) && $_options['nameCaseInSensitive']) {
+            $this->_filterModel['name']['options']['caseSensitive'] = false;
+        }
+        parent::_setOptions($_options);
+    }
 
     /**
      * append grants acl filter
@@ -126,7 +151,22 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     {
         parent::_appendGrantsFilter($select, $backend, $user);
 
+        if (!$this->_ignorePinProtection && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            $db = $backend->getAdapter();
+            $select->joinLeft(array(
+                /* table  */ 'pinProtected' => SQL_TABLE_PREFIX . $backend->getTableName()),
+                /* on     */ "{$db->quoteIdentifier('pinProtected.id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
+                /* select */ array()
+            );
+            $select->where("{$db->quoteIdentifier('pinProtected.pin_protected')} = 0 OR {$db->quoteIdentifier('pinProtected.pin_protected')} IS NULL");
+        }
+
         // TODO do something when acl_node = NULL?
+    }
+
+    public function ignorePinProtection($_value = true)
+    {
+        $this->_ignorePinProtection = $_value;
     }
 
     /**

@@ -12,6 +12,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     app: null,
 
     /**
+     * App which triggered this action
+     */
+    initialApp: null,
+
+    /**
      * Required for overflow auto
      */
     autoScroll: true,
@@ -68,9 +73,10 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 revision = this.record.get('revision');
 
             var url = Ext.urlEncode({
-                method: 'Filemanager.downloadPreview',
+                method: 'Tinebase.downloadPreview',
                 frontend: 'http',
                 _path: path,
+                _appId: this.initialApp ? this.initialApp.id : this.app.id,
                 _type: 'previews',
                 _num: previewNumber,
                 _revision: revision
