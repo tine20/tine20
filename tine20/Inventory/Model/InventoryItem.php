@@ -33,7 +33,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 10,
+        'version'           => 11,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',

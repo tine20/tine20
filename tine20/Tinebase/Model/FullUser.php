@@ -28,6 +28,7 @@
  * @property    string                      accountLoginShell   account login shell
  * @property    string                      accountPrimaryGroup primary group id
  * @property    string                      container_id
+ * @property    string                      configuration
  * @property    array                       groups              list of group memberships
  * @property    Tinebase_DateTime           lastLoginFailure    time of last login failure
  * @property    int                         loginFailures       number of login failures
@@ -40,6 +41,8 @@
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
+    const CONFIGURATION_PERSONAL_QUOTA = 'personalQuota';
+
     /**
      * list of zend inputfilter
      * 
@@ -125,6 +128,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 Tinebase_Model_User::VISIBILITY_HIDDEN, 
                 Tinebase_Model_User::VISIBILITY_DISPLAYED)
             ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
+            'configuration'         => array('allowEmpty' => true),
             'created_by'            => array('allowEmpty' => true),
             'creation_time'         => array('allowEmpty' => true),
             'last_modified_by'      => array('allowEmpty' => true),
@@ -372,5 +376,18 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         }
         
         return $username;
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['configuration']) && is_array($this->_properties['configuration'])) {
+            if (count($this->_properties['configuration']) > 0) {
+                $this->_properties['configuration'] = json_encode($this->_properties['configuration']);
+            } else {
+                $this->_properties['configuration'] = null;
+            }
+        }
+
+        parent::runConvertToData();
     }
 }

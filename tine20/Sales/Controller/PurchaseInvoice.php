@@ -339,5 +339,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
             default;
             break;
         }
+
+        parent::_checkRight($_action);
     }
 }

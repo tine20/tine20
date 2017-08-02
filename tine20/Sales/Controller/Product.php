@@ -132,6 +132,8 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
             default;
                break;
         }
+
+        parent::_checkRight($_action);
     }
 
     /**

@@ -46,7 +46,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel,
         var config = {
             role: this.chooseRoleBox.getValue(),
             status: this.chooseStatusBox.getValue()
-        }
+        };
         return config;
     },
     
@@ -72,8 +72,21 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel,
                     margins: '10px 10px',
                     border:  false,
                     frame:   false,
-                    items: [ 
-                        Tine.widgets.form.RecordPickerManager.get('Calendar', 'Event', {ref: '../../../searchBox'}),
+                    items: [
+                        Tine.widgets.form.RecordPickerManager.get(
+                            'Calendar',
+                            'Event',
+                            {
+                                ref: '../../../searchBox',
+                                onStoreLoad: function(store, records) {
+                                    store.each(function(record) {
+                                        // Only show records with edit grant
+                                        if(!record.data.editGrant) {
+                                            store.remove(record);
+                                        }
+                                    });
+                                }
+                            }),
                         {
                             fieldLabel: this.app.i18n._('Role'),
                             emptyText: this.app.i18n._('Select Role'),

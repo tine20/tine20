@@ -40,6 +40,7 @@
  * @property Calendar_Model_Rrule           rrule
  * @property string                         transp
  * @property string                         status
+ * @property string                         summary
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -478,7 +479,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         return (boolean) preg_match('/^fakeid/', $this->getId());
     }
-    
+
+    /**
+     * returns a URL with a deep link path to the node provided
+     *
+     * @return string
+     */
+    public function getDeepLink()
+    {
+        return Tinebase_Core::getUrl() . '#/Calendar/showEvent/' . $this->getId();
+    }
+
     /**
      * sets recurId of this model
      * 

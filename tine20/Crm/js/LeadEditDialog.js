@@ -62,7 +62,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @type {Array}
      */
     ignoreRelatedModels: ['Sales_Model_Product', 'Addressbook_Model_Contact', 'Tasks_Model_Task'],
-    
+
+    initComponent: function() {
+        Tine.Crm.LeadEditDialog.superclass.initComponent.call(this);
+        this.on('recordUpdate', this.onAfterRecordUpdate, this);
+    },
+
     /**
      * executed after record got updated from proxy
      * 
@@ -88,18 +93,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-
-    /**
-     * is called from onApplyChanges
-     * @param {Boolean} closeWindow
-     */
-    doApplyChanges: function(closeWindow) {
+    
+    onAfterRecordUpdate: function(closeWindow) {
         this.getAdditionalData();
         
         var relations = [].concat(this.record.get('relations'));
         this.record.data.relations = relations;
-        
-        Tine.Crm.LeadEditDialog.superclass.doApplyChanges.call(this, closeWindow);
     },
     
     /**

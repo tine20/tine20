@@ -24,7 +24,19 @@ Tine.Calendar.EventUI.prototype = {
             el.addClass(cls);
         });
     },
-    
+
+    removeClass: function(cls) {
+        Ext.each(this.getEls(), function(el){
+            el.removeClass(cls);
+        });
+    },
+
+    focus: function() {
+        Ext.each(this.getEls(), function(el){
+            el.focus();
+        });
+    },
+
     blur: function() {
         Ext.each(this.getEls(), function(el){
             el.blur();
@@ -32,17 +44,31 @@ Tine.Calendar.EventUI.prototype = {
     },
     
     clearDirty: function() {
-        Ext.each(this.getEls(), function(el) {
-            el.setOpacity(1, 1);
-        });
+        this.setOpacity(1, 1);
     },
-    
-    focus: function() {
+
+    setStyle: function(style) {
         Ext.each(this.getEls(), function(el){
-            el.focus();
+            el.setStyle(style);
         });
     },
-    
+
+    getStyle: function(property) {
+        var value;
+        Ext.each(this.getEls(), function(el){
+            value = el.getStyle(property);
+            return false;
+        });
+
+        return value;
+    },
+
+    setOpacity: function(v, a) {
+        Ext.each(this.getEls(), function(el){
+            el.setOpacity(v, a);
+        });
+    },
+
     /**
      * returns events dom
      * @return {Array} of Ext.Element
@@ -64,11 +90,9 @@ Tine.Calendar.EventUI.prototype = {
     },
     
     markDirty: function() {
-        Ext.each(this.getEls(), function(el) {
-            el.setOpacity(0.5, 1);
-        });
+        this.setOpacity(0.5, 1);
     },
-    
+
     markOutOfFilter: function() {
         Ext.each(this.getEls(), function(el) {
             el.setOpacity(0.5, 0);
@@ -109,13 +133,7 @@ Tine.Calendar.EventUI.prototype = {
         }
         this.domIds = [];
     },
-    
-    removeClass: function(cls) {
-        Ext.each(this.getEls(), function(el){
-            el.removeClass(cls);
-        });
-    },
-    
+
     render: function(view) {
         this.event.view = view;
 
@@ -142,30 +160,7 @@ Tine.Calendar.EventUI.prototype = {
 
         // compute status icons
         this.statusIcons = Tine.Calendar.EventUI.getStatusInfo(this.event, this.attendeeRecord);
-    },
-    
-    setOpacity: function(v) {
-        Ext.each(this.getEls(), function(el){
-            el.setStyle(v);
-        });
-    },
-    
-    setStyle: function(style) {
-        Ext.each(this.getEls(), function(el){
-            el.setStyle(style);
-        });
-    },
-
-    getStyle: function(property) {
-        var value;
-        Ext.each(this.getEls(), function(el){
-            value = el.getStyle(property);
-            return false;
-        });
-
-        return value;
     }
-    
 };
 
 Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {

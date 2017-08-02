@@ -33,7 +33,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @cfg {Number} autoRefreshInterval (seconds)
      */
     autoRefreshInterval: 300,
-    
+
+    /**
+     * @cfg {Boolean} initialLoadAfterRender
+     */
+    initialLoadAfterRender: true,
+
     /**
      * @property autoRefreshTask
      * @type Ext.util.DelayedTask
@@ -355,9 +360,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         
         this.actionUpdater = new  Tine.widgets.ActionUpdater({
-            actions: this.recordActions,
-            grantsProperty: false,
-            containerProperty: false
+            actions: this.recordActions
         });
     },
 
@@ -501,18 +504,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     onRender: function(ct, position) {
         Tine.Calendar.MainScreenCenterPanel.superclass.onRender.apply(this, arguments);
-        
-        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName),
-            favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
-        
+
         this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
-        
-        if (defaultFavorite) {
-            favoritesPanel.selectFilter(defaultFavorite);
-        } else {
-            this.refresh();
+
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName);
+
+        if (this.initialLoadAfterRender) {
+            if (defaultFavorite) {
+                this.selectFavorite(defaultFavorite);
+            } else {
+                this.refresh();
+            }
         }
     },
+
+    selectFavorite: function(favorite) {
+        var favorite = favorite || Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName),
+            favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+
+        favoritesPanel.selectFilter(favorite);
+    },
+
     
     getViewParts: function (view) {
         view = String(view);
@@ -1480,7 +1492,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
             }
             // update container tree
-            Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+            // why do we need this?
+            // Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
             
             // update attendee filter grid
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getAttendeeFilter().setFilterValue(store.proxy.jsonReader.jsonData.filter);

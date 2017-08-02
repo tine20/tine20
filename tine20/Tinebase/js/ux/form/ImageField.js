@@ -215,7 +215,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      * @private
      */
     onContextMenu: function (e, input) {
-        e.preventDefault();
+        e.stopEvent();
         if (this.ctxMenu) {
             this.ctxMenu.destroy();
         }

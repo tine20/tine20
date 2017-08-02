@@ -24,6 +24,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
      */
     recordClass: Tine.Filemanager.Model.Node,
 
+    requiredGrant: 'editGrant',
     layout: 'fit',
     border: false,
 
@@ -41,6 +42,14 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         });
         this.hasOwnRightsDescription = new Ext.form.Label({
             text: this.app.i18n._("Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself.")
+        });
+        this.pinProtectionCheckbox = new Ext.form.Checkbox({
+            disabled: true,
+            hidden: ! Tine.Tinebase.registry.get('secondFactor'),
+            boxLabel: this.app.i18n._('This folder is pin protected')
+        });
+        this.pinProtectionDescription = new Ext.form.Label({
+            text: this.app.i18n._("If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             downloadGrantTitle: 'Download', // i18n._('Download')
@@ -69,7 +78,9 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
                 width: '100%',
                 items: [
                     this.hasOwnGrantsCheckbox,
-                    this.hasOwnRightsDescription
+                    this.hasOwnRightsDescription,
+                    this.pinProtectionCheckbox,
+                    this.pinProtectionDescription
                 ]},
                 this.grantsGrid
             ]
@@ -80,27 +91,41 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
     onOwnGrantsCheck: function(cb, checked) {
         this.grantsGrid.setReadOnly(!checked);
+        this.pinProtectionCheckbox.setDisabled(!checked);
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');
         this.hasOwnGrantsCheckbox.setValue(record.get('acl_node') == record.id);
+        this.pinProtectionCheckbox.setValue(record.get('pin_protected'));
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
 
-        // this.ownerCt[(record.get('type') == 'folder' ? 'un' : '') + 'hideTabStripItem'](this);
+        this.setReadOnly(! hasRequiredGrant);
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+        this.grantsGrid.setReadOnly(readOnly);
+        this.hasOwnGrantsCheckbox.setDisabled(readOnly);
     },
 
     onRecordUpdate: function(editDialog, record) {
         var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : '',
-            grants = [];
+            grants = [],
+            pin_protected = this.pinProtectionCheckbox.getValue() ? true : false;
 
         this.grantsGrid.getStore().each(function(r) {grants.push(r.data)});
 
         record.set('acl_node', acl_node);
         record.set('grants', '');
         record.set('grants', grants);
+        record.set('pin_protected', pin_protected);
     }
 });

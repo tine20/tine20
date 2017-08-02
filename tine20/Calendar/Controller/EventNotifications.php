@@ -265,6 +265,8 @@
      * @param array                      $_updates
      * @return void
      *
+     * @throws Exception
+     *
      * TODO this needs major refactoring
      */
     public function sendNotificationToAttender(Calendar_Model_Attender $_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
@@ -353,6 +355,8 @@
             $view->event        = $_event;
             $view->updater      = $_updater;
             $view->updates      = $_updates;
+
+            $view->attendeeAccountId = $attendeeAccountId;
             
             $messageBody = $view->render('eventNotification.php');
             
@@ -369,6 +373,11 @@
             }
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
+            if ($_action === 'alarm') {
+                // throw exception in case of alarm as the exception is catched in \Tinebase_Alarm::sendPendingAlarms
+                // and alarm sending is marked as failure
+                throw $e;
+            }
             return;
         }
     }

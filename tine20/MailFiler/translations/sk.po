@@ -1,0 +1,340 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - MailFiler\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Slowakisch\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: \n"
+
+#: js/nodeActions.js:28
+msgid "Create Folder"
+msgstr ""
+
+#: js/nodeActions.js:37
+msgid "New Folder"
+msgstr ""
+
+#: js/nodeActions.js:37
+msgid "Please enter the name of the new folder:"
+msgstr ""
+
+#: js/nodeActions.js:40
+#, python-brace-format
+msgid "No {0} added"
+msgstr ""
+
+#: js/nodeActions.js:40 js/nodeActions.js:127 js/GridContextMenu.js:40
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/nodeActions.js:73
+msgid "Edit Properties"
+msgstr ""
+
+#: js/nodeActions.js:106
+msgid "Rename"
+msgstr ""
+
+#: js/nodeActions.js:120
+#, python-brace-format
+msgid "Rename {0}"
+msgstr ""
+
+#: js/nodeActions.js:121 js/GridContextMenu.js:34
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/nodeActions.js:127 js/GridContextMenu.js:40
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr ""
+
+#: js/nodeActions.js:151
+msgid "Delete"
+msgstr ""
+
+#: js/nodeActions.js:178 js/GridContextMenu.js:144
+msgid "Do you really want to delete the following files?"
+msgstr ""
+
+#: js/nodeActions.js:213
+msgid "Move"
+msgstr ""
+
+#: js/nodeActions.js:224
+msgid "Move Items"
+msgstr ""
+
+#: js/nodeActions.js:246 js/MailFiler.js:32 js/NodeEditDialog.js:49
+msgid "Save locally"
+msgstr ""
+
+#: js/nodeActions.js:270
+msgid "Preview"
+msgstr ""
+
+#: js/MailFiler.js:24
+msgid "MailFiler"
+msgstr ""
+
+#: js/ExceptionHandler.js:32
+msgid "Service Unavailable"
+msgstr ""
+
+#: js/ExceptionHandler.js:33
+#, python-brace-format
+msgid "The MailFiler is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:55
+msgid "Files already exists"
+msgstr ""
+
+#: js/ExceptionHandler.js:55
+msgid "Do you want to replace the following file(s)?"
+msgstr ""
+
+#: js/ExceptionHandler.js:99
+msgid "Failure on create folder"
+msgstr ""
+
+#: js/ExceptionHandler.js:100
+msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/NodeEditDialog.js:57 js/NodeGridPanel.js:393
+msgid "Print Message"
+msgstr ""
+
+#: js/NodeEditDialog.js:121 js/NodeGridPanel.js:455
+msgid "Print Preview"
+msgstr ""
+
+#: js/NodeEditDialog.js:134
+msgid "Edit folder"
+msgstr ""
+
+#: js/NodeEditDialog.js:134
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:136 js/Model.js:45 js/NodeGridPanel.js:170
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/NodeEditDialog.js:136 js/Model.js:42
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/NodeEditDialog.js:223 js/NodeGridPanel.js:87
+msgid "Name"
+msgstr ""
+
+#: js/NodeEditDialog.js:230 js/Model.js:100
+msgid "Type"
+msgstr ""
+
+#: js/NodeEditDialog.js:238 js/NodeGridPanel.js:186
+msgid "Created By"
+msgstr ""
+
+#: js/NodeEditDialog.js:241 js/Model.js:102 js/NodeGridPanel.js:178
+msgid "Creation Time"
+msgstr ""
+
+#: js/NodeEditDialog.js:250
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:253
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:281 js/Model.js:103
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:295
+msgid "Enter description"
+msgstr ""
+
+#: js/Model.js:99
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:101 js/NodeGridPanel.js:161
+msgid "Contenttype"
+msgstr ""
+
+#: js/Model.js:106 js/GridDetailsPanel.js:187 js/NodeGridPanel.js:101
+#: js/MailDetailsPanel.js:48 Model/Message.php:48
+msgid "Subject"
+msgstr ""
+
+#: js/Model.js:107 js/NodeGridPanel.js:108
+msgid "From (Email)"
+msgstr ""
+
+#: js/Model.js:108 js/NodeGridPanel.js:115
+msgid "From (Name)"
+msgstr ""
+
+#: js/Model.js:109 js/NodeGridPanel.js:130
+msgid "To"
+msgstr ""
+
+#: js/Model.js:110
+msgid "Cc"
+msgstr ""
+
+#: js/Model.js:111
+msgid "Bcc"
+msgstr ""
+
+#: js/Model.js:112 js/NodeGridPanel.js:94
+msgid "Flags"
+msgstr ""
+
+#: js/Model.js:115 js/NodeGridPanel.js:146
+msgid "Received"
+msgstr ""
+
+#: js/GridDetailsPanel.js:188 js/MailDetailsPanel.js:49
+msgid "From"
+msgstr ""
+
+#: js/GridDetailsPanel.js:189 js/MailDetailsPanel.js:50
+msgid "Add"
+msgstr ""
+
+#: js/GridDetailsPanel.js:190 js/MailDetailsPanel.js:51
+msgid "Add contact to addressbook"
+msgstr ""
+
+#: js/GridDetailsPanel.js:191 js/MailDetailsPanel.js:52
+msgid "Date"
+msgstr ""
+
+#: js/GridDetailsPanel.js:193 js/MailDetailsPanel.js:54
+#: js/MailDetailsPanel.js:252
+msgid "Show or hide header information"
+msgstr ""
+
+#: js/GridDetailsPanel.js:290 js/MailDetailsPanel.js:127
+msgid "Attachments"
+msgstr ""
+
+#: js/NodeGridPanel.js:79
+msgid "Tags"
+msgstr ""
+
+#: js/NodeGridPanel.js:122
+msgid "Sender"
+msgstr ""
+
+#: js/NodeGridPanel.js:138
+msgid "Sent"
+msgstr ""
+
+#: js/NodeGridPanel.js:153
+msgid "Size"
+msgstr ""
+
+#: js/NodeGridPanel.js:193
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/NodeGridPanel.js:201
+msgid "Last Modified By"
+msgstr ""
+
+#: js/NodeGridPanel.js:239
+msgid "Answered"
+msgstr ""
+
+#: js/NodeGridPanel.js:242
+msgid "Forwarded"
+msgstr ""
+
+#: js/NodeGridPanel.js:245
+msgid "Tine20"
+msgstr ""
+
+#: js/NodeGridPanel.js:303
+msgid "Folder Up"
+msgstr ""
+
+#: js/NodeGridPanel.js:364
+msgid "Reply"
+msgstr ""
+
+#: js/NodeGridPanel.js:374
+msgid "Reply To All"
+msgstr ""
+
+#: js/NodeGridPanel.js:384
+msgid "Forward"
+msgstr ""
+
+#: js/NodeGridPanel.js:476
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr ""
+
+#: js/NodeGridPanel.js:495
+msgid "Original message"
+msgstr ""
+
+#: Config.php:26
+msgid "Public Download URL"
+msgstr ""
+
+#: Config.php:28
+msgid "Possible status. Please note that additional status might impact other MailFiler systems on export or syncronisation."
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid "The destination has the same path the source has. No action has been performed."
+msgstr ""

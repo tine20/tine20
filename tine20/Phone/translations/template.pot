@@ -13,76 +13,48 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Model/Call.php:43
-msgid "Call"
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
 msgstr ""
 
-#: Model/Call.php:44
-msgid "Calls"
+#: js/CallGridPanel.js:68
+msgid "Dial number"
 msgstr ""
 
-#: Model/Call.php:60 js/DialerPanel.js:76
-msgid "Line"
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
 msgstr ""
 
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr ""
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr ""
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr ""
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr ""
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr ""
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr ""
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr ""
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr ""
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr ""
-
-#: Model/Call.php:128
-msgid "Contact"
-msgstr ""
-
-#: Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr ""
-
-#: Model/MyPhone.php:33 js/CallGridPanel.js:167
+#: js/CallGridPanel.js:167 Model/MyPhone.php:33
 msgid "Phones"
 msgstr ""
 
-#: Model/MyPhone.php:61
-msgid "Settings"
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
 msgstr ""
 
-#: Model/MyPhone.php:66
-msgid "Lines"
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
 msgstr ""
 
-#: Model/MyPhone.php:69
-msgid "Description"
+#: js/AddressbookGridPanelHook.js:40
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:196
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:205
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:214
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:223
+msgid "Cell private"
 msgstr ""
 
 #: js/Phone.js:100
@@ -97,44 +69,12 @@ msgstr ""
 msgid "unknown number"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
+#: js/DialerPanel.js:53 Model/MyPhone.php:32
+msgid "Phone"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:191
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:200
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:209
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:218
-msgid "Cell private"
-msgstr ""
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr ""
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr ""
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr ""
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr ""
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
+#: js/DialerPanel.js:76 Model/Call.php:60
+msgid "Line"
 msgstr ""
 
 #: js/DialerPanel.js:85
@@ -212,4 +152,60 @@ msgstr ""
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
+msgstr ""
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr ""
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr ""
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr ""
+
+#: Model/Call.php:43
+msgid "Call"
+msgstr ""
+
+#: Model/Call.php:44
+msgid "Calls"
+msgstr ""
+
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr ""
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr ""
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr ""
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr ""
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr ""
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr ""
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr ""
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr ""
+
+#: Model/Call.php:120
+msgid "Destination"
 msgstr ""

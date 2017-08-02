@@ -5,7 +5,7 @@
  * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -73,7 +73,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_CUSTOMFIELDS = 'manage_customfields';
-    
+
     /**
      * the right to view roles
      * @staticvar string
@@ -123,6 +123,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const VIEW_SERVERINFO = 'view_serverinfo';
+
+    /**
+     * the right to view quota usage
+     * @staticvar string
+     */
+    const VIEW_QUOTA_USAGE = 'view_quota_usage';
         
     /**
      * holds the instance of the singleton
@@ -188,6 +194,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_CONTAINERS,
             self::VIEW_CUSTOMFIELDS,
             self::VIEW_SERVERINFO,
+            self::VIEW_QUOTA_USAGE,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -267,6 +274,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_SERVERINFO   => array(
                 'text'          => $translate->_('view serverinfo'),
                 'description'   => $translate->_('view serverinfo list'),
+            ),
+            self::VIEW_QUOTA_USAGE => array(
+                'text'          => $translate->_('view quota usage'),
+                'description'   => $translate->_('view quota usage'),
             ),
         );
         

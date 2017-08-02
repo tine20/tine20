@@ -75,4 +75,18 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Inventory', '10.3');
     }
+
+    /**
+     * update to 10.4
+     *
+     * change container_id to uuid
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
+
+        $this->setApplicationVersion('Inventory', '10.4');
+    }
 }

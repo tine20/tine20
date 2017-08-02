@@ -40,7 +40,7 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
     protected $_validators = array(
         // tine record fields
         'id'                   => array('allowEmpty' => true,  'Alnum'),
-        'container_id'         => array('allowEmpty' => true,  'Int'  ),
+        'container_id'         => array('allowEmpty' => true,  'Alnum'),
         'created_by'           => array('allowEmpty' => true,         ),
         'creation_time'        => array('allowEmpty' => true          ),
         'last_modified_by'     => array('allowEmpty' => true          ),
@@ -56,6 +56,8 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'type'                 => array('allowEmpty' => false         ),
         'is_location'          => array('allowEmpty' => true          ),
+        // location is a virtual field
+        'location'             => array('allowEmpty' => true          ),
         'status'               => array('allowEmpty' => true          ),
         'busy_type'            => array('allowEmpty' => true          ),
         'suppress_notification'=> array('allowEmpty' => true          ),

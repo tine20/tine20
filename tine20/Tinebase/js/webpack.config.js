@@ -80,6 +80,7 @@ module.exports = {
             {test: /\.css$/, loader: "style-loader!css-loader"},
             {test: /\.png/, loader: "url-loader?limit=100000&minetype=image/png"},
             {test: /\.gif/, loader: "url-loader?limit=100000&minetype=image/gif"},
+            {test: /\.svg/, loader: "url-loader?limit=100000&minetype=image/svg"}
         ]
     },
     resolveLoader: {fallback: __dirname + "/node_modules"}

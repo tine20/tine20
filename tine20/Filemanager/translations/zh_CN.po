@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # vehery <spacen_zj@hotmail.com>, 2012
 # 尹晓东 <xindev@gmail.com>, 2013
@@ -9,224 +9,123 @@ msgstr ""
 "PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/tine20/tine20/language/zh_CN/)\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:104
-#, python-format
-msgid "%s's personal files"
-msgstr "%s的个人文件"
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr ""
-
-#: Acl/Rights.php:104
-msgid "manage shared folders"
-msgstr "管理共享文件夹"
-
-#: Acl/Rights.php:105
-msgid "Create new shared folders"
-msgstr "创建共享文件夹"
-
-#: Acl/Rights.php:108
-msgid "Manage anonymous download links"
-msgstr ""
-
-#: Acl/Rights.php:109
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
-
-#: js/NodeEditDialog.js:50 js/Filemanager.js:32 js/NodeGridPanel.js:339
-msgid "Save locally"
-msgstr "本地保存"
-
-#: js/NodeEditDialog.js:66
-msgid "Edit folder"
-msgstr ""
-
-#: js/NodeEditDialog.js:66
-msgid "edit file"
-msgstr ""
-
-#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "文件夹"
-
-#: js/NodeEditDialog.js:68 js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "文件"
-
-#: js/NodeEditDialog.js:114
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
-msgid "Name"
-msgstr "文件名"
-
-#: js/NodeEditDialog.js:154 js/Model.js:527
-msgid "Type"
-msgstr "类型"
-
-#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:246
-#: js/NodeGridPanel.js:182
-msgid "Created By"
-msgstr "所有人"
-
-#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:254 js/Model.js:529
-#: js/NodeGridPanel.js:174
-msgid "Creation Time"
-msgstr "创建时间"
-
-#: js/NodeEditDialog.js:174
-msgid "Modified By"
-msgstr "修改"
-
-#: js/NodeEditDialog.js:177
-msgid "Last Modified"
-msgstr "最后修改"
-
-#: js/NodeEditDialog.js:200
-msgid "Description"
-msgstr "描述"
-
-#: js/NodeEditDialog.js:214
-msgid "Enter description"
-msgstr "输入描述"
-
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:696
-#: js/NodeGridPanel.js:847
-msgid "Upload Failed"
-msgstr "上传失败"
-
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:697
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator."
-msgstr ""
-
-#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
-msgid "Putting files in this folder is not allowed!"
-msgstr "文件不允许放入这个文件夹！"
-
-#: js/DownloadLinkGridPanel.js:63
-msgid "Create Public Link"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:71
-msgid "Remove record"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:135
-msgid "Creating new Download Link..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:173
-msgid "Deleting Download Links..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:173
-msgid "Deleting Download Link..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:230
-msgid "Url"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:262
-msgid "Expiration Time"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:271
-msgid "Access Count"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:278 js/NodeGridPanel.js:189
-msgid "Last Modified Time"
-msgstr "最后修改时间"
-
-#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:196
-msgid "Last Modified By"
-msgstr "最后修改人"
-
-#: js/GridContextMenu.js:34
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "请输入新的名称 {0}:"
-
-#: js/GridContextMenu.js:40
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "没有重命名 {0}"
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:548
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "你需要提供一个 {0}  名！"
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:589
-msgid "Do you really want to delete the following files?"
-msgstr "你真的要删除以下文件吗？"
-
-#: js/Filemanager.js:24
-msgid "Filemanager"
-msgstr "文件管理"
-
 #: js/PathFilterModel.js:50
 msgid "path"
 msgstr "路径"
 
-#: js/Model.js:279 js/Model.js:295
+#: js/nodeActions.js:39
+msgid "Create Folder"
+msgstr "创建文件夹"
+
+#: js/nodeActions.js:48
+msgid "New Folder"
+msgstr "新建文件夹"
+
+#: js/nodeActions.js:48
+msgid "Please enter the name of the new folder:"
+msgstr "请输入新的文件夹名字："
+
+#: js/nodeActions.js:51
 #, python-brace-format
-msgid "Copying data .. {0}"
-msgstr "复制数据 .. {0}"
+msgid "No {0} added"
+msgstr "没有添加 {0}"
 
-#: js/Model.js:282 js/Model.js:297
+#: js/nodeActions.js:51 js/nodeActions.js:138
 #, python-brace-format
-msgid "Moving data .. {0}"
-msgstr "移动数据 .. {0}"
+msgid "You have to supply a {0} name!"
+msgstr "你需要提供一个 {0}  名！"
 
-#: js/Model.js:301
-msgid "Please wait"
-msgstr "请等待"
+#: js/nodeActions.js:84
+msgid "Edit Properties"
+msgstr "编辑属性"
 
-#: js/Model.js:526
-msgid "Quick Search"
+#: js/nodeActions.js:117
+msgid "Rename"
 msgstr ""
 
-#: js/Model.js:528 js/NodeGridPanel.js:142
-msgid "Contenttype"
-msgstr "类型"
+#: js/nodeActions.js:131
+#, python-brace-format
+msgid "Rename {0}"
+msgstr ""
 
-#: js/Model.js:553
-msgid "Download Link"
-msgid_plural "Download Links"
-msgstr[0] ""
+#: js/nodeActions.js:132
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "请输入新的名称 {0}:"
+
+#: js/nodeActions.js:138
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "没有重命名 {0}"
+
+#: js/nodeActions.js:162 js/nodeActions.js:173
+msgid "System Link"
+msgstr ""
+
+#: js/nodeActions.js:176
+msgid "Use this link to share the entry with other system users"
+msgstr ""
+
+#: js/nodeActions.js:193
+msgid "Delete"
+msgstr "删除"
+
+#: js/nodeActions.js:220
+msgid "Do you really want to delete the following files?"
+msgstr "你真的要删除以下文件吗？"
+
+#: js/nodeActions.js:255
+msgid "Move"
+msgstr ""
+
+#: js/nodeActions.js:266
+msgid "Move Items"
+msgstr ""
+
+#: js/nodeActions.js:288 js/NodeEditDialog.js:51 js/Filemanager.js:74
+msgid "Save locally"
+msgstr "本地保存"
+
+#: js/nodeActions.js:312
+msgid "Preview"
+msgstr ""
+
+#: js/nodeActions.js:338 js/GrantsPanel.js:49
+msgid "Publish"
+msgstr ""
+
+#: js/nodeActions.js:369
+msgid "Folder has been published successfully"
+msgstr ""
+
+#: js/nodeActions.js:369
+msgid "File has been published successfully"
+msgstr ""
+
+#: js/nodeActions.js:22
+msgid "Reload),"
+msgstr ""
+
+#: js/NodeTreePanel.js:509 js/NodeGridPanel.js:753
+msgid "Upload Failed"
+msgstr "上传失败"
+
+#: js/NodeTreePanel.js:510 js/NodeGridPanel.js:754
+msgid "Putting files in this folder is not allowed!"
+msgstr "文件不允许放入这个文件夹！"
+
+#: js/SearchCombo.js:62
+msgid "Select a file"
+msgstr ""
 
 #: js/ExceptionHandler.js:32
 msgid "Service Unavailable"
@@ -234,9 +133,7 @@ msgstr "服务不可用"
 
 #: js/ExceptionHandler.js:33
 #, python-brace-format
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
+msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
 msgstr "文件管理器配置不正确。 请参看 {0}Tine 2.0 Admin FAQ{1} 配置建议，或咨询您的系统管理员。"
 
 #: js/ExceptionHandler.js:55
@@ -255,90 +152,415 @@ msgstr "创建文件夹失败"
 msgid "Item with this name already exists!"
 msgstr "此名称的项目已经存在！"
 
+#: js/NodeEditDialog.js:68
+msgid "Edit folder"
+msgstr ""
+
+#: js/NodeEditDialog.js:68
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:70 js/Model.js:26 js/FilePicker.js:297
+#: js/NodeGridPanel.js:255
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "文件夹"
+
+#: js/NodeEditDialog.js:70 js/Model.js:23
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "文件"
+
+#: js/NodeEditDialog.js:112
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:164 js/FilePicker.js:275 js/NotificationGridPanel.js:93
+#: js/NodeGridPanel.js:233
+msgid "Name"
+msgstr "文件名"
+
+#: js/NodeEditDialog.js:172 js/Model.js:595
+msgid "Type"
+msgstr "类型"
+
+#: js/NodeEditDialog.js:184 js/Model.js:603 js/NodeGridPanel.js:308
+msgid "Indexed"
+msgstr ""
+
+#: js/NodeEditDialog.js:184
+msgid "Not yet indexed"
+msgstr ""
+
+#: js/NodeEditDialog.js:202 js/DownloadLinkGridPanel.js:254
+#: js/NodeGridPanel.js:270
+msgid "Created By"
+msgstr "所有人"
+
+#: js/NodeEditDialog.js:205 js/Model.js:597 js/DownloadLinkGridPanel.js:262
+#: js/NodeGridPanel.js:263
+msgid "Creation Time"
+msgstr "创建时间"
+
+#: js/NodeEditDialog.js:214
+msgid "Modified By"
+msgstr "修改"
+
+#: js/NodeEditDialog.js:217
+msgid "Last Modified"
+msgstr "最后修改"
+
+#: js/NodeEditDialog.js:238 js/Model.js:598
+msgid "Description"
+msgstr "描述"
+
+#: js/NodeEditDialog.js:252
+msgid "Enter description"
+msgstr "输入描述"
+
+#: js/Filemanager.js:24
+msgid "Filemanager"
+msgstr "文件管理"
+
+#: js/Model.js:91 js/RevisionPanel.js:34
+msgid "Revision"
+msgstr "版本"
+
+#: js/Model.js:242 js/Model.js:257
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr "复制数据 .. {0}"
+
+#: js/Model.js:245 js/Model.js:259
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr "移动数据 .. {0}"
+
+#: js/Model.js:263
+msgid "Please wait"
+msgstr "请等待"
+
+#: js/Model.js:594
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:596 js/FilePicker.js:289 js/NodeGridPanel.js:247
+msgid "Contenttype"
+msgstr "类型"
+
+#: js/Model.js:602
+msgid "File Contents"
+msgstr ""
+
+#: js/Model.js:625
+msgid "Download Link"
+msgid_plural "Download Links"
+msgstr[0] ""
+
+#: js/FilePicker.js:282 js/UsagePanel.js:48 js/NodeGridPanel.js:240
+msgid "Size"
+msgstr "大小"
+
+#: js/DownloadLinkGridPanel.js:67
+msgid "Create Public Link"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:75
+msgid "Remove record"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:143
+msgid "Creating new Download Link..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:181
+msgid "Deleting Download Links..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:181
+msgid "Deleting Download Link..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:238 js/FilePublishedDialog.js:58
+msgid "Url"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:270
+msgid "Expiration Time"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:279
+msgid "Access Count"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:277
+msgid "Last Modified Time"
+msgstr "最后修改时间"
+
+#: js/DownloadLinkGridPanel.js:294 js/NodeGridPanel.js:284
+msgid "Last Modified By"
+msgstr "最后修改人"
+
+#: js/NotificationPanel.js:25
+msgid "Notifications"
+msgstr ""
+
+#: js/NotificationPanel.js:45
+msgid "This folder has own notification settings"
+msgstr ""
+
+#: js/DocumentPreview.js:98
+msgid "No preview available."
+msgstr ""
+
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
 msgstr ""
 
-#: js/NodeGridPanel.js:120
+#: js/RecursiveFilter.js:38
+msgid "Whole Filemanager"
+msgstr ""
+
+#: js/RecursiveFilter.js:49
+msgid "Search"
+msgstr ""
+
+#: js/RecursiveFilter.js:51
+msgid "This Folder"
+msgstr ""
+
+#: js/UsagePanel.js:28
+msgid "Usage"
+msgstr ""
+
+#: js/UsagePanel.js:52 js/NodeGridPanel.js:295
+msgid "Revision Size"
+msgstr ""
+
+#: js/UsagePanel.js:58
+msgid "File Type"
+msgstr ""
+
+#: js/UsagePanel.js:62
+msgid "Usage by File Type"
+msgstr ""
+
+#: js/UsagePanel.js:69
+msgid "User"
+msgstr ""
+
+#: js/UsagePanel.js:73
+msgid "Usage by User"
+msgstr ""
+
+#: js/UsagePanel.js:109
+msgid "unknown"
+msgstr ""
+
+#: js/NotificationGridPanel.js:34
+msgid "Notification"
+msgstr ""
+
+#: js/NotificationGridPanel.js:35
+msgid "Notactiveification"
+msgstr ""
+
+#: js/NotificationGridPanel.js:46
+msgid "Summary"
+msgstr ""
+
+#: js/NotificationGridPanel.js:49
+msgid "Day"
+msgstr ""
+
+#: js/NotificationGridPanel.js:53
+msgid "Days"
+msgstr ""
+
+#: js/NotificationGridPanel.js:129
+msgid "No permission"
+msgstr ""
+
+#: js/NotificationGridPanel.js:140
+msgid "all"
+msgstr ""
+
+#: js/NotificationGridPanel.js:159
+msgid "Search for users ..."
+msgstr ""
+
+#: js/NotificationGridPanel.js:192
+msgid "Search for groups ..."
+msgstr ""
+
+#: js/NodeGridPanel.js:225
 msgid "Tags"
 msgstr "标签"
 
-#: js/NodeGridPanel.js:135
-msgid "Size"
-msgstr "大小"
+#: js/NodeGridPanel.js:296
+msgid "Total size of all available revisions"
+msgstr ""
 
-#: js/NodeGridPanel.js:159
-msgid "Revision"
-msgstr "版本"
+#: js/NodeGridPanel.js:309
+msgid "File contents is part of the search index"
+msgstr ""
 
-#: js/NodeGridPanel.js:244
+#: js/NodeGridPanel.js:377
 #, python-brace-format
 msgid "The max. Upload Filesize is {0} MB"
 msgstr "上传文件最大为 {0} MB"
 
-#: js/NodeGridPanel.js:282
+#: js/NodeGridPanel.js:416
 msgid "Upload"
 msgstr "上传"
 
-#: js/NodeGridPanel.js:306
-msgid "Edit Properties"
-msgstr "编辑属性"
-
-#: js/NodeGridPanel.js:317
-msgid "Create Folder"
-msgstr "创建文件夹"
-
-#: js/NodeGridPanel.js:328
+#: js/NodeGridPanel.js:473
 msgid "Folder Up"
 msgstr "文件夹在前"
 
-#: js/NodeGridPanel.js:349 js/NodeGridPanel.js:350 js/NodeGridPanel.js:352
-msgid "Delete"
-msgstr "删除"
-
-#: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
-msgid "Publish"
+#: js/FilePublishedDialog.js:66 js/FilePublishedDialog.js:109
+msgid "Password"
 msgstr ""
 
-#: js/NodeGridPanel.js:422
-msgid "Folder has been published successfully"
+#: js/FilePublishedDialog.js:74
+msgid "Valid until"
 msgstr ""
 
-#: js/NodeGridPanel.js:422
-msgid "File has been published successfully"
+#: js/FilePublishedDialog.js:92
+msgid "Send as e-mail"
 msgstr ""
 
-#: js/NodeGridPanel.js:423
-#, python-brace-format
-msgid "Url: {0}"
+#: js/FilePublishedDialog.js:106 js/GrantsPanel.js:47
+msgid "Download"
 msgstr ""
 
-#: js/NodeGridPanel.js:423
-#, python-brace-format
-msgid "Valid Until: {1}"
+#: js/GrantsPanel.js:33
+msgid "Grants"
 msgstr ""
 
-#: js/NodeGridPanel.js:544
-msgid "New Folder"
-msgstr "新建文件夹"
+#: js/GrantsPanel.js:40
+msgid "This folder has own grants"
+msgstr ""
 
-#: js/NodeGridPanel.js:544
-msgid "Please enter the name of the new folder:"
-msgstr "请输入新的文件夹名字："
+#: js/GrantsPanel.js:44
+msgid "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
+msgstr ""
 
-#: js/NodeGridPanel.js:548
-#, python-brace-format
-msgid "No {0} added"
-msgstr "没有添加 {0}"
+#: js/GrantsPanel.js:48
+msgid "The grant to download files"
+msgstr ""
 
-#: Controller/Node.php:319
+#: js/GrantsPanel.js:50
+msgid "The grant to create anonymous download links for files"
+msgstr ""
+
+#: js/RevisionPanel.js:49
+msgid "This folder has own revision settings"
+msgstr ""
+
+#: js/RevisionPanel.js:60
+msgid "Revision active"
+msgstr ""
+
+#: js/RevisionPanel.js:72
+msgid "Limit revision amount to"
+msgstr ""
+
+#: js/RevisionPanel.js:88
+msgid "Hold-back in months"
+msgstr ""
+
+#: Controller/Node.php:430
 msgid "My folders"
 msgstr "我的文件夹"
 
-#: Controller/Node.php:326
+#: Controller/Node.php:437
 msgid "Shared folders"
 msgstr "共享文件夹"
 
-#: Controller/Node.php:333
+#: Controller/Node.php:444
 msgid "Other users folders"
 msgstr "其他用户文件夹"
+
+#: Controller/Node.php:1365
+msgid "Received"
+msgstr ""
+
+#: Controller/Node.php:1366
+msgid "To"
+msgstr ""
+
+#: Controller/Node.php:1367
+msgid "Cc"
+msgstr ""
+
+#: Controller/Node.php:1368
+msgid "Bcc"
+msgstr ""
+
+#: Controller/Node.php:1369
+msgid "From (E-Mail)"
+msgstr ""
+
+#: Controller/Node.php:1370
+msgid "From (Name)"
+msgstr ""
+
+#: Controller/Node.php:1371
+msgid "Body"
+msgstr ""
+
+#: Controller/Node.php:1372
+msgid "Attachments"
+msgstr ""
+
+#: Config.php:26
+msgid "Public Download URL"
+msgstr ""
+
+#: Config.php:28
+msgid "Possible status. Please note that additional status might impact other Filemanager systems on export or syncronisation."
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr "管理共享文件夹"
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr "创建共享文件夹"
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid "The destination has the same path the source has. No action has been performed."
+msgstr ""
+
+#: Preference.php:61
+msgid "Row double click default"
+msgstr ""
+
+#: Preference.php:62
+msgid "Defines which action should be executed on double click by default?"
+msgstr ""
+
+#~ msgid "%s's personal files"
+#~ msgstr "%s的个人文件"

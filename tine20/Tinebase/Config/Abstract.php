@@ -543,7 +543,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _loadConfig($_name)
     {
-        if ($this->_cachedApplicationConfig === NULL) {
+        if ($this->_cachedApplicationConfig === NULL || empty($this->_cachedApplicationConfig)) {
             $this->_loadAllAppConfigsInCache();
         }
         $result = (isset($this->_cachedApplicationConfig[$_name])) ? $this->_cachedApplicationConfig[$_name] :  NULL;

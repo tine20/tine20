@@ -185,6 +185,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             foreach ($record->grants as $newGrant) {
                 foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
                     if ($newGrant->{$grant}) {
+                        $newGrant->id = null;
                         $newGrant->account_grant = $grant;
                         $newGrant->record_id = $recordId;
                         $this->_grantsBackend->create($newGrant);
@@ -251,7 +252,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         $grant->sanitizeAccountIdAndFillWithAllGrants();
         $record->grants->addRecord($grant);
     }
-    
+
+    /**
+     * @param string $recordId
+     */
+    public function deleteGrantsOfRecord($recordId)
+    {
+        $this->_grantsBackend->deleteByProperty($recordId, 'record_id');
+    }
+
     /**
      * this function creates a new record with default grants during inital setup
      * 

@@ -674,6 +674,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $result = $this->_getAndDecodeMessageBody($_message, $_message->text_partid , Zend_Mime::TYPE_TEXT, $_account);
                     return Felamimail_Message::convertContentType(Zend_Mime::TYPE_TEXT, Zend_Mime::TYPE_HTML, $result);
                 }
+            } else {
+                // only needed without html purifier (@see Felamimail_HTMLPurifier_AttrTransform_AValidator)
+                $body = Felamimail_Message::replaceTargets($body);
             }
             
             if (! ($_account !== NULL && $_account->display_format === Felamimail_Model_Account::DISPLAY_CONTENT_TYPE && $bodyPart->type == Zend_Mime::TYPE_TEXT)) {
@@ -686,8 +689,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
-            $body = Felamimail_Message::replaceTargets($body);
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding part ' . $partId . ' to message body.');
             

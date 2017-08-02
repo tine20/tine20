@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -26,10 +26,17 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     layout: 'fit',
     plain: true,
     title: null,
+    // password or pin
+    pwType: 'password',
 
     initComponent: function() {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
-        this.title = (this.title !== null) ? this.title : String.format(i18n._('Change Password For "{0}"'), this.currentAccount.accountDisplayName);
+        this.passwordLabel = this.pwType === 'pin' ? i18n._('PIN') : i18n._('Password');
+        this.title = (this.title !== null) ? this.title : String.format(
+            i18n._('Change {0} For "{1}"'),
+            this.passwordLabel,
+            this.currentAccount.accountDisplayName
+        );
         
         this.items = new Ext.FormPanel({
             bodyStyle: 'padding:5px;',
@@ -44,15 +51,15 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             },
             items: [{
                 id: 'oldPassword',
-                fieldLabel: i18n._('Old Password'),
+                fieldLabel: String.format(i18n._('Old {0}'), this.passwordLabel),
                 name:'oldPassword'
             },{
                 id: 'newPassword',
-                fieldLabel: i18n._('New Password'),
+                fieldLabel: String.format(i18n._('New {0}'), this.passwordLabel),
                 name:'newPassword'
             },{
                 id: 'newPasswordSecondTime',
-                fieldLabel: i18n._('Repeat new Password'),
+                fieldLabel: String.format(i18n._('Repeat new {0}'), this.passwordLabel),
                 name:'newPasswordSecondTime'
             }],
             buttons: [{
@@ -72,9 +79,9 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                         if (values.newPassword == values.newPasswordSecondTime) {
                             Ext.Ajax.request({
                                 waitTitle: i18n._('Please Wait!'),
-                                waitMsg: i18n._('changing password...'),
+                                waitMsg: String.format(i18n._('Changing {0}'), this.passwordLabel),
                                 params: {
-                                    method: 'Tinebase.changePassword',
+                                    method: this.pwType === 'pin' ? 'Tinebase.changePin' : 'Tinebase.changePassword',
                                     oldPassword: values.oldPassword,
                                     newPassword: values.newPassword
                                 },
@@ -84,16 +91,18 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                         Ext.getCmp('changePassword_window').close();
                                         Ext.MessageBox.show({
                                             title: i18n._('Success'),
-                                            msg: i18n._('Your password has been changed.'),
+                                            msg: String.format(i18n._('Your {0} has been changed.'), this.passwordLabel),
                                             buttons: Ext.MessageBox.OK,
                                             icon: Ext.MessageBox.INFO
                                         });
-                                        Ext.Ajax.request({
-                                            params: {
-                                                method: 'Tinebase.updateCredentialCache',
-                                                password: values.newPassword
-                                            }
-                                        });
+                                        if (this.pwType === 'password') {
+                                            Ext.Ajax.request({
+                                                params: {
+                                                    method: 'Tinebase.updateCredentialCache',
+                                                    password: values.newPassword
+                                                }
+                                            });
+                                        }
                                     } else {
                                         Ext.MessageBox.show({
                                             title: i18n._('Failure'),
@@ -102,18 +111,20 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                             icon: Ext.MessageBox.ERROR  
                                         });
                                     }
-                                }
+                                },
+                                scope: this
                             });
                         } else {
                             Ext.MessageBox.show({
                                 title: i18n._('Failure'),
-                                msg: i18n._('The new passwords mismatch, please correct them.'),
+                                msg: String.format(i18n._('{0} mismatch, please correct.'), this.passwordLabel),
                                 buttons: Ext.MessageBox.OK,
                                 icon: Ext.MessageBox.ERROR 
                             });
                         }
                     }
-                }
+                },
+                scope: this
             }]
         });
         

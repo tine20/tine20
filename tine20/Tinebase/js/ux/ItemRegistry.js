@@ -138,7 +138,13 @@ Ext.ux.ItemRegistry.prototype = {
             item;
             
         if (typeof def === 'function') {
-            item = new def(this.config);
+            try {
+                item = new def(this.config);
+            } catch (error) {
+                console.error('Ext.ux.ItemRegistry::getItem failed to create')
+                console.error(error);
+                return;
+            }
         } else {
             if (Ext.isString(def)) {
                 def = {xtype: def};

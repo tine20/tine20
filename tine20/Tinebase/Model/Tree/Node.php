@@ -32,7 +32,10 @@
  * @property    array              revisionProps
  * @property    array              notificationProps
  * @property    string             preview_count
+ * @property    integer            quota
  * @property    Tinebase_Record_RecordSet grants
+ * @property    bool               pin_protected
+ * @property    string             path
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -71,7 +74,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      *
      * @var array list of modlog omit fields
      */
-    protected $_modlogOmitFields = array('hash', 'available_revisions', 'revision_size', 'path', 'indexed_hash');
+    protected $_modlogOmitFields = array('revision', 'contenttype', 'description', 'revision_size', 'indexed_hash',
+        'hash', 'size', 'preview_count', 'available_revisions', 'path');
 
     /**
      * if foreign Id fields should be resolved on search and get from json
@@ -117,6 +121,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
+        'quota'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -140,6 +145,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits',
             Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'pin_protected'         => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => false,
+            array('InArray', array(true, false))
+        ),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -150,7 +160,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'tempFile'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'stream'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // acl grants
-        'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'grants'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -277,4 +287,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         return parent::isValid($_throwExceptionOnInvalidData);
     }
 
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return $this->type === Tinebase_Model_Tree_FileObject::TYPE_FILE || $this->type ===
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+    }
 }

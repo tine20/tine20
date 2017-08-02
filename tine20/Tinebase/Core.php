@@ -1834,6 +1834,14 @@ class Tinebase_Core
         }
     }
 
+    /**
+     * clear application instance cache
+     */
+    public static function clearAppInstanceCache()
+    {
+        self::$appInstanceCache = array();
+    }
+
     public static function getDelegate($applicationName, $configKey, $interfaceName)
     {
         if (!isset(static::$_delegatorCache[$configKey])) {

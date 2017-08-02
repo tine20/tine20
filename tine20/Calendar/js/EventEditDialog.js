@@ -10,6 +10,8 @@
  
 Ext.ns('Tine.Calendar');
 
+require('./FreeTimeSearchDialog');
+
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.EventEditDialog
@@ -31,6 +33,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Calendar.backend,
     showContainerSelector: false,
     displayNotes: true,
+    requiredSaveGrant: 'readGrant',
 
     mode: 'local',
 
@@ -291,6 +294,22 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     },
 
+    onFreeTimeSearch: function() {
+        this.onRecordUpdate();
+        Tine.Calendar.FreeTimeSearchDialog.openWindow({
+            record: this.record,
+            listeners: {
+                scope: this,
+                apply: this.onFreeTimeSearchApply
+            }
+        });
+    },
+
+    onFreeTimeSearchApply: function(dialog, recordData) {
+        this.record = this.recordProxy.recordReader({responseText: recordData});
+        this.onRecordLoad();
+    },
+
     /**
      * mute first alert
      * 
@@ -304,7 +323,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onPrint: function(printMode) {
         this.onRecordUpdate();
         var renderer = new Tine.Calendar.Printer.EventRenderer();
-        renderer.print(this.record);
+        renderer.print(this);
     },
 
     initComponent: function() {
@@ -318,6 +337,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         );
 
         this.tbarItems = [new Ext.Button(new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
+            handler: this.onFreeTimeSearch,
+            iconCls: 'action_fretimesearch',
+            disabled: false,
+            scope: this
+        })), new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'notes_noteIcon',
@@ -523,16 +548,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.onRecordLoad(this.record);
         this.rrulePanel.onRecordLoad(this.record);
         this.alarmPanel.onRecordLoad(this.record);
-        
-        // apply grants
-        if (! this.record.get('editGrant')) {
-            this.getForm().items.each(function(f){
-                if(f.isFormField && f.requiredGrant !== undefined){
-                    f.setDisabled(! this.record.get(f.requiredGrant));
-                }
-            }, this);
-        }
-        
+
         this.perspectiveCombo.loadPerspective();
         // disable container selection combo if user has no right to edit
         this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);

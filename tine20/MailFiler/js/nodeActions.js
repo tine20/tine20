@@ -129,7 +129,7 @@ Tine.MailFiler.nodeActions.Rename = {
                     }
 
                     // @TODO validate filename
-                    var targetPath = record.get('path').replace(new RegExp(record.get('name') +'$'), text);
+                    var targetPath = record.get('path').replace(_.escapeRegExp(new RegExp(record.get('name')) +'$'), text);
                     Tine.MailFiler.fileRecordBackend.copyNodes([record], targetPath, true);
 
                 }

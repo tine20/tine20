@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,42 +14,23 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s's personal example records"
-
-#: Model/ExampleRecord.php:34
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "example record"
-msgstr[1] "example records"
-
-#: Model/ExampleRecord.php:35
-msgid "example records"
-msgstr "example records"
-
-#: Model/ExampleRecord.php:38
-msgid "example record list"
-msgstr "example record list"
-
-#: Model/ExampleRecord.php:39
-msgid "example record lists"
-msgstr "example record lists"
-
-#: Model/ExampleRecord.php:55 js/ExampleRecordEditDialog.js:67
-#: js/ExampleDetailsPanel.js:74
-msgid "Name"
-msgstr "Name"
-
-#: Model/ExampleRecord.php:60 js/ExampleRecordEditDialog.js:73
-#: js/ExampleDetailsPanel.js:78
-msgid "Status"
-msgstr "Status"
-
 #: js/ExampleRecordEditDialog.js:50
 msgid "ExampleRecord"
 msgstr "ExampleRecord"
+
+#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
+#: Model/ExampleRecord.php:80
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:91
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:99
+msgid "Reason"
+msgstr "Reason"
 
 #: js/ExampleDetailsPanel.js:56
 msgid "Total Example Records"
@@ -58,6 +40,108 @@ msgstr "Total Example Records"
 msgid "New Example"
 msgstr "New Example"
 
+#: Config.php:108
+msgid "Status Available"
+msgstr "Status Available"
+
+#: Config.php:110
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+
+#: Config.php:119
+msgid "Completed"
+msgstr "Completed"
+
+#: Config.php:120
+msgid "Cancelled"
+msgstr "Cancelled"
+
+#: Config.php:121
+msgid "In process"
+msgstr "In process"
+
+#: Config.php:128
+msgid "Reasons Available"
+msgstr "Reasons Available"
+
+#: Config.php:130
+msgid "Possible status reasons."
+msgstr "Possible status reasons."
+
+#: Config.php:141
+msgid "Change"
+msgstr "Change"
+
+#: Config.php:142
+msgid "Documentation"
+msgstr "Documentation"
+
+#: Config.php:143
+msgid "Requirement Changed"
+msgstr "Requirement Changed"
+
+#: Config.php:144
+msgid "Not Possible"
+msgstr "Not Possible"
+
+#: Config.php:145
+msgid "Implementation"
+msgstr "Implementation"
+
+#: Config.php:146
+msgid "Review"
+msgstr "Review"
+
+#: Config.php:147
+msgid "Integration"
+msgstr "Integration"
+
+#: Config.php:154
+msgid "Enabled Features"
+msgstr "Enabled Features"
+
+#: Config.php:156
+msgid "Enabled Features in Sales Application."
+msgstr "Enabled Features in Sales Application."
+
+#: Config.php:163
+msgid "Invoices Module"
+msgstr "Invoices Module"
+
+#: Config.php:173
+msgid "Example String"
+msgstr "Example String"
+
+#: Config.php:175
+msgid "Just an example string for test purpose"
+msgstr "Just an example string for test purpose"
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "ExampleApplication"
+
+#: Model/ExampleRecord.php:35
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] "example record"
+msgstr[1] "example records"
+
+#: Model/ExampleRecord.php:36
+msgid "example records"
+msgstr "example records"
+
+#: Model/ExampleRecord.php:39
+msgid "example record list"
+msgstr "example record list"
+
+#: Model/ExampleRecord.php:40
+msgid "example record lists"
+msgstr "example record lists"
+
+#: Model/ExampleRecord.php:106 Model/ExampleRecord.php:128
+msgid "Number"
+msgstr "Number"
+
 #: Preference.php:60
 msgid "Default Example Record Container"
 msgstr "Default Example Record Container"
@@ -65,31 +149,3 @@ msgstr "Default Example Record Container"
 #: Preference.php:61
 msgid "The default container for new records"
 msgstr "The default container for new records"
-
-#: Config.php:31
-msgid "Status Available"
-msgstr "Status Available"
-
-#: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-msgstr ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "ExampleApplication"
-
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr "Completed"
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr "Cancelled"
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr "In process"

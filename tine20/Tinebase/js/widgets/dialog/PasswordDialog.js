@@ -24,6 +24,11 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
     allowEmptyPassword: false,
 
     /**
+     * dialog provides password generation action
+     */
+    hasPwGen: true,
+
+    /**
      * Password field
      */
     passwordField: null,
@@ -34,7 +39,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
     initComponent: function () {
         this.addEvents(
             /**
-             * If the dialog will close and a password were choisen
+             * If the dialog will close and a password was chosen
              * @param node
              */
             'passwordEntered'
@@ -91,16 +96,18 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             scope: this
         });
 
-        this.tbar = [
-            this.pwgenAction
-        ];
+        if (this.hasPwGen) {
+            this.tbar = [
+                this.pwgenAction
+            ];
+        }
 
         this.bbar = [
             '->',
             this.okAction
         ];
 
-        Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
+        Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.initComponent.call(this);
     },
 
     /**
@@ -137,7 +144,9 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
      */
     onOk: function () {
         this.fireEvent('passwordEntered', this.passwordField.getValue());
-        this.window.close();
+        if (this.window) {
+            this.window.close();
+        }
     },
 
     /**
@@ -145,8 +154,9 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
      *
      * @returns {null}
      */
-    openWindow: function () {
-        this.window = Tine.WindowFactory.getWindow({
+    openWindow: function (config) {
+        config = config || {};
+        this.window = Tine.WindowFactory.getWindow(Ext.apply({
             title: i18n._('Set password'),
             closeAction: 'close',
             modal: true,
@@ -159,7 +169,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             items: [
                 this
             ]
-        });
+        }, config));
 
         return this.window;
     }

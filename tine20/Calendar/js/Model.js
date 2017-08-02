@@ -71,6 +71,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     recordName: 'Event',
     recordsName: 'Events',
     containerProperty: 'container_id',
+    grantsPath: 'data',
     // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
     containerName: 'Calendar',
     containersName: 'Calendars',
@@ -192,6 +193,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     }
 
     var data = {
+        id: 'new-' + Ext.id(),
         summary: '',
         'class': eventClass,
         dtstart: dtstart,
@@ -444,7 +446,27 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         
         return this.doXHTTPRequest(options);
     },
-    
+
+    promiseCreateRecurException: function(event, deleteInstance, deleteAllFollowing, checkBusyConflicts, options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.createRecurException(event, deleteInstance, deleteAllFollowing, checkBusyConflicts, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
     /**
      * delete a recuring event series
      * 
@@ -716,7 +738,11 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
         fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
         sortInfo: {field: 'user_id', direction: 'ASC'}
     });
-    
+
+    if (Ext.isString(attendeeData)) {
+        attendeeData = Ext.decode(attendeeData || null);
+    }
+
     Ext.each(attendeeData, function(attender) {
         if (attender) {
             var record = new Tine.Calendar.Model.Attender(attender, attender.id && Ext.isString(attender.id) ? attender.id : Ext.id());
@@ -755,7 +781,11 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord = function(att
  */
 Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(attendeeStore, attendee) {
     var attendeeRecord = false;
-    
+
+    if (! Ext.isFunction(attendee.beginEdit)) {
+        attendee = new Tine.Calendar.Model.Attender(attendee, attendee.id);
+    }
+
     attendeeStore.each(function(r) {
         var attendeeType = [attendee.get('user_type')];
 
@@ -775,6 +805,24 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
     
     return attendeeRecord;
 };
+
+Tine.Calendar.Model.Attender.getAttendeeStore.getSignature = function(attendee) {
+    var _ = window.lodash;
+
+    attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id, attendee.role].join('/');
+};
+
+Tine.Calendar.Model.Attender.getAttendeeStore.fromSignature = function(signatureId) {
+    var ids = signatureId.split('/');
+
+    return new Tine.Calendar.Model.Attender({
+        cal_event_id: ids[0],
+        user_type: ids[1],
+        user_id: ids[2],
+        role: ids[3]
+    });
+}
 
 /**
  * returns attendee data
@@ -802,6 +850,72 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, 
 
     return attendeeData;
 };
+
+// PROXY
+Tine.Calendar.Model.AttenderProxy = function(config) {
+    Tine.Calendar.Model.AttenderProxy.superclass.constructor.call(this, config);
+    this.jsonReader.readRecords = this.readRecords.createDelegate(this);
+};
+Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
+    /**
+     * provide events to do an freeBusy info checkup for when searching attendee
+     *
+     * @cfg {Function} freeBusyEventsProvider
+     */
+    freeBusyEventsProvider: Ext.emptyFn,
+
+    recordClass: Tine.Calendar.Model.Attender,
+
+    searchRecords: function(filter, paging, options) {
+        var _ = window.lodash,
+            fbEvents = _.union([].concat(this.freeBusyEventsProvider()));
+
+        _.set(options, 'params.ignoreUIDs', _.union(_.map(fbEvents, 'data.uid')));
+        _.set(options, 'params.events', _.map(fbEvents, 'data'));
+
+        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.apply(this, arguments);
+    },
+
+    readRecords : function(resultData){
+        var _ = window.lodash,
+            totalcount = 0,
+            fbEvents = _.compact([].concat(this.freeBusyEventsProvider())),
+            records = [],
+            fbInfos = _.map(fbEvents, function(fbEvent) {
+                return new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo[fbEvent.get('id')]);
+            });
+
+        _.each(['user', 'group', 'resource'], function(type) {
+            var typeResult = _.get(resultData, type, {}),
+                typeCount = _.get(typeResult, 'totalcount', 0),
+                typeData = _.get(typeResult, 'results', []);
+
+            totalcount += +typeCount;
+            _.each(typeData, function(userData) {
+                var id = type + '-' + userData.id,
+                    attendeeData = _.assign(Tine.Calendar.Model.Attender.getDefaultData(), {
+                        id: id,
+                        user_type: type,
+                        user_id: userData
+                    }),
+                    attendee = new Tine.Calendar.Model.Attender(attendeeData, id);
+
+                if (fbEvents.length) {
+                    attendee.set('fbInfo', _.map(fbInfos, function(fbInfo, idx) {
+                        return fbInfo.getStateOfAttendee(attendee, fbEvents[idx]);
+                    }).join('<br >'));
+                }
+                records.push(attendee);
+            });
+        });
+
+        return {
+            success : true,
+            records: records,
+            totalRecords: totalcount
+        };
+    }
+});
 
 /**
  * @namespace Tine.Calendar.Model
@@ -835,6 +949,40 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     recordName: 'Resource',
     recordsName: 'Resources'
 });
+
+Tine.Calendar.Model.Resource.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Calendar');
+
+    return [
+        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Name'), field: 'name'},
+        {label: app.i18n._('Email'), field: 'email'},
+        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+        {label: app.i18n._('Maximum number of attendee'), field: 'max_number_of_people'},
+        {
+            label: app.i18n._('Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'resourceTypes'
+        },
+        {
+            label: app.i18n._('Default attendee status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'attendeeStatus'
+        },
+        {
+            label: app.i18n._('Busy Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'freebusyTypes'
+        },
+        {filtertype: 'tinebase.tag', app: app}
+    ];
+};
 
 /**
  * @namespace   Tine.Calendar.Model

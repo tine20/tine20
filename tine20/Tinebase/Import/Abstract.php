@@ -129,7 +129,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import the data
      *
-     * @param resource|string $_resource (if $_filename is a stream)
+     * @param mixed $_resource (if $_filename is a stream)
      * @param array $_clientRecordData
      * @return array with import data (imported records, failures, duplicates and totalcount)
      */
@@ -153,11 +153,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * - iconv with IGNORE
      * - replace linebreaks
      * 
-     * @param resource $resource
+     * @param mixed $resource
      */
     protected function _appendStreamFilters($resource)
     {
-        if (! $resource || ! isset($this->_options['useStreamFilter']) || ! $this->_options['useStreamFilter']) {
+        if (! is_resource($resource) || ! isset($this->_options['useStreamFilter']) || ! $this->_options['useStreamFilter']) {
             return;
         }
 
@@ -198,7 +198,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * do something before the import
      * 
-     * @param resource $_resource
+     * @param mixed $_resource
      */
     protected function _beforeImport($_resource = NULL)
     {
@@ -210,6 +210,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _afterImport()
     {
     }
+
+    /**
+     * get raw data of a single record
+     *
+     * @param  mixed $_resource
+     * @return array
+     */
+    abstract protected function _getRawData(&$_resource);
 
     /**
      * do import: loop data -> convert to records -> import records

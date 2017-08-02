@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
@@ -8,32 +8,55 @@ msgstr ""
 "PO-Revision-Date: 2014-10-26 22:46+0000\n"
 "Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "จำนวน %s ของโครงการส่วนบุคคล"
+#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "ผู้เข้าร่วม"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "จัดการ โคงการร่วมที่ใช้บ่อย"
+#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "หน้าที่"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119 js/Model.js:35
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "โครงการ"
+
+#: js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128 js/Model.js:74
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121 js/Model.js:75
+msgid "Number"
+msgstr "ลำดับ"
+
+#: js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134 js/Model.js:78
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/ProjectEditDialog.js:177 js/Model.js:76
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: js/ProjectEditDialog.js:191
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "ค้นหาคำถามที่ถามบ่อย"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "ป้ายกำกับ"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -47,22 +70,6 @@ msgstr "รายชื่อโครงการ"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "ลำดับ"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "สถานะ"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -80,17 +87,9 @@ msgstr "เวลาที่สร้างขึ้น"
 msgid "Created By"
 msgstr "สร้าง โดย"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr "ผู้เข้าร่วม"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "หน้าที่"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "โครงการ"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -117,38 +116,12 @@ msgstr "เลือก หน้าที่"
 msgid "Adding {0} Participants to project"
 msgstr "กำลังเพิ่มผู้เข้าร่วม {0} คน ในโครงการ"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "โครงการ"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "ค้นหาคำถามที่ถามบ่อย"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "โครงการทั้งหมดของฉัน"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "ค่าที่ชอบหลัก"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด โครงการ"
-
 #: Config.php:38
 msgid "Project Status Available"
 msgstr "สถานะของโครงการ ว่าง"
 
 #: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:47
@@ -172,10 +145,7 @@ msgid "Project Attendee Role Available"
 msgstr ""
 
 #: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -205,3 +175,28 @@ msgstr "โครงการของฉันที่กำลังรอ"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "โครงการของฉันที่กำลังดำเนินการอยู่"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "จำนวน %s ของโครงการส่วนบุคคล"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "จัดการ โคงการร่วมที่ใช้บ่อย"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "โครงการทั้งหมดของฉัน"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด โครงการ"

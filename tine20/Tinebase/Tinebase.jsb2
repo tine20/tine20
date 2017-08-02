@@ -194,6 +194,10 @@
           "path": "js/ux/grid/"
         },
         {
+          "text": "MultiCellSelectionModel.js",
+          "path": "js/ux/grid/"
+        },
+        {
           "text": "UploadManager.js",
           "path": "js/ux/file/"
         },
@@ -227,6 +231,10 @@
         },
         {
           "text": "NumberField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "PeriodPicker.js",
           "path": "js/ux/form/"
         },
         {
@@ -371,6 +379,10 @@
         },
         {
           "text": "ColumnTree.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "EditDialogRenderer.js",
           "path": "js/ux/Printer/renderers/"
         },
         {
@@ -658,10 +670,6 @@
           "path": "js/widgets/grid/"
         },
         {
-          "text": "PickerGridLayerCombo.js",
-          "path": "js/widgets/grid/"
-        },
-        {
           "text": "LinkGridPanel.js",
           "path": "js/widgets/grid/"
         },
@@ -858,6 +866,14 @@
           "path": "js/widgets/relation/"
         },
         {
+          "text": "RecordsPickerCombo.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "PickerGridLayerCombo.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "ConfigPanel.js",
           "path": "js/widgets/form/"
         },
@@ -879,6 +895,10 @@
         },
         {
           "text": "PasswordDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "SecondFactorDialog.js",
           "path": "js/widgets/dialog/"
         },
         {
@@ -1065,6 +1085,10 @@
           "path": "css/ux/form/"
         },
         {
+          "text": "PeriodPicker.css",
+          "path": "css/ux/form/"
+        },
+        {
           "text": "DisplayPanel.css",
           "path": "css/ux/display/"
         },
@@ -1121,7 +1145,7 @@
           "path": "css/widgets/"
         },
         {
-          "text": "RecordPrinter.css",
+          "text": "print.css",
           "path": "css/widgets/"
         },
         {

@@ -9,6 +9,6 @@
     <icon_class>tinebase-action-export-xls</icon_class>
     <template>tine20:///Tinebase/folders/shared/export/templates/Addressbook/addressbook_contact_export.xlsx</template>
     <favorite>true</favorite>
-    <order>400</order>
+    <order>600</order>
     <scope>multi</scope>
 </config>

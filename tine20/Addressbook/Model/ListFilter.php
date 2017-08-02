@@ -62,5 +62,8 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
         'list_type'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'showHidden'           => array('filter' => 'Addressbook_Model_ListHiddenFilter'),
         'contact'              => array('filter' => 'Addressbook_Model_ListMemberFilter'),
+        'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
+            'idProperty' => 'addressbook_lists.id'
+        )),
     );
 }

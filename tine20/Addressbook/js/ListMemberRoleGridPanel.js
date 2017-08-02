@@ -202,7 +202,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
     // NOTE: Ext doc seems to be wrong on arguments here
     onContextMenu: function(e, target) {
-        e.preventDefault();
+        e.stopEvent();
         var row = this.getView().findRowIndex(target);
         var contact = this.store.getAt(row);
         if (contact) {

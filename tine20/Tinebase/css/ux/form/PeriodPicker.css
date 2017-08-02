@@ -1,0 +1,32 @@
+.ux-pp-field {
+    widht: 100%;
+}
+
+.ux-pp-range {
+    width: 40%;
+}
+
+.ux-pp-period {
+    width: 60%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ux-pp-prev {
+    background-position: 0 -105px;
+}
+
+.ux-pp-next {
+    background-position: 0 -120px;
+}
+
+.ux-pp-prev, .ux-pp-next {
+    background-image: url(../../../../themes/tine20/resources/images/tine20/panel/tool-sprites.gif);
+    overflow: hidden;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    display: block;
+    margin: 2px;
+    opacity: 0.6;
+}

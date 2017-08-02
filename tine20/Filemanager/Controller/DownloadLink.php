@@ -116,6 +116,8 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             default;
             break;
         }
+
+        parent::_checkRight($_action);
     }
     
     /**

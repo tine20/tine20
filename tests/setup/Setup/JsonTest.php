@@ -299,6 +299,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        Admin_Config::unsetInstance();
     }
     
     /**
@@ -309,6 +310,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        Admin_Config::unsetInstance();
 
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);

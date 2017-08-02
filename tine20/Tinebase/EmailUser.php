@@ -62,7 +62,14 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const SMTP_POSTFIX          = 'Smtp_Postfix';
-    
+
+    /**
+     * Smtp Postfix multi instance backend const
+     *
+     * @staticvar string
+     */
+    const SMTP_POSTFIXMULTIINSTANCE          = 'Smtp_Postfixmultiinstance';
+
     /**
      * Smtp Postfix backend const
      * 
@@ -145,6 +152,7 @@ class Tinebase_EmailUser
         self::SMTP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Smtp_LdapUniventionMailSchema',
         self::SMTP_LDAP_SIMPLEMAIL  => 'Tinebase_EmailUser_Smtp_LdapSimpleMailSchema',
         self::SMTP_POSTFIX          => 'Tinebase_EmailUser_Smtp_Postfix',
+        self::SMTP_POSTFIXMULTIINSTANCE => 'Tinebase_EmailUser_Smtp_PostfixMultiInstance',
         self::SMTP_POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
         self::SMTP_STANDARD         => 'Tinebase_EmailUser_Smtp_Standard',
     );

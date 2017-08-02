@@ -16,7 +16,7 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  */
 Ext.ux.form.MoneyField = Ext.extend(Ext.ux.form.NumberField, {
     initComponent: function() {
-        this.suffix = Tine.Tinebase.registry.get('currencySymbol');
+        this.suffix = ' ' + Tine.Tinebase.registry.get('currencySymbol');
         this.decimalPrecision = 2;
         this.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
 

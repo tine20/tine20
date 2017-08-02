@@ -61,7 +61,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
             checked: this.record.get('preferred_address') === "0",
             hideLabel: false,
-            fieldLabel: i18n._('Preferred Address'),
+            fieldLabel: this.app.i18n._('Preferred Address'),
             listeners: {
                 'check': function(checkbox, value) {
                     if (value) {
@@ -76,7 +76,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.preferredAddressPrivateCheckbox = new Ext.form.Checkbox({
             checked: this.record.get('preferred_address') === "1",
             hideLabel: false,
-            fieldLabel: i18n._('Preferred Address'),
+            fieldLabel: this.app.i18n._('Preferred Address'),
             listeners: {
                 'check': function(checkbox, value) {
                     if (value) {
@@ -485,7 +485,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onPrint: function(printMode) {
         this.onRecordUpdate();
         var renderer = new Tine.Addressbook.Printer.ContactRenderer();
-        renderer.print(this.record);
+        renderer.print(this);
     },
 
     /**

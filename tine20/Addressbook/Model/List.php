@@ -161,6 +161,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      */
     public function getPathNeighbours()
     {
+        $result = parent::getPathNeighbours();
+
         if (!empty($this->members)) {
             foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
                 $members[$member->getId()] = $member;
@@ -193,10 +195,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
         }
 
-        $result = array(
-            'parents' => array(),
-            'children' => $members
-        );
+        $result['children'] = array_merge($result['children'], $members);
 
         return $result;
     }

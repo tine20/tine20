@@ -71,7 +71,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         if (store.queriesDone.indexOf(key) >= 0) {
             Tine.log.debug('result already loaded -> directly query store');
             // we need regexp here because query returns all records with path that begins with the value string otherwise
-            var valueReg = new RegExp(value + '$');
+            var valueReg = new RegExp(window.lodash.escapeRegExp(value) + '$');
             result = store.query(field, valueReg);
             args.push(result);
             callback.apply(scope, args);

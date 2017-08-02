@@ -121,17 +121,19 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * 
      * @param Tinebase_Model_User $user
      * @return string
+     *
+     * @todo add documentation for config option and add it to setup gui
+     * @todo adjust signature to \Tinebase_User_Plugin_Abstract::_getEmailUserName
      */
     protected function _getEmailUserName(Tinebase_Model_User $user)
     {
-        // @todo add documentation for config option and add it to setup gui
         if (isset($this->_options['useEmailAsUsername'])) {
             return $user->accountEmailAddress;
         }
         
         return $this->_appendDomain($user->accountLoginName);
     }
-    
+
     /**
      * inspect set password
      * 

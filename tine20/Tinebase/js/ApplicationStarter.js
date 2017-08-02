@@ -289,6 +289,11 @@ Tine.Tinebase.ApplicationStarter = {
             fieldKey = 'tags';
         }
         var fieldconfig = modelConfig.fields[fieldKey];
+
+        if (fieldconfig && fieldconfig.type === 'virtual') {
+            fieldconfig = fieldconfig.config;
+        }
+
         var appName = modelConfig.appName;
         var modelName = modelConfig.modelName;
         
@@ -398,17 +403,24 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // iterate record fields
                     Ext.each(modelConfig.fieldKeys, function(key) {
+                        var fieldDefinition = modelConfig.fields[key];
+
+                        if (fieldDefinition.type === 'virtual') {
+                            fieldDefinition = fieldDefinition.config;
+                        }
+
                         // add field to model array
-                        modelArray.push(this.getField(modelConfig.fields[key], key));
-                        
-                        if (modelConfig.fields[key].label) {
+                        modelArray.push(this.getField(fieldDefinition, key));
+
+                        if (fieldDefinition.label) {
                             // register grid renderer
                             if (initial) {
+                                var renderer = null;
                                 try {
-                                    var renderer = this.getGridRenderer(modelConfig.fields[key], key, appName, modelName);
+                                    renderer = this.getGridRenderer(fieldDefinition, key, appName, modelName);
                                 } catch (e) {
                                     Tine.log.err(e);
-                                    var renderer = null;
+                                    renderer = null;
                                 }
                                 
                                 if (Ext.isFunction(renderer)) {
@@ -558,7 +570,7 @@ Tine.Tinebase.ApplicationStarter = {
                     var gridPanelName = modelName + 'GridPanel', 
                         gpConfig = {
                             modelConfig: modelConfig,
-                            app: Tine[appName], 
+                            app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
                             recordClass: Tine[appName].Model[modelName]
                         };

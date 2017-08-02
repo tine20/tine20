@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>10.5</version>
+    <version>10.6</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>24</version>
+            <version>25</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -173,7 +173,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -584,7 +585,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -594,7 +595,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -953,6 +955,10 @@
             <table>
                 <name>container</name>
             </table>
+            <field>
+                <name>id</name>
+                <value special="uid"/>
+            </field>
             <field>
                 <name>name</name>
                 <value>Internal Contacts</value>

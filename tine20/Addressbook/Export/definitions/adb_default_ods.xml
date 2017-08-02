@@ -6,8 +6,6 @@
     <plugin>Addressbook_Export_Ods</plugin>
     <!-- _('OpenDocument all data') -->
     <label>OpenDocument all data</label>
-    <favorite>true</favorite>
-    <order>300</order>
     <scope>multi</scope>
     <header>1</header>
     <headers>

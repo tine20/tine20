@@ -34,7 +34,15 @@ Tine.Addressbook.addressRenderer = function (v, metadata, record, store, a, b, c
 
     // According to config, resolve the given fields from record
     keys.forEach(function (key) {
-        local[key] = Tine.Tinebase.EncodingHelper.encode(record.get(local[key]));
+        var value = null;
+
+        if (!record.data) {
+            value = window.lodash.get(record, local[key]);
+        } else {
+            value = window.lodash.get(record.data, local[key]);
+        }
+
+        local[key] = Tine.Tinebase.EncodingHelper.encode(value);
 
         // Country code to country name
         // @todo: Wouldn't it be cool, if this could be managed by the modelconfig as well?

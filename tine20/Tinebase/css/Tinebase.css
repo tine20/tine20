@@ -446,6 +446,16 @@ html, body {
     background-image:url(../../images/oxygen/32x32/mimetypes/text-csv.png) !important;
 }
 
+.action_options {
+    background-image:url(../../images/oxygen/16x16/actions/gear.png) !important;
+}
+.x-btn-medium .action_options {
+    background-image:url(../../images/oxygen/22x22/actions/gear.png) !important;
+}
+.x-btn-large .action_options {
+    background-image:url(../../images/oxygen/32x32/actions/gear.png) !important;
+}
+
 .tinebase-action-debug-console {
     background-image:url(../../images/oxygen/16x16/apps/utilities-terminal.png) !important;
 }

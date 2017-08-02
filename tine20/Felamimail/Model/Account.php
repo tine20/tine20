@@ -361,7 +361,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                         if ($this->smtp_credentials_id !== $this->credentials_id) {
                             $this->smtp_credentials_id = $this->credentials_id;
                             Felamimail_Controller_Account::getInstance()->update($this);
-                            return $this->resolveCredentials($_onlyUsername, $_throwExceptio, $_smtp);
+                            return $this->resolveCredentials($_onlyUsername, $_throwException, $_smtp);
                         }
                     }
 
@@ -398,9 +398,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     $credentials->password .= $imapConfig['pwsuffix'];
                 }
 
-                if (! empty($imapConfig['domain']) && strpos($credentials->username, $imapConfig['domain']) === false) {
-                    $credentials->username .= '@' . $imapConfig['domain'];
-                }
+                $credentials->username = $this->_appendDomainOrInstance($credentials->username, $imapConfig);
             }
             
             if (! $this->{$userField}) {
@@ -411,6 +409,21 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         }
         
         return TRUE;
+    }
+
+    protected function _appendDomainOrInstance($username, $config)
+    {
+        if (! empty($config['instanceName']) && strpos($username, $config['instanceName']) === false) {
+            $user = Tinebase_Core::getUser();
+            if ($username !== $user->getId()) {
+                $username = $user->getId();
+            }
+            $username .= '@' . $config['instanceName'];
+        } else if (! empty($config['domain']) && strpos($username, $config['domain']) === false) {
+            $username .= '@' . $config['domain'];
+        }
+
+        return $username;
     }
 
     /**

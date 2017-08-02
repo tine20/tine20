@@ -132,6 +132,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);
         this.on('afteredit', this.onAfterAttenderEdit, this);
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         this.addEvents('beforenewattendee');
 
         this.initColumns();
@@ -143,7 +144,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         };
         
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
-        
+
         this.initPhoneGridPanelHook();
     },
     
@@ -159,13 +160,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app:   'Calendar',
-                keyFieldName: 'attendeeRoles',
-                listeners: {
-                    scope: this,
-                    change: function (field, newValue) {
-                        this.setDefaultAttendeeRole(newValue);
-                    }
-                }
+                keyFieldName: 'attendeeRoles'
             }
         }, {
             id: 'displaycontainer_id',
@@ -278,8 +273,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     height: 170,
                     scope: this,
                     options: [
-                        {text: 'Group', name: 'sel_group'},
-                        {text: 'Member of Group', name: 'sel_memberOf'}
+                        {text: this.app.i18n._('Group'), name: 'sel_group'},
+                        {text: this.app.i18n._('Member of Group'), name: 'sel_memberOf'}
                     ],
 
                     handler: function(option) {
@@ -352,10 +347,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
                 break;
                 
-            case 'user_type' :
-                this.startEditing(o.row, o.column +1);
+            case 'user_type':
+                this.startEditing(o.row, this.getColumnModel().getIndexById('user_id'));
                 break;
-            
+
+            case 'role':
+                if (o.row == this.store.getCount()-1) {
+                    this.setDefaultAttendeeRole(o.record.get('role'));
+                    this.startEditing(o.row, this.getColumnModel().getIndexById('user_id'));
+                }
+
+                break;
             case 'container_id':
                 // check if displaycontainer of owner got changed
                 if (o.record == this.eventOriginator) {
@@ -442,12 +444,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
             type = type == 'memberOf' ? 'group' : type;
 
-            colModel.config[o.column].setEditor(new Tine.Calendar.AttendeePickerCombo({
+            var attendeePickerCombo = new Tine.Calendar.AttendeePickerCombo({
                 minListWidth: 370,
                 blurOnSelect: true,
                 eventRecord: this.record,
                 additionalFilters: type != 'any' ? [{field: 'type', operator: 'oneof', value: [type]}] : null
-            }));
+            });
+
+            this.fireEvent('beforenewattendeepickercombo', this, attendeePickerCombo, o);
+            colModel.config[o.column].setEditor(attendeePickerCombo);
+
+
             
             colModel.config[o.column].editor.selectedRecord = null;
         }
@@ -472,13 +479,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             //this.stopEditing();
         }
     },
-    
-    // NOTE: Ext docu seems to be wrong on arguments here
-    onContextMenu: function(e, target) {
-        e.preventDefault();
+
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
 
         var me = this,
-            row = this.getView().findRowIndex(target),
             attender = this.store.getAt(row),
             type = attender.get('user_type');
 
@@ -570,34 +575,27 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     Tine.widgets.exportAction.SCOPE_SINGLE
                 );
 
-                var actionUpdater = new Tine.widgets.ActionUpdater({
-                    containerProperty: Tine.Calendar.Model.Resource.getMeta('containerProperty'),
-                    evalGrants: true
-                });
-                actionUpdater.addAction(exportAction);
-                actionUpdater.updateActions([resource]);
-
                 items = items.concat(exportAction);
             }
 
-            var plugins = [];
+            var plugins = [{
+                ptype: 'ux.itemregistry',
+                key:   'Attendee-GridPanel-ContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }];
+
+            // add phone call action via item registry
             if (this.phoneHook && attender.get('user_type') == 'user') {
                 var contact = new Tine.Addressbook.Model.Contact(attender.get('user_id'));
                 this.phoneHook.setContactAndUpdateAction(contact);
-                plugins = [{
-                    ptype: 'ux.itemregistry',
-                    key:   'Attendee-GridPanel-ContextMenu'
-                }, {
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }];
             }
             
             Tine.log.debug(items);
             
             this.ctxMenu = new Ext.menu.Menu({
                 items: items,
-                // add phone call action via item registry
                 plugins: plugins,
                 listeners: {
                     scope: this,
@@ -606,6 +604,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 }
             });
+
+            var actionUpdater = new Tine.widgets.ActionUpdater();
+            actionUpdater.addAction(exportAction);
+            actionUpdater.updateActions([resource]);
+
             this.ctxMenu.showAt(e.getXY());
         }
     },
@@ -665,7 +668,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     updateFreeBusyInfo: function(force) {
         if (this.showMemberOfType) return;
 
-        var schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
+        var _ = window.lodash,
+            schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
         if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) return;
@@ -683,13 +687,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         Tine.Calendar.getFreeBusyInfo(
             Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
-            schedulingInfo,
+            [schedulingInfo],
             [this.record.get('uid')],
             function(freeBusyData) {
                 // outdated data
                 if (encodedSchedulingInfo != this.encodedSchedulingInfo) return;
 
-                var fbInfo = new Tine.Calendar.FreeBusyInfo(freeBusyData);
+                var fbInfo = new Tine.Calendar.FreeBusyInfo(_.values(freeBusyData)[0]);
 
                 this.store.each(function(attendee) {
                     attendee.set('fbInfo', fbInfo.getStateOfAttendee(attendee, this.record));
@@ -709,7 +713,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     setDefaultAttendeeRole:function(role) {
         this.defaultAttendeeRole = role;
-        this.newAttendee.set('role', role);
+        if (this.newAttendee) {
+            this.newAttendee.set('role', role);
+        }
     },
 
     /**

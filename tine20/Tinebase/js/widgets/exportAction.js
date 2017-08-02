@@ -25,12 +25,18 @@ Tine.widgets.exportAction.getExports = function (recordClass, favorites, scope) 
         exportDefinitions = _.filter(allExportDefinitions, {model: phpClassName});
 
     if (_.isBoolean(favorites)) {
-        exportDefinitions = _.filter(exportDefinitions, {favorite: favorites? '1' : '0'});
+        exportDefinitions = _.filter(exportDefinitions, function(d) {
+            if (favorites) {
+                return d.favorite === '1';
+            } else {
+                return d.favorite === '0' || d.favorite === null;
+            }
+        });
     }
 
     if (_.isString(scope)) {
         exportDefinitions = _.filter(exportDefinitions, function(d) {
-            return d.scope == "" || d.scope == scope;
+            return d.scope === null || d.scope == "" || d.scope == scope;
         });
     }
 

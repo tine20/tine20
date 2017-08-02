@@ -439,7 +439,14 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
+        var oldValue = this.currentValue;
         this.currentValue = value;
+        Tine.Tinebase.common.assertComparable(this.currentValue);
+
+        if (JSON.stringify(value) != JSON.stringify(oldValue)){
+            this.fireEvent('change', this, value, oldValue);
+        }
+
         return this;
     },
     

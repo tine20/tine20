@@ -301,4 +301,17 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         $this->_backend->get($event1->getId());
         $this->assertEquals(0, $event1->is_deleted);
     }
+
+    /**
+     * testIncreaseSeqForContainerId
+     */
+    public function testIncreaseSeqsForContainerId()
+    {
+        $event = $this->testCreateEvent();
+        $this->_backend->increaseSeqsForContainerId($event->container_id);
+
+        $updatedEvent = $this->_backend->get($event->getId());
+
+        $this->assertEquals($event->seq + 1, $updatedEvent->seq);
+    }
 }

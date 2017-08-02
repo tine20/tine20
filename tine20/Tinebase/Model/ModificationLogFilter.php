@@ -39,6 +39,7 @@ class Tinebase_Model_ModificationLogFilter extends Tinebase_Model_Filter_FilterG
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'application_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'record_id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'modification_account' => array('filter' => 'Tinebase_Model_Filter_Id'),

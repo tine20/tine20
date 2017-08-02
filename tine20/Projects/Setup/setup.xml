@@ -2,14 +2,14 @@
 <application>
     <name>Projects</name>
     <!-- gettext('Projects') -->   
-    <version>10.1</version>
+    <version>10.2</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <!-- project -->
         <table>
             <name>projects_project</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -19,7 +19,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

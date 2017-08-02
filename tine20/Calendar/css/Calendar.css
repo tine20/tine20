@@ -121,6 +121,16 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-workweek.png) !important;
 }
 
+.action_fretimesearch {
+    background-image:url(../../images/oxygen/16x16/actions/system-search.png) !important;
+}
+.x-btn-medium .action_fretimesearch {
+    background-image:url(../../images/oxygen/22x22/actions/system-search.png) !important;
+}
+.x-btn-large .action_fretimesearch {
+    background-image:url(../../images/oxygen/32x32/actions/system-search.png) !important;
+}
+
 .cal-attendee-type-resource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
     background-position:2px 2px;

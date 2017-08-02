@@ -91,6 +91,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onContextMenu: function(node, e) {
+        e.stopEvent();
         if (this.getRootNode().childNodes.length > 2 && node.id != 'addFilterPanel') {
             this.contextMenu.contextNode = node;
             this.contextMenu.showAt(e.getXY());
@@ -181,6 +182,11 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onFilterPanelActivate: function(filterToolbar, filterPanel) {
         var node = this.getNodeById(filterPanel.id);
+
+        if (this.getSelectionModel().isSelected(node)) {
+            return;
+        }
+
         if (node) {
             this.suspendEvents();
             node.select();

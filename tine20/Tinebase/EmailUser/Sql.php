@@ -23,7 +23,14 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * @var string
      */
     protected $_userTable = NULL;
-    
+
+    /**
+     * schema of the table
+     *
+     * @var array
+     */
+    protected $_schema = NULL;
+
     /**
      * email user config
      * 
@@ -37,6 +44,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * @var array
      */
     protected $_propertyMapping = array();
+
+    /**
+     * @var array
+     */
+    protected $_tableMapping = array();
 
     /**
      * config key (IMAP/SMTP)
@@ -170,6 +182,37 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     }
 
     /**
+     * @param Tinebase_Model_User $_user
+     * @return mixed
+     */
+    public function getRawUserById(Tinebase_Model_User $_user)
+    {
+        $userId = $_user->getId();
+
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+        );
+        $this->_appendClientIdOrDomain($where);
+
+        $select = $this->_getSelect();
+        foreach ($where as $w) {
+            $select->where($w);
+        }
+
+        // Perform query - retrieve user from database
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+
+        if (!$queryResult) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found!');
+        }
+
+        return $queryResult;
+    }
+
+    /**
      * inspect get user by property
      * 
      * @param Tinebase_Model_User  $_user  the user object
@@ -180,27 +223,13 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             return;
         }
         
-        $userId = $_user->getId();
-        
-        $select = $this->_getSelect()
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $userId);
-        
-        // Perform query - retrieve user from database
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found!');
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
+        $rawUser = $this->getRawUserById($_user);
         
         // convert data to Tinebase_Model_EmailUser
-        $emailUser = $this->_rawDataToRecord((array)$queryResult);
+        $emailUser = $this->_rawDataToRecord((array)$rawUser);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($emailUser->toArray(), TRUE));
         
         // modify/correct user name
         // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
@@ -321,7 +350,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             
             $insertData = $emailUserData;
             $this->_beforeAddOrUpdate($insertData);
-            
+
+            $insertData = array_intersect_key($insertData, $this->getSchema());
             $this->_db->insert($this->_userTable, $insertData);
             
             $this->_afterAddOrUpdate($emailUserData);
@@ -414,7 +444,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $updateData = $emailUserData;
             
             $this->_beforeAddOrUpdate($updateData);
-            
+
+            $updateData = array_intersect_key($updateData, $this->getSchema());
             $this->_db->update($this->_userTable, $updateData, $where);
             
             $this->_afterAddOrUpdate($emailUserData);
@@ -430,10 +461,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     }
     
     /**
-     * check if user exists already in email backjend user table
+     * check if user exists already in email backend user table
      * 
      * @param  Tinebase_Model_FullUser  $_user
      * @throws Tinebase_Exception_Backend_Database
+     * @return boolean
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
@@ -460,7 +492,27 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         return true;
     }
-    
+
+    /**
+     * returns the db schema
+     * @return array
+     * @throws Tinebase_Exception_Backend_Database
+     *
+     * @refactor use trait (see \Tinebase_Backend_Sql_Abstract::getSchema)
+     */
+    public function getSchema()
+    {
+        if (!$this->_schema) {
+            try {
+                $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_userTable, $this->_db);
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
+            }
+        }
+
+        return $this->_schema;
+    }
+
     /**
      * converts raw data from adapter into a single record / do mapping
      *
@@ -477,4 +529,43 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * @return array
      */
     abstract protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties);
+
+    /**
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_EmailUser
+     */
+    public function getAllEmailUsers()
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_EmailUser', array());
+        foreach ($this->_getSelect()->limit(0)->query()->fetchAll() as $row) {
+            $result->addRecord($this->_rawDataToRecord($row));
+        }
+        return $result;
+    }
+
+    /**
+     * returns array with keys mailQuota and mailSize
+     * @return array
+     */
+    public function getTotalUsageQuota()
+    {
+        $data = $this->_getSelect(
+            array(
+                new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailQuota'] . '.' .
+                        $this->_propertyMapping['emailMailQuota']) . ') as mailQuota'),
+                new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailSize']  . '.' .
+                        $this->_propertyMapping['emailMailSize'])  . ') as mailSize'),
+                //new Zend_Db_Expr('SUM(' . $this->_propertyMapping['emailSieveSize'] . ') as sieveSize'),
+            ))->query()->fetchAll();
+        return $data[0];
+    }
+
+    protected function _replaceValue(array &$array, array $replacements)
+    {
+        foreach($array as &$value) {
+            if (isset($replacements[$value])) {
+                $value = $replacements[$value];
+            }
+        }
+    }
+
 }

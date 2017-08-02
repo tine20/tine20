@@ -376,6 +376,19 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         ));
         return $contact;
     }
+
+    /**
+     * testIncreaseSeqForContainerId
+     */
+    public function testIncreaseSeqsForContainerId()
+    {
+        $contact = $this->testCreateContact();
+        $this->_backend->increaseSeqsForContainerId($contact->container_id);
+
+        $updatedConcact = $this->_backend->get($contact->getId());
+
+        $this->assertEquals($contact->seq + 1, $updatedConcact->seq);
+    }
 }        
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_Backend_SqlTest::main') {

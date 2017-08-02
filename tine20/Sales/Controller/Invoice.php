@@ -1604,6 +1604,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             default;
             break;
         }
+
+        parent::_checkRight($_action);
     }
 
     /**

@@ -543,30 +543,57 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         return $out;
     }
 
+
     /**
      * test record json api
      *
-     * @param $modelName
+     * @param string $modelName
+     * @param string $nameField
+     * @param string $descriptionField
+     * @param bool $delete
+     * @param array $recordData
      * @return array
+     * @throws Exception
      */
-    protected function _testSimpleRecordApi($modelName, $nameField = 'name', $descriptionField = 'description', $delete = true)
-    {
+    protected function _testSimpleRecordApi(
+        $modelName,
+        $nameField = 'name',
+        $descriptionField = 'description',
+        $delete = true,
+        $recordData = [],
+        $description = true
+    ) {
         $uit = $this->_getUit();
         if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
             throw new Exception('only allowed for json frontend tests suites');
         }
 
         $newRecord = array(
-            $nameField          => 'my test ' . $modelName,
-            $descriptionField   => 'my test description'
+            $nameField => 'my test ' . $modelName
         );
-        $savedRecord = call_user_func(array($uit, 'save' . $modelName), $newRecord);
 
+        if ($description) {
+            $newRecord[$descriptionField] = 'my test description';
+        }
+
+        $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
-        $savedRecord[$descriptionField] = 'my updated description';
 
-        $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
-        $this->assertEquals('my updated description', $updatedRecord[$descriptionField]);
+        // Update description if record has
+        if ($description) {
+            $savedRecord[$descriptionField] = 'my updated description';
+            $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
+            $this->assertEquals('my updated description', $updatedRecord[$descriptionField]);
+        }
+
+        if (!$description) {
+            $updatedRecord = $savedRecord;
+        }
+
+        // update name as well!
+        $updatedRecord[$nameField] = 'my updated namefield';
+        $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $updatedRecord);
+        $this->assertEquals('my updated namefield', $updatedRecord[$nameField]);
 
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
