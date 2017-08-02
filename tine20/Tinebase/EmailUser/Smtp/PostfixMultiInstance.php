@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
  * 
 --
 -- Database: `postfix`
@@ -19,16 +19,19 @@
 --
 
 CREATE TABLE IF NOT EXISTS `smtp_users` (
-  `userid` varchar(40) NOT NULL,
-  `client_idnr` varchar(40) NOT NULL,
-  `username` varchar(80) NOT NULL,
-  `passwd` varchar(80) NOT NULL,
-  `email` varchar(80) DEFAULT NULL,
-  `forward_only` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`userid`, `client_idnr`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`userid` varchar(40) NOT NULL,
+`client_idnr` varchar(40) DEFAULT NULL,
+`username` varchar(80) NOT NULL,
+`passwd` varchar(256) NOT NULL,
+`email` varchar(80) DEFAULT NULL,
+`forward_only` tinyint(1) NOT NULL DEFAULT '0',
+PRIMARY KEY (`id`),
+UNIQUE KEY `username` (`username`),
+UNIQUE KEY `userid-client_idnr` (`userid`,`client_idnr`),
+UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 
 -- --------------------------------------------------------
 
@@ -37,12 +40,23 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
 --
 
 CREATE TABLE IF NOT EXISTS `smtp_destinations` (
-  `userid` VARCHAR( 40 ) NOT NULL ,
-  `source` VARCHAR( 80 ) NOT NULL ,
-  `destination` VARCHAR( 80 ) NOT NULL ,
-  CONSTRAINT `smtp_destinations::userid--smtp_users::userid` FOREIGN KEY (`userid`) 
-  REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=Innodb DEFAULT CHARSET=utf8;
+`users_id` int(11) NOT NULL,
+`source` varchar(80) NOT NULL,
+`destination` varchar(80) NOT NULL,
+KEY `users_id` (`users_id`),
+KEY `source` (`source`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `smtp_destinations`
+--
+ALTER TABLE `smtp_destinations`
+ADD CONSTRAINT `smtp_destinations_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `smtp_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- --------------------------------------------------------
 
 --
@@ -86,7 +100,7 @@ query = SELECT destination FROM smtp_destinations WHERE source='%s'
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
+class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
      * destination table name with prefix
@@ -100,7 +114,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * 
      * @var string
      */
-    protected $_subconfigKey = 'postfix';
+    protected $_subconfigKey = 'postfixmultiinstance';
     
     /**
      * postfix config
@@ -172,20 +186,20 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
         // _userTable.emailUserId=_destinationTable.emailUserId
-        $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']);
+        $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.id');
         $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
-        
+
+
         $select = $this->_db->select()
             ->from($this->_userTable)
-            ->group($this->_userTable . '.userid')
+            ->group(array($this->_userTable . '.userid', $this->_userTable . '.client_idnr'))
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
             
         // select source from alias table
         $select->joinLeft(
             array('aliases' => $this->_destinationTable), // Table
-            '(' . $userIDMap .  ' = ' .  // ON (left)
-            $this->_db->quoteIdentifier('aliases.' . $this->_propertyMapping['emailUserId']) . // ON (right)
+            '(' . $userIDMap .  ' = ' . $this->_db->quoteIdentifier('aliases.users_id') .
             ' AND ' . $userEmailMap . ' = ' . // AND ON (left)
             $this->_db->quoteIdentifier('aliases.' . $this->_propertyMapping['emailForwards']) . ')', // AND ON (right)
             array($this->_propertyMapping['emailAliases'] => $this->_dbCommand->getAggregate('aliases.' . $this->_propertyMapping['emailAliases']))); // Select
@@ -193,8 +207,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // select destination from alias table
         $select->joinLeft(
             array('forwards' => $this->_destinationTable), // Table
-            '(' . $userIDMap .  ' = ' . // ON (left)
-            $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailUserId']) . // ON (right)
+            '(' . $userIDMap .  ' = ' . $this->_db->quoteIdentifier('forwards.users_id') .
             ' AND ' . $userEmailMap . ' = ' . // AND ON (left)
             $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailAliases']) . ')', // AND ON (right)
             array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate('forwards.' . $this->_propertyMapping['emailForwards']))); // Select
@@ -216,48 +229,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     */
     protected function _beforeAddOrUpdate(&$emailUserData)
     {
-        $this->_deleteOldUserDataIfExists($emailUserData);
         unset($emailUserData[$this->_propertyMapping['emailForwards']]);
         unset($emailUserData[$this->_propertyMapping['emailAliases']]);
-    }
-
-    /**
-     * delete old email user data
-     *
-     * @param array $emailUserData
-     * @throws Tinebase_Exception_Backend_Database
-     * @throws Tinebase_Exception_SystemGeneric
-     */
-    protected function _deleteOldUserDataIfExists($emailUserData)
-    {
-        $select = $this->_getSelect();
-        $select
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId'])  . ' != ?',   $emailUserData['userid'])
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']) . ' = ?',   $emailUserData['email']);
-
-        try {
-            $stmt = $this->_db->query($select);
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $zdse);
-            throw new Tinebase_Exception_Backend_Database($zdse->getMessage());
-        }
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-
-        if ($queryResult) {
-            // check if user is still valid
-            try {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $queryResult['userid']);
-                throw new Tinebase_Exception_SystemGeneric('could not overwrite email data of user ' . $queryResult['userid']);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
-                        . __LINE__ . ' Removing old email data of userid ' . $queryResult['userid']);
-                }
-                $this->_deleteUserById($queryResult['userid']);
-                $this->_removeDestinations($queryResult['userid']);
-            }
-        }
     }
     
     /**
@@ -285,7 +258,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Setting default alias/forward for ' . print_r($_smtpSettings, true));
-        
+
+        if (!isset($_smtpSettings['id'])) {
+            $_smtpSettings['id'] = $this->_db->lastInsertId();
+        }
+
         $this->_removeDestinations($_smtpSettings[$this->_propertyMapping['emailUserId']]);
         
         // check if it should be forward only
@@ -305,7 +282,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     protected function _removeDestinations($userId)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('users_id') . ' = ?', $userId),
         );
         
         $this->_db->delete($this->_destinationTable, $where);
@@ -320,7 +297,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     {
         // create email -> username alias
         $this->_addDestination(array(
-            'userid'        => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
+            'users_id'      => $_smtpSettings['id'],
             'source'        => $_smtpSettings[$this->_propertyMapping['emailAddress']],  // TineEmail
             'destination'   => $_smtpSettings[$this->_propertyMapping['emailUsername']], // email
         ));
@@ -328,7 +305,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // create username -> username alias if email and username are different
         if ($_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]) {
             $this->_addDestination(array(
-                'userid'      => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
+                'users_id'    => $_smtpSettings['id'],
                 'source'      => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username
                 'destination' => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username
             ));
@@ -361,8 +338,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
             . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
-        
-        $userId = $_smtpSettings[$this->_propertyMapping['emailUserId']];
+
+        $users_id = $_smtpSettings['id'];
             
         foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
             // check if in primary or secondary domains
@@ -371,12 +348,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
                     // create alias -> email
                     $this->_addDestination(array(
-                        'userid'      => $userId,
+                        'users_id'    => $users_id,
                         'source'      => $aliasAddress,
                         'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']], // email 
                     ));
                 } else if ($this->_hasForwards($_smtpSettings)) {
-                    $this->_addForwards($userId, $aliasAddress, $_smtpSettings[$this->_propertyMapping['emailForwards']]);
+                    $this->_addForwards($users_id, $aliasAddress, $_smtpSettings[$this->_propertyMapping['emailForwards']]);
                 }
             }
         }
@@ -390,23 +367,23 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _hasForwards($_smtpSettings)
     {
-        return ((isset($_smtpSettings[$this->_propertyMapping['emailForwards']]) || array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
+        return isset($_smtpSettings[$this->_propertyMapping['emailForwards']]) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]);
     }
     
     /**
      * add forward destinations
-     * 
-     * @param string $userId
+     *
+     * @param string $users_id
      * @param string $source
      * @param array $forwards
      */
-    protected function _addForwards($userId, $source, $forwards)
+    protected function _addForwards($users_id, $source, $forwards)
     {
         foreach ($forwards as $forwardAddress) {
             if (! empty($forwardAddress)) {
                 // create email -> forward
                 $this->_addDestination(array(
-                    'userid'      => $userId,
+                    'users_id'    => $users_id,
                     'source'      => $source,
                     'destination' => $forwardAddress
                 ));
@@ -429,7 +406,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             . ' Setting forwards for ' . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailForwards']], TRUE));
         
         $this->_addForwards(
-            $_smtpSettings[$this->_propertyMapping['emailUserId']],
+            $_smtpSettings['id'],
             $_smtpSettings[$this->_propertyMapping['emailAddress']],
             $_smtpSettings[$this->_propertyMapping['emailForwards']]
         );
@@ -483,8 +460,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         }
         
         $emailUser = new Tinebase_Model_EmailUser($data, TRUE);
-        
-        $this->_getForwardedAliases($emailUser);
+
+        if (isset($_rawdata['id'])) {
+            $destionationsId = $_rawdata['id'];
+            $this->_getForwardedAliases($emailUser, $destionationsId);
+        }
         
         return $emailUser;
     }
@@ -495,8 +475,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      *   user where aliases are directly mapped to forward addresses 
      * 
      * @param Tinebase_Model_EmailUser $emailUser
+     * @param integer $usersId
      */
-    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser)
+    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser, $usersId)
     {
         if (! $emailUser->emailForwardOnly) {
             return;
@@ -504,7 +485,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         
         $select = $this->_db->select()
             ->from($this->_destinationTable)
-            ->where($this->_db->quoteIdentifier($this->_destinationTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?', $emailUser->emailUserId);
+            ->where($this->_db->quoteIdentifier($this->_destinationTable . '.users_id') . ' = ?', $usersId);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();
@@ -587,6 +568,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         }
         
         $rawData['client_idnr'] = $this->_clientId;
+        if (isset($rawData['id'])) {
+            unset($rawData['id']);
+        }
+        if (($row = $this->getRawUserById($_user)) && is_array($row) && isset($row['id'])) {
+            $rawData['id'] = $row['id'];
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         

@@ -157,7 +157,17 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         this.imapBackendCombo = new Ext.form.ComboBox(backendComboConfig);
         
         // smtp combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['postfixcombined', 'Postfix SQL (combined schema)'], ['Ldapsmtpmail', 'Ldap (only mail attribute)'], ['ldapSmtp', 'Postfix Ldap (dbmail schema)'], ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)'], ['ldap_univention', 'Univention'], ['ldap_simplemail', 'SimpleMail or custom Ldap (BETA)']];
+        backendComboConfig.store = [
+            ['standard', this.app.i18n._('Standard SMTP')],
+            ['postfix', 'Postfix MySQL'],
+            ['postfixcombined', 'Postfix SQL (combined schema)'],
+            ['postfixmultiinstance', 'Postfix SQL (multi instance)'],
+            ['Ldapsmtpmail', 'Ldap (only mail attribute)'],
+            ['ldapSmtp', 'Postfix Ldap (dbmail schema)'],
+            ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)'],
+            ['ldap_univention', 'Univention'],
+            ['ldap_simplemail', 'SimpleMail or custom Ldap (BETA)']
+        ];
         backendComboConfig.name = 'smtp_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -378,6 +388,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                             xtype: 'textfield'
                         },
                         items: this.getDbConfigFields('smtp', 'postfix')
+                    }, {
+                        // postfix config options
+                        id: this.smtpBackendIdPrefix + 'postfixmultiinstance',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: this.getDbConfigFields('smtp', 'postfixmultiinstance')
                     }, {
                         // postfix config options
                         id: this.smtpBackendIdPrefix + 'postfixcombined',

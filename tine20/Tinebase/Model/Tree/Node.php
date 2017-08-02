@@ -35,6 +35,7 @@
  * @property    integer            quota
  * @property    Tinebase_Record_RecordSet grants
  * @property    bool               pin_protected
+ * @property    string             path
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
