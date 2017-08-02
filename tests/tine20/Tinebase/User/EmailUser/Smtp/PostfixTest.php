@@ -96,8 +96,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
         $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(), TRUE));
-        $this->assertEquals(array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain), $testUser->smtpUser->emailForwards, 'forwards not found');
-        $this->assertEquals(array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain),     $testUser->smtpUser->emailAliases, 'aliases not found');
+        $this->assertTrue(in_array('unittest@' . $this->_mailDomain, $testUser->smtpUser->emailForwards), 'forwards not found');
+        $this->assertTrue(in_array('test@' . $this->_mailDomain, $testUser->smtpUser->emailForwards), 'forwards not found');
+        $this->assertTrue(in_array('bla@' . $this->_mailDomain, $testUser->smtpUser->emailAliases), 'aliases not found');
+        $this->assertTrue(in_array('blubb@' . $this->_mailDomain, $testUser->smtpUser->emailAliases), 'aliases not found');
         $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);
         
