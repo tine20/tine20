@@ -65,4 +65,80 @@ class Tinebase_Model_RoleMember extends Tinebase_Record_Abstract
             ),
         )
     );
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
+     * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
+    {
+        $model = $_recordSetDiff->model;
+        if ($_recordSet->getRecordClassName() !== $model) {
+            throw new Tinebase_Exception_InvalidArgument('try to apply record set diff on a record set of different model!' .
+                'record set model: ' . $_recordSet->getRecordClassName() . ', record set diff model: ' . $model);
+        }
+
+        /** @var Tinebase_Record_Abstract $modelInstance */
+        $modelInstance = new $model(array(), true);
+        $idProperty = $modelInstance->getIdProperty();
+
+        foreach($_recordSetDiff->removed as $data) {
+            $found = false;
+            /** @var Tinebase_Model_RoleMember $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->role_id        === $data['role_id']        &&
+                        $record->account_id     === $data['account_id']     &&
+                        $record->account_type   === $data['account_type']       ) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
+                $_recordSet->removeRecord($record);
+            }
+        }
+
+        foreach($_recordSetDiff->modified as $data) {
+            $diff = new Tinebase_Record_Diff($data);
+            $found = false;
+            /** @var Tinebase_Model_RoleMember $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->role_id        === $diff->diff['role_id']        &&
+                        $record->account_id     === $diff->diff['account_id']     &&
+                        $record->account_type   === $diff->diff['account_type']       ) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
+                $record->applyDiff($diff);
+            } else {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+                throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
+            }
+        }
+
+        foreach($_recordSetDiff->added as $data) {
+            $found = false;
+            /** @var Tinebase_Model_RoleMember $record */
+            foreach ($_recordSet as $record) {
+                if (    $record->role_id        === $data['role_id']        &&
+                        $record->account_id     === $data['account_id']     &&
+                        $record->account_type   === $data['account_type']       ) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (true === $found) {
+                $_recordSet->removeRecord($record);
+            }
+            $newRecord = new $model($data);
+            $_recordSet->addRecord($newRecord);
+        }
+
+        return true;
+    }
 }
