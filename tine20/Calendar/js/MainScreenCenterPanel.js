@@ -1521,74 +1521,77 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.onProxyFail(error);
         }
     },
-    
+
+    onConflict: function (error, event, ignoreFn) {
+        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee),
+            fbInfo = new Tine.Calendar.FreeBusyInfo(error.freebusyinfo),
+            denyIgnore = fbInfo.getStateOfAllAttendees() == Tine.Calendar.FreeBusyInfo.states.BUSY_UNAVAILABLE;
+
+        this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+            modal: true,
+            allowCancel: false,
+            width: 550,
+            height: 180 + fbInfo.attendeeCount * 14 + 12 * error.freebusyinfo.length,
+            title: this.app.i18n._('Scheduling Conflict'),
+            questionText: '<div class = "cal-conflict-heading">' +
+            this.app.i18n._('The following attendee are busy at the requested time:') +
+            '</div>' +
+            fbInfo.getInfoByAttendee(attendeeStore, event),
+            options: [
+                {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
+                {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
+                {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
+            ],
+            scope: this,
+            handler: function (option) {
+                var panel = this.getCalendarPanel(this.activeView),
+                    store = panel.getStore();
+
+                switch (option) {
+                    case 'ignore':
+                        if (Ext.isFunction(ignoreFn)) {
+                            ignoreFn();
+                        } else {
+                            this.onAddEvent(event, false, true);
+                        }
+                        this.conflictConfirmWin.close();
+                        break;
+
+                    case 'edit':
+
+                        var presentationMatch = this.activeView.match(this.presentationRe),
+                            presentation = Ext.isArray(presentationMatch) ? presentationMatch[0] : null;
+
+                        if (presentation != 'Grid') {
+                            var view = panel.getView();
+                            view.getSelectionModel().select(event);
+                            // mark event as not dirty to allow edit dlg
+                            event.dirty = false;
+                            view.fireEvent('dblclick', view, event);
+                        } else {
+                            // add or edit?
+                            this.onEditInNewWindow(null, event);
+                        }
+
+                        this.conflictConfirmWin.close();
+                        break;
+                    case 'cancel':
+                    default:
+                        this.conflictConfirmWin.close();
+                        this.loadMask.show();
+                        store.load({refresh: true});
+                        break;
+                }
+            }
+        });
+    },
+
     onProxyFail: function(error, event, ignoreFn) {
         this.setLoading(false);
         if(this.loadMask) this.loadMask.hide();
         
-        if (error.code == 901) {
-            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee),
-                fbInfo = new Tine.Calendar.FreeBusyInfo(error.freebusyinfo),
-                denyIgnore = fbInfo.getStateOfAllAttendees() == Tine.Calendar.FreeBusyInfo.states.BUSY_UNAVAILABLE;
-
-            this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
-                modal: true,
-                allowCancel: false,
-                width: 550,
-                height: 180 + fbInfo.attendeeCount*14 + 12*error.freebusyinfo.length,
-                title: this.app.i18n._('Scheduling Conflict'),
-                questionText: '<div class = "cal-conflict-heading">' +
-                                   this.app.i18n._('The following attendee are busy at the requested time:') + 
-                               '</div>' +
-                                fbInfo.getInfoByAttendee(attendeeStore, event),
-                options: [
-                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
-                    {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
-                    {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
-                ],
-                scope: this,
-                handler: function(option) {
-                    var panel = this.getCalendarPanel(this.activeView),
-                        store = panel.getStore();
-
-                    switch (option) {
-                        case 'ignore':
-                            if (Ext.isFunction(ignoreFn)) {
-                                ignoreFn();
-                            } else {
-                                this.onAddEvent(event, false, true);
-                            }
-                            this.conflictConfirmWin.close();
-                            break;
-                        
-                        case 'edit':
-                            
-                            var presentationMatch = this.activeView.match(this.presentationRe),
-                                presentation = Ext.isArray(presentationMatch) ? presentationMatch[0] : null;
-                            
-                            if (presentation != 'Grid') {
-                                var view = panel.getView();
-                                view.getSelectionModel().select(event);
-                                // mark event as not dirty to allow edit dlg
-                                event.dirty = false;
-                                view.fireEvent('dblclick', view, event);
-                            } else {
-                                // add or edit?
-                                this.onEditInNewWindow(null, event);
-                            }
-                            
-                            this.conflictConfirmWin.close();
-                            break;
-                        case 'cancel':
-                        default:
-                            this.conflictConfirmWin.close();
-                            this.loadMask.show();
-                            store.load({refresh: true});
-                            break;
-                    }
-                }
-            });
-            
+        if (error.code === 901) {
+            this.onConflict(error, event, ignoreFn);
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(error);
         }

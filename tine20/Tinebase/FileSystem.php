@@ -103,6 +103,13 @@ class Tinebase_FileSystem implements
      * @var array
      */
     protected $_secondFactorCache = array();
+
+    /**
+     * class cache to remember all members of the notification role
+     *
+     * @var array
+     */
+    protected $_quotaNotificationRoleMembers = array();
     
     /**
      * holds the instance of the singleton
@@ -801,6 +808,7 @@ class Tinebase_FileSystem implements
      * @param Tinebase_Record_RecordSet $_nodes
      * @param int $_sizeDiff
      * @param int $_revisionSizeDiff
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _updateFolderSizesUpToRoot(Tinebase_Record_RecordSet $_nodes, $_sizeDiff, $_revisionSizeDiff)
     {
@@ -2764,6 +2772,7 @@ class Tinebase_FileSystem implements
         foreach ($otherAccountNodes as $otherAccount) {
             if (count($sharedFoldersOfOtherUsers->filter('parent_id', $otherAccount->getId())) > 0) {
                 $result->addRecord($otherAccount);
+                /** @noinspection PhpUndefinedMethodInspection */
                 $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend(
                     'accountId',
                     $otherAccount->name,
@@ -2883,6 +2892,7 @@ class Tinebase_FileSystem implements
                 Tinebase_Model_Grants::GRANT_SYNC => true,
             ));
         } else if ($pathRecord->isToplevelPath() && $pathRecord->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $account = $_accountId instanceof Tinebase_Model_FullUser
                 ? $_accountId
                 : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
@@ -2921,7 +2931,7 @@ class Tinebase_FileSystem implements
      *
      * TODO add to interface
      */
-    public function getGrantsOfContainer($_containerId, $_ignoreAcl = false, $_grantModel = 'Tinebase_Model_Grants')
+    public function getGrantsOfContainer($_containerId, $_ignoreAcl = false, /** @noinspection PhpUnusedParameterInspection */$_grantModel = 'Tinebase_Model_Grants')
     {
         $record = $_containerId instanceof Tinebase_Model_Tree_Node ? $_containerId : $this->get($_containerId);
 
@@ -3376,6 +3386,15 @@ class Tinebase_FileSystem implements
         $quotaIncludesRevisions = $quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION};
         $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
         $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
+        $this->_quotaNotificationRoleMembers = array();
+
+        if (!empty($notificationRole = $quotaConfig->{Tinebase_Config::QUOTA_SQ_NOTIFICATION_ROLE})) {
+            try {
+                $role = Tinebase_Role::getInstance()->getRoleByName($notificationRole);
+                $this->_quotaNotificationRoleMembers =
+                    Tinebase_Role::getInstance()->getRoleMembersAccounts($role->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
 
         if ($total > 0) {
             /** @var Tinebase_Model_Application $tinebaseApplication */
@@ -3437,6 +3456,42 @@ class Tinebase_FileSystem implements
                 $this->_sendQuotaNotification($node);
             }
         }
+
+        /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
+        $imapBackend = Tinebase_EmailUser::getInstance();
+
+        if (!$imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            return;
+        }
+
+        /** @var Tinebase_Model_EmailUser $emailUser */
+        foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
+            $alert = false;
+            $softAlert = false;
+            if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
+                $alert = true;
+            } elseif($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
+                $alert = true;
+                $softAlert = true;
+            }
+
+            if (true === $alert) {
+                /** @var Tinebase_Model_FullUser $user */
+                foreach (Tinebase_User::getInstance()->getMultiple(array_unique(array_merge(
+                        $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
+                    $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                        $user->accountId));
+                    $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+
+                    // _('email quota notification')
+                    // _('email soft quota notification')
+                    $translatedSubject = $translate->_('email ' . ($softAlert ? 'soft ' : '') . 'quota notification');
+
+                    Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject,
+                        $emailUser->emailUsername . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
+                }
+            }
+        }
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
@@ -3477,11 +3532,12 @@ class Tinebase_FileSystem implements
                             break;
                     }
                 }
-
-                $accountIds = array_unique($accountIds);
             }
 
-            /** @var Tinebase_Model_User $user */
+            $accountIds = array_merge($accountIds, $this->_quotaNotificationRoleMembers);
+            $accountIds = array_unique($accountIds);
+
+            /** @var Tinebase_Model_FullUser $user */
             foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
                 $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
                     $user->accountId));
@@ -3491,7 +3547,7 @@ class Tinebase_FileSystem implements
                 // _('filemanager soft quota notification')
                 $translatedSubject = $translate->_('filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification');
 
-                Tinebase_Notification::getInstance()->send($user->accountId, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
+                Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
             }
         } catch(Exception $e) {
             // LOG
