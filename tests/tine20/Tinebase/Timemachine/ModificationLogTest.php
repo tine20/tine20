@@ -415,10 +415,10 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $mod = clone ($roleModifications->getByIndex(2));
         $diff = new Tinebase_Record_Diff(json_decode($mod->new_value, true));
         $rsDiff = new Tinebase_Record_RecordSetDiff($diff->diff['members']);
+        $rsDiff->removed = $rsDiff->added;
         $modified = $rsDiff->added;
-        $rsDiff->added = array();
         $modified[0]['account_id'] = 'test3';
-        $rsDiff->modified = $modified;
+        $rsDiff->added = $modified;
         $diffArray = $diff->diff;
         $diffArray['members'] = $rsDiff;
         $diff->diff = $diffArray;
