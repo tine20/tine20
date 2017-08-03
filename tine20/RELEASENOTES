@@ -4,4 +4,21 @@
   Release:     Caroline (2017.11)
   Last change:
 
-FILL ME!
+GENERAL CHANGES
+---
+
+* Replication
+* ... TODO
+
+FILEMANAGER
+---
+
+* separate ACL on all folder nodes
+* fulltext search with tika
+* preview service
+* ... TODO
+
+CALENDAR
+---
+
+* .. TODO
