@@ -1346,14 +1346,19 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
                         count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
 
-                    $recipients = array();
-                    foreach($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
-                        $recipients[] = new Addressbook_Model_Contact(array('email' => $recipient), true);
+                    $plain = "Error applying modlog: \n" . print_r($modification->toArray(), true);
+                    $plain .= "\n\n" . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
+
+                    foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
+                        $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
+                        try {
+                            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
+                                'replication client error', $plain);
+                        } catch (Exception $e) {
+                            // skipping recipient
+                            Tinebase_Exception::log($e);
+                        }
                     }
-
-                    $plain = $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
-
-                    Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, 'replication client error', $plain);
                 }
 
                 // must not happen, continuing pointless!
