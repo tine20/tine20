@@ -1788,9 +1788,19 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $userController = Tinebase_User::getInstance();
+        $emailUser = Tinebase_EmailUser::getInstance();
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
         /** @var Tinebase_Model_FullUser $user */
         foreach ($userController->getFullUsers() as $user) {
-            if (!empty($user->accountEmailAddress)) {
+            $emailUser->inspectGetUserByProperty($user);
+            if (! empty($user->accountEmailAddress)) {
+                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
+                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                    $user->accountEmailAddress = $newEmailAddress;
+                }
                 $userController->updateUser($user);
             }
         }

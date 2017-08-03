@@ -360,4 +360,25 @@ class Tinebase_EmailUser
         
         return self::$_configs[$_configType];
     }
+
+    /**
+     * @param array|null $config
+     * @return array
+     */
+    public static function getAllowedDomains($config = null)
+    {
+        if ($config === null) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        }
+
+        $allowedDomains = array();
+        if (! empty($config['primarydomain'])) {
+            $allowedDomains = array($config['primarydomain']);
+            if (! empty($config['secondarydomains'])) {
+                // merge primary and secondary domains and split secondary domains + trim whitespaces
+                $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
+            }
+        }
+        return $allowedDomains;
+    }
 }
