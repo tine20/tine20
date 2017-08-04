@@ -573,6 +573,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
+            // TODO implement this!
+            return $model;
+        }));
 
         $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
     }
@@ -821,6 +825,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
                     foreach ($this->_foreignIdFields as $name => $controller) {
                         if (!empty($record->{$name})) {
+                            /** @var Tinebase_Controller_Record_Abstract $controller */
                             $controller = $controller::getInstance();
                             $record->{$name} = $controller->get($record->{$name});
                         }

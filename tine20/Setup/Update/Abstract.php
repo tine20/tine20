@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -28,10 +28,22 @@ class Setup_Update_Abstract
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
+
+    /**
+     * @var null|boolean
+     */
+    protected $_isReplicationSlave = null;
+
+    /**
+     * @var null|boolean
+     */
+    protected $_isReplicationMaster = null;
     
     /** 
-    * the constructor
-    */
+     * the constructor
+     *
+     * @param string $_backend
+     */
     public function __construct($_backend)
     {
         $this->_backend = $_backend;
@@ -42,7 +54,7 @@ class Setup_Update_Abstract
      * get version number of a given application 
      * version is stored in database table "applications"
      *
-     * @param string application
+     * @param string $_application
      * @return string version number major.minor release 
      */
     public function getApplicationVersion($_application)
@@ -77,7 +89,7 @@ class Setup_Update_Abstract
      * get version number of a given table
      * version is stored in database table "applications_tables"
      *
-     * @param Tinebase_Application application
+     * @param string $_tableName
      * @return int version number 
      */
     public function getTableVersion($_tableName)
@@ -85,7 +97,7 @@ class Setup_Update_Abstract
         $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'application_tables')
                 ->where(    $this->_db->quoteIdentifier('name') . ' = ?', $_tableName)
-                ->orwhere(  $this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
+                ->orWhere(  $this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' ' . $select->__toString());
@@ -102,7 +114,7 @@ class Setup_Update_Abstract
      * set version number of a given table
      * version is stored in database table "applications_tables"
      *
-     * @param string tableName
+     * @param string $_tableName
      * @param int|string $_version
      * @param boolean $_createIfNotExist
      * @param string $_application
@@ -126,7 +138,7 @@ class Setup_Update_Abstract
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
             );
-            $result = $applicationsTables->update(array('version' => $_version), $where);
+            $applicationsTables->update(array('version' => $_version), $where);
         }
     }
     
@@ -134,8 +146,7 @@ class Setup_Update_Abstract
      * set version number of a given table
      * version is stored in database table "applications_tables"
      *
-     * @param string tableName
-     * @return int version number 
+     * @param string $_tableName
      */  
     public function increaseTableVersion($_tableName)
     {
@@ -147,14 +158,14 @@ class Setup_Update_Abstract
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
         );
-        $result = $applicationsTables->update(array('version' => $version), $where);
+        $applicationsTables->update(array('version' => $version), $where);
     }
     
     /**
      * compares version numbers of given table and given number
      *
      * @param  string $_tableName
-     * @param  int version number
+     * @param  int $_version number
      * @throws Setup_Exception
      */     
     public function validateTableVersion($_tableName, $_version)
@@ -171,6 +182,8 @@ class Setup_Update_Abstract
      * @param string $_tableName
      * @param Setup_Backend_Schema_Table_Abstract $_table
      * @param string $_application
+     * @param int $_version
+     * @return boolean
      */
     public function createTable($_tableName, Setup_Backend_Schema_Table_Abstract $_table, $_application = 'Tinebase', $_version = 1)
     {
@@ -185,6 +198,8 @@ class Setup_Update_Abstract
         Tinebase_Application::getInstance()->addApplicationTable($app, $_tableName, $_version);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created new table ' . $_tableName);
+
+        return true;
     }
     
     /**
@@ -223,7 +238,7 @@ class Setup_Update_Abstract
     public function dropTable($_tableName, $_application = 'Tinebase')
     {
         Tinebase_Application::getInstance()->removeApplicationTable(Tinebase_Application::getInstance()->getApplicationByName($_application), $_tableName);
-        $result = $this->_backend->dropTable($_tableName);
+        $this->_backend->dropTable($_tableName);
     }
     
     /**
@@ -241,7 +256,8 @@ class Setup_Update_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Prompting for username on CLI');
             
-            $userFound = NULL;
+            $userFound = null;
+            $userAccount = null;
             
             do {
                 try {
@@ -420,6 +436,7 @@ class Setup_Update_Abstract
         try {
             $setupId = Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
+            /** @noinspection PhpUndefinedMethodInspection */
             $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId, 'Tinebase_Model_FullUser');
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
@@ -458,6 +475,7 @@ class Setup_Update_Abstract
 
         $updateRequired = false;
         $setNewVersions = array();
+        /** @var Tinebase_Record_Abstract $modelName */
         foreach($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());
@@ -478,5 +496,40 @@ class Setup_Update_Abstract
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReplicationSlave()
+    {
+        if (null !== $this->_isReplicationSlave) {
+            return $this->_isReplicationSlave;
+        }
+        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
+        // check if we are a replication slave
+        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
+            $this->_isReplicationMaster = true;
+            return ($this->_isReplicationSlave = false);
+        }
+
+        $this->_isReplicationMaster = false;
+        return ($this->_isReplicationSlave = true);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReplicationMaster()
+    {
+        if (null !== $this->_isReplicationMaster) {
+            return $this->_isReplicationMaster;
+        }
+
+        return ($this->_isReplicationMaster = ! $this->isReplicationSlave());
     }
 }
