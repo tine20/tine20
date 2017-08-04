@@ -166,7 +166,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 contentType: recordClass.getMeta('modelName'),
                 iconCls: modelApp.appName + modelName,
-                text: recordClass.getRecordsName(),
+                text: recordClass.getModuleName(),
                 leaf : true
             };
             

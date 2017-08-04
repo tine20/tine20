@@ -286,6 +286,17 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
             
         return i18n.n_(p.recordName, p.recordsName, 1);
     };
+    f.getModuleName = function () {
+        var app = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n : i18n,
+            moduleName;
+
+        if (p.modelConfiguration && p.modelConfiguration.moduleName) {
+            return i18n._(p.modelConfiguration.moduleName);
+        }
+
+        return p.moduleName ? i18n._(p.moduleName) : f.getRecordsName();
+    };
     f.getRecordsName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :i18n;
