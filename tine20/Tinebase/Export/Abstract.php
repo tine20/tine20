@@ -244,6 +244,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
+        if ($this->_config->templateFileId) {
+            try {
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId, true));
+                $this->_templateFileName = $path->streamwrapperpath;
+            } catch (Exception $e) {}
+        }
         if (isset($_additionalOptions['template'])) {
             try {
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'], true));
