@@ -1360,7 +1360,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "fbd03e07c494556f291f67841111dc5321c07893"
+                "reference": "2f4d0b6f07d0b800c0ef4c0e5fade7c8e2b351aa"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1784,11 +1784,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl14",
+            "version": "1.12.20pl15",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "40d2f288999a5e1a23051e90352d6f15fed50b5a"
+                "reference": "c43f4aa3d0853ab685e75eed24d361b6ace30bff"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2365,7 +2365,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch14",
+            "version": "1.12.20.0-patch15",
             "package": "zendframework/zendframework1"
         },
         {
