@@ -5,7 +5,7 @@
  * @package     Phone
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 class Phone_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -30,5 +30,15 @@ class Phone_Setup_Update_Release10 extends Setup_Update_Abstract
         $update9 = new Phone_Setup_Update_Release9($this->_backend);
         $update9->update_2();
         $this->setApplicationVersion('Phone', '10.2');
+    }
+
+    /**
+     * update to 11.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Phone', '11.0');
     }
 }

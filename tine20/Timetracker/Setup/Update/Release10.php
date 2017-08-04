@@ -194,4 +194,12 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->update_1();
         $this->setApplicationVersion('Timetracker', '10.6');
     }
+
+    /**
+     * update to 11.0
+     */
+    public function update_6()
+    {
+        $this->setApplicationVersion('Timetracker', '11.0');
+    }
 }

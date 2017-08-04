@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 class HumanResources_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -57,5 +57,10 @@ class HumanResources_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_contract', 3);
 
         $this->setApplicationVersion('HumanResources', '10.3');
+    }
+
+    public function update_3()
+    {
+        $this->setApplicationVersion('HumanResources', '11.0');
     }
 }

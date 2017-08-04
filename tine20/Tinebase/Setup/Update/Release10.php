@@ -2065,4 +2065,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
         $this->setApplicationVersion('Tinebase', '10.42');
     }
+
+    /**
+     * update to 11.0
+     */
+    public function update_42()
+    {
+        $this->setApplicationVersion('Tinebase', '11.0');
+    }
 }

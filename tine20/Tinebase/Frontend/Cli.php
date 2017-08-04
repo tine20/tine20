@@ -1777,5 +1777,24 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo PHP_EOL . 'done' . PHP_EOL . PHP_EOL;
+
+        return 0;
+    }
+
+    public function updateAllAccountsWithAccountEmail()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $userController = Tinebase_User::getInstance();
+        /** @var Tinebase_Model_FullUser $user */
+        foreach ($userController->getFullUsers() as $user) {
+            if (!empty($user->accountEmailAddress)) {
+                $userController->updateUser($user);
+            }
+        }
+
+        return 0;
     }
 }

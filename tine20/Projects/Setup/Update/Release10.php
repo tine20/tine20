@@ -37,4 +37,9 @@ class Projects_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Projects', '10.2');
     }
+
+    public function update_2()
+    {
+        $this->setApplicationVersion('Projects', '11.0');
+    }
 }
