@@ -141,4 +141,54 @@ class Tinebase_Model_RoleMember extends Tinebase_Record_Abstract
 
         return true;
     }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        $shallowCopyOne = new Tinebase_Record_RecordSet(self::class);
+        $removed = new Tinebase_Record_RecordSet(self::class);
+        $added = new Tinebase_Record_RecordSet(self::class);
+
+        foreach ($_recordSetOne as $roleMemberOne) {
+            $shallowCopyOne->addRecord($roleMemberOne);
+        }
+
+        /** @var Tinebase_Model_RoleMember $roleMemberTwo */
+        foreach ($_recordSetTwo as $roleMemberTwo) {
+            $found = false;
+            /** @var Tinebase_Model_RoleMember $roleMemberTwo */
+            foreach ($shallowCopyOne as $roleMemberOne) {
+                if (    $roleMemberOne->role_id        === $roleMemberTwo->role_id        &&
+                        $roleMemberOne->account_id     === $roleMemberTwo->account_id     &&
+                        $roleMemberOne->account_type   === $roleMemberTwo->account_type       ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (true === $found) {
+                $shallowCopyOne->removeRecord($roleMemberOne);
+            } else {
+                $added->addRecord($roleMemberTwo);
+            }
+        }
+
+        /** @var Tinebase_Model_RoleMember $roleMemberTwo */
+        foreach ($shallowCopyOne as $roleMemberOne) {
+            $removed->addRecord($roleMemberOne);
+        }
+
+        $result = new Tinebase_Record_RecordSetDiff(array(
+            'model'    => self::class,
+            'added'    => $added,
+            'removed'  => $removed,
+            'modified' => new Tinebase_Record_RecordSet('Tinebase_Record_Diff')
+        ));
+
+        return $result;
+    }
 }
