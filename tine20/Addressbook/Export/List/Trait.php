@@ -19,7 +19,13 @@ trait Addressbook_Export_List_Trait
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         parent::_resolveRecords($_records);
+
+        if ('adb_list_doc' === $this->_config->name) {
+            $this->_listDocResolveRecords($_records);
+            return;
+        }
 
         /** @var Addressbook_Model_List $record */
         foreach ($_records as $record) {
@@ -68,6 +74,75 @@ trait Addressbook_Export_List_Trait
             }
 
             $record->memberroles = $str;
+        }
+    }
+
+    /**
+     * resolve records and prepare for export (set user timezone, ...)
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _listDocResolveRecords(Tinebase_Record_RecordSet $_records)
+    {
+        $memberRolesBackend = Addressbook_Controller_List::getInstance()->getMemberRolesBackend();
+
+        /** @var Addressbook_Model_List $record */
+        foreach ($_records as $record) {
+            $filter = new Addressbook_Model_ListMemberRoleFilter(array(
+                array('field' => 'list_id',      'operator' => 'equals', 'value' => $record->getId())
+            ));
+
+            $members = array();
+            $listRoles = array();
+            /** @var Addressbook_Model_ListMemberRole $listMemberRole */
+            foreach($memberRolesBackend->search($filter) as $listMemberRole)
+            {
+                if (!isset($members[$listMemberRole->contact_id])) {
+                    $members[$listMemberRole->contact_id] = array();
+                }
+                $members[$listMemberRole->contact_id][] = $listMemberRole->list_role_id;
+                $listRoles[$listMemberRole->list_role_id] = true;
+            }
+
+            if (count($listRoles) > 0) {
+                $listRolesResultSet = Addressbook_Controller_ListRole::getInstance()->getMultiple(array_keys($listRoles));
+            }
+
+            $memberRecords = array();
+            if (is_array($record->members)) {
+                $memberRecords = Addressbook_Controller_Contact::getInstance()->getMultiple($record->members);
+            }
+            $newMembers = array();
+
+            /** @var Addressbook_Model_Contact $contact */
+            foreach($memberRecords as $contact) {
+                $newMembers[$contact->getId()] = $contact->toArray();
+                if (isset($members[$contact->getId()])) {
+                    $str = '';
+                    $first = true;
+                    foreach($members[$contact->getId()] as $listRoleId) {
+                        /** @var Addressbook_Model_ListRole $listRole */
+                        if (null !== ($listRole = $listRolesResultSet->getById($listRoleId))) {
+                            $str .= (true===$first?'':', ') . $listRole->name;
+                            $first = false;
+                            if (true === $listRoles[$listRoleId]) {
+                                $listRoles[$listRoleId] = array(
+                                    'name'      => $listRole->name,
+                                    'members'   => $contact->n_fn
+                                );
+                            } else {
+                                $listRoles[$listRoleId]['members'] .= ', ' . $contact->n_fn;
+                            }
+                        }
+                    }
+                    $newMembers[$contact->getId()]['memberroles'] = $str;
+                } else {
+                    $newMembers[$contact->getId()]['memberroles'] = '';
+                }
+            }
+
+            $record->members = $newMembers;
+            $record->memberroles = $listRoles;
         }
     }
 }
