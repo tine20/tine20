@@ -156,14 +156,14 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     static public function convertContainerId($_containerId)
     {
         // null will be string casted to empty string
-        if($_containerId instanceof Tinebase_Model_Container) {
+        if ($_containerId instanceof Tinebase_Model_Container) {
             $id = (string)$_containerId->getId();
         } else {
             $id = (string)$_containerId;
         }
 
         // ctype_alnum returns false on empty string
-        if(false === ctype_alnum($id)) {
+        if (false === ctype_alnum($id)) {
             throw new Tinebase_Exception_InvalidArgument('No container id set.');
         }
 
