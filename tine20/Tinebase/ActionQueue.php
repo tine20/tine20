@@ -162,9 +162,16 @@
     {
         $params = func_get_args();
         $action = array_shift($params);
+        $user = Tinebase_Core::getUser();
+        if (! is_object($user)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . " Not Queueing action: '{$action}' because no valid user object found");
+            return null;
+        }
+
         $message = array(
             'action'     => $action,
-            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_id' => $user->getId(),
             'params'     => $params
         );
         
