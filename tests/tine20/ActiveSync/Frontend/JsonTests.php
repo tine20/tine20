@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -19,12 +19,12 @@ class ActiveSync_Frontend_JsonTests extends ActiveSync_TestCase
      * lazy init of uit
      *
      * @return ActiveSync_Frontend_Json
-     *
-     * @todo fix ide object class detection for completions
      */
     protected function _getUit()
     {
-        return parent::_getUit();
+        /** @var ActiveSync_Frontend_Json $uit */
+        $uit = parent::_getUit();
+        return $uit;
     }
     
     /**
@@ -32,7 +32,7 @@ class ActiveSync_Frontend_JsonTests extends ActiveSync_TestCase
      */
     public function testSearchSyncDevices()
     {
-        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE);
+        $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE);
         
         $result = $this->_getUit()->searchSyncDevices(array(), array());
         
@@ -73,12 +73,32 @@ class ActiveSync_Frontend_JsonTests extends ActiveSync_TestCase
      */
     public function testSaveSyncDevice()
     {
+        $uit = $this->_getUit();
         $device = $this->testGetSyncDevice();
         
         $device['friendlyname'] = 'Very friendly name';
         $device['owner_id'] = $device['owner_id']['accountId'];
-        $updatedDevice = $this->_getUit()->saveSyncDevice($device);
-        
-        $this->assertEquals($device['friendlyname'], $updatedDevice['friendlyname']);
+        $device['remotewipe'] = 1;
+        $updatedDevice = $uit->saveSyncDevice($device);
+
+        static::assertEquals($device['friendlyname'], $updatedDevice['friendlyname']);
+        static::assertEquals(0, $updatedDevice['remotewipe']);
+
+
+        $result = $uit->remoteResetDevices(array($updatedDevice['id']));
+        static::assertTrue(is_array($result) && isset($result['success']) && true === $result['success'] &&
+            count($result) === 1, 'result of remoteResetDevices should be array(\'success\' => true)');
+
+        $fetchedDevice = $uit->getSyncDevice($updatedDevice['id']);
+        static::assertEquals(1, $fetchedDevice['remotewipe'], 'remote wipe not set successfully!');
+
+        $catched = false;
+        try {
+            unset($updatedDevice['id']);
+            $uit->saveSyncDevice($updatedDevice);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $catched = true;
+        }
+        static::assertTrue($catched, 'misuse of saveSyncDevice to create a new device must not be possible');
     }
 }

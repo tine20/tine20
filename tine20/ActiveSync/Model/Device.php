@@ -22,6 +22,7 @@
  * @property  string  $policy_id          the current policy_id
  * @property  string  $policykey          the current policykey
  * @property  string  $tasksfilter_id     the tasks filter id
+ * @property  boolean $remotewipe
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {

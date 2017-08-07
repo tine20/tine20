@@ -32,6 +32,11 @@ class ActiveSync_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_DEVICES = 'manage_devices';
+
+    /**
+     * the right to reset a device to factory state, wiping all data
+     */
+    const RESET_DEVICES = 'reset_devices';
     
     /**
      * holds the instance of the singleton
@@ -84,6 +89,7 @@ class ActiveSync_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array(
             self::MANAGE_DEVICES,
+            self::RESET_DEVICES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -104,6 +110,10 @@ class ActiveSync_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('Manage ActiveSync devices'),
                 'description'   => $translate->_('See, edit and delete ActiveSync devices'),
             ),
+            self::RESET_DEVICES => array(
+                'text'          => $translate->_('Reset ActiveSync devices'),
+                'description'   => $translate->_('Remotely reset ActiveSync devices to factory state, deleting all data'),
+            )
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
