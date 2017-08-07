@@ -87,9 +87,15 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
 
-        $emailUser = Tinebase_EmailUser::getInstance();
-        foreach ($result as $user) {
-            $emailUser->inspectGetUserByProperty($user);
+        $emailUser = null;
+        try {
+            $emailUser = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        if (null !== $emailUser) {
+            foreach ($result as $user) {
+                $emailUser->inspectGetUserByProperty($user);
+            }
         }
         
         return $result;
