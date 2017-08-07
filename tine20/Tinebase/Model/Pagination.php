@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,7 @@
  * @property string limit
  * @property string sort
  * @property string dir
+ * @property string model
  */
 class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 {
@@ -48,7 +49,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
                                         array('InArray', array('ASC', 'DESC')),
-                                        'default'       => 'ASC'        )
+                                        'default'       => 'ASC'        ),
+        'model'                => array('allowEmpty'    => true,
+                                        'default'       => NULL         ),
     );
     
     /**
@@ -59,19 +62,54 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     public function appendPaginationSql($_select)
     {
+        // check model for required joins etc.
+        $this->appendModelConfig($_select);
+
         $this->appendLimit($_select);
         $this->appendSort($_select);
     }
-    
+
+    /**
+     * Appends limit statement to a given select object
+     *
+     * @param  Zend_Db_Select $_select
+     * @return void
+     */
+    public function appendModelConfig($_select)
+    {
+        if (empty($this->model) || empty($this->sort) || empty($this->dir)) {
+            return;
+        }
+
+        /** @var Tinebase_Record_Abstract $model */
+        $model = $this->model;
+        if (empty($mapping = $model::getSortExternalMapping())) {
+            return;
+        }
+        $joined = array();
+        foreach ((array)$this->sort as $field) {
+            if (!isset($mapping[$field])) {
+                continue;
+            }
+            $mappingDef = $mapping[$field];
+            if (isset($joined[$mappingDef['table']])) {
+                continue;
+            }
+            $_select->joinLeft(array($mappingDef['table'] => SQL_TABLE_PREFIX . $mappingDef['table']), $mappingDef['on'],
+                array());
+            $joined[$mappingDef['table']] = true;
+        }
+    }
+
     /**
      * Appends limit statement to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select $_select
      * @return void
      */
     public function appendLimit($_select)
     {
-        if (! empty($this->limit)) {
+        if (!empty($this->limit)) {
             $start = ($this->start >= 0) ? $this->start : 0;
             $_select->limit($this->limit, $start);
         }
@@ -80,7 +118,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     /**
      * Appends sort statement to a given select object
      * 
-     * @param  Zend_Db_Select
+     * @param  Zend_Db_Select $_select
      * @return void
      */
     public function appendSort($_select)
@@ -97,15 +135,10 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     protected function _getSortCols()
     {
-        if (is_array($this->sort)) {
-            $order = array();
-            foreach ($this->sort as $sort) {
-                $order[] = $sort . ' ' . $this->dir;
-            }
-        } else {
-            $order = array($this->sort . ' ' . $this->dir);
+        $order = array();
+        foreach ((array)$this->sort as $sort) {
+            $order[] = $sort . ' ' . $this->dir;
         }
-        
         return $order;
     }
 }

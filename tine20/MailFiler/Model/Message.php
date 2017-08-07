@@ -21,9 +21,10 @@
  * @property    string  $sender         the sender of the email
  * @property    string  $content_type   the content type of the message
  * @property    string  $body_content_type   the content type of the message body
- * @property    array   $to             the to receipients
- * @property    array   $cc             the cc receipients
- * @property    array   $bcc            the bcc receipients
+ * @property    array   $to             the to recipients
+ * @property    string  $to_flat        the to recipients as one string, comma separated email list
+ * @property    array   $cc             the cc recipients
+ * @property    array   $bcc            the bcc recipients
  * @property    array   $structure      the message structure
  * @property    array   $attachments    the attachments
  * @property    string  $messageuid     the message uid on the imap server
@@ -50,6 +51,7 @@ class MailFiler_Model_Message extends Felamimail_Model_Message
         'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'sender'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'to_flat'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bcc'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'received'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

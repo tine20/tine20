@@ -215,6 +215,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static $_requiredRight = NULL;
 
+    protected static $_sortExternalMapping = array();
+
 
     /******************************** functions ****************************************/
     
@@ -1480,5 +1482,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
     {
         return null;
+    }
+
+    public static function getSortExternalMapping()
+    {
+        return static::$_sortExternalMapping;
     }
 }

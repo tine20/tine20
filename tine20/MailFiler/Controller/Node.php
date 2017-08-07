@@ -155,6 +155,9 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
         $mailFilerMessage->setFromJsonInUsersTimezone($message->toArray());
         $mailFilerMessage->structure = $message->structure;
         $mailFilerMessage->node_id = $node->getId();
+        $to = $mailFilerMessage->to;
+        sort($to);
+        $mailFilerMessage->to_flat = join(', ', $to);
 
         MailFiler_Controller_Message::getInstance()->create($mailFilerMessage);
     }

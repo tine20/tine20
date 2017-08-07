@@ -49,6 +49,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected $_defaultImportDefinitionName = null;
 
     /**
+     * the model from which the pagination object should read its configuration
+     *
+     * @var string
+     */
+    protected $_paginationModel = null;
+
+    /**
      * Configured plugins for filter model
      * @var array
      */
@@ -187,6 +194,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
         $decodedPagination = $this->_prepareParameter($_paging);
+        if (null !== $this->_paginationModel) {
+            $decodedPagination['model'] = $this->_paginationModel;
+        } else {
+            unset($decodedPagination['model']);
+        }
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $filter = $this->_decodeFilter($_filter, $_filterModel);
         
