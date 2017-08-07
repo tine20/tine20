@@ -1379,7 +1379,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $records = Tinebase_FileSystem::getInstance()->search($filter);
             if ($path === $emailPath) {
-                $imapBackend = Tinebase_EmailUser::getInstance();
+                $imapBackend = null;
+                try {
+                    $imapBackend = Tinebase_EmailUser::getInstance();
+                } catch (Tinebase_Exception_NotFound $tenf) {}
                 if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
                     /** @var Tinebase_Model_Tree_Node $emailNode */
                     $emailNode = clone $records->getFirstRecord();
