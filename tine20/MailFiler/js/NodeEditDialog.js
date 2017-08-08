@@ -153,14 +153,7 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * download file
      */
     onDownload: function () {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'MailFiler.downloadFile',
-                requestType: 'HTTP',
-                path: '',
-                id: this.record.get('id')
-            }
-        }).start();
+        Tine.Filemanager.downloadFile(this.record, null, 'MailFiler');
     },
 
     /**
