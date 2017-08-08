@@ -961,6 +961,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_saveAttendee($record, $currentRecord, $record->isRescheduled($currentRecord));
         // need to save new attendee set in $updatedRecord for modlog
         $updatedRecord->attendee = clone($record->attendee);
+
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
+            'observable' => $updatedRecord
+        ]));
     }
     
     /**
