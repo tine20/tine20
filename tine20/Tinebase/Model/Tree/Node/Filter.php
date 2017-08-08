@@ -153,12 +153,13 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
 
         if (!$this->_ignorePinProtection && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
             $db = $backend->getAdapter();
+            $uniqueId = uniqid('pinProtected');
             $select->joinLeft(array(
-                /* table  */ 'pinProtected' => SQL_TABLE_PREFIX . $backend->getTableName()),
-                /* on     */ "{$db->quoteIdentifier('pinProtected.id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
+                /* table  */ $uniqueId => SQL_TABLE_PREFIX . $backend->getTableName()),
+                /* on     */ "{$db->quoteIdentifier($uniqueId . '.id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
                 /* select */ array()
             );
-            $select->where("{$db->quoteIdentifier('pinProtected.pin_protected')} = 0 OR {$db->quoteIdentifier('pinProtected.pin_protected')} IS NULL");
+            $select->where("{$db->quoteIdentifier($uniqueId . '.pin_protected')} = 0 OR {$db->quoteIdentifier($uniqueId . '.pin_protected')} IS NULL");
         }
 
         // TODO do something when acl_node = NULL?
