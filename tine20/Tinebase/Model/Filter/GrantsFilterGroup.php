@@ -22,6 +22,11 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
     protected $_aclTableName = null;
 
     /**
+     * @var string the alias for the acl table name
+     */
+    protected $_joinedTableAlias = null;
+
+    /**
      * @var string acl record column for join with acl table
      */
     protected $_aclIdColumn = 'id';
@@ -97,14 +102,15 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
             $user = isset($this->_options['user']) ? $this->_options['user'] : Tinebase_Core::getUser();
         }
 
+        $this->_joinedTableAlias = uniqid($this->_aclTableName);
         $db = $backend->getAdapter();
         $select->join(array(
-            /* table  */ $this->_aclTableName => SQL_TABLE_PREFIX . $this->_aclTableName), 
-            /* on     */ "{$db->quoteIdentifier($this->_aclTableName . '.record_id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
+            /* table  */ $this->_joinedTableAlias => SQL_TABLE_PREFIX . $this->_aclTableName),
+            /* on     */ "{$db->quoteIdentifier($this->_joinedTableAlias . '.record_id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
             /* select */ array()
         );
         
-        Tinebase_Container::addGrantsSql($select, $user, $this->_requiredGrants, $this->_aclTableName);
+        Tinebase_Container::addGrantsSql($select, $user, $this->_requiredGrants, $this->_joinedTableAlias);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' $select after appending grants sql: ' . $select);
