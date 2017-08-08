@@ -30,7 +30,6 @@ require('./nodeActions');
  */
 Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.Filemanager.NodeGridPanel, {
 
-    enableDD: false,
     recordClass: Tine.MailFiler.Model.Node,
 
     /**
