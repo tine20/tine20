@@ -534,6 +534,25 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.Filemanager.NodeGridPanel, {
     },
 
     /**
+     * grid row doubleclick handler
+     *
+     * @param {Tine.MailFiler.NodeGridPanel} grid
+     * @param {} row record
+     * @param {Ext.EventObjet} e
+     */
+    onRowDblClick: function (grid, row, e) {
+        var rowRecord = grid.getStore().getAt(row);
+
+        if (rowRecord.data.type == 'file') {
+            Tine.MailFiler.NodeEditDialog.openWindow({
+                record: rowRecord
+            });
+        } else if (rowRecord.data.type == 'folder') {
+            Tine.MailFiler.NodeGridPanel.superclass.onRowDblClick.call(this, grid, row, e);
+        }
+    },
+
+    /**
      * get action toolbar
      *
      * @return {Ext.Toolbar}
