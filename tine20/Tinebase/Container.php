@@ -1428,8 +1428,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $containerIds = array();
         foreach ($_records as $record) {
-            if (isset($record[$_containerProperty]) && !isset($containerIds[Tinebase_Model_Container::convertContainerId($record[$_containerProperty])])) {
-                $containerIds[Tinebase_Model_Container::convertContainerId($record[$_containerProperty])] = null;
+            if (isset($record[$_containerProperty])) {
+                $containerId = Tinebase_Model_Container::convertContainerId($record[$_containerProperty]);
+                if (! isset($containerIds[$containerId])) {
+                    $containerIds[$containerId] = $containerId;
+                }
             }
         }
         
@@ -1442,7 +1445,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             : $_accountId;
         
         $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", array_keys($containerIds))
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $containerIds)
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
