@@ -259,13 +259,13 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     {
         $xmlBlock = null;
         preg_match(
-            '/(<\?xml.*?)(<w:p>.*\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
+            '/(<\?xml.*)(<w:p(\s+[^>]*)?>.*?\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p(\s+[^>]*)?>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
             $this->tempDocumentMainPart,
             $matches
         );
 
-        if (isset($matches[3])) {
-            $xmlBlock = $matches[3];
+        if (isset($matches[4])) {
+            $xmlBlock = $matches[4];
             $cloned = array();
             for ($i = 1; $i <= $clones; $i++) {
                 $cloned[] = $xmlBlock;
@@ -276,7 +276,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     $matches[2] = substr($matches[2], $pos);
                 }
                 $this->tempDocumentMainPart = str_replace(
-                    $matches[2] . $matches[3] . $matches[4],
+                    $matches[2] . $matches[4] . $matches[5],
                     implode('', $cloned),
                     $this->tempDocumentMainPart
                 );
@@ -297,7 +297,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     public function replaceBlock($blockname, $replacement)
     {
         preg_match(
-            '/(<\?xml.*)(<w:p( [^>]+)?>.*\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p( [^>]+)?>.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            '/(<\?xml.*)(<w:p(\s+[^>]*)?>.*?\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p(\s+[^>]*)?>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
             $this->tempDocumentMainPart,
             $matches
         );
