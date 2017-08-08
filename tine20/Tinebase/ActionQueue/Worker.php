@@ -230,14 +230,21 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " with isChild: " . var_export($this->_isChild, true));
 
         // execute in subprocess
-        /*if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
-            $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($job), $exitCode );
+        //if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
+        chdir(__DIR__);
+            if (is_object($job)) {
+                /** @var Tinebase_Record_Interface $job */
+                $job = $job->toArray(true);
+            }
+            exec('php -d include_path=' . escapeshellarg(get_include_path()) .
+                ' ./../../tine20.php --method Tinebase.executeQueueJob message=' .
+                escapeshellarg(json_encode($job)), $output, $exitCode);
             if ($exitCode != 0) {
-                throw new Exception('Problem during execution with shell: ' . $output);
+                throw new Exception('Problem during execution with shell: ' . join(PHP_EOL, $output));
             }
 
         // execute in same process
-        } else { */
+        /*} else {
             Zend_Registry::_unsetInstance();
 
             Tinebase_Core::initFramework();
@@ -246,9 +253,10 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
         if (true !== ($result = Tinebase_ActionQueue::getInstance()->executeAction($job))) {
             throw new Tinebase_Exception_UnexpectedValue('action queue job execution did not return true: ' . var_export($result, true));
-        }
+        }*/
         //}
 
-        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " result: " . var_export($result, true));
+        //$this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " result: " . var_export($result, true));
+        $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " output: " . var_export($output, true));
     }
 }

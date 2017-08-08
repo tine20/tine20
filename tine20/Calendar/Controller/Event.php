@@ -195,13 +195,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE)
+    public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $skipEvent = false)
     {
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $this->_inspectEvent($_record);
+            $this->_inspectEvent($_record, $skipEvent);
             
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
@@ -357,6 +357,40 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         return $conflicts;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @return array
+     */
+    public function mergeFreeBusyInfo(Tinebase_Record_RecordSet $_records)
+    {
+        $_records->sort('dtstart');
+        $result = array();
+        /** @var Calendar_Model_Event $event */
+        foreach($_records as $event) {
+            foreach($result as $key => &$period) {
+                if ($event->dtstart->isEarlierOrEquals($period['dtend'])) {
+                    if ($event->dtend->isLaterOrEquals($period['dtstart'])) {
+                        if ($event->dtstart->isEarlier($period['dtstart'])) {
+                            $period['dtstart'] = clone $event->dtstart;
+                        }
+                        if ($event->dtend->isLater($period['dtend'])) {
+                            $period['dtend'] = clone $event->dtend;
+                        }
+                        continue 2;
+                    } else {
+                        throw new Tinebase_Exception_UnexpectedValue('record set sort by dtstart did not work!');
+                    }
+                }
+            }
+            $result[] = array(
+                'dtstart' => $event->dtstart,
+                'dtend' => $event->dtend
+            );
+        }
+
+        return $result;
     }
 
     /**
@@ -609,6 +643,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function searchFreeTime($_event, $_options)
     {
+        $functionTime = time();
+
         // validate $_event, originator_tz will be validated by setTimezone() call
         if (!isset($_event->dtstart) || !$_event->dtstart instanceof Tinebase_DateTime) {
             throw new Tinebase_Exception_UnexpectedValue('dtstart needs to be set');
@@ -630,7 +666,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
             new Tinebase_DateTime($_options['until'])) : $_event->dtend->getClone()->addYear(2);
 
-        $currentFrom = $from->getClone()->setTime(0, 0, 0);
+        $currentFrom = $from->getClone();
         $currentUntil = $from->getClone()->addDay(6)->setTime(23, 59, 59);
         if ($currentUntil->isLater($until)) {
             $currentUntil = clone $until;
@@ -667,6 +703,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         do {
+            if (time() - $functionTime > 23) {
+                $exception = new Calendar_Exception_AttendeeBusy();
+                $exception->setEvent(new Calendar_Model_Event(array('dtend' => $currentFrom), true));
+                throw $exception;
+            }
+
             $currentConstraints = clone $constraints;
             Calendar_Model_Rrule::mergeRecurrenceSet($currentConstraints, $currentFrom, $currentUntil);
             $currentConstraints->sort('dtstart');
@@ -679,7 +721,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $recurEvent = clone $_event;
                     $recurEvent->uid = Tinebase_Record_Abstract::generateUID();
                     $recurEvent->dtstart = $event->dtstart->getClone()->subDay(1);
-                    $recurEvent->dtend = $recurEvent->dtstart->getClone()->addSecond($durationSec);
+                    if ($_event->is_all_day_event) {
+                        $recurEvent->dtend = $event->dtend->getClone()->subDay(1);
+                    } else {
+                        $recurEvent->dtend = $recurEvent->dtstart->getClone()->addSecond($durationSec);
+                    }
                     if (null === ($recurEvent = Calendar_Model_Rrule::computeNextOccurrence($recurEvent, $exceptions, $event->dtstart))
                             || $recurEvent->dtstart->isLater($event->dtend)) {
                         $remove[] = $event;
@@ -705,51 +751,75 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
 
                 $busySlots = $this->getFreeBusyInfo(new Calendar_Model_EventFilter($periods, Tinebase_Model_Filter_FilterGroup::CONDITION_OR), $_event->attendee);
-                $busySlots->sort('dtstart');
+                $busySlots = $this->mergeFreeBusyInfo($busySlots);
 
                 /** @var Calendar_Model_Event $event */
                 foreach ($currentConstraints as $event) {
+                    if ($event->dtend->isEarlierOrEquals($currentFrom)) {
+                        continue;
+                    }
+
+                    if ($_event->is_all_day_event) {
+                        $durationSec = (int)$event->dtend->getTimestamp() - (int)$event->dtstart->getTimestamp();
+                    }
+
                     $constraintStart = (int)$event->dtstart->getTimestamp();
+                    if ($constraintStart < (int)$currentFrom->getTimestamp()) {
+                        $constraintStart = (int)$currentFrom->getTimestamp();
+                    }
                     $constraintEnd = (int)$event->dtend->getTimestamp();
+                    if ($constraintEnd > (int)$currentUntil->getTimestamp()) {
+                        $constraintEnd = (int)$currentUntil->getTimestamp();
+                    }
                     $lastBusyEnd = $constraintStart;
                     $remove = array();
                     /** @var Calendar_Model_FreeBusy $busy */
-                    foreach ($busySlots as $busy) {
-                        $busyStart = (int)$busy->dtstart->getTimestamp();
-                        $busyEnd = (int)$busy->dtend->getTimestamp();
+                    foreach ($busySlots as $key => $busy) {
+                        $busyStart = (int)$busy['dtstart']->getTimestamp();
+                        $busyEnd = (int)$busy['dtend']->getTimestamp();
 
                         if ($busyEnd < $constraintStart) {
-                            $remove[] = $busy;
+                            $remove[] = $key;
                             continue;
                         }
 
-                        if ($lastBusyEnd + $durationSec <= $busyStart) {
+                        if ($busyStart > ($constraintEnd - $durationSec)) {
+                            $lastBusyEnd = $busyEnd;
+                            break;
+                        }
+
+                        if (($lastBusyEnd + $durationSec) <= $busyStart) {
                             // check between $lastBusyEnd and $busyStart
                             $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $busyStart, $durationSec, $until);
                             if ($result->count() > 0) {
+                                if ($_event->is_all_day_event) {
+                                    $result->getFirstRecord()->dtstart = $_event->dtstart;
+                                    $result->getFirstRecord()->dtend = $_event->dtend;
+                                }
                                 return $result;
                             }
                         }
                         $lastBusyEnd = $busyEnd;
-                        if ($busyStart > $constraintEnd - $durationSec) {
-                            break;
-                        }
                     }
-                    foreach ($remove as $record) {
-                        $busySlots->removeRecord($record);
+                    foreach ($remove as $key) {
+                        unset($busySlots[$key]);
                     }
 
-                    if ($lastBusyEnd + $durationSec <= $constraintEnd) {
+                    if (($lastBusyEnd + $durationSec) <= $constraintEnd) {
                         // check between $lastBusyEnd and $constraintEnd
                         $result = $this->_tryForFreeSlot($_event, $lastBusyEnd, $constraintEnd, $durationSec, $until);
                         if ($result->count() > 0) {
+                            if ($_event->is_all_day_event) {
+                                $result->getFirstRecord()->dtstart = $_event->dtstart;
+                                $result->getFirstRecord()->dtend = $_event->dtend;
+                            }
                             return $result;
                         }
                     }
                 }
             }
 
-            $currentFrom->addDay(7);
+            $currentFrom->addDay(7)->setTime(0, 0, 0);
             $currentUntil->addDay(7);
             if ($currentUntil->isLater($until)) {
                 $currentUntil = clone $until;
@@ -806,7 +876,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
+    public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS, $skipEvent = false)
     {
         /** @var Calendar_Model_Event $_record */
         try {
@@ -825,21 +895,25 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-                $this->_inspectEvent($_record);
+                $this->_inspectEvent($_record, $skipEvent);
                
                 if ($_checkBusyConflicts) {
                     if ($event->isRescheduled($_record) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
-                       ) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " Ensure that all attendee are free with free/busy check ... ");
+                        count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
+                    ) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Ensure that all attendee are free with free/busy check ... ");
+                        }
                         $this->checkBusyConflicts($_record);
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
+                        }
                     }
                 }
-                
+
                 parent::update($_record);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
@@ -1212,7 +1286,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $dtStart = new Tinebase_DateTime($dtStart);
         }
         $dtStart->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
-        $dtEnd = $_recurInstance->dtEnd;
+        $dtEnd = $_recurInstance->dtend;
         if (! $dtEnd instanceof Tinebase_DateTime) {
             $dtEnd = new Tinebase_DateTime($dtEnd);
         }
@@ -1567,9 +1641,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        if (preg_match('/^fakeid/', $_id)) {
-            // get base event when trying to fetch a non-persistent recur instance
-            return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
+        if (preg_match('/^fakeid(.*)\/(.*)/', $_id, $matches)) {
+            $baseEvent = $this->get($matches[1]);
+            $exceptions = $this->getRecurExceptions($baseEvent);
+            $originalDtStart = new Tinebase_DateTime($matches[2]);
+
+            $exdates = $exceptions->getOriginalDtStart();
+            $exdate = array_search($originalDtStart, $exdates);
+
+            return $exdate !== false ? $exceptions[$exdate] :
+                Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $originalDtStart);
         } else {
             return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         }
@@ -1940,7 +2021,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @TODO move stuff from other places here
      * @param   Calendar_Model_Event $_record      the record to inspect
      */
-    protected function _inspectEvent($_record)
+    protected function _inspectEvent($_record, $skipEvent = false)
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
@@ -2011,6 +2092,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule_constraints) {
             $this->setConstraintsExdates($_record);
         }
+
+        if (!$skipEvent) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
+                'observable' => $_record
+            )));
+        }
     }
 
     /**
@@ -2048,6 +2135,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
+
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectDeleteEvent([
+                'observable' => $event,
+                'deletedIds' => $_ids
+            ]));
         }
         
         $this->_deleteAlarmsForIds($_ids);
@@ -2388,13 +2480,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 Tinebase_Alarm::getInstance()->setAlarmsOfRecord($_event);
             }
+
+            $event->attendee->removeRecord($currentAttender);
+            $event->attendee->addRecord($updatedAttender);
             
             $this->_increaseDisplayContainerContentSequence($updatedAttender, $event);
 
-            if ($currentAttender->status != $updatedAttender->status) {
-                $this->_touch($event, TRUE);
-            }
-            
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
+                'observable' => $event
+            )));
+
+            $this->_touch($event, true);
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();

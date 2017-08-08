@@ -13,75 +13,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: Model/Event.php:35
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Sondertermin"
-msgstr[1] "Sondertermine"
+#: js/EventDetailsPanel.js:44
+msgid "Unknown date"
+msgstr "Unbekanntes Datum"
 
-#: Model/Event.php:39
-msgid "Event list"
-msgid_plural "Event lists"
-msgstr[0] "Sondertermin Liste"
-msgstr[1] "Sondertermin Listen"
+#: js/EventDetailsPanel.js:47
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr "{0} {1} Uhr"
 
-#: Model/Event.php:55 js/EventDetailsPanel.js:88 js/EventEditDialog.js:127
+#: js/EventDetailsPanel.js:83
+msgid "Total Events"
+msgstr "Gesamtanzahl der Sondertermine"
+
+#: js/EventDetailsPanel.js:101 js/EventEditDialog.js:176 Model/Event.php:70
 msgid "Title"
 msgstr "Titel"
 
-#: Model/Event.php:60 js/EventDetailsPanel.js:92 js/EventEditDialog.js:140
-#: Config.php:75
+#: js/EventDetailsPanel.js:105 js/EventEditDialog.js:189 Config.php:75
+#: Model/Event.php:75
 msgid "Action"
 msgstr "Aktion"
 
-#: Model/Event.php:66 js/EventDetailsPanel.js:97 js/EventEditDialog.js:147
-#: Config.php:94
+#: js/EventDetailsPanel.js:110 js/EventEditDialog.js:196 Config.php:94
+#: Model/Event.php:81
 msgid "Project type"
 msgstr "Art des Vorhabens"
 
-#: Model/Event.php:72 js/EventEditDialog.js:202
-msgid "Target group"
-msgstr "Zielgruppe"
-
-#: Model/Event.php:78 js/EventDetailsPanel.js:102 js/EventEditDialog.js:154
+#: js/EventDetailsPanel.js:115 js/EventEditDialog.js:202 Model/Event.php:93
 msgid "Department"
 msgstr "Abteilung"
 
-#: Model/Event.php:82 js/EventEditDialog.js:169
-msgid "Contact"
-msgstr "Ansprechpartner"
-
-#: Model/Event.php:92 js/EventDetailsPanel.js:116 js/EventEditDialog.js:161
-msgid "Location"
-msgstr "Standort"
-
-#: Model/Event.php:96 js/EventEditDialog.js:187
-msgid "Subregion"
-msgstr "Teilbereich"
-
-#: Model/Event.php:100 js/EventEditDialog.js:218
-msgid "Planned"
-msgstr "Geplant"
-
-#: Model/Event.php:106
-msgid "Event start"
+#: js/EventDetailsPanel.js:120
+msgid "Start Time"
 msgstr "Beginn"
 
-#: Model/Event.php:113
-msgid "Event end"
+#: js/EventDetailsPanel.js:125
+msgid "End Time"
 msgstr "Ende"
 
-#: Model/Event.php:120 js/EventEditDialog.js:194
-msgid "Organizer"
-msgstr "Veranstalter"
-
-#: Model/Event.php:124 js/EventEditDialog.js:207
-msgid "Guests"
-msgstr "Gästeanzahl"
-
-#: Model/Event.php:128
-msgid "Optional date"
-msgstr "Optionales Datum"
+#: js/EventDetailsPanel.js:130 js/EventEditDialog.js:214 Model/Event.php:113
+msgid "Location"
+msgstr "Standort"
 
 #: js/CalendarEventGridPanel.js:71
 msgid "Type"
@@ -103,82 +76,85 @@ msgstr "Haupttermin"
 msgid "Main Event"
 msgstr "Haupttermin"
 
-#: js/EventDetailsPanel.js:44
-msgid "Unknown date"
-msgstr "Unbekanntes Datum"
+#: js/EventEditDialog.js:123
+msgid "Ignore Scheduling Conflict"
+msgstr "Terminkonflikt Ignorieren"
 
-#: js/EventDetailsPanel.js:47
-#, python-brace-format
-msgid "{0} {1} o'clock"
-msgstr "{0} {1} Uhr"
+#: js/EventEditDialog.js:124
+msgid "There is a resource/attendee conflict. You can ignore the conflict and save the record by pressing \"yes\"."
+msgstr "Es gab einen Teilnehmer/Ressourcenkonflikt. Sie können den Konflikt durch Bestätigen mit \"Ja\" ignorieren."
 
-#: js/EventDetailsPanel.js:70
-msgid "Total Events"
-msgstr "Gesamtanzahl der Sondertermine"
-
-#: js/EventDetailsPanel.js:106
-msgid "Start Time"
-msgstr "Beginn"
-
-#: js/EventDetailsPanel.js:111
-msgid "End Time"
-msgstr "Ende"
-
-#: js/EventEditDialog.js:103
+#: js/EventEditDialog.js:152
 msgid "General"
 msgstr "Generell"
 
-#: js/EventEditDialog.js:170
+#: js/EventEditDialog.js:223 Model/Event.php:103
+msgid "Contact"
+msgstr "Ansprechpartner"
+
+#: js/EventEditDialog.js:224
 msgid "Add Contact ..."
 msgstr "Kontakt hinzufügen ..."
 
-#: js/EventEditDialog.js:181
+#: js/EventEditDialog.js:235
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/EventEditDialog.js:227
+#: js/EventEditDialog.js:241 Model/Event.php:117
+msgid "Subregion"
+msgstr "Teilbereich"
+
+#: js/EventEditDialog.js:248 Model/Event.php:141
+msgid "Organizer"
+msgstr "Veranstalter"
+
+#: js/EventEditDialog.js:256 Model/Event.php:87
+msgid "Target group"
+msgstr "Zielgruppe"
+
+#: js/EventEditDialog.js:261 Model/Event.php:145
+msgid "Guests"
+msgstr "Gästeanzahl"
+
+#: js/EventEditDialog.js:272 Model/Event.php:121
+msgid "Planned"
+msgstr "Geplant"
+
+#: js/EventEditDialog.js:281
 msgid "Optional Date"
 msgstr "Optionales Datum"
 
-#: js/EventEditDialog.js:233
+#: js/EventEditDialog.js:287
 msgid "Start"
 msgstr "Start"
 
-#: js/EventEditDialog.js:245
+#: js/EventEditDialog.js:299
 msgid "End"
 msgstr "Ende"
 
-#: js/EventEditDialog.js:275
+#: js/EventEditDialog.js:330
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/EventEditDialog.js:289
+#: js/EventEditDialog.js:344
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an."
 
-#: js/EventEditDialog.js:306
+#: js/EventEditDialog.js:356
 msgid "Calendar Entries"
 msgstr "Kalendereinträge"
 
-#: js/EventEditDialog.js:370
+#: js/EventEditDialog.js:420
 msgid "Start date is not valid"
 msgstr "Das Anfangsdatum ist nicht korrekt"
 
-#: js/EventEditDialog.js:384
+#: js/EventEditDialog.js:434
 msgid "End date is not valid"
 msgstr "Das Enddatum ist nicht korrekt"
 
-#: js/EventEditDialog.js:387
+#: js/EventEditDialog.js:437
 msgid "End date must be after start date"
 msgstr "Das Enddatum muss nach dem Startdatum liegen"
-
-#: Preference.php:60
-msgid "Default Event Container"
-msgstr "Standard Sondertermin Container"
-
-#: Preference.php:61
-msgid "The default container for new Events"
-msgstr "der standard Container für neue Sondertermine"
 
 #: Config.php:57
 msgid "Is planned"
@@ -208,10 +184,6 @@ msgstr "Typ des Vorhabens"
 msgid "Target Groups"
 msgstr "Zielgruppen"
 
-#: Setup/setup.xml:4
-msgid "Events"
-msgstr "Sondertermine"
-
 #: Setup/Initialize.php:34
 msgid "All Events"
 msgstr "Alle Sondertermine"
@@ -220,8 +192,38 @@ msgstr "Alle Sondertermine"
 msgid "All existing Events"
 msgstr "Alle existierende Sondertermine"
 
-msgid "Ignore Scheduling Conflict"
-msgstr "Terminkonflikt Ignorieren"
+#: Setup/setup.xml:4
+msgid "Events"
+msgstr "Sondertermine"
 
-msgid "There is a resource/attendee conflict. You can ignore the conflict and save the record by pressing \"yes\"."
-msgstr "Es gab einen Teilnehmer/Ressourcenkonflikt. Sie können den Konflikt durch Bestätigen mit \"Ja\" ignorieren."
+#: Model/Event.php:50
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Sondertermin"
+msgstr[1] "Sondertermine"
+
+#: Model/Event.php:54
+msgid "Event list"
+msgid_plural "Event lists"
+msgstr[0] "Sondertermin Liste"
+msgstr[1] "Sondertermin Listen"
+
+#: Model/Event.php:127
+msgid "Event start"
+msgstr "Beginn"
+
+#: Model/Event.php:134
+msgid "Event end"
+msgstr "Ende"
+
+#: Model/Event.php:149
+msgid "Optional date"
+msgstr "Optionales Datum"
+
+#: Preference.php:60
+msgid "Default Event Container"
+msgstr "Standard Sondertermin Container"
+
+#: Preference.php:61
+msgid "The default container for new Events"
+msgstr "der standard Container für neue Sondertermine"

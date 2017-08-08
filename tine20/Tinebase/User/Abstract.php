@@ -417,7 +417,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     protected function _generateUserWithSchema2($_account)
     {
         $result = $_account->accountLastName;
-        for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
+        for ($i=0, $iMax = strlen($_account->accountFirstName); $i < $iMax; $i++) {
         
             $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {
@@ -438,7 +438,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     protected function _generateUserWithSchema3($_account)
     {
         $result = $_account->accountLastName;
-        for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
+        for ($i=0, $iMax = strlen($_account->accountFirstName); $i < $iMax; $i++) {
         
             $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . '.' . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {
@@ -594,9 +594,22 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * returns active users
      *
+     * @params integer $lastMonths
      * @return int
      */
-    public function getActiveUserCount()
+    public function getActiveUserCount($lastMonths = 1)
+    {
+        $ids = $this->getActiveUserIds($lastMonths);
+        return count($ids);
+    }
+
+    /**
+     * returns active users
+     *
+     * @params integer $lastMonths
+     * @return array of user ids
+     */
+    public function getActiveUserIds($lastMonths = 1)
     {
         $backend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_User',
@@ -604,12 +617,39 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             'modlogActive' => true,
         ));
 
-        // TODO allow to set this as param
-        $afterDate = Tinebase_DateTime::now()->subMonth(1);
+        $afterDate = Tinebase_DateTime::now()->subMonth($lastMonths);
         $filter = new Tinebase_Model_FullUserFilter(array(
             array('field' => 'last_login', 'operator' => 'after', 'value' => $afterDate),
             array('field' => 'status', 'operator' => 'equals', 'value' => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
         ));
+
+        return $backend->search($filter, null, /* $_cols`*/ Tinebase_Backend_Sql_Abstract::IDCOL);
+    }
+
+    /**
+     * returns users by status
+     *
+     * @param string $status
+     * @return int
+     */
+    public function getUserCount($status = null)
+    {
+        $backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_User',
+            'tableName' => 'accounts',
+            'modlogActive' => true,
+        ));
+
+        $statusFilter = in_array($status, array(
+                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED,
+                Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED,
+            ))
+            ? array('field' => 'status', 'operator' => 'equals', 'value' => $status)
+            : array();
+
+        $filter = new Tinebase_Model_FullUserFilter(array($statusFilter));
 
         return $backend->searchCount($filter);
     }
@@ -626,6 +666,22 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         if (! in_array($adminGroup->getId(), $memberships)) {
             Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
         }
+    }
+
+    /**
+     * set PIN
+     *
+     * @param  string  $_userId
+     * @param  string  $_pin
+     * @return array
+     *
+     * TODO move to Tinebase_User_sql and replace with abstract fn here
+     * TODO replicate PIN?
+     */
+    public function setPin($_userId, $_pin)
+    {
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        return $this->_updatePasswordProperty($userId, $_pin, 'pin');
     }
 
     /******************* abstract functions *********************/

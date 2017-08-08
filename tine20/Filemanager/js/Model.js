@@ -64,8 +64,10 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
 
 // register grants for nodes
 Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function(container) {
-    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
-    grants.push('download', 'publish');
+    // TODO get default grants and remove export
+    // var grants = Tine.widgets.container.GrantsManager.defaultGrants();
+    //grants.push('download', 'publish');
+    var grants = ['read', 'add', 'edit', 'delete', 'sync', 'download', 'publish'];
 
     return grants;
 });
@@ -220,6 +222,9 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
             else if (target.attributes) {
                 targetPath = target.attributes.path + '/';
                 treeIsTarget = true;
+            }
+            else if (target.path) {
+                targetPath = target.path + (target.type == 'folder' ? '/' : '');
             }
 
             for(var i=0; i<items.length; i++) {

@@ -37,7 +37,9 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
 
         ob_start();
         ob_clean();
-        $observerController->fireEvent($observable, 'Tinebase_Event_Record_Update');
+        $event = new Tinebase_Event_Record_Update();
+        $event->observable = $observable;
+        $observerController->fireEvent($event);
         $result = ob_get_clean();
 
         $this->assertEquals('catched record update for observing id: exampleIdentifier', $result);

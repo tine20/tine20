@@ -32,4 +32,14 @@ class Tasks_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('tasks', 9);
         $this->setApplicationVersion('Tasks', '10.1');
     }
+
+    public function update_1()
+    {
+        $this->setApplicationVersion('Tasks', '10.2');
+    }
+
+    public function update_2()
+    {
+        $this->setApplicationVersion('Tasks', '11.0');
+    }
 }

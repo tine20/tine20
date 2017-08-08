@@ -1445,11 +1445,40 @@ class Setup_Controller
         $this->_clearCache();
 
         if ($this->isInstalled('Tinebase')) {
-            throw new Setup_Exception('Tinebase already installed!');
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tinebase is already installed.');
+            return false;
         }
 
-        $mysqlBackupFile = $options['backupDir'] . '/tine20_mysql.sql.bz2';
-        if (! file_exists($mysqlBackupFile)) {
+        $mysqlBackupFile = null;
+        if (isset($options['backupDir'])) {
+            $mysqlBackupFile = $options['backupDir'] . '/tine20_mysql.sql.bz2';
+        } else if (isset($options['backupUrl'])) {
+            // download files first and put them in temp dir
+            $tempDir = Tinebase_Core::getTempDir();
+            foreach (array(
+                         array('file' => 'tine20_config.tar.bz2', 'param' => 'config'),
+                         array('file' => 'tine20_mysql.sql.bz2', 'param' => 'db'),
+                         array('file' => 'tine20_files.tar.bz2', 'param' => 'files')
+                    ) as $download) {
+                if (isset($options[$download['param']])) {
+                    $fileUrl = $options['backupUrl'] . '/' . $download['file'];
+                        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Downloading ' . $fileUrl);
+                    $targetFile = $tempDir . DIRECTORY_SEPARATOR . $download['file'];
+                    if ($download['param'] === 'db') {
+                        $mysqlBackupFile = $targetFile;
+                    }
+                    file_put_contents(
+                        $targetFile,
+                        fopen($fileUrl, 'r')
+                    );
+                }
+            }
+            $options['backupDir'] = $tempDir;
+        } else {
+            throw new Setup_Exception("backupDir or backupUrl param required");
+        }
+
+        if (! $mysqlBackupFile || ! file_exists($mysqlBackupFile)) {
             throw new Setup_Exception("$mysqlBackupFile not found");
         }
 
@@ -1489,12 +1518,13 @@ class Setup_Controller
     protected function _replaceTinebaseidInDump($mysqlBackupFile)
     {
         // fetch old Tinebase ID
-        $cmd = "bzcat $mysqlBackupFile | grep \",'Tinebase',\"";
+        $cmd = "bzcat $mysqlBackupFile | grep \",'Tinebase','enabled'\"";
         $result = exec($cmd);
         if (! preg_match("/'([0-9a-f]+)','Tinebase'/", $result, $matches)) {
             throw new Setup_Exception('could not find Tinebase ID in dump');
         }
         $oldTinebaseId = $matches[1];
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Replacing old Tinebase id: ' . $oldTinebaseId);
 
         $cmd = "bzcat $mysqlBackupFile | sed s/"
             . $oldTinebaseId . '/'
@@ -2092,7 +2122,7 @@ class Setup_Controller
             throw new Exception("$backupDir could  not be created");
         }
 
-        if ($options['config']) {
+        if (isset($options['config']) && $options['config']) {
             $configFile = stream_resolve_include_path('config.inc.php');
             $configDir = dirname($configFile);
 
@@ -2100,7 +2130,7 @@ class Setup_Controller
             `cd $configDir; tar cjf $backupDir/tine20_config.tar.bz2 $files`;
         }
 
-        if ($options['db']) {
+        if (isset($options['db']) && $options['db']) {
             if (! $this->_backend) {
                 throw new Exception('db not configured, cannot backup');
             }

@@ -1,9 +1,9 @@
 Ext.ns('Tine.Addressbook.Printer');
 
-Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
-    stylesheetPath: 'Tinebase/css/widgets/RecordPrinter.css',
+Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
+    stylesheetPath: 'Tinebase/css/widgets/print.css',
 
-    generateBody: function(contact) {
+    generateBody: function(component, data) {
         var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
 
         return new Promise(function (fulfill, reject) {
@@ -91,7 +91,7 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.BaseRendere
                     },
                     addressRenderer: function (config) {
                         var renderer = Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'addressblock', 'displayPanel');
-                        return renderer(null, null, contact, null, null, null, config);
+                        return renderer(null, null, data, null, null, null, config);
                     },
                     relationRenderer: function (values) {
                         return Tine.widgets.relation.Renderer.renderAll(values);
@@ -99,7 +99,7 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.BaseRendere
                     }
 
                 });
-            fulfill(bodyTpl.apply(contact.data));
+            fulfill(bodyTpl.apply(data));
         })
     }
 });

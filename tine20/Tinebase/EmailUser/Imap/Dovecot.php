@@ -220,6 +220,23 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         // makes mapping data to _config easier
         'emailHome'            => 'home'
     );
+
+    protected $_tableMapping = array(
+        'emailUserId'       => 'USERTABLE',
+        'emailUsername'     => 'USERTABLE',
+        'emailPassword'     => 'USERTABLE',
+        'emailUID'          => 'USERTABLE',
+        'emailGID'          => 'USERTABLE',
+        'emailLastLogin'    => 'USERTABLE',
+        'emailMailQuota'    => 'USERTABLE',
+        #'emailSieveQuota'   => 'USERTABLE',
+
+        'emailMailSize'     => 'QUOTATABLE',
+        'emailSieveSize'    => 'QUOTATABLE',
+
+        // makes mapping data to _config easier
+        'emailHome'            => 'USERTABLE'
+    );
     
     /**
      * Dovecot readonly
@@ -253,6 +270,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         
         // _quotaTable = dovecot_aliases
         $this->_quotasTable = $this->_config['prefix'] . $this->_config['quotaTable'];
+
+        $this->_replaceValue($this->_tableMapping, array(
+            'USERTABLE' => $this->_userTable,
+            'QUOTATABLE' => $this->_quotasTable
+        ));
         
         // set domain from imap config
         $this->_config['domain'] = !empty($this->_config['domain']) ? $this->_config['domain'] : null;
@@ -282,17 +304,17 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     {
         $select = $this->_db->select()
         
-            ->from(array($this->_userTable))
+            ->from(array($this->_userTable), $_cols)
 
             // Left Join Quotas Table
             ->joinLeft(
                 array($this->_quotasTable), // table
                 '(' . $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .  ' = ' . // ON (left)
                     $this->_db->quoteIdentifier($this->_quotasTable . '.' . $this->_propertyMapping['emailUsername']) . ')', // ON (right)
-                array( // Select
+                '*' === $_cols ? array( // Select
                     $this->_propertyMapping['emailMailSize']  => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailSize'], // emailMailSize
                     $this->_propertyMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveSize'] // emailSieveSize
-                ) 
+                ) : array()
             )
             
             // Only want 1 user (shouldn't be more than 1 anyway)
@@ -399,16 +421,18 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         }
         
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        
-        if ($this->_config['domain'] !== null) {
-            $emailUsername = $this->_appendDomain($_user->accountLoginName);
-        } else {
-            $emailUsername = $_newUserProperties->accountEmailAddress;
+
+        $emailUsername = $this->_getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
+
+        list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+        $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+
+        if (isset($this->_config['instanceName'])) {
+            $rawData['instancename'] = $this->_config['instanceName'];
         }
-        
-        list($localPart, $domain) = explode('@', $emailUsername, 2);
+
         $rawData['domain'] = $domain;
-        
+
         // replace home wildcards when storing to db
         // %d = domain
         // %n = user

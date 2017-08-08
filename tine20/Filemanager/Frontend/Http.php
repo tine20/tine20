@@ -62,31 +62,4 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         $this->_downloadFileNode($node, $pathRecord->streamwrapperpath, $revision);
     }
-
-    /**
-     * download file
-     *
-     * @param string $_path
-     * @param string $_type
-     * @param int $_num
-     * @param string $_revision
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function downloadPreview($_path, $_type, $_num = 0, $_revision = null)
-    {
-        $_revision = $_revision ?: null;
-
-        $nodeController = Filemanager_Controller_Node::getInstance();
-        if ($_path) {
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($_path));
-            $node = $nodeController->getFileNode($pathRecord, $_revision);
-        } else {
-            throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');
-        }
-
-        $this->_downloadPreview($node, $_type, $_num);
-
-        exit;
-    }
 }

@@ -50,9 +50,10 @@ Tine.widgets.form.FieldManager = function() {
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {String} category {editDialog|propertyGrid} optional.
+         * @param {Object} config
          * @return {Object}
          */
-        getByModelConfig: function(appName, modelName, fieldName, category) {
+        getByModelConfig: function(appName, modelName, fieldName, category, config) {
             var field = {},
                 recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
@@ -60,6 +61,12 @@ Tine.widgets.form.FieldManager = function() {
                 fieldType = fieldDefinition.type || 'textfield',
                 app = Tine.Tinebase.appMgr.get(appName),
                 i18n = fieldDefinition.useGlobalTranslation ? i18n : app.i18n;
+
+
+            if (fieldType === 'virtual' && fieldDefinition.config) {
+                fieldType = fieldDefinition.config.type || 'textfield';
+                fieldDefinition = fieldDefinition.config;
+            }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             field.name = fieldName;
@@ -71,6 +78,9 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             switch(fieldType) {
+                case 'money':
+                    field.xtype = 'extuxmoneyfield';
+                    break;
                 case 'date':
                     field.xtype = 'datefield';
                     if (fieldDefinition.dateFormat) {
@@ -85,22 +95,56 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'bool':
                 case 'boolean':
-                    field.xtype = category == 'editDialg' ? 'checkbox' : 'booleancombo';
-                    field.boxLabel = field.fieldLabel;
+                    if (category === 'editDialog') {
+                        field.xtype = 'checkbox';
+                    } else {
+                        field.xtype = 'booleancombo';
+                    }
                     break;
                 case 'integer':
                     field.xtype = 'numberfield';
                     field.allowDecimals = false;
-                    // min max ???
+
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
+                        field.xtype = 'extuxnumberfield';
+                        field.useThousandSeparator = false;
+                        field.suffix = ' %';
+                    }
+
+                    if (fieldDefinition.max) {
+                        field.maxValue = fieldDefinition.max;
+                    }
+
+                    if (fieldDefinition.min) {
+                        field.minValue = fieldDefinition.min;
+                    }
                     break;
                 case 'float':
                     field.xtype = 'numberfield';
-                    field.decimalPrecision = 2; //???
-                    // min max ???
+                    field.decimalPrecision = 2;
+
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
+                        field.xtype = 'extuxnumberfield';
+                        field.suffix = ' %';
+                    }
+
+                    if (fieldDefinition.max) {
+                        field.maxValue = fieldDefinition.max;
+                    }
+
+                    if (fieldDefinition.min) {
+                        field.minValue = fieldDefinition.min;
+                    }
                     break;
                 case 'user':
                     field.xtype = 'addressbookcontactpicker';
                     field.userOnly = true;
+                    break;
+                case 'record':
+                    if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        var picker = Tine.widgets.form.RecordPickerManager.get(fieldDefinition.config.appName, fieldDefinition.config.modelName, Ext.apply(field, config));
+                        field = picker;
+                    }
                     break;
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
@@ -116,6 +160,8 @@ Tine.widgets.form.FieldManager = function() {
                     break;
             }
 
+            Ext.apply(field, config);
+
             return field;
         },
 
@@ -126,13 +172,15 @@ Tine.widgets.form.FieldManager = function() {
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {String} category {editDialog|propertyGrid} optional.
+         * @param {Object} config
          * @return {Object}
          */
-        get: function(appName, modelName, fieldName, category) {
+        get: function(appName, modelName, fieldName, category, config) {
             var appName = this.getAppName(appName),
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
-                genericKey = this.getKey([appName, modelName, fieldName]);
+                genericKey = this.getKey([appName, modelName, fieldName]),
+                config = config || {};
 
             // check for registered renderer
             var field = fields[categoryKey] ? fields[categoryKey] : fields[genericKey];
@@ -144,7 +192,7 @@ Tine.widgets.form.FieldManager = function() {
 
             // check for known datatypes
             if (! field) {
-                field = this.getByModelConfig(appName, modelName, fieldName, category);
+                field = this.getByModelConfig(appName, modelName, fieldName, category, config);
             }
 
             return field;

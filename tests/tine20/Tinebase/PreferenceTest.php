@@ -326,7 +326,7 @@ class Tinebase_PreferenceTest extends TestCase
         self::assertEquals(1, count($fixedCalendarsPref['value']), 'did not find personal container in value: '
             . print_r($fixedCalendarsPref, true));
         $container = $fixedCalendarsPref['value'][0];
-        self::assertTrue(is_array($container));
+        self::assertTrue(is_array($container), 'container not resolved: ' . print_r($fixedCalendarsPref, true));
         self::assertEquals($personalContainer->getId(), $container['id']);
         self::assertTrue(isset($fixedCalendarsPref['uiconfig']), 'uiconfig missing: '
             . print_r($fixedCalendarsPref, true));

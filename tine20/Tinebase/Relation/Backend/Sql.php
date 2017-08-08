@@ -70,7 +70,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * adds a new relation
      * 
-     * @param  Tinebase_Model_Relation $_relation 
+     * @param  Tinebase_Model_Relation $_relation
      * @return Tinebase_Model_Relation the new relation
      * 
      * @todo    move check existance and update / modlog to controller?

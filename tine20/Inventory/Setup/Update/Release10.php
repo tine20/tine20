@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -74,5 +74,29 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions($app);
 
         $this->setApplicationVersion('Inventory', '10.3');
+    }
+
+    /**
+     * update to 10.4
+     *
+     * change container_id to uuid
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
+
+        $this->setApplicationVersion('Inventory', '10.4');
+    }
+
+    /**
+     * update to 11.0
+     *
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->setApplicationVersion('Inventory', '11.0');
     }
 }

@@ -22,7 +22,9 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     const TYPE_STANDARD = 'standard';
     const TYPE_DATASOURCE = 'datasource';
     const TYPE_GROUP = 'group';
+    const TYPE_SUBGROUP = 'subgroup';
     const TYPE_RECORD = 'record';
+    const TYPE_SUBRECORD = 'subrecord';
 
     /**
      * Content of document rels (in XML format) of the temporary document.
@@ -257,7 +259,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     {
         $xmlBlock = null;
         preg_match(
-            '/(<\?xml.*)(<w:p.*>\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p( [^>]+)?>.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
+            '/(<\?xml.*?)(<w:p>.*\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
             $this->tempDocumentMainPart,
             $matches
         );
@@ -270,6 +272,9 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             }
 
             if ($replace) {
+                if (($pos = strrpos($matches[2], '<w:p>')) !== 0) {
+                    $matches[2] = substr($matches[2], $pos);
+                }
                 $this->tempDocumentMainPart = str_replace(
                     $matches[2] . $matches[3] . $matches[4],
                     implode('', $cloned),
@@ -312,6 +317,10 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     public function setConfig(array $config)
     {
         $this->_config = $config;
+        if (Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD === $this->_type &&
+                isset($this->_config['recordXml'])) {
+
+        }
     }
 
     /**
@@ -333,5 +342,41 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             return $this->_config;
         }
         return $this->_config[$key];
+    }
+
+    /**
+     * Returns array of all variables in template.
+     *
+     * @return string[]
+     */
+    public function getVariables()
+    {
+        $result = parent::getVariables();
+
+        switch($this->_type) {
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case self::TYPE_DATASOURCE:
+                if (isset($this->_config['group'])) {
+                    $result = array_merge($result, $this->_config['group']->getVariables());
+                }
+            case self::TYPE_GROUP:
+                if (isset($this->_config['record'])) {
+                    $result = array_merge($result, $this->_config['record']->getVariables());
+                }
+                if (isset($this->_config['recordRow']) && isset($this->_config['recordRow']['recordRowProcessor'])) {
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    $result = array_merge($result, $this->_config['recordRow']['recordRowProcessor']->getVariables());
+                }
+                // DO NOT return variables of sub groups or sub records
+                break;
+            case self::TYPE_SUBGROUP:
+            case self::TYPE_SUBRECORD:
+                if (isset($this->_config['recordXml'])) {
+                    $result = array_merge($result, $this->getVariablesForPart($this->_config['recordXml']));
+                }
+                break;
+        }
+
+        return array_unique($result);
     }
 }

@@ -58,6 +58,7 @@ Tine.Phone.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel, {
         });
         
         this.on('contextmenu', function(node, event){
+            event.stopEvent();
             this.ctxNode = node;
             if (node.id != 'phone-root') {
                 contextMenu.showAt(event.getXY());

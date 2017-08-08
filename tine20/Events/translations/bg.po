@@ -1,0 +1,230 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Events\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Bulgarisch\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: \n"
+
+#: js/EventDetailsPanel.js:44
+msgid "Unknown date"
+msgstr ""
+
+#: js/EventDetailsPanel.js:47
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr ""
+
+#: js/EventDetailsPanel.js:83
+msgid "Total Events"
+msgstr ""
+
+#: js/EventDetailsPanel.js:101 js/EventEditDialog.js:176 Model/Event.php:70
+msgid "Title"
+msgstr ""
+
+#: js/EventDetailsPanel.js:105 js/EventEditDialog.js:189 Config.php:75
+#: Model/Event.php:75
+msgid "Action"
+msgstr ""
+
+#: js/EventDetailsPanel.js:110 js/EventEditDialog.js:196 Config.php:94
+#: Model/Event.php:81
+msgid "Project type"
+msgstr ""
+
+#: js/EventDetailsPanel.js:115 js/EventEditDialog.js:202 Model/Event.php:93
+msgid "Department"
+msgstr ""
+
+#: js/EventDetailsPanel.js:120
+msgid "Start Time"
+msgstr ""
+
+#: js/EventDetailsPanel.js:125
+msgid "End Time"
+msgstr ""
+
+#: js/EventDetailsPanel.js:130 js/EventEditDialog.js:214 Model/Event.php:113
+msgid "Location"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:71
+msgid "Type"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:231
+msgid "DISASSEMBLY"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:233
+msgid "ASSEMBLY"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:235
+msgid "MAIN"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:268
+msgid "Main Event"
+msgstr ""
+
+#: js/EventEditDialog.js:123
+msgid "Ignore Scheduling Conflict"
+msgstr ""
+
+#: js/EventEditDialog.js:124
+msgid "There is a resource/attendee conflict. You can ignore the conflict and save the record by pressing \"yes\"."
+msgstr ""
+
+#: js/EventEditDialog.js:152
+msgid "General"
+msgstr ""
+
+#: js/EventEditDialog.js:223 Model/Event.php:103
+msgid "Contact"
+msgstr ""
+
+#: js/EventEditDialog.js:224
+msgid "Add Contact ..."
+msgstr ""
+
+#: js/EventEditDialog.js:235
+msgid "Phone"
+msgstr ""
+
+#: js/EventEditDialog.js:241 Model/Event.php:117
+msgid "Subregion"
+msgstr ""
+
+#: js/EventEditDialog.js:248 Model/Event.php:141
+msgid "Organizer"
+msgstr ""
+
+#: js/EventEditDialog.js:256 Model/Event.php:87
+msgid "Target group"
+msgstr ""
+
+#: js/EventEditDialog.js:261 Model/Event.php:145
+msgid "Guests"
+msgstr ""
+
+#: js/EventEditDialog.js:272 Model/Event.php:121
+msgid "Planned"
+msgstr ""
+
+#: js/EventEditDialog.js:281
+msgid "Optional Date"
+msgstr ""
+
+#: js/EventEditDialog.js:287
+msgid "Start"
+msgstr ""
+
+#: js/EventEditDialog.js:299
+msgid "End"
+msgstr ""
+
+#: js/EventEditDialog.js:330
+msgid "Description"
+msgstr ""
+
+#: js/EventEditDialog.js:344
+msgid "Enter description"
+msgstr ""
+
+#: js/EventEditDialog.js:356
+msgid "Calendar Entries"
+msgstr ""
+
+#: js/EventEditDialog.js:420
+msgid "Start date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:434
+msgid "End date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:437
+msgid "End date must be after start date"
+msgstr ""
+
+#: Config.php:57
+msgid "Is planned"
+msgstr ""
+
+#: Config.php:59
+msgid "Is the event planned?"
+msgstr ""
+
+#: Config.php:68
+msgid "Set"
+msgstr ""
+
+#: Config.php:69
+msgid "Optional"
+msgstr ""
+
+#: Config.php:77
+msgid "Type of action"
+msgstr ""
+
+#: Config.php:96
+msgid "Type of project"
+msgstr ""
+
+#: Config.php:116 Config.php:118
+msgid "Target Groups"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "All Events"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "All existing Events"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Events"
+msgstr ""
+
+#: Model/Event.php:50
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Event.php:54
+msgid "Event list"
+msgid_plural "Event lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Event.php:127
+msgid "Event start"
+msgstr ""
+
+#: Model/Event.php:134
+msgid "Event end"
+msgstr ""
+
+#: Model/Event.php:149
+msgid "Optional date"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Event Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new Events"
+msgstr ""

@@ -216,8 +216,48 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     */
     protected function _beforeAddOrUpdate(&$emailUserData)
     {
+        $this->_deleteOldUserDataIfExists($emailUserData);
         unset($emailUserData[$this->_propertyMapping['emailForwards']]);
         unset($emailUserData[$this->_propertyMapping['emailAliases']]);
+    }
+
+    /**
+     * delete old email user data
+     *
+     * @param array $emailUserData
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _deleteOldUserDataIfExists($emailUserData)
+    {
+        $select = $this->_getSelect();
+        $select
+            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId'])  . ' != ?',   $emailUserData['userid'])
+            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']) . ' = ?',   $emailUserData['email']);
+
+        try {
+            $stmt = $this->_db->query($select);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $zdse);
+            throw new Tinebase_Exception_Backend_Database($zdse->getMessage());
+        }
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+
+        if ($queryResult) {
+            // check if user is still valid
+            try {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $queryResult['userid']);
+                throw new Tinebase_Exception_SystemGeneric('could not overwrite email data of user ' . $queryResult['userid']);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                        . __LINE__ . ' Removing old email data of userid ' . $queryResult['userid']);
+                }
+                $this->_deleteUserById($queryResult['userid']);
+                $this->_removeDestinations($queryResult['userid']);
+            }
+        }
     }
     
     /**
@@ -535,7 +575,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         
         $rawData[$this->_propertyMapping['emailAddress']]  = $_user->accountEmailAddress;
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
+        $rawData[$this->_propertyMapping['emailUsername']] = $this->_getEmailUserName($_user);
         
         if (empty($rawData[$this->_propertyMapping['emailAddress']])) {
             $rawData[$this->_propertyMapping['emailAliases']]  = null;

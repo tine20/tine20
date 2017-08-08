@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 class HumanResources_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -42,5 +42,25 @@ class HumanResources_Setup_Update_Release10 extends Setup_Update_Abstract
             // do nothing
         }
         $this->setApplicationVersion('HumanResources', '10.2');
+    }
+
+    public function update_2()
+    {
+        $this->_backend->alterCol('humanresources_contract', new Setup_Backend_Schema_Field_Xml('<field>
+            <name>feast_calendar_id</name>
+            <type>text</type>
+            <length>40</length>
+            <default>null</default>
+            <notnull>false</notnull>
+        </field>'));
+
+        $this->setTableVersion('humanresources_contract', 3);
+
+        $this->setApplicationVersion('HumanResources', '10.3');
+    }
+
+    public function update_3()
+    {
+        $this->setApplicationVersion('HumanResources', '11.0');
     }
 }

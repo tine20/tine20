@@ -76,7 +76,34 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
-    
+
+    public function testGetRecurInstance()
+    {
+        // create event and invite admin group
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+
+        $persistentEvent = $this->_controller->create($event);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, Tinebase_DateTime::now());
+
+        $deepLink = $nextOccurance->getDeepLink();
+        preg_match('/fakeid.*$/', $deepLink, $matches);
+        $id = $matches[0];
+
+        $recurInstance = $this->_controller->get($id);
+        $this->assertTrue($recurInstance->isRecurInstance());
+        $this->assertEquals($nextOccurance->getId(), $recurInstance->getId());
+
+        // create recur exception in the meantime
+        $nextOccurance->summary = 'exception';
+        $this->_controller->createRecurException($nextOccurance);
+        $recurInstance = $this->_controller->get($id);
+//        print_r($recurInstance->toArray());
+        $this->assertFalse($recurInstance->isRecurInstance());
+        $this->assertEquals($nextOccurance->summary, $recurInstance->summary);
+    }
+
     /**
      * testUpdateEvent
      */

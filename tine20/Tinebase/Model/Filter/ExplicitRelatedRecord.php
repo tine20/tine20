@@ -54,8 +54,14 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
 
             $notInIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
             $filter = new $filtergroup(array(
-                
+
             ),'AND');
+
+            // Deal with generic filtermodel!
+            if ($this->_options['own_filtergroup'] === Tinebase_Model_Filter_FilterGroup::class) {
+                $filter->setConfiguredModel($_modelName);
+            }
+
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => $idProperty, 'operator' => 'notin', 'value' => $notInIds)));
 
             return $controller::getInstance()->search($filter, null, false, true);

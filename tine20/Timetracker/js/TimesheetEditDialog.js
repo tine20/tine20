@@ -126,6 +126,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
             this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
         }
+
+        var focusFieldName = this.record.get('timeaccount_id') ? 'duration' : 'timeaccount_id',
+            focusField = this.getForm().findField(focusFieldName);
+
+        focusField.focus(true, 250);
     },
 
     /**
@@ -252,19 +257,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         forceSelection: true,
                         name: 'timeaccount_id',
-                        lazyInit: false,
-                        listeners: {
-                            scope: this,
-                            render: function(field){
-                                if(!this.useMultiple) {
-                                    field.focus(false, 250);
-                                }
-                            },
-                            select: this.onTimeaccountUpdate
-                        }
+                        lazyInit: false
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',
+                        selectOnFocus: true,
                         allowBlank: false,
                         xtype: 'tinedurationspinner'
                         }, {

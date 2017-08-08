@@ -220,10 +220,14 @@ class Tinebase_Auth
         }
         
         $this->_backend->setCredential($_password);
-        
-        if (Tinebase_Session::isStarted()) {
-            Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
-        } else {
+
+        try {
+            if (Tinebase_Session::isStarted()) {
+                Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
+            } else {
+                Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
+            }
+        } catch (Zend_Session_Exception $e) {
             Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
@@ -437,16 +441,24 @@ class Tinebase_Auth
      * @param string $username
      * @param string $password
      * @param array $options
+     * @param boolean $allowEmpty
      * @return int
      * @throws Tinebase_Exception_Backend
      */
-    public static function validateSecondFactor($username, $password, $options)
+    public static function validateSecondFactor($username, $password, $options = null, $allowEmpty = false)
     {
+        if (! $options) {
+            $options = Tinebase_Config::getInstance()->get(
+                Tinebase_Config::AUTHENTICATIONSECONDFACTOR,
+                new Tinebase_Config_Struct()
+            )->toArray();
+        }
+
         if (isset($options['provider'])) {
             $authProviderClass = 'Tinebase_Auth_SecondFactor_' . $options['provider'];
             if (class_exists($authProviderClass)) {
                 $authProvider = new $authProviderClass($options);
-                return $authProvider->validate($username, $password);
+                return $authProvider->validate($username, $password, $allowEmpty);
             }
         }
         throw new Tinebase_Exception_Backend('Second factor backend not recognized / misconfigured');

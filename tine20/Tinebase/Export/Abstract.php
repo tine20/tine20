@@ -162,10 +162,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_hasTemplate = false;
 
+    /** @var Twig_Environment */
+    protected $_twigEnvironment = null;
     /**
      * @var Twig_TemplateWrapper|null
      */
     protected $_twigTemplate = null;
+
+    protected $_twigMapping = array();
 
     /**
      * @var string
@@ -197,9 +201,20 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected $_currentRowType = null;
 
+    /**
+     * @var Tinebase_Record_Abstract
+     */
+    protected $_currentRecord = null;
+
     protected $_getRelations = false;
 
     protected $_additionalRecords = array();
+
+    protected $_keyFields = array();
+
+    protected $_virtualFields = array();
+
+    protected $_foreignIdFields = array();
 
     /**
      * the constructor
@@ -281,6 +296,43 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $this->_additionalRecords[$key] = $record;
             }
         }
+
+        if ($this->_config->keyFields) {
+            foreach ($this->_config->keyFields as $keyFields) {
+                if ($keyFields->propertyName) {
+                    $keyFields = array($keyFields);
+                }
+                foreach($keyFields as $keyField) {
+                    $this->_keyFields[$keyField->propertyName] = $keyField->name;
+                }
+            }
+        }
+
+        if ($this->_config->foreignIds) {
+            foreach ($this->_config->foreignIds as $foreignIds) {
+                if ($foreignIds->controller) {
+                    $foreignIds = array($foreignIds);
+                }
+                foreach($foreignIds as $foreignId) {
+                    $this->_foreignIdFields[$foreignId->name] = $foreignId->controller;
+                }
+            }
+        }
+
+        if ($this->_config->virtualFields) {
+            foreach ($this->_config->virtualFields as $virtualFields) {
+                if ($virtualFields->relatedModel) {
+                    $virtualFields = array($virtualFields);
+                }
+                foreach($virtualFields as $virtualField) {
+                    $this->_virtualFields[$virtualField->name] = array(
+                        'relatedModel' => $virtualField->relatedModel,
+                        'relatedDegree' => $virtualField->relatedDegree,
+                        'type' => $virtualField->type
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -332,21 +384,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         return $config;
-    }
-
-    /**
-     * get custom field names for this app
-     *
-     * @return array
-     */
-    protected function _getCustomFieldNames()
-    {
-        if ($this->_customFieldNames === null) {
-            $this->_customFieldNames = Tinebase_CustomField::getInstance()->
-                getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
-        }
-
-        return $this->_customFieldNames;
     }
 
     protected function _getTemplateFilename()
@@ -505,8 +542,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
 
-        $tineTwigLoader = new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
-            array($this, '_getTwigSource'));
+        $tineTwigLoader = new Twig_Loader_Chain(array(
+            new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
+                array($this, '_getTwigSource'))));
 
         // TODO turn on caching
         // in order to cache the templates, we need to cache $this->_twigMapping too!
@@ -516,23 +554,27 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             mkdir($cacheDir, 0777, true);
         }*/
 
-        $twig = new Twig_Environment($tineTwigLoader, array(
+        $this->_twigEnvironment = new Twig_Environment($tineTwigLoader, array(
             'autoescape' => 'json',
             'cache' => false, //$cacheDir
         ));
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedParameterInspection */
-        $twig->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
+        $this->_twigEnvironment->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
             return json_encode($string);
         });
 
         $locale = $this->_locale;
         $translate = $this->_translate;
-        $twig->addFunction(new Twig_SimpleFunction('translate', function ($str) use($locale, $translate) {
-            return $translate->_($str, $locale);
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
+            function ($str) use($locale, $translate) {
+                return $translate->_($str, $locale);
+            }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
 
-        $this->_twigTemplate = $twig->load($this->_templateFileName);
+        $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
     }
 
     /**
@@ -557,6 +599,28 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _getLastModifiedTimeStamp()
     {
         return filemtime($this->_templateFileName);
+    }
+
+    protected function _getCurrentState()
+    {
+        return array(
+            '_firstIteration'       => $this->_firstIteration,
+            '_writeGenericHeader'   => $this->_writeGenericHeader,
+            '_groupByProperty'      => $this->_groupByProperty,
+            '_groupByProcessor'     => $this->_groupByProcessor,
+            '_lastGroupValue'       => $this->_lastGroupValue,
+            '_currentRecord'        => $this->_currentRecord,
+            '_currentRowType'       => $this->_currentRowType,
+            '_twigTemplate'         => $this->_twigTemplate,
+            '_twigMapping'          => $this->_twigMapping,
+        );
+    }
+
+    protected function _setCurrentState(array $array)
+    {
+        foreach ($array as $key => $value) {
+            $this->{$key} = $value;
+        }
     }
 
     /**
@@ -601,11 +665,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     if (false === $first) {
                         $this->_endGroup();
                     }
+                    $this->_currentRecord = $record;
                     $this->_startGroup();
                 }
                 // TODO fix this?
                 //$this->_writeGroupHeading($record);
             }
+            $this->_currentRecord = $record;
 
             $this->_currentRowType = self::ROW_TYPE_RECORD;
 
@@ -670,6 +736,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolving export records...');
+        if ($_records->count() === 0) {
+            return;
+        }
+        $record = $_records->getFirstRecord();
         // FIXME think what to do
         // TODO fix ALL this!
 
@@ -702,6 +772,76 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // add container
         if (in_array('container_id', $types)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
+        }
+
+        if ($record->has('customfields')) {
+            $_records->customfields = array();
+            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+        }
+
+        if ($record->has('relations')) {
+            /** @var Tinebase_Record_Abstract $modelName */
+            $modelName = $_records->getRecordClassName();
+
+            $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
+                $_records->getArrayOfIds());
+
+            $appConfig = Tinebase_Config::factory($this->_applicationName);
+            $modelConfig = $modelName::getConfiguration();
+
+            /** @var Tinebase_Record_Abstract $record */
+            foreach ($_records as $idx => $record) {
+                if (isset($relations[$idx])) {
+                    $record->relations = $relations[$idx];
+                }
+
+                if (null === $modelConfig) {
+                    foreach ($this->_keyFields as $name => $keyField) {
+                        /** @var Tinebase_Config_KeyField $keyField */
+                        $keyField = $appConfig->{$keyField};
+                        $record->{$name} = $keyField->getTranslatedValue($record->{$name});
+                    }
+
+                    foreach ($this->_virtualFields as $name => $virtualField) {
+                        $value = null;
+                        if (!empty($record->relations)) {
+                            /** @var Tinebase_Model_Relation $relation */
+                            foreach ($record->relations as $relation) {
+                                if ($relation->related_model === $virtualField['relatedModel'] &&
+                                    $relation->related_degree === $virtualField['relatedDegree'] &&
+                                    $relation->type === $virtualField['type']
+                                ) {
+                                    $value = $relation->related_record;
+                                    break;
+                                }
+                            }
+                        }
+                        $record->{$name} = $value;
+                    }
+
+                    foreach ($this->_foreignIdFields as $name => $controller) {
+                        if (!empty($record->{$name})) {
+                            $controller = $controller::getInstance();
+                            $record->{$name} = $controller->get($record->{$name});
+                        }
+                    }
+                } else {
+                    foreach ($modelConfig->virtualFields as $field) {
+                        // resolve virtual relation record from relations property
+                        if (isset($field['type']) && $field['type'] === 'relation') {
+                            $fc = $field['config'];
+                            if (!empty($record->relations)) {
+                                foreach ($record->relations as $relation) {
+                                    if ($relation->type === $fc['type'] &&
+                                            $relation->related_model === ($fc['appName'] . '_Model_' . $fc['modelName'])) {
+                                        $record->{$field['key']} = $relation->related_record;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
@@ -832,7 +972,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $this->_logoPath = '/' . $this->_logoPath;
                 }
 
-                $this->_logoPath = 'file://' . dirname(dirname(__DIR__)) . $this->_logoPath;
+                $baseDir = dirname(dirname(__DIR__));
+                if (0 === strpos($this->_logoPath, $baseDir)) {
+                    $this->_logoPath = 'file://' . $this->_logoPath;
+                } else {
+                    $this->_logoPath = 'file://' . $baseDir . $this->_logoPath;
+                }
 
                 if (!is_file($this->_logoPath)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not find branding logo. Config: ' . Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO} . ' path: ' . $this->_logoPath);
@@ -852,6 +997,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             'export'            => array(
                 'timestamp'         => $this->_exportTimeStamp,
                 'account'           => Tinebase_Core::getUser(),
+                'contact'           => Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()
+                                        ->contact_id),
                 'groupdata'         => $this->_lastGroupValue,
             ),
             'additionalRecords' => $this->_additionalRecords,

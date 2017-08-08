@@ -62,7 +62,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * Key under which the default replication group name setting will be stored/retrieved
      */
     const DEFAULT_REPLICATION_GROUP_NAME_KEY = 'defaultReplicationGroupName';
-    
+
     protected static $_contact2UserMapping = array(
         'n_family'      => 'accountLastName',
         'n_given'       => 'accountFirstName',
@@ -498,7 +498,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_CONTACT_DATA] = true;
         }
         Addressbook_Controller_Contact::getInstance()->setRequestContext($requestContext);
-        
+
         self::getPrimaryGroupForUser($user);
 
         try {
@@ -673,7 +673,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         return $result;
     }
-    
+
     /**
      * sync user data to contact
      * 
@@ -709,7 +709,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         $contact->account_id = $user->getId();
-        
+
         return $contact;
     }
     
@@ -733,7 +733,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Start synchronizing users with options ' . print_r($options, true));
 
         /** TODO replace this with something more generic, like interface "syncable" */
@@ -925,7 +925,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $addressBookController->setRequestContext($requestContext);
 
 
-        
+
         $adminLoginName     = $_options['adminLoginName'];
         $adminPassword      = $_options['adminPassword'];
         $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';

@@ -245,20 +245,15 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * Returns role identified by its id
      * 
-     * @param   int  $_roleId
+     * @param   string  $_roleId
      * @return  Tinebase_Model_Role  
      * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_NotFound
      */
     public function getRoleById($_roleId)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId <= 0) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-
         /** @var Tinebase_Model_Role $role */
-        $role = $this->_getRolesBackend()->get($roleId);
+        $role = $this->_getRolesBackend()->get((string)$_roleId);
         return $role;
     }
     
@@ -358,26 +353,45 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * get list of role members 
      *
-     * @param   int $_roleId
+     * @param   string $_roleId
      * @return  array of array with account ids & types
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function getRoleMembers($_roleId)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId <= 0) {
-            throw new Tinebase_Exception_AccessDenied('$_roleId must be integer and greater than 0');
-        }
-        
         $select = $this->_getDb()->select()
             ->from(array('role_accounts' => SQL_TABLE_PREFIX . 'role_accounts'))
-            ->where($this->_getDb()->quoteIdentifier('role_id') . ' = ?', $roleId);
+            ->where($this->_getDb()->quoteIdentifier('role_id') . ' = ?', (string)$_roleId);
         
         $stmt = $this->_getDb()->query($select);
         
         $members = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         return $members;
+    }
+
+    /**
+     * get list of role members account ids, resolves groups to account ids
+     *
+     * @param   string $_roleId
+     * @return  array with account ids
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function getRoleMembersAccounts($_roleId)
+    {
+        $accountIds = array();
+        foreach ($this->getRoleMembers($_roleId) as $role) {
+		    switch($role['account_type']) {
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                    $accountIds[] = $role['account_id'];
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                    $accountIds = array_merge($accountIds,
+                        Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
+                    break;
+            }
+        }
+        return $accountIds;
     }
 
     /**
@@ -433,24 +447,20 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * set role members 
      *
-     * @param   int $_roleId
+     * @param   string $_roleId
      * @param   array $_roleMembers with role members ("account_type" => account type, "account_id" => account id)
      * @param   bool $_allowSetId
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setRoleMembers($_roleId, array $_roleMembers, $_allowSetId = false)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-
+        $_roleId = (string)$_roleId;
         /** @var Tinebase_Model_Role $oldRole */
         $oldRole = $this->get($_roleId);
         
         // remove old members
         $where = array(
-            $this->_getDb()->quoteIdentifier('role_id') . ' = ?' => $roleId
+            $this->_getDb()->quoteIdentifier('role_id') . ' = ?' => $_roleId
         );
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_accounts', $where);
         
@@ -463,7 +473,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             }
             
             $data = array(
-                'role_id'       => $roleId,
+                'role_id'       => $_roleId,
                 'account_type'  => $member['type'],
                 'account_id'    => $member['id'],
             );
@@ -533,11 +543,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function addRoleMember($_roleId, $_account)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-        
         $validTypes = array(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
 
         if (! in_array($_account['type'], $validTypes)) {
@@ -550,7 +555,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $oldRole = $this->get($_roleId);
         
         $data = array(
-            'role_id'       => $roleId,
+            'role_id'       => (string)$_roleId,
             'account_type'  => $_account['type'],
             'account_id'    => $_account['id'],
             'id'            => Tinebase_Record_Abstract::generateUID(),
@@ -586,16 +591,11 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function removeRoleMember($_roleId, $_account)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId || $roleId < 1) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-
         /** @var Tinebase_Model_Role $oldRole */
-        $oldRole = $this->get($roleId);
+        $oldRole = $this->get($_roleId);
         
         $where = array(
-            $this->_getDb()->quoteIdentifier('role_id') . ' = ?'      => $roleId,
+            $this->_getDb()->quoteIdentifier('role_id') . ' = ?'      => (string) $_roleId,
             $this->_getDb()->quoteIdentifier('account_type') . ' = ?' => $_account['type'],
             $this->_getDb()->quoteIdentifier('account_id') . ' = ?'   => (string) $_account['id']
         );
@@ -627,21 +627,16 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * get list of role rights
      *
-     * @param   int $_roleId
+     * @param   string $_roleId
      * @return  array of array with application ids & rights
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getRoleRights($_roleId)
     {
-        $roleId = (int)$_roleId;
-        if ($roleId != $_roleId || $roleId <= 0) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-        
         $select = $this->_getDb()->select()
             ->distinct()
             ->from(array('role_rights' => SQL_TABLE_PREFIX . 'role_rights'), array('application_id', 'right'))
-            ->where($this->_getDb()->quoteIdentifier('role_id') . ' = ?', $_roleId);
+            ->where($this->_getDb()->quoteIdentifier('role_id') . ' = ?', (string) $_roleId);
         
         $stmt = $this->_getDb()->query($select);
         
@@ -653,16 +648,12 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * set role rights 
      *
-     * @param   int    $roleId
+     * @param   string    $roleId
      * @param   array  $roleRights  with role rights array(("application_id" => app id, "right" => the right to set), (...))
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setRoleRights($roleId, array $roleRights)
     {
-        if (!is_numeric($roleId) || ($roleId = (int)$roleId) === 0) {
-            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
-        }
-        
         $currentRights = $this->getRoleRights($roleId);
         // change array key to string identifying right
         foreach ($currentRights as $id => $right) {
@@ -698,7 +689,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * add one role right
      * 
-     * @param int $roleId
+     * @param string $roleId
      * @param string $applicationId
      * @param string $right
      */
@@ -708,7 +699,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $oldRole = $this->get($roleId);
 
         $data = array(
-            'role_id'        => $roleId,
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'role_id'        => (string)$roleId,
             'application_id' => $applicationId,
             'right'          => $right,
         );
@@ -723,7 +715,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * remove one role right
      * 
-     * @param int $roleId
+     * @param string $roleId
      * @param string $applicationId
      * @param string $right
      */
@@ -733,7 +725,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $oldRole = $this->get($roleId);
 
         $where = array(
-            $this->_getDb()->quoteIdentifier('role_id') . ' = ?'        => $roleId,
+            $this->_getDb()->quoteIdentifier('role_id') . ' = ?'        => (string) $roleId,
             $this->_getDb()->quoteIdentifier('application_id') . ' = ?' => $applicationId,
             $this->_getDb()->quoteIdentifier('right') . ' = ?'          => $right
         );
@@ -748,7 +740,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * invalidate rights cache
      * 
-     * @param int   $roleId
+     * @param string   $roleId
      * @param array $roleRights  the role rights to purge from cache
      */
     protected function _invalidateRightsCache($roleId, $roleRights)
@@ -784,8 +776,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * add single role rights 
      *
-     * @param   int $_roleId
-     * @param   int $_applicationId
+     * @param   string $_roleId
+     * @param   string $_applicationId
      * @param   string $_right
      * 
      * @todo this function should be removed and setRoleRights should be used instead
@@ -795,7 +787,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         // check if already in
         $select = $this->_getDb()->select()
             ->from(array('role_rights' => SQL_TABLE_PREFIX . 'role_rights'), array('id'))
-            ->where($this->_getDb()->quoteIdentifier('role_id')        . ' = ?', $_roleId)
+            ->where($this->_getDb()->quoteIdentifier('role_id')        . ' = ?', (string)$_roleId)
             ->where($this->_getDb()->quoteIdentifier('application_id') . ' = ?', $_applicationId)
             ->where($this->_getDb()->quoteIdentifier('right')          . ' = ?', $_right);
         
@@ -811,14 +803,13 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     
     /**
      * Create initial Roles
-     * 
-     * @todo make hard coded role names ('user role' and 'admin role') configurable
-     * 
+     *
      * @return void
      */
     public function createInitialRoles()
     {
         $groupsBackend = Tinebase_Group::getInstance();
+        /** @noinspection PhpUndefinedMethodInspection */
         $oldValue = $groupsBackend->modlogActive(false);
         
         $adminGroup         = $groupsBackend->getDefaultAdminGroup();
@@ -829,10 +820,13 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $oldSetNotes = $this->_setNotes;
         $this->_omitModLog = true;
         $this->_setNotes = false;
+
+        $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
+        $adminRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_ADMIN_ROLE_NAME);
         
         // add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(
-            'name'                  => 'admin role',
+            'name'                  => $adminRoleName,
             'description'           => 'admin role for tine. this role has all rights per default.',
         ));
         $adminRole = $this->createRole($adminRole);
@@ -844,7 +838,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         ));
         
         $userRole = new Tinebase_Model_Role(array(
-            'name'                  => 'user role',
+            'name'                  => $userRoleName,
             'description'           => 'userrole for tine. this role has only the run rights for all applications per default.',
         ));
         $userRole = $this->createRole($userRole);
@@ -868,6 +862,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             )
         ));
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $groupsBackend->modlogActive($oldValue);
 
         $this->_setNotes = $oldSetNotes;
@@ -951,6 +946,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         $modelName = $this->_modelName;
+        /** @noinspection PhpUndefinedMethodInspection */
         $modelConf = $modelName::getConfiguration();
         $rs = new Tinebase_Record_RecordSet($this->_modelName, array($result));
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs, $modelConf);

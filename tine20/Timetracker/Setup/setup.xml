@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>10.5</version>
+    <version>11.0</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>timetracker_timeaccount</name>
-            <version>11</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -21,7 +21,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

@@ -81,6 +81,61 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         var imageUrl = Tine.Tinebase.common.getUrl('full') + '/images/view-calendar-day-' + new Date().getDate() + '.png';
         Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(' + imageUrl + ')');
 
+    },
+
+    routes: {
+        'showEvent/(.*)': 'showEvent'
+    },
+
+    /**
+     * display event in mainscreen
+     * @param {String} id
+     *
+     * example:
+     * http://tine20.example.com:10443/#/Calendar/showEvent/89192f9d3ce44ed3681a1b73d5ca491e766c4d62
+     */
+    showEvent: function(id) {
+        var cp = this.getMainScreen().getCenterPanel(),
+            activePanel = cp.getCalendarPanel(cp.activeView),
+            activeView = activePanel.getView(),
+            store = activeView.store;
+
+        cp.initialLoadAfterRender = false;
+
+        Tine.Tinebase.MainScreenPanel.show(this);
+
+        if (cp.loadMask) {
+            cp.loadMask.show();
+        }
+
+        Tine.Calendar.backend.loadRecord(id, {
+            success: function(record) {
+                // @TODO timeline view
+                store.on('load', function() {
+                    // NOTE: the store somehow changes, so refetch it
+                    var activePanel = cp.getCalendarPanel(cp.activeView),
+                        activeView = activePanel.getView(),
+                        sm = activeView.getSelectionModel(),
+                        store = activeView.store,
+                        event = store.getById(record.get('id'))
+
+                    if (! event) {
+                        store.add([record]);
+                        event = record;
+                    }
+
+                    sm.select.defer(250, sm, [event]);
+
+                }, this, { single: true });
+
+                activeView.updatePeriod({from: record.get('dtstart')});
+                cp.selectFavorite();
+            },
+            failure: function() {
+                cp.selectFavorite();
+                Ext.Msg.alert(this.i18n._('Event not found'), this.i18n._("The Event was deleted in the meantime or you don't have access rights to it."));
+            }
+        });
     }
 });
 
@@ -102,8 +157,6 @@ Tine.Calendar.MainScreen = function(config) {
     var prefs = this.app.getRegistry().get('preferences');
     Ext.DatePicker.prototype.startDay = parseInt((prefs ? prefs.get('firstdayofweek') : 1), 10);
 
-    Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
-    
     Tine.Calendar.MainScreen.superclass.constructor.apply(this, arguments);
 };
 

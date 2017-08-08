@@ -642,7 +642,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             // remove own email and all non-email strings/objects from to/cc
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                ownEmailRegexp = new RegExp(account.get('email'));
+                ownEmailRegexp = new RegExp(window.lodash.escapeRegExp(account.get('email')));
             Ext.each(['to', 'cc'], function(field) {
                 for (var i=0; i < this[field].length; i++) {
                     if (! Ext.isString(this[field][i]) || ! this[field][i].match(/@/) || ownEmailRegexp.test(this[field][i])) {

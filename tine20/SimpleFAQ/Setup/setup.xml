@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>SimpleFAQ</name>
-    <version>10.0</version>
+    <version>11.0</version>
     <order>62</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>simple_faq</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -20,7 +20,9 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>faqstatus_id</name>

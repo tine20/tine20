@@ -61,6 +61,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     recordsName: 'records',
     /**
+     * @cfg {String} grantsPath
+     * path (see _.get() to find grants
+     */
+    grantsPath: null,
+    /**
      * @cfg {String} containerProperty
      * name of the container property
      */
@@ -118,10 +123,22 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         if (this.modified[name] === undefined) {
             this.modified[name] = current;
         }
-        
+        if (encode(value) == encode(this.modified[name])) {
+            delete this.modified[name];
+        }
+        if (Object.keys(this.modified).length === 0) {
+            this.dirty = false;
+        }
         if (cfName = String(name).match(this.cfExp)) {
-            this.data.customfields = this.data.customfields || {};
-            this.data.customfields[cfName[1]] = value;
+            var oldValueJSON = JSON.stringify(this.get('customfields') || {}),
+                valueObject = JSON.parse(oldValueJSON);
+
+            Tine.Tinebase.common.assertComparable(valueObject);
+            valueObject[cfName[1]] = value;
+
+            if (JSON.stringify(valueObject) != oldValueJSON) {
+                this.set('customfields', valueObject);
+            }
         } else {
             this.data[name] = value;
         }
@@ -320,6 +337,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         if (field) {
             field.label = p.containerName;
         }
+    }
+    if (!p.grantsPath) {
+        p.grantsPath = 'data' + (containerProperty ? ('.' + containerProperty) : '') + '.account_grants';
     }
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;

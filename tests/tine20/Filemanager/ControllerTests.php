@@ -68,6 +68,8 @@ class Filemanager_ControllerTests extends TestCase
 
     public function testNotificationUpdateForReadOnly()
     {
+        Zend_Registry::set('locale', new Zend_Locale('en'));
+        
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
@@ -107,14 +109,28 @@ class Filemanager_ControllerTests extends TestCase
             $node = $fileManager->update($node);
 
             // do update again, it should work now
+            // test that updates to other things than own notification are silently dropped
             Tinebase_Core::set(Tinebase_Core::USER, $sclever);
-            $scleverNotificationProps = array(
+            $notificationProps = array(array(
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
-            );
-            $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $scleverNotificationProps;
+            ),array(
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => '1233',
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
+            ),array(
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
+            ));
+            $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = $notificationProps;
+            $oldDescription = $node->description;
+            static::assertNotEquals('test', $oldDescription, 'test data bad, the description must not be "test"');
+            $node->description = 'test';
+
             $node = $fileManager->update($node);
+            static::assertEquals($oldDescription, $node->description, 'description should not have been updated!');
             static::assertEquals(1, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
             static::assertTrue(
                 isset($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[0]) &&

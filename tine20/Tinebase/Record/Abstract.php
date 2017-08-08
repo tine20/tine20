@@ -1312,7 +1312,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
 
         foreach((array)($diff->oldData) as $property => $oldValue)
         {
-            if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
+            if ('customfields' === $property) {
+                if (!is_array($oldValue)) {
+                    $oldValue = array();
+                }
+                if (isset($diff->diff['customfields']) && is_array($diff->diff['customfields'])) {
+                    foreach (array_keys($diff->diff['customfields']) as $unSetProperty) {
+                        if (!isset($oldValue[$unSetProperty])) {
+                            $oldValue[$unSetProperty] = null;
+                        }
+                    }
+                }
+            } elseif (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
                 $oldValue = new Tinebase_DateTime($oldValue);
             }
             $this->$property = $oldValue;
@@ -1346,7 +1357,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         is_array($this->$property)?$this->$property:array());
                 }
 
-                $this->$property->applyRecordSetDiff($recordSetDiff);
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $recordSetDiff->model;
+                if (true !== $model::applyRecordSetDiff($this->$property, $recordSetDiff)) {
+                    $this->$property->applyRecordSetDiff($recordSetDiff);
+                }
             } else {
                 if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
                     $oldValue = new Tinebase_DateTime($oldValue);
@@ -1354,6 +1369,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $this->$property = $oldValue;
             }
         }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
+     * @return bool
+     */
+    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
+    {
+        return false;
     }
 
     /**
@@ -1373,7 +1398,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
     {
-        /** @var Tinebase_Record_Abstract_GetPathPartDecorator $delegate */
+        /** @var Tinebase_Record_Abstract_GetPathPartDelegatorInterface $delegate */
         $delegate = Tinebase_Core::getDelegate($this->_application, 'getPathPartDelegate_' . get_called_class() ,
                                                 'Tinebase_Record_Abstract_GetPathPartDelegatorInterface');
         if (false !== $delegate) {
@@ -1434,7 +1459,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * extended properties getter
      *
      * @param string $_property
-     * @return &array
+     * @return array
      */
     public function &xprops($_property = 'xprops')
     {
@@ -1445,5 +1470,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
 
         return $this->_properties[$_property];
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return null|Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        return null;
     }
 }

@@ -85,7 +85,9 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
     
     getStrategy: function() {
-        var name = Tine.Calendar.ColorManager.colorStrategyBtn.colorStrategy;
+        var p = Tine.Calendar.ColorManager.colorStrategyBtn.prototype,
+            name = Ext.state.Manager.get(p.stateId, p).colorStrategy;
+
         return Tine.Calendar.colorStrategies[name];
     },
     
@@ -124,6 +126,8 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
         return this.colorSchemata[color];
     }
 });
+
+Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
 
 Tine.Calendar.ColorManager.str2dec = function(string) {
     var s = String(string).replace('#', ''),
@@ -198,7 +202,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         };
 
         Tine.Calendar.ColorManager.colorStrategyBtn.superclass.initComponent.apply(this, arguments);
-        Tine.Calendar.ColorManager.colorStrategyBtn = this;
+        // Tine.Calendar.ColorManager.colorStrategyBtn = this;
     },
 
     changeColorStrategy: function(strategy) {

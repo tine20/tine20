@@ -20,13 +20,14 @@ Tine.Tinebase.CanonicalPath.separator = '/';
  * @param {Ext.Component} component
  */
 Tine.Tinebase.CanonicalPath.getPath = function(component) {
-    var pathParts = [],
+    var _ = window.lodash,
+        pathParts = [],
         pathPart;
 
     while (component) {
         pathPart = Tine.Tinebase.CanonicalPath.getPathPart(component);
 
-        if (pathPart && !pathParts.join(Tine.Tinebase.CanonicalPath.separator).match(new RegExp('^' + pathPart))) {
+        if (pathPart && !pathParts.join(Tine.Tinebase.CanonicalPath.separator).match(new RegExp('^' + _.escapeRegExp(pathPart)))) {
             pathParts.unshift(pathPart);
         }
 

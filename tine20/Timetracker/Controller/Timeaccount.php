@@ -202,8 +202,8 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         if (! $hasRight) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' timeaccounts.');
         }
-         
-        return;
+
+        return parent::_checkRight($_action);
     }
     
     public function doGrantChecks()

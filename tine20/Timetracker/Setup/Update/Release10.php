@@ -67,12 +67,17 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Timetracker', '10.2');
     }
 
+    public function update_2()
+    {
+        $this->setApplicationVersion('Timetracker', '10.3');
+    }
+
     /**
-     * update to 10.3
+     * update to 10.4
      *
      * @return void
      */
-    public function update_2()
+    public function update_3()
     {
         if (! $this->_backend->tableExists('timetracker_timeaccount_fav')) {
             $declaration = new Setup_Backend_Schema_Table_Xml('<table>
@@ -165,28 +170,36 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->_backend->createTable($declaration, 'Timetracker', 'timetracker_timeaccount_fav');
             $this->setTableVersion('timetracker_timeaccount_fav', 1);
         }
-        $this->setApplicationVersion('Timetracker', '10.3');
+        $this->setApplicationVersion('Timetracker', '10.4');
     }
 
     /**
      * 0012470: Don't shorten description in export
      */
-    public function update_3()
+    public function update_4()
     {
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Timetracker'));
-        $this->setApplicationVersion('Timetracker', '10.4');
+        $this->setApplicationVersion('Timetracker', '10.5');
     }
 
     /**
-     * update to 10.5
+     * update to 10.6
      *
      * Add fulltext index to field description of timesheet
      * - re-run update 0 + 1 because 2017.02 added update 2 + 3
      */
-    public function update_4()
+    public function update_5()
     {
         $this->update_0();
         $this->update_1();
-        $this->setApplicationVersion('Timetracker', '10.5');
+        $this->setApplicationVersion('Timetracker', '10.6');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_6()
+    {
+        $this->setApplicationVersion('Timetracker', '11.0');
     }
 }

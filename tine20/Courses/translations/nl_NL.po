@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Pascal Zittema <p_zittema@hotmail.com>, 2013
 # Whatsek <Whatsek@gmail.com>, 2015
@@ -9,14 +9,205 @@ msgstr ""
 "PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Voornaam"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Voeg nieuw lid toe aan cursus"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fouten"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Verhelp de genoemde fouten."
+
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Naam"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "soort"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Mislukt"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
+
+#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Cursus"
+msgstr[1] "Cursussen"
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Taaklijst"
+msgstr[1] "Taaklijsten"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr "Snel zoeken"
+
+#: js/Models.js:74 js/CourseEditDialog.js:227 Config.php:103
+msgid "Internet Access"
+msgstr "Internet toegang"
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Cursus soort"
+msgstr[1] "Cursus soorten"
+
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
+msgstr "Importeer cursus leden"
+
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
+msgstr "Voeg nieuwe gebruiker toe"
+
+#: js/CourseEditDialog.js:204
+msgid "Course Name"
+msgstr "Cursus naam"
+
+#: js/CourseEditDialog.js:211
+msgid "Course / School Type"
+msgstr "Cursus / School soort"
+
+#: js/CourseEditDialog.js:221
+msgid "Description"
+msgstr "Omschrijving"
+
+#: js/CourseEditDialog.js:256
+msgid "Members"
+msgstr "Leden"
+
+#: js/CourseEditDialog.js:283
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:287
+msgid "unknown"
+msgstr "Onbekend"
+
+#: js/CourseEditDialog.js:292
+msgid "Reset Password"
+msgstr "Reset wachtwoord"
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Docent"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Docent account"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Mijn cursus"
+
+#: Config.php:105
+msgid "Internet access options."
+msgstr "Internet toegang opties"
+
+#: Config.php:112
+msgid "On"
+msgstr "Aan"
+
+#: Config.php:113
+msgid "Off"
+msgstr "Uit"
+
+#: Config.php:114
+msgid "Filtered"
+msgstr "Gefilterd"
+
+#: Config.php:119 Config.php:121
+msgid "Internet Access Group (ON)"
+msgstr "Internet toegang groep (aan)"
+
+#: Config.php:127 Config.php:129
+msgid "Internet Access Group (FILTERED)"
+msgstr "Internet toegang groep (gefilterd)"
+
+#: Config.php:135 Config.php:137
+msgid "Students Group"
+msgstr "Studenten groep"
+
+#: Config.php:143 Config.php:145
+msgid "Students Import Definition"
+msgstr "Student importeer waarde"
+
+#: Config.php:151
+msgid "Students login name prefix"
+msgstr "Variable studenten loginnaam"
+
+#: Config.php:158
+msgid "Students password suffix"
+msgstr ""
+
+#: Config.php:165
+msgid "Teacher password"
+msgstr ""
+
+#: Config.php:174
+msgid "Student username schema"
+msgstr "Student gebruikersnaam schema"
+
+#: Config.php:176
+msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgstr "Student gebruikersnaam schema (0 = alleen achternaam (10 karakters), 1 = achternaam + 2 karakters van voornaam"
+
+#: Config.php:183 Config.php:185
+msgid "Samba user settings"
+msgstr "Samba gebruikersopties"
+
+#: Config.php:194
+msgid "Default department"
+msgstr "Standaard afdeling"
+
+#: Config.php:196
+msgid "The default department for new Courses"
+msgstr "De standaard afdeling voor nieuwe cursussen"
+
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:30 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Alle cursussen"
+
+#: Setup/Initialize.php:57
+msgid "School"
+msgstr "School"
+
+#: Setup/Initialize.php:58
+msgid "Defaul school for Courses application"
+msgstr "Standaard school voor Cursussen applicatie "
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Cursussen"
 
 #: Acl/Rights.php:108
 msgid "Add new user"
@@ -42,195 +233,6 @@ msgstr "Beheer gedeelde favoriete cursussen"
 msgid "Create or update shared courses favorites"
 msgstr "Maak of update favoriete gedeelde cursussen"
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Naam"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "soort"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Mislukt"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
-
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr "Importeer cursus leden"
-
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr "Voeg nieuwe gebruiker toe"
-
-#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Cursus"
-msgstr[1] "Cursussen"
-
-#: js/CourseEditDialog.js:204
-msgid "Course Name"
-msgstr "Cursus naam"
-
-#: js/CourseEditDialog.js:211
-msgid "Course / School Type"
-msgstr "Cursus / School soort"
-
-#: js/CourseEditDialog.js:221
-msgid "Description"
-msgstr "Omschrijving"
-
-#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:96
-msgid "Internet Access"
-msgstr "Internet toegang"
-
-#: js/CourseEditDialog.js:256
-msgid "Members"
-msgstr "Leden"
-
-#: js/CourseEditDialog.js:283
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:287
-msgid "unknown"
-msgstr "Onbekend"
-
-#: js/CourseEditDialog.js:292
-msgid "Reset Password"
-msgstr "Reset wachtwoord"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Taaklijst"
-msgstr[1] "Taaklijsten"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr "Snel zoeken"
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Cursus soort"
-msgstr[1] "Cursus soorten"
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Voornaam"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Achternaam"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Voeg nieuw lid toe aan cursus"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fouten"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Verhelp de genoemde fouten."
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Docent"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Docent account"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Mijn cursus"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Alle cursussen"
-
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "De standaard favoriet die bij het opstarten van Klassen wordt geladen"
-
-#: Config.php:98
-msgid "Internet access options."
-msgstr "Internet toegang opties"
-
-#: Config.php:105
-msgid "On"
-msgstr "Aan"
-
-#: Config.php:106
-msgid "Off"
-msgstr "Uit"
-
-#: Config.php:107
-msgid "Filtered"
-msgstr "Gefilterd"
-
-#: Config.php:112 Config.php:114
-msgid "Internet Access Group (ON)"
-msgstr "Internet toegang groep (aan)"
-
-#: Config.php:120 Config.php:122
-msgid "Internet Access Group (FILTERED)"
-msgstr "Internet toegang groep (gefilterd)"
-
-#: Config.php:128 Config.php:130
-msgid "Students Group"
-msgstr "Studenten groep"
-
-#: Config.php:136 Config.php:138
-msgid "Students Import Definition"
-msgstr "Student importeer waarde"
-
-#: Config.php:144
-msgid "Students login name prefix"
-msgstr "Variable studenten loginnaam"
-
-#: Config.php:151
-msgid "Students password suffix"
-msgstr ""
-
-#: Config.php:158
-msgid "Student username schema"
-msgstr "Student gebruikersnaam schema"
-
-#: Config.php:160
-msgid ""
-"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
-"chars of firstname"
-msgstr "Student gebruikersnaam schema (0 = alleen achternaam (10 karakters), 1 = achternaam + 2 karakters van voornaam"
-
-#: Config.php:167 Config.php:169
-msgid "Samba user settings"
-msgstr "Samba gebruikersopties"
-
-#: Config.php:178
-msgid "Default department"
-msgstr "Standaard afdeling"
-
-#: Config.php:180
-msgid "The default department for new Courses"
-msgstr "De standaard afdeling voor nieuwe cursussen"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Cursussen"
-
-#: Setup/Initialize.php:57
-msgid "School"
-msgstr "School"
-
-#: Setup/Initialize.php:58
-msgid "Defaul school for Courses application"
-msgstr "Standaard school voor Cursussen applicatie "

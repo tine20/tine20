@@ -461,7 +461,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_systemLink = Tine.Filemanager.nodeActionsMgr.get('systemLink');
 
         if (this.previewsEnabled) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview');
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
         }
 
         // grid only actions - work on node which is displayed (this.currentFolderNode)

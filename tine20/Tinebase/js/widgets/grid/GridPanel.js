@@ -394,7 +394,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: this.recordClass.getMeta('containerProperty'), 
             evalGrants: this.evalGrants
         });
 
@@ -450,6 +449,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 removeStrategy: 'keepBuffered'
             });
         }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.grid.getSelectionModel());
     },
 
     /**
@@ -546,7 +547,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.each(this.modelConfig.fieldKeys, function(key) {
                 var fieldConfig = this.modelConfig.fields[key];
                     globalI18n = (fieldConfig && fieldConfig.hasOwnProperty('useGlobalTranslation'));
-                
+
+                if (fieldConfig.type === 'virtual') {
+                    fieldConfig = fieldConfig.config;
+                }
+
                 // don't show multiple record fields
                 if (fieldConfig.type == 'records') {
                     return true;
@@ -858,11 +863,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
-        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel(),
+            _ = window.lodash;
+
+        var container = _.get(this.modelConfig, 'import.defaultImportContainerRegistryKey', false);
+
+        if (container) {
+            container = treePanel.getDefaultContainer(container);
+        }
+
+        Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: treePanel.getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
+            defaultImportContainer: container,
             listeners: {
                 scope: this,
                 'finish': function() {
@@ -1261,41 +1274,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
-     * import records
-     *
-     * @param {Button} btn
-     */
-    onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
-        Tine.widgets.dialog.ImportDialog.openWindow({
-            appName: this.app.appName,
-            modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
-                ? this.getDefaultContainer()
-                : treePanel.getDefaultContainer(),
-            // update grid after import
-            listeners: {
-                scope: this,
-                'finish': function() {
-                    this.loadGridData({
-                        preserveCursor:     false,
-                        preserveSelection:  false,
-                        preserveScroller:   false,
-                        removeStrategy:     'default'
-                    });
-                }
-            }
-        });
-    },
-
-    /**
      * perform the initial load of grid data
      */
     initialLoad: function() {
-        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName);
-        var favoritesPanel  = this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' && this.hasFavoritesPanel 
-            ? this.app.getMainScreen().getWestPanel().getFavoritesPanel() 
-            : null;
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(
+                this.app.appName, this.recordClass.prototype.modelName
+            ),
+            favoritesPanel  = this.app.getMainScreen()
+            && typeof this.app.getMainScreen().getWestPanel === 'function'
+            && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function'
+            && this.hasFavoritesPanel
+                ? this.app.getMainScreen().getWestPanel().getFavoritesPanel()
+                : null;
+
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
@@ -1794,7 +1785,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
-            result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+            var cfDefinition = cfConfig.get('definition');
+            switch (cfDefinition.type) {
+                case 'record':
+                    result.push({
+                        filtertype: 'foreignrecord',
+                        label: cfDefinition.label,
+                        app: this.app,
+                        ownRecordClass: this.recordClass,
+                        foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                        linkType: 'foreignId',
+                        ownField: 'customfield:' + cfConfig.id
+                    });
+                    break;
+                case 'keyfield':
+                    // @TODO implement me
+                    break;
+                default:
+                    result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                    break;
+            }
         }, this);
 
         return result;

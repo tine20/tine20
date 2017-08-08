@@ -17,94 +17,138 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
-msgid "Status Available"
-msgstr ""
-
-#: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:74
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
-
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:87
+#: js/ExampleRecordEditDialog.js:50
 msgid "ExampleRecord"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
+#: Model/ExampleRecord.php:80
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
-#: js/Model.js:71
+#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:91
 msgid "Status"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:96
-msgid "Title"
+#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:99
+msgid "Reason"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:102
-msgid "Budget"
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:126
-msgid "Show closed"
+#: js/Example.js:23
+msgid "New Example"
 msgstr ""
 
-#: js/Model.js:31
+#: Config.php:108
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:110
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:119
+msgid "Completed"
+msgstr ""
+
+#: Config.php:120
+msgid "Cancelled"
+msgstr ""
+
+#: Config.php:121
+msgid "In process"
+msgstr ""
+
+#: Config.php:128
+msgid "Reasons Available"
+msgstr ""
+
+#: Config.php:130
+msgid "Possible status reasons."
+msgstr ""
+
+#: Config.php:141
+msgid "Change"
+msgstr ""
+
+#: Config.php:142
+msgid "Documentation"
+msgstr ""
+
+#: Config.php:143
+msgid "Requirement Changed"
+msgstr ""
+
+#: Config.php:144
+msgid "Not Possible"
+msgstr ""
+
+#: Config.php:145
+msgid "Implementation"
+msgstr ""
+
+#: Config.php:146
+msgid "Review"
+msgstr ""
+
+#: Config.php:147
+msgid "Integration"
+msgstr ""
+
+#: Config.php:154
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:156
+msgid "Enabled Features in Sales Application."
+msgstr ""
+
+#: Config.php:163
+msgid "Invoices Module"
+msgstr ""
+
+#: Config.php:173
+msgid "Example String"
+msgstr ""
+
+#: Config.php:175
+msgid "Just an example string for test purpose"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr ""
+
+#: Model/ExampleRecord.php:35
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:35
+#: Model/ExampleRecord.php:36
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:39
 msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:69
-msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:79
-msgid "Last modified"
+#: Model/ExampleRecord.php:40
+msgid "example record lists"
 msgstr ""
 
-#: js/Model.js:80
-msgid "Last modifier"
+#: Model/ExampleRecord.php:106 Model/ExampleRecord.php:128
+msgid "Number"
 msgstr ""
 
-#: js/Model.js:81
-msgid "Creation Time"
+#: Preference.php:60
+msgid "Default Example Record Container"
 msgstr ""
 
-#: js/Model.js:82
-msgid "Creator"
-msgstr ""
-
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
+#: Preference.php:61
+msgid "The default container for new records"
 msgstr ""

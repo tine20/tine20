@@ -306,7 +306,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         if (! node.attributes.isPersistentFilter) {
             return;
         }
-        
+
+        e.stopEvent();
         Tine.log.debug(node);
         
         var record = this.store.getById(node.id);

@@ -1,14 +1,24 @@
 
 =TINE 2.0 RELEASENOTES=
                     
-  Release:     2017.02
-  Last change: 2017-01-25
+  Release:     Caroline (2017.11)
+  Last change:
 
-== Removal of Community Applications ==
+GENERAL CHANGES
+---
 
-We no longer support Expressomail, Expressodriver, Sipgate and RequestTracker.
+* Replication
+* ... TODO
 
-They have been moved to a separate branch (community_apps):
-https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/community_apps
+FILEMANAGER
+---
 
-== TODO: add more new stuff (from 2016.11-develop and 2016.09) ==
+* separate ACL on all folder nodes
+* fulltext search with tika
+* preview service
+* ... TODO
+
+CALENDAR
+---
+
+* .. TODO

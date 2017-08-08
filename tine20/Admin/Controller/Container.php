@@ -328,5 +328,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
             default;
                break;
         }
+
+        parent::_checkRight($_action);
     }
 }

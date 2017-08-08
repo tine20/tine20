@@ -476,10 +476,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     protected function _createMyConf($path, $config)
     {
+        $port = $config->port ? $config->port : 3306;
+
         $mycnfData = <<<EOT
 [client]
 host = {$config->host}
-port = {$config->port}
+port = {$port}
 user = {$config->username}
 password = {$config->password}
 EOT;
@@ -502,5 +504,13 @@ EOT;
             }
         }
         return false;
+    }
+
+    protected function _addDeclarationCollation(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
+    {
+        if (isset($_field->collation)) {
+            $_buffer[] = 'COLLATE ' . $_field->collation;
+        }
+        return $_buffer;
     }
 }

@@ -10,8 +10,22 @@
  */
 class Tinebase_Auth_SecondFactor_PrivacyIdea extends Tinebase_Auth_SecondFactor_Abstract
 {
-    public function validate($username, $password)
+    /**
+     * validate second factor
+     *
+     * @param string $username
+     * @param string $password
+     * @param boolean $allowEmpty
+     * @return integer (Tinebase_Auth::FAILURE|Tinebase_Auth::SUCCESS)
+     */
+    public function validate($username, $password, $allowEmpty = false)
     {
+        if (! $allowEmpty && empty($password)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Empty password given');
+            return Tinebase_Auth::FAILURE;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Options: ' . print_r($this->_options, true));
 

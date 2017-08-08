@@ -35,10 +35,16 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      */
     store: null,
 
+    app: null,
+
     /**
      * initializes the component
      */
     initComponent: function() {
+        if (!this.app && this.recordClass) {
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+        }
+
         this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, Ext.applyIf({},this));
         this.items = [this.combo];
 
@@ -62,8 +68,6 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
             var value = this.combo.getValue();
 
             if (value.length) {
-                var recordToAdd = this.combo.selectedRecord;
-
                 // check if another relationPicker has the same record selected
                 if (this.modelUnique) {
                     var hasDuplicate = false,
@@ -97,23 +101,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                 if (value != this.combo.startValue) {
                     this.removeIdFromStore(this.combo.startValue);
                 }
-
-                if (this.store.findBy(function(record, id) {
-                    if(record) {
-                        if(record.get('related_id') == value && record.get('type') == this.relationType) return true;
-                    }
-                }, this) == -1) {
-                    var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.editDialog.relationsPanel.getRelationDefaults(), {
-                        related_record: recordToAdd.data,
-                        related_id: recordToAdd.id,
-                        related_model: this.fullModelName,
-                        type: this.relationType,
-                        related_degree: this.relationDegree
-                    }), recordToAdd.id);
-
-                    this.combo.startRecord = recordToAdd;
-                    this.store.add(relationRecord);
-                    }
+                this.addRecord(this.combo.selectedRecord);
             } else {
                 this.removeIdFromStore(this.combo.startValue);
             }
@@ -123,6 +111,31 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
         this.editDialog.relationPickers.push(this);
 
         Tine.widgets.relation.PickerCombo.superclass.initComponent.call(this);
+    },
+
+    /**
+     * Add a record to store if not existing
+     * @param recordToAdd
+     */
+    addRecord: function (recordToAdd) {
+        var record = this.store.findBy(function (record) {
+            if (record && record.get('related_id') === this.combo.getValue() && record.get('type') === this.relationType) {
+                return true;
+            }
+        }, this);
+
+        if (record === -1) {
+            var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.editDialog.relationsPanel.getRelationDefaults(), {
+                related_record: recordToAdd.data,
+                related_id: recordToAdd.id,
+                related_model: this.fullModelName,
+                type: this.relationType,
+                related_degree: this.relationDegree
+            }), recordToAdd.id);
+
+            this.combo.startRecord = recordToAdd;
+            this.store.add(relationRecord);
+        }
     },
 
     /**
@@ -146,6 +159,11 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      * Shortcut for the equivalent method of the combo
      */
     setValue: function(v) {
+        // If v might be a record, we try to select it and if not in store we create it in relation store
+        if (v.hasOwnProperty('data')) {
+            this.addRecord(v);
+        }
+
         return this.combo.setValue(v);
     },
     

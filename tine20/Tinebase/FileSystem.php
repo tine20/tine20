@@ -94,6 +94,22 @@ class Tinebase_FileSystem implements
      * @var array
      */
     protected $_statCache = array();
+
+    /**
+     * class cache to remember secondFactor check per node id. This is required as the "state" might change
+     * during an update for example. Node is not pin protected, gets updated, becomes pin protected -> the final get
+     * at the end of the update process fails -> pin protection will only be checked once, the first time in a request
+     *
+     * @var array
+     */
+    protected $_secondFactorCache = array();
+
+    /**
+     * class cache to remember all members of the notification role
+     *
+     * @var array
+     */
+    protected $_quotaNotificationRoleMembers = array();
     
     /**
      * holds the instance of the singleton
@@ -146,7 +162,7 @@ class Tinebase_FileSystem implements
 
     public function resetBackends()
     {
-        $config = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM};
+        $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
         $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_notificationActive = true === $config->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
@@ -154,9 +170,17 @@ class Tinebase_FileSystem implements
 
         $this->_treeNodeBackend = null;
 
-        $this->_fileObjectBackend  = new Tinebase_Tree_FileObject(null, array(
+        $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
             Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
         ));
+    }
+
+    /**
+     * @return Tinebase_Tree_FileObject
+     */
+    public function getFileObjectBackend()
+    {
+        return $this->_fileObjectBackend;
     }
 
     public function setStreamOptionForNextOperation($_key, $_value)
@@ -243,12 +267,13 @@ class Tinebase_FileSystem implements
         return $node;
     }
 
-    protected function _getTreeNodeBackend()
+    public function _getTreeNodeBackend()
     {
         if ($this->_treeNodeBackend === null) {
             $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
                 'modelName' => $this->_treeNodeModel,
-                Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS => $this->_notificationActive
+                Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS => $this->_notificationActive,
+                Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive,
             ));
         }
 
@@ -375,6 +400,7 @@ class Tinebase_FileSystem implements
             $parentNode = $this->get($node->parent_id);
             $node->acl_node = $parentNode->acl_node;
             $this->update($node);
+            $this->_nodeAclController->deleteGrantsOfRecord($node->getId());
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -465,6 +491,11 @@ class Tinebase_FileSystem implements
 
             if ($sourcePathParts == $destinationPathParts) {
                 throw new Tinebase_Exception_UnexpectedValue("Source path and destination path must be different.");
+            }
+
+            if (null !== ($deletedNode = $this->_getTreeNodeBackend()
+                    ->getChild($parentNode, $destinationNodeName, true, false)) && $deletedNode->is_deleted) {
+                $this->_updateDeletedNodeName($deletedNode);
             }
 
             // set new node properties
@@ -678,17 +709,171 @@ class Tinebase_FileSystem implements
         return $newFileObject;
     }
 
+    public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $effectiveQuota = $total;
+        $localQuota = null !== $node->quota ? (int)$node->quota : null;
+        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+            $localSize = $node->size;
+        } else {
+            $localSize = $node->revision_size;
+        }
+        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $personalNode = null;
+        if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $personalNode = $this->stat('/Filemanager/folders/personal');
+        }
+
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $tinebaseState = $tinebaseApplication->xprops('state');
+
+        $totalUsage = 0;
+        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
+                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+            }
+        } else {
+            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
+                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
+            }
+        }
+        $effectiveUsage = $totalUsage;
+
+
+        $effectiveFree = $effectiveQuota > 0 ? $effectiveQuota - $effectiveUsage : null;
+
+        foreach ($this->_getTreeNodeBackend()->getAllFolderNodes(new Tinebase_Record_RecordSet(
+                'Tinebase_Model_Tree_Node', array($node))) as $parentNode) {
+            if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                $size = $parentNode->size;
+            } else {
+                $size = $parentNode->revision_size;
+            }
+
+            // folder quota
+            if (null !== $parentNode->quota && 0 !== (int)$parentNode->quota) {
+                if (null === $localQuota) {
+                    $localQuota = $parentNode->quota;
+                    $localSize = $size;
+                }
+                $free = $parentNode->quota - $size;
+                if (null === $effectiveFree || $free < $effectiveFree) {
+                    $effectiveFree = $free;
+                    $effectiveQuota = $parentNode->quota;
+                    $effectiveUsage = $size;
+                }
+            }
+
+            //personal quota
+            if (null !== $personalNode && $parentNode->parent_id === $personalNode->getId()) {
+                $user = Tinebase_User::getInstance()->getFullUserById($parentNode->name);
+                $quota = isset(
+                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
+                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                    $totalByUser;
+                if ($quota > 0) {
+                    if (null === $localQuota) {
+                        $localQuota = $quota;
+                        $localSize = $size;
+                    }
+                    $free = $quota - $size;
+                    if (null === $effectiveFree || $free < $effectiveFree) {
+                        $effectiveFree = $free;
+                        $effectiveQuota = $quota;
+                        $effectiveUsage = $size;
+                    }
+                }
+            }
+        }
+
+        if (null === $localQuota) {
+            $localQuota = $total;
+            $localSize = $totalUsage;
+        }
+
+        return array(
+            'localQuota'        => $localQuota,
+            'localUsage'        => $localSize,
+            'localFree'         => $localQuota > $localSize ? $localQuota - $localSize : 0,
+            'effectiveQuota'    => $effectiveQuota,
+            'effectiveUsage'    => $effectiveUsage,
+            'effectiveFree'     => $effectiveFree,
+        );
+    }
+
     /**
      * @param Tinebase_Record_RecordSet $_nodes
      * @param int $_sizeDiff
      * @param int $_revisionSizeDiff
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _updateFolderSizesUpToRoot(Tinebase_Record_RecordSet $_nodes, $_sizeDiff, $_revisionSizeDiff)
     {
-        $objectIds = $this->_getTreeNodeBackend()->getAllFolderNodes($_nodes)->object_id;
-        if (!empty($objectIds)) {
+        $sizeIncrease = $_sizeDiff > 0 || $_revisionSizeDiff > 0;
+
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+
+        $applicationController = Tinebase_Application::getInstance();
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+        $tinebaseState = $tinebaseApplication->xprops('state');
+        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+        }
+        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+        }
+
+        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] += $_sizeDiff;
+        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] += $_revisionSizeDiff;
+
+        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] < 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' root size should not become smaller than 0: ' .
+                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE]);
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+        }
+        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] < 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' root revision size should not become smaller than 0: ' .
+                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE]);
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+        }
+
+        if (true === $sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
+            $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+            if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] > $total) {
+                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                }
+            } else {
+                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] > $total) {
+                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                }
+            }
+        }
+        $applicationController->updateApplication($tinebaseApplication);
+
+        $folderNodes = $this->_getTreeNodeBackend()->getAllFolderNodes($_nodes);
+        if ($folderNodes->count() > 0) {
+
+            $userController = Tinebase_User::getInstance();
+            $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+            $personalNode = null;
+            if (true === $sizeIncrease && $applicationController->isInstalled('Filemanager')) {
+                try {
+                    $personalNode = $this->stat('/Filemanager/folders/personal');
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->initializeApplication('Filemanager');
+                    $personalNode = $this->stat('/Filemanager/folders/personal');
+                }
+            }
+
             /** @var Tinebase_Model_Tree_FileObject $fileObject */
-            foreach($this->_fileObjectBackend->getMultiple($objectIds) as $fileObject) {
+            foreach($this->_fileObjectBackend->getMultiple($folderNodes->object_id) as $fileObject) {
                 $fileObject->size = (int)$fileObject->size + (int)$_sizeDiff;
                 if ($fileObject->size < 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -701,7 +886,36 @@ class Tinebase_FileSystem implements
                         . ' revision_size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
                     $fileObject->revision_size = 0;
                 }
-                $this->_fileObjectBackend->update($fileObject);
+
+                if (true === $sizeIncrease) {
+                    /** @var Tinebase_Model_Tree_Node $folderNode */
+                    foreach ($folderNodes->filter('object_id', $fileObject->getId()) as $folderNode) {
+                        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                            $size = $fileObject->size;
+                        } else {
+                            $size = $fileObject->revision_size;
+                        }
+
+                        // folder quota
+                        if (null !== $folderNode->quota && $size > $folderNode->quota) {
+                            throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                        }
+
+                        //personal quota
+                        if (null !== $personalNode && $folderNode->parent_id === $personalNode->getId()) {
+                            $user = $userController->getFullUserById($folderNode->name);
+                            $quota = isset(
+                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
+                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                                $totalByUser;
+                            if ($quota > 0 && $size > $quota) {
+                                throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                            }
+                        }
+                    }
+                }
+
+                $this->_fileObjectBackend->update($fileObject, false);
             }
         }
     }
@@ -1052,6 +1266,11 @@ class Tinebase_FileSystem implements
                 $node->name = basename($newPath);
             }
 
+            try {
+                $deletedNewPathNode = $this->stat($newPath, null, true);
+                $this->_updateDeletedNodeName($deletedNewPathNode);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+
             $node = $this->_getTreeNodeBackend()->update($node, true);
 
             $transactionManager->commitTransaction($transactionId);
@@ -1068,6 +1287,21 @@ class Tinebase_FileSystem implements
                 $transactionManager->rollBack();
             }
         }
+    }
+
+    protected function _updateDeletedNodeName(Tinebase_Model_Tree_Node $_node)
+    {
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+        $parentId = $_node->parent_id;
+        do {
+            $id = uniqid();
+            $name = $_node->name . $id;
+            if (($len = mb_strlen($name)) > 255) {
+                $name = mb_substr($name, $len - 255);
+            }
+        } while (null !== $treeNodeBackend->getChild($parentId, $name, true, false));
+        $_node->name = $name;
+        $this->_getTreeNodeBackend()->update($_node, true);
     }
     
     /**
@@ -1156,7 +1390,7 @@ class Tinebase_FileSystem implements
                 $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
                     0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
-            $this->_getTreeNodeBackend()->delete($node->getId());
+            $this->_getTreeNodeBackend()->softDelete($node->getId());
             $this->clearStatCache($path);
 
             // delete object only, if no other tree node refers to it
@@ -1203,10 +1437,11 @@ class Tinebase_FileSystem implements
      *
      * @param  string  $path
      * @param  int|null $revision
+     * @param  boolean $getDeleted
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_NotFound
      */
-    public function stat($path, $revision = null)
+    public function stat($path, $revision = null, $getDeleted = false)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -1252,7 +1487,11 @@ class Tinebase_FileSystem implements
             $missingPathParts = array_diff_assoc($this->_splitPath($path), $pathParts);
 
             foreach ($missingPathParts as $pathPart) {
-                $node = $this->_getTreeNodeBackend()->getChild($parentNode, $pathPart);
+                $node = $this->_getTreeNodeBackend()->getChild($parentNode, $pathPart, $getDeleted);
+
+                if ($node->is_deleted && null !== $parentNode && $parentNode->is_deleted) {
+                    throw new Tinebase_Exception_NotFound('cascading deleted nodes');
+                }
 
                 // keep track of current path position
                 array_push($pathParts, $pathPart);
@@ -1262,6 +1501,8 @@ class Tinebase_FileSystem implements
 
                 $parentNode = $node;
             }
+
+
 
             if (null !== $revision) {
                 try {
@@ -1351,6 +1592,56 @@ class Tinebase_FileSystem implements
     /**
      * delete file node
      *
+     * @param string $id
+     * @param bool $updateDirectoryNodesHash
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function unDeleteFileNode($id, $updateDirectoryNodesHash = true)
+    {
+        if (false === $this->_modLogActive ) {
+            return;
+        }
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $node = $this->get($id, true);
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($node, 'undelete', $node);
+            $this->_getTreeNodeBackend()->update($node);
+
+            /** @var Tinebase_Model_Tree_FileObject $object */
+            $object = $this->_fileObjectBackend->get($node->object_id, true);
+
+            if ($object->is_deleted) {
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($object, 'undelete', $object);
+                $object->indexed_hash = '';
+                $this->_fileObjectBackend->update($object);
+            }
+
+            if (true === $updateDirectoryNodesHash) {
+                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
+                    (int)$node->size, (int)$node->revision_size);
+
+                try {
+                    $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->getPathOfNode($node, true));
+                    $this->_updateDirectoryNodesHash(dirname($path->statpath));
+
+                    // Tinebase_Model_Tree_Node_Path::_getContainerType may find that is not a personal or shared container (for example it may be a records container)
+                } catch (Tinebase_Exception_InvalidArgument $teia) {}
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+    }
+
+    /**
+     * delete file node
+     *
      * @param Tinebase_Model_Tree_Node $node
      * @param bool $updateDirectoryNodesHash
      * @throws Tinebase_Exception_InvalidArgument
@@ -1420,28 +1711,43 @@ class Tinebase_FileSystem implements
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
-            $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
-                ? $_parentId
-                : ($_parentId ? $this->get($_parentId) : null);
 
-            $directoryObject = new Tinebase_Model_Tree_FileObject(array(
-                'type'          => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                'contentytype'  => null,
-                'hash'          => Tinebase_Record_Abstract::generateUID(),
-                'size'          => 0
-            ));
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($directoryObject, 'create');
-            $directoryObject = $this->_fileObjectBackend->create($directoryObject);
+            if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $name, true, false)) &&
+                    $deletedNode->is_deleted) {
+                $deletedNode->is_deleted = 0;
+                $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
+                if ($object->is_deleted) {
+                    $object->is_deleted = 0;
+                    $this->_fileObjectBackend->update($object);
+                }
+                //we can use _treeNodeBackend as we called get further up
+                $treeNode = $this->_treeNodeBackend->update($deletedNode);
+            } else {
 
-            $treeNode = new Tinebase_Model_Tree_Node(array(
-                'name'          => $name,
-                'object_id'     => $directoryObject->getId(),
-                'parent_id'     => $parentId,
-                'acl_node'      => $parentNode && !empty($parentNode->acl_node) ? $parentNode->acl_node : null,
-                Tinebase_Model_Tree_Node::XPROPS_REVISION
-                                => $parentNode && !empty($parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION}) ? $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
-            ));
-            $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
+                $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
+                    ? $_parentId
+                    : ($_parentId ? $this->get($_parentId) : null);
+
+                $directoryObject = new Tinebase_Model_Tree_FileObject(array(
+                    'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                    'contentytype' => null,
+                    'hash' => Tinebase_Record_Abstract::generateUID(),
+                    'size' => 0
+                ));
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($directoryObject, 'create');
+                $directoryObject = $this->_fileObjectBackend->create($directoryObject);
+
+                $treeNode = new Tinebase_Model_Tree_Node(array(
+                    'name' => $name,
+                    'object_id' => $directoryObject->getId(),
+                    'parent_id' => $parentId,
+                    'acl_node' => $parentNode && !empty($parentNode->acl_node) ? $parentNode->acl_node : null,
+                    Tinebase_Model_Tree_Node::XPROPS_REVISION => $parentNode &&
+                        !empty($parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION}) ?
+                        $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
+                ));
+                $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
+            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -1468,37 +1774,65 @@ class Tinebase_FileSystem implements
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
-            $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
-            $fileObject = new Tinebase_Model_Tree_FileObject(array(
-                'type'          => $_fileType,
-                'contentytype'  => null,
-            ));
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
+            if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $_name, true, false)) &&
+                    $deletedNode->is_deleted) {
+                $deletedNode->is_deleted = 0;
+                /** @var Tinebase_Model_Tree_FileObject $object */
+                $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
+                if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
+                    $object->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+                    $object->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+                    Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$object->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_name}");
+                    }
+                }
+                $object->hash = Tinebase_Record_Abstract::generateUID();
+                $object->size = 0;
+                $object->is_deleted = 0;
+                $object->type = $_fileType;
+                $object->preview_count = 0;
+                $this->_fileObjectBackend->update($object);
+                //we can use _treeNodeBackend as we called get further up
+                $treeNode = $this->_treeNodeBackend->update($deletedNode);
+            } else {
 
-            // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
-            if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
-                $fileObject->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-                $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-                Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_name}");
+                $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
+                $fileObject = new Tinebase_Model_Tree_FileObject(array(
+                    'type' => $_fileType,
+                    'contentytype' => null,
+                ));
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
+
+                // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
+                if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
+                    $fileObject->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+                    $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+                    Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_name}");
+                    }
+
+                }
+
+                $fileObject = $this->_fileObjectBackend->create($fileObject);
+
+                $treeNode = new Tinebase_Model_Tree_Node(array(
+                    'name' => $_name,
+                    'object_id' => $fileObject->getId(),
+                    'parent_id' => $parentId,
+                    'acl_node' => $parentNode && empty($parentNode->acl_node) ? null : $parentNode->acl_node,
+                ));
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                        ' ' . print_r($treeNode->toArray(), true));
+                }
+
+                $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
             }
-
-            $fileObject = $this->_fileObjectBackend->create($fileObject);
-
-            $treeNode = new Tinebase_Model_Tree_Node(array(
-                'name'          => $_name,
-                'object_id'     => $fileObject->getId(),
-                'parent_id'     => $parentId,
-                'acl_node'      => $parentNode && empty($parentNode->acl_node) ? null : $parentNode->acl_node,
-            ));
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                ' ' . print_r($treeNode->toArray(), true));
-
-            $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -1729,7 +2063,12 @@ class Tinebase_FileSystem implements
                 $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
             }
 
-            $newNode = $this->_getTreeNodeBackend()->update($_node);
+            /** @var Tinebase_Model_Tree_Node $newNode */
+            $newNode = $this->_getTreeNodeBackend()->update($_node, false);
+
+            if (isset($_node->grants)) {
+                $newNode->grants = $_node->grants;
+            }
 
             $this->_getTreeNodeBackend()->updated($newNode, $currentNodeObject);
 
@@ -1750,14 +2089,15 @@ class Tinebase_FileSystem implements
      * @param string $_property
      * @param string $_newValue
      * @param string $_oldValue
+     * @param bool   $_ignoreACL
      */
-    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue)
+    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue, $_ignoreACL = true)
     {
         $childIds = $this->getAllChildIds(array($_node->getId()), array(array(
             'field'     => $_property,
             'operator'  => 'equals',
             'value'     => $_oldValue
-        )));
+        )), $_ignoreACL);
         if (count($childIds) > 0) {
             $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
         }
@@ -1815,7 +2155,7 @@ class Tinebase_FileSystem implements
             'ignoreAcl' => $_ignoreAcl,
         ));
         if (null !== $_requiredGrants) {
-            $searchFilter->setRequiredGrants($_requiredGrants);
+            $searchFilter->setRequiredGrants((array) $_requiredGrants);
         }
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
@@ -2002,6 +2342,7 @@ class Tinebase_FileSystem implements
             $hashes = array();
         }
 
+        // hard delete is ok here
         $this->_fileObjectBackend->delete($toDeleteIds);
         if (true === $this->_indexingActive) {
             Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($toDeleteIds);
@@ -2169,7 +2510,11 @@ class Tinebase_FileSystem implements
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
                 if ($_path->containerOwner && ($_topLevelAllowed || ! $_path->isToplevelPath())) {
-                    $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                    if ($_path->isToplevelPath()) {
+                        $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                    } else {
+                        $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                    }
                 } else {
                     $hasPermission = ($_action === 'get');
                 }
@@ -2226,6 +2571,8 @@ class Tinebase_FileSystem implements
             case 'delete':
                 $requiredGrant = Tinebase_Model_Grants::GRANT_DELETE;
                 break;
+            case 'admin':
+                return false;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
@@ -2258,6 +2605,18 @@ class Tinebase_FileSystem implements
     {
         // always refetch node to have current acl_node value
         $node = $this->get($_containerId);
+        if (!isset($this->_secondFactorCache[$node->getId()]) &&
+            null !== $node->acl_node && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+            if ($node->getId() !== $node->acl_node) {
+                $acl_node = $this->get($node->acl_node);
+            } else {
+                $acl_node = $node;
+            }
+            if ($acl_node->pin_protected) {
+                return false;
+            }
+        }
+        $this->_secondFactorCache[$node->getId()] = true;
         /** @noinspection PhpUndefinedMethodInspection */
         $account = $_accountId instanceof Tinebase_Model_FullUser
             ? $_accountId
@@ -2413,6 +2772,7 @@ class Tinebase_FileSystem implements
         foreach ($otherAccountNodes as $otherAccount) {
             if (count($sharedFoldersOfOtherUsers->filter('parent_id', $otherAccount->getId())) > 0) {
                 $result->addRecord($otherAccount);
+                /** @noinspection PhpUndefinedMethodInspection */
                 $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend(
                     'accountId',
                     $otherAccount->name,
@@ -2532,6 +2892,7 @@ class Tinebase_FileSystem implements
                 Tinebase_Model_Grants::GRANT_SYNC => true,
             ));
         } else if ($pathRecord->isToplevelPath() && $pathRecord->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $account = $_accountId instanceof Tinebase_Model_FullUser
                 ? $_accountId
                 : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
@@ -2570,7 +2931,7 @@ class Tinebase_FileSystem implements
      *
      * TODO add to interface
      */
-    public function getGrantsOfContainer($_containerId, $_ignoreAcl = false, $_grantModel = 'Tinebase_Model_Grants')
+    public function getGrantsOfContainer($_containerId, $_ignoreAcl = false, /** @noinspection PhpUnusedParameterInspection */$_grantModel = 'Tinebase_Model_Grants')
     {
         $record = $_containerId instanceof Tinebase_Model_Tree_Node ? $_containerId : $this->get($_containerId);
 
@@ -2677,7 +3038,6 @@ class Tinebase_FileSystem implements
         $invalidHashes = array();
         $created = 0;
         $deleted = 0;
-        $transactionManager = Tinebase_TransactionManager::getInstance();
 
         foreach($treeNodeBackend->search(
                 new Tinebase_Model_Tree_Node_Filter(array(
@@ -2693,7 +3053,11 @@ class Tinebase_FileSystem implements
                 continue;
             }
 
-            foreach ($node->available_revisions as $revision) {
+            $availableRevisions = $node->available_revisions;
+            if (!is_array($availableRevisions)) {
+                $availableRevisions = explode(',', $availableRevisions);
+            }
+            foreach ($availableRevisions as $revision) {
                 if ($node->revision != $revision) {
                     $treeNodeBackend->setRevision($revision);
                     try {
@@ -3012,5 +3376,181 @@ class Tinebase_FileSystem implements
         } while (false);
 
         return $_alarm;
+    }
+
+    public function notifyQuota()
+    {
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $quotaIncludesRevisions = $quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION};
+        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
+        $this->_quotaNotificationRoleMembers = array();
+
+        if (!empty($notificationRole = $quotaConfig->{Tinebase_Config::QUOTA_SQ_NOTIFICATION_ROLE})) {
+            try {
+                $role = Tinebase_Role::getInstance()->getRoleByName($notificationRole);
+                $this->_quotaNotificationRoleMembers =
+                    Tinebase_Role::getInstance()->getRoleMembersAccounts($role->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
+
+        if ($total > 0) {
+            /** @var Tinebase_Model_Application $tinebaseApplication */
+            $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+            $tinebaseState = $tinebaseApplication->xprops('state');
+
+            $totalUsage = 0;
+            if ($quotaIncludesRevisions) {
+                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
+                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+                }
+            } else {
+                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
+                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
+                }
+            }
+
+            if ($totalUsage >= ($total * 0.99)) {
+                $this->_sendQuotaNotification(null, false);
+            } elseif($softQuota > 0 && $totalUsage > ($total * $softQuota / 100)) {
+                $this->_sendQuotaNotification();
+            }
+        }
+
+        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $personalNode = null;
+        if ($totalByUser > 0 && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $personalNode = $this->stat('/Filemanager/folders/personal');
+            /** @var Tinebase_Model_Tree_Node $node */
+            foreach ($treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(
+                        array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
+                        array('field' => 'parent_id', 'operator' => 'quals', 'value' => $personalNode->getId())
+                    ), '', array('ignoreAcl' => true))) as $node) {
+                if ($quotaIncludesRevisions) {
+                    $size = $node->revision_size;
+                } else {
+                    $size = $node->size;
+                }
+                if ($size >= ($totalByUser * 0.99)) {
+                    $this->_sendQuotaNotification($node, false);
+                } elseif($softQuota > 0 && $size > ($totalByUser * $softQuota / 100)) {
+                    $this->_sendQuotaNotification($node);
+                }
+            }
+        }
+
+        foreach ($treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(
+                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
+                    array('field' => 'quota', 'operator' => 'greater', 'value' => 0)
+                ), '', array('ignoreAcl' => true))) as $node) {
+            if ($quotaIncludesRevisions) {
+                $size = $node->revision_size;
+            } else {
+                $size = $node->size;
+            }
+            if ($size >= ($node->quota * 0.99)) {
+                $this->_sendQuotaNotification($node, false);
+            } elseif($softQuota > 0 && $size > ($node->quota * $softQuota / 100)) {
+                $this->_sendQuotaNotification($node);
+            }
+        }
+
+        /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
+        $imapBackend = Tinebase_EmailUser::getInstance();
+
+        if (!$imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            return;
+        }
+
+        /** @var Tinebase_Model_EmailUser $emailUser */
+        foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
+            $alert = false;
+            $softAlert = false;
+            if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
+                $alert = true;
+            } elseif($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
+                $alert = true;
+                $softAlert = true;
+            }
+
+            if (true === $alert) {
+                /** @var Tinebase_Model_FullUser $user */
+                foreach (Tinebase_User::getInstance()->getMultiple(array_unique(array_merge(
+                        $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
+                    $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                        $user->accountId));
+                    $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+
+                    // _('email quota notification')
+                    // _('email soft quota notification')
+                    $translatedSubject = $translate->_('email ' . ($softAlert ? 'soft ' : '') . 'quota notification');
+
+                    Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject,
+                        $emailUser->emailUsername . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
+                }
+            }
+        }
+    }
+
+    protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
+    {
+        try {
+            $path = $this->getPathOfNode($node, true);
+            if (null === $node || null === $node->acl_node) {
+                $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
+            } else {
+                $accountIds = array();
+                $acl_node = $node;
+                if ($node->acl_node !== $node->getId()) {
+                    $acl_node = $this->get($node->acl_node);
+                }
+                /** @var Tinebase_Model_Grants $grants */
+                foreach ($this->getGrantsOfContainer($acl_node, true) as $grants) {
+                    if (!$grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                        continue;
+                    }
+                    switch($grants->account_type) {
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                            $accountIds[] = $grants->account_id;
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                            $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($grants->account_id));
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                            foreach (Tinebase_Role::getInstance()->getRoleMembers($grants->account_id) as $role) {
+                                switch($role['account_type']) {
+                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                                        $accountIds[] = $role['account_id'];
+                                        break;
+                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                                        $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+
+            $accountIds = array_merge($accountIds, $this->_quotaNotificationRoleMembers);
+            $accountIds = array_unique($accountIds);
+
+            /** @var Tinebase_Model_FullUser $user */
+            foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
+                $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                    $user->accountId));
+                $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+
+                // _('filemanager quota notification')
+                // _('filemanager soft quota notification')
+                $translatedSubject = $translate->_('filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification');
+
+                Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
+            }
+        } catch(Exception $e) {
+            // LOG
+        }
     }
 }

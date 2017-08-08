@@ -1,7 +1,7 @@
-Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
+Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
     stylesheetPath: 'Calendar/css/print.css',
 
-    generateBody: function(event) {
+    generateBody: function(component, data) {
         var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
 
         return new Promise(function (fulfill, reject) {
@@ -30,11 +30,11 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                         '</div>',
                         '<div class="print-single-details-row">',
                             '<span class="cal-print-single-label">', i18n._('Start Time'), '</span>',
-                            '<span class="cal-print-single-value">{[this.datetimeRenderer(values.dtstart)]}</span>',
+                            '<span class="cal-print-single-value">{values.dtstart}</span>',
                         '</div>',
                         '<div class="print-single-details-row">',
                             '<span class="cal-print-single-label">', i18n._('End Time'), '</span>',
-                            '<span class="cal-print-single-value">{[this.datetimeRenderer(values.dtend)]}</span>',
+                            '<span class="cal-print-single-value">{values.dtend}</span>',
                         '</div>',
                         // @TODO print rrule
                         '{[this.customFieldRenderer(values.customfields)]}',
@@ -46,7 +46,6 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 '</div>',
 
                 {
-                    datetimeRenderer: Tine.Calendar.EventDetailsPanel.prototype.datetimeRenderer,
                     attendeeRenderer: Tine.Calendar.EventDetailsPanel.prototype.attendeeRenderer,
                     customFieldRenderer: function(values) {
                         return Tine.widgets.customfields.Renderer.renderAll('Calendar', Tine.Calendar.Model.Event, values);
@@ -54,13 +53,11 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 }
             );
 
-            fulfill(bodyTpl.apply(event.data));
+            fulfill(bodyTpl.apply(data));
         });
     },
 
-    getTitle: function(event) {
-        return event.getTitle();
-    },
-
-
+    getTitle: function(data) {
+        return data.summary;
+    }
 });

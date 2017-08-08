@@ -142,7 +142,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
      */
     doPrintOnStylesheetLoad: function(win, component) {
         var me = this;
-        var styleLoaded = new Promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
             var checkcss = function(win, component) {
                 var el = win.document.getElementById('csscheck'),
                     comp = el.currentStyle || getComputedStyle(el, null);
@@ -153,12 +153,13 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                 fulfill();
             };
             checkcss(win, component);
-        });
-
-        return styleLoaded.then(function() {
-            me.onBeforePrint(win.document, component);
-            return me.doPrint(win);
-        });
+        })
+            .then(function() {
+                me.onBeforePrint(win.document, component);
+            })
+            .then(function() {
+                return me.doPrint(win);
+            });
     },
 
     doPrint: function(win) {
@@ -188,7 +189,11 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                 }, 'Tinebase/js/html2canvas');
 
             } else {
-                win.print();
+                try {
+                    win.document.execCommand('print', false, null);
+                } catch(e) {
+                    win.print();
+                }
                 if (!me.debug) {
                     win.close();
                 }
@@ -220,11 +225,11 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         var me = this;
         return new Promise(function (fulfill, reject) {
             me.prepareData(component).then(function(data) {
-                me.generateBody(component).then(function(bodyHtml) {
+                me.generateBody(component, data).then(function(bodyHtml) {
                     fulfill(new Ext.XTemplate(
                         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
                         '<html>',
-                        '<head>',
+                        '<head> ',
                         '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
                         me.getAdditionalHeaders(),
                         '<link href="' + me.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
@@ -254,9 +259,10 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     * Returns the HTML that will be placed into the print window. This should produce HTML to go inside the
     * <body> element only, as <head> is generated in the print function
     * @param {Ext.Component} component The component to render
+    * @param data The data extracted from the component
     * @return {String} The HTML fragment to place inside the print window's <body> element
     */
-    generateBody: function() {
+    generateBody: function(component, data) {
         return new Promise(function (fulfill, reject) {
             fulfill('')
         });

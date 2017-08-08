@@ -33,4 +33,14 @@ class Events_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('events_event', '2');
         $this->setApplicationVersion('Events', '10.1');
     }
+
+    public function update_1()
+    {
+        $this->setApplicationVersion('Events', '10.2');
+    }
+
+    public function update_2()
+    {
+        $this->setApplicationVersion('Events', '11.0');
+    }
 }

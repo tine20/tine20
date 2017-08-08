@@ -40,6 +40,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_cloneRow = null;
 
+    protected $_cloneRowStyles = array();
+
     protected $_excelVersion = null;
 
 
@@ -158,6 +160,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
                 $cell->setValue($newRow['value'] . '#' . $this->_rowCount);
                 $cell->setXfIndex($newRow['XFIndex']);
+            }
+
+            $rowDimension = $sheet->getRowDimension($newRowOffset);
+            foreach($this->_cloneRowStyles as $func => $value) {
+                call_user_func(array($rowDimension, $func), $value);
             }
         }
     }
@@ -327,6 +334,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         $rowIter = $sheet->getRowIterator();
         /** @var PHPExcel_Worksheet_Row $row */
+        /** @noinspection PhpUnusedLocalVariableInspection */
         foreach($rowIter as $row) {
             ++$this->_rowCount;
         }
@@ -337,13 +345,15 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         // TODO header row?
 
         if (null === ($block = $this->_findCell('${ROW}'))) {
-            return $this->_findFirstFreeRow();
+            $this->_findFirstFreeRow();
+            return;
         }
         $startColumn = $block->getColumn();
         $this->_rowOffset = $block->getRow();
 
         if (null === ($block = $this->_findCell('${/ROW}'))) {
-            return $this->_findFirstFreeRow();
+            $this->_findFirstFreeRow();
+            return;
         }
 
         $this->_dumpRecords = false;
@@ -363,7 +373,17 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         /** @var  $rowIterator */
         $rowIterator = $sheet->getRowIterator($this->_rowOffset);
-        $cellIterator = $rowIterator->current()->getCellIterator($startColumn, $endColumn);
+        $row = $rowIterator->current();
+        $rowDimension = $sheet->getRowDimension($row->getRowIndex());
+        $this->_cloneRowStyles = array(
+            'setCollapsed'      => $rowDimension->getCollapsed(),
+            'setOutlineLevel'   => $rowDimension->getOutlineLevel(),
+            'setRowHeight'      => $rowDimension->getRowHeight(),
+            'setVisible'        => $rowDimension->getVisible(),
+            'setXfIndex'        => $rowDimension->getXfIndex(),
+            'setZeroHeight'     => $rowDimension->getZeroHeight()
+        );
+        $cellIterator = $row->getCellIterator($startColumn, $endColumn);
 
         $replace = array('${ROW}', '${/ROW}');
         /** @var PHPExcel_Cell $cell */

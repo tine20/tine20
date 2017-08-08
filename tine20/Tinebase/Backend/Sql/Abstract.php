@@ -733,9 +733,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _checkTracing(Zend_Db_Select $select)
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $config = Tinebase_Core::getConfig();
-        if ( Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config && isset($config->logger)) {
-            if ($config->logger->traceQueryOrigins) {
+        $config = Tinebase_Config::getInstance();
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config && isset($config->logger)) {
+            if (isset($config->logger->traceQueryOrigins) && $config->logger->traceQueryOrigins) {
                 $e = new Exception();
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "\n" . 
                     "BACKTRACE: \n" . $e->getTraceAsString() . "\n" . 
@@ -1359,11 +1359,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $idArray = (! is_array($_id)) ? array(Tinebase_Record_Abstract::convertId($_id, $this->_modelName)) : $_id;
         $identifier = $this->_getRecordIdentifier();
 
+        $this->_inspectBeforeSoftDelete($idArray);
+
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
         );
 
         return $this->_db->update($this->_tablePrefix . $this->_tableName, array('is_deleted' => 1), $where);
+    }
+
+    /**
+     * @param array $_ids
+     */
+    protected function _inspectBeforeSoftDelete(array $_ids)
+    {
     }
     
     /**
@@ -1740,7 +1749,21 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         return $result;
     }
-    
+
+    /**
+     * increases seq by one for all records for given container
+     *
+     * @param string $containerId
+     * @return void
+     */
+    public function increaseSeqsForContainerId($containerId)
+    {
+        $seq = $this->_db->quoteIdentifier('seq');
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+
+        $this->_db->query("UPDATE {$this->_tablePrefix}{$this->_tableName} SET $seq = $seq +1 WHERE $where");
+    }
+
     /**
      * save value in in-class cache
      * 

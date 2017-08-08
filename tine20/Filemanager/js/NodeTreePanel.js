@@ -76,9 +76,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     onRecordChanges: function(data, e) {
         if (data.type == 'folder') {
-            var me = this,
+            var _ = window.lodash,
+                me = this,
                 path = data.path,
-                parentPath = path.replace(new RegExp(data.name + '$'), ''),
+                parentPath = path.replace(new RegExp(_.escapeRegExp(data.name) + '$'), ''),
                 node = this.getNodeById(data.id),
                 pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
@@ -105,18 +106,21 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             // add / remount node
-            me.expandPath(parentPath, '', function(sucess, parentNode) {
-                var childNode = parentNode.findChild('name', data.name);
-                if (! childNode) {
-                    parentNode.appendChild(node || me.loader.createNode(data));
-                } else if (childNode != node) {
-                    // node got duplicated by expand load
-                    try {
-                        node.cancelExpand();
-                        node.remove(true);
-                    } catch (e) {}
-                }
-            });
+            try {
+                me.expandPath(parentPath, '', function (sucess, parentNode) {
+                    var childNode = parentNode.findChild('name', data.name);
+                    if (!childNode) {
+                        parentNode.appendChild(node || me.loader.createNode(data));
+                    } else if (childNode != node) {
+                        // node got duplicated by expand load
+                        try {
+                            node.cancelExpand();
+                            node.remove(true);
+                        } catch (e) {
+                        }
+                    }
+                });
+            } catch (e) {}
         }
     },
 
@@ -305,8 +309,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         });
 
         this.actionUpdater = new Tine.widgets.ActionUpdater({
-            containerProperty: this.recordClass.getMeta('containerProperty'),
-            evalGrants: true,
             actions: this.ctxMenu.items
         });
     },
@@ -318,6 +320,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Ext.EventObject} event
      */
     onContextMenu: function(node, event) {
+        event.stopEvent();
         Tine.log.debug(node);
 
         // legacy for reload action
@@ -367,8 +370,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @return {String} tree path
      */
     getTreePath: function(containerPath) {
-        var treePath = '/' + this.getRootNode().id + containerPath
-            .replace(new RegExp('^' + Tine.Tinebase.container.getMyFileNodePath()), '/myUser')
+        var _ = window.lodash,
+            treePath = '/' + this.getRootNode().id + containerPath
+            .replace(new RegExp('^' + _.escapeRegExp(Tine.Tinebase.container.getMyFileNodePath())), '/myUser')
             .replace(/^\/personal/, '/otherUsers')
             .replace(/\/$/, '');
 

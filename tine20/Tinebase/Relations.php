@@ -52,6 +52,42 @@ class Tinebase_Relations
         }
         return self::$instance;
     }
+
+    /**
+     * set all relations of a given record
+     *
+     * NOTE: given relation data is expected to be an array atm.
+     *
+     * @param  array  $_relationData    data for relations to create
+
+     * @return void
+     */
+    public function undeleteRelations($_relationData)
+    {
+        foreach((array) $_relationData as $relationData) {
+            if ($relationData instanceof Tinebase_Model_Relation) {
+                $relation = $relationData;
+            } else {
+                $relation = new Tinebase_Model_Relation($relationData, true);
+            }
+
+            $relation->related_record = null;
+
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($relation->related_model);
+                try {
+                    $appController->getBackend()->get($relation->related_id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                }
+            } catch(Tinebase_Exception_AccessDenied $tead) {
+                // we just undelete it...
+            }
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($relation, 'undelete', $relation);
+            $this->_updateRelation($relation);
+        }
+    }
     
     /**
      * set all relations of a given record
@@ -631,6 +667,12 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Resolving " . count($relations) . " relations");
 
+            if (! $records instanceof Tinebase_Record_RecordSet) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    " No recordset found");
+                return;
+            }
+
             /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
@@ -663,7 +705,7 @@ class Tinebase_Relations
     /**
      * adds a new relation
      * 
-     * @param   Tinebase_Model_Relation $_relation 
+     * @param   Tinebase_Model_Relation $_relation
      * @return  Tinebase_Model_Relation|NULL the new relation
      * @throws  Tinebase_Exception_Record_Validation
      */

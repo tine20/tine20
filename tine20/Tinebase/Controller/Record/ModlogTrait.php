@@ -48,8 +48,8 @@ trait Tinebase_Controller_Record_ModlogTrait
     /**
      * write modlog
      *
-     * @param Tinebase_Record_Interface $_newRecord
-     * @param Tinebase_Record_Interface $_oldRecord
+     * @param Tinebase_Record_Interface|null $_newRecord
+     * @param Tinebase_Record_Interface|null $_oldRecord
      * @return NULL|Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_InvalidArgument
      */

@@ -2,13 +2,13 @@
 <application>
     <name>Events</name>
     <!-- gettext('Events') -->   
-    <version>10.1</version>
+    <version>11.0</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>events_event</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -18,7 +18,8 @@
                 </field>
                 <field>
                     <name>container_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

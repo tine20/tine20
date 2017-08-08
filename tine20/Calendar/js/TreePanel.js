@@ -225,6 +225,6 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
         }
 
-        return this.supr().getSelectedContainer(requiredGrants, defaultContainer, onlySingle);
+        return this.supr().getSelectedContainer.call(this, requiredGrants, defaultContainer, onlySingle);
     }
 });

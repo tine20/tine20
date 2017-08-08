@@ -321,7 +321,13 @@ abstract class Console_Daemon
             /** @noinspection PhpUndefinedFieldInspection */
             $config->general->pidfile = $opts->p;
         }
-        
+
+        // config file path
+        if (isset($opts->config)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $config->general->configfile = $opts->config;
+        }
+
         // become daemon
         if (isset($opts->d)) {
             /** @noinspection PhpUndefinedFieldInspection */

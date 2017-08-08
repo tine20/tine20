@@ -1,4 +1,3 @@
-Tine.Calendar.Printer.EventRenderer
 Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
     paperHeight: 200, 
     

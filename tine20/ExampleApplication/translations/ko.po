@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Koreanisch\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: \n"
+
+#: js/ExampleRecordEditDialog.js:50
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
+#: Model/ExampleRecord.php:80
+msgid "Name"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:91
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:99
+msgid "Reason"
+msgstr ""
+
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr ""
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr ""
+
+#: Config.php:108
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:110
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:119
+msgid "Completed"
+msgstr ""
+
+#: Config.php:120
+msgid "Cancelled"
+msgstr ""
+
+#: Config.php:121
+msgid "In process"
+msgstr ""
+
+#: Config.php:128
+msgid "Reasons Available"
+msgstr ""
+
+#: Config.php:130
+msgid "Possible status reasons."
+msgstr ""
+
+#: Config.php:141
+msgid "Change"
+msgstr ""
+
+#: Config.php:142
+msgid "Documentation"
+msgstr ""
+
+#: Config.php:143
+msgid "Requirement Changed"
+msgstr ""
+
+#: Config.php:144
+msgid "Not Possible"
+msgstr ""
+
+#: Config.php:145
+msgid "Implementation"
+msgstr ""
+
+#: Config.php:146
+msgid "Review"
+msgstr ""
+
+#: Config.php:147
+msgid "Integration"
+msgstr ""
+
+#: Config.php:154
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:156
+msgid "Enabled Features in Sales Application."
+msgstr ""
+
+#: Config.php:163
+msgid "Invoices Module"
+msgstr ""
+
+#: Config.php:173
+msgid "Example String"
+msgstr ""
+
+#: Config.php:175
+msgid "Just an example string for test purpose"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr ""
+
+#: Model/ExampleRecord.php:35
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ExampleRecord.php:36
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:39
+msgid "example record list"
+msgstr ""
+
+#: Model/ExampleRecord.php:40
+msgid "example record lists"
+msgstr ""
+
+#: Model/ExampleRecord.php:106 Model/ExampleRecord.php:128
+msgid "Number"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
+msgstr ""

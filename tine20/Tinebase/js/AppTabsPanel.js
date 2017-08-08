@@ -144,6 +144,10 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                 items: this.getAppItems(),
                 style: {'border-right': '1px solid #E2E2E3'}
             }, {
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tine.Tinebase.AppMenu.Additionals'
+                }],
                 items: Tine.Tinebase.MainScreen.getMainMenu().getMainActions()
             }]
         });
