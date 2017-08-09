@@ -130,7 +130,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 var _ = window.lodash,
                     i18nLabel = field.label ? i18n._hidden(field.label) : field.name,
-                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.*) (->) ([^)]*)\\)'),
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.*?) (->) ([^)]*)\\)'),
                     struct = regexp.exec(note),
                     label = struct && struct.length == 5 ? struct[1] : null,
                     oldValue = label ? struct[2] : null,

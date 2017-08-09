@@ -339,7 +339,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $currentMods = $this->_writeModLog($newRecord, $oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0) {
-            Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
+                    $node) {
+                Tinebase_Notes::getInstance()->addSystemNote($node->getId(), Tinebase_Core::getUser(),
+                    Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods, 'Sql', 'Tinebase_Model_Tree_Node');
+            }
         }
 
         Tinebase_Model_Tree_FileObject::setReplicable($oldIsReplicable);

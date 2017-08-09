@@ -116,3 +116,18 @@ Tine.Filemanager.downloadFile = function(path, revision, appName) {
         }
     }).start();
 };
+
+
+/**
+ * download file into browser with base64 (btoa) encoded path
+ *
+ * @param {String} encodedpath
+ * @param revision
+ * @param appName
+ * @returns {Ext.ux.file.Download}
+ *
+ * @refactor: we should only need one downloadFile fn
+ */
+Tine.Filemanager.downloadFileByEncodedPath = function(encodedpath, revision, appName) {
+    return Tine.Filemanager.downloadFile(atob(encodedpath), revision, appName);
+};
