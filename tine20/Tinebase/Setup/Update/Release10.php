@@ -2034,7 +2034,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $applications = Tinebase_Application::getInstance()->getApplications();
         /** @var Tinebase_Model_Application $application */
         foreach ($applications as $application) {
-            $setupXml = Setup_Controller::getInstance()->getSetupXml($application->name);
+            try {
+                $setupXml = Setup_Controller::getInstance()->getSetupXml($application->name);
+            } catch (Setup_Exception_NotFound $senf) {
+                Tinebase_Exception::log($senf);
+                $setupXml = false;
+            }
             if (!$setupXml || !$setupXml->tables || !$setupXml->tables->table) {
                 continue;
             }
