@@ -369,6 +369,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _executeSubTemplate($_name, Tinebase_Export_Richtext_TemplateProcessor $_processor)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting sub tempalte: ' . $_name);
+
         $recordSet = $this->_currentRecord->{$_name};
         if (is_array($recordSet)) {
             if (count($recordSet) === 0) {
@@ -376,6 +378,23 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             }
             if (($record = reset($recordSet)) instanceof Tinebase_Record_Abstract) {
                 $recordSet = new Tinebase_Record_RecordSet(get_class($record), $recordSet);
+            } else {
+                $realRecordSet = new Tinebase_Record_RecordSet(Tinebase_Record_Generic::class, array());
+                $mergedRecords = array();
+                foreach($recordSet as $recordArray) {
+                    if (!is_array($recordArray)) {
+                        return;
+                    }
+                    $mergedRecords = array_merge($recordArray, $mergedRecords);
+                }
+                $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                foreach($recordSet as $recordArray) {
+                    $record = new Tinebase_Record_Generic(array(), true);
+                    $record->setValidators($validators);
+                    $record->setFromArray($recordArray);
+                    $realRecordSet->addRecord($record);
+                }
+                $recordSet = $realRecordSet;
             }
         } elseif (is_object($recordSet)) {
             if ($recordSet instanceof Tinebase_Record_Abstract) {

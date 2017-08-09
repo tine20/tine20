@@ -22,6 +22,10 @@ trait Addressbook_Export_List_Trait
         /** @noinspection PhpUndefinedMethodInspection */
         parent::_resolveRecords($_records);
 
+        if ($_records->getRecordClassName() != Addressbook_Model_List::class) {
+            return;
+        }
+
         if ('adb_list_doc' === $this->_config->name) {
             $this->_listDocResolveRecords($_records);
             return;
