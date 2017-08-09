@@ -195,10 +195,17 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         $result = parent::toArray($valueToJson);
         if (strtolower($this->_cfRecord->definition['type']) == 'record') {
             try {
-                if (! is_array($result['value']['value'])) {
-                    $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-                    $controller = Tinebase_Core::getApplicationInstance($modelName);
+                $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
+                $controller = Tinebase_Core::getApplicationInstance($modelName);
+                if (is_string($result['value']['value'])) {
                     $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
+                } else if (is_array($result['value']['value'])) {
+                    //  this is very bad - @refactor
+                    foreach ($result['value']['value'] as $key => $subfilter) {
+                        if (isset($result['value']['value'][$key]['value']) && is_string($result['value']['value'][$key]['value']))
+                        $result['value']['value'][$key]['value'] = $controller->get($result['value']['value'][$key]['value'])->toArray();
+                    }
+
                 } else {
                     // TODO do we need to do something in this case?
                 }
