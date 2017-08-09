@@ -1320,6 +1320,7 @@ class Admin_JsonTest extends TestCase
             'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId()
         )));
 
+        $imapBackend = null;
         try {
             $imapBackend = Tinebase_EmailUser::getInstance();
         } catch (Tinebase_Exception_NotFound $tenf) {}
