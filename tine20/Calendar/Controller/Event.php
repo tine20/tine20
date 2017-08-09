@@ -915,7 +915,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
 
                 parent::update($_record);
-                
+
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
@@ -939,7 +939,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         $updatedEvent = $this->get($event->getId());
-        
+
+        if ($skipEvent === false) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
+                'observable' => $updatedEvent
+            ]));
+        }
+
         // send notifications
         $this->sendNotifications($sendNotifications);
         if ($this->_sendNotifications && $_record->mute != 1) {
@@ -961,10 +967,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_saveAttendee($record, $currentRecord, $record->isRescheduled($currentRecord));
         // need to save new attendee set in $updatedRecord for modlog
         $updatedRecord->attendee = clone($record->attendee);
-
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
-            'observable' => $updatedRecord
-        ]));
     }
     
     /**
