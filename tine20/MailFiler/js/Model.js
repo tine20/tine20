@@ -16,7 +16,14 @@ Ext.ns('Tine.MailFiler.Model');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.MailFiler.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray.concat([
-    { name: 'message'}
+    { name: 'message'},
+    // needed for sorting in grid
+    { name: 'to_flat'},
+    { name: 'sent'},
+    { name: 'subject'},
+    { name: 'received'},
+    { name: 'from_name'},
+    { name: 'from_email'}
 ]), {
     appName: 'MailFiler',
     modelName: 'Node',
@@ -89,7 +96,9 @@ Tine.MailFiler.Model.Node.getFilterModel = function() {
         {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
         {label: app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
         {label: app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
+        // TODO hide "to" or to_flat here?
         {label: app.i18n._('To'),          field: 'to',            operators: ['contains']},
+        //{label: app.i18n._('To Flat'),     field: 'to_flat',       operators: ['contains']},
         {label: app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
         {label: app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
         {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, multiselectFieldConfig: {

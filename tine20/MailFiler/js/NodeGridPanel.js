@@ -125,12 +125,11 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.Filemanager.NodeGridPanel, {
             hidden: true,
             renderer: this.messageRenderer
         },{
-            id: 'to',
+            id: 'to_flat',
             header: this.app.i18n._("To"),
             width: 150,
             sortable: true,
-            dataIndex: 'to',
-            hidden: true,
+            dataIndex: 'to_flat',
             renderer: this.messageRenderer
         },{
             id: 'sent',
