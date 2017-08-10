@@ -59,9 +59,9 @@ class AllTests
         // this will not find ./library/OpenDocument/AllTests.php ... but it had not been added previously neither. So nothing changed with regards to that
         foreach(new DirectoryIterator(__DIR__) as $dirIter) {
             if ($dirIter->isDir() && !$dirIter->isDot() &&
-                    is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
-                    'Scheduler' !== $dirIter->getFilename() &&
-                    !in_array($dirIter->getFilename(), $oldSuits)) {
+                is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
+                'Scheduler' !== $dirIter->getFilename() &&
+                !in_array($dirIter->getFilename(), $oldSuits)) {
                 $className = $dirIter->getFilename() . '_AllTests';
                 $suite->addTest($className::suite());
             }
