@@ -235,16 +235,89 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     }
 
     /**
-     * @param string $row
-     * @param int $num
-     * @param string $where
+     * Find the start position of the nearest table row before $offset.
      *
-    public function insertRow($row, $num, $where)
+     * @param integer $offset
+     * @return integer
+     */
+    protected function findRowStart($offset)
     {
-        $row = preg_replace('/\$\{(.*?)\}/', '\${\\1#' . $num . '}', $row);
+        return $this->findTag('<w:tr', $offset, false);
+    }
 
-        $this->setValue($where, $row . $where);
-    }*/
+    /**
+     * @param string $tag
+     * @param int $offset
+     * @param bool $forward
+     * @return int
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function findTag($tag, $offset, $forward = true)
+    {
+        if (true === $forward) {
+            $strpos = 'strpos';
+            $minmax = 'min';
+        } else {
+            $strpos = 'strrpos';
+            $minmax = 'max';
+            $offset = (strlen($this->tempDocumentMainPart) - $offset) * -1;
+        }
+
+        $result1 = $strpos($this->tempDocumentMainPart, $tag . ' ', $offset);
+        $result2 = $strpos($this->tempDocumentMainPart, $tag . '>', $offset);
+
+        if (false === $result1) {
+            if (false === $result2) {
+                throw new Tinebase_Exception_NotFound('Can not find the start position of the tag: ' . $tag);
+            }
+            return (int)$result2;
+        }
+        if (false === $result2) {
+            return (int)$result1;
+        }
+
+        return (int)$minmax($result1, $result2);
+    }
+
+    /**
+     * Find a block (optionally replace it)
+     *
+     * @param string $blockName
+     * @param string $replacement
+     *
+     * @return string|null
+     */
+    public function findBlock($blockName, $replacement = null)
+    {
+        $openBlock = '${' . $blockName . '}';
+        if (false === ($openBlockPos = strpos($this->tempDocumentMainPart, $openBlock))) {
+            return null;
+        }
+        $openBlockPos = $this->findTag('<w:p', $openBlockPos, false);
+        if (false === ($endOpenBlockPos = strpos($this->tempDocumentMainPart, '</w:p>', $openBlockPos))) {
+            return null;
+        }
+        $endOpenBlockPos += 6;
+
+        $closeBlock = '${/' . $blockName . '}';
+        if (false === ($closeBlockPos = strpos($this->tempDocumentMainPart, $closeBlock, $endOpenBlockPos))) {
+            return null;
+        }
+        $closeBlockPos = $this->findTag('<w:p', $closeBlockPos, false);
+        if (false === ($endCloseBlockPos = strpos($this->tempDocumentMainPart, '</w:p>', $closeBlockPos))) {
+            return null;
+        }
+        $endCloseBlockPos += 6;
+
+        $xmlBlock = substr($this->tempDocumentMainPart, $endOpenBlockPos, $closeBlockPos - $endOpenBlockPos);
+
+        if (null !== $replacement) {
+            $this->tempDocumentMainPart = substr($this->tempDocumentMainPart, 0, $openBlockPos) . $replacement .
+                substr($this->tempDocumentMainPart, $endCloseBlockPos);
+        }
+
+        return $xmlBlock;
+    }
 
     /**
      * Clone a block.
@@ -252,38 +325,12 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      * @param string $blockname
      * @param integer $clones
      * @param boolean $replace
-     *
      * @return string|null
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function cloneBlock($blockname, $clones = 1, $replace = true)
     {
-        $xmlBlock = null;
-        preg_match(
-            '/(<\?xml.*?)(<w:p>.*\${' . $blockname . '}.*?<\/w:p>)(.*)(<w:p>.*?\${\/' . $blockname . '}.*?<\/w:p>)/is',
-            $this->tempDocumentMainPart,
-            $matches
-        );
-
-        if (isset($matches[3])) {
-            $xmlBlock = $matches[3];
-            $cloned = array();
-            for ($i = 1; $i <= $clones; $i++) {
-                $cloned[] = $xmlBlock;
-            }
-
-            if ($replace) {
-                if (($pos = strrpos($matches[2], '<w:p>')) !== 0) {
-                    $matches[2] = substr($matches[2], $pos);
-                }
-                $this->tempDocumentMainPart = str_replace(
-                    $matches[2] . $matches[3] . $matches[4],
-                    implode('', $cloned),
-                    $this->tempDocumentMainPart
-                );
-            }
-        }
-
-        return $xmlBlock;
+        throw new Tinebase_Exception_NotImplemented('do not use this function! ' . __METHOD__);
     }
 
     /**
@@ -291,24 +338,11 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      *
      * @param string $blockname
      * @param string $replacement
-     *
-     * @return void
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function replaceBlock($blockname, $replacement)
     {
-        preg_match(
-            '/(<\?xml.*)(<w:p( [^>]+)?>.*\${' . $blockname . '}<\/w:.*?p>)(.*)(<w:p( [^>]+)?>.*\${\/' . $blockname . '}<\/w:.*?p>)/is',
-            $this->tempDocumentMainPart,
-            $matches
-        );
-
-        if (isset($matches[4])) {
-            $this->tempDocumentMainPart = str_replace(
-                $matches[2] . $matches[4] . $matches[5],
-                $replacement,
-                $this->tempDocumentMainPart
-            );
-        }
+        throw new Tinebase_Exception_NotImplemented('do not use this function! ' . __METHOD__);
     }
 
     /**

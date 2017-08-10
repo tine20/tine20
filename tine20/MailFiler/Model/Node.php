@@ -5,8 +5,8 @@
  * @package     MailFiler
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      AirMike <airmike23@gmail.com>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,6 +31,33 @@ class MailFiler_Model_Node extends Tinebase_Model_Tree_Node
      * @var string
      */
     protected $_application = 'MailFiler';
+
+    protected static $_sortExternalMapping = array(
+        'subject'       => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+        'from_email'    => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+        'from_name'     => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+        'sender'        => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+        'received'      => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+        'sent'          => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
+    );
 
     /**
      * overwrite constructor to add more filters

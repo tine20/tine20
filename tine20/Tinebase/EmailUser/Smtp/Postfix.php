@@ -147,15 +147,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         
         // set domain from smtp config
         $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
-        
-        // add allowed domains
-        if (! empty($this->_config['primarydomain'])) {
-            $this->_config['alloweddomains'] = array($this->_config['primarydomain']);
-            if (! empty($this->_config['secondarydomains'])) {
-                // merge primary and secondary domains and split secondary domains + trim whitespaces
-                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $this->_config['secondarydomains']));
-            } 
-        }
+        $this->_config['alloweddomains'] = Tinebase_EmailUser::getAllowedDomains($this->_config);
         
         $this->_clientId = Tinebase_Core::getTinebaseId();
         

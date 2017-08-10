@@ -36,10 +36,16 @@ class MailFiler_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchNodes($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, MailFiler_Controller_Node::getInstance(), 'MailFiler_Model_NodeFilter');
-        $this->_removeAppIdFromPathFilter($result);
-        
-        return $result;
+        $this->_paginationModel = 'MailFiler_Model_Node';
+        try {
+            $result = $this->_search($filter, $paging, MailFiler_Controller_Node::getInstance(),
+                'MailFiler_Model_NodeFilter');
+            $this->_removeAppIdFromPathFilter($result);
+
+            return $result;
+        } finally {
+            $this->_paginationModel = null;
+        }
     }
     
     /**

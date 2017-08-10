@@ -25,6 +25,7 @@
  * @property string     $identifier legacy
  * @property string     $recordName Human readable name of the record
  * @property string     $recordsName Human readable name of multiple records
+ * @property string     $moduleName The name of the module if it doesn't fit to the recordsName, e.g. used in frontend module tree panel
  * @property string     $containerProperty The property of the container, if any
  * @property boolean    $containerUsesFilter set this to false, if no filter and grid column should be created - default is true
  * @property boolean    $hasPersonalContainer set this to false, if personal containers should be ommited - default is true
@@ -701,7 +702,7 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule',
+        'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton',
         'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group',
     );
@@ -1441,7 +1442,12 @@ class Tinebase_ModelConfiguration {
             
             // add calculated values to frontend configuration
             foreach ($this->_frontendProperties as $prop) {
-                $this->_frontendConfiguration[$prop] = $this->{'_' . $prop};
+                // There should be no need to require all properties, the frontend should handle the abstinence.
+                $property = '_' . $prop;
+                if (!property_exists($this, $property)) {
+                    continue;
+                }
+                $this->_frontendConfiguration[$prop] = $this->{$property};
             }
         }
         return $this->_frontendConfiguration;

@@ -15,25 +15,8 @@ Ext.ns('Tine.MailFiler.Model');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.MailFiler.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'id' },
-    { name: 'name' },
-    { name: 'path' },
-    { name: 'size' },
-    { name: 'revision' },
-    { name: 'type' },
-    { name: 'contenttype' },
-    { name: 'description' },
-    { name: 'grants' },
-    { name: 'account_grants' },
-    { name: 'description' },
-    { name: 'object_id'},
-    { name: 'message'},
-
-    { name: 'relations' },
-    { name: 'customfields' },
-    { name: 'notes' },
-    { name: 'tags' }
+Tine.MailFiler.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray.concat([
+    { name: 'message'}
 ]), {
     appName: 'MailFiler',
     modelName: 'Node',

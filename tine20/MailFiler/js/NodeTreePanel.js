@@ -13,7 +13,6 @@ require('./nodeContextMenu');
 
 Tine.MailFiler.NodeTreePanel = Ext.extend(Tine.Filemanager.NodeTreePanel, {
     recordClass : Tine.MailFiler.Model.Node,
-    enableDD: false,
 
     /**
      * initiates tree context menus
@@ -24,7 +23,7 @@ Tine.MailFiler.NodeTreePanel = Ext.extend(Tine.Filemanager.NodeTreePanel, {
         this.ctxMenu = Tine.MailFiler.nodeContextMenu.getMenu({
             actionMgr: Tine.MailFiler.nodeActionsMgr,
             nodeName: this.recordClass.getContainerName(),
-            actions: ['reload', 'createFolder', 'delete', 'rename', 'move' /* ? */, 'edit'],
+            actions: ['reload', 'createFolder', 'delete', 'rename', 'move' , 'edit'],
             scope: this,
             backend: 'MailFiler',
             backendModel: 'Node'

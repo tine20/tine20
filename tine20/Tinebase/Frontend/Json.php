@@ -1432,18 +1432,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_InvalidArgument('A controller for the given appName and modelName does not exist!');
         }
         
-        if (! class_exists($filterClassName)) {
-            throw new Tinebase_Exception_InvalidArgument('A filter for the given appName and modelName does not exist!');
-        }
-        
         if (! in_array($property, $recordClassName::getAutocompleteFields())) {
             throw new Tinebase_Exception_UnexpectedValue('bad property name');
         }
-        
-        $filter = new $filterClassName(array(
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, array(
             array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
         ));
-        
+
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
         
         $values = array_unique($controller->search($filter, $paging)->{$property});

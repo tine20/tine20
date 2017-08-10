@@ -253,6 +253,8 @@ Tine.MailFiler.GridContextMenu = {
      * 
      * @param {} button
      * @param {} event
+     *
+     * @todo use Tine.Filemanager.downloadFile
      */
     downloadFile: function(button, event) {
         

@@ -391,9 +391,6 @@ class Tinebase_Core
                 throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
             } else {
                 $controllerName = $controllerNameModel;
-                if (! class_exists($controllerName)) {
-                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
-                }
             }
         } else if (! class_exists($controllerName)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

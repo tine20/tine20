@@ -1219,15 +1219,21 @@ class Felamimail_Frontend_JsonTest extends TestCase
             /* $_emailFrom */ '',
             /*$_subject */ 'test\test' // is converted to 'test_test'
         );
+        $message2 = $this->_sendMessage(
+            'INBOX',
+            /* $addtionalHeaders */ array(),
+            /* $_emailFrom */ '',
+            /*$_subject */ 'abctest'
+        );
         $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
             . '/' . $user->accountLoginName
             . '/' . $personalFilemanagerContainer->name;
         $filter = array(array(
-            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'], $message2['id'])
         ));
         $result = $this->_json->fileMessages($filter, $appName, $path);
         $this->assertTrue(isset($result['totalcount']));
-        $this->assertEquals(1, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
+        $this->assertEquals(2, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
 
         // check if message exists in $appName
         $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
@@ -1282,9 +1288,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'value'    => 'test'
         ));
         $mailFilerJson = new MailFiler_Frontend_Json();
-        $emlNodes = $mailFilerJson->searchNodes($filter, array());
-        $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
-        $emlNode = $emlNodes['results'][0];
+        $emlNodes = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'ASC'));
+        $this->assertEquals(2, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
+        $emlNode = $emlNodes['results'][1];
 
         // check email fields
         $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
@@ -1292,6 +1298,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
         $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
         $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
+
+        $emlNodesDesc = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'DESC'));
+        $this->assertEquals(2, $emlNodesDesc['totalcount'], 'could not find eml file node with subject filter');
+        $this->assertEquals($emlNode['id'], $emlNodesDesc['results'][1]['id'], 'sort did not work');
     }
 
     /**

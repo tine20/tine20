@@ -456,7 +456,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user: ' . $zdse->getMessage());
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
+            Tinebase_Exception::log($zdse);
         }
     }
     
@@ -567,5 +568,4 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             }
         }
     }
-
 }

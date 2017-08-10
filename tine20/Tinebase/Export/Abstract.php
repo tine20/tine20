@@ -244,6 +244,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
+        if ($this->_config->templateFileId) {
+            try {
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId, true));
+                $this->_templateFileName = $path->streamwrapperpath;
+            } catch (Exception $e) {}
+        }
         if (isset($_additionalOptions['template'])) {
             try {
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'], true));
@@ -573,6 +579,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
+            // TODO implement this!
+            return $model;
+        }));
 
         $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
     }
@@ -821,6 +831,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
                     foreach ($this->_foreignIdFields as $name => $controller) {
                         if (!empty($record->{$name})) {
+                            /** @var Tinebase_Controller_Record_Abstract $controller */
                             $controller = $controller::getInstance();
                             $record->{$name} = $controller->get($record->{$name});
                         }

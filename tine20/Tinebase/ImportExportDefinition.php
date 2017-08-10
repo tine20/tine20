@@ -87,6 +87,37 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             array('field' => 'type',            'operator' => 'equals',  'value' => 'export'),
         ));
         $result = $this->search($filter);
+
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $toRemove = new Tinebase_Record_RecordSet('Tinebase_Model_ImportExportDefinition');
+        /** @var Tinebase_Model_ImportExportDefinition $definition */
+        foreach($result as $definition) {
+            if ($definition->plugin_options) {
+                $config = Tinebase_ImportExportDefinition::getInstance()->
+                    getOptionsAsZendConfigXml($definition, array());
+                if (!empty($config->template)) {
+                    if (strpos($config->template, 'tine20://') === false) {
+                        continue;
+                    }
+                    try {
+                        $node = $fileSystem->stat(substr($config->template, 9));
+                        if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $node->getId(),
+                                Tinebase_Model_Grants::GRANT_READ)) {
+                            $toRemove[] = $definition;
+                        }
+                    } catch (Exception $e) {
+                        $toRemove[] = $definition;
+                    }
+                } elseif (!empty($config->templateFileId)) {
+                    if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
+                            Tinebase_Model_Grants::GRANT_READ)) {
+                        $toRemove[] = $definition;
+                    }
+                }
+            }
+        }
+
+        $result->removeRecords($toRemove);
         
         return $result;
     }

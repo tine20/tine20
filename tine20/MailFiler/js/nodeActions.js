@@ -248,7 +248,7 @@ Tine.MailFiler.nodeActions.Download = {
     disabled: true,
     scope: this,
     handler: function() {
-        Tine.MailFiler.downloadFile(this.initialConfig.selections[0]);
+        Tine.Filemanager.downloadFile(this.initialConfig.selections[0], null, 'MailFiler');
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
         var enabled = !isFilterSelect
