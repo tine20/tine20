@@ -1322,6 +1322,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
             } catch (Exception $e) {}
         }
+        if ($this->_backend->tableExists('humanresources_contract')) {
+            try {
+                $this->_backend->dropForeignKey('humanresources_contract', 'tine20_contract::feast_calendar_id--container::id');
+            } catch (Exception $e) {}
+        }
+
 
         if (version_compare($this->getApplicationVersion('Tinebase'), '10.32') < 0 ) {
             if ($this->getTableVersion('container') < 13) {
@@ -1539,7 +1545,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </reference>
                 </index>'));
 
-        if ($this->_backend->tableExists('timeaccount')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Timetracker') &&
+                $this->_backend->tableExists('timeaccount')) {
             $this->_backend->addForeignKey('timeaccount', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>timeaccount::container_id--container::id</name>
                     <field>
@@ -1553,7 +1560,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </index>'));
         }
 
-        if ($this->_backend->tableExists('sales_contracts')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Sales') &&
+                $this->_backend->tableExists('sales_contracts')) {
             $this->_backend->addForeignKey('sales_contracts', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>sales_contracts::container_id--container::id</name>
                     <field>
@@ -1567,7 +1575,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </index>'));
         }
 
-        if ($this->_backend->tableExists('metacrm_lead')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Crm') &&
+                $this->_backend->tableExists('metacrm_lead')) {
             $this->_backend->addForeignKey('metacrm_lead', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>metacrm_lead::container_id--container::id</name>
                     <field>
@@ -1581,46 +1590,48 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </index>'));
         }
 
-        if ($this->_backend->tableExists('cal_resources')) {
-            $this->_backend->addForeignKey('cal_resources', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>cal_resources::container_id--container::id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>'));
-        }
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+            if ($this->_backend->tableExists('cal_resources')) {
+                $this->_backend->addForeignKey('cal_resources', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>cal_resources::container_id--container::id</name>
+                        <field>
+                            <name>container_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>container</table>
+                            <field>id</field>
+                        </reference>
+                    </index>'));
+            }
 
-        if ($this->_backend->tableExists('cal_events')) {
-            $this->_backend->addForeignKey('cal_events', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>cal_events::container_id--container::id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>'));
-        }
+            if ($this->_backend->tableExists('cal_events')) {
+                $this->_backend->addForeignKey('cal_events', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>cal_events::container_id--container::id</name>
+                        <field>
+                            <name>container_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>container</table>
+                            <field>id</field>
+                        </reference>
+                    </index>'));
+            }
 
-        if ($this->_backend->tableExists('cal_attendee')) {
-            $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>cal_attendee::displaycontainer_id--container::id</name>
-                    <field>
-                        <name>displaycontainer_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>'));
+            if ($this->_backend->tableExists('cal_attendee')) {
+                $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>cal_attendee::displaycontainer_id--container::id</name>
+                        <field>
+                            <name>displaycontainer_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>container</table>
+                            <field>id</field>
+                        </reference>
+                    </index>'));
+            }
         }
 
         if ($this->_backend->tableExists('addressbook')) {

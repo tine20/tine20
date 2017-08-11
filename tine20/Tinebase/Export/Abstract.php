@@ -433,7 +433,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getDownloadFilename($_appName, $_format)
     {
-        return 'export_' . strtolower($_appName) . '.' . $_format;
+        $model = '';
+        if (null !== $this->_modelName && count($modelParts = explode('_', $this->_modelName, 3)) === 3) {
+            $model = '_' . strtolower($modelParts[2]);
+        }
+        return 'export_' . strtolower($_appName) . $model . '.' . $_format;
     }
 
 

@@ -30,7 +30,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function exportEvents($filter, $options)
     {
-        $decodedFilter = Zend_Json::decode($filter ?: null);
+        $decodedFilter = empty($filter) ? null : Zend_Json::decode($filter);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
 
         if (! is_array($decodedFilter)) {
@@ -51,7 +51,7 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function exportResources($filter, $options)
     {
-        $decodedFilter = Zend_Json::decode($filter?: null);
+        $decodedFilter = empty($filter) ? null : Zend_Json::decode($filter);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
 
         if (! is_array($decodedFilter)) {

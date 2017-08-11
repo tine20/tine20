@@ -60,9 +60,11 @@ trait Addressbook_Export_List_Trait
             }
 
             $str = '';
+            $members = '';
             /** @var Addressbook_Model_Contact $contact */
             foreach($memberRecords as $contact) {
                 $str .= ($str===''?'':', ') . $contact->n_fn;
+                $members .= ($members===''?'':', ') . $contact->n_fn;
                 if (isset($members[$contact->getId()])) {
                     $str .= ' (';
                     $first = true;
@@ -78,6 +80,7 @@ trait Addressbook_Export_List_Trait
             }
 
             $record->memberroles = $str;
+            $record->members = $members;
         }
     }
 
