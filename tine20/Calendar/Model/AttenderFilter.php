@@ -204,7 +204,11 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $result = parent::toArray($_valueToJson);
         
         if ($_valueToJson) {
-            Calendar_Model_Attender::resolveAttendee($this->_value);
+            try {
+                Calendar_Model_Attender::resolveAttendee($this->_value);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                Tinebase_Exception::log($teia);
+            }
         }
         
         $result['value'] = $this->_operator == 'equals' ? $this->_value[0]->toArray($_valueToJson) : $this->_value->toArray($_valueToJson);
