@@ -26,9 +26,9 @@ msgstr ""
 msgid "Originally"
 msgstr "Изначально"
 
-#: js/EventDetailsPanel.js:29 js/AttendeeGridPanel.js:809
-#: js/AttendeeGridPanel.js:833 js/AttendeeGridPanel.js:850
-#: js/AttendeeGridPanel.js:862
+#: js/EventDetailsPanel.js:29 js/AttendeeGridPanel.js:814
+#: js/AttendeeGridPanel.js:838 js/AttendeeGridPanel.js:855
+#: js/AttendeeGridPanel.js:867
 msgid "No Information"
 msgstr "Нет информации"
 
@@ -51,45 +51,45 @@ msgstr "Начало"
 msgid "End Time"
 msgstr "Окончание"
 
-#: js/EventDetailsPanel.js:189 js/GridView.js:218 Model/Event.php:386
+#: js/EventDetailsPanel.js:189 js/GridView.js:218 Model/Event.php:387
 msgid "Blocking"
 msgstr "Блокировано"
 
 #: js/EventDetailsPanel.js:194 js/GridView.js:226 js/EventEditDialog.js:202
-#: Config.php:264 Config.php:314 Setup/Update/Release5.php:94
+#: Config.php:271 Config.php:321 Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr "Предполагается"
 
 #: js/EventDetailsPanel.js:199 js/Model.js:336 js/ResourcesGridPanel.js:81
 #: js/GridView.js:239 js/ResourceEditDialog.js:102 js/Printer/EventRecord.js:28
-#: js/EventEditDialog.js:126 Model/Event.php:389
+#: js/EventEditDialog.js:126 Model/Event.php:390
 msgid "Location"
 msgstr "Местоположение"
 
 #: js/EventDetailsPanel.js:203 js/Model.js:356 js/PerspectiveCombo.js:127
 #: js/GridView.js:245 js/Printer/EventRecord.js:18 js/EventEditDialog.js:364
-#: Config.php:242 Model/Event.php:390
+#: Config.php:249 Model/Event.php:391
 msgid "Organizer"
 msgstr "Организатор"
 
-#: js/EventDetailsPanel.js:221 js/Model.js:533
+#: js/EventDetailsPanel.js:221 js/Model.js:553
 #: js/EventContextAttendeesItem.js:112 js/AttendeeGridPanel.js:106
 #: js/AttendeeFilterModel.js:35 js/Printer/EventRecord.js:42 js/WestPanel.js:93
-#: Config.php:241
+#: Config.php:248
 msgid "Attendee"
 msgstr "Участник"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:70 js/Model.js:537
+#: js/ContactEventsGridPanel.js:50 js/Model.js:70 js/Model.js:557
 msgid "Events"
 msgstr "События"
 
 #: js/ContactEventsGridPanel.js:113 js/Model.js:335 js/GridView.js:234
-#: js/Printer/EventRecord.js:14 js/EventEditDialog.js:81 Model/Event.php:393
+#: js/Printer/EventRecord.js:14 js/EventEditDialog.js:81 Model/Event.php:394
 msgid "Summary"
 msgstr "Сводка"
 
-#: js/ContactEventsGridPanel.js:126 js/AttendeeGridPanel.js:252
-#: js/AddToEventPanel.js:88 js/EventEditDialog.js:182 Model/Event.php:392
+#: js/ContactEventsGridPanel.js:126 js/AttendeeGridPanel.js:246
+#: js/AddToEventPanel.js:101 js/EventEditDialog.js:182 Model/Event.php:393
 msgid "Status"
 msgstr "Состояние"
 
@@ -101,7 +101,7 @@ msgstr "события не найдены"
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: js/SearchCombo.js:84 js/Model.js:70 js/Model.js:537
+#: js/SearchCombo.js:85 js/Model.js:70 js/Model.js:557
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Событие"
@@ -109,11 +109,11 @@ msgstr[1] "События"
 msgstr[2] "Событий"
 msgstr[3] "Событий"
 
-#: js/SearchCombo.js:85
+#: js/SearchCombo.js:86
 msgid "Search Event"
 msgstr "Поиск события"
 
-#: js/SearchCombo.js:223 js/GridView.js:212 js/Printer/Base.js:74
+#: js/SearchCombo.js:229 js/GridView.js:212 js/Printer/Base.js:74
 #: js/EventEditDialog.js:141
 msgid "whole day"
 msgstr "весь день"
@@ -198,7 +198,7 @@ msgstr "Упорядочить участников"
 msgid "Check to filter for this attendee"
 msgstr "Добавить в фильтр этого участника"
 
-#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:547
+#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:548
 msgid "Edit Resource"
 msgstr ""
 
@@ -230,12 +230,13 @@ msgstr[3] "Календарей"
 msgid "Calendars"
 msgstr "Календари"
 
-#: js/Model.js:334
+#: js/Model.js:334 js/Model.js:957
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
-#: js/Model.js:337 js/GridView.js:252 js/ResourceEditDialog.js:117
-#: js/Printer/EventRecord.js:21 js/EventEditDialog.js:261 Model/Event.php:388
+#: js/Model.js:337 js/Model.js:960 js/GridView.js:252
+#: js/ResourceEditDialog.js:117 js/Printer/EventRecord.js:21
+#: js/EventEditDialog.js:261 Model/Event.php:389
 msgid "Description"
 msgstr "Описание"
 
@@ -268,7 +269,7 @@ msgstr "Событие (как организатор)"
 msgid "Event attendee"
 msgstr "Событие участника"
 
-#: js/Model.js:533
+#: js/Model.js:553
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Участник"
@@ -276,7 +277,7 @@ msgstr[1] "Участника"
 msgstr[2] "Участников"
 msgstr[3] "Участников"
 
-#: js/Model.js:886 js/AttendeeGridPanel.js:223 Config.php:296
+#: js/Model.js:948 js/AttendeeGridPanel.js:217 Config.php:303
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ресурс"
@@ -284,9 +285,35 @@ msgstr[1] "Ресурсы"
 msgstr[2] "Ресурсы"
 msgstr[3] "Ресурсы"
 
-#: js/Model.js:886 Controller.php:454
+#: js/Model.js:948 Controller.php:454
 msgid "Resources"
 msgstr "Ресурсы"
+
+#: js/Model.js:958 js/ResourcesGridPanel.js:44 js/ResourceEditDialog.js:68
+#: js/AttendeeGridPanel.js:225
+msgid "Name"
+msgstr "Название"
+
+#: js/Model.js:959 js/ResourcesGridPanel.js:50 js/ResourceEditDialog.js:73
+msgid "Email"
+msgstr "Email"
+
+#: js/Model.js:961 js/ResourcesGridPanel.js:63 js/ResourceEditDialog.js:96
+msgid "Maximum number of attendee"
+msgstr ""
+
+#: js/Model.js:963 js/ResourcesGridPanel.js:56 js/ResourceEditDialog.js:80
+#: js/AttendeeGridPanel.js:205
+msgid "Type"
+msgstr "Тип"
+
+#: js/Model.js:970 js/ResourceEditDialog.js:86
+msgid "Default attendee status"
+msgstr ""
+
+#: js/Model.js:977 js/ResourcesGridPanel.js:77 js/ResourceEditDialog.js:92
+msgid "Busy Type"
+msgstr ""
 
 #: js/Calendar.js:22 js/MonthView.js:83 js/YearView.js:83 js/DaysView.js:123
 msgid "New Event"
@@ -374,7 +401,7 @@ msgstr ""
 msgid "during events in the calendars"
 msgstr ""
 
-#: js/RrulePanel.js:409 Model/Event.php:385
+#: js/RrulePanel.js:409 Model/Event.php:386
 msgid "End"
 msgstr "Окончание"
 
@@ -436,30 +463,8 @@ msgstr "Каждый {0}. год"
 msgid "of"
 msgstr "из"
 
-#: js/ResourcesGridPanel.js:44 js/ResourceEditDialog.js:68
-#: js/AttendeeGridPanel.js:231
-msgid "Name"
-msgstr "Название"
-
-#: js/ResourcesGridPanel.js:50 js/ResourceEditDialog.js:73
-msgid "Email"
-msgstr "Email"
-
-#: js/ResourcesGridPanel.js:56 js/ResourceEditDialog.js:80
-#: js/AttendeeGridPanel.js:211
-msgid "Type"
-msgstr "Тип"
-
-#: js/ResourcesGridPanel.js:63 js/ResourceEditDialog.js:96
-msgid "Maximum number of attendee"
-msgstr ""
-
 #: js/ResourcesGridPanel.js:71
 msgid "Default Status"
-msgstr ""
-
-#: js/ResourcesGridPanel.js:77 js/ResourceEditDialog.js:92
-msgid "Busy Type"
 msgstr ""
 
 #: js/EventContextAttendeesItem.js:63
@@ -497,10 +502,6 @@ msgstr "Это событие изначально сохранено в {0}"
 #, python-brace-format
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr "Это событие будет отображаться в личном календаре {0}"
-
-#: js/ResourceEditDialog.js:86
-msgid "Default attendee status"
-msgstr ""
 
 #: js/ResourceEditDialog.js:112
 msgid "Suppress notification"
@@ -714,23 +715,23 @@ msgstr "Не удалось вывести на печать"
 msgid "Sorry, your current view does not support printing."
 msgstr "Извините, этот вид не поддерживает вывод на печать."
 
-#: js/MainScreenCenterPanel.js:1538
+#: js/MainScreenCenterPanel.js:1535
 msgid "Scheduling Conflict"
 msgstr "Конфликт планирования"
 
-#: js/MainScreenCenterPanel.js:1540
+#: js/MainScreenCenterPanel.js:1537
 msgid "The following attendee are busy at the requested time:"
 msgstr "Эти участники заняты в данное время:"
 
-#: js/MainScreenCenterPanel.js:1544
+#: js/MainScreenCenterPanel.js:1541
 msgid "Ignore Conflict"
 msgstr "Игнорировать конфликт"
 
-#: js/MainScreenCenterPanel.js:1545
+#: js/MainScreenCenterPanel.js:1542
 msgid "Edit Event"
 msgstr "Изменить событие"
 
-#: js/MainScreenCenterPanel.js:1546
+#: js/MainScreenCenterPanel.js:1543
 msgid "Cancel this action"
 msgstr "Закончить действие"
 
@@ -738,64 +739,64 @@ msgstr "Закончить действие"
 msgid "Click here to invite another attender..."
 msgstr "Нажмите здесь, чтобы пригласить другого участника..."
 
-#: js/AttendeeGridPanel.js:158 js/AddToEventPanel.js:78
+#: js/AttendeeGridPanel.js:158 js/AddToEventPanel.js:91
 msgid "Role"
 msgstr "Роль"
 
-#: js/AttendeeGridPanel.js:178
+#: js/AttendeeGridPanel.js:172
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "Это календарь в котором участник сохранил событие"
 
-#: js/AttendeeGridPanel.js:212
+#: js/AttendeeGridPanel.js:206
 msgid "Click icon to change"
 msgstr "Нажмите для изменения значек"
 
-#: js/AttendeeGridPanel.js:221
+#: js/AttendeeGridPanel.js:215
 msgid "User"
 msgstr "Пользователь"
 
-#: js/AttendeeGridPanel.js:222 js/AttendeeGridPanel.js:282
+#: js/AttendeeGridPanel.js:216 js/AttendeeGridPanel.js:276
 #: Model/Attender.php:244
 msgid "Group"
 msgstr "Группа"
 
-#: js/AttendeeGridPanel.js:224
+#: js/AttendeeGridPanel.js:218
 msgid "Member of group"
 msgstr "Член группы"
 
-#: js/AttendeeGridPanel.js:240
+#: js/AttendeeGridPanel.js:234
 msgid "Availability of Attendee"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:277
+#: js/AttendeeGridPanel.js:271
 msgid "Whole Group or each Member of Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:278
+#: js/AttendeeGridPanel.js:272
 msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:283
+#: js/AttendeeGridPanel.js:277
 msgid "Member of Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:378
+#: js/AttendeeGridPanel.js:379
 msgid "Loading Groupmembers..."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:508
+#: js/AttendeeGridPanel.js:509
 msgid "Remove Attender"
 msgstr "Удалить участника"
 
-#: js/AttendeeGridPanel.js:524
+#: js/AttendeeGridPanel.js:525
 msgid "Compose email"
 msgstr "Написать письмо"
 
-#: js/AttendeeGridPanel.js:820
+#: js/AttendeeGridPanel.js:825
 msgid "(as a group member)"
 msgstr "(как член группы)"
 
-#: js/AttendeeGridPanel.js:911
+#: js/AttendeeGridPanel.js:916
 msgid "External Attendee"
 msgstr "Внешний участник"
 
@@ -828,7 +829,7 @@ msgstr "Слишком длинное резюме"
 msgid "Summary too Short"
 msgstr "Слишком короткое резюме"
 
-#: js/Printer/DaysView.js:108
+#: js/Printer/DaysView.js:107
 #, python-brace-format
 msgid "Week {0} :"
 msgstr "Неделя {0} :"
@@ -837,15 +838,15 @@ msgstr "Неделя {0} :"
 msgid "Please choose the Event to add the contacts to"
 msgstr "Пожалуйста, выберите событие для добавления контактов"
 
-#: js/AddToEventPanel.js:79
+#: js/AddToEventPanel.js:92
 msgid "Select Role"
 msgstr "Выберите роль"
 
-#: js/AddToEventPanel.js:89
+#: js/AddToEventPanel.js:102
 msgid "Select Status"
 msgstr "Выбрать Состояние"
 
-#: js/AddToEventPanel.js:109
+#: js/AddToEventPanel.js:122
 #, python-brace-format
 msgid "Adding {0} Attendee to event"
 msgstr "Добавлен {0} участник в событие"
@@ -914,7 +915,7 @@ msgstr ""
 msgid "Color by Attendee Role"
 msgstr ""
 
-#: js/FreeBusyInfo.js:97 Config.php:315
+#: js/FreeBusyInfo.js:97 Config.php:322
 msgid "Unavailable"
 msgstr ""
 
@@ -1044,55 +1045,55 @@ msgstr "Дополнительные теги..."
 msgid "Event finder options"
 msgstr ""
 
-#: Controller/EventNotifications.php:461
+#: Controller/EventNotifications.php:468
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Напоминание для события \"%1$s\" на %2$s"
 
-#: Controller/EventNotifications.php:464
+#: Controller/EventNotifications.php:471
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Приглашение на событие \"%1$s\" в %2$s"
 
-#: Controller/EventNotifications.php:473
+#: Controller/EventNotifications.php:480
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:481
+#: Controller/EventNotifications.php:488
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Событие \"%1$s\" в %2$s было отменено"
 
-#: Controller/EventNotifications.php:489
+#: Controller/EventNotifications.php:496
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Событие \"%1$s\" было перенесено с %2$s на %3$s"
 
-#: Controller/EventNotifications.php:496
+#: Controller/EventNotifications.php:503
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Событие \"%1$s\" в %2$s было обновлено"
 
-#: Controller/EventNotifications.php:507
+#: Controller/EventNotifications.php:514
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s присоединился к событию \"%2$s\" в %3$s"
 
-#: Controller/EventNotifications.php:511
+#: Controller/EventNotifications.php:518
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s отклонил событие \"%2$s\" на %3$s"
 
-#: Controller/EventNotifications.php:515
+#: Controller/EventNotifications.php:522
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Предварительный ответ от %1$s для события \"%2$s\" в %3$s"
 
-#: Controller/EventNotifications.php:519
+#: Controller/EventNotifications.php:526
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Нет ответа от %1$s для события \"%2$s\" в %3$s"
 
-#: Controller/EventNotifications.php:523
+#: Controller/EventNotifications.php:530
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Участник изменил событие \"%1$s\" в %2$s"
 
-#: Controller/EventNotifications.php:535
+#: Controller/EventNotifications.php:542
 msgid "Tentative event notification for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:544
+#: Controller/EventNotifications.php:551
 msgid "Resource Management"
 msgstr ""
 
@@ -1148,223 +1149,227 @@ msgstr "Детали события"
 msgid "Import iCal-files"
 msgstr "Импорт файлов iCal"
 
-#: Config.php:189 Preference.php:221
+#: Config.php:196 Preference.php:221
 msgid "Fixed Calendars"
 msgstr "Закреплённые календари"
 
-#: Config.php:191
+#: Config.php:198
 msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr "Календари всегда отображаются в не зависимости от данных фильтра. Это может быть полезно при наличии праздничных календарей."
 
-#: Config.php:198
+#: Config.php:205
 msgid "Crop Days"
 msgstr "Вырезать дни"
 
-#: Config.php:200 Config.php:224
+#: Config.php:207 Config.php:231
 msgid "Crop calendar view configured start and endtime."
 msgstr ""
 
-#: Config.php:210
+#: Config.php:217
 msgid "Crop Days Limit Override"
 msgstr ""
 
-#: Config.php:212
+#: Config.php:219
 msgid "Allow events outside start and endtime."
 msgstr ""
 
-#: Config.php:222
+#: Config.php:229
 msgid "Week View Mouse Wheel Increment"
 msgstr ""
 
-#: Config.php:234 Config.php:236
+#: Config.php:241 Config.php:243
 msgid "Default View for Events"
 msgstr ""
 
-#: Config.php:251
+#: Config.php:258
 msgid "Attendee Status Available"
 msgstr "Доступна роль участника"
 
-#: Config.php:253
+#: Config.php:260
 msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:261 Setup/Update/Release5.php:91
+#: Config.php:268 Setup/Update/Release5.php:91
 msgid "No response"
 msgstr "Без ответа"
 
-#: Config.php:262 Setup/Update/Release5.php:92
+#: Config.php:269 Setup/Update/Release5.php:92
 msgid "Accepted"
 msgstr "Принято"
 
-#: Config.php:263 Setup/Update/Release5.php:93
+#: Config.php:270 Setup/Update/Release5.php:93
 msgid "Declined"
 msgstr "Отклонено"
 
-#: Config.php:270
+#: Config.php:277
 msgid "Attendee Roles Available"
 msgstr "Доступна роль участника"
 
-#: Config.php:272
+#: Config.php:279
 msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:280 Setup/Update/Release5.php:77
+#: Config.php:287 Setup/Update/Release5.php:77
 msgid "Required"
 msgstr "Необходимый"
 
-#: Config.php:281 Setup/Update/Release5.php:78
+#: Config.php:288 Setup/Update/Release5.php:78
 msgid "Optional"
 msgstr "Дополнительный"
 
-#: Config.php:287
+#: Config.php:294
 msgid "Resource Types Available"
 msgstr ""
 
-#: Config.php:289
+#: Config.php:296
 msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:297
+#: Config.php:304
 msgid "Room"
 msgstr ""
 
-#: Config.php:303
+#: Config.php:310
 msgid "Free/Busy Types Available"
 msgstr ""
 
-#: Config.php:305
+#: Config.php:312
 msgid "Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:312
+#: Config.php:319
 msgid "Free"
 msgstr ""
 
-#: Config.php:313
+#: Config.php:320
 msgid "Busy"
 msgstr ""
 
-#: Config.php:321
+#: Config.php:328
 msgid "Filter timeslot for CalDAV events"
 msgstr "Фильтрация событий CalDAV  по времени"
 
-#: Config.php:323
+#: Config.php:330 Config.php:341
 msgid "For how long in the past (in months) the events should be synchronized."
 msgstr "Как долго в прошлое синхронизировать данные (в месяцах)."
 
-#: Config.php:332
+#: Config.php:339
+msgid "Filter timeslot for CalDAV events with SyncToken"
+msgstr ""
+
+#: Config.php:350
 msgid "Timeslot for event notifications"
 msgstr ""
 
-#: Config.php:334
+#: Config.php:352
 msgid "For how long in the past (in weeks) event notifications should be sent."
 msgstr ""
 
-#: Config.php:343
+#: Config.php:361
 msgid "Default filter period (from) for events fetched via JSON API"
 msgstr "Фильтр по умолчанию, полученных через JSON API (от)"
 
-#: Config.php:345
+#: Config.php:363
 msgid "For how long in the past (in months) the events should be fetched."
 msgstr "Насколько старые (в месяцах) события должны быть запрошены."
 
-#: Config.php:354
+#: Config.php:372
 msgid "Default filter period (until) for events fetched via JSON API"
 msgstr "Фильтр по умолчанию, полученных через JSON API (до)"
 
-#: Config.php:356
+#: Config.php:374
 msgid "For how long in the future (in months) the events should be fetched."
 msgstr "Насколько новые (в месяцах) события должны быть запрошены."
 
-#: Config.php:365 Config.php:367
+#: Config.php:383 Config.php:385
 msgid "Disable iMIP for external organizers"
 msgstr ""
 
-#: Config.php:376
+#: Config.php:394
 msgid "(CalDAV) Skip double events from personal or shared calendar"
 msgstr ""
 
-#: Config.php:378
+#: Config.php:396
 msgid "(CalDAV) Skip double events from personal or shared calendar (\"personal\" > Skip events from personal calendar or \"shared\" > Skip events from shared calendar)"
 msgstr ""
 
-#: Config.php:387
+#: Config.php:405
 msgid "Send notifications to every user with edit permissions of the added resources"
 msgstr ""
 
-#: Config.php:397
+#: Config.php:415
 msgid "Enabled Features"
 msgstr "Включённые возможности программы."
 
-#: Config.php:399
+#: Config.php:417
 msgid "Enabled Features in Calendar Application."
 msgstr ""
 
-#: Config.php:406
+#: Config.php:424
 msgid "Calendar Split View"
 msgstr ""
 
-#: Config.php:407
+#: Config.php:425
 msgid "Split day and week views by attendee"
 msgstr ""
 
-#: Config.php:411
+#: Config.php:429
 msgid "Calendar Year View"
 msgstr ""
 
-#: Config.php:412
+#: Config.php:430
 msgid "Adds year view to Calendar"
 msgstr ""
 
-#: Config.php:416
+#: Config.php:434
 msgid "Calendar Extended Context Menu Actions"
 msgstr ""
 
-#: Config.php:417
+#: Config.php:435
 msgid "Adds extended actions to event context menus"
 msgstr ""
 
-#: Config.php:421
+#: Config.php:439
 msgid "Color Events By"
 msgstr ""
 
-#: Config.php:422
+#: Config.php:440
 msgid "Choose event color by different criteria"
 msgstr ""
 
-#: Config.php:426
+#: Config.php:444
 msgid "Recur Events Except"
 msgstr ""
 
-#: Config.php:427
+#: Config.php:445
 msgid "Recur Events except on certain dates"
 msgstr ""
 
-#: Config.php:440
+#: Config.php:458
 msgid "Send Tentative Notifications"
 msgstr ""
 
-#: Config.php:441
+#: Config.php:459
 msgid "Send notifications to event organiziers of events that are tentative certain days before event is due"
 msgstr ""
 
-#: Config.php:449 Config.php:450
+#: Config.php:467 Config.php:468
 msgid "Enabled"
 msgstr ""
 
-#: Config.php:455
+#: Config.php:473
 msgid "Days Before Due Date"
 msgstr ""
 
-#: Config.php:456
+#: Config.php:474
 msgid "How many days before the events due date to start send notifications."
 msgstr ""
 
-#: Config.php:461
+#: Config.php:479
 msgid "Additional Filter"
 msgstr ""
 
-#: Config.php:462
+#: Config.php:480
 msgid "Additional filter to limit events notifications should be send for."
 msgstr ""
 
@@ -1434,6 +1439,7 @@ msgid "Export event data into ods spreadsheet"
 msgstr ""
 
 #: Export/definitions/cal_resource_doc.xml:5
+#: Export/definitions/cal_default_doc_single.xml:10
 msgid "Word details"
 msgstr ""
 
@@ -1447,6 +1453,10 @@ msgstr ""
 
 #: Export/definitions/cal_default_doc_sheet.xml:12
 msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+#: Export/definitions/cal_resource_xls_overview.xml:5
+msgid "Excel overview"
 msgstr ""
 
 #: Model/Rrule.php:353
@@ -1527,39 +1537,39 @@ msgstr "На этот контакт система создала событи�
 msgid "The email address has been shortened:"
 msgstr "Адрес почты был сокращён:"
 
-#: Model/Event.php:384
+#: Model/Event.php:385
 msgid "Start"
 msgstr "Начало"
 
-#: Model/Event.php:387
+#: Model/Event.php:388
 msgid "Classification"
 msgstr "Классификация"
 
-#: Model/Event.php:391
+#: Model/Event.php:392
 msgid "Priority"
 msgstr "Приоритет"
 
-#: Model/Event.php:394
+#: Model/Event.php:395
 msgid "Url"
 msgstr "URL"
 
-#: Model/Event.php:395
+#: Model/Event.php:396
 msgid "Recurrance rule"
 msgstr "Правило повторений"
 
-#: Model/Event.php:396
+#: Model/Event.php:397
 msgid "Is all day event"
 msgstr "Событие на весь день"
 
-#: Model/Event.php:397
+#: Model/Event.php:398
 msgid "Organizer timezone"
 msgstr "Часовой пояс организатора"
 
-#: Model/Event.php:422
+#: Model/Event.php:423
 msgid "No"
 msgstr "Нет"
 
-#: Model/Event.php:422
+#: Model/Event.php:423
 msgid "Yes"
 msgstr "Да"
 

@@ -118,7 +118,7 @@ msgstr "Помещение"
 msgid "Display Name"
 msgstr "Отображать как"
 
-#: js/ContactEditDialog.js:209 js/ContactGrid.js:251 js/Model.js:411
+#: js/ContactEditDialog.js:209 js/ContactGrid.js:252 js/Model.js:411
 msgid "Industry"
 msgid_plural "Industries"
 msgstr[0] ""
@@ -596,9 +596,13 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: Controller/Contact.php:589
+#: Controller/Contact.php:593
 msgid "Uploaded new contact image."
 msgstr "Добавлено новое изображение контакта."
+
+#: Controller/Contact.php:596
+msgid "Deleted contact image."
+msgstr ""
 
 #: Frontend/Cli.php:216
 msgid "This contact has been automatically added by the system as an event attender"
@@ -908,6 +912,11 @@ msgstr "Домашний URL"
 #: Export/Pdf.php:112
 msgid "Other Data"
 msgstr "Другие данные"
+
+#: Export/definitions/adb_xls_overview.xml:5
+#: Export/definitions/adb_list_overview_xls.xml:5
+msgid "Excel overview"
+msgstr ""
 
 #: Export/definitions/adb_default_ods.xml:7
 msgid "OpenDocument all data"
