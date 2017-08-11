@@ -1322,6 +1322,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
             } catch (Exception $e) {}
         }
+        if ($this->_backend->tableExists('humanresources_contract')) {
+            try {
+                $this->_backend->dropForeignKey('humanresources_contract', 'tine20_contract::feast_calendar_id--container::id');
+            } catch (Exception $e) {}
+        }
+
 
         if (version_compare($this->getApplicationVersion('Tinebase'), '10.32') < 0 ) {
             if ($this->getTableVersion('container') < 13) {
