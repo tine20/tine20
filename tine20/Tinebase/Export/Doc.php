@@ -73,8 +73,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_subTwigTemplates = array();
     protected $_subTwigMappings = array();
 
-
-
     /**
      * get download content type
      *
@@ -83,19 +81,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     public function getDownloadContentType()
     {
         return 'application/vnd.ms-word';
-    }
-
-
-    /**
-     * return download filename
-     *
-     * @param string $_appName
-     * @param string $_format
-     * @return string
-     */
-    public function getDownloadFilename($_appName, $_format)
-    {
-        return 'letter_' . strtolower($_appName) . '.docx';
     }
 
     public static function getDefaultFormat()
