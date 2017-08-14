@@ -35,6 +35,9 @@ class Crm_Setup_Update_Release10 extends Setup_Update_Abstract
 
     public function update_1()
     {
+        if ($this->getTableVersion('metacrm_lead') < 10) {
+            $this->setTableVersion('metacrm_lead', 10);
+        }
         $this->setApplicationVersion('Crm', '10.2');
     }
 }

@@ -35,6 +35,9 @@ class Projects_Setup_Update_Release10 extends Setup_Update_Abstract
 
     public function update_1()
     {
+        if ($this->getTableVersion('projects_project') < 4) {
+            $this->setTableVersion('projects_project', 4);
+        }
         $this->setApplicationVersion('Projects', '10.2');
     }
 }

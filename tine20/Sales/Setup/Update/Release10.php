@@ -209,4 +209,15 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('sales_orderconf', 2);
         $this->setApplicationVersion('Sales', '10.9');
     }
+
+    /**
+     * update to 10.10
+     */
+    public function update_9()
+    {
+        if ($this->getTableVersion('sales_contracts') < 10) {
+            $this->setTableVersion('sales_contracts', 10);
+        }
+        $this->setApplicationVersion('Sales', '10.10');
+    }
 }

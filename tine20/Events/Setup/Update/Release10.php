@@ -36,6 +36,9 @@ class Events_Setup_Update_Release10 extends Setup_Update_Abstract
 
     public function update_1()
     {
+        if ($this->getTableVersion('events_event') < 3) {
+            $this->setTableVersion('events_event', 3);
+        }
         $this->setApplicationVersion('Events', '10.2');
     }
 }
