@@ -100,6 +100,7 @@ class Tinebase_Application
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
+        /** @var Tinebase_Model_Application $application */
         $application = $this->getApplications()->getById($applicationId);
         
         if (!$application) {
@@ -194,6 +195,7 @@ class Tinebase_Application
      *
      * @param  string  $state  can be Tinebase_Application::ENABLED or Tinebase_Application::DISABLED
      * @return Tinebase_Record_RecordSet list of applications
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getApplicationsByState($state)
     {
@@ -222,8 +224,8 @@ class Tinebase_Application
         
         // create a hash of installed applications and their versions
         $applications = array_combine(
-            Tinebase_Application::getInstance()->getApplications()->id,
-            Tinebase_Application::getInstance()->getApplications()->version
+            $applications->id,
+            $applications->version
         );
         
         ksort($applications);
@@ -332,7 +334,7 @@ class Tinebase_Application
     /**
      * get all possible application rights
      *
-     * @param   int application id
+     * @param   int $_applicationId
      * @return  array   all application rights
      */
     public function getAllRights($_applicationId)
@@ -354,8 +356,7 @@ class Tinebase_Application
     /**
      * get right description
      *
-     * @param   int     application id
-     * @param   string  right
+     * @param   int     $_applicationId
      * @return  array   right description
      */
     public function getAllRightDescriptions($_applicationId)
@@ -450,10 +451,10 @@ class Tinebase_Application
     /**
      * add table to tine registry
      *
-     * @param Tinebase_Model_Application
-     * @param string name of table
-     * @param int version of table
-     * @return int
+     * @param Tinebase_Model_Application|string $_applicationId
+     * @param string $_name of table
+     * @param int $_version of table
+     * @return void
      */
     public function addApplicationTable($_applicationId, $_name, $_version)
     {
@@ -506,6 +507,7 @@ class Tinebase_Application
             'modlog'        => array('tablename' => 'timemachine_modlog'),
             'import'        => array('tablename' => 'import'),
             'rootnode'      => array('tablename' => ''),
+            'pobserver'     => array(),
         );
         $countMessage = ' Deleted';
         
@@ -524,7 +526,11 @@ class Tinebase_Application
                 case 'customfield':
                     $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
                     break;
+                case 'pobserver':
+                    $count = Tinebase_Record_PersistentObserver::getInstance()->deleteByApplication($_application);
+                    break;
                 case 'rootnode':
+                    $count = 0;
                     try {
                         // note: TFS expects name here, not ID
                         $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
@@ -600,6 +606,7 @@ class Tinebase_Application
 
         /** @var Tinebase_Model_Application $app */
         foreach($apps as $app) {
+            /** @var Tinebase_Controller $controllerClass */
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
                 try {

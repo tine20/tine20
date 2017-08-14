@@ -117,7 +117,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.readOnly = readOnly;
         this.action_add.setDisabled(readOnly);
         this.action_remove.setDisabled(readOnly);
-        this.action_add_from_filemanager.setDisabled(readOnly);
+
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.action_add_from_filemanager.setDisabled(readOnly);
+        }
     },
 
     /**

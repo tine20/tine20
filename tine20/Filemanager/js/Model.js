@@ -93,9 +93,11 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
     var revisionString = Tine.Tinebase.appMgr.get('Filemanager').i18n._('Revision') + " " + revision,
         availableRevisions = record.get('available_revisions');
 
-    return Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0 ?
-        '<a href="#"; onclick="Tine.Filemanager.downloadFile(\'' + record.get('path')+ '\',' + revision + '); return false;">' + revisionString + '</a>' :
-        revisionString;
+    // NOTE we have to encode the path here because it might contain quotes or other bad chars
+    return (Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0)
+        ? '<a href="#"; onclick="Tine.Filemanager.downloadFileByEncodedPath(\'' + btoa(record.get('path')) + '\',' + revision
+            + '); return false;">' + revisionString + '</a>'
+        : revisionString;
 });
 
 

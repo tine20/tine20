@@ -433,7 +433,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getDownloadFilename($_appName, $_format)
     {
-        return 'export_' . strtolower($_appName) . '.' . $_format;
+        $model = '';
+        if (null !== $this->_modelName && count($modelParts = explode('_', $this->_modelName, 3)) === 3) {
+            $model = '_' . strtolower($modelParts[2]);
+        }
+        return 'export_' . strtolower($_appName) . $model . '.' . $_format;
     }
 
 
@@ -570,6 +574,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             return json_encode($string);
         });
 
+        $this->_addTwigFunctions();
+
+        $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
+    }
+
+    /**
+     * adds twig function to the twig environment to be used in the templates
+     */
+    protected function _addTwigFunctions()
+    {
         $locale = $this->_locale;
         $translate = $this->_translate;
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
@@ -583,8 +597,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             // TODO implement this!
             return $model;
         }));
-
-        $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
     }
 
     /**

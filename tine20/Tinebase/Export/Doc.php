@@ -73,8 +73,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_subTwigTemplates = array();
     protected $_subTwigMappings = array();
 
-
-
     /**
      * get download content type
      *
@@ -83,19 +81,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     public function getDownloadContentType()
     {
         return 'application/vnd.ms-word';
-    }
-
-
-    /**
-     * return download filename
-     *
-     * @param string $_appName
-     * @param string $_format
-     * @return string
-     */
-    public function getDownloadFilename($_appName, $_format)
-    {
-        return 'letter_' . strtolower($_appName) . '.docx';
     }
 
     public static function getDefaultFormat()
@@ -388,6 +373,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     $mergedRecords = array_merge($recordArray, $mergedRecords);
                 }
                 $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                unset($validators['customfields']);
                 foreach($recordSet as $recordArray) {
                     $record = new Tinebase_Record_Generic(array(), true);
                     $record->setValidators($validators);
@@ -422,6 +408,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_docTemplate = $_processor;
 
         if (!isset($this->_subTwigTemplates[$subTempName])) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $this->_twigEnvironment->getLoader()->addLoader(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName . $subTempName, $this->_getLastModifiedTimeStamp(),
                     array($this, '_getTwigSource')));
@@ -816,5 +803,18 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         }
 
         return $this->_templateVariables;
+    }
+
+    /**
+     * adds twig function to the twig environment to be used in the templates
+     */
+    protected function _addTwigFunctions()
+    {
+        parent::_addTwigFunctions();
+
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
+            function ($str) {
+                return (is_scalar($str) && strlen($str) > 0) ? $str . "\x0B" : $str;
+            }));
     }
 }

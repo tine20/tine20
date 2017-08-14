@@ -754,19 +754,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.log.debug('creating new default data record');
             this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
-        
-        if (this.mode !== 'local') {
+
+        if (typeof this.record === 'string') {
+            if (! Ext.isFunction(this.record.beginEdit)) {
+                this.record = this.recordProxy.recordReader({responseText: this.record});
+            }
+            this.onRecordLoad.defer(10, this);
+        } else {
             if (this.record && this.record.id) {
                 this.loadRemoteRecord();
             } else {
                 this.onRecordLoad.defer(10, this);
             }
-        } else {
-            // note: in local mode we expect a valid record
-            if (! Ext.isFunction(this.record.beginEdit)) {
-                this.record = this.recordProxy.recordReader({responseText: this.record});
-            }
-            this.onRecordLoad.defer(10, this);
         }
     },
     

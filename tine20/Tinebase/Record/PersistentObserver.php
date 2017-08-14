@@ -253,4 +253,20 @@ class Tinebase_Record_PersistentObserver
 
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
     }
+
+    /**
+     * @param Tinebase_Model_Application $_application
+     * @return int
+     */
+    public function deleteByApplication(Tinebase_Model_Application $_application)
+    {
+        $sqlCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
+        $likeQName = $sqlCommand->getLike() . $this->_db->quote($_application->name . '%');
+
+        $where =
+            $this->_db->quoteIdentifier('observable_model') . ' ' . $likeQName . ' OR ' .
+            $this->_db->quoteIdentifier('observer_model')   . ' ' . $likeQName;
+
+        return $this->_table->delete($where);
+    }
 }

@@ -174,6 +174,15 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->zipClass->addFromString('word/_rels/footer' . $index . '.xml.rels', $data);
         }
 
+        // replace newline placeholder vertical tab (ascii 11)
+        foreach ($this->tempDocumentHeaders as &$xml) {
+            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
+        }
+        $this->tempDocumentMainPart = join('</w:t><w:br /><w:t>', mb_split("\x0B", $this->tempDocumentMainPart));
+        foreach ($this->tempDocumentFooters as &$xml) {
+            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
+        }
+
         return parent::save();
     }
 

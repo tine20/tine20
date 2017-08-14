@@ -185,6 +185,15 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 
     public function update_7()
     {
+        if ($this->getTableVersion('cal_events') < 14) {
+            $this->setTableVersion('cal_events', 14);
+        }
+        if ($this->getTableVersion('cal_attendee') < 6) {
+            $this->setTableVersion('cal_attendee', 6);
+        }
+        if ($this->getTableVersion('cal_resources') < 6) {
+            $this->setTableVersion('cal_resources', 6);
+        }
         $this->setApplicationVersion('Calendar', '10.8');
     }
 

@@ -57,6 +57,10 @@ class MailFiler_Model_Node extends Tinebase_Model_Tree_Node
             'table'         => 'mailfiler_message',
             'on'            => 'tree_nodes.id = mailfiler_message.node_id'
         ),
+        'to_flat'       => array(
+            'table'         => 'mailfiler_message',
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+        ),
     );
 
     /**
