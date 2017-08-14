@@ -17,6 +17,9 @@ class SimpleFAQ_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
+        if ($this->getTableVersion('simple_faq') < 3) {
+            $this->setTableVersion('simple_faq', 3);
+        }
         $this->setApplicationVersion('SimpleFAQ', '10.1');
     }
 

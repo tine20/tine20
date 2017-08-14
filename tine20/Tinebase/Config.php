@@ -556,6 +556,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_NAME = 'queueName';
 
     const QUOTA = 'quota';
+    const QUOTA_SHOW_UI = 'showUI';
     const QUOTA_INCLUDE_REVISION = 'includeRevision';
     const QUOTA_TOTALINMB = 'totalInMB';
     const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
@@ -1666,6 +1667,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'setBySetupModule'      => false,
             'content'               => array(
+                self::QUOTA_SHOW_UI => array(
+                    //_('Show UI')
+                    'label'                 => 'Show UI',
+                    //_('Should the quota UI elements be rendered or not.')
+                    'description'           => 'Should the quota UI elements be rendered or not.',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => true,
+                    'default'               => true,
+                ),
                 self::QUOTA_INCLUDE_REVISION => array(
                     //_('Include revisions')
                     'label'                 => 'Include revisions',

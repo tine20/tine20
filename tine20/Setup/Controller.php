@@ -443,18 +443,18 @@ class Setup_Controller
         $messages = array();
         
         // update tinebase first (to biggest major version)
-        $tinebase = $applications->filter('name', 'Tinebase')->getFirstRecord();
-        if (! empty($tinebase)) {
-            unset($applications[$applications->getIndexById($tinebase->getId())]);
-        
-            list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
-            
-            for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
-                $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
-            }
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        if ($idx = $applications->getIndexById($tinebase->getId())) {
+            unset($applications[$idx]);
         }
-            
+
+        list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
+
+        for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
+            $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
+        }
+
         // update the rest
         for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
             foreach ($applications as $application) {

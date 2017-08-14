@@ -25,6 +25,8 @@
         $title = $i18n->_('Please wait or contact your administrator');
     } catch (Exception $e) {
         // new tine installation with empty DB
+        $msg = 'Tine 2.0 needs to be updated or is not installed yet.';
+        $title = 'Please wait or contact your administrator';
         header('Location: setup.php');
     }
     

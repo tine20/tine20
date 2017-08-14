@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -94,6 +94,9 @@ class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveSyncDevice($recordData)
     {
+        if (empty($recordData['id'])) {
+            throw new Tinebase_Exception_AccessDenied('you are not allowed to create a sync device');
+        }
         return $this->_save($recordData, ActiveSync_Controller_SyncDevices::getInstance(), 'ActiveSync_Model_Device', 'id');
     }
     
@@ -106,5 +109,16 @@ class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteSyncDevices($ids)
     {
         return $this->_delete($ids, ActiveSync_Controller_SyncDevices::getInstance());
+    }
+
+    /**
+     * @param array $ids
+     * @return array
+     */
+    public function remoteResetDevices($ids)
+    {
+        ActiveSync_Controller_SyncDevices::getInstance()->remoteResetDevices($ids);
+
+        return array('success' => true);
     }
 }

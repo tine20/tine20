@@ -79,7 +79,7 @@ class MailFiler_Controller_Message extends Felamimail_Controller_Message
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string                            $_action get|update
      */
-    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter = null, $_action = 'get')
     {
         // TODO acl - we already checked acl on the nodes and this has no public api
     }

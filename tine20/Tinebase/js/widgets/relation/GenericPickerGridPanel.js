@@ -1153,22 +1153,23 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     loadRecord: function(dialog, record, ticketFn) {
         var _ = window.lodash,
+            me = this,
             interceptor = ticketFn(),
             evalGrants = dialog.evalGrants,
             hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.store.removeAll();
 
-        if (dialog.mode == 'local' && this.editDialog.recordClass.getMeta('phpClassName') === 'Calendar_Model_Event') {
-            // if dialog is local, relations must be fetched async
+        var relations = _.get(record, 'data.relations');
+
+        if (relations) {
+            this.loadRelations(relations, interceptor);
+        } else {
             Tine.Tinebase.getRelations('Calendar_Model_Event', record.get('id'), null, [], null, function (response, request) {
-                if(response) {
-                    this.loadRelations(response.results, interceptor);
+                if (response) {
+                    me.loadRelations(response.results, interceptor);
                 }
             }.createDelegate(this));
-        } else {
-            var relations = record.get('relations');
-            this.loadRelations(relations, interceptor);
         }
 
         this.setReadOnly(! hasRequiredGrant);

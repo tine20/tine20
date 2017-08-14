@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -39,6 +39,8 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
      * @todo rename to containerACLChecks
      */
     protected $_doContainerACLChecks = false;
+
+    protected $_allowRemoteWipeFlag = false;
     
     /**
      * holds the instance of the singleton
@@ -114,12 +116,34 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
      * delete access log entries
      *
      * @param   array $_ids list of logIds to delete
+     * @return Tinebase_Record_RecordSet
      */
     public function delete($_ids)
     {
         $this->checkRight('MANAGE_DEVICES');
         
         return parent::delete($_ids);
+    }
+
+    /**
+     * set remoteWipe flag for devices
+     *
+     * @param   array $_ids list of devices to flag for remote wipe
+     */
+    public function remoteResetDevices($_ids)
+    {
+        $this->checkRight('RESET_DEVICES');
+        $this->_allowRemoteWipeFlag = true;
+
+        try {
+            /** @var ActiveSync_Model_Device $record */
+            foreach ($this->getMultiple($_ids) as $record) {
+                $record->remotewipe = true;
+                $this->update($record);
+            }
+        } finally {
+            $this->_allowRemoteWipeFlag = false;
+        }
     }
 
     /**
@@ -133,11 +157,26 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
     {
         // spoofing protection
         $fieldsToUnset = array('id', 'deviceid', 'devicetype', 'policy_id', 'acsversion', 'useragent',
-            'model', 'os', 'oslanguage', 'pinglifetime', 'pingfolder', 'remotewipe', 'calendarfilter_id',
+            'model', 'os', 'oslanguage', 'pinglifetime', 'pingfolder', 'calendarfilter_id',
             'contactsfilter_id', 'emailfilter_id', 'tasksfilter_id', 'lastping');
+        if (false === $this->_allowRemoteWipeFlag) {
+            $fieldsToUnset[] = 'remotewipe';
+        }
         
         foreach ($fieldsToUnset as $field) {
             $_record->{$field} = $_oldRecord{$field};
         }
+    }
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        throw new Tinebase_Exception_AccessDenied('this is not allowed!');
     }
 }

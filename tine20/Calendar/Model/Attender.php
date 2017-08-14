@@ -1030,7 +1030,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     }
                     break;
                 default:
-                    throw new Exception("type $type not supported");
+                    throw new Tinebase_Exception_InvalidArgument("type $type not supported");
                     break;
             }
         }

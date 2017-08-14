@@ -73,8 +73,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_subTwigTemplates = array();
     protected $_subTwigMappings = array();
 
-
-
     /**
      * get download content type
      *
@@ -83,19 +81,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     public function getDownloadContentType()
     {
         return 'application/vnd.ms-word';
-    }
-
-
-    /**
-     * return download filename
-     *
-     * @param string $_appName
-     * @param string $_format
-     * @return string
-     */
-    public function getDownloadFilename($_appName, $_format)
-    {
-        return 'letter_' . strtolower($_appName) . '.docx';
     }
 
     public static function getDefaultFormat()
@@ -369,6 +354,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _executeSubTemplate($_name, Tinebase_Export_Richtext_TemplateProcessor $_processor)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting sub tempalte: ' . $_name);
+
         $recordSet = $this->_currentRecord->{$_name};
         if (is_array($recordSet)) {
             if (count($recordSet) === 0) {
@@ -376,6 +363,24 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             }
             if (($record = reset($recordSet)) instanceof Tinebase_Record_Abstract) {
                 $recordSet = new Tinebase_Record_RecordSet(get_class($record), $recordSet);
+            } else {
+                $realRecordSet = new Tinebase_Record_RecordSet(Tinebase_Record_Generic::class, array());
+                $mergedRecords = array();
+                foreach($recordSet as $recordArray) {
+                    if (!is_array($recordArray)) {
+                        return;
+                    }
+                    $mergedRecords = array_merge($recordArray, $mergedRecords);
+                }
+                $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                unset($validators['customfields']);
+                foreach($recordSet as $recordArray) {
+                    $record = new Tinebase_Record_Generic(array(), true);
+                    $record->setValidators($validators);
+                    $record->setFromArray($recordArray);
+                    $realRecordSet->addRecord($record);
+                }
+                $recordSet = $realRecordSet;
             }
         } elseif (is_object($recordSet)) {
             if ($recordSet instanceof Tinebase_Record_Abstract) {
@@ -403,6 +408,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_docTemplate = $_processor;
 
         if (!isset($this->_subTwigTemplates[$subTempName])) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $this->_twigEnvironment->getLoader()->addLoader(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName . $subTempName, $this->_getLastModifiedTimeStamp(),
                     array($this, '_getTwigSource')));
@@ -532,15 +538,14 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         foreach ($this->_getTemplateVariables() as $placeholder) {
             if (strpos($placeholder, 'DATASOURCE') === 0 && preg_match('/DATASOURCE_(.*)/', $placeholder, $match)) {
-                if (null === ($dataSource = $this->_docTemplate->cloneBlock($placeholder, 1, false))) {
-                    throw new Tinebase_Exception_UnexpectedValue('clone block for ' . $placeholder . ' failed');
+                if (null === ($dataSource = $this->_docTemplate->findBlock($placeholder, '${' . $match[0] . '}'))) {
+                    throw new Tinebase_Exception_UnexpectedValue('find&replace block for ' . $placeholder . ' failed');
                 }
 
                 $dataSource = '<?xml' . $dataSource;
                 $processor = new Tinebase_Export_Richtext_TemplateProcessor($dataSource, true,
                     Tinebase_Export_Richtext_TemplateProcessor::TYPE_DATASOURCE);
                 $this->_dataSources[$match[1]] = $processor;
-                $this->_docTemplate->replaceBlock($match[0], '${' . $match[0] . '}');
 
                 $this->_findAndReplaceGroup($processor);
             }
@@ -554,8 +559,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         $config = array();
 
-        if (null !== ($group = $_templateProcessor->cloneBlock('GROUP_BLOCK', 1, false))) {
-            $_templateProcessor->replaceBlock('GROUP_BLOCK', '${GROUP_BLOCK}');
+        if (null !== ($group = $_templateProcessor->findBlock('GROUP_BLOCK', '${GROUP_BLOCK}'))) {
             $groupProcessor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml' . $group, true,
                 Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP, $_templateProcessor);
 
@@ -564,16 +568,13 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             } else {
                 $config['record'] = $recordProcessor;
             }
-            if (null !== ($groupHeader = $_templateProcessor->cloneBlock('GROUP_HEADER', 1, false))) {
-                $_templateProcessor->replaceBlock('GROUP_HEADER', '');
+            if (null !== ($groupHeader = $_templateProcessor->findBlock('GROUP_HEADER', ''))) {
                 $config['groupHeader'] = $groupHeader;
             }
-            if (null !== ($groupFooter = $_templateProcessor->cloneBlock('GROUP_FOOTER', 1, false))) {
-                $_templateProcessor->replaceBlock('GROUP_FOOTER', '');
+            if (null !== ($groupFooter = $_templateProcessor->findBlock('GROUP_FOOTER', ''))) {
                 $config['groupFooter'] = $groupFooter;
             }
-            if (null !== ($groupSeparator = $_templateProcessor->cloneBlock('GROUP_SEPARATOR', 1, false))) {
-                $_templateProcessor->replaceBlock('GROUP_SEPARATOR', '');
+            if (null !== ($groupSeparator = $_templateProcessor->findBlock('GROUP_SEPARATOR', ''))) {
                 $config['groupSeparator'] = $groupSeparator;
             }
             if (isset($config['recordRow']) && (isset($config['groupHeader']) || isset($config['groupFooter']) ||
@@ -601,8 +602,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _findAndReplaceRecord(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor)
     {
-        if (null !== ($recordBlock = $_templateProcessor->cloneBlock('RECORD_BLOCK', 1, false))) {
-            $_templateProcessor->replaceBlock('RECORD_BLOCK', '${RECORD_BLOCK}');
+        if (null !== ($recordBlock = $_templateProcessor->findBlock('RECORD_BLOCK', '${RECORD_BLOCK}'))) {
             $processor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml' . $recordBlock, true,
                 Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD, $_templateProcessor);
             $this->_findAndReplaceSubGroup($processor);
@@ -611,18 +611,15 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             );
             $processor->setMainPart('<?xml');
 
-            if (null !== ($recordHeader = $_templateProcessor->cloneBlock('RECORD_HEADER', 1, false))) {
-                $_templateProcessor->replaceBlock('RECORD_HEADER', '');
+            if (null !== ($recordHeader = $_templateProcessor->findBlock('RECORD_HEADER', ''))) {
                 $config['header'] = $recordHeader;
             }
 
-            if (null !== ($recordFooter = $_templateProcessor->cloneBlock('RECORD_FOOTER', 1, false))) {
-                $_templateProcessor->replaceBlock('RECORD_FOOTER', '');
+            if (null !== ($recordFooter = $_templateProcessor->findBlock('RECORD_FOOTER', ''))) {
                 $config['footer'] = $recordFooter;
             }
 
-            if (null !== ($recordSeparator = $_templateProcessor->cloneBlock('RECORD_SEPARATOR', 1, false))) {
-                $_templateProcessor->replaceBlock('RECORD_SEPARATOR', '');
+            if (null !== ($recordSeparator = $_templateProcessor->findBlock('RECORD_SEPARATOR', ''))) {
                 $config['separator'] = $recordSeparator;
             }
             $processor->setConfig(array_merge($processor->getConfig(), $config));
@@ -694,9 +691,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
             $config = array();
             if (null !== $foundGroup) {
-                if (null !== ($group = $_templateProcessor->cloneBlock($foundGroup, 1, false))) {
+                if (null !== ($group = $_templateProcessor->findBlock($foundGroup, '${R' . $foundGroup . '}'))) {
                     list(,$propertyName) = explode('_', $foundGroup);
-                    $_templateProcessor->replaceBlock($foundGroup, '${R' . $foundGroup . '}');
                     $groupProcessor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml' . $group, true,
                         Tinebase_Export_Richtext_TemplateProcessor::TYPE_SUBGROUP, $_templateProcessor);
 
@@ -705,16 +701,13 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     } else {
                         $config['record'] = $recordProcessor;
                     }
-                    if (null !== ($groupHeader = $_templateProcessor->cloneBlock('SUBG_HEADER_' . $propertyName, 1, false))) {
-                        $_templateProcessor->replaceBlock('SUBG_HEADER_' . $propertyName, '');
+                    if (null !== ($groupHeader = $_templateProcessor->findBlock('SUBG_HEADER_' . $propertyName, ''))) {
                         $config['groupHeader'] = $groupHeader;
                     }
-                    if (null !== ($groupFooter = $_templateProcessor->cloneBlock('SUBG_FOOTER_' . $propertyName, 1, false))) {
-                        $_templateProcessor->replaceBlock('SUBG_FOOTER_' . $propertyName, '');
+                    if (null !== ($groupFooter = $_templateProcessor->findBlock('SUBG_FOOTER_' . $propertyName, ''))) {
                         $config['groupFooter'] = $groupFooter;
                     }
-                    if (null !== ($groupSeparator = $_templateProcessor->cloneBlock('SUBG_SEPARATOR_' . $propertyName, 1, false))) {
-                        $_templateProcessor->replaceBlock('SUBG_SEPARATOR_' . $propertyName, '');
+                    if (null !== ($groupSeparator = $_templateProcessor->findBlock('SUBG_SEPARATOR_' . $propertyName, ''))) {
                         $config['groupSeparator'] = $groupSeparator;
                     }
                     $config['groupXml'] = $this->_cutXml($groupProcessor->getMainPart());
@@ -722,7 +715,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     $groupProcessor->setConfig($config);
                     $parentConfig['subgroups'][$propertyName] = $groupProcessor;
                 } else {
-                    throw new Tinebase_Exception('clone block failed after subgroup was found: ' . $foundGroup);
+                    throw new Tinebase_Exception('find&replace block failed after subgroup was found: ' . $foundGroup);
                 }
             } elseif (null !== $foundRecord) {
                 if (null === ($recordProcessor = $this->_findAndReplaceSubRecord($_templateProcessor))) {
@@ -763,9 +756,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             return null;
         }
 
-        if (null !== ($recordBlock = $_templateProcessor->cloneBlock($foundRecord, 1, false))) {
+        if (null !== ($recordBlock = $_templateProcessor->findBlock($foundRecord, '${R' . $foundRecord . '}'))) {
             list(,$propertyName) = explode('_', $foundRecord);
-            $_templateProcessor->replaceBlock($foundRecord, '${R' . $foundRecord . '}');
             $processor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml', true,
                 Tinebase_Export_Richtext_TemplateProcessor::TYPE_SUBRECORD, $_templateProcessor);
             $config = array(
@@ -773,24 +765,21 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 'name'          => $foundRecord,
             );
 
-            if (null !== ($recordHeader = $_templateProcessor->cloneBlock('SUBR_HEADER_' . $propertyName, 1, false))) {
-                $_templateProcessor->replaceBlock('SUBR_HEADER_' . $propertyName, '');
+            if (null !== ($recordHeader = $_templateProcessor->findBlock('SUBR_HEADER_' . $propertyName, ''))) {
                 $config['header'] = $recordHeader;
             }
 
-            if (null !== ($recordFooter = $_templateProcessor->cloneBlock('SUBR_FOOTER_' . $propertyName, 1, false))) {
-                $_templateProcessor->replaceBlock('SUBR_FOOTER_' . $propertyName, '');
+            if (null !== ($recordFooter = $_templateProcessor->findBlock('SUBR_FOOTER_' . $propertyName, ''))) {
                 $config['footer'] = $recordFooter;
             }
 
-            if (null !== ($recordSeparator = $_templateProcessor->cloneBlock('SUBR_SEPARATOR_' . $propertyName, 1, false))) {
-                $_templateProcessor->replaceBlock('SUBR_SEPARATOR_' . $propertyName, '');
+            if (null !== ($recordSeparator = $_templateProcessor->findBlock('SUBR_SEPARATOR_' . $propertyName, ''))) {
                 $config['separator'] = $recordSeparator;
             }
             $processor->setConfig($config);
             return $processor;
         } else {
-            throw new Tinebase_Exception('clone block failed after subrecord was found: ' . $foundRecord);
+            throw new Tinebase_Exception('find&replace block failed after subrecord was found: ' . $foundRecord);
         }
     }
 
@@ -814,5 +803,18 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         }
 
         return $this->_templateVariables;
+    }
+
+    /**
+     * adds twig function to the twig environment to be used in the templates
+     */
+    protected function _addTwigFunctions()
+    {
+        parent::_addTwigFunctions();
+
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
+            function ($str) {
+                return (is_scalar($str) && strlen($str) > 0) ? $str . "\x0B" : $str;
+            }));
     }
 }

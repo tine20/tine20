@@ -96,18 +96,38 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  *
  * @param {String|Tine.Filemanager.Model.Node}
  * @param revision
+ * @param appName
  * @returns {Ext.ux.file.Download}
+ *
+ * @todo move to Tine.Filemanager.FileRecordBackend
  */
-Tine.Filemanager.downloadFile = function(path, revision) {
-    path = lodash.get(path, 'data.path') || lodash.get(path, 'path') || path;
+Tine.Filemanager.downloadFile = function(path, revision, appName) {
+    var _ = window.lodash;
+    appName = appName || 'Filemanager';
+    path = _.get(path, 'data.path') || _.get(path, 'path') || path;
 
     return new Ext.ux.file.Download({
         params: {
-            method: 'Filemanager.downloadFile',
+            method: appName + '.downloadFile',
             requestType: 'HTTP',
             id: '',
             path: path,
             revision: revision
         }
     }).start();
+};
+
+
+/**
+ * download file into browser with base64 (btoa) encoded path
+ *
+ * @param {String} encodedpath
+ * @param revision
+ * @param appName
+ * @returns {Ext.ux.file.Download}
+ *
+ * @refactor: we should only need one downloadFile fn
+ */
+Tine.Filemanager.downloadFileByEncodedPath = function(encodedpath, revision, appName) {
+    return Tine.Filemanager.downloadFile(atob(encodedpath), revision, appName);
 };

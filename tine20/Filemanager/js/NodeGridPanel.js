@@ -527,6 +527,21 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * go up one folder
+     *
+     * @param {Ext.Component} button
+     * @param {Ext.EventObject} event
+     */
+    onLoadParentFolder: function(button, event) {
+        var currentFolderNode = this.currentFolderNode;
+
+        if(currentFolderNode && currentFolderNode.parentNode) {
+            this.currentFolderNode = currentFolderNode.parentNode;
+            currentFolderNode.parentNode.select();
+        }
+    },
+
+    /**
      * get the right contextMenu
      */
     getContextMenu: function(grid, row, e) {

@@ -1320,7 +1320,10 @@ class Admin_JsonTest extends TestCase
             'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId()
         )));
 
-        $imapBackend = Tinebase_EmailUser::getInstance();
+        $imapBackend = null;
+        try {
+            $imapBackend = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_NotFound $tenf) {}
         if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
             static::assertEquals(2, $filterAppResult['totalcount']);
             static::assertEquals('Emails', $filterAppResult['results'][1]['name']);

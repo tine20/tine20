@@ -159,18 +159,10 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
     {
         parent::__construct($_options);
         
-        // set domain from smtp config
+        // set domain and allowed domains from smtp config
         $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
-        
-        // add allowed domains
-        if (! empty($this->_config['primarydomain'])) {
-            $this->_config['alloweddomains'] = array($this->_config['primarydomain']);
-            if (! empty($this->_config['secondarydomains'])) {
-                // merge primary and secondary domains and split secondary domains + trim whitespaces
-                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $this->_config['secondarydomains']));
-            } 
-        }
-        
+        $this->_config['alloweddomains'] = Tinebase_EmailUser::getAllowedDomains($this->_config);
+
         $this->_clientId = Tinebase_Core::getTinebaseId();
         
         $this->_destinationTable = $this->_config['prefix'] . $this->_config['destinationTable'];
@@ -263,7 +255,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
             $_smtpSettings['id'] = $this->_db->lastInsertId();
         }
 
-        $this->_removeDestinations($_smtpSettings[$this->_propertyMapping['emailUserId']]);
+        $this->_removeDestinations($_smtpSettings['id']);
         
         // check if it should be forward only
         if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {

@@ -36,7 +36,7 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function exportContacts($filter, $options)
     {
-        $decodedFilter = Zend_Json::decode($filter);
+        $decodedFilter = empty($filter) ? null : Zend_Json::decode($filter);
         $decodedOptions = Zend_Json::decode($options);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -61,7 +61,7 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function exportLists($filter, $options)
     {
-        $decodedFilter = Zend_Json::decode($filter);
+        $decodedFilter = empty($filter) ? null : Zend_Json::decode($filter);
         $decodedOptions = Zend_Json::decode($options);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

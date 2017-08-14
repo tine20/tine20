@@ -104,7 +104,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     {
         $result = parent::getDownloadFilename($_appName, $_format);
 
-        if ('Excel2007' === $this->_excelVersion) {
+        if ('Excel2007' === $this->_excelVersion && $_format !== 'xlsx') {
             // excel2007 extension is .xlsx
             $result .= 'x';
         }
