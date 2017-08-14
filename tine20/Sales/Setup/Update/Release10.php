@@ -224,7 +224,7 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 11.0
      */
-    public function update_9()
+    public function update_10()
     {
         $this->setApplicationVersion('Sales', '11.0');
     }
