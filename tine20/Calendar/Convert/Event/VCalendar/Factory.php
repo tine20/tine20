@@ -28,6 +28,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_DAVDROID    = 'davdroid';
     const CLIENT_BUSYCAL	 = 'busycal';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_EVOLUTION   = 'evolution';
     
     /**
      * cache parsed user-agent strings
@@ -79,6 +80,10 @@ class Calendar_Convert_Event_VCalendar_Factory
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE:
                 return new Calendar_Convert_Event_VCalendar_Tine($_version);
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EVOLUTION:
+                return new Calendar_Convert_Event_VCalendar_Evolution($_version);
+
         }
         return new Calendar_Convert_Event_VCalendar_Generic($_version);
     }
@@ -127,6 +132,11 @@ class Calendar_Convert_Event_VCalendar_Factory
         // EMClient
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
+
+        
+        // Evolution
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EVOLUTION;
             $version = $matches['version'];
 
         // Tine 2.0
