@@ -92,7 +92,7 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
         // this.hasOwnNotificationSettings.setDisabled(!featureEnabled || !hasRequiredGrant || (hasOwnNotificationSettings && !hasAdminGrant))
         this.hasOwnNotificationSettings.setDisabled(!hasAdminGrant);
 
-        this.notificationGrid.setReadOnly(!featureEnabled || !hasRequiredGrant);
+        this.notificationGrid.setReadOnly(!featureEnabled || !hasRequiredGrant || !hasOwnNotificationSettings);
     },
 
     onSave: function (editDialog, record, ticketFn) {
