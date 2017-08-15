@@ -880,8 +880,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     fileRecords: function(appName, path) {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgsIds = [],
-            callback = Ext.emptyFn;
+            msgsIds = [];
 
         if (sm.isFilterSelect) {
             var msgs = this.getStore();
@@ -889,13 +888,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = sm.getSelectionsCollection();
         }
 
-        if (msgs.length < 5) {
-            this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
-            this.fileMessagesLoadMask.show();
-            callback = this.afterFileRecords;
-        }
-        // last params are the callback & scope
-        Tine.Felamimail.fileMessages(filter, appName, path, callback, this);
+        this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
+        this.fileMessagesLoadMask.show();
+        Ext.Ajax.request({
+            params: {
+                method: 'Felamimail.fileMessages',
+                filterData: filter,
+                targetApp: appName,
+                targetPath: path
+            },
+            timeout: 300000, // 5 minutes
+            scope: this,
+            success: function(result, request){
+                this.afterFileRecords(result, request);
+            },
+            failure: function(response, request) {
+                var responseText = Ext.util.JSON.decode(response.responseText),
+                    exception = responseText.data;
+                this.afterFileRecords(response, request, exception);
+            }
+        });
     },
 
     /**
@@ -903,17 +915,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * TODO reload grid when request returns?
      */
-    afterFileRecords: function(unknown, result) {
+    afterFileRecords: function(result, request, error) {
         Tine.log.info('Tine.Felamimail.GridPanel::afterFileRecords');
         Tine.log.debug(result);
 
         this.fileMessagesLoadMask.hide();
 
-        if (result && result.type && result.type == 'exception') {
-            var error = result.error ? result.error : null;
+        if (error) {
             Ext.Msg.show({
                 title: this.app.i18n._('Error Filing Message'),
-                msg: error && error.message ? error.message : this.app.i18n._('Could not file message.'),
+                msg: error.message ? error.message : this.app.i18n._('Could not file message.'),
                 icon: Ext.MessageBox.ERROR,
                 buttons: Ext.Msg.OK
             });
