@@ -225,7 +225,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getName()
     {
-        $resolvedUser = $this->getResolvedUser();
+        $resolvedUser = $this->getResolvedUser(null, false);
         if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
             Tinebase_Translation::getTranslation('Calendar');
             return Tinebase_Translation::getTranslation('Calendar')->_('unknown');
@@ -256,11 +256,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @return Tinebase_Record_Abstract
      */
-    public function getResolvedUser($event=null)
+    public function getResolvedUser($event = null, $resolveDisplayContainer = true)
     {
         $clone = clone $this;
         $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
-        self::resolveAttendee($resolvable, true, $event);
+        self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
         
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
