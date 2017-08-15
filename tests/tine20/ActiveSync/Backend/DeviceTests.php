@@ -98,6 +98,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
      * create ActiveSync_Model_Device to be used in tests
      * 
      * @return ActiveSync_Model_Device
+     * @todo use demodata here (\ActiveSync_Setup_DemoData::_createDevices)
      */
     public static function getTestDevice($_type = null)
     {

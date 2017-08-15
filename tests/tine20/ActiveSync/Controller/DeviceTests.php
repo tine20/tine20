@@ -119,7 +119,3 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($device->contactsfilter_id, $this->objects['filter']->getId());
     }
 }
-    
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Device::main') {
-    ActiveSync_Controller_Device::main();
-}
