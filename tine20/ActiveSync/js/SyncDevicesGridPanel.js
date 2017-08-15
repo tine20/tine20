@@ -4,7 +4,7 @@
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -38,6 +38,7 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('ActiveSync');
         this.gridConfig.cm = this.getColumnModel();
+        this.contextMenuItems = this.getAdditionalCtxItems();
         Tine.ActiveSync.SyncDevicesGridPanel.superclass.initComponent.call(this);
     },
     
@@ -88,7 +89,61 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Last Ping'),      id: 'lastping',          dataIndex: 'lastping',          hidden: false, width: 200, renderer: Tine.Tinebase.common.dateTimeRenderer}
         ];
     },
-        /**
+
+    /**
+     * getAdditionalCtxItems
+     *
+     * @returns {Array}
+     */
+    getAdditionalCtxItems: function() {
+        this.actionRemoteResetDevices = new Ext.Action({
+            text: this.app.i18n._('Remote Reset Device'),
+            disabled: ! Tine.Tinebase.common.hasRight('RESET DEVICES', 'ActiveSync'),
+            scope: this,
+            handler: this.onRemoteResetDevices,
+            iconCls: 'action_wipeDevice'
+        });
+
+        return [this.actionRemoteResetDevices];
+    },
+
+    /**
+     * onRemoteResetDevices
+     */
+    onRemoteResetDevices: function() {
+        Ext.MessageBox.confirm(
+            this.app.i18n._('Please Confirm'),
+            this.app.i18n._('Do you really want to wipe the selected devices? All personal data will be removed and the device is reset to factory settings!'),
+            function(button) {
+                if (button == 'yes') {
+
+                    var selectedRows = this.grid.getSelectionModel().getSelections(),
+                        ids = [];
+                    for (var i = 0; i < selectedRows.length; ++i) {
+                        ids.push(selectedRows[i].id);
+                    }
+
+                    Ext.Ajax.request({
+                        params: {
+                            method: 'ActiveSync.remoteResetDevices',
+                            ids: ids
+                        },
+                        scope: this,
+                        success: function () {
+                            this.loadGridData();
+                        },
+                        failure: function (exception) {
+                            this.loadGridData();
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                        }
+                    });
+                }
+            },
+            this
+        );
+    },
+
+    /**
      * initialises filter toolbar
      */
     initFilterPanel: function() {

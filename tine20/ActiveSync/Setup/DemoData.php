@@ -36,7 +36,14 @@ class ActiveSync_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var ActiveSync_Controller_Device
      */
     protected $_controller;
-    
+
+    /**
+     * required apps
+     *
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin');
+
     /**
      * models to work on
      * @var array
