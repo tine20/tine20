@@ -165,11 +165,16 @@ trait Calendar_Export_GenericTrait
     {
         parent::_resolveRecords($_records);
 
+        if ('Calendar_Model_Event' !== $_records->getRecordClassName() ||
+                'Calendar_Export_Ods' !== static::class) {
+            return;
+        }
+
         Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
 
         foreach($_records as $record) {
             $attendee = $record->attendee->getName();
-            $record->attendee = implode('& ', $attendee);
+            $record->attendee = implode(' & ', $attendee);
 
             $organizer = $record->resolveOrganizer();
             if ($organizer) {
