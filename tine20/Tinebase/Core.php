@@ -1800,7 +1800,7 @@ class Tinebase_Core
         if (! empty($proxyConfig)) {
             $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
             if (is_array($config)) {
-                $config = array_merge($proxyConfig);
+                $config = array_merge($config, $proxyConfig);
             } else {
                 $config = $proxyConfig;
             }
