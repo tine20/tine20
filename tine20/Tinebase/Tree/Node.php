@@ -157,7 +157,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $this->_inspectForPreviewCreation($_newRecord);
 
         if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
-            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'created');
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.checkForCRUDNotifications', $_newRecord->getId(), 'created');
         }
     }
 
@@ -201,7 +201,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
-                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
+                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
             }
         }
 
