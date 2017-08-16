@@ -3156,7 +3156,7 @@ class Tinebase_FileSystem implements
         $alarmController = Tinebase_Alarm::getInstance();
 
         do {
-            $node = $this->get($nodeId);
+            $node = $this->get($nodeId, true);
             $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
             if (count($notificationProps) === 0) {
