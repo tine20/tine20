@@ -119,18 +119,19 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
                     $offset = 0;
                     foreach ($pathParts as $pathPart) {
                         $pathPart = mb_strtolower($pathPart);
-                        $found = false;
+                        $found = array();
                         foreach ($sT as $key => $term) {
                             if (strpos($pathPart, $term) !== false) {
-                                $found = true;
-                                break;
+                                $found[] = $key;
                             }
                         }
-                        if (false === $found) {
+                        if (empty($found)) {
                             ++$offset;
                             continue;
                         }
-                        unset($sT[$key]);
+                        foreach($found as $key) {
+                            unset($sT[$key]);
+                        }
                         if (count($sT) === 0) {
                             break;
                         }
