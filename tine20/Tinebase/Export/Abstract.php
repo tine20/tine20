@@ -428,10 +428,28 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     public function getDownloadFilename($_appName, $_format)
     {
         $model = '';
-        if (null !== $this->_modelName && count($modelParts = explode('_', $this->_modelName, 3)) === 3) {
-            $model = '_' . strtolower($modelParts[2]);
+        if (null !== $this->_modelName) {
+            /** @var Tinebase_Record_Abstract $model */
+            $model = $this->_modelName;
+            if (null !== ($modelConf = $model::getConfiguration())) {
+                $model = '_' . $this->_translate->_($modelConf->recordName, $this->_locale);
+            } else {
+                $model = explode('_', $model, 3);
+                if (count($model) === 3) {
+                    $model = '_' . $this->_translate->_($model[2], $this->_locale);
+                } else {
+                    $model = '';
+                }
+            }
         }
-        return 'export_' . strtolower($_appName) . $model . '.' . $_format;
+        $name = '';
+        if (!empty($this->_config->label)) {
+            $name = '_' . $this->_translate->_($this->_config->label, $this->_locale);
+        }
+        $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
+        return preg_replace('/\s+/', '_',
+            mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
+            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format));
     }
 
 
