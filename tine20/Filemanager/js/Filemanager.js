@@ -40,7 +40,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
 
         // if file, show directory file is in
         var dirPath = path;
-        if (String(path).match(/\/.*\.[a-zA-Z0-9]+$/)) {
+        if (String(path).match(/\/.*\..+$/)) {
             var pathParts = path.split('/');
             pathParts.pop();
             dirPath = pathParts.join('/');
