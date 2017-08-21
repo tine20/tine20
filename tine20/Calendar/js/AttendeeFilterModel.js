@@ -34,9 +34,9 @@ Tine.Calendar.AttendeeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         this.operators = ['in'/*, 'notin'*/];
         this.label = this.app.i18n._('Attendee');
         
-        
         this.defaultValue = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-            user_id: Tine.Tinebase.registry.get('currentAccount')
+            user_type: 'user',
+            user_id: Tine.Tinebase.registry.get('userContact')
         });
     },
     

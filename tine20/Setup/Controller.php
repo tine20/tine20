@@ -1552,16 +1552,27 @@ class Setup_Controller
 
         $this->_clearCache();
 
+        //sanitize input
+        $_applications = array_unique(array_filter($_applications));
+
         $installedApps = Tinebase_Application::getInstance()->getApplications();
         
         // uninstall all apps if tinebase ist going to be uninstalled
-        if (count($installedApps) !== count($_applications) && in_array('Tinebase', $_applications)) {
+        if (in_array('Tinebase', $_applications)) {
             $_applications = $installedApps->name;
+        } else {
+            // prevent Addressbook and Admin from being uninstalled
+            if(($key = array_search('Addressbook', $_applications)) !== false) {
+                unset($_applications[$key]);
+            }
+            if(($key = array_search('Admin', $_applications)) !== false) {
+                unset($_applications[$key]);
+            }
         }
         
         // deactivate foreign key check if all installed apps should be uninstalled
         $deactivatedForeignKeyCheck = false;
-        if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
+        if (in_array('Tinebase', $_applications) && get_class($this->_backend) === 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
             $deactivatedForeignKeyCheck = true;
         }
@@ -1953,28 +1964,50 @@ class Setup_Controller
     protected function _sortUninstallableApplications($_applications)
     {
         $result = array();
+
+        // if not everything is going to be uninstalled, we need to check the dependencies of the applications
+        // that stay installed.
+        if (!isset($_applications['Tinebase'])) {
+            $installedApps = Tinebase_Application::getInstance()->getApplications()->name;
+            $xml = array();
+
+            do {
+                $changed = false;
+                $stillInstalledApps = array_diff($installedApps, array_keys($_applications));
+                foreach ($stillInstalledApps as $name) {
+                    if (!isset($xml[$name])) {
+                        try {
+                            $xml[$name] = $this->getSetupXml($name);
+                        } catch (Setup_Exception_NotFound $senf) {
+                            Tinebase_Exception::log($senf);
+                        }
+                    }
+                    $depends = isset($xml[$name]) ? (array) $xml[$name]->depends : array();
+                    if (isset($depends['application'])) {
+                        foreach ((array)$depends['application'] as $app) {
+                            if(isset($_applications[$app])) {
+                                unset($_applications[$app]);
+                                $changed = true;
+                            }
+                        }
+                    }
+                }
+            } while(true === $changed);
+        }
         
         // get all apps to uninstall ($name => $dependencies)
         $appsToSort = array();
         foreach($_applications as $name => $xml) {
             if ($name !== 'Tinebase') {
-                $depends = $xml ? (array) $xml->depends : array();
+                $appsToSort[$name] = array();
+                $depends = $xml ? (array)$xml->depends : array();
                 if (isset($depends['application'])) {
-                    if ($depends['application'] == 'Tinebase') {
-                        $appsToSort[$name] = array();
-                        
-                    } else {
-                        $depends['application'] = (array) $depends['application'];
-                        
-                        foreach ($depends['application'] as $app) {
-                            // don't add tinebase (all apps depend on tinebase)
-                            if ($app != 'Tinebase') {
-                                $appsToSort[$name][] = $app;
-                            }
+                    foreach ((array)$depends['application'] as $app) {
+                        // don't add tinebase (all apps depend on Tinebase)
+                        if ($app !== 'Tinebase') {
+                            $appsToSort[$name][] = $app;
                         }
                     }
-                } else {
-                    $appsToSort[$name] = array();
                 }
             }
         }
@@ -1984,8 +2017,6 @@ class Setup_Controller
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
 
             foreach($appsToSort as $name => $depends) {
-                //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - $count $name - " . print_r($depends, true));
-                
                 // don't uninstall if another app depends on this one
                 $otherAppDepends = FALSE;
                 foreach($appsToSort as $innerName => $innerDepends) {
@@ -2012,7 +2043,6 @@ class Setup_Controller
         // Tinebase is uninstalled last
         if (isset($_applications['Tinebase'])) {
             $result['Tinebase'] = $_applications['Tinebase'];
-            unset($_applications['Tinebase']);
         }
         
         return $result;

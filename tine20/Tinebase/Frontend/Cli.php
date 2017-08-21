@@ -1580,6 +1580,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     </field>
                 </index>
             ');
+            $setupBackend->addIndex('sales_order_conf', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_order_conf';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
             $setupBackend->addIndex('tasks', $declaration);
         } catch (Exception $e) {
             $failures[] = 'tasks';

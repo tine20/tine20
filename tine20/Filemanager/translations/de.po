@@ -196,7 +196,7 @@ msgstr "Indiziert"
 
 #: js/NodeEditDialog.js:184
 msgid "Not yet indexed"
-msgstr "Noch nciht indiziert"
+msgstr "Noch nicht indiziert"
 
 #: js/NodeEditDialog.js:202 js/DownloadLinkGridPanel.js:254
 #: js/NodeGridPanel.js:270

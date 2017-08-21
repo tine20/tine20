@@ -105,6 +105,45 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_RecordSet $_paths
+     */
+    public function cutTailAfterRecord(Tinebase_Record_Interface $_record, Tinebase_Record_RecordSet $_paths)
+    {
+        $shadowPart = ltrim($_record->getShadowPathPart(), '/');
+        $shadowPaths = array();
+        $remove = array();
+
+        /** @var Tinebase_Model_Path $path */
+        foreach ($_paths as $path) {
+            $pathParts = explode('/', $path->path);
+            $shadowPathParts = explode('/', $path->shadow_path);
+            $countPathParts = count($shadowPathParts);
+            $offset = 0;
+            foreach ($shadowPathParts as $sPart) {
+                ++$offset;
+                if ($sPart === $shadowPart) {
+                    break;
+                }
+            }
+            if ($countPathParts <= $offset) {
+                continue;
+            }
+            $path->path = join('/', array_slice($pathParts, 0, $offset));
+            $path->shadow_path = join('/', array_slice($shadowPathParts, 0, $offset));
+            if (!isset($shadowPaths[$path->shadow_path])) {
+                $shadowPaths[$path->shadow_path] = true;
+            } else {
+                $remove[] = $path->getId();
+            }
+        }
+
+        foreach ($remove as $id) {
+            $_paths->removeById($id);
+        }
+    }
+
+    /**
      * getPathsForShadowPathPart
      *
      * no acl check done in here

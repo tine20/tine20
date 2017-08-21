@@ -349,7 +349,7 @@ class Tinebase_Core
      * returns an instance of the controller of an application
      *
      * ATTENTION if ever refactored, this is called via ActionQueue with the single parameter 'Tinebase_FOO_User' to get Tinebase_User (triggered in Tinebase_User_Sql::deleteUserInSqlBackend()
-     * Tinebase_FOO_Filesystem
+     * Tinebase_FOO_FileSystem
      *
      * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
@@ -1800,7 +1800,7 @@ class Tinebase_Core
         if (! empty($proxyConfig)) {
             $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
             if (is_array($config)) {
-                $config = array_merge($proxyConfig);
+                $config = array_merge($config, $proxyConfig);
             } else {
                 $config = $proxyConfig;
             }
