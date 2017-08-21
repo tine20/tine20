@@ -15,26 +15,12 @@
  */
 class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
 {
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'Tasks';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Tasks_Model_Task';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tasks_Model_TaskFilter';
+    protected $_configuredModel = 'Tasks_Model_Task';
+
     
     /**
      * @var array filter model fieldName => definition
-     */
+     *
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tasks_Model_Task')),
         'uid'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -64,5 +50,5 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
-    );
+    );*/
 }
