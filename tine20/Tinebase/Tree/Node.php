@@ -133,9 +133,9 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
 
         if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $select->columns('CAST(MIN(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ') = MIN(' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS int) AS isIndexed');
+            $select->columns(new Zend_Db_Expr('CAST(MIN(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ') = MIN(' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS int) AS ' . $this->_db->quoteIdentifier('isIndexed')));
         } else {
-            $select->columns('(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS ' . $this->_db->quoteIdentifier('isIndexed'));
+            $select->columns(new Zend_Db_Expr('IF (' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ', TRUE, FALSE) AS ' . $this->_db->quoteIdentifier('isIndexed')));
         }
             
         return $select;
