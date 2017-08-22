@@ -211,7 +211,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
         $this->_usernamesToDelete[] = 'cronuser';
-        $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents';
+        $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents::' . Tinebase_Core::getTinebaseId();
 
         ob_start();
         $this->_cli->triggerAsyncEvents($opts);

@@ -25,6 +25,7 @@ class Tinebase_Lock
         $db = Tinebase_Core::getDb();
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $id = sha1($id);
             if (    ($stmt = $db->query('SELECT IS_FREE_LOCK("' . $id . '")')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
@@ -66,6 +67,7 @@ class Tinebase_Lock
         $db = Tinebase_Core::getDb();
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $id = sha1($id);
             if (    ($stmt = $db->query('SELECT RELEASE_LOCK("' . $id . '")')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
