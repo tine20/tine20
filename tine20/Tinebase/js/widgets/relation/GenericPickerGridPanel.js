@@ -801,7 +801,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var relatedApp = Tine.Tinebase.appMgr.get(appName); 
         var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
         var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
-        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy || Tine[appName][(model.toLowerCase() + 'Backend')];
+        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy
+            || Tine[appName][(model.toLowerCase() + 'Backend')]
+            || new Tine.Tinebase.data.RecordProxy({
+                appName: appName,
+                modelName: model,
+                recordClass: rc
+            });
         
         if (! Ext.isFunction(record.get)) {
             record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
