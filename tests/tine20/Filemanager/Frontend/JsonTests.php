@@ -537,6 +537,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
         $this->assertEquals('file2', $result[1]['name']);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[1]['type']);
+        $this->assertEquals(0, $result[0]['isIndexed']);
         
         return $filepaths;
     }

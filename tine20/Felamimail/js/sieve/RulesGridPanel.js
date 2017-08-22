@@ -130,15 +130,13 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
         if (sm.getCount() == 1) {
             var selectedRows = sm.getSelections(),
-                record = selectedRows[0];
-            
-            // get next/prev record
-            var index = this.store.indexOf(record),
+                record = selectedRows[0],
+                allRecords = this.store.data.items,
+                index = this.store.indexOf(record),
                 switchRecordIndex = (dir == 'down') ? index + 1 : index - 1,
                 switchRecord = this.store.getAt(switchRecordIndex);
-            
+
             if (switchRecord) {
-                // switch ids and resort store
                 var oldId = record.id,
                     switchId = switchRecord.id;
 
@@ -148,8 +146,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 switchRecord.id = oldId;
                 record.set('id', switchId);
                 record.id = switchId;
-                
-                this.store.commitChanges();
+
+                // NOTE: we need to reload store as selection model is confused otherwise
+                this.store.loadRecords({records: allRecords}, {add: false}, true);
                 this.store.sort('id', 'ASC');
                 sm.selectRecords([record]);
             }
