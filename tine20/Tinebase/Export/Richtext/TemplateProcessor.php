@@ -137,7 +137,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     continue;
                 }
                 if (preg_match('#Relationship Id="' . $match[2] . '"[^>]+Target="(media/[^"]+)"#', $relData, $relMatch)) {
-                    $fileContent = file_get_contents($match[1]);
+                    $fileContent = @file_get_contents($match[1]);
                     if (!empty($fileContent)) {
                         $this->zipClass->deleteName('word/' . $relMatch[1]);
                         $this->zipClass->addFromString('word/' . $relMatch[1], $fileContent);
