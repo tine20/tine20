@@ -852,7 +852,7 @@ class Tinebase_Core
 
         // make sure cache is setup or we get in trouble in config_abstract. after db is available, cache needs to be present too!
         self::getCache();
-        
+
         $config = self::getConfig();
         
         if (!isset($config->database)) {
