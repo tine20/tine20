@@ -172,7 +172,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         Tinebase_Container::getInstance()->update($container);
         
         if ($_record->grants instanceof Tinebase_Record_RecordSet) {
-            Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
+            if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_ADMIN) &&
+                    !Tinebase_Core::getUser()->hasGrant($container, Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                unset($_record->grants);
+            } else {
+                Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, true, false);
+            }
+        } else {
+            unset($_record->grants);
         }
         
         return parent::update($_record);
