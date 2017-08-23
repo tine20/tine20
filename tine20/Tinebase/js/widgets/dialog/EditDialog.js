@@ -181,6 +181,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     additionalConfig: null,
 
     /**
+     * Assuming mode is not local, but the dialog is supposed to treat this.record as a json string and keep those data
+     */
+    recordFromJson: false,
+
+    /**
      * canonical name
      * @cfg {String} canonicalName
      */
@@ -754,8 +759,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.log.debug('creating new default data record');
             this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
-        
-        if (this.mode !== 'local') {
+
+        // Mode local means, that the record is not supposed to be loaded from server and saved to server.
+        // So if mode !== local, the record would be always loaded from the server and discard all data passed as record before
+        // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
+        // But to make this work you need to pass a json encoded record to the editdialog as string!
+        if (this.mode !== 'local' && this.recordFromJson !== true) {
             if (this.record && this.record.id) {
                 this.loadRemoteRecord();
             } else {
@@ -763,7 +772,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         } else {
             // note: in local mode we expect a valid record
-            if (! Ext.isFunction(this.record.beginEdit)) {
+            if (!Ext.isFunction(this.record.beginEdit)) {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad.defer(10, this);
