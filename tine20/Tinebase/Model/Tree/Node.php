@@ -75,7 +75,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var array list of modlog omit fields
      */
     protected $_modlogOmitFields = array('revision', 'contenttype', 'description', 'revision_size', 'indexed_hash',
-        'hash', 'size', 'preview_count', 'available_revisions', 'path');
+        'hash', 'size', 'preview_count', 'available_revisions', 'path', 'isIndexed');
 
     /**
      * if foreign Id fields should be resolved on search and get from json
