@@ -103,7 +103,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->debugExceptions = true;
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r(self::$_server->httpRequest->getHeaders(), true));
             $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
             
             if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
                 // NOTE inputstream can not be rewinded
