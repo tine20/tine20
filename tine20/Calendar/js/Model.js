@@ -810,7 +810,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getSignature = function(attendee) 
     var _ = window.lodash;
 
     attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
-    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id, attendee.role].join('/');
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, attendee.role].join('/');
 };
 
 Tine.Calendar.Model.Attender.getAttendeeStore.fromSignature = function(signatureId) {
