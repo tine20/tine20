@@ -295,7 +295,7 @@ class Tinebase_Core
             if (file_exists($XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php")) {
                 define('XHPROF_LIB_ROOT', $XHPROF_ROOT . '/xhprof_lib');
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Enabling xhprof');
-                xhprof_enable(XHPROF_FLAGS_MEMORY);
+                xhprof_enable(XHPROF_FLAGS_MEMORY, array());
             } else {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not find xhprof lib root');
             }
@@ -1533,10 +1533,18 @@ class Tinebase_Core
     {
         $hostname = self::get('HOSTNAME');
         if (! $hostname) {
-            $request = new Sabre\HTTP\Request();
-            $hostname = strlen($request->getUri()) > 1 ?
-                str_replace($request->getUri(), '', $request->getAbsoluteUri()) :
-                $request->getAbsoluteUri();
+            if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
+                if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
+                    $hostname = 'http://'; // backward compatibility. This is what used to happen if you ask zend
+                } else {
+                    $hostname = parse_url($url, PHP_URL_SCHEME) . '://' . parse_url($url, PHP_URL_HOST);
+                }
+            } else {
+                $request = new Zend_Controller_Request_Http();
+                $hostname = $request->getScheme() . '://' . $request->getHttpHost();
+            }
 
             self::set('HOSTNAME', $hostname);
         }
@@ -1552,10 +1560,24 @@ class Tinebase_Core
      */
     public static function getUrl($part = 'full')
     {
-        $request = new Zend_Controller_Request_Http();
-        $pathname = $request->getBasePath();
-        $hostname = $request->getHttpHost();
-        $protocol = $request->getScheme();
+        if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
+            if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
+                $protocol = 'http://'; // backward compatibility. This is what used to happen if you ask zend
+                $hostname = '';
+                $pathname = '';
+            } else {
+                $protocol = parse_url($url, PHP_URL_SCHEME);
+                $hostname = parse_url($url, PHP_URL_HOST);
+                $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $url), '/');
+            }
+        } else {
+            $request = new Zend_Controller_Request_Http();
+            $pathname = $request->getBasePath();
+            $hostname = $request->getHttpHost();
+            $protocol = $request->getScheme();
+        }
 
         switch ($part) {
             case 'path':
