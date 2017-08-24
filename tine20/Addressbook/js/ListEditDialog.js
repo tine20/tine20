@@ -52,7 +52,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initToolbar: function() {
         this.printButton = new Ext.Action({
-            text: String.format(Tine.Tinebase.appMgr.get('Addressbook').i18n._('Print {0}'), this.recordClass.getMeta('modelName')),
+            text: String.format(Tine.Tinebase.appMgr.get('Addressbook').i18n._('Print {0}'), this.recordClass.getRecordName()),
             handler: this.onPrint,
             iconCls:'action_print',
             disabled: false,
