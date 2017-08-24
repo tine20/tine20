@@ -1533,7 +1533,7 @@ msgstr "Erstellt von"
 #: js/widgets/dialog/AttachmentsGridPanel.js:137
 #: js/widgets/tree/ContextMenu.js:119
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: js/widgets/ActivitiesGridPanel.js:64
 msgid "Notes"
@@ -1565,7 +1565,7 @@ msgstr[1] "{0} bearbeiten"
 #: js/widgets/ActivitiesGridPanel.js:267 js/widgets/grid/FileUploadGrid.js:229
 #, python-brace-format
 msgid "Remove {0}"
-msgstr "Entferne {0}"
+msgstr "{0} entfernen"
 
 #: js/widgets/ActivitiesGridPanel.js:357
 msgid "Enter new note:"
