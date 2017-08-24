@@ -1206,14 +1206,23 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         $tinebaseProxy = $tine20Service->getProxy('Tinebase');
         /** @noinspection PhpUndefinedMethodInspection */
-        $result = $tinebaseProxy->getBlob($hash);
+        $response = $tinebaseProxy->getBlob($hash);
+        if (!is_array($response) || !isset($response['success']) || true !== $response['success'] ||
+                !isset($response['data'])) {
+            throw new Tinebase_Exception_Backend('could not fetch blob from master successfully: ' . $hash);
+        }
+        if (false === ($data = base64_decode($response['data'], true))) {
+            throw new Tinebase_Exception_Backend('fetched blob from master was not proper base64: ' . $hash);
+        }
 
         $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
         $path = $fileObject->getFilesystemPath();
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
         }
-        file_put_contents($path, $result);
+        if (false === file_put_contents($path, $data)) {
+            throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
+        }
     }
 
     /**
