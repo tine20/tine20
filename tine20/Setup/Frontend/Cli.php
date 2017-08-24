@@ -433,12 +433,17 @@ class Setup_Frontend_Cli
     /**
      * Update Import Export Definitions for all applications
      */
-    protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts){
-
+    protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts)
+    {
+        if ($_opts->onlyDefinitions) {
+            $onlyDefinitions = true;
+        } else {
+            $onlyDefinitions = false;
+        }
         //get all applications
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         foreach ($applications as $application) {
-            Setup_Controller::getInstance()->createImportExportDefinitions($application);
+            Setup_Controller::getInstance()->createImportExportDefinitions($application, $onlyDefinitions);
             echo "Update definitions for " . $application->name . "...\n";
         }
     }

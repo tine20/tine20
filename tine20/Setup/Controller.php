@@ -1705,8 +1705,9 @@ class Setup_Controller
      * look for export & import definitions and put them into the db
      *
      * @param Tinebase_Model_Application $_application
+     * @param boolean $_onlyDefinitions
      */
-    public function createImportExportDefinitions($_application)
+    public function createImportExportDefinitions($_application, $_onlyDefinitions = false)
     {
         foreach (array('Import', 'Export') as $type) {
             $path =
@@ -1726,6 +1727,10 @@ class Setup_Controller
                         }
                     }
                 }
+            }
+
+            if (true === $_onlyDefinitions) {
+                continue;
             }
 
             $path =

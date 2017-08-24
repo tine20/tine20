@@ -208,11 +208,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         try {
             $existing = $this->getByName($definition->name);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
-            $copyFields = array('filename', 'plugin_options', 'description', 'label');
-            foreach ($copyFields as $field) {
-                $existing->{$field} = $definition->{$field};
-            }
-            $result = $this->_backend->update($existing);
+            $definition->setId($existing->getId());
+            $result = $this->_backend->update($definition);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist
