@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-07-13 15:25+0200\n"
+"PO-Revision-Date: 2017-08-24 14:06+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -410,7 +410,7 @@ msgstr "Gesamtgröße der verfügbaren Revisionen"
 
 #: js/NodeGridPanel.js:309
 msgid "File contents is part of the search index"
-msgstr ""
+msgstr "Dateiinhalte sind Teil der indizierten Suche"
 
 #: js/NodeGridPanel.js:377
 #, python-brace-format
@@ -439,7 +439,7 @@ msgstr "Sende als E-Mail"
 
 #: js/FilePublishedDialog.js:106 js/GrantsPanel.js:47
 msgid "Download"
-msgstr ""
+msgstr "Herunterladen"
 
 #: js/GrantsPanel.js:33
 msgid "Grants"
@@ -499,11 +499,11 @@ msgstr "An"
 
 #: Controller/Node.php:1367
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: Controller/Node.php:1368
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: Controller/Node.php:1369
 msgid "From (E-Mail)"
@@ -515,7 +515,7 @@ msgstr "Von (Name)"
 
 #: Controller/Node.php:1371
 msgid "Body"
-msgstr ""
+msgstr "Body"
 
 #: Controller/Node.php:1372
 msgid "Attachments"
@@ -527,7 +527,7 @@ msgstr "Öffentliche Download URL"
 
 #: Config.php:28
 msgid "Possible status. Please note that additional status might impact other Filemanager systems on export or syncronisation."
-msgstr ""
+msgstr "Möglicher Status. Bitte beachten Sie, dass zusätzliche Status andere Dateiablage Systeme beeinflussen können, wenn diese via Export oder Synchronisation angebunden sind."
 
 #: Acl/Rights.php:104
 msgid "manage shared folders"
@@ -563,11 +563,11 @@ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausg
 
 #: Preference.php:61
 msgid "Row double click default"
-msgstr ""
+msgstr "Zeilen Doppelklick Standard"
 
 #: Preference.php:62
 msgid "Defines which action should be executed on double click by default?"
-msgstr ""
+msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
 
 #~ msgid "%s's personal files"
 #~ msgstr "Persönliche Dateien von %s"
