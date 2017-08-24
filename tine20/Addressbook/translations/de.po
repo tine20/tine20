@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-07-13 15:40+0200\n"
+"PO-Revision-Date: 2017-08-24 15:24+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -350,17 +350,10 @@ msgstr "Zeitzone"
 msgid "Geo"
 msgstr "Geografischer Ort"
 
-#: js/ContactGrid.js:248 js/Model.js:380 js/ListRoleGridPanel.js:50
-#: Controller.php:193
-msgid "List Roles"
-msgstr "Gruppenrollen"
-
-#: js/ListRoleMemberFilterModel.js:37 js/Model.js:380
-#, fuzzy
-msgid "List Role"
-msgid_plural "List Roles"
-msgstr[0] "Gruppenrolle"
-msgstr[1] "Gruppenrollen"
+#: js/ContactGrid.js:248 js/ListRoleMemberFilterModel.js:37 js/Model.js:380
+#: js/ListRoleGridPanel.js:50 Controller.php:193
+msgid "List Functions"
+msgstr "Gruppenfunktionen"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -502,6 +495,13 @@ msgstr[1] "E-mail Adressen"
 #: js/Model.js:333
 msgid "Email Addresses"
 msgstr "E-mail Adressen"
+
+#: js/Model.js:380
+#, fuzzy
+msgid "List Function"
+msgid_plural "List Functions"
+msgstr[0] "Gruppenfunktion"
+msgstr[1] "Gruppenfunktionen"
 
 #: js/Model.js:411 Controller.php:202
 msgid "Industries"
@@ -817,15 +817,15 @@ msgstr "Verwalte Listen in den Stammdaten"
 
 #: Acl/Rights.php:131
 msgid "View, create, delete or update lists in CoreData application"
-msgstr ""
+msgstr "Gruppen in den Stammdaten sehen, anlegen, löschen oder bearbeiten"
 
 #: Acl/Rights.php:134
-msgid "Manage list roles in CoreData"
-msgstr "Verwalte Listen Rollen in den Stammdaten"
+msgid "Manage list functions in CoreData"
+msgstr "Verwalte Gruppenfunktionen in den Stammdaten"
 
 #: Acl/Rights.php:135
-msgid "View, create, delete or update list roles in CoreData application"
-msgstr ""
+msgid "View, create, delete or update list functions in CoreData application"
+msgstr "Gruppenfunktionen in den Stammdaten ansehen, anlegen, löschen oder bearbeiten"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"

@@ -47,7 +47,7 @@ Tine.Addressbook.ListRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             columns: this.getColumns()
         });
 
-        this.title = this.app.i18n._('List Roles')
+        this.title = this.app.i18n._('List Functions')
 
         Tine.Addressbook.ListRoleGridPanel.superclass.initComponent.call(this);
     },

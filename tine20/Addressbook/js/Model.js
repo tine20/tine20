@@ -354,9 +354,9 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
     appName: 'Addressbook',
     modelName: 'ListRole',
     titleProperty: 'name',
-    // ngettext('List Role', 'List Roles', n); gettext('List Roles');
-    recordName: 'List Role',
-    recordsName: 'List Roles'
+    // ngettext('List Function', 'List Functions', n); gettext('List Functions');
+    recordName: 'List Function',
+    recordsName: 'List Functions'
 });
 
 /**
