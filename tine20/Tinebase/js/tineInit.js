@@ -787,7 +787,7 @@ Tine.Tinebase.tineInit = {
 
         // initialise window types
         var windowType = 'Browser';
-        Ext.ux.PopupWindow.prototype.url = 'index.php';
+        Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
