@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:37+0000\n"
+"PO-Revision-Date: 2017-08-24 14:25+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -19,9 +19,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: js/TagEditDialog.js:38 js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
 msgid "Please wait"
@@ -197,7 +196,7 @@ msgstr "Passwort zurücksetzen"
 
 #: js/user/GridPanel.js:79
 msgid "Reset Pin"
-msgstr ""
+msgstr "PIN zurücksetzen"
 
 #: js/user/GridPanel.js:188 js/Roles.js:241 js/Groups.js:239
 #: js/container/GridPanel.js:65 js/SambaMachineGrid.js:76
@@ -259,11 +258,11 @@ msgstr "Bitte geben Sie das neue Passwort ein:"
 
 #: js/user/GridPanel.js:286
 msgid "Set new pin"
-msgstr ""
+msgstr "Neuen PIN setzen"
 
 #: js/user/GridPanel.js:286
 msgid "Please enter the new pin:"
-msgstr ""
+msgstr "Bitte geben Sie den neuen PIN ein:"
 
 #: js/user/EditDialog.js:190
 msgid "Domain is not allowed. Check your SMTP domain configuration."
@@ -972,7 +971,7 @@ msgstr "Datensatz"
 
 #: js/customfield/EditDialog.js:444
 msgid "Record List"
-msgstr ""
+msgstr "Datensatz Liste"
 
 #: js/customfield/EditDialog.js:471
 msgid "Length"
@@ -988,7 +987,7 @@ msgstr "Zusätzliche Eigenschaft des Zusatzfeldes"
 
 #: js/customfield/EditDialog.js:488
 msgid "Tab Panel"
-msgstr ""
+msgstr "Karteireiter"
 
 #: js/customfield/EditDialog.js:522
 msgid "Customfield already exists. Please choose another name."
@@ -1136,7 +1135,7 @@ msgstr "Serverinformationen ansehen"
 
 #: Acl/Rights.php:279 Acl/Rights.php:280
 msgid "view quota usage"
-msgstr ""
+msgstr "Quota Nutzung ansehen"
 
 #~ msgid "Restart application to apply new customfields?"
 #~ msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
