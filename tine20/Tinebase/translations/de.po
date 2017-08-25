@@ -1627,7 +1627,7 @@ msgstr "Wählen Sie ein Land ..."
 
 #: js/widgets/mainscreen/WestPanel.js:303
 msgid "containers"
-msgstr "Kontainer"
+msgstr "Container"
 
 #: js/widgets/mainscreen/WestPanel.js:330
 msgid "Favorites"
