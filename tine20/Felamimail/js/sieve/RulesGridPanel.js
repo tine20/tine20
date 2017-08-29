@@ -277,9 +277,17 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         if (action_argument && action_argument != '') {
-            result += ': ' + Ext.isObject(action_argument)
-                ? action_argument.emails + (action_argument.copy ? ' (' + this.app.i18n._('Keep a copy') + ')' : '')
-                : action_argument;
+            result += ': ';
+
+            if (Ext.isObject(action_argument)) {
+                if (action_argument.copy) {
+                    result += action_argument.emails + ' (' + this.app.i18n._('Keep a copy') + ')';
+                } else {
+                    result += action_argument.emails + '';
+                }
+            } else {
+                result += action_argument;
+            }
         }
             
         return Ext.util.Format.htmlEncode(result);
@@ -324,7 +332,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 result = String.format(result, condition.header, condition.key);
             }
         }
-        
+
         return Ext.util.Format.htmlEncode(result);
     },
     
