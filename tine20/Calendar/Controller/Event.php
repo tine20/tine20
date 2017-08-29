@@ -284,7 +284,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
 
-        if (! empty($event->rrule)) {
+        if (! empty($event->rrule) && ! $event->recurid) {
             try {
                 $eventSet->merge($this->getRecurExceptions($event, true));
             } catch (Tinebase_Exception_NotFound $e) {
