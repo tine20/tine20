@@ -1480,11 +1480,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function getFolderUsage($_id)
     {
-        $childIds = $this->_backend->getAllChildIds($_id, array(
-            'field'     => 'type',
-            'operator'  => 'equals',
-            'value'     => Tinebase_Model_Tree_FileObject::TYPE_FILE
-        ), false);
+        $childIds = $this->_backend->getAllChildIds($_id, array(), false);
 
         $createdBy = array();;
         $type = array();
@@ -1492,6 +1488,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             try {
                 $fileNode = $this->_backend->get($id);
             } catch(Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileNode->type) {
                 continue;
             }
 

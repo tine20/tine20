@@ -2130,7 +2130,9 @@ class Tinebase_FileSystem implements
     }
 
     /**
-     * returns all children nodes, allows to set addition filters
+     * returns all children nodes, allows to set additional filters
+     * be careful with additional filters! The recursion only works on folders that match the filter!
+     * e.g. filter for type !== FOLDER do not work as recursion never starts!
      *
      * @param array         $_ids
      * @param array         $_additionalFilters
@@ -2159,7 +2161,7 @@ class Tinebase_FileSystem implements
         }
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
-            $result = array_merge($result, $children, $this->getAllChildIds($children, $_additionalFilters, $_ignoreAcl));
+            $result = array_merge($children, $this->getAllChildIds($children, $_additionalFilters, $_ignoreAcl));
         }
 
         return $result;
