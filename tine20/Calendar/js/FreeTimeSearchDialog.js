@@ -24,7 +24,6 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
     initComponent: function() {
         var _ = window.lodash;
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-        this.window.setTitle(this.app.i18n._('Free Time Search'));
 
         this.recordClass = Tine.Calendar.Model.Event;
         this.recordProxy = Tine.Calendar.backend;
@@ -126,6 +125,8 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
 
     afterRender: function() {
         Tine.Calendar.FreeTimeSearchDialog.superclass.afterRender.call(this);
+
+        this.window.setTitle(this.app.i18n._('Free Time Search'));
 
         this.loadMask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Searching for Free Time...")});
         this.loadMask.show.defer(100, this.loadMask);
