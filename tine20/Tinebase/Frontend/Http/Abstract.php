@@ -138,6 +138,31 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         fclose($handle);
     }
 
+
+    /**
+     * download (fpassthru) tempfile
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @param string $filesystemPath
+     * @param int|null $revision
+     * @param boolean $ignoreAcl
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _downloadTempFile(Tinebase_Model_TempFile $tempFile, $filesystemPath)
+    {
+        Tinebase_Core::setExecutionLifeTime(0);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Download tempfile' . print_r($tempFile->toArray(), TRUE));
+
+        $this->_prepareHeader($tempFile->name, $tempFile->contenttype, /* $disposition */ 'attachment', $tempFile->size);
+
+        $handle = fopen($filesystemPath, 'r');
+
+        fpassthru($handle);
+        fclose($handle);
+    }
+
     /**
      * download (fpassthru) file node
      * 

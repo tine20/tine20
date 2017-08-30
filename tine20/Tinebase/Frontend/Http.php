@@ -846,7 +846,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $filemanagerHttpFrontend->downloadFile($file->path, null);
         }
 
-        $this->_downloadFileNode($tmpFile, $tmpFile->path);
+        $this->_downloadTempFile($tmpFile, $tmpFile->path);
         exit;
     }
 

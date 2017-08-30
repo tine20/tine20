@@ -59,7 +59,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     showProgress: true,
     
     i18nFileString: null,
-    
+
+
+    fileSelectionDialog: null,
+
     /**
      * init
      * @private
@@ -117,10 +120,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.readOnly = readOnly;
         this.action_add.setDisabled(readOnly);
         this.action_remove.setDisabled(readOnly);
-
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_add_from_filemanager.setDisabled(readOnly);
-        }
     },
 
     /**
@@ -205,29 +204,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.action_add = new Ext.Action(this.getAddAction());
 
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            var filemanager = Tine.Tinebase.appMgr.get('Filemanager');
-
-            this.action_add_from_filemanager = new Ext.Action({
-                text: String.format(filemanager.i18n._('Add {0} from Filemanager'), this.i18nFileString),
-                iconCls: 'action_add',
-                scope: this,
-                handler: function () {
-                    var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                        title: filemanager.i18n._('Select a file'),
-                        singleSelect: true,
-                        constraint: 'file'
-                    });
-
-                    filePickerDialog.openWindow();
-
-                    filePickerDialog.on('selected', function(node) {
-                        me.onFileSelectFromFilemanager.call(me, node);
-                    });
-                }
-            });
-        }
-
         this.action_remove = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.i18nFileString),
             iconCls: 'action_remove',
@@ -255,10 +231,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.tbar = [
             this.action_add
         ];
-
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.tbar.push(this.action_add_from_filemanager)
-        }
 
         this.tbar.push(this.action_remove);
         
@@ -371,19 +343,32 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @return {Object} add action config
      */
     getAddAction: function () {
+        var me = this;
+
         return {
-            text: String.format(i18n._('Add {0}'), this.i18nFileString),
+            text: String.format(i18n._('Add {0}'), me.i18nFileString),
             iconCls: 'action_add',
-            scope: this,
+            scope: me,
             plugins: [{
                 ptype: 'ux.browseplugin',
                 multiple: true,
-                dropElSelector: 'div[id=' + this.id + ']'
+                enableFileDialog: false,
+                dropElSelector: 'div[id=' + this.id + ']',
+                handler: this.onFilesSelect.createDelegate(me)
             }],
-            handler: this.onFilesSelect
+            handler: me.openDialog
         };
     },
-    
+
+    // Constructs a new dialog and opens it. Better to construct a new one everyt
+    openDialog: function () {
+        this.fileSelectionDialog = new Tine.Tinebase.FileSelectionDialog({
+            handler: this.onFilesSelect.createDelegate(this)
+        });
+
+        this.fileSelectionDialog.openWindow()
+    },
+
     /**
      * populate grid store
      *
@@ -457,6 +442,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} e
      */
     onFilesSelect: function (fileSelector, e) {
+        if (window.lodash.isArray(fileSelector)) {
+            this.onFileSelectFromFilemanager(fileSelector);
+            return;
+        }
+
+
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
