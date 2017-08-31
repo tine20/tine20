@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -118,5 +118,30 @@ class Tinebase_CoreTest extends TestCase
         
         $this->assertInstanceOf('Tinebase_Server_WebDAV', $server);
     }
-    
+
+    public function testGetUrl()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test/uri');
+            static::assertEquals('https://unittestDomain.test/uri', Tinebase_Core::getUrl());
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetHostname()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        Tinebase_Core::set('HOSTNAME', null);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test/uri');
+            static::assertEquals('https://unittestDomain.test', Tinebase_Core::getHostname());
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+            Tinebase_Core::set('HOSTNAME', null);
+        }
+    }
 }
