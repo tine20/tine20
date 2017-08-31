@@ -223,7 +223,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * @param {Ext.Element} element to render to 
      */
     operatorRenderer: function (filter, el) {
-        var operatorStore = new Ext.data.JsonStore({
+        var _ = window.lodash,
+            me = this,
+            operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [
                 {operator: 'contains',      label: i18n._('contains')},
@@ -281,7 +283,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 }
             }, this);
         }
-        
+
+        // add registered / custom operators
+        _.each(this.operators, function(operator) {
+            if (_.isObject(operator)) {
+                operatorStore.loadData([{operator: operator.operator.filterName,     label: operator.label}], true);
+            }
+        });
+
         if (operatorStore.getCount() > 1) {
             var operator = new Ext.form.ComboBox({
                 filter: filter,
