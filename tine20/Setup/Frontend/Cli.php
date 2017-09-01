@@ -432,10 +432,13 @@ class Setup_Frontend_Cli
 
     /**
      * Update Import Export Definitions for all applications
+     *
+     * @param Zend_Console_Getopt $_opts
      */
     protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts)
     {
-        if ($_opts->onlyDefinitions) {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (isset($options['onlyDefinitions'])) {
             $onlyDefinitions = true;
         } else {
             $onlyDefinitions = false;
@@ -861,7 +864,7 @@ class Setup_Frontend_Cli
     /**
      * parse remaining args
      * 
-     * @param string $_args
+     * @param array $_args
      * @return array
      */
     protected function _parseRemainingArgs($_args)
