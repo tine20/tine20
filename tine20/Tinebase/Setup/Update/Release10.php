@@ -783,6 +783,15 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         // this is needed for filesystem operations
         $this->_addRevisionPreviewCountCol();
 
+        $count = $this->_db->update(SQL_TABLE_PREFIX . 'container', array('model' => 'Tinebase_Model_Tree_Node'),
+            $this->_db->quoteIdentifier('model') . ' = "Tinebase_Model_Node"');
+        if ($count > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' updated ' . $count . ' containers with model "Tinebase_Model_Node" to "Tinebase_Model_Tree_Node"');
+            }
+        }
+
         $applications = Tinebase_Application::getInstance()->getApplications();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if ($setupUser) {
