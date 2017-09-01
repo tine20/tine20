@@ -20,8 +20,9 @@
  *
  * @method int getQueueSize()
  * @method int waitForJob()
- * @method string receive(integer $jobId)
+ * @method array receive(integer $jobId)
  * @method void delete(integer $jobId)
+ * @method void reschedule(string $jobId)
  *
  */
  class Tinebase_ActionQueue implements Tinebase_Controller_Interface

@@ -360,10 +360,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * process given queue job
-     *  --message json encoded task
+     *  --jobId the queue job id to execute
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return bool success
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function executeQueueJob($_opts)
     {
@@ -376,23 +377,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $args = $_opts->getRemainingArgs();
-        $message = preg_replace('/^message=/', '', $args[0]);
+        $jobId = preg_replace('/^jobId=/', '', $args[0]);
         
-        if (! $message) {
-            throw new Tinebase_Exception_InvalidArgument('mandatory parameter "message" is missing');
+        if (! $jobId) {
+            throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        if (null === ($job = json_decode($message, true))) {
-            throw new Tinebase_Exception_InvalidArgument('parameter "message" can not be json decoded');
-        }
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
             Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
         }
 
-        Tinebase_ActionQueue::getInstance()->executeAction($job);
+        $result = $actionQueue->executeAction($job);
         
-        return TRUE;
+        return false !== $result;
     }
     
     /**

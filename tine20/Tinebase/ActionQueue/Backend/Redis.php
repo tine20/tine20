@@ -134,7 +134,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      *
      * @param  integer  $jobId  the id of the job
      * @throws RuntimeException
-     * @return string           the job
+     * @return array           the job
      */
     public function receive($jobId)
     {

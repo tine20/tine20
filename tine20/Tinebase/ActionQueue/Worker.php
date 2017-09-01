@@ -112,7 +112,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             
             if ($childPid == 0) { // executed in child process
                 try {
-                    $this->_executeAction($job);
+                    $this->_executeAction($jobId);
 
                     $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exiting...");
                     exit(0); // message will be deleted in parent process
@@ -221,24 +221,19 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     /**
      * execute the action
      *
-     * @param  string  $job
-     * //@ throws Exception
-     * @todo make self::EXECUTION_METHOD_EXEC_CLI working
+     * @param  string  $jobId
+     * @throws Exception
      */
-    protected function _executeAction($job)
+    protected function _executeAction($jobId)
     {
         $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " with isChild: " . var_export($this->_isChild, true));
 
         // execute in subprocess
         //if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
         chdir(__DIR__);
-            if (is_object($job)) {
-                /** @var Tinebase_Record_Interface $job */
-                $job = $job->toArray(true);
-            }
             exec('php -d include_path=' . escapeshellarg(get_include_path()) .
-                ' ./../../tine20.php --method Tinebase.executeQueueJob message=' .
-                escapeshellarg(json_encode($job)), $output, $exitCode);
+                ' ./../../tine20.php --method Tinebase.executeQueueJob jobId=' .
+                escapeshellarg($jobId), $output, $exitCode);
             if ($exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . join(PHP_EOL, $output));
             }
