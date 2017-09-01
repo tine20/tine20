@@ -122,16 +122,17 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             $offset = 0;
             foreach ($shadowPathParts as $sPart) {
                 ++$offset;
-                if ($sPart === $shadowPart) {
+                if (0 === strpos($sPart, $shadowPart)) {
                     break;
                 }
             }
             if ($countPathParts <= $offset) {
                 continue;
             }
-            $path->path = join('/', array_slice($pathParts, 0, $offset));
-            $path->shadow_path = join('/', array_slice($shadowPathParts, 0, $offset));
-            if (!isset($shadowPaths[$path->shadow_path])) {
+            $shadow_path = preg_replace('/\{[^\}]+\}$/', '', join('/', array_slice($shadowPathParts, 0, $offset)));
+            if (!isset($shadowPaths[$shadow_path])) {
+                $path->shadow_path = $shadow_path;
+                $path->path = join('/', array_slice($pathParts, 0, $offset));
                 $shadowPaths[$path->shadow_path] = true;
             } else {
                 $remove[] = $path->getId();
