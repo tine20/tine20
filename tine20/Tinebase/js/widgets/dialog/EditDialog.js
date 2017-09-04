@@ -501,7 +501,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         return items.length ? {
-            layout: 'accordion',
+            layout: 'ux.multiaccordion',
             animate: true,
             region: 'east',
             width: 210,

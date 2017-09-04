@@ -132,7 +132,7 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             displayField:'faqstatus'
                         }]] //end of center panel items
                     }, {
-                        layout: 'accordion',
+                        layout: 'ux.multiaccordion',
                         animate: true,
                         region: 'east',
                         width: 210,

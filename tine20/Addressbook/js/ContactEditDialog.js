@@ -385,9 +385,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     }]
                 }, {
                     // activities and tags
-                    // TODO make order of accordion items stateful
                     region: 'east',
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     width: 210,
                     split: true,

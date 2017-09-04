@@ -145,7 +145,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]] 
                 }, {
                     // activities and tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

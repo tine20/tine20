@@ -322,6 +322,10 @@
           "path": "js/ux/layout/"
         },
         {
+          "text": "MultiAccordionLayout.js",
+          "path": "js/ux/layout/"
+        },
+        {
           "text": "GMapPanel.js",
           "path": "js/ux/"
         },

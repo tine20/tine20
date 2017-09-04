@@ -465,7 +465,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }] // end of center lead panel with border layout
                     }, {
-                        layout: 'accordion',
+                        layout: 'ux.multiaccordion',
                         animate: true,
                         region: 'east',
                         width: 210,

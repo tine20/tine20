@@ -210,7 +210,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, revisionPanel]
             }, {
                 // activities and tags
-                layout: 'accordion',
+                layout: 'ux.multiaccordion',
                 animate: true,
                 region: 'east',
                 width: 210,
