@@ -9,13 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
-    
-    // @TODO find quickfilter plugin an pick quickFilterField and criteriaIgnores from it
-    this.criteriaIgnores = config.criteriaIgnores || [
-        {field: 'container_id', operator: 'equals', value: {path: '/'}},
-        {field: 'query',        operator: 'contains',    value: ''}
-    ];
-    
+
     // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
     
@@ -60,23 +54,7 @@ Tine.widgets.grid.FilterPanel = function(config) {
 };
 
 Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
-    /**
-     * @cfg {String} quickFilterField
-     * 
-     * name of quickfilter filed in filter definitions
-     */
-    quickFilterField: 'query',
-    
-    /**
-     * @cfg {Array} criterias to ignore
-     */
-    criteriaIgnores: null,
-    
-    /**
-     * @cfg {String} moreFiltersActiveText
-     */
-    moreFiltersActiveText: 'Attention: There are more filters active!', //_('Attention: There are more filters active!')
-    
+
     /**
      * @property activeFilterPanel
      * @type Tine.widgets.grid.FilterToolbar
@@ -107,9 +85,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     initComponent: function() {
         
         var filterPanel = this.addFilterPanel();
+        this.filterModelMap = filterPanel.filterModelMap;
         this.activeFilterPanel = filterPanel;
         
-        this.initQuickFilterField();
+        // this.initQuickFilterField();
 
         this.advancedSearchEnabled = Tine.Tinebase.featureEnabled('featureShowAdvancedSearch') &&
             this.filterToolbarConfig.app.enableAdvancedSearch;
@@ -135,6 +114,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }];
         
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
+
+        this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
+            syncFields: false
+        });
+        this.quickFilterPlugin.init(this);
     },
     
     /**
@@ -148,7 +132,16 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
 
     getAllFilterData: Tine.widgets.grid.FilterToolbar.prototype.getAllFilterData,
     storeOnBeforeload: Tine.widgets.grid.FilterToolbar.prototype.storeOnBeforeload,
-    
+
+    onFilterRowsChange: function() {
+        this.activeFilterPanel.doLayout();
+        this.manageHeight();
+    },
+
+    onFiltertrigger: function() {
+        this.activeFilterPanel.onFiltertrigger();
+    },
+
     manageHeight: function() {
         if (this.rendered && this.activeFilterPanel.rendered) {
             var tbHeight = this.activeFilterPanel.getHeight(),
@@ -233,295 +226,19 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.fireEvent('filterpanelactivate', this, filterPanel);
     },
-    
-    // NOTE: there is no special filterPanel, each filterpanel could be closed  at any time
-    //       ?? what does this mean for quickfilterplugin???
-    //       -> we cant mirror fileds or need to mirror the field from the active tbar
-    //       -> mhh, better deactivate as soon as we have more than one tbar
-    //       -> don't sync, but fetch with this wrapper!
-    initQuickFilterField: function() {
-        var stateful = !! this.filterToolbarConfig.recordClass;
-        // autogenerate stateId
-        if (stateful) {
-            var stateId = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-FilterToolbar-QuickfilterPlugin';
-        }
-        
-        this.quickFilter = new Ext.ux.SearchField({
-            width: this.advancedSearchEnabled ? 250 : 300,
-            enableKeyEvents: true
-        });
-        
-        this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
-        this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
-        
-        this.criteriaText = new Ext.Panel({
-            border: 0,
-            bodyStyle: {
-                border: 0,
-                background: 'none',
-                'line-height': '11px',
-                'text-align': 'left'
-            }
-        });
-        
-        this.detailsToggleBtn = new Ext.Button({
-            style: {'margin-top': '2px'},
-            enableToggle: true,
-            text: i18n._('show details'),
-            tooltip: i18n._('Always show advanced filters'),
-            scope: this,
-            handler: this.onDetailsToggle,
-            stateful: stateful,
-            stateId: stateful ? stateId : null,
-            getState: function() {
-                return {detailsButtonPressed: this.pressed};
-            },
-            applyState: function(state) {
-                if (state.detailsButtonPressed) {
-                    this.setText(i18n._('hide details'));
-                    this.toggle(state.detailsButtonPressed);
-                }
-            },
-            stateEvents: ['toggle'],
-            listeners: {
-                scope: this,
-                render: function() {
-                    // limit width of this.criteriaText
-                    this.criteriaText.setWidth(this.quickFilterGroup.getWidth() - this.detailsToggleBtn.getWidth());
-                    this.onDetailsToggle(this.detailsToggleBtn);
-                }
-            }
-        });
 
-        this.advancedSearchButton = new Ext.Button({
-            enableToggle: true,
-            pressed: Tine.Tinebase.registry.get('preferences').get('advancedSearch') == 1,
-            text: i18n._('Advanced search'),
-            tooltip: i18n._('Search in related records as well.'),
-            scope: this,
-            handler: this.onAdvancedSearchToggle,
-            hidden: !this.filterToolbarConfig.app.enableAdvancedSearch,
-            stateEvents: ['toggle']
-        });
-    },
-
-    onAdvancedSearchToggle: function(btn) {
-        Ext.Ajax.request({
-            params: {
-                application: 'Tinebase',
-                method: 'Tinebase.toogleAdvancedSearch',
-                state: btn.pressed || 0
-            },
-            timeout: 1800, // 30 Seconds
-            scope: this,
-            success: function () {
-                Tine.log.debug("Toogled advanced search through references.");
-            }
-        });
-    },
-
-    /**
-     * called when the (external) quick filter is cleared
-     */
-    onQuickFilterClear: function() {
-        this.quickFilter.reset();
-        this.quickFilter.setValue('');
-        this.syncQuickFilterFields(true, '');
-        this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
-    },
-    
-    /**
-     * called when the (external) filter triggers filter action
-     */
-    onQuickFilterTrigger: function() {
-        this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
-        this.activeFilterPanel.onFilterRowsChange.call(this.activeFilterPanel);
-    },
-    
-    /**
-     * called when the details toggle button gets toggled
-     * 
-     * @param {Ext.Button} btn
-     */
-    onDetailsToggle: function(btn) {
-        btn.setText(btn.pressed ? i18n._('hide details') : i18n._('show details'));
-        this[btn.pressed ? 'show' : 'hide']();
-        this.quickFilter.setDisabled(btn.pressed);
-        this.manageCriteriaText();
-        
-        this.syncQuickFilterFields(btn.pressed);
-        
-        this.activeFilterPanel.doLayout();
-        this.manageHeight();
-    },
-    
-    /**
-     * synchronizes the quickfilter field with the  coreesponding filter of the active filter toolbar
-     * 
-     * @param {Bool} fromQuickFilter
-     * @param {String} value
-     */
-    syncQuickFilterFields: function(fromQuickFilter, value) {
-        
-        if (fromQuickFilter === undefined) {
-            fromQuickFilter = true;
-        }
-        
-        if (fromQuickFilter) {
-            var val = (value !== undefined) ? value : this.quickFilter.getValue(),
-                quickFilter;
-                
-            this.quickFilter.setValue('');
-            // find quickfilterrow
-            this.activeFilterPanel.filterStore.each(function(filter) {
-                if (filter.formFields && filter.get('field') == this.quickFilterField) {
-                    quickFilter = filter;
-                    quickFilter.set('value', val);
-                    quickFilter.formFields.value.setValue(val);
-                    return false;
-                }
-            }, this);
-        
-            if (! quickFilter && val) {
-                quickFilter = this.activeFilterPanel.addFilter(new this.activeFilterPanel.record({field: this.quickFilterField, value: val}));
-            }
-        } else {
-            this.activeFilterPanel.filterStore.each(function(filter) {
-                if (filter.formFields && filter.get('field') == this.quickFilterField) {
-                    this.quickFilter.setValue(filter.formFields.value.getValue());
-                    filter.set('value', '');
-                    return false;
-                }
-            }, this);
-        }
-    },
-    
-    /**
-     * manages the criteria text
-     */
-    manageCriteriaText: function() {
-        var moreCriterias = false,
-            filterPanelCount = 0,
-            criterias = [];
-            
-        // count filterPanels
-        for (var id in this.filterPanels) {if (this.filterPanels.hasOwnProperty(id)) {filterPanelCount++;}}
-        
-        if (! filterPanelCount > 1) {
-            moreCriterias = true;
-            
-        } else {
-            // not more filters only if we hove one filterPanel & only one queryFilter in it (or implicit filters)
-            this.activeFilterPanel.filterStore.each(function(filter) {
-                var f = this.activeFilterPanel.getFilterData(filter);
-                
-                for (var i=0, criteria, ignore; i<this.criteriaIgnores.length; i++) {
-                    criteria = this.criteriaIgnores[i];
-                    ignore = true;
-                    
-                    for (var p in criteria) {
-                        if (criteria.hasOwnProperty(p)) {
-                            if (Ext.isString(criteria[p]) || Ext.isEmpty(f[p]) ) {
-                                ignore &= f.hasOwnProperty(p) && f[p] === criteria[p];
-                            } else {
-                                for (var pp in criteria[p]) {
-                                    if (criteria[p].hasOwnProperty(pp)) {
-                                        ignore &= f.hasOwnProperty(p) && typeof f[p].hasOwnProperty == 'function' && f[p].hasOwnProperty(pp) && f[p][pp] === criteria[p][pp];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (ignore) {
-                        // don't judge them as criterias
-                        return;
-                    }
-                }
-                
-                if (this.activeFilterPanel.filterModelMap[f.field]) {
-                    criterias.push(this.activeFilterPanel.filterModelMap[f.field].label);
-                } else {
-                    // no idea how to get the filterplugin for non ftb itmes
-                    criterias.push(f.field);
-                }
-            }, this);
-            moreCriterias = criterias.length > 0;
-        }
-        
-        moreCriterias = this.hidden ? moreCriterias : false;
-        
-        if (this.criteriaText && this.criteriaText.rendered) {
-            this.criteriaText.update(moreCriterias ? i18n._(this.moreFiltersActiveText) : '');
-        }
-    },
-    
-    /**
-     * gets the (extra) quick filter toolbar items
-     * 
-     * @return {Ext.ButtonGroup}
-     */
     getQuickFilterField: function() {
-        if (! this.quickFilterGroup) {
-            var quickfilterConfig;
-            if (this.advancedSearchEnabled) {
-                quickfilterConfig = {
-                    columns: 2,
-                    items: [
-                        this.quickFilter,
-                        this.advancedSearchButton,
-                        this.criteriaText,
-                        this.detailsToggleBtn
-                    ]
-                };
-            } else {
-                quickfilterConfig = {
-                    columns: 1,
-                    items: [
-                        this.quickFilter, {
-                            xtype: 'toolbar',
-                            style: {border: 0, background: 'none'},
-                            items: [this.criteriaText, '->', this.detailsToggleBtn]
-                        }
-                    ]
-                };
-            }
+        return this.quickFilterPlugin.getQuickFilterField();
+    },
 
-            quickfilterConfig.canonicalName = 'QuickSearchBox';
-            this.quickFilterGroup = new Ext.ButtonGroup(quickfilterConfig);
-        }
-        
-        return this.quickFilterGroup;
-    },
-    
     getQuickFilterPlugin: function() {
-        return this;
+        return this.quickFilterPlugin;
     },
-    
+
     getValue: function() {
-        var quickFilterValue = this.quickFilter.getValue(),
-            filters = [];
+        var filters = [];
         
-        if (quickFilterValue) {
-            filters.push({field: this.quickFilterField, operator: 'contains', value: quickFilterValue, id: 'quickFilter'});
-            
-            // add implicit / ignored fields (important e.g. for container_id)
-            Ext.each(this.criteriaIgnores, function(criteria) {
-                if (criteria.field != this.quickFilterField) {
-                    var filterIdx = this.activeFilterPanel.filterStore.find('field', criteria.field),
-                        filter = filterIdx >= 0  ? this.activeFilterPanel.filterStore.getAt(filterIdx) : null,
-                        filterModel = filter ? this.activeFilterPanel.getFilterModel(filter) : null;
-                    
-                    if (filter) {
-                        filters.push(Ext.isFunction(filterModel.getFilterData) ? filterModel.getFilterData(filter) : this.activeFilterPanel.getFilterData(filter));
-                    }
-                }
-                
-            }, this);
-            
-            return filters;
-        }
-        
+
         for (var id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
                 filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: this.filterPanels[id].title});
@@ -529,10 +246,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         // NOTE: always trigger a OR condition, otherwise we sould loose inactive FilterPanles
-        //return filters.length == 1 ? filters[0].filters : [{'condition': 'OR', 'filters': filters}];
-        return [{'condition': 'OR', 'filters': filters}];
+        return [{'condition': 'OR', 'filters': filters, id: 'FilterPanel'}];
     },
-    
+
     setValue: function(value) {
         // save last filter ?
         var prefs;
@@ -572,14 +288,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
             
             this.activeFilterPanel.setValue(value);
-            
-            var quickFilterValue = this.activeFilterPanel.filterStore.getById('quickFilter');
-            if (quickFilterValue) {
-                this.quickFilter.setValue(quickFilterValue.get('value'));
-                this.activeFilterPanel.supressEvents = true;
-                this.activeFilterPanel.deleteFilter(quickFilterValue);
-                this.activeFilterPanel.supressEvents = false;
-            }
+
         } 
         
         // OR condition on root level
@@ -624,7 +333,5 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
             
         }
-        
-        this.manageCriteriaText();
     }
 });
