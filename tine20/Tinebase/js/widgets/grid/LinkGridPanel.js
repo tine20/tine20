@@ -73,7 +73,7 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     requiredGrant: 'editGrant',
 
     typeColumnHeader: null,
-    
+
     /**
      * @return Ext.grid.ColumnModel
      * @private

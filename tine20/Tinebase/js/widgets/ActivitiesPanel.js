@@ -58,7 +58,13 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * the record model
      */
     record_model: null,
-    
+
+    /**
+     * @cfg {Number} pos
+     * position 500 = 100 + 100*4 -> means fourth one after app specific tabs
+     */
+    pos: 500,
+
     /**
      * other config options
      */

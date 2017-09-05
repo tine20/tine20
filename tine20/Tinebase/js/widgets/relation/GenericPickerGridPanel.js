@@ -103,6 +103,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     hideRelatedDegree: true,
 
+    /**
+     * @cfg {Number} pos
+     * position 200 = 100 + 100*3 -> means third one after app specific tabs
+     */
+    pos: 400,
+
     /* config */
     frame: true,
     border: true,

@@ -375,6 +375,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // init notes panel
         this.initNotesPanel();
 
+        // apply generic tab sorting
+        if (this.items.xtype == 'tabpanel') {
+            this.items.plugins = this.items.plugins || [];
+            this.items.plugins.push({
+                ptype : 'ux.tabpanelsortplugin',
+                enableDD: false
+            });
+            this.items.items[0].pos = 10;
+        }
+
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
 
         // set fields readOnly if set
@@ -1255,18 +1265,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             // init relations panel before onRecordLoad
             if (! this.relationsPanel) {
                 this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this });
+                this.items.items.push(this.relationsPanel);
             }
-            // interrupt process flow until dialog is rendered
-            if (! this.rendered) {
-                this.initRelationsPanel.defer(250, this);
-                return;
-            }
-            // add relations panel if this is rendered
-            if (this.items.items[0]) {
-                this.items.items[0].add(this.relationsPanel);
-            }
-            
-            Tine.log.debug('Tine.widgets.dialog.EditDialog::initRelationsPanel() - Initialized relations panel and added to dialog tab items.');
         }
     },
 

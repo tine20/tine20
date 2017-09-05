@@ -10,6 +10,7 @@ Ext.ns('Tine.widgets.customfields');
 
 Tine.widgets.customfields.EditDialogPlugin = function (config) {
     Ext.apply(this, config);
+    this.tabPanelPosition = 20;
 };
 
 Tine.widgets.customfields.EditDialogPlugin.prototype = {
@@ -180,6 +181,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
 
         this.getTabPanel().add(new Ext.Panel({
             title: (!tabName || tabName == 'customfields') ? i18n._('Custom Fields') : i18n._hidden(tabName),
+            pos: this.tabPanelPosition,
             layout: 'form',
             border: true,
             frame: true,
@@ -191,6 +193,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 labelSeparator: ''
             }
         }));
+
+        this.tabPanelPosition = this.tabPanelPosition++;
     }
 };
 
