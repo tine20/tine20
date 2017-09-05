@@ -95,7 +95,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 20,
+            pageSize: parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || 50,
             store: this.store,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying history records {0} - {1} of {2}'),

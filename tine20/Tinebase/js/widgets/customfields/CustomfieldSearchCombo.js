@@ -45,7 +45,7 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
     forceSelection: false,
     triggerAction: 'all',
     minChars: 1,
-    pageSize: 10,
+    pageSize: 50,
     displayField: 'value',
     valueField: 'value',
     enableKeyEvents: true,
@@ -54,6 +54,8 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
      * @private
      */
     initComponent: function() {
+        this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
+
         this.store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.CustomfieldValue,
             baseParams: {

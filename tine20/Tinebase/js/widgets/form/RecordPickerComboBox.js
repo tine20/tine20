@@ -100,7 +100,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     additionalFilters: null,
     
     triggerAction: 'all',
-    pageSize: 10,
+    pageSize: 50,
     minChars: 3,
     forceSelection: true,
     minListWidth: 300,
@@ -120,7 +120,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.emptyText = this.emptyText || i18n._('Search for record ...')
 
         this.loadingText = i18n._('Searching...');
-        
+
+        this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
+
         this.store = new Tine.Tinebase.data.RecordStore({
             readOnly: true,
             proxy: this.recordProxy || undefined,
