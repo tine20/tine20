@@ -277,7 +277,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     /**
      * wrapper for get container functions
      *
-     * @param  string $_function
+     * @param  string $_node
      * @param  string $_ownerId    => needed for $_node == 'personal'
      * @return array of container ids
      * @throws Tinebase_Exception_UnexpectedValue

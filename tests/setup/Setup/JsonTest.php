@@ -299,6 +299,11 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->_json->uninstallApplications($installedApplications);
 
+        $this->_clearCachesAndRegistry();
+    }
+
+    protected function _clearCachesAndRegistry()
+    {
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Core::unsetUser();
         Tinebase_Group::unsetInstance();
@@ -311,10 +316,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _installAllApps()
     {
-        Tinebase_Core::unsetTinebaseId();
-        Tinebase_Group::unsetInstance();
-        Tinebase_Cache_PerRequest::getInstance()->reset();
-        Admin_Config::unsetInstance();
+        $this->_clearCachesAndRegistry();
 
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
