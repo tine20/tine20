@@ -42,7 +42,7 @@ class Setup_Update_Abstract
     /** 
      * the constructor
      *
-     * @param string $_backend
+     * @param Setup_Backend_Interface $_backend
      */
     public function __construct($_backend)
     {
