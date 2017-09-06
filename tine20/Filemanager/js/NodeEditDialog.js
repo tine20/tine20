@@ -254,7 +254,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: 'Tinebase_Model_Tree_Node'
             }),
             this.downloadLinkGrid,
-            {xtype: 'Tine.Filemanager.UsagePanel'},
+            {xtype: 'Tine.Filemanager.UsagePanel', app: this.app, editDialog: this},
             grantsPanel
         ];
 
