@@ -574,26 +574,57 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     /**
      * testMoveFileNode
+     * test quota
      */
-    public function testMoveFileNode()
+    public function testMoveFileNodeAndQuota()
     {
-        $filePaths = $this->testCreateFileNodes(true);
-        $secondFolderNode = $this->testCreateContainerNodeInSharedFolder('fooContainer');
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $oldQuotaConfig = clone $quotaConfig;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
 
-        $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
-        $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
+        try {
+            $filePaths = $this->testCreateFileNodes(true);
+            $secondFolderNode = $this->testCreateContainerNodeInPersonalFolder('fooContainer');
 
-        $parentFolder = $this->_fsController->stat(dirname($file0Path));
-        static::assertEquals(16, $parentFolder->size, 'two files with 8 bytes each created, excpected 16 bytes folder size');
-        static::assertEquals(0, $secondFolderNode['size'], 'expect new folder to be empty');
+            $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
+            $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
 
-        $this->_getUit()->moveNodes($file0Path, $targetPath, false);
+            $parentFolder = $this->_fsController->stat(dirname($file0Path));
+            static::assertEquals(16, $parentFolder->size,
+                'two files with 8 bytes each created, excpected 16 bytes folder size');
+            static::assertEquals(0, $secondFolderNode['size'], 'expect new folder to be empty');
 
-        $parentFolder = $this->_fsController->stat(dirname($file0Path));
-        static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
-        $secondFolderNode = $this->_fsController->stat($targetPath);
-        static::assertEquals(8, $secondFolderNode->size, 'one file with 8 bytes expected');
+            $parentFolderJson = $this->_getUit()->getNode($parentFolder->getId());
+            static::assertTrue(isset($parentFolderJson['effectiveAndLocalQuota']) &&
+                (1024 * 1024 * 1024) === (int)$parentFolderJson['effectiveAndLocalQuota']['localQuota'] &&
+                $parentFolderJson['effectiveAndLocalQuota']['localQuota'] === $parentFolderJson['effectiveAndLocalQuota']['effectiveQuota'] &&
+                $parentFolderJson['effectiveAndLocalQuota']['localUsage'] === $parentFolderJson['effectiveAndLocalQuota']['effectiveUsage'] &&
+                $parentFolderJson['effectiveAndLocalQuota']['localFree'] === $parentFolderJson['effectiveAndLocalQuota']['effectiveFree'] &&
+                $parentFolderJson['effectiveAndLocalQuota']['localQuota'] - $parentFolderJson['effectiveAndLocalQuota']['localUsage'] =
+                    $parentFolderJson['effectiveAndLocalQuota']['localFree'],
+                'effectiveAndLocalQuota is not right: ' . print_r($parentFolderJson, true));
 
+            $this->_getUit()->moveNodes($file0Path, $targetPath, false);
+
+            $parentFolder = $this->_fsController->stat(dirname($file0Path));
+            static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
+            $secondFolderNode = $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath($targetPath)->statpath);
+            static::assertEquals(8, $secondFolderNode->size, 'one file with 8 bytes expected');
+
+            $secondFolderJson = $this->_getUit()->getNode($secondFolderNode->getId());
+            static::assertTrue(isset($secondFolderJson['effectiveAndLocalQuota']) &&
+                (100 * 1024 * 1024) === (int)$secondFolderJson['effectiveAndLocalQuota']['localQuota'] &&
+                $secondFolderJson['effectiveAndLocalQuota']['localQuota'] === $secondFolderJson['effectiveAndLocalQuota']['effectiveQuota'] &&
+                $secondFolderJson['effectiveAndLocalQuota']['localUsage'] === $secondFolderJson['effectiveAndLocalQuota']['effectiveUsage'] &&
+                $secondFolderJson['effectiveAndLocalQuota']['localFree'] === $secondFolderJson['effectiveAndLocalQuota']['effectiveFree'] &&
+                $secondFolderJson['effectiveAndLocalQuota']['localQuota'] - $secondFolderJson['effectiveAndLocalQuota']['localUsage'] =
+                    $secondFolderJson['effectiveAndLocalQuota']['localFree'],
+                'effectiveAndLocalQuota is not right: ' . print_r($secondFolderJson, true));
+
+        } finally {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
+        }
     }
 
     /**
@@ -1142,10 +1173,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $node = $this->testCreateContainerNodeInPersonalFolder();
 
-        $result = Filemanager_Controller_Node::getInstance()->get($node['id']);
+        $result = $this->_getUit()->getNode($node['id']);
 
-        $this->assertTrue($result->path != "");
-        $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer', $result->path);
+        $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer', $result['path']);
+        $this->assertTrue(isset($result['effectiveAndLocalQuota']['localQuota']), 'effectiveAndLocalQuota not present in result: ' . print_r($result, true));
     }
 
     /**

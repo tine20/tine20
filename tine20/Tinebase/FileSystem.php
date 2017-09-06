@@ -819,7 +819,7 @@ class Tinebase_FileSystem implements
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = $tinebaseApplication->xprops('state');
+        $tinebaseState = &$tinebaseApplication->xprops('state');
         if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
             $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
         }

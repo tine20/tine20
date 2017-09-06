@@ -254,6 +254,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL)
     {
+        /** @var Tinebase_Model_Tree_Node $record */
         $record = parent::get($_id);
 
         if (! $this->_backend->checkACLNode($record, 'get')) {
@@ -261,12 +262,20 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
 
         if ($record) {
-            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
+            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
         }
 
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
         $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
         $this->resolveGrants($record);
+
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $record->type) {
+            $context = $this->getRequestContext();
+            if (is_array($context) && isset($context['quotaResult'])) {
+                $context['quotaResult'] = $this->_backend->getEffectiveAndLocalQuota($record);
+                $this->setRequestContext($context);
+            }
+        }
 
         return $record;
     }
