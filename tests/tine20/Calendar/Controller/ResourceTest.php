@@ -440,8 +440,6 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
      */
     public function testResourceAclSearchTinebase()
     {
-        static::markTestSkipped('fixme: wait for Tinebase_Container::search to be acl fixed');
-
         $this->_prepareTestResourceAcl();
 
         $filter = array(array(

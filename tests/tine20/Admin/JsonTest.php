@@ -907,6 +907,7 @@ class Admin_JsonTest extends TestCase
     public function testSearchContainers()
     {
         $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        Tinebase_Container::getInstance()->resetClassCache();
         
         $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $filter = array(

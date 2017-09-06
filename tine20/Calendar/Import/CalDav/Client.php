@@ -211,6 +211,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 . ' / $defaultCalendarsName = ' . $defaultCalendarsName . ' / $uuid = ' . $uuid);
         
         $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'application_id',  'operator' => 'equals',     'value' => $application_id),
             array(
                 'field' => 'uuid', 
                 'operator' => 'equals', 
