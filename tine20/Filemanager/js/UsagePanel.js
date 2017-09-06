@@ -43,7 +43,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             ]
         });
 
-        var bytesRenderer = Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3),
+        var bytesRenderer = Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3),
             columns = [
             {header: this.app.i18n._('Size'), width: 150, sortable: true, renderer: bytesRenderer, dataIndex: 'size'}
         ];

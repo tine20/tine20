@@ -13,13 +13,16 @@
 Ext.ns('Tine.Admin');
 
 Tine.Admin = function () {
-    
+    var registeredItems = [];
+    var panels = [];
+
     /**
      * builds the admin applications tree
      */
     var getInitialTree = function (translation) {
         
-        var tree = [{
+        var _ = window.lodash,
+            tree = [{
             text: translation.ngettext('User', 'Users', 50),
             cls: 'treemain',
             iconCls: 'tinebase-accounttype-user',
@@ -58,20 +61,6 @@ Tine.Admin = function () {
             dataPanelType: "roles",
             viewRight: 'roles'
         }, {
-            text: translation.gettext('Computers'),
-            cls: 'treemain',
-            iconCls: 'admin-node-computers',
-            allowDrag: false,
-            allowDrop: true,
-            id: 'computers',
-            icon: false,
-            children: [],
-            leaf: null,
-            expanded: true,
-            dataPanelType: 'computers',
-            hidden: ! Tine.Admin.registry.get('manageSAM'),
-            viewRight: 'computers'
-        }, {
             text: translation.gettext('Applications'),
             cls: "treemain",
             iconCls: 'admin-node-applications',
@@ -85,18 +74,17 @@ Tine.Admin = function () {
             dataPanelType: "applications",
             viewRight: 'apps'
         }, {
-            text: translation.gettext('Access Log'),
+            text: translation.gettext('Containers'),
             cls: "treemain",
-            iconCls: 'admin-node-accesslog',
+            iconCls: 'admin-node-containers',
             allowDrag: false,
             allowDrop: true,
-            id: "accesslog",
-            icon: false,
+            id: "containers",
             children: [],
             leaf: null,
             expanded: true,
-            dataPanelType: "accesslog",
-            viewRight: 'access_log'
+            dataPanelType: "containers",
+            viewRight: 'containers'
         }, {
             text: translation.gettext('Shared Tags'),
             cls: "treemain",
@@ -111,18 +99,6 @@ Tine.Admin = function () {
             dataPanelType: "sharedtags",
             viewRight: 'shared_tags'
         }, {
-            text: translation.gettext('Containers'),
-            cls: "treemain",
-            iconCls: 'admin-node-containers',
-            allowDrag: false,
-            allowDrop: true,
-            id: "containers",
-            children: [],
-            leaf: null,
-            expanded: true,
-            dataPanelType: "containers",
-            viewRight: 'containers'
-        }, {
             text: translation.gettext('Customfields'),
             cls: "treemain",
             iconCls: 'admin-node-customfields',
@@ -134,6 +110,33 @@ Tine.Admin = function () {
             expanded: true,
             dataPanelType: "customfields",
             viewRight: 'customfields'
+        }, {
+            text: translation.gettext('Computers'),
+            cls: 'treemain',
+            iconCls: 'admin-node-computers',
+            allowDrag: false,
+            allowDrop: true,
+            id: 'computers',
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: 'computers',
+            hidden: ! Tine.Admin.registry.get('manageSAM'),
+            viewRight: 'computers'
+        }, {
+            text: translation.gettext('Access Log'),
+            cls: "treemain",
+            iconCls: 'admin-node-accesslog',
+            allowDrag: false,
+            allowDrop: true,
+            id: "accesslog",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "accesslog",
+            viewRight: 'access_log'
         }, {
             text: translation.gettext('Server Information'),
             cls: "treemain",
@@ -148,10 +151,11 @@ Tine.Admin = function () {
             viewRight: 'serverinfo'
         }];
         
-        // TODO find a generic hooking mechanism
+        // TODO use hooking mechanism bellow - why is manage_devices a Tinebase right and not a ActiveSync right???
         if (Tine.Tinebase.appMgr.get('ActiveSync') && Tine.Tinebase.common.hasRight('manage_devices', 'ActiveSync')) {
             tree.push({
                 text: translation.gettext('ActiveSync Devices'),
+                pos: 850,
                 cls: "treemain",
                 iconCls: 'activesync-device-standard',
                 allowDrag: false,
@@ -163,8 +167,40 @@ Tine.Admin = function () {
                 dataPanelType: "devices"
             });
         }
-        
-        return tree;
+
+        _.each(tree, function(item, idx) {
+            item.pos = item.pos || (100 + 100 * idx);
+        });
+        _.each(registeredItems, function(item) {
+            // NOTE: too early for appMgr :-(
+            var app = item.appName ? Tine.Tinebase.appMgr.get(item.appName) : null,
+                i18n = app ? app.i18n : translation;
+
+            item.text = i18n._hidden(item.text);
+            item.pos = item.pos || (200 + 100 * tree.length);
+
+            tree.push(item);
+        });
+
+
+        return _.sortBy(tree, 'pos');
+    };
+
+    /**
+     * register a new admin (tree) item
+     * @param item
+     */
+    var registerItem = function(item) {
+        item.dataPanelType = item.dataPanelType || Ext.id();
+
+        registeredItems.push(Ext.applyIf(item, {
+            cls: "treemain",
+            allowDrag: false,
+            allowDrop: true,
+            children: [],
+            leaf: null,
+            expanded: true,
+        }));
     };
 
     /**
@@ -230,7 +266,12 @@ Tine.Admin = function () {
                 true
             );
 
-            switch (node.attributes.dataPanelType) {
+            var _ = window.lodash,
+                me = this,
+                item = node.attributes,
+                dataPanelType = item.dataPanelType;
+
+            switch (dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();
                 break;
@@ -255,11 +296,11 @@ Tine.Admin = function () {
             case 'containers':
                 Tine.Admin.container.show();
                 break;
-           case 'customfields':
+            case 'customfields':
                 Tine.Admin.customfield.show();
                 break;
-           case 'serverinfo':
-               Tine.Admin.getServerInfo(function(response) {
+            case 'serverinfo':
+                Tine.Admin.getServerInfo(function(response) {
                    Tine.log.debug('Tine.Admin.getServerInfo()');
                    
                    if (! this.infoPanel) {
@@ -286,12 +327,28 @@ Tine.Admin = function () {
                    }
                    Tine.Tinebase.MainScreen.setActiveContentPanel(this.infoPanel, true);
                    Tine.Tinebase.MainScreen.setActiveToolbar(this.infoPanelToolbar, true);
-               }, this);
-               break;
-           // TODO find a generic hooking mechanism
+                }, this);
+                break;
+            // TODO find a generic hooking mechanism
             case 'devices':
                 Tine.ActiveSync.syncdevices.show();
                 break;
+
+            default:
+                if (! panels[dataPanelType]) {
+                    panels[dataPanelType] = new item.panel();
+                }
+
+                var contentPanel = panels[dataPanelType],
+                    actionToolbar;
+
+                if (! _.isFunction(contentPanel.getActionToolbar)) {
+                    actionToolbar = new Ext.Toolbar();
+                    contentPanel.getActionToolbar = function() {return actionToolbar};
+                }
+
+                Tine.Tinebase.appMgr.get('Admin').getMainScreen().setActiveContentPanel(contentPanel, true);
+                Tine.Tinebase.appMgr.get('Admin').getMainScreen().setActiveToolbar(contentPanel.getActionToolbar(), true);
             }
         }, this);
 
@@ -322,6 +379,7 @@ Tine.Admin = function () {
     
     // public functions and variables
     return {
+        registerItem: registerItem,
         getPanel: getAdminTree
     };
     

@@ -334,6 +334,30 @@
           "path": "js/ux/tree/"
         },
         {
+          "text": "TreeGridSorter.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "TreeGridColumnResizer.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "TreeGridNodeUI.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "TreeGridLoader.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "TreeGridColumns.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "TreeGrid.js",
+          "path": "js/ux/tree/"
+        },
+        {
           "text": "DisplayPanel.js",
           "path": "js/ux/display/"
         },
@@ -1099,6 +1123,10 @@
         {
           "text": "CenterLayout.css",
           "path": "css/ux/layout/"
+        },
+        {
+          "text": "treegrid.css",
+          "path": "css/ux/tree/"
         },
         {
           "text": "LockCombo.css",
