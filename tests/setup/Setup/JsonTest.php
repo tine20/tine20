@@ -215,6 +215,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_uninstallAllApps();
 
+        // sleep to prevent problems with cached stuff before re-install
+        sleep(5);
+
         // saveAuthentication re-installs 'Addressbook', 'Tinebase', 'Admin'
         $result = $this->_json->saveAuthentication($testAuthenticationData);
         
