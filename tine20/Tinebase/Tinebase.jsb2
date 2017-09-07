@@ -242,6 +242,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "BytesField.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "LayerCombo.js",
           "path": "js/ux/form/"
         },
