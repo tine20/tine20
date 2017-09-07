@@ -27,14 +27,23 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
 
     /**
-     * overwritten to activate action_saveAndClose if user has manage_resource right
+     * executed after record got updated from proxy
      */
-    updateToolbars: function(record, containerField) {
-        Tine.Calendar.ResourceEditDialog.superclass.updateToolbars.call(this, record, containerField);
-
+    onRecordLoad: function() {
+        // manage_resources right grants all grants
         if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
-            this.action_saveAndClose.setDisabled(false);
+            // TODO use a loop here (or maybe adminGrant is sufficient?)
+            var _ = window.lodash;
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.readGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.syncGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.exportGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.adminGrant', true);
         }
+
+        Tine.Calendar.ResourceEditDialog.superclass.onRecordLoad.call(this);
     },
 
     /**
