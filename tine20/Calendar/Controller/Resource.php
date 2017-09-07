@@ -98,7 +98,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
             'model'             => 'Calendar_Model_Event'
         )), NULL, TRUE);
-        
+
+        if (is_array($_record->grants) && !empty($_record->grants)) {
+            $_record->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, $_record->grants);
+        }
         if ($_record->grants instanceof Tinebase_Record_RecordSet) {
             Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
         }
@@ -162,27 +165,51 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck will be ignored!
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
-        $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-        $container->name = $_record->name;
-        Tinebase_Container::getInstance()->update($container);
-        
-        if ($_record->grants instanceof Tinebase_Record_RecordSet) {
-            if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_ADMIN) &&
-                    !Tinebase_Core::getUser()->hasGrant($container, Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-                unset($_record->grants);
-            } else {
-                Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, true, false);
+        // we better make this in one transaction, we don't want to update them separately
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            // container does not make ACL checks, so we do it...
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+            if ($container->name !== $_record->name) {
+                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_EDIT) &&
+                    !Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                    throw new Tinebase_Exception_AccessDenied('You do not have permission to update this resource');
+                }
+                $container->name = $_record->name;
+                Tinebase_Container::getInstance()->update($container);
             }
-        } else {
-            unset($_record->grants);
+
+            if (is_array($_record->grants) && !empty($_record->grants)) {
+                $_record->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, $_record->grants);
+            }
+            if ($_record->grants instanceof Tinebase_Record_RecordSet) {
+                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_ADMIN) &&
+                    !Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                    unset($_record->grants);
+                } else {
+                    Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, true, false);
+                }
+            } else {
+                unset($_record->grants);
+            }
+
+            $result = parent::update($_record);
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+
+            return $result;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        return parent::update($_record);
     }
     
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
@@ -204,9 +231,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         $this->doContainerACLChecks($this->_doContainerACLChecks && ! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
         
         switch ($_action) {
+            // only create requires Calendar_Acl_Rights::MANAGE_RESOURCES, all other acl checks are handled in _checkGrant
             case 'create':
-            case 'update':
-            case 'delete':
                 if (! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage resources");
                 }

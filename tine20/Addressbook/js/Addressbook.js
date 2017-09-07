@@ -140,11 +140,15 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     ],
 
     initComponent: function() {
-        if(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureResources')) {
+        // only show if calendar is available and user has manage_resources right
+        if (   Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureResources')
+            && Tine.Tinebase.common.hasRight('run', 'Calendar')
+            && Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')
+        ) {
            this.contentTypes.push({model: 'Resource', requiredRight: null, singularContainerMode: true});
         }
 
-        if(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')) {
+        if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')) {
             this.contentTypes.push({model: 'List', requiredRight: null, singularContainerMode: false});
         }
         
