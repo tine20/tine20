@@ -13,27 +13,28 @@ Tine.Admin.QuotaUsage = Ext.extend(Ext.ux.tree.TreeGrid, {
 
     initComponent: function() {
         var _ = window.lodash,
-            me = this;
+            comp = this;
 
         this.app = Tine.Tinebase.appMgr.get('Admin');
 
         this.loader = {
             directFn: Tine.Admin.searchQuotaNodes,
-            // paramsAsHash: true,
             getParams : function(node, callback, scope) {
-                var _ = window.lodash,
-                    me = this,
-                    path = node.getPath('name').replace(node.getOwnerTree().getRootNode().getPath(), '/'),
+                var path = node.getPath('name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/'),
                     filter = [{field: 'path', operator: 'equals', value: path}];
 
+                if (path == '/' && comp.buttonRefreshData) {
+                    comp.buttonRefreshData.disable();
+                }
+
                 return [filter];
-                // this.loadMask.show();
-                Tine.Admin.searchQuotaNodes(filter, _.bind(callback, scope));
             },
             processResponse: function(response, node, callback, scope) {
-                me.loadMask.hide();
+                if (comp.buttonRefreshData) {
+                    comp.buttonRefreshData.enable();
+                }
                 response.responseData = response.responseText.results;
-
+                
                 return Ext.ux.tree.TreeGridLoader.prototype.processResponse.apply(this, arguments);
             },
             createNode: function(attr) {
@@ -76,14 +77,29 @@ Tine.Admin.QuotaUsage = Ext.extend(Ext.ux.tree.TreeGrid, {
             });
         }
 
+        this.tbar = [{
+            ref: '../buttonRefreshData',
+            tooltip: Ext.PagingToolbar.prototype.refreshText,
+            iconCls: "x-tbar-loading",
+            handler: this.onButtonRefreshData,
+            scope: this
+        }];
+
+        this.on('beforecollapsenode', this.onBeforeCollapse, this);
+
         this.supr().initComponent.apply(this, arguments);
     },
 
-    onRender : function(ct, position){
-        this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Loading Quota Data')});
-        this.loadMask.show();
+    /**
+     * require reload when node is collapsed
+     */
+    onBeforeCollapse: function(node) {
+        node.removeAll();
+        node.loaded = false;
+    },
 
-        this.supr().onRender.apply(this, arguments);
+    onButtonRefreshData: function() {
+        this.getRootNode().reload();
     }
 });
 
