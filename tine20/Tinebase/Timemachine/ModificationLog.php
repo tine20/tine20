@@ -1419,7 +1419,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         $tinebase = $applicationController->getApplicationByName('Tinebase');
 
-        $state = $tinebase->xprops('state');
+        $state = &$tinebase->xprops('state');
         if (!isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
             $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = 0;
         }
