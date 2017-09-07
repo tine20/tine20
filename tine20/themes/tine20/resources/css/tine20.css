@@ -869,19 +869,6 @@ body.x-body-masked .x-window-plain .x-window-mc {
     color:#396095;
 }
 
-/* some progress bar colors */
-/* @see 0008254: Allow colors in Tasks progressbar */
-.PercentRenderer-progress-bar10 { background-color: #f36 !important; background-image: none; }
-.PercentRenderer-progress-bar20 { background-color: #e69 !important; background-image: none; }
-.PercentRenderer-progress-bar30 { background-color: #d8a !important; background-image: none; }
-.PercentRenderer-progress-bar40 { background-color: #c9a !important; background-image: none; }
-.PercentRenderer-progress-bar50 { background-color: #baa !important; background-image: none; }
-.PercentRenderer-progress-bar60 { background-color: #aa9 !important; background-image: none; }
-.PercentRenderer-progress-bar70 { background-color: #aa8 !important; background-image: none; }
-.PercentRenderer-progress-bar80 { background-color: #ab8 !important; background-image: none; }
-.PercentRenderer-progress-bar90 { background-color: #9b8 !important; background-image: none; }
-.PercentRenderer-progress-bar100 { background-color: #8c7 !important; background-image: none; }
-
 .x-list-header{
     background-color:#f9f9f9;
     background-image:url(../images/tine20/grid/grid3-hrow.gif);

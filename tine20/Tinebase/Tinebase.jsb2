@@ -706,6 +706,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "QuotaRenderer.js",
+          "path": "js/widgets/grid/"
+        },
+        {
             "text": "Manager.js",
             "path": "js/widgets/relation/"
         },
