@@ -859,7 +859,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return new this.recordClass(recordData, 0);
     },
 
-    
     /**
      * executed after record got updated from proxy
      */
