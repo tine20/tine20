@@ -60,7 +60,7 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
             var el = relations[index];
             if (el.type == this.type && el.related_model == this.relModel) {
                 var record = new this.recordClass(el.related_record);
-                return record.getTitle();
+                return Ext.util.Format.htmlEncode(record.getTitle());
             }
         }
     }

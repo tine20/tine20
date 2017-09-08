@@ -518,7 +518,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         for (var id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
-                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: this.filterPanels[id].title});
+                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: Ext.util.Format.htmlDecode(this.filterPanels[id].title)});
             }
         }
         
