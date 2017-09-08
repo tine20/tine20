@@ -166,6 +166,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      * get value of next revision for given fileobject
      * 
      * @param Tinebase_Model_Tree_FileObject $_objectId
+     * @return int
      */
     protected function _getNextRevision(Tinebase_Model_Tree_FileObject $_objectId)
     {
@@ -587,6 +588,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $record = new Tinebase_Model_Tree_FileObject($diff->diff);
                 $this->_prepareReplicationRecord($record);
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                 $this->create($record);
                 if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && null !== $record->hash &&
                         !is_file($record->getFilesystemPath())) {
@@ -598,10 +600,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 /** @var Tinebase_Model_Tree_FileObject $record */
                 $record = $this->get($_modification->record_id, true);
-                $oldHash = $record->hash;
+                $currentRecord = clone $record;
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
-                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $oldHash !== $record->hash &&
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
+                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $currentRecord->hash !== $record->hash &&
                     null !== $record->hash && !is_file($record->getFilesystemPath())) {
                     Tinebase_Timemachine_ModificationLog::getInstance()->fetchBlobFromMaster($record->hash);
                 }
