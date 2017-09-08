@@ -126,6 +126,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             app = Tine.Tinebase.appMgr.get(appName),
             i18n = app ? app.i18n : window.i18n;
 
+        note = Ext.util.Format.htmlEncode(note);
+        
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 var _ = window.lodash,

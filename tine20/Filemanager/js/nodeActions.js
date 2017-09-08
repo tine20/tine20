@@ -202,13 +202,9 @@ Tine.Filemanager.nodeActions.Delete = {
         if (nodes && nodes.length) {
             for (var i = 0; i < nodes.length; i++) {
                 var currNodeData = nodes[i].data;
-
-                if (typeof currNodeData.name == 'object') {
-                    nodeName += currNodeData.name.name + '<br />';
-                }
-                else {
-                    nodeName += currNodeData.name + '<br />';
-                }
+                nodeName += Tine.Tinebase.EncodingHelper.encode(typeof currNodeData.name == 'object' ?
+                    currNodeData.name.name :
+                    currNodeData.name) + '<br />';
             }
         }
 
