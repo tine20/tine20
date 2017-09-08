@@ -1535,8 +1535,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             title: this.app.i18n._('Scheduling Conflict'),
             questionText: '<div class = "cal-conflict-heading">' +
             this.app.i18n._('The following attendee are busy at the requested time:') +
-            '</div>' +
-            fbInfo.getInfoByAttendee(attendeeStore, event),
+                '</div>' +
+                fbInfo.getInfoByAttendee(attendeeStore, event),
             options: [
                 {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
                 {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},

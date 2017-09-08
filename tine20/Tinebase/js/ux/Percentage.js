@@ -192,7 +192,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             metadata.css = 'x-tinebase-uploadrow';
         }
         
-        return fileName;
+        return Ext.util.Format.htmlEncode(fileName);
     }
     
     if (! Ext.ux.PercentRendererWithName.template) {
@@ -221,7 +221,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     if (typeof value == 'object') {
         fileName = value.name;
     }
-    
+    fileName = Ext.util.Format.htmlEncode(fileName);
     var percent = record.get('progress');
 
     var additionalStyle = '';
@@ -229,7 +229,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = i18n._('(paused)') + '&#160;&#160;' + fileName;
         additionalStyle = 'background-image: url(\'styles/images/tine20/progress/progress-bg-y.gif\') !important;';
     }
-       
+
     var display = 'width:0px';
     if(percent > -1 && percent < 100) {
         display = '';

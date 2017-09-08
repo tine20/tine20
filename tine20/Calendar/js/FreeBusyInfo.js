@@ -91,7 +91,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
                 eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
             }
             if (fbInfo.event && fbInfo.event.summary) {
-                eventInfo += ' : ' + fbInfo.event.summary;
+                eventInfo += ' : ' + Ext.util.Format.htmlEncode(fbInfo.event.summary);
             }
             if (fbInfo.type == 'BUSY_UNAVAILABLE') {
                 eventInfo += '<span class="cal-conflict-eventinfos-unavailable">' + this.app.i18n._('Unavailable') + '</span>';

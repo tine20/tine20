@@ -123,7 +123,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
                     allowDrop: false,
                     expanded: false,
                     text: Ext.util.Format.htmlEncode(record.get('name')),
-                    qtip: Tine.Tinebase.common.doubleEncode(record.get('host')),
+                    qtip: Ext.util.Format.htmlEncode(record.get('host')),
                     leaf: false,
                     cls: 'felamimail-node-account',
                     delimiter: record.get('delimiter'),
