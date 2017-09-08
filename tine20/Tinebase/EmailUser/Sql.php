@@ -532,12 +532,17 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     abstract protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties);
 
     /**
+     * @param $domain optional domain to limit to
      * @return Tinebase_Record_RecordSet of Tinebase_Model_EmailUser
      */
-    public function getAllEmailUsers()
+    public function getAllEmailUsers($domain = null)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_EmailUser', array());
-        foreach ($this->_getSelect()->limit(0)->query()->fetchAll() as $row) {
+        $select = $this->_getSelect()->limit(0);
+        if (null !== $domain) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?', $domain);
+        }
+        foreach ($select->query()->fetchAll() as $row) {
             $result->addRecord($this->_rawDataToRecord($row));
         }
         return $result;
@@ -545,18 +550,26 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
     /**
      * returns array with keys mailQuota and mailSize
+     *
+     * @param string $domain optional domain to limit to
      * @return array
      */
-    public function getTotalUsageQuota()
+    public function getTotalUsageQuota($domain = null)
     {
-        $data = $this->_getSelect(
+        $select = $this->_getSelect(
             array(
                 new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailQuota'] . '.' .
                         $this->_propertyMapping['emailMailQuota']) . ') as mailQuota'),
                 new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($this->_tableMapping['emailMailSize']  . '.' .
                         $this->_propertyMapping['emailMailSize'])  . ') as mailSize'),
                 //new Zend_Db_Expr('SUM(' . $this->_propertyMapping['emailSieveSize'] . ') as sieveSize'),
-            ))->query()->fetchAll();
+            ));
+
+        if (null !== $domain) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?', $domain);
+        }
+
+        $data = $select->query()->fetchAll();
         return $data[0];
     }
 

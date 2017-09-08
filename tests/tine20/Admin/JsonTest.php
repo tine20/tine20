@@ -1337,15 +1337,22 @@ class Admin_JsonTest extends TestCase
             )));
             static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
-            /** ATTENTION as the third part of a path needs to be 'personal' or 'shared' below would error!
+            $domains = array_unique(array_merge(
+                Tinebase_EmailUser::getAllowedDomains(Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)),
+                $imapBackend->getAllDomains()
+            ));
+            foreach ($dovecotResult['results'] as $result) {
+                static::assertTrue(false !== ($idx = array_search($result['name'], $domains)), 'unknown or duplicate domain');
+                unset($domains[$idx]);
+            }
+
             $dovecotResult = $this->_json->searchQuotaNodes(array(array(
                 'field'     => 'path',
                 'operator'  => 'equals',
                 'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
-                    '/Emails/' . $dovecotResult['results'][0]['parent_id']
+                    '/Emails/' . $dovecotResult['results'][0]['name']
             )));
-            static::assertEquals(0, $dovecotResult['totalcount']);
-             *  */
+            static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
         } else {
             static::assertEquals(1, $filterAppResult['totalcount']);

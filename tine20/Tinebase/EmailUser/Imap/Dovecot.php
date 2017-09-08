@@ -356,7 +356,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
                         $data[$keyMapping] = $value > 0 ? $value : null;
                         break;
                     case 'emailMailSize':
-                        $data[$keyMapping] = $value > 0 ? round($value/1048576, 2) : 0;
+                        $data[$keyMapping] = $value > 0 ? $value : 0;
                         break;
                     default: 
                         $data[$keyMapping] = $value;
@@ -450,5 +450,22 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         
         return $rawData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllDomains()
+    {
+        $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
+        if (isset($this->_config['instanceName'])) {
+            $select->where($this->_db->quoteIdentifier('instancename') . ' = ?', $this->_config['instanceName']);
+        }
+
+        $result = $select->query()->fetchAll(Zend_DB::FETCH_NUM);
+        array_walk($result, function(&$val) {
+            $val = $val[0];
+        });
+        return $result;
     }
 }
