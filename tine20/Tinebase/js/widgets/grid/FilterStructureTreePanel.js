@@ -82,6 +82,9 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.filterPanel.activeFilterPanel.on('titlechange', this.onFilterPanelTitleChange, this);
         
         this.editor = new Ext.tree.TreeEditor(this);
+        this.editor.on('startedit', function(el, value) {
+            this.editor.setValue(Ext.util.Format.htmlDecode(value));
+        }, this);
         
         Tine.widgets.grid.FilterStructureTreePanel.superclass.initComponent.call(this);
     },
@@ -113,7 +116,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onNodeTextChange: function(node, text, oldText) {
         if (node.attributes && node.attributes.filterPanel) {
-            node.attributes.filterPanel.setTitle(text);
+            node.attributes.filterPanel.setTitle(Ext.util.Format.htmlEncode(text));
         }
     },
     

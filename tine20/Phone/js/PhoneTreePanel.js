@@ -101,13 +101,13 @@ Tine.Phone.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel, {
         this.store.each(function(record) {
             var label = (record.data.description == '') 
                ? record.data.macaddress 
-               : Ext.util.Format.ellipsis(record.data.description, 30);
+               : Ext.util.Format.ellipsis(Ext.util.Format.htmlEncode(record.data.description), 30);
             var node = new Ext.tree.TreeNode({
                 id: record.id,
                 record: record,
                 text: label,
                 iconCls: 'PhoneIconCls',
-                qtip: Tine.Tinebase.common.doubleEncode(record.data.description),
+                qtip: Ext.util.Format.htmlEncode(record.data.description),
                 leaf: true
             });
             rootNode.appendChild(node);

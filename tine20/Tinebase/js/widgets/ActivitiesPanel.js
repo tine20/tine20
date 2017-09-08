@@ -122,6 +122,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         var recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model),
             app = Tine.Tinebase.appMgr.get(this.app);
 
+        note = Ext.util.Format.htmlEncode(note);
+        
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 if (field.label) {

@@ -253,10 +253,10 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         if(attr.name && typeof attr.name == 'object') {
             Ext.apply(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
-                qtip: Tine.Tinebase.common.doubleEncode(attr.name.name)
+                qtip: Ext.util.Format.htmlEncode(attr.name.name)
             });
         }
-        
+
         // copy 'real' data to a node record NOTE: not a full record as we have no record reader here
         var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
         attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
@@ -577,13 +577,13 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
         
         var newNode = new Ext.tree.AsyncTreeNode({
-            text: nodeName,
+            text: Ext.util.Format.htmlEncode(nodeName),
             path: nodeData.path,
             name: nodeData.name,
             nodeRecord: newNodeRecord,
             account_grants: nodeData.account_grants,
             id: nodeData.id
-        })
+        });
         
         newNode.attributes.nodeRecord.beginEdit();
         newNode.attributes.nodeRecord.set('path', nodeData.path);

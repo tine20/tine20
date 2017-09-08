@@ -495,12 +495,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
         
         Ext.applyIf(attr, {
-            text: Ext.util.Format.htmlEncode(attr.name),
-            qtip: Tine.Tinebase.common.doubleEncode(attr.name),
+            text: attr.name,
+            qtip: attr.name,
             leaf: !!attr.account_grants,
             allowDrop: !!attr.account_grants && attr.account_grants.addGrant
         });
-        
+
+        attr.text = Ext.util.Format.htmlEncode(attr.text);
+        attr.qtip = Ext.util.Format.htmlEncode(attr.qtip);
+
         // copy 'real' data to container space
         attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
     },
