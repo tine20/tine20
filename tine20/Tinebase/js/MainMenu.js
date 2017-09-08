@@ -63,7 +63,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         // TODO add a bigger spacer here?
         { xtype: 'spacer' },
         {
-            text: String.format(i18n._('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
+            text: Ext.util.Format.htmlEncode(String.format(i18n._('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName)),
             menu: this.getUserActions(),
             menuAlign: 'tr-br',
             iconCls: Tine.Tinebase.registry.get('userAccountChanged') ? 'renderer_accountUserChangedIcon' : 'renderer_accountUserIcon'

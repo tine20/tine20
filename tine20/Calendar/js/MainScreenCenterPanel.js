@@ -1547,7 +1547,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
                     }
                     if (fbInfo.event && fbInfo.event.summary) {
-                        eventInfo += ' : ' + fbInfo.event.summary;
+                        eventInfo += ' : ' + Ext.util.Format.htmlEncode(fbInfo.event.summary);
                     }
                     if (fbInfo.type == 'BUSY_UNAVAILABLE') {
                         denyIgnore = true;
