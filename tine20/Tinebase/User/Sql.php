@@ -1389,6 +1389,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 $record = new Tinebase_Model_FullUser($diff->diff);
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                 $this->addUser($record);
                 break;
 
@@ -1409,7 +1410,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
                 if (!$diff->isEmpty()) {
                     $record = $this->getUserById($modification->record_id, 'Tinebase_Model_FullUser');
+                    $currentRecord = clone $record;
                     $record->applyDiff($diff);
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
                     $this->updateUser($record);
                 }
                 break;
