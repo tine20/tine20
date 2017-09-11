@@ -336,6 +336,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         this.value = value;
         return this;
+    },
+
+    validateValue : function(value){
+        // happens when removing contents and pressing ctrl+z
+        if (Ext.isString(value) && ! this.selectedRecord) {
+            value = null;
+            this.setRawValue('');
+        }
+
+        return this.supr().validateValue(value);
     }
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);
