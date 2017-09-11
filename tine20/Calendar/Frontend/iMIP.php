@@ -23,17 +23,26 @@ class Calendar_Frontend_iMIP
      * @TODO autodelete REFRESH mails
      * 
      * @param  Calendar_Model_iMIP $_iMIP
+     * @return mixed
      */
-    public function autoProcess($_iMIP)
+    public function autoProcess(Calendar_Model_iMIP $_iMIP)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . ' Incoming iMIP ics'
+                . print_r($_iMIP->toArray(), true));
+        }
+
         if ($_iMIP->method == Calendar_Model_iMIP::METHOD_COUNTER) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component with COUNTER method -> must always be processed manually");
-            return;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
+                __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component with COUNTER method "
+                . "-> must always be processed manually");
+            return false;
         }
         
         if (! $this->getExistingEvent($_iMIP, TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
-            return;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
+                __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
+            return false;
         }
         
         // update existing event details _WITHOUT_ status updates
