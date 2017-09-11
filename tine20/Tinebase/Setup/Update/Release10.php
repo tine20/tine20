@@ -2033,4 +2033,24 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
         $this->setApplicationVersion('Tinebase', '10.42');
     }
+
+    /**
+     * update to 10.43
+     *
+     * change configuration column to xprops in accounts
+     */
+    public function update_42()
+    {
+        if ($this->getTableVersion('accounts') < 14) {
+            $this->_backend->dropCol('accounts', 'configuration');
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+            $this->setTableVersion('accounts', 14);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.43');
+    }
 }

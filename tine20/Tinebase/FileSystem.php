@@ -771,8 +771,8 @@ class Tinebase_FileSystem implements
             if (null !== $personalNode && $parentNode->parent_id === $personalNode->getId()) {
                 $user = Tinebase_User::getInstance()->getFullUserById($parentNode->name);
                 $quota = isset(
-                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
-                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
                 if ($quota > 0) {
                     if (null === $localQuota) {
@@ -905,8 +905,8 @@ class Tinebase_FileSystem implements
                         if (null !== $personalNode && $folderNode->parent_id === $personalNode->getId()) {
                             $user = $userController->getFullUserById($folderNode->name);
                             $quota = isset(
-                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
-                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
+                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                                 $totalByUser;
                             if ($quota > 0 && $size > $quota) {
                                 throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');

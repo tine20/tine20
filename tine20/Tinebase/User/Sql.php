@@ -55,7 +55,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'loginFailures'             => 'login_failures',
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
-        'contactId'                 => 'contact_id'
+        'contactId'                 => 'contact_id',
+        'xprops'                    => 'xprops'
     );
     
     /**
@@ -435,6 +436,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 'deleted_by',
                 'seq',
             ));
+        }
+
+        // TODO remove
+        // remove this in 2018.11 as an upgrade to 2017.11 creates the field
+        if ($this->_userHasXpropsField()) {
+            $fields[] = 'xprops';
         }
 
         $select = $this->_db->select()
@@ -1050,6 +1057,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'deleted_time'          => $_user->deleted_time,
             'deleted_by'            => $_user->deleted_by,
             'seq'                   => $_user->seq,
+            'xprops'                => $_user->xprops,
         );
         
         $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_time', 'deleted_by');
@@ -1057,6 +1065,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             if (empty($accountData[$property])) {
                 unset($accountData[$property]);
             }
+        }
+
+        if (isset($accountData['xprops'])) {
+            $accountData['xprops'] = json_encode($accountData['xprops']);
         }
         
         return $accountData;
@@ -1339,7 +1351,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * checks if use table already has modlog fields
+     * checks if user table already has modlog fields
      *
      * @return bool
      */
@@ -1347,6 +1359,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
         return isset($schema['creation_time']);
+    }
+
+    /**
+     * checks if user table already has xprops field
+     *
+     * @return bool
+     */
+    protected function _userHasXpropsField()
+    {
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        return isset($schema['xprops']);
     }
 
     /**
