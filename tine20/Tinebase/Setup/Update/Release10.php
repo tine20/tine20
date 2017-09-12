@@ -2042,7 +2042,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_42()
     {
         if ($this->getTableVersion('accounts') < 14) {
-            $this->_backend->dropCol('accounts', 'configuration');
+            try {
+                $this->_backend->dropCol('accounts', 'configuration');
+            } catch (Exception $e) {
+                // ignore .. :)
+            }
+
             $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('<field>
                     <name>xprops</name>
                     <type>text</type>
