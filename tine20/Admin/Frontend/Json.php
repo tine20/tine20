@@ -1327,7 +1327,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return FALSE;
         }
 
-        $emailPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Felamimail');
+        if ($isFelamimailInstalled = Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            $emailPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Felamimail');
+        } else {
+            $emailPath = '';
+        }
         $virtualPath = $emailPath . '/Emails';
         $path = '';
         if (null !== $filter) {
@@ -1338,51 +1342,53 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             });
         }
 
-        $filter = $this->_decodeFilter($filter, 'Tinebase_Model_Tree_Node_Filter');
-        // ATTENTION sadly the pathfilter to Array does path magic, returns the flatpath and not the statpath
-        // etc. this is Filemanager path magic. We don't want that here!
-        $filterArray = $filter->toArray();
-        array_walk($filterArray, function (&$val) use($path) {
-            if('path' === $val['field']) {
-                $val['value'] = $path;
-            }
-        });
-        $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
-
-        $pathFilters = $filter->getFilter('path', TRUE);
-        if (count($pathFilters) !== 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . 'Exactly one path filter required.');
-            $pathFilter = $filter->createFilter(array(
-                    'field'     => 'path',
-                    'operator'  => 'equals',
-                    'value'     => '/',)
-            );
-            $filter->removeFilter('path');
-            $filter->addFilter($pathFilter);
-            $path = '/';
-        }
-
-        $filter->removeFilter('type');
-        $filter->addFilter($filter->createFilter(array(
-                    'field'     => 'type',
-                    'operator'  => 'equals',
-                    'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-                )));
-
-        if (strpos($path, $virtualPath) === 0) {
-            if (count(explode('/', trim($path, '/'))) > 2) {
-                $records = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array());
-            } else {
-                $records = $this->_getVirtualEmailQuotaNodes();
-            }
+        if ($isFelamimailInstalled && strpos($path, $virtualPath) === 0) {
+            $records = $this->_getVirtualEmailQuotaNodes(str_replace($virtualPath, '', $path));
+            $filterArray = $filter;
+            $result = $this->_multipleRecordsToJson($records);
         } else {
+            $filter = $this->_decodeFilter($filter, 'Tinebase_Model_Tree_Node_Filter');
+            // ATTENTION sadly the pathfilter to Array does path magic, returns the flatpath and not the statpath
+            // etc. this is Filemanager path magic. We don't want that here!
+            $filterArray = $filter->toArray();
+            array_walk($filterArray, function (&$val) use ($path) {
+                if ('path' === $val['field']) {
+                    $val['value'] = $path;
+                }
+            });
+            $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
+
+            $pathFilters = $filter->getFilter('path', true);
+            if (count($pathFilters) !== 1) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . 'Exactly one path filter required.');
+                }
+                $pathFilter = $filter->createFilter(array(
+                        'field' => 'path',
+                        'operator' => 'equals',
+                        'value' => '/',
+                    )
+                );
+                $filter->removeFilter('path');
+                $filter->addFilter($pathFilter);
+                $path = '/';
+            }
+
+            $filter->removeFilter('type');
+            $filter->addFilter($filter->createFilter(array(
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+            )));
+
             $records = Tinebase_FileSystem::getInstance()->search($filter);
-            if ($path === $emailPath) {
+            if ($isFelamimailInstalled && $path === $emailPath) {
                 $imapBackend = null;
                 try {
                     $imapBackend = Tinebase_EmailUser::getInstance();
-                } catch (Tinebase_Exception_NotFound $tenf) {}
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                }
                 if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
                     /** @var Tinebase_Model_Tree_Node $emailNode */
                     $emailNode = clone $records->getFirstRecord();
@@ -1395,17 +1401,31 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $emailNode->revision_size = $emailNode->size;
                     $records->addRecord($emailNode);
                 }
+            } elseif ($isFelamimailInstalled && '/' === $path) {
+                $imapBackend = null;
+                try {
+                    $imapBackend = Tinebase_EmailUser::getInstance();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                }
+                if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                    $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+                    $node = $records->filter('name',
+                        Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
+                    $node->quota += $imapUsageQuota['mailQuota'];
+                    $node->size += $imapUsageQuota['mailSize'];
+                }
             }
+
+            $result = $this->_multipleRecordsToJson($records, $filter);
+
+            $filterArray = $filter->toArray();
+            array_walk($filterArray, function (&$val) use ($path) {
+                if ('path' === $val['field']) {
+                    $val['value'] = $path;
+                }
+            });
         }
 
-        $result = $this->_multipleRecordsToJson($records, $filter);
-
-        $filterArray = $filter->toArray();
-        array_walk($filterArray, function (&$val) use($path) {
-            if('path' === $val['field']) {
-                $val['value'] = $path;
-            }
-        });
         return array(
             'results'       => array_values($result),
             'totalcount'    => count($result),
@@ -1414,9 +1434,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * @param string $path
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    protected function _getVirtualEmailQuotaNodes()
+    protected function _getVirtualEmailQuotaNodes($path)
     {
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
         $imapBackend = Tinebase_EmailUser::getInstance();
@@ -1426,18 +1447,43 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $result;
         }
 
-        $parent_id = Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId();
-        /** @var Tinebase_Model_EmailUser $emailUser */
-        foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
-            $node = new Tinebase_Model_Tree_Node(array(), true);
-            $node->parent_id = $parent_id;
-            $node->name = $emailUser->emailUsername;
-            $node->quota = $emailUser->emailMailQuota;
-            $node->size = $emailUser->emailMailSize;
-            $node->revision_size = $emailUser->emailMailSize;
-            $node->setId($emailUser->emailUserId);
-            $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
-            $result->addRecord($node);
+        $path = trim($path, '/');
+        if (empty($path)) {
+            $parent_id = Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId();
+
+            $domains = array_unique(array_merge(
+                Tinebase_EmailUser::getAllowedDomains(Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)),
+                $imapBackend->getAllDomains()
+            ));
+
+            foreach ($domains as $domain) {
+                $usageQuota = $imapBackend->getTotalUsageQuota($domain);
+
+                $node = new Tinebase_Model_Tree_Node(array(), true);
+                $node->parent_id = $parent_id;
+                $node->name = $domain;
+                $node->quota = $usageQuota['mailQuota'];
+                $node->size = $usageQuota['mailSize'];
+                $node->revision_size = $usageQuota['mailSize'];
+                $node->setId(md5($domain));
+                $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+                $result->addRecord($node);
+            }
+        } elseif (count($pathParts = explode('/', $path)) === 1) {
+            $parent_id = md5($pathParts[0]);
+
+            /** @var Tinebase_Model_EmailUser $emailUser */
+            foreach ($imapBackend->getAllEmailUsers($pathParts[0]) as $emailUser) {
+                $node = new Tinebase_Model_Tree_Node(array(), true);
+                $node->parent_id = $parent_id;
+                $node->name = $emailUser->emailUsername;
+                $node->quota = $emailUser->emailMailQuota;
+                $node->size = $emailUser->emailMailSize;
+                $node->revision_size = $emailUser->emailMailSize;
+                $node->setId($emailUser->emailUserId);
+                $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+                $result->addRecord($node);
+            }
         }
 
         return $result;

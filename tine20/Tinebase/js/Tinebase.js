@@ -21,6 +21,7 @@ require('postal.request-response');
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
 
+require('./ux/util/screenshot');
 
 module.exports = {
     director: director,

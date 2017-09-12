@@ -257,7 +257,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         forceSelection: true,
                         name: 'timeaccount_id',
-                        lazyInit: false
+                        lazyInit: false,
+                        listeners: {
+                            scope: this,
+                            select: this.onTimeaccountUpdate
+                        }
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
                         name: 'duration',

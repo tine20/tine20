@@ -204,7 +204,8 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
                 'field'     => 'query',
                 'operator'     => 'contains',
                 'value'     => 'Winter'
-        ));
+        ),array('field' => 'application_id', 'operator' => 'equals', 'value' =>
+            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()));
         $paging = array(
                 'start'    => 0,
                 'limit'    => 1

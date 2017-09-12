@@ -263,7 +263,7 @@ class Setup_Frontend_Cli
                 }
             }
             $maxLoops--;
-        } while ($result['updated'] > 0 && $maxLoops > 0);
+        } while (isset($result['updated']) && $result['updated'] > 0 && $maxLoops > 0);
         
         return ($maxLoops > 0) ? 0 : 1;
     }
@@ -276,7 +276,14 @@ class Setup_Frontend_Cli
     protected function _updateApplications()
     {
         $controller = Setup_Controller::getInstance();
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                    . ' Could not get applications');
+            Tinebase_Exception::log($e);
+            return array();
+        }
         
         foreach ($applications as $key => &$application) {
             try {

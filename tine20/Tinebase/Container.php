@@ -81,6 +81,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @var string
      */
     protected $_defaultCountCol = 'id';
+
+    /**
+     * whether or not to execute _addSearchAclFilter
+     *
+     * @var bool
+     */
+    protected $_doSearchAclFilter = true;
     
     /**
      * cache timeout for ACL related cache entries (in seconds)
@@ -102,6 +109,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
     
     /**
@@ -132,9 +144,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param bool $_onlyIds
      * @param string $_action
      * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
+        $this->_addSearchAclFilter($_filter);
+
         return parent::search($_filter, $_pagination, $_onlyIds);
     }
 
@@ -144,10 +159,54 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action
      * @return int
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        $this->_addSearchAclFilter($_filter);
+
         return parent::searchCount($_filter);
+    }
+
+    /**
+     * sets _doSearchAclFilter, returns old value. Pass null to not set, just get
+     *
+     * @param bool $bool
+     * @return bool
+     */
+    public function doSearchAclFilter($bool = true)
+    {
+        $oldValue = $this->_doSearchAclFilter;
+        if (null !== $bool) {
+            $this->_doSearchAclFilter = (bool)$bool;
+        }
+        return $oldValue;
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _addSearchAclFilter(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        if (true !== $this->_doSearchAclFilter) {
+            return;
+        }
+
+        if (! $_filter instanceof Tinebase_Model_ContainerFilter) {
+            throw new Tinebase_Exception_InvalidArgument('filter is expected to be instanceof Tinebase_Model_ContainerFilter');
+        }
+        if (count($_filter->getFilter('application_id', true)) !== 1 ||
+            null === ($applicationFilter = $_filter->getFilter('application_id')) ||
+            $applicationFilter->getOperator() !== 'equals') {
+            throw new Tinebase_Exception_InvalidArgument('filter needs to contain exactly 1 application_id equals filter');
+        }
+        if ($_filter->getCondition() !== Tinebase_Model_Filter_FilterGroup::CONDITION_AND) {
+            throw new Tinebase_Exception_InvalidArgument('outermost filter needs to be of condition AND');
+        }
+        $_filter->addFilter(new Tinebase_Model_Filter_Container('id', 'equals', '/',
+            array('applicationName' => Tinebase_Application::getInstance()->
+            getApplicationById($applicationFilter->getValue())->name)));
     }
     
     /**
@@ -425,6 +484,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         $this->addGrantsSql($select, $accountId, $grant);
+        if ($meta['appName'] === 'Calendar' && Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+            $where = join(' ', $select->getPart(Zend_Db_Select::WHERE));
+            $select->reset(Zend_Db_Select::WHERE);
+            $select->where($where);
+            $select->orWhere(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('container.application_id') .' = ?', $applicationId) . ' AND ' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
+                $this->_db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
+            );
+        }
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         
@@ -850,6 +919,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $select->orWhere(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('container.application_id') .' = ?', $application->getId()) . ' AND ' .
                 $this->_db->quoteInto($this->_db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
+                $this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0 AND ' .
                 $this->_db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
             );
         }

@@ -107,7 +107,7 @@ class Admin_JsonTest extends TestCase
         $accountData = $this->_getUserArrayWithPw();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId();
         $accountData['accountFirstName'] = 'PHPUnitup';
-        $accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] = 100;
+        $accountData['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = 100;
         
         $account = $this->_createUser($accountData);
         
@@ -118,9 +118,11 @@ class Admin_JsonTest extends TestCase
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
         $this->assertTrue($authResult->isValid());
-        $this->assertTrue(isset($accountData['configuration']) && isset($accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA])
-            && $accountData['configuration'][Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] === 100,
-            'failed to set/get account configuration');
+        $this->assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
+            && $accountData['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 100,
+            'failed to set/get account filesystem personal quota');
+        $this->assertTrue(isset($account['effectiveAndLocalQuota']) &&
+            100 === $account['effectiveAndLocalQuota']['localQuota']);
         
         $account['accountPrimaryGroup'] = $accountData['accountPrimaryGroup'];
         return $account;
@@ -907,6 +909,7 @@ class Admin_JsonTest extends TestCase
     public function testSearchContainers()
     {
         $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        Tinebase_Container::getInstance()->resetClassCache();
         
         $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $filter = array(
@@ -1336,15 +1339,22 @@ class Admin_JsonTest extends TestCase
             )));
             static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
-            /** ATTENTION as the third part of a path needs to be 'personal' or 'shared' below would error!
+            $domains = array_unique(array_merge(
+                Tinebase_EmailUser::getAllowedDomains(Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)),
+                $imapBackend->getAllDomains()
+            ));
+            foreach ($dovecotResult['results'] as $result) {
+                static::assertTrue(false !== ($idx = array_search($result['name'], $domains)), 'unknown or duplicate domain');
+                unset($domains[$idx]);
+            }
+
             $dovecotResult = $this->_json->searchQuotaNodes(array(array(
                 'field'     => 'path',
                 'operator'  => 'equals',
                 'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
-                    '/Emails/' . $dovecotResult['results'][0]['parent_id']
+                    '/Emails/' . $dovecotResult['results'][0]['name']
             )));
-            static::assertEquals(0, $dovecotResult['totalcount']);
-             *  */
+            static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
         } else {
             static::assertEquals(1, $filterAppResult['totalcount']);

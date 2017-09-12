@@ -129,6 +129,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'deleted_time'          => array('allowEmpty' => true),
         'deleted_by'            => array('allowEmpty' => true),
         'seq'                   => array('allowEmpty' => true),
+        'xprops'                => array('allowEmpty' => true),
     );
 
     protected static $_replicable = true;

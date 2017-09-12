@@ -1109,17 +1109,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
     {
-        if (empty($_user->contact_id)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . " updatedUser does not have contact_id set: " . $_user->accountLoginName);
-            return;
-        }
-
-        $oldACL = $this->doContainerACLChecks(false);
-
-        $this->delete($_user->contact_id);
-
-        $this->doContainerACLChecks($oldACL);
+        // this will be handled in \Addressbook_Controller::_handleEvent
     }
 
     /**
