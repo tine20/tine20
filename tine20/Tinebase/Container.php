@@ -919,6 +919,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $select->orWhere(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('container.application_id') .' = ?', $application->getId()) . ' AND ' .
                 $this->_db->quoteInto($this->_db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
+                $this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0 AND ' .
                 $this->_db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
             );
         }
