@@ -576,8 +576,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $newRecord[$descriptionField] = 'my test description';
         }
 
+        $classParts = explode('_', get_called_class());
+        $realModelName = $classParts[0] . '_Model_' . $modelName;
+        /** @var Tinebase_Record_Abstract $realModelName */
+        $configuration = $realModelName::getConfiguration();
+
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+        if (null !== $configuration && $configuration->modlogActive) {
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId']);
+        }
 
         // Update description if record has
         if ($description) {
