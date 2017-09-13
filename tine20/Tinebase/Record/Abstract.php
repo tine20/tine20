@@ -914,10 +914,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function diff($_record, $omitFields = array())
     {
-        /** TODO remove this! why is it here? */
+        /** this is very bad, it is because of the subdiff below... maybe it is resolved in the meantime? */
         if (! $_record instanceof Tinebase_Record_Abstract) {
-            /** @var Tinebase_Record_Diff $_record  ... really?!? */
-            return $_record;
+            if (!empty($_record)) {
+                return $_record;
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Did not get Tinebase_Record_Abstract, diffing against empty record');
+            $model = get_called_class();
+            $_record = new $model(array(), true);
         }
         
         $result = new Tinebase_Record_Diff(array(
@@ -965,32 +970,60 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                             . $recordField->getIso()
                         );
                     } 
-                } else if (! $recordField instanceof DateTime && $ownField == $recordField) {
+                } elseif (! $recordField instanceof DateTime && $ownField == $recordField) {
                     continue;
                 } 
-            } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
+            } elseif ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } else if ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
-                    ' Doing subdiff for field ' . $fieldName);
-                $subdiff = $ownField->diff($recordField);
+            } elseif ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
+                if ($ownField instanceof Tinebase_Record_Abstract && is_scalar($recordField)) {
+                    // maybe we have the id of the record -> just compare the id
+                    if ($ownField->getId() == $recordField) {
+                        continue;
+                    } else {
+                        $ownField = $ownField->getId();
+                    }
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                            ' Doing subdiff for field ' . $fieldName);
+                    }
+                    $subdiff = $ownField->diff($recordField);
+                    if (is_object($subdiff) && !$subdiff->isEmpty()) {
+                        $diff[$fieldName] = $subdiff;
+                        $oldData[$fieldName] = $ownField;
+                    }
+                    continue;
+                }
+            } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_Abstract) {
+                $model = get_class($recordField);
+                $emptyRecord = new $model(array(), true);
+                $subdiff = $emptyRecord->diff($recordField);
                 if (is_object($subdiff) && ! $subdiff->isEmpty()) {
                     $diff[$fieldName] = $subdiff;
                     $oldData[$fieldName] = $ownField;
                 }
                 continue;
-            } else if ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
+            } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_RecordSet) {
+                $emptyRecordSet = new Tinebase_Record_RecordSet($recordField->getRecordClassName(), array());
+                $subdiff = $emptyRecordSet->diff($recordField);
+                if (is_object($subdiff) && ! $subdiff->isEmpty()) {
+                    $diff[$fieldName] = $subdiff;
+                    $oldData[$fieldName] = $ownField;
+                }
+                continue;
+            } elseif ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
                 // maybe we have the id of the record -> just compare the id
                 if ($recordField->getId() == $ownField) {
                     continue;
                 } else {
                     $recordField = $recordField->getId();
                 }
-            } else if ($ownField == $recordField) {
+            } elseif ($ownField == $recordField) {
                 continue;
-            } else if (empty($ownField) && empty($recordField)) {
+            } elseif (empty($ownField) && empty($recordField)) {
                 continue;
-            } else if ((empty($ownField)    && $recordField instanceof Tinebase_Record_RecordSet && count($recordField) == 0)
+            } elseif ((empty($ownField)    && $recordField instanceof Tinebase_Record_RecordSet && count($recordField) == 0)
                 ||     (empty($recordField) && $ownField    instanceof Tinebase_Record_RecordSet && count($ownField) == 0) )
             {
                 continue;

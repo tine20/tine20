@@ -1134,7 +1134,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * set system notes
      *
      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $_record          the update record
      * @param   string $_systemNoteType
      * @param   Tinebase_Record_RecordSet $_currentMods
      */
