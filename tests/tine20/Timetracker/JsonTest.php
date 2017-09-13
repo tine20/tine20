@@ -135,6 +135,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(TRUE), $this->_getPaging());
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
+
+        // TODO enable this assertation and clean up the timetracker json converter to use abstract code!
+        //$this->assertEquals(Tinebase_Core::getUser()->getId(), $search['results'][0]['created_by']['accountId']);
     }
 
     /**
