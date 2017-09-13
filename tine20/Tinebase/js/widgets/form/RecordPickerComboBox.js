@@ -241,7 +241,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             scope: this,
             contextmenu: Ext.emptyFn
         });
- 
+
         this.relayEvents(c, ['contextmenu']);
     },
     
@@ -340,6 +340,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         return this;
     },
 
+    // otherwise we can't distinguish between typeAhead and ctrl+z
+    filterValidation : Ext.emptyFn,
+
     validateValue : function(value){
         // happens when removing contents and pressing ctrl+z
         if (Ext.isString(value) && ! this.selectedRecord) {
@@ -349,5 +352,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         return this.supr().validateValue(value);
     }
+
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);
