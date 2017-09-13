@@ -1822,4 +1822,19 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    public function waitForActionQueueToEmpty()
+    {
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (!$actionQueue->hasAsyncBackend()) {
+            return 0;
+        }
+
+        $startTime = time();
+        while ($actionQueue->getQueueSize() > 0 && time() - $startTime < 300) {
+            usleep(1000);
+        }
+
+        return $actionQueue->getQueueSize();
+    }
 }
