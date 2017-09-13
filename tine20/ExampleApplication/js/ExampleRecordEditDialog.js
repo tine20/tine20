@@ -83,7 +83,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                     ] 
                 }, {
                     // tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

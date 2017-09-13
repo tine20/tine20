@@ -341,16 +341,10 @@ msgstr "Timezone"
 msgid "Geo"
 msgstr "Geo"
 
-#: js/ContactGrid.js:248 js/Model.js:380 js/ListRoleGridPanel.js:50
-#: Controller.php:193
-msgid "List Roles"
-msgstr "List Roles"
-
-#: js/ListRoleMemberFilterModel.js:37 js/Model.js:380
-msgid "List Role"
-msgid_plural "List Roles"
-msgstr[0] "List Role"
-msgstr[1] "List Roles"
+#: js/ContactGrid.js:248 js/ListRoleMemberFilterModel.js:37 js/Model.js:380
+#: js/ListRoleGridPanel.js:50 Controller.php:193
+msgid "List Functions"
+msgstr "List Functions"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -492,6 +486,12 @@ msgstr[1] "Email Addresses"
 #: js/Model.js:333
 msgid "Email Addresses"
 msgstr "Email Addresses"
+
+#: js/Model.js:380
+msgid "List Function"
+msgid_plural "List Functions"
+msgstr[0] "List Function"
+msgstr[1] "List Functions"
 
 #: js/Model.js:411 Controller.php:202
 msgid "Industries"
@@ -810,12 +810,12 @@ msgid "View, create, delete or update lists in CoreData application"
 msgstr "View, create, delete or update lists in CoreData application"
 
 #: Acl/Rights.php:134
-msgid "Manage list roles in CoreData"
-msgstr "Manage list roles in CoreData"
+msgid "Manage list functions in CoreData"
+msgstr "Manage list functions in CoreData"
 
 #: Acl/Rights.php:135
-msgid "View, create, delete or update list roles in CoreData application"
-msgstr "View, create, delete or update list roles in CoreData application"
+msgid "View, create, delete or update list functions in CoreData application"
+msgstr "View, create, delete or update list functions in CoreData application"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"

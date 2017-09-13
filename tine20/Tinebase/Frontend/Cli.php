@@ -331,7 +331,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
 
-        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__);
+        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__ . '::' . Tinebase_Core::getTinebaseId());
         if (! $freeLock) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Job already running.');
@@ -360,10 +360,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * process given queue job
-     *  --message json encoded task
+     *  --jobId the queue job id to execute
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return bool success
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function executeQueueJob($_opts)
     {
@@ -376,23 +377,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $args = $_opts->getRemainingArgs();
-        $message = preg_replace('/^message=/', '', $args[0]);
+        $jobId = preg_replace('/^jobId=/', '', $args[0]);
         
-        if (! $message) {
-            throw new Tinebase_Exception_InvalidArgument('mandatory parameter "message" is missing');
+        if (! $jobId) {
+            throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        if (null === ($job = json_decode($message, true))) {
-            throw new Tinebase_Exception_InvalidArgument('parameter "message" can not be json decoded');
-        }
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
             Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
         }
 
-        Tinebase_ActionQueue::getInstance()->executeAction($job);
+        $result = $actionQueue->executeAction($job);
         
-        return TRUE;
+        return false !== $result;
     }
     
     /**
@@ -1580,6 +1580,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     </field>
                 </index>
             ');
+            $setupBackend->addIndex('sales_order_conf', $declaration);
+        } catch (Exception $e) {
+            $failures[] = 'sales_order_conf';
+        }
+
+        try {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>description</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>description</name>
+                    </field>
+                </index>
+            ');
             $setupBackend->addIndex('tasks', $declaration);
         } catch (Exception $e) {
             $failures[] = 'tasks';
@@ -1806,5 +1821,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         return 0;
+    }
+
+    public function waitForActionQueueToEmpty()
+    {
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (!$actionQueue->hasAsyncBackend()) {
+            return 0;
+        }
+
+        $startTime = time();
+        while ($actionQueue->getQueueSize() > 0 && time() - $startTime < 300) {
+            usleep(1000);
+        }
+
+        return $actionQueue->getQueueSize();
     }
 }

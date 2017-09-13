@@ -246,11 +246,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
 
-        if (! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_READ) ||
-            ! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_SYNC)) {
+        if ((! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_READ) ||
+                ! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_SYNC)) &&
+                ($directory->model !== Calendar_Model_Event::class ||
+                ! isset($directory->xprops()['Calendar']['Resource']['resource_id']) ||
+                !Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
-                . ' has neither READ nor SYNC grants for container ' . $directory->getId());
+                . ' has either not READ or SYNC grants for container ' . $directory->getId());
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
 

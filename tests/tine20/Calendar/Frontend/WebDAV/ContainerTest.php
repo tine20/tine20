@@ -387,9 +387,18 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $shares = $container->getShares();
 
         $this->assertEquals(2, count($shares), 'should find 2 shares');
-        $this->assertEquals('urn:uuid:anyone', $shares[0]['href']);
-        $this->assertEquals('urn:uuid:'
-            . Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup)->list_id, $shares[1]['href']);
+        $hrefsToFind = array(
+            'urn:uuid:anyone',
+            'urn:uuid:'
+                . Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup)->list_id
+        );
+        $found = 0;
+        foreach ($shares as $share) {
+            if (in_array($share['href'], $hrefsToFind)) {
+                $found++;
+            }
+        }
+        self::assertEquals(2, $found, 'should find 2 hrefs in shares: ' . print_r($hrefsToFind, true));
     }
     
     /**

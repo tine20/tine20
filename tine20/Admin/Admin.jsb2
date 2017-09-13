@@ -114,6 +114,10 @@
         {
           "text": "GridPanel.js",
           "path": "js/config/"
+        },
+        {
+          "text": "QuotaUsage.js",
+          "path": "js/"
         }
       ]
     },

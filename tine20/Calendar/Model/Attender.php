@@ -225,7 +225,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getName()
     {
-        $resolvedUser = $this->getResolvedUser();
+        $resolvedUser = $this->getResolvedUser(null, false);
         if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
             Tinebase_Translation::getTranslation('Calendar');
             return Tinebase_Translation::getTranslation('Calendar')->_('unknown');
@@ -256,11 +256,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @return Tinebase_Record_Abstract
      */
-    public function getResolvedUser($event=null)
+    public function getResolvedUser($event = null, $resolveDisplayContainer = true)
     {
         $clone = clone $this;
         $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
-        self::resolveAttendee($resolvable, true, $event);
+        self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
         
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
@@ -944,7 +944,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @todo move status_authkey cleanup elsewhere
      * @todo use self::getResolvedAttendees to avoid code duplication
-     * 
+     *
      * @param Tinebase_Record_RecordSet|array   $eventAttendees 
      * @param bool                              $resolveDisplayContainers
      * @param Calendar_Model_Event|array        $_events
@@ -956,7 +956,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $eventAttendee = $eventAttendees instanceof Tinebase_Record_RecordSet ? array($eventAttendees) : $eventAttendees;
-
 
         $events = !$_events ? array() : $_events;
         $events = $_events instanceof Tinebase_Record_Abstract ? array($events) : $events;
@@ -995,7 +994,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         $organizerIds = array();
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $organizerId = $event->organizer;
             if (! $organizerId instanceof Addressbook_Model_Contact) {
                 $organizerIds[] = $organizerId;
@@ -1036,7 +1035,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         // sort entries in
-        foreach($events as $event) {
+        foreach ($events as $event) {
             if ($event->organizer && ! $event->organizer instanceof Addressbook_Model_Contact) {
                 $event->organizer = $contacts->getById($event->organizer);
             }
@@ -1045,7 +1044,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
-                    // allready resolved from cache
+                    // already resolved from cache
                     continue;
                 }
                 
@@ -1063,10 +1062,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
                 
                 if ($idx !== false) {
+                    $user = $attendeeTypeSet[$idx];
                     // copy to cache
-                    self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id] = $attendeeTypeSet[$idx];
+                    self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id] = $user;
                     
-                    $attender->user_id = $attendeeTypeSet[$idx];
+                    $attender->user_id = $user;
                 }
             }
         }
@@ -1092,6 +1092,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})
                     && (!$event || !$event->hasExternalOrganizer())
                 ) {
+                    continue;
+                }
+
+                // keep authkey if attender is a resource and user has manage_resources
+                if ($attender->user_type === static::USERTYPE_RESOURCE &&
+                    Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
                     continue;
                 }
                 

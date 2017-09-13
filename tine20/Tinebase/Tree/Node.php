@@ -133,9 +133,9 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
 
         if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $select->columns('CAST(MIN(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ') = MIN(' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS int) AS isIndexed');
+            $select->columns(new Zend_Db_Expr('CAST(MIN(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ') = MIN(' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS int) AS ' . $this->_db->quoteIdentifier('isIndexed')));
         } else {
-            $select->columns('(' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ') AS ' . $this->_db->quoteIdentifier('isIndexed'));
+            $select->columns(new Zend_Db_Expr('IF (' . $this->_db->quoteIdentifier('tree_fileobjects.indexed_hash') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.hash') . ', TRUE, FALSE) AS ' . $this->_db->quoteIdentifier('isIndexed')));
         }
             
         return $select;
@@ -157,7 +157,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $this->_inspectForPreviewCreation($_newRecord);
 
         if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
-            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'created');
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.checkForCRUDNotifications', $_newRecord->getId(), 'created');
         }
     }
 
@@ -201,7 +201,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
-                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_Filesystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
+                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
             }
         }
 

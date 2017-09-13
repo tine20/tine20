@@ -66,9 +66,13 @@ trait Calendar_Export_GenericTrait
      */
     protected function _exportRecords()
     {
-        // to support rrule & sorting we can't do pagination in calendar exports
-        $records = $this->_controller->search($this->_filter, NULL, $this->_getRelations, false, 'export');
-        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
+        if (!isset($this->_records)) {
+            // to support rrule & sorting we can't do pagination in calendar exports
+            $records = $this->_controller->search($this->_filter, null, $this->_getRelations, false, 'export');
+            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
+        } else {
+            $records = $this->_records;
+        }
 
         // explode multiday whole day events to multiple, one day whole day events
         $multiDayConfig = $this->_config->get('multiDay', NULL);
@@ -161,11 +165,16 @@ trait Calendar_Export_GenericTrait
     {
         parent::_resolveRecords($_records);
 
+        if ('Calendar_Model_Event' !== $_records->getRecordClassName() ||
+                'Calendar_Export_Ods' !== static::class) {
+            return;
+        }
+
         Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
 
         foreach($_records as $record) {
             $attendee = $record->attendee->getName();
-            $record->attendee = implode('& ', $attendee);
+            $record->attendee = implode(' & ', $attendee);
 
             $organizer = $record->resolveOrganizer();
             if ($organizer) {

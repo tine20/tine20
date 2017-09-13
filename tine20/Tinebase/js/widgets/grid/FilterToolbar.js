@@ -496,7 +496,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (typeof this.layout.layout == 'function') {
             Tine.widgets.grid.FilterToolbar.superclass.doLayout.apply(this, arguments);
         }
-        
+
         if (this.rendered) {
             this.arrangeButtons();
             

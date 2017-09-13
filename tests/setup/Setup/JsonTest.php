@@ -26,7 +26,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * Authentication data as stored in config before a test runs.
-     * Needed to restore originakl state after a test ran.
+     * Needed to restore original state after a test ran.
      * @see setUp()
      * @see teardown()
      *
@@ -214,7 +214,11 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $testAuthenticationData['authentication'][Tinebase_Auth::SQL]['adminPasswordConfirmation'] = 'phpunit-password';
         
         $this->_uninstallAllApps();
-        
+
+        // sleep to prevent problems with cached stuff before re-install
+        sleep(5);
+
+        // saveAuthentication re-installs 'Addressbook', 'Tinebase', 'Admin'
         $result = $this->_json->saveAuthentication($testAuthenticationData);
         
         $savedAuthenticationData = $this->_json->loadAuthenticationData();
@@ -232,9 +236,11 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->assertTrue(empty($baseApplicationStack), 'Assure that base application stack was installed after saving authentication');
+        $this->assertTrue(empty($baseApplicationStack),
+            'Assure that base application stack was installed after saving authentication');
 
-        $this->_uninstallAllApps(); //Ensure that all aps get re-installed with default username/password because some tests rely on these values
+        // Ensure that all aps get re-installed with default username/password because some tests rely on these values
+        $this->_uninstallAllApps();
     }
 
     /**
@@ -296,7 +302,13 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->_json->uninstallApplications($installedApplications);
 
+        $this->_clearCachesAndRegistry();
+    }
+
+    protected function _clearCachesAndRegistry()
+    {
         Tinebase_Core::unsetTinebaseId();
+        Tinebase_Core::unsetUser();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
@@ -307,10 +319,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _installAllApps()
     {
-        Tinebase_Core::unsetTinebaseId();
-        Tinebase_Group::unsetInstance();
-        Tinebase_Cache_PerRequest::getInstance()->reset();
-        Admin_Config::unsetInstance();
+        $this->_clearCachesAndRegistry();
 
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);

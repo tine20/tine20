@@ -32,7 +32,25 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_uit = Setup_Controller::getInstance();
+        $this->_uit = Setup_ControllerMock::getInstance();
+
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if (null === ($oldUser = Tinebase_Core::getUser())) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
+
+        foreach ($setupUser->getGroupMemberships() as $gId) {
+            Tinebase_Group::getInstance()->removeGroupMember($gId, $setupUser->accountId);
+        }
+        Tinebase_Group::unsetInstance();
+        foreach (Tinebase_Acl_Roles::getInstance()->getRoleMemberships($setupUser->accountId) as $rId) {
+            Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, $setupUser->accountId);
+        }
+        Tinebase_Acl_Roles::unsetInstance();
+
+        if (null === $oldUser) {
+            Tinebase_Core::unsetUser();
+        }
     }
 
     /**

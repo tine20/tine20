@@ -58,7 +58,13 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * the record model
      */
     record_model: null,
-    
+
+    /**
+     * @cfg {Number} pos
+     * position 500 = 100 + 100*4 -> means fourth one after app specific tabs
+     */
+    pos: 500,
+
     /**
      * other config options
      */
@@ -89,7 +95,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 20,
+            pageSize: parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || 50,
             store: this.store,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying history records {0} - {1} of {2}'),
@@ -126,6 +132,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             app = Tine.Tinebase.appMgr.get(appName),
             i18n = app ? app.i18n : window.i18n;
 
+        note = Ext.util.Format.htmlEncode(note);
+        
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 var _ = window.lodash,

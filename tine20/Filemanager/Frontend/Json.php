@@ -160,7 +160,22 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getNode($id)
     {
-        return $this->_get($id, Filemanager_Controller_Node::getInstance());
+        $controller = Filemanager_Controller_Node::getInstance();
+        $context = $controller->getRequestContext();
+        if (!is_array($context)) {
+            $context = array();
+        }
+        $context['quotaResult'] = true;
+        $controller->setRequestContext($context);
+
+        $result = $this->_get($id, $controller);
+
+        $context = $controller->getRequestContext();
+        if (is_array($context) && isset($context['quotaResult']) && is_array($context['quotaResult'])) {
+            $result['effectiveAndLocalQuota'] = $context['quotaResult'];
+        }
+
+        return $result;
     }
     
     /**

@@ -18,3 +18,13 @@
 .x-btn-large .activesync-device-standard {
     background-image:url(../../images/oxygen/32x32/devices/phone.png) !important;
 }
+
+.action_wipeDevice {
+    background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
+}
+.x-btn-medium .action_wipeDevice {
+    background-image:url(../../images/oxygen/22x22/actions/emptytrash.png) !important;
+}
+.x-btn-large .action_wipeDevice {
+    background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
+}

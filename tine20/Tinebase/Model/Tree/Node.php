@@ -75,7 +75,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var array list of modlog omit fields
      */
     protected $_modlogOmitFields = array('revision', 'contenttype', 'description', 'revision_size', 'indexed_hash',
-        'hash', 'size', 'preview_count', 'available_revisions', 'path');
+        'hash', 'size', 'preview_count', 'available_revisions', 'path', 'isIndexed');
 
     /**
      * if foreign Id fields should be resolved on search and get from json
@@ -294,7 +294,21 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      */
     public function isReplicable()
     {
-        return $this->type === Tinebase_Model_Tree_FileObject::TYPE_FILE || $this->type ===
-            Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+        if ($this->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+            return true;
+        }
+        if ($this->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+            if (strlen($this->name) === 3 &&
+                    Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() === $this->parent_id) {
+                return false;
+            }
+            if (strlen($this->name) === 37 && null !== $this->parent_id &&
+                    Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() ===
+                    Tinebase_FileSystem::getInstance()->get($this->parent_id)->parent_id) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }

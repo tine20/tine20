@@ -19,16 +19,39 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
      */
     prepareData: function (editDialog) {
         return new Promise(function (fulfill, reject) {
-            var form = editDialog.getForm(),
-                recordData = Ext.util.JSON.decode(Ext.util.JSON.encode(editDialog.record.data));
+            var _ = window.lodash;
 
-            form.items.each(function (field) {
-                if ((field instanceof Ext.form.ComboBox) && field.selectedRecord) {
-                    recordData[field.getName()] = field.getRawValue();
-                }
+            // hack to have all form items rendered
+            _.each(editDialog.findByType('tabpanel'), function(tabpanel) {
+                var active = tabpanel.getActiveTab();
+                _.each(tabpanel.items.items, function(item) {
+                    tabpanel.setActiveTab(item);
+                });
+                tabpanel.setActiveTab(active);
             });
 
-            fulfill(recordData);
+            // wait for rendering
+            (function() {
+                var recordData = Ext.util.JSON.decode(Ext.util.JSON.encode(editDialog.record.data));
+
+                editDialog.getForm().items.each(function (field) {
+                    if (field instanceof Ext.form.ComboBox || ! Ext.isString(recordData[name])) {
+                        var name = field.getName(),
+                            isCustomField = name.match(/^customfield_(.*)/),
+                            string = field.getRawValue();
+
+                        if (isCustomField) {
+                            _.set(recordData, 'customfields.' + isCustomField[1], string);
+                        } else {
+                            recordData[name] = string;
+
+                        }
+                    }
+                });
+
+                fulfill(recordData);
+            }).defer(1000);
+
         });
     }
 });

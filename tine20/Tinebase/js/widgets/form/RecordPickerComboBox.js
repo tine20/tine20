@@ -100,9 +100,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     additionalFilters: null,
     
     triggerAction: 'all',
-    pageSize: 10,
+    pageSize: 50,
     minChars: 3,
     forceSelection: true,
+    minListWidth: 300,
     
     /**
      * additional filters to use for each query
@@ -119,7 +120,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.emptyText = this.emptyText || i18n._('Search for record ...')
 
         this.loadingText = i18n._('Searching...');
-        
+
+        this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
+
         this.store = new Tine.Tinebase.data.RecordStore({
             readOnly: true,
             proxy: this.recordProxy || undefined,
@@ -238,7 +241,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             scope: this,
             contextmenu: Ext.emptyFn
         });
- 
+
         this.relayEvents(c, ['contextmenu']);
     },
     
@@ -335,6 +338,20 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         this.value = value;
         return this;
+    },
+
+    // otherwise we can't distinguish between typeAhead and ctrl+z
+    filterValidation : Ext.emptyFn,
+
+    validateValue : function(value){
+        // happens when removing contents and pressing ctrl+z
+        if (Ext.isString(value) && ! this.selectedRecord) {
+            value = null;
+            this.setRawValue('');
+        }
+
+        return this.supr().validateValue(value);
     }
+
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);

@@ -231,7 +231,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                         '<html>',
                         '<head> ',
                         '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
-                        me.getAdditionalHeaders(),
+                        '<x-additional-headers />',
                         '<link href="' + me.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
                         '<title>' + me.getTitle(component) + '</title>',
                         '</head>',
@@ -240,7 +240,8 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                         bodyHtml,
                         '</body>',
                         '</html>'
-                    ).apply(data));
+                    // NOTE: we need to append additional headers outside xtemplate as the template.compile has problems e.g. with complex css structures
+                    ).apply(data).replace('<x-additional-headers />', me.getAdditionalHeaders()));
                 });
             });
         });

@@ -138,7 +138,7 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                 }, 
                 {
                 // activities and tags
-                layout: 'accordion',
+                layout: 'ux.multiaccordion',
                 animate: true,
                 region: 'east',
                 width: 210,

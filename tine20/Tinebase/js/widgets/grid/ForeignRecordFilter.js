@@ -132,7 +132,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 appName = foreignRecordClass.getMeta('appName'),
                 app = Tine.Tinebase.appMgr.get(appName),
                 label = app ? app.i18n._hidden(def.label) : def.label;
-            
+
             operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);
         
@@ -154,7 +154,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     initExplicit: function() {
         this.foreignField = this.foreignRecordClass.getMeta('idProperty');
-        
+
         var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
             i18n;
         if (foreignApp) {
@@ -163,33 +163,39 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             i18n = new Locale.Gettext();
             i18n.textdomain('Tinebase');
         }
-        
+
         if (! this.label) {
             this.label = i18n.n_(this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1);
         } else {
             this.label = i18n._(this.label);
         }
-        
+
         if (! this.operators) {
             this.operators = ['equals', 'not', 'definedBy'];
         }
 
-        // NOTE: Tine.widgets.grid.FilterModel can't cope with custom operators/values yet
-        // // get operators from registry
-        // Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function(def) {
-        //     // translate label
-        //     var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
-        //         appName = foreignRecordClass.getMeta('appName'),
-        //         app = Tine.Tinebase.appMgr.get(appName),
-        //         label = app ? app.i18n._hidden(def.label) : def.label;
-        //
-        //     this.operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
-        // }, this);
+        // get operators from registry
+        if (this.ownRecordClass) {
+            Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function (def) {
+                // translate label
+                var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
+                    appName = foreignRecordClass.getMeta('appName'),
+                    app = Tine.Tinebase.appMgr.get(appName),
+                    label = app ? app.i18n._hidden(def.label) : def.label;
+
+                this.operators.push({
+                    operator: Ext.apply(def, {
+                        foreignRecordClass: foreignRecordClass
+                    }),
+                    label: label
+                });
+            }, this);
+        }
+
 
         if (! this.defaultOperator) {
             this.defaultOperator = 'equals';
         }
-        
     },
     
     /**
@@ -215,7 +221,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * NOTE: generic filters have their foreign record definition in the values
      */
     getRelatedRecordValue: function(filter) {
-        var filters = filter.toolbar ? filter.toolbar.getValue() : [],
+        var _ = window.lodash,
+            me = this,
+            filters = filter.toolbar ? filter.toolbar.getValue() : [],
             foreignRecordClass = filter.foreignRecordDefinition.foreignRecordClass,
             value;
             
@@ -230,19 +238,36 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
         } else {
             value = filters;
-            // get value for idField if our own operator is not definedBy
-            if (filter.get('operator') != 'definedBy') {
-                value.push({field: ':' + foreignRecordClass.getMeta('idProperty'), operator: filter.get('operator'), value: filter.formFields.value.value});
-            }
-            
-            // get values of filters of our toolbar we are superfilter for (left hand stuff)
-            this.ftb.filterStore.each(function(filter) {
-                var filterModel = this.ftb.getFilterModel(filter);
-                if (filterModel.superFilter && filterModel.superFilter == this) {
-                    var filterData = this.ftb.getFilterData(filter);
-                    value.push(filterData);
+
+            var operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
+                registeredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
+
+            if (registeredOperator) {
+                value.push({
+                    filterName: registeredOperator.filterName,
+                    field: ':' + registeredOperator.field,
+                    operator: registeredOperator.operator,
+                    value: filter.formFields.value.value
+                });
+            } else {
+                // get value for idField if our own operator is not definedBy
+                if (filter.get('operator') != 'definedBy') {
+                    value.push({
+                        field: ':' + foreignRecordClass.getMeta('idProperty'),
+                        operator: filter.get('operator'),
+                        value: filter.formFields.value.value
+                    });
                 }
-            }, this);
+
+                // get values of filters of our toolbar we are superfilter for (left hand stuff)
+                this.ftb.filterStore.each(function (filter) {
+                    var filterModel = this.ftb.getFilterModel(filter);
+                    if (filterModel.superFilter && filterModel.superFilter == this) {
+                        var filterData = this.ftb.getFilterData(filter);
+                        value.push(filterData);
+                    }
+                }, this);
+            }
             
         }
         
@@ -254,11 +279,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {} filter
      */
     setRelatedRecordValue: function(filter) {
-        var value = filter.get('value');
+        var _ = window.lodash,
+            me = this,
+            value = filter.get('value'),
+            operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
+            isRegisteredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
         
-        if (['equals', 'not', 'oneOf'].indexOf(filter.get('operator') ? filter.get('operator') : filter.formFields.operator.origGetValue()) >= 0 ) {
+        if (isRegisteredOperator || ['equals', 'not', 'oneOf'].indexOf(operator) >= 0) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
-            return filter.formFields.value.origSetValue(arguments[1] ? arguments[1] : value);
+            return filter.formFields.value.origSetValue(arguments.length ? arguments[1] : value);
         }
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
@@ -309,11 +338,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     field = parts[2];
                 
                 if (leftHand) {
-                    // leftHand id property is handled below
-                    if (field == foreignRecordIdProperty) {
+                    // leftHand id property and registered operators are handled below
+                    if (field == foreignRecordIdProperty || filterData.filterName) {
                         return;
                     }
-                    
+
                     // move filter to leftHand/parent filterToolbar
                     if (this.ftb.getFilterModel(filterData.field)) {
                         // ftb might have a record with this id
@@ -347,6 +376,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filter.set('value', value[0].value);
                 filter.formFields.operator.setValue(value[0].operator);
                 this.onOperatorChange(filter, value[0].operator, true);
+            }
+
+            // a single registered filter is always displayed in the parent Toolbar with our own filterRow
+            else if (value.length == 1 && (registeredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == value[0].filterName;}), 'operator', false))) {
+                filter.set('value', value[0].value);
+                filter.formFields.operator.setValue(registeredOperator.filterName);
+                this.onOperatorChange(filter, registeredOperator.filterName, true);
+                filter.formFields.value.origSetValue(value[0].value)
             }
             
             // set remaining child filters
@@ -495,7 +532,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+        var _ = window.lodash,
+            me = this,
+            operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
             value;
 
         switch(operator) {
@@ -518,42 +557,54 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                          this.onFiltertrigger();
                      }
                 }, this);
-                
+
                 value.origSetValue = value.setValue.createDelegate(value);
+
                 break;
-                
-            default: 
-                this.setRelatedRecordValue(filter);
-                
-                if (! filter.formFields.value) {
-                    value = new Ext.Button({
-                        text: i18n._(this.startDefinitionText),
-                        filter: filter,
-                        width: this.filterValueWidth,
-                        id: 'tw-ftb-frow-valuefield-' + filter.id,
-                        renderTo: el,
-                        handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
-                        scope: this
-                    });
-                    
-                    // show button
-                    el.addClass('x-btn-over');
-                    
-//                    value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
-//                    value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter]);
-                    
-                    // change text if setRelatedRecordValue had child filters
-                    if (filter.toolbar) {
-                        value.setText((this.editDefinitionText));
-                    }
-                
+
+            default:
+                var def = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', {}),
+                    backup = _.reduce(_.keys(def), function(bkup, key) {
+                        return _.set(bkup, key, me[key]);
+                    }, {}),
+                    valueType = _.get(def, 'valueType');
+
+                // cope with operator registry values
+                if ( valueType) {
+                    _.assign(me, def);
+                    value = Tine.widgets.grid.FilterModel.prototype.valueRenderer.call(me, filter, el);
+                    _.assign(me, backup);
+
+                    value.origSetValue = value.setValue.createDelegate(value);
                 } else {
-                    value = filter.formFields.value;
+                    this.setRelatedRecordValue(filter);
+
+                    if (!filter.formFields.value) {
+                        value = new Ext.Button({
+                            text: i18n._(this.startDefinitionText),
+                            filter: filter,
+                            width: this.filterValueWidth,
+                            id: 'tw-ftb-frow-valuefield-' + filter.id,
+                            renderTo: el,
+                            handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
+                            scope: this
+                        });
+
+                        // show button
+                        el.addClass('x-btn-over');
+
+                        // change text if setRelatedRecordValue had child filters
+                        if (filter.toolbar) {
+                            value.setText((this.editDefinitionText));
+                        }
+
+                    } else {
+                        value = filter.formFields.value;
+                    }
                 }
-                
                 break;
         }
-        
+
         value.setValue = this.setRelatedRecordValue.createDelegate(this, [filter], 0);
         value.getValue = this.getRelatedRecordValue.createDelegate(this, [filter]);
         

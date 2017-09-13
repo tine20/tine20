@@ -833,6 +833,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 $record = new Tinebase_Model_Group($diff->diff);
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                 $this->addGroup($record);
                 break;
 
@@ -842,7 +843,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                     $this->setGroupMembers($modification->record_id, $diff->diff['members']);
                 } else {
                     $record = $this->getGroupById($modification->record_id);
+                    $currentRecord = clone $record;
                     $record->applyDiff($diff);
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
                     $this->updateGroup($record);
                 }
                 break;

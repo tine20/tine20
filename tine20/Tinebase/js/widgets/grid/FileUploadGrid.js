@@ -209,12 +209,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             var filemanager = Tine.Tinebase.appMgr.get('Filemanager');
 
             this.action_add_from_filemanager = new Ext.Action({
-                text: String.format(filemanager.i18n._('Add {0} from Filemanager'), this.i18nFileString),
+                text: String.format(i18n._('Add {0} from Filemanager'), this.i18nFileString),
                 iconCls: 'action_add',
                 scope: this,
                 handler: function () {
                     var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                        title: filemanager.i18n._('Select a file'),
+                        title: i18n._('Select a file'),
                         singleSelect: true,
                         constraint: 'file'
                     });

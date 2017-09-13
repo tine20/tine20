@@ -320,7 +320,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: items
                 }, {
                     // activities and tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

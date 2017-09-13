@@ -128,28 +128,28 @@ msgstr "Ordner von E-Mailkonto {0}"
 msgid "Folders of all accounts"
 msgstr "Ordner aller E-Mailkonten"
 
-#: js/TreePanel.js:689
+#: js/TreePanel.js:691
 msgid "Total Messages:"
 msgstr "Nachrichten insgesamt:"
 
-#: js/TreePanel.js:693
+#: js/TreePanel.js:695
 msgid "Unread Messages:"
 msgstr "Ungelesene Nachrichten:"
 
-#: js/TreePanel.js:697
+#: js/TreePanel.js:699
 msgid "Name on Server:"
 msgstr "Name auf dem Server:"
 
-#: js/TreePanel.js:701
+#: js/TreePanel.js:703
 msgid "Last update:"
 msgstr "Zuletzt aktualisiert:"
 
-#: js/TreePanel.js:721
+#: js/TreePanel.js:723
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
 msgstr "Lade Nachrichten … ({0} erledigt)"
 
-#: js/TreePanel.js:737
+#: js/TreePanel.js:739
 #, python-brace-format
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
@@ -797,7 +797,7 @@ msgstr "mindestens eine Bedingung erfüllt ist"
 msgid "Do this action:"
 msgstr "Führe diese Aktion aus:"
 
-#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:280
+#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:281
 msgid "Keep a copy"
 msgstr "Kopie  zurückbehalten"
 
@@ -938,32 +938,32 @@ msgstr "Aktivieren"
 msgid "Disable"
 msgstr "Deaktivieren"
 
-#: js/sieve/RulesGridPanel.js:203
+#: js/sieve/RulesGridPanel.js:202
 msgid "ID"
 msgstr "ID"
 
-#: js/sieve/RulesGridPanel.js:210
+#: js/sieve/RulesGridPanel.js:209
 msgid "Conditions"
 msgstr "Bedingungen"
 
-#: js/sieve/RulesGridPanel.js:218
+#: js/sieve/RulesGridPanel.js:217
 msgid "Action"
 msgstr "Aktion"
 
-#: js/sieve/RulesGridPanel.js:311
+#: js/sieve/RulesGridPanel.js:312
 msgid "is greater than"
 msgstr "ist größer als"
 
-#: js/sieve/RulesGridPanel.js:311
+#: js/sieve/RulesGridPanel.js:312
 msgid "is less than"
 msgstr "ist weniger als"
 
-#: js/sieve/RulesGridPanel.js:322
+#: js/sieve/RulesGridPanel.js:323
 #, python-brace-format
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Header \"{0}\" enthält \"{1}\""
 
-#: js/sieve/RulesGridPanel.js:322
+#: js/sieve/RulesGridPanel.js:323
 #, python-brace-format
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Header \"{0}\" enthält \"{1}\""
@@ -1066,47 +1066,47 @@ msgstr "Fehler beim Speichern des Sieve-Skriptes"
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
-#: js/AttachmentUploadGrid.js:47
+#: js/AttachmentUploadGrid.js:49
 msgid "Attachment"
 msgstr "Anhang"
 
-#: js/AttachmentUploadGrid.js:56
-msgid "Filemanager (inline)"
-msgstr "Dateimanager (Inline)"
+#: js/AttachmentUploadGrid.js:58
+msgid "Filemanager (Download link)"
+msgstr "Dateimanager (Download Link)"
 
-#: js/AttachmentUploadGrid.js:59
-msgid "Filemanager (inline, password)"
-msgstr "Dateimanager (Inline, Passwort)"
+#: js/AttachmentUploadGrid.js:61
+msgid "Filemanager (Download link, password)"
+msgstr "Dateimanager (Download Link, Passwort)"
 
-#: js/AttachmentUploadGrid.js:62
+#: js/AttachmentUploadGrid.js:64
 msgid "Filemanager (Systemlink)"
 msgstr "Dateimanager (System Link)"
 
-#: js/AttachmentUploadGrid.js:119
+#: js/AttachmentUploadGrid.js:121
 msgid "Attachment Type"
 msgstr "Anhang Typ"
 
-#: js/AttachmentUploadGrid.js:120
+#: js/AttachmentUploadGrid.js:122
 msgid "Click icon to change"
-msgstr "Icon zum Ändern klicken"
+msgstr "Zum Ändern auf die Zeile klicken"
 
-#: js/AttachmentUploadGrid.js:142
+#: js/AttachmentUploadGrid.js:144
 msgid "name"
 msgstr "Name"
 
-#: js/AttachmentUploadGrid.js:149
+#: js/AttachmentUploadGrid.js:151
 msgid "size"
 msgstr "Größe"
 
-#: js/AttachmentUploadGrid.js:156
+#: js/AttachmentUploadGrid.js:158
 msgid "type"
 msgstr "Typ"
 
-#: js/AttachmentUploadGrid.js:199
+#: js/AttachmentUploadGrid.js:201
 msgid "Failure"
 msgstr "Fehler"
 
-#: js/AttachmentUploadGrid.js:200
+#: js/AttachmentUploadGrid.js:202
 msgid "This file is already attached to this record."
 msgstr "Diese Datei ist bereits an diesen Datensatz angehängt."
 
@@ -1159,75 +1159,79 @@ msgstr "Abwesenheitsnotiz von %1$s"
 msgid "You have new mail from "
 msgstr ""
 
-#: Config.php:95
+#: Config.php:103
 msgid "Vacation Templates Node ID"
 msgstr ""
 
-#: Config.php:104
+#: Config.php:112
 msgid "Email Notification Templates Node ID"
 msgstr ""
 
-#: Config.php:113
+#: Config.php:121
 msgid "Custom Vacation Message"
 msgstr "Benutzerdefnierte Abwesenheitsnotiz"
 
-#: Config.php:115
+#: Config.php:123
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
 
-#: Config.php:124
+#: Config.php:132
 msgid "Cache email body"
 msgstr "E-Mail zwischenspeichern"
 
-#: Config.php:126
+#: Config.php:134
 msgid "Should the email body be cached (recommended for slow IMAP server connections)"
 msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
 
-#: Config.php:135
+#: Config.php:143
 msgid "Delete Archived Mail"
 msgstr "Archivierte E-Mail löschen"
 
-#: Config.php:145
+#: Config.php:153
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
-#: Config.php:147
+#: Config.php:155
 msgid "Enabled features in Felamimail application."
 msgstr "Feature in der Felamimail Applikation aktivieren."
 
-#: Config.php:154
+#: Config.php:162
 msgid "Tine 2.0 Flag"
 msgstr "Tine 2.0 Flag"
 
-#: Config.php:155
+#: Config.php:163
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
 
-#: Config.php:163
+#: Config.php:171
 msgid "Filter E-Mail URIs"
 msgstr "E-Mail URIs filtern"
 
-#: Config.php:165
+#: Config.php:173
 msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on.)"
 msgstr ""
 
-#: Config.php:182
+#: Config.php:190
 msgid "System Account Folder Defaults"
 msgstr ""
 
-#: Config.php:184
+#: Config.php:192
 msgid "Paths of the special folders (like Sent, Trash, ...)"
 msgstr ""
 
-#: Config.php:193
+#: Config.php:201
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+#: Config.php:211
 msgid "Sieve Redirect Only Internal"
 msgstr ""
 
-#: Config.php:195
+#: Config.php:213
 msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
 msgstr ""
 
-#: Config.php:204 Config.php:206
+#: Config.php:222 Config.php:224
 msgid "Sieve Notification Bounces Reporting Email"
 msgstr ""
 
@@ -1346,6 +1350,12 @@ msgstr ".eml Dateianhang in weitergeleiteten Mails"
 #: Preference.php:134
 msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+
+#~ msgid "Filemanager (inline)"
+#~ msgstr "Dateimanager (Inline)"
+
+#~ msgid "Filemanager (inline, password)"
+#~ msgstr "Dateimanager (Inline, Passwort)"
 
 #~ msgid "Add Note"
 #~ msgstr "Notiz hinzufügen"

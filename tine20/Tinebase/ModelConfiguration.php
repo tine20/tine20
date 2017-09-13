@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -38,6 +38,7 @@
  * @property boolean    $hasNotes If this is true, the record has notes
  * @property boolean    $hasTags If this is true, the record has tags
  * @property boolean    $hasAttachments If this is true, the record has file attachments
+ * @property boolean    $hasAlarms If this is true, the record has alarms
  * @property boolean    $modlogActive If this is true, a modlog will be created
  * @property boolean    $multipleEdit If this is true, multiple edit of records of this model is possible
  * @property string     $multipleEditRequiredRight If multiple edit requires a special right, it's defined here
@@ -240,6 +241,13 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_hasAttachments = NULL;
+
+    /**
+     * If this is true, the record has alarms
+     *
+     * @var boolean
+     */
+    protected $_hasAlarms = NULL;
 
     /**
      * If this is true, the record has extended properties
@@ -703,7 +711,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
-        'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton',
+        'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms', 'idProperty', 'splitButton',
         'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group',
     );
 
@@ -927,6 +935,13 @@ class Tinebase_ModelConfiguration {
             $this->_fields['attachments'] = array(
                 'label' => NULL,
                 'type'  => 'attachments'
+            );
+        }
+
+        if ($this->_hasAlarms) {
+            $this->_fields['alarms'] = array(
+                'label' => NULL,
+                'type'  => 'alarms'
             );
         }
 
@@ -1566,6 +1581,9 @@ class Tinebase_ModelConfiguration {
                     }
                     if ($fr->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
                         Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($foreignRecords);
+                    }
+                    if ($fr->has('alarms')) {
+                        Tinebase_Alarm::getInstance()->getAlarms($foreignRecords);
                     }
                 }
 

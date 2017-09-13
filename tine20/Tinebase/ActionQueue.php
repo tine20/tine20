@@ -20,8 +20,9 @@
  *
  * @method int getQueueSize()
  * @method int waitForJob()
- * @method string receive(integer $jobId)
+ * @method array receive(integer $jobId)
  * @method void delete(integer $jobId)
+ * @method void reschedule(string $jobId)
  *
  */
  class Tinebase_ActionQueue implements Tinebase_Controller_Interface
@@ -56,10 +57,10 @@
      *
      * @return Tinebase_ActionQueue
      */
-    public static function getInstance() 
+    public static function getInstance($_forceBackend = null)
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_ActionQueue();
+        if (self::$_instance === NULL || null !== $_forceBackend) {
+            self::$_instance = new Tinebase_ActionQueue($_forceBackend);
         }
         
         return self::$_instance;
@@ -76,14 +77,14 @@
     /**
      * constructor
      */
-    private function __construct()
+    private function __construct($_forceBackend = null)
     {
         $options = null;
-        $backend = self::BACKEND_DIRECT;
+        $backend = null === $_forceBackend ? self::BACKEND_DIRECT : $_forceBackend;
         $config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
 
         /** @noinspection PhpUndefinedFieldInspection */
-        if ($config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND}) && $config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+        if (null === $_forceBackend && $config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND}) && $config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             /** @noinspection PhpUndefinedFieldInspection */
             $options = $config->toArray();
             

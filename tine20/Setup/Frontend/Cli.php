@@ -263,7 +263,7 @@ class Setup_Frontend_Cli
                 }
             }
             $maxLoops--;
-        } while ($result['updated'] > 0 && $maxLoops > 0);
+        } while (isset($result['updated']) && $result['updated'] > 0 && $maxLoops > 0);
         
         return ($maxLoops > 0) ? 0 : 1;
     }
@@ -276,7 +276,14 @@ class Setup_Frontend_Cli
     protected function _updateApplications()
     {
         $controller = Setup_Controller::getInstance();
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                    . ' Could not get applications');
+            Tinebase_Exception::log($e);
+            return array();
+        }
         
         foreach ($applications as $key => &$application) {
             try {
@@ -432,13 +439,21 @@ class Setup_Frontend_Cli
 
     /**
      * Update Import Export Definitions for all applications
+     *
+     * @param Zend_Console_Getopt $_opts
      */
-    protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts){
-
+    protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (isset($options['onlyDefinitions'])) {
+            $onlyDefinitions = true;
+        } else {
+            $onlyDefinitions = false;
+        }
         //get all applications
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         foreach ($applications as $application) {
-            Setup_Controller::getInstance()->createImportExportDefinitions($application);
+            Setup_Controller::getInstance()->createImportExportDefinitions($application, $onlyDefinitions);
             echo "Update definitions for " . $application->name . "...\n";
         }
     }
@@ -856,7 +871,7 @@ class Setup_Frontend_Cli
     /**
      * parse remaining args
      * 
-     * @param string $_args
+     * @param array $_args
      * @return array
      */
     protected function _parseRemainingArgs($_args)

@@ -171,7 +171,7 @@ Tine.Addressbook.ContactGridPanel.displayNameRenderer = function(data) {
 
 Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
     data = Locale.getTranslationData('CountryList', data);
-    return data;
+    return Ext.util.Format.htmlEncode(data);
 };
 
 /**
@@ -245,7 +245,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
         { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
-        { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
+        { id: 'memberroles', header: i18n._('List Functions'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
     ];
 
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {

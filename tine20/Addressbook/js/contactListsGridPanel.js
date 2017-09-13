@@ -21,7 +21,9 @@ Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
     recordClass: Tine.Addressbook.Model.List,
     usePagingToolbar: false,
 
-    autoExpandColumn: 'name',
+    gridConfig: {
+        autoExpandColumn: 'name',
+    },
 
     // the list record
     record: null,
@@ -52,7 +54,7 @@ Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
 
     getColumns: function() {
         return [
-            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 30, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer, hidden: false },
+            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 20, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer, hidden: false },
             {id: 'name', header: this.app.i18n._("Name"), width: 100, sortable: true, dataIndex: 'name'
         }];
     },

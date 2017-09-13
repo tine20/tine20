@@ -357,12 +357,13 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         if(this.fireEvent("beforeload", this, params) !== false){
             
             // move paging to own object
-            var paging = {
-                sort:  params.sort,
-                dir:   params.dir,
-                start: params.start,
-                limit: params.limit
-            };
+            var _ = window.lodash,
+                paging = {
+                    sort:  _.get(params, 'paging.sort', params.sort),
+                    dir:   _.get(params, 'paging.dir', params.dir),
+                    start: _.get(params, 'paging.start', params.start),
+                    limit: _.get(params, 'paging.limit', params.limit)
+                };
             
             this.searchRecords(params.filter, paging, {
                 params: params,

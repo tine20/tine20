@@ -284,7 +284,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
 
-        if (! empty($event->rrule)) {
+        if (! empty($event->rrule) && ! $event->recurid) {
             try {
                 $eventSet->merge($this->getRecurExceptions($event, true));
             } catch (Tinebase_Exception_NotFound $e) {
@@ -2609,11 +2609,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($attender->displaycontainer_id) {
             // check if user is allowed to set status
-            if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
-                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
+                            Tinebase_Model_Grants::GRANT_EDIT) &&
+                        ! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
                     //If resource has an default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
-                } else {
+                }
+            } else {
+                if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
                     $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
                 }
             }
@@ -2711,13 +2715,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         // reset status if user has no right and authkey is wrong
-        if ($attender->displaycontainer_id) {
-            if (! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)
-                    && $attender->status_authkey != $currentAttender->status_authkey) {
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
-                $attender->status = $currentAttender->status;
+        if ($attender->displaycontainer_id && $attender->status_authkey !== $currentAttender->status_authkey) {
+            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
+                        Tinebase_Model_Grants::GRANT_EDIT)
+                    && !Tinebase_Core::getUser()->hasRight('Calendar',
+                        Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
+                    }
+                    $attender->status = $currentAttender->status;
+                }
+            } else {
+                if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
+                        Tinebase_Model_Grants::GRANT_EDIT)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
+                    }
+                    $attender->status = $currentAttender->status;
+                }
             }
         }
 

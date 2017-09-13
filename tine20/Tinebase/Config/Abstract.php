@@ -439,7 +439,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 // TODO do lint!?! php -l $confdFolder . DIRECTORY_SEPARATOR . $direntry
                 /** @noinspection PhpIncludeInspection */
                 $tmpArray = include($confdFolder . DIRECTORY_SEPARATOR . $direntry);
-                if (false !== $tmpArray) {
+                if (false !== $tmpArray && is_array($tmpArray)) {
                     foreach ($tmpArray as $key => $value) {
                         self::$_configFileData[$key] = $value;
                     }

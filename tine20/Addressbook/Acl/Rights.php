@@ -131,8 +131,8 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('View, create, delete or update lists in CoreData application'),
             ),
             self::MANAGE_CORE_DATA_LIST_ROLES => array(
-                'text'          => $translate->_('Manage list roles in CoreData'),
-                'description'   => $translate->_('View, create, delete or update list roles in CoreData application'),
+                'text'          => $translate->_('Manage list functions in CoreData'),
+                'description'   => $translate->_('View, create, delete or update list functions in CoreData application'),
             ),
         );
         

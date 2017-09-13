@@ -22,10 +22,47 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
 
     layout: 'fit',
     border: false,
+    requiredGrant: 'adminGrant',
 
     initComponent: function() {
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
         this.title = this.app.i18n._('Usage');
+
+        this.editDialog.on('load', this.onRecordLoad, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+
+        var _ = window.lodash,
+            fsConfig = Tine.Tinebase.configManager.get('quota'),
+            showQuotaUi = _.get(fsConfig, 'showUI', true),
+            bytesRenderer = Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3),
+            columns = [
+                {header: this.app.i18n._('Size'), width: 150, sortable: true, renderer: bytesRenderer, dataIndex: 'size'}
+            ];
+
+        this.hasOwnQuotaCheckbox = new Ext.form.Checkbox({
+            hidden: !showQuotaUi,
+            disabled: true,
+            boxLabel: this.app.i18n._('This folder has own quota'),
+            listeners: {scope: this, check: this.onOwnQuotaCheck}
+        });
+        this.quotaField = Ext.ComponentMgr.create({
+            hidden: !showQuotaUi,
+            fieldLabel: this.app.i18n.gettext('Quota'),
+            emptyText: this.app.i18n.gettext('no quota set'),
+            name: 'quota',
+            xtype: 'extuxbytesfield'
+        });
+        this.effetiveUsageField = Ext.ComponentMgr.create({
+            fieldLabel: this.app.i18n.gettext('Current Usage'),
+            name: 'effectiveQuota',
+            xtype: 'displayfield'
+        });
+
+        this.hasOwnQuotaDescription = new Ext.form.Label({
+            hidden: !showQuotaUi,
+            columnWidth: 1,
+            text: this.app.i18n._("The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota.")
+        });
 
         this.byTypeStore = new Ext.data.ArrayStore({
             fields: [
@@ -43,17 +80,13 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             ]
         });
 
-        var bytesRenderer = Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3),
-            columns = [
-            {header: this.app.i18n._('Size'), width: 150, sortable: true, renderer: bytesRenderer, dataIndex: 'size'}
-        ];
-
         if (Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
             columns.push({header: this.app.i18n._('Revision Size'), width: 150, sortable: true, renderer: bytesRenderer, dataIndex: 'revision_size'});
         }
 
         this.byTypeGrid = new Ext.grid.GridPanel({
             store: this.byTypeStore,
+            flex: 1,
             columns: [
                 {id:'type',header: this.app.i18n._('File Type'), width: 160, sortable: true, dataIndex: 'type'},
             ].concat(columns),
@@ -65,6 +98,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
 
         this.byUserGrid = new Ext.grid.GridPanel({
             store: this.byUserStore,
+            flex: 1,
             columns: [
                 {id:'user',header: this.app.i18n._('User'), width: 160, sortable: true, dataIndex: 'user'},
             ].concat(columns),
@@ -74,11 +108,29 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             // baseCls: 'ux-arrowcollapse'
         });
 
+        this.quotaPanel = {
+            layout: 'form',
+            frame: true,
+            hideLabels: true,
+            width: '100%',
+            items: [{
+                xtype: 'columnform',
+                items: [
+                    [this.effetiveUsageField, this.hasOwnQuotaCheckbox, this.quotaField],
+                    [this.hasOwnQuotaDescription]
+                ]
+            }]
+        };
         this.items = [{
             layout: 'vbox',
+            align: 'stretch',
+            pack: 'start',
             border: false,
-            defaults: {flex: 1},
-            items: [this.byTypeGrid, this.byUserGrid]
+            items: [
+                this.quotaPanel,
+                this.byTypeGrid,
+                this.byUserGrid
+            ]
         }];
         this.supr().initComponent.call(this);
     },
@@ -109,6 +161,35 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             return [lodash.get(userNameMap, user + '.n_fn' , me.app.i18n._('unknown')), o.size, o.revision_size];
         }));
 
+    },
+
+    onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            effectiveQuota = _.get(record, 'data.effectiveAndLocalQuota.effectiveQuota', null),
+            effectiveUsage = _.get(record, 'data.effectiveAndLocalQuota.effectiveUsage'),
+            quota = +record.get('quota'),
+            hasOwnQuota = !!quota;
+
+        this.hasOwnQuotaCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
+            || record.get('type') != 'folder');
+
+        this.hasOwnQuotaCheckbox.setValue(hasOwnQuota);
+        this.quotaField.setDisabled(! hasOwnQuota);
+
+        this.effetiveUsageField.setValue(Tine.widgets.grid.QuotaRenderer(effectiveUsage, effectiveQuota, true));
+    },
+
+    onOwnQuotaCheck: function(cb, checked) {
+        this.quotaField.setDisabled(! checked);
+        if (! checked) {
+            this.quotaField.setValue(null);
+        }
+    },
+
+    onRecordUpdate: function(editDialog, record) {
+        var quota = +this.quotaField.getValue() || null;
+
+        record.set('quota', quota);
     }
 });
 

@@ -41,6 +41,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
+                pos: 30,
                 layout: 'fit',
                 title: this.app.i18n._('Map'),
                 disabled: (Ext.isEmpty(this.record.get('adr_one_lon')) || Ext.isEmpty(this.record.get('adr_one_lat'))) && (Ext.isEmpty(this.record.get('adr_two_lon')) || Ext.isEmpty(this.record.get('adr_two_lat')))
@@ -384,9 +385,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     }]
                 }, {
                     // activities and tags
-                    // TODO make order of accordion items stateful
                     region: 'east',
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     width: 210,
                     split: true,

@@ -16,8 +16,9 @@
  * @subpackage  Acl
  *
  * @property string                     $id
- * @property Tinebase_Record_RecordSet  $members
  * @property string                     $name
+ * @property Tinebase_Record_RecordSet  $members
+ * @property Tinebase_Record_RecordSet  $rights
  *
  */
 class Tinebase_Model_Role extends Tinebase_Record_Abstract
@@ -28,6 +29,8 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected static $_isReplicable = true;
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -100,6 +103,11 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
         return $this->name;
     }
 
+    public static function setIsReplicable($bool = true)
+    {
+        static::$_isReplicable = (bool)$bool;
+    }
+
     /**
      * returns true if this record should be replicated
      *
@@ -107,7 +115,7 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
      */
     public function isReplicable()
     {
-        return true;
+        return static::$_isReplicable;
     }
 
     /**

@@ -238,7 +238,7 @@ Ext.namespace('Tine.Tasks');
                     ]]
                 }, {
                     // activities and tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

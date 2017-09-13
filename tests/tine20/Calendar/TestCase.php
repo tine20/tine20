@@ -351,6 +351,7 @@ abstract class Calendar_TestCase extends TestCase
             Tinebase_Model_Grants::GRANT_PRIVATE  => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            // TODO add sync grant?
         );
     }
     

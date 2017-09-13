@@ -347,18 +347,10 @@ msgstr ""
 msgid "Geo"
 msgstr ""
 
-#: js/ContactGrid.js:248 js/Model.js:380 js/ListRoleGridPanel.js:50
-#: Controller.php:193
-msgid "List Roles"
+#: js/ContactGrid.js:248 js/ListRoleMemberFilterModel.js:37 js/Model.js:380
+#: js/ListRoleGridPanel.js:50 Controller.php:193
+msgid "List Functions"
 msgstr ""
-
-#: js/ListRoleMemberFilterModel.js:37 js/Model.js:380
-msgid "List Role"
-msgid_plural "List Roles"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -508,6 +500,14 @@ msgstr[3] ""
 #: js/Model.js:333
 msgid "Email Addresses"
 msgstr ""
+
+#: js/Model.js:380
+msgid "List Function"
+msgid_plural "List Functions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: js/Model.js:411 Controller.php:202
 msgid "Industries"
@@ -826,11 +826,11 @@ msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
 
 #: Acl/Rights.php:134
-msgid "Manage list roles in CoreData"
+msgid "Manage list functions in CoreData"
 msgstr ""
 
 #: Acl/Rights.php:135
-msgid "View, create, delete or update list roles in CoreData application"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
 #: Export/Pdf.php:37

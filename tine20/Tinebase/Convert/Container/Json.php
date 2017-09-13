@@ -49,7 +49,7 @@ class Tinebase_Convert_Container_Json extends Tinebase_Convert_Json
             $containerArray = $container->toArray();
 
             if ($container instanceof Tinebase_Model_Container) {
-                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container)->toArray();
                 $containerArray['path'] = $container->getPath();
                 $ownerId = $container->getOwner();
             } else {

@@ -1,6 +1,6 @@
 Ext.ns('Tine.Filemanager');
 
-Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
+Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     /**
      * Node record to preview
      */
@@ -36,6 +36,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
       */
     containsScrollbar: true,
 
+    /**
+     * gray fbar
+     */
+    cls: 'tw-editdialog',
+
     initComponent: function () {
         this.addEvents(
             /**
@@ -44,13 +49,29 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             'noPreviewAvailable'
         );
 
-        Tine.Filemanager.DocumentPreview.superclass.initComponent.apply(this, arguments);
-
-        this.on('noPreviewAvailable', this.onNoPreviewAvailable.createDelegate(this));
+        this.on('noPreviewAvailable', this.onNoPreviewAvailable, this);
 
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
+
+        this.action_close = new Ext.Action({
+            text: this.app.i18n._('Close'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onClose,
+            iconCls: 'action_cancel'
+        });
+
+        this.fbar = ['->', this.action_close];
+
+        Ext.getBody().on('keydown', function (e) {
+            if (e.getKey() === e.SPACE || e.getKey() === e.ESC) {
+                this.onClose();
+            }
+        }, this);
+
+        Tine.Filemanager.DocumentPreview.superclass.initComponent.apply(this, arguments);
 
         if (!this.record) {
             this.fireEvent('noPreviewAvailable');
@@ -96,6 +117,15 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
      */
     onNoPreviewAvailable: function () {
         this.html = '<b>' + this.app.i18n._('No preview available.') + '</b>';
+    },
+
+    /**
+     * @private
+     */
+    onClose : function(){
+        this.fireEvent('cancel');
+        this.purgeListeners();
+        this.window.close();
     }
 });
 

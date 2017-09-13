@@ -783,6 +783,15 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         // this is needed for filesystem operations
         $this->_addRevisionPreviewCountCol();
 
+        $count = $this->_db->update(SQL_TABLE_PREFIX . 'container', array('model' => 'Tinebase_Model_Tree_Node'),
+            $this->_db->quoteIdentifier('model') . ' = "Tinebase_Model_Node"');
+        if ($count > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' updated ' . $count . ' containers with model "Tinebase_Model_Node" to "Tinebase_Model_Tree_Node"');
+            }
+        }
+
         $applications = Tinebase_Application::getInstance()->getApplications();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if ($setupUser) {
@@ -2026,9 +2035,34 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.43
+     *
+     * change configuration column to xprops in accounts
      */
     public function update_42()
+    {
+        if ($this->getTableVersion('accounts') < 14) {
+            try {
+                $this->_backend->dropCol('accounts', 'configuration');
+            } catch (Exception $e) {
+                // ignore .. :)
+            }
+
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+            $this->setTableVersion('accounts', 14);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.43');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_43()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

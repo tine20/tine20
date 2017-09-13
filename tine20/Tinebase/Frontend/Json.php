@@ -1505,12 +1505,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
         $path = $fileObject->getFilesystemPath();
-        $result = '';
+
         if (is_file($path)) {
-            $result = file_get_contents($path);
+            if (false === ($data = file_get_contents($path))) {
+                throw new Tinebase_Exception_Backend('could not open blob file: ' . $hash);
+            }
+        } else {
+            throw new Tinebase_Exception_NotFound('could not find blob: ' . $hash);
         }
 
-        return $result;
+        return array(
+            'success' => true,
+            'data'    => base64_encode($data)
+        );
     }
 
     /**

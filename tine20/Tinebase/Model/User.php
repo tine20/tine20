@@ -129,9 +129,12 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'deleted_time'          => array('allowEmpty' => true),
         'deleted_by'            => array('allowEmpty' => true),
         'seq'                   => array('allowEmpty' => true),
+        'xprops'                => array('allowEmpty' => true),
     );
 
     protected static $_replicable = true;
+
+    protected static $_forceSuperUser = false;
     
     /**
      * (non-PHPdoc)
@@ -176,6 +179,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     public function hasRight($_application, $_right)
     {
+        if (true === static::$_forceSuperUser) {
+            return true;
+        }
+
         $roles = Tinebase_Acl_Roles::getInstance();
         
         $result = $roles->hasRight($_application, $this->accountId, $_right);
@@ -355,6 +362,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     public function hasGrant($_containerId, $_grant, $_aclModel = 'Tinebase_Model_Container')
     {
+        if (true === static::$_forceSuperUser) {
+            return true;
+        }
+
         if ($_containerId instanceof Tinebase_Record_Abstract) {
             $aclModel = get_class($_containerId);
             if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
@@ -439,5 +450,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     public static function setReplicable($isReplicable)
     {
         static::$_replicable = (bool)$isReplicable;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public static function forceSuperUser($bool = true)
+    {
+        static::$_forceSuperUser = (bool)$bool;
     }
 }

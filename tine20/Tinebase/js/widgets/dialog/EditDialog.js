@@ -181,6 +181,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     additionalConfig: null,
 
     /**
+     * Assuming mode is not local, but the dialog is supposed to treat this.record as a json string and keep those data
+     */
+    recordFromJson: false,
+
+    /**
      * canonical name
      * @cfg {String} canonicalName
      */
@@ -370,6 +375,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // init notes panel
         this.initNotesPanel();
 
+        // apply generic tab sorting
+        if (this.items.xtype == 'tabpanel') {
+            this.items.plugins = this.items.plugins || [];
+            this.items.plugins.push({
+                ptype : 'ux.tabpanelsortplugin',
+                enableDD: false
+            });
+            this.items.items[0].pos = 10;
+        }
+
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
 
         // set fields readOnly if set
@@ -486,7 +501,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         return items.length ? {
-            layout: 'accordion',
+            layout: 'ux.multiaccordion',
             animate: true,
             region: 'east',
             width: 210,
@@ -755,17 +770,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
 
-        if (typeof this.record === 'string') {
-            if (! Ext.isFunction(this.record.beginEdit)) {
-                this.record = this.recordProxy.recordReader({responseText: this.record});
-            }
-            this.onRecordLoad.defer(10, this);
-        } else {
+        // Mode local means, that the record is not supposed to be loaded from server and saved to server.
+        // So if mode !== local, the record would be always loaded from the server and discard all data passed as record before
+        // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
+        // But to make this work you need to pass a json encoded record to the editdialog as string!
+        if (this.mode !== 'local' && this.recordFromJson !== true) {
             if (this.record && this.record.id) {
                 this.loadRemoteRecord();
             } else {
                 this.onRecordLoad.defer(10, this);
             }
+        } else {
+            // note: in local mode we expect a valid record
+            if (!Ext.isFunction(this.record.beginEdit)) {
+                this.record = this.recordProxy.recordReader({responseText: this.record});
+            }
+            this.onRecordLoad.defer(10, this);
         }
     },
     
@@ -839,7 +859,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return new this.recordClass(recordData, 0);
     },
 
-    
     /**
      * executed after record got updated from proxy
      */
@@ -1245,18 +1264,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             // init relations panel before onRecordLoad
             if (! this.relationsPanel) {
                 this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this });
+                this.items.items.push(this.relationsPanel);
             }
-            // interrupt process flow until dialog is rendered
-            if (! this.rendered) {
-                this.initRelationsPanel.defer(250, this);
-                return;
-            }
-            // add relations panel if this is rendered
-            if (this.items.items[0]) {
-                this.items.items[0].add(this.relationsPanel);
-            }
-            
-            Tine.log.debug('Tine.widgets.dialog.EditDialog::initRelationsPanel() - Initialized relations panel and added to dialog tab items.');
         }
     },
 

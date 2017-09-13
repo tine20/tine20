@@ -116,28 +116,28 @@ msgstr "แฟ้มของบัญชี {0}"
 msgid "Folders of all accounts"
 msgstr "แฟ้มของทุกบัญชี"
 
-#: js/TreePanel.js:689
+#: js/TreePanel.js:691
 msgid "Total Messages:"
 msgstr "ข้อความทั้งหมด:"
 
-#: js/TreePanel.js:693
+#: js/TreePanel.js:695
 msgid "Unread Messages:"
 msgstr "ข้อความที่ยังไม่ได้อ่าน:"
 
-#: js/TreePanel.js:697
+#: js/TreePanel.js:699
 msgid "Name on Server:"
 msgstr "ชื่อบนเซิร์ฟเวอร์:"
 
-#: js/TreePanel.js:701
+#: js/TreePanel.js:703
 msgid "Last update:"
 msgstr "ปรับปรุงล่าสุด:"
 
-#: js/TreePanel.js:721
+#: js/TreePanel.js:723
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
 msgstr ""
 
-#: js/TreePanel.js:737
+#: js/TreePanel.js:739
 #, python-brace-format
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
@@ -776,7 +776,7 @@ msgstr "ตรงกับเงื่อนไขใดๆก็ได้"
 msgid "Do this action:"
 msgstr "ทำสิ่งนี้:"
 
-#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:280
+#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:281
 msgid "Keep a copy"
 msgstr ""
 
@@ -917,32 +917,32 @@ msgstr "สามารถใช้งานได้"
 msgid "Disable"
 msgstr "ไม่สามารถใช้งานได้"
 
-#: js/sieve/RulesGridPanel.js:203
+#: js/sieve/RulesGridPanel.js:202
 msgid "ID"
 msgstr "รหัส"
 
-#: js/sieve/RulesGridPanel.js:210
+#: js/sieve/RulesGridPanel.js:209
 msgid "Conditions"
 msgstr "เงื่อนไข"
 
-#: js/sieve/RulesGridPanel.js:218
+#: js/sieve/RulesGridPanel.js:217
 msgid "Action"
 msgstr "ปฏิกิริยา"
 
-#: js/sieve/RulesGridPanel.js:311
+#: js/sieve/RulesGridPanel.js:312
 msgid "is greater than"
 msgstr "มากกว่า"
 
-#: js/sieve/RulesGridPanel.js:311
+#: js/sieve/RulesGridPanel.js:312
 msgid "is less than"
 msgstr "น้อยกว่า"
 
-#: js/sieve/RulesGridPanel.js:322
+#: js/sieve/RulesGridPanel.js:323
 #, python-brace-format
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "หัวเรื่อง \"{0}\" มี \"{1}\""
 
-#: js/sieve/RulesGridPanel.js:322
+#: js/sieve/RulesGridPanel.js:323
 #, python-brace-format
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "หัวเรื่อง \"{0}\" ตรงกับ \"{1}\""
@@ -1045,47 +1045,47 @@ msgstr "จัดเก็บตัวกรองข้อผิดพลาด
 msgid "Could not save script on Sieve server."
 msgstr "ไม่สามารถจัดเก็บสคริปบนตัวให้บริการกรอง"
 
-#: js/AttachmentUploadGrid.js:47
+#: js/AttachmentUploadGrid.js:49
 msgid "Attachment"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:56
-msgid "Filemanager (inline)"
+#: js/AttachmentUploadGrid.js:58
+msgid "Filemanager (Download link)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:59
-msgid "Filemanager (inline, password)"
+#: js/AttachmentUploadGrid.js:61
+msgid "Filemanager (Download link, password)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:62
+#: js/AttachmentUploadGrid.js:64
 msgid "Filemanager (Systemlink)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:119
+#: js/AttachmentUploadGrid.js:121
 msgid "Attachment Type"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:120
+#: js/AttachmentUploadGrid.js:122
 msgid "Click icon to change"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:142
+#: js/AttachmentUploadGrid.js:144
 msgid "name"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:149
+#: js/AttachmentUploadGrid.js:151
 msgid "size"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:156
+#: js/AttachmentUploadGrid.js:158
 msgid "type"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:199
+#: js/AttachmentUploadGrid.js:201
 msgid "Failure"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:200
+#: js/AttachmentUploadGrid.js:202
 msgid "This file is already attached to this record."
 msgstr ""
 
@@ -1138,75 +1138,79 @@ msgstr "ไม่ได้อยู่ที่บริษัท ตอบจ�
 msgid "You have new mail from "
 msgstr ""
 
-#: Config.php:95
+#: Config.php:103
 msgid "Vacation Templates Node ID"
 msgstr ""
 
-#: Config.php:104
+#: Config.php:112
 msgid "Email Notification Templates Node ID"
 msgstr ""
 
-#: Config.php:113
+#: Config.php:121
 msgid "Custom Vacation Message"
 msgstr "จัดทำข้อความพักร้อน"
 
-#: Config.php:115
+#: Config.php:123
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "ผู้ใช้สามารถตั้งข้อความพักร้อนด้วยตัวเองสำหรับบัญชีระบบได้"
 
-#: Config.php:124
+#: Config.php:132
 msgid "Cache email body"
 msgstr "แคชข้อความของอีเมล"
 
-#: Config.php:126
+#: Config.php:134
 msgid "Should the email body be cached (recommended for slow IMAP server connections)"
 msgstr "ควรให้ข้อความของอีเมลมีการจัดเก็บ (แนะนำสำหรับการติดต่อระบบ IMAP ที่ล่าช้า)"
 
-#: Config.php:135
+#: Config.php:143
 msgid "Delete Archived Mail"
 msgstr ""
 
-#: Config.php:145
+#: Config.php:153
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:147
+#: Config.php:155
 msgid "Enabled features in Felamimail application."
 msgstr ""
 
-#: Config.php:154
+#: Config.php:162
 msgid "Tine 2.0 Flag"
 msgstr ""
 
-#: Config.php:155
+#: Config.php:163
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr ""
 
-#: Config.php:163
+#: Config.php:171
 msgid "Filter E-Mail URIs"
 msgstr ""
 
-#: Config.php:165
+#: Config.php:173
 msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on.)"
 msgstr ""
 
-#: Config.php:182
+#: Config.php:190
 msgid "System Account Folder Defaults"
 msgstr ""
 
-#: Config.php:184
+#: Config.php:192
 msgid "Paths of the special folders (like Sent, Trash, ...)"
 msgstr ""
 
-#: Config.php:193
+#: Config.php:201
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+#: Config.php:211
 msgid "Sieve Redirect Only Internal"
 msgstr ""
 
-#: Config.php:195
+#: Config.php:213
 msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
 msgstr ""
 
-#: Config.php:204 Config.php:206
+#: Config.php:222 Config.php:224
 msgid "Sieve Notification Bounces Reporting Email"
 msgstr ""
 

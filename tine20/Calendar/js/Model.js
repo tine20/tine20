@@ -810,7 +810,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getSignature = function(attendee) 
     var _ = window.lodash;
 
     attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
-    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id, attendee.role].join('/');
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, attendee.role].join('/');
 };
 
 Tine.Calendar.Model.Attender.getAttendeeStore.fromSignature = function(signatureId) {
@@ -949,6 +949,29 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     recordName: 'Resource',
     recordsName: 'Resources'
 });
+
+/**
+ * get default data for a new resource
+ *
+ * @return {Object} default data
+ * @static
+ */
+Tine.Calendar.Model.Resource.getDefaultData = function() {
+    var data = {
+        grants: [{
+            account_id: "0",
+            account_type: "anyone",
+            account_name: i18n._('Anyone'),
+            exportGrant: true,
+            readGrant: true,
+            syncGrant: true
+        }
+            // don't add account/group/role with admin grants here as manage_resource right is enough
+        ]
+    };
+
+    return data;
+};
 
 Tine.Calendar.Model.Resource.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');

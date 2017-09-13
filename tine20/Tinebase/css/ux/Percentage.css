@@ -18,3 +18,20 @@
     position:absolute;
     text-align:center;
 }
+
+/* some progress bar colors */
+/* @see 0008254: Allow colors in Tasks progressbar */
+.PercentRenderer-progress-bar10 { background-color: #f36 !important; background-image: none; }
+.PercentRenderer-progress-bar20 { background-color: #e69 !important; background-image: none; }
+.PercentRenderer-progress-bar30 { background-color: #d8a !important; background-image: none; }
+.PercentRenderer-progress-bar40 { background-color: #c9a !important; background-image: none; }
+.PercentRenderer-progress-bar50 { background-color: #baa !important; background-image: none; }
+.PercentRenderer-progress-bar60 { background-color: #aa9 !important; background-image: none; }
+.PercentRenderer-progress-bar70 { background-color: #aa8 !important; background-image: none; }
+.PercentRenderer-progress-bar80 { background-color: #ab8 !important; background-image: none; }
+.PercentRenderer-progress-bar90 { background-color: #9b8 !important; background-image: none; }
+.PercentRenderer-progress-bar100 { background-color: #8c7 !important; background-image: none; }
+.PercentRenderer-progress-barBelow { background-color: #a9fa79 !important; background-image: none; }
+.PercentRenderer-progress-barOver { background-color: #F7FE2E !important; background-image: none; }
+.PercentRenderer-progress-barLimit { background-color: #f77a4d !important; background-image: none; }
+.QuotaRenderer-unlimited {background-color: transparent !important; background-image: none; border: none; padding-top:1px; }
