@@ -781,7 +781,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             allowDrop: false,
             expanded: false,
             text: Ext.util.Format.htmlEncode(record.get('name')),
-            qtip: Tine.Tinebase.common.doubleEncode(record.get('host')),
+            qtip: Ext.util.Format.htmlEncode(record.get('host')),
             leaf: false,
             cls: 'felamimail-node-account',
             delimiter: record.get('delimiter'),
