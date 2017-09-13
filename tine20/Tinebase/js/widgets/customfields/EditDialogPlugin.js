@@ -88,7 +88,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         form.items.each(function(f) {
             var name = f.getName();
             
-            if (name.match(/^customfield_(.+)$/)) {
+            if (Ext.isString(name) && name.match(/^customfield_(.+)$/)) {
                 name = name.match(/^customfield_(.+)$/)[1];
                 
                 this.customfieldsValue[name] = f.getValue();
