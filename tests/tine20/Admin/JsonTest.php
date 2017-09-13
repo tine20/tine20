@@ -119,11 +119,22 @@ class Admin_JsonTest extends TestCase
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
         $this->assertTrue($authResult->isValid());
         $this->assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
-            && $accountData['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 100,
+            && $account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 100,
             'failed to set/get account filesystem personal quota');
         $this->assertTrue(isset($account['effectiveAndLocalQuota']) &&
             100 === $account['effectiveAndLocalQuota']['localQuota']);
-        
+
+        $account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = 200;
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
+        $account['groups'] = array($account['groups']['results'][0]['id']);
+        $updatedAccount = $this->_json->saveUser($account);
+
+        $this->assertTrue(isset($updatedAccount['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
+            && $updatedAccount['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 200,
+            'failed to set/get account filesystem personal quota');
+        $this->assertTrue(isset($updatedAccount['effectiveAndLocalQuota']) &&
+            200 === $updatedAccount['effectiveAndLocalQuota']['localQuota']);
+
         $account['accountPrimaryGroup'] = $accountData['accountPrimaryGroup'];
         return $account;
     }

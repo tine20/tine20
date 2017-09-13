@@ -61,7 +61,10 @@ Tine.Admin.Model.UserArray = [
     { name: 'sambaSAM' },
     { name: 'emailUser' },
     { name: 'contact_id' },
-    { name: 'container_id' }
+    { name: 'container_id' },
+    { name: 'filesystemSize'},
+    { name: 'effectiveAndLocalQuota'},
+    { name: 'xprops'}
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserArray, {

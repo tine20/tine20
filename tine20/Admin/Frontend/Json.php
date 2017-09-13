@@ -274,9 +274,29 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $accounts = Admin_Controller_User::getInstance()->searchFullUsers($filter, $sort, $dir, $start, $limit);
+        $results = array();
+        foreach ($this->_multipleRecordsToJson($accounts) as $val) {
+            $val['filesystemSize'] = null;
+            $val['filesystemRevisionSize'] = null;
+            $results[$val['accountId']] = $val;
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $accountIds = $accounts->getId();
+            /** @var Tinebase_Model_Tree_Node $node */
+            foreach (Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
+                array('field' => 'path', 'operator' => 'equals', 'value' => '/Filemanager/folders/personal'),
+                array('field' => 'name', 'operator' => 'in', 'value' => $accountIds)
+            ), '', array('ignoreAcl' => true))) as $node) {
+                if (isset($results[$node->name])) {
+                    $results[$node->name]['filesystemSize'] = $node->size;
+                    $results[$node->name]['filesystemRevisionSize'] = $node->revision_size;
+                }
+            }
+        }
 
         $result = array(
-            'results'     => $this->_multipleRecordsToJson($accounts),
+            'results'     => array_values($results),
             'totalcount'  => Admin_Controller_User::getInstance()->searchCount($filter)
         );
         

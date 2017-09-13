@@ -36,6 +36,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
         this.isLdapBackend = Tine.Tinebase.registry.get('accountBackend') == 'Ldap';
+        this.isEmailBackend = Tine.Tinebase.registry.get('manageImapEmailUser');
         Tine.Admin.user.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -192,6 +193,8 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName'},
             { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName'},
             { header: this.app.i18n._('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200, hidden: false},
+            { header: this.app.i18n._('Email usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'emailUser', renderer: this.emailQuotaRenderer},
+            { header: this.app.i18n._('Filesystem usage'), id: 'fileQuota', dataIndex: 'filesystemSize', renderer: this.fileQuotaRenderer, hidden: false},
             { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200},
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
@@ -335,5 +338,21 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         return gridValue;
+    },
+
+    emailQuotaRenderer: function(_value) {
+        var quota = _value['emailMailQuota'] ? _value['emailMailQuota'] : 0,
+            size = _value['emailMailSize'] ? _value['emailMailSize'] : 0;
+
+        return Tine.widgets.grid.QuotaRenderer(size, quota, /*use SoftQuota*/ false);
+    },
+
+    fileQuotaRenderer: function(_value, _cellObject, _record) {
+        var accountConfig = _record.get('xprops') ? _record.get('xprops') : null,
+            quotaConfig = Tine.Tinebase.configManager.get('quota'),
+            quota = accountConfig && accountConfig['personalFSQuota'] ? parseInt(accountConfig['personalFSQuota'])  : quotaConfig.totalByUserInMB * 1024 * 1024,
+            size =  _record.get('filesystemSize') ? parseInt(_record.get('filesystemSize')) : 0;
+
+        return Tine.widgets.grid.QuotaRenderer(size, quota, /*use SoftQuota*/ true);
     }
 });

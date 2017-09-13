@@ -133,25 +133,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initPagingToolbar: function() {
         Ext.QuickTips.init();
         
-        this.quotaBar = new Ext.ProgressBar({
-            width: 120,
-            height: 16,
+        this.quotaBar = new Ext.Component({
             style: {
-                marginTop: '1px'
-            },
-            text: this.app.i18n._('Quota usage')
+                marginTop: '3px',
+                width: '100px',
+                height: '16px'
+            }
         });
+
         this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
         this.pagingToolbar.insert(12, this.quotaBar);
-        
-        // NOTE: the Ext.progessbar has an ugly bug: it does not layout correctly when hidden
-        //       so we need to listen when we get activated to relayout the progessbar
-        Tine.Tinebase.MainScreen.on('appactivate', function(app) {
-            if (app.appName === 'Felamimail') {
-                this.quotaBar.syncProgressBar();
-                this.quotaBar.setWidth(this.quotaBar.getWidth());
-            }
-        }, this);
     },
     
     /**
@@ -1443,25 +1434,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (accountInbox && parseInt(accountInbox.get('quota_limit'), 10) && accountId == accountInbox.get('account_id')) {
             Tine.log.debug('Showing quota info.');
             
-            var limit = parseInt(accountInbox.get('quota_limit'), 10),
-                usage = parseInt(accountInbox.get('quota_usage'), 10),
-                left = limit - usage,
-                percentage = Math.round(usage/limit * 100),
-                text = String.format(this.app.i18n._('{0} %'), percentage);
-            this.quotaBar.show();
-            this.quotaBar.setWidth(75);
-            this.quotaBar.updateProgress(usage/limit, text);
+            var limit = parseInt(accountInbox.get('quota_limit'), 10) / 1024,
+                usage = parseInt(accountInbox.get('quota_usage'), 10) * 1024;
             
-            Ext.QuickTips.register({
-                target:  this.quotaBar,
-                dismissDelay: 30000,
-                title: this.app.i18n._('Your quota'),
-                text: String.format(this.app.i18n._('{0} available (total: {1})'), 
-                    Ext.util.Format.fileSize(left * 1024),
-                    Ext.util.Format.fileSize(limit * 1024)
-                ),
-                width: 200
-            });
+            this.quotaBar.show();
+            this.quotaBar.update(Tine.widgets.grid.QuotaRenderer(usage, limit, /*use SoftQuota*/ false));
         } else {
             Tine.log.debug('No account inbox found or no quota info found.');
             this.quotaBar.hide();
