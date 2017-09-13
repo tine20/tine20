@@ -106,7 +106,7 @@ class Tinebase_Record_PersistentObserver
 
                 /** @var Tinebase_Controller_Record_Abstract $controller */
                 if (!isset($this->_controllerCache[$observer->observer_model])) {
-                    $controller = Tinebase_Core::getApplicationInstance($observer->observer_model);
+                    $controller = Tinebase_Core::getApplicationInstance($observer->observer_model, '', true);
                     $this->_controllerCache[$observer->observer_model] = $controller;
                 } else {
                     $controller = $this->_controllerCache[$observer->observer_model];
@@ -114,7 +114,12 @@ class Tinebase_Record_PersistentObserver
 
                 $_event->persistentObserver = $observer;
 
+                $rightsCheck = $controller->doRightChecks(false);
+                $containerAclCheck = $controller->doContainerACLChecks(false);
+
                 $controller->handleEvent($_event);
+                $controller->doContainerACLChecks($containerAclCheck);
+                $controller->doRightChecks($rightsCheck);
             }
         } finally {
             $this->_outerCall = $setOuterCall;
