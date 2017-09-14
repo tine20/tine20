@@ -121,6 +121,8 @@ class MailFiler_Model_NodeFilter extends Tinebase_Model_Tree_Node_Filter
      */
     public function appendFilterSql($_select, $_backend)
     {
+        parent::appendFilterSql($_select, $_backend);
+
         $messageFilterArray = array();
         foreach ($this->_customData as $customData) {
             $messageFilterArray[] = array('field' => $customData['field'], 'operator' => $customData['operator'], 'value' => $customData['value']);
