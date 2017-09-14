@@ -632,7 +632,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (isset($filters['groupFilter'])) {
                 $groupFilter[] = $filters['groupFilter'];
             }
-            $groupFilter[] = array('field' => 'type', 'operator' => 'contains', 'value' => 'group');
+            $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
             $groupPaging = $paging;
             $groupPaging['sort'] = 'name';
             $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $groupPaging);
@@ -654,10 +654,20 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $attendee = array();
             foreach ($result as $type => $res) {
                 foreach ($res['results'] as $r) {
-                    $attendee[] = array(
-                        'user_id' => $type === 'group' ? $r['group_id'] : $r['id'],
-                        'user_type' => $type
-                    );
+                    if ($type === Calendar_Model_Attender::USERTYPE_GROUP) {
+                        if (empty($r['group_id'])) {
+                            continue;
+                        }
+                        $attendee[] = array(
+                            'user_id' => $r['group_id'],
+                            'user_type' => $type
+                        );
+                    } else {
+                        $attendee[] = array(
+                            'user_id' => $r['id'],
+                            'user_type' => $type
+                        );
+                    }
                 }
             }
 

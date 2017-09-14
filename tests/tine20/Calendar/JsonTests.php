@@ -2183,6 +2183,18 @@ class Calendar_JsonTests extends Calendar_TestCase
             count($result[Calendar_Model_Attender::USERTYPE_RESOURCE]['results']) === 0 &&
             isset($result['freeBusyInfo']) &&
             count(array_pop($result['freeBusyInfo'])) === 0, print_r($result, true));
+
+        $filter = [
+            ['field' => 'query', 'operator' => 'contains', 'value' => ''],
+            ['field' => 'type',  'operator' => 'oneof',    'value' => [Calendar_Model_Attender::USERTYPE_GROUP]]
+        ];
+
+        $result = $this->_uit->searchAttenders($filter, $paging, [$persistentEvent->toArray()], array());
+        $this->assertTrue(
+            !isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
+            isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
+            !isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE])
+        );
     }
 
     public function testSearchFreeTime()
