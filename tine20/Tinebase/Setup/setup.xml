@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.43</version>
+    <version>10.44</version>
     <tables>
         <table>
             <name>applications</name>
@@ -150,7 +150,7 @@
 
         <table>
             <name>groups</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -236,6 +236,9 @@
                     <unique>true</unique>
                     <field>
                         <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
                     </field>
                 </index>
                 <index>
@@ -1620,7 +1623,7 @@
 
         <table>
             <name>roles</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1690,6 +1693,9 @@
                     <unique>true</unique>
                     <field>
                         <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
                     </field>
                 </index>
             </declaration>
@@ -3466,7 +3472,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3536,6 +3542,10 @@
                     <default>false</default>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -3551,6 +3561,9 @@
                     </field>
                     <field>
                         <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
                     </field>
                 </index>
                 <index>
