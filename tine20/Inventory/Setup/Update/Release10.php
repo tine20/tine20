@@ -91,11 +91,25 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.5
+     *
+     * add unique constraint on name + deleted_time
      *
      * @return void
      */
     public function update_4()
+    {
+        $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
+
+        $this->setApplicationVersion('Inventory', '10.5');
+    }
+
+    /**
+     * update to 11.0
+     *
+     * @return void
+     */
+    public function update_5()
     {
         $this->setApplicationVersion('Inventory', '11.0');
     }

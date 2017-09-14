@@ -21,4 +21,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_42();
         $this->setApplicationVersion('Tinebase', '11.1');
     }
+
+    /**
+     * update to 11.2
+     *
+     * add deleted_time to unique index for groups, roles, tree_nodes
+     */
+    public function update_1()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_43();
+        $this->setApplicationVersion('Tinebase', '11.2');
+    }
 }
