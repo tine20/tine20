@@ -32,7 +32,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     {
         $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         if ($body !== null) {
-            $this->_body = $body;
+            $this->_body = $body; 
         } else if ($this->_request instanceof \Zend\Http\Request) {
             $this->_body = fopen('php://temp', 'r+');
             fwrite($this->_body, $request->getContent());
@@ -40,19 +40,18 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             /*
              * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
              * client sends empty request instead empty xml-sceleton -> inject it here
+             * (improvement: do not rely on user agent because other clients use windows stuff, too)
              */
-            $broken_user_agent_preg = '/^Microsoft-WebDAV-MiniRedir\/[6,10]/';
-            if (isset($_SERVER['HTTP_USER_AGENT']) && (preg_match($broken_user_agent_preg, $_SERVER['HTTP_USER_AGENT']) === 1) ) {
-                if ($request->getContent() == '') {
-                    $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
-                    $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/><D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
-                    $broken_user_agent_body.= '</D:prop></D:propfind>';
-                    fwrite($this->_body, $broken_user_agent_body);
-                    rewind($this->_body);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
-                        $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
-                }
+            if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
+                $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
+                $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
+                $broken_user_agent_body.= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
+                $broken_user_agent_body.= '</D:prop></D:propfind>';
+                fwrite($this->_body, $broken_user_agent_body);
+                rewind($this->_body);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
+                    $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
             }
         }
         
