@@ -398,7 +398,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
                 $found++;
             }
         }
-        self::assertEquals(2, $found, 'should find 2 hrefs in shares: ' . print_r($hrefsToFind));
+        self::assertEquals(2, $found, 'should find 2 hrefs in shares: ' . print_r($hrefsToFind, true));
     }
     
     /**
