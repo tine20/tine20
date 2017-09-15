@@ -136,4 +136,54 @@ class MailFiler_Frontend_JsonTests extends TestCase
 
         $this->assertEquals(1, count($updatedNode['tags']));
     }
+
+    /**
+     * test search nodes (shared)
+     */
+    public function testSearchSharedNodesWithAcl()
+    {
+        $testNodeName = 'privatesharedtest';
+        $testPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $testNodeName;
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
+        $node = $result[0];
+        // remove users grants
+        $node['grants'] = array(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+            Tinebase_Model_Grants::GRANT_EDIT => true,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+            Tinebase_Model_Grants::GRANT_EXPORT => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+            Tinebase_Model_Grants::GRANT_ADMIN => true,
+            Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
+        ));
+        $result = $this->_getUit()->saveNode($node);
+
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $found = false;
+        foreach ($result['results'] as $foundNode) {
+            if ($foundNode['name'] === $testNodeName) {
+                self::assertEquals(1, count($foundNode['grants']),
+                    'should find node with 1 grant: ' . print_r($foundNode, true));
+                $found = true;
+            }
+        }
+        self::assertTrue($found, 'should find node of user');
+
+        // switch to sclever
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $result = $this->_json->searchNodes($filter, array());
+        foreach ($result['results'] as $foundNode) {
+            if ($foundNode['name'] === $testNodeName) {
+                self::fail('should not find node because of acl as sclever: ' . print_r($foundNode, true));
+            }
+        }
+    }
 }

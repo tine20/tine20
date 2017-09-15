@@ -56,32 +56,25 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
                 $this->_operator = 'contains';
             }
         }
-
-        $values = array();
-        foreach ((array)$this->_value as $value) {
-            //replace full text meta characters
-            //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-            $value = preg_replace('#\W#u', ' ', $value);
-            // replace multiple spaces with just one
-            $value = preg_replace('# +#u', ' ', trim($value));
-            $values = array_merge($values, explode(' ', $value));
-        }
-
         // mysql supports full text for InnoDB as of 5.6.4
         // full text can't do a pure negative search...
-        if (true === $not || ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4') ) {
+        $useMysqlFullText = false === $not && Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4');
 
-            if (true !== $not && Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
+        $values = static::sanitizeValue($this->_value, $useMysqlFullText);
 
-            $values = array_filter($values, function($val) {
-                return mb_strlen($val) >= 3;
-            });
-
-            if (count($values) === 0) {
+        if (count($values) === 0) {
+            if (true === $not) {
                 $_select->where('1 = 1');
-                return;
+            } else {
+                $_select->where('1 = 0');
             }
+            return;
+        }
+
+        if (false === $useMysqlFullText) {
+
+            if (false === $not && Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
 
             $filterGroup = new Tinebase_Model_Filter_FilterGroup();
 
@@ -93,16 +86,6 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filterGroup, $_backend);
 
         } else {
-            $ftConfig = $this->getMySQLFullTextConfig();
-            $values = array_filter($values, function($val) use ($ftConfig) {
-                return mb_strlen($val) >= $ftConfig['tokenSize'] && !in_array($val, $ftConfig['stopWords']);
-            });
-
-            if (count($values) === 0) {
-                $_select->where('1 = 1');
-                return;
-            }
-
             $field = $this->_getQuotedFieldName($_backend);
             $searchTerm = '';
 
@@ -114,6 +97,34 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         }
     }
 
+    public static function sanitizeValue($_value, $_useMysqlFullText = true)
+    {
+        $values = array();
+
+        foreach ((array)$_value as $value) {
+            //replace full text meta characters
+            //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
+            // replace any non letter, non digit, non underscore with blank
+            $value = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $value);
+            // replace multiple spaces with just one
+            $value = preg_replace('# +#u', ' ', trim($value));
+            $values = array_merge($values, explode(' ', $value));
+        }
+
+        if (true === $_useMysqlFullText) {
+            $ftConfig = static::getMySQLFullTextConfig();
+            $values = array_filter($values, function($val) use ($ftConfig) {
+                return mb_strlen($val) >= $ftConfig['tokenSize'] && !in_array($val, $ftConfig['stopWords']);
+            });
+        } else {
+            $values = array_filter($values, function($val) {
+                return mb_strlen($val) >= 3;
+            });
+        }
+
+        return $values;
+    }
+
     /**
      * this looks up the default mysql innodb full text stop word list and returns the contents as array
      *
@@ -121,7 +132,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
      *
      * @return array
      */
-    protected function getMySQLFullTextConfig()
+    protected static function getMySQLFullTextConfig()
     {
         $cacheId = 'mysqlFullTextConfig';
 

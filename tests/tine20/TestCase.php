@@ -584,7 +584,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
         if (null !== $configuration && $configuration->modlogActive) {
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId']);
+            $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
+                print_r($savedRecord));
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
+                'created_by has wrong value: ' . print_r($savedRecord));
         }
 
         // Update description if record has
@@ -606,6 +609,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         $this->assertEquals(1, $result['totalcount']);
+
+        if (null !== $configuration && $configuration->modlogActive) {
+            $this->assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
+                'last_modified_by not present: ' . print_r($result));
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
+                'last_modified_by has wrong value: ' . print_r($result));
+        }
 
         if ($delete) {
             call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
