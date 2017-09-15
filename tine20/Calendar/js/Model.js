@@ -177,7 +177,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         centerPanel = mainScreen.getCenterPanel(),
         westPanel = mainScreen.getWestPanel(),
         container = westPanel.getContainerTreePanel().getDefaultContainer(),
-        organizer = (defaultAttendeeStrategy != 'me' && container.ownerContact) ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
+        organizer = (defaultAttendeeStrategy != 'me' && container && container.ownerContact) ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
         makeEventsPrivate = prefs.get('defaultSetEventsToPrivat'),
         eventClass = null,
@@ -308,7 +308,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
                 }
             }, this);
             
-            if (container.ownerContact && addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+            if (container && container.ownerContact && addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
                 var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                     user_type: 'user',
                     user_id: container.ownerContact
