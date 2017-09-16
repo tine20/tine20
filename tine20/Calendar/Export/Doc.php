@@ -39,8 +39,6 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->init($_filter, $_controller, $_additionalOptions);
-
-        parent::__construct($_filter, $_controller, $_additionalOptions);
     }
 
     /**

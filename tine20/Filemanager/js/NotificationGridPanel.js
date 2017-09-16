@@ -8,6 +8,8 @@
 Ext.ns('Tine.Filemanager');
 
 Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerGridPanel, {
+    app: null,
+
     selectType: 'both',
     selectAnyone: false,
 
@@ -19,6 +21,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     editDialog: null,
 
     initComponent: function () {
+        this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
         this.currentUser = Tine.Tinebase.registry.get('currentAccount');
         this.initColumns();
         this.supr().initComponent.call(this);
@@ -31,8 +34,8 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
         this.configColumns = [
             new Ext.ux.grid.CheckColumn({
                 id: 'active',
-                header: i18n._('Notification'),
-                tooltip: i18n._('Notactiveification'),
+                header: this.app.i18n._('Notification'),
+                tooltip: this.app.i18n._('Notification active'),
                 dataIndex: 'active',
                 width: 55,
                 onBeforeCheck: function (checkbox, record) {
@@ -43,14 +46,14 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                 dataIndex: 'summary',
                 width: 100,
                 sortable: true,
-                header: i18n._('Summary'),
+                header: this.app.i18n._('Summary'),
                 renderer: function (value) {
                     if (value === 1) {
-                        return value + ' ' + i18n._('Day');
+                        return value + ' ' + this.app.i18n._('Day');
                     }
 
                     if (value > 1) {
-                        return value + ' ' + i18n._('Days');
+                        return value + ' ' + this.app.i18n._('Days');
                     }
 
                     return '';
@@ -90,7 +93,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                 columns: [
                     {
                         id: 'name',
-                        header: i18n._('Name'),
+                        header: this.app.i18n._('Name'),
                         dataIndex: this.recordPrefix + 'name',
                         renderer: this.accountRenderer.createDelegate(this)
                     }
@@ -189,7 +192,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
-                emptyText: i18n._('Search for groups ...')
+                emptyText: this.app.i18n._('Search for groups ...')
             });
 
             this.groupCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.groupCombo], true);

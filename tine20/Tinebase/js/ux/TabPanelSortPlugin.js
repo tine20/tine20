@@ -30,19 +30,24 @@ Ext.ux.TabPanelSortPlugin.prototype = {
      * @cfg {Object} dropZoneConfig
      */
     dropZoneConfig: null,
-    
+
+    /**
+     * @cfg {Number} pos
+     * position
+     */
+    pos: null,
+
+    /**
+     * @cfg {Bool}
+     */
+    enableDD: true,
+
     /**
      * tabpanel
      * @type object
      */
     tabpanel: null,
-    
-    /**
-     * current position
-     * @type Number
-     */
-    pos: null,
-    
+
     /**
      * init this plugin
      * 
@@ -60,26 +65,37 @@ Ext.ux.TabPanelSortPlugin.prototype = {
             'tabsort'
         );
         
+        this.tabpanel.on('beforerender', this.onBeforeRender, this);
         this.tabpanel.on('render', this.onRender, this);
     },
-    
-    
+
+    onBeforeRender: function(tabpanel) {
+        tabpanel.items.sort('ASC', function(a, b) {
+            var posA = a.pos || (100 + 10*tabpanel.items.indexOf(a)),
+                posB = b.pos || (100 + 10*tabpanel.items.indexOf(b));
+
+            return posA - posB;
+        });
+    },
+
     /**
      * onRender define dragZone and dropZone
      * 
      * @param {Ext.TabPanel} tabpanel
      */
     onRender: function(tabpanel) {
-        this.dragZone = new Ext.dd.DragZone(tabpanel.header, Ext.apply({
-            getDragData: this.getDragData.createDelegate(this),
-            getRepairXY: this.getRepairXY.createDelegate(this)
-        }, this.dragZoneConfig || {}));
-        
-        this.dropZone = new Ext.dd.DropZone(tabpanel.header, Ext.apply({
-            onNodeOver : this.onNodeOver.createDelegate(this),
-            onNodeDrop : this.onNodeDrop.createDelegate(this),
-            getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
-        }, this.dropZoneConfig || {}));
+        if (this.enableDD) {
+            this.dragZone = new Ext.dd.DragZone(tabpanel.header, Ext.apply({
+                getDragData: this.getDragData.createDelegate(this),
+                getRepairXY: this.getRepairXY.createDelegate(this)
+            }, this.dragZoneConfig || {}));
+
+            this.dropZone = new Ext.dd.DropZone(tabpanel.header, Ext.apply({
+                onNodeOver: this.onNodeOver.createDelegate(this),
+                onNodeDrop: this.onNodeDrop.createDelegate(this),
+                getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
+            }, this.dropZoneConfig || {}));
+        }
     },
     
     /**
@@ -204,3 +220,5 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         return e.getTarget('ul[class^=x-tab]', 10);
     }
 };
+
+Ext.preg('ux.tabpanelsortplugin', Ext.ux.TabPanelSortPlugin);

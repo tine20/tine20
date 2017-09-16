@@ -129,17 +129,15 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.grid.getSelectionModel();
             
         if (sm.getCount() == 1) {
-            var selectedRows = sm.getSelections();
-            record = selectedRows[0];
-            
-            // get next/prev record
-            var index = this.store.indexOf(record),
+            var selectedRows = sm.getSelections(),
+                record = selectedRows[0],
+                allRecords = this.store.data.items,
+                index = this.store.indexOf(record),
                 switchRecordIndex = (dir == 'down') ? index + 1 : index - 1,
                 switchRecord = this.store.getAt(switchRecordIndex);
-            
+
             if (switchRecord) {
-                // switch ids and resort store
-                var oldId = record.id;
+                var oldId = record.id,
                     switchId = switchRecord.id;
 
                 record.set('id', Ext.id());
@@ -148,8 +146,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 switchRecord.id = oldId;
                 record.set('id', switchId);
                 record.id = switchId;
-                
-                this.store.commitChanges();
+
+                // NOTE: we need to reload store as selection model is confused otherwise
+                this.store.loadRecords({records: allRecords}, {add: false}, true);
                 this.store.sort('id', 'ASC');
                 sm.selectRecords([record]);
             }
@@ -229,10 +228,12 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initLayout: function() {
         this.supr().initLayout.call(this);
-        
+
         this.items.push({
             region : 'north',
             height : 55,
+            layout: 'card',
+            activeItem: 0,
             border : false,
             items  : this.actionToolbar
         });
@@ -269,16 +270,24 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = type,
             action_argument = record.get('action_argument');
 
-        for (i=0; i < types.length; i++) {
+        for (var i=0; i < types.length; i++) {
             if (types[i][0] == type) {
                 result = types[i][1];
             }
         }
         
         if (action_argument && action_argument != '') {
-            result += ': ' + Ext.isObject(action_argument)
-                ? action_argument.emails + (action_argument.copy ? ' (' + this.app.i18n._('Keep a copy') + ')' : '')
-                : action_argument;
+            result += ': ';
+
+            if (Ext.isObject(action_argument)) {
+                if (action_argument.copy) {
+                    result += action_argument.emails + ' (' + this.app.i18n._('Keep a copy') + ')';
+                } else {
+                    result += action_argument.emails + '';
+                }
+            } else {
+                result += action_argument;
+            }
         }
             
         return Ext.util.Format.htmlEncode(result);
@@ -323,7 +332,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 result = String.format(result, condition.header, condition.key);
             }
         }
-        
+
         return Ext.util.Format.htmlEncode(result);
     },
     

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,13 +18,6 @@
 class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * tinebase container controller/backend
-     * 
-     * @var Tinebase_Container
-     */
-    protected $_containerController = NULL;
-    
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -35,10 +28,13 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $this->_modelName             = 'Tinebase_Model_Container';
         $this->_doContainerACLChecks  = FALSE;
         $this->_purgeRecords          = FALSE;
-        
+
+        // we need to avoid that anybody else gets this instance ... as it has acl turned off!
+        Tinebase_Container::destroyInstance();
         $this->_backend = Tinebase_Container::getInstance();
-        
-        $this->_containerController = Tinebase_Container::getInstance();
+        $this->_backend->doSearchAclFilter(false);
+        // unset internal reference to prevent others to get instance without acl
+        Tinebase_Container::destroyInstance();
     }
 
     /**
@@ -81,8 +77,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
         
-        $container = $this->_containerController->getContainerById($_id);
-        $container->account_grants = $this->_containerController->getGrantsOfContainer($_id, TRUE);
+        $container = $this->_backend->getContainerById($_id);
+        $container->account_grants = $this->_backend->getGrantsOfContainer($_id, TRUE);
         
         return $container;
     }
@@ -102,8 +98,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
 
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
         
-        $container = $this->_containerController->addContainer($_record, $_record->account_grants, TRUE);
-        $container->account_grants = $this->_containerController->getGrantsOfContainer($container, TRUE);
+        $container = $this->_backend->addContainer($_record, $_record->account_grants, TRUE);
+        $container->account_grants = $this->_backend->getGrantsOfContainer($container, TRUE);
         
         return $container;
     }
@@ -159,7 +155,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants);
         
         Tinebase_Container::getInstance()->checkContainerOwner($_record);
-        $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
+        $this->_backend->setGrants($_record, $_record->account_grants, TRUE, FALSE);
     }
     
     /**

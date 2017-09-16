@@ -136,7 +136,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * after grid renderd
      */
     initDragDrop: function () {
-        if (! this.enableDD) {
+        if (Ext.isTouchDevice || !this.enableDD) {
             return;
         }
 
@@ -241,7 +241,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 40,
                 sortable: true,
                 dataIndex: 'size',
-                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3)
+                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
             },{
                 id: 'contenttype',
                 header: this.app.i18n._("Contenttype"),
@@ -298,7 +298,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true,
                 dataIndex: 'revision_size',
                 hidden: true,
-                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3)
+                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
             });
         }
 

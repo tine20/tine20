@@ -22,10 +22,12 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
      * Store with all valid attachment types
      */
     attachmentTypeStore: null,
+    app: null,
 
     currentRecord: null,
 
     initComponent: function () {
+        this.app = this.app || Tine.Tinebase.appMgr.get('Felamimail');
         this.attachmentTypeStore = new Ext.data.JsonStore({
             fields: ['id', 'name'],
             data: this.getAttachmentMethods()
@@ -44,7 +46,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
     getAttachmentMethods: function () {
         var methods = [{
             id: 'attachment',
-            name: i18n._('Attachment')
+            name: this.app.i18n._('Attachment')
         }];
 
         if (!Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
@@ -53,13 +55,13 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
 
         methods = methods.concat([{
                 id: 'download_public_fm',
-                name: i18n._('Filemanager (inline)')
+                name: this.app.i18n._('Filemanager (Download link)')
             }, {
                 id: 'download_protected_fm',
-                name: i18n._('Filemanager (inline, password)')
+                name: this.app.i18n._('Filemanager (Download link, password)')
             }, {
                 id: 'systemlink_fm',
-                name: i18n._('Filemanager (Systemlink)')
+                name: this.app.i18n._('Filemanager (Systemlink)')
             }]
         );
 
@@ -115,9 +117,9 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             id: 'attachment_type',
             dataIndex: 'attachment_type',
             sortable: true,
-            width: 150,
-            header: i18n._('Attachment Type'),
-            tooltip: i18n._('Click icon to change'),
+            width: 250,
+            header: this.app.i18n._('Attachment Type'),
+            tooltip: this.app.i18n._('Click icon to change'),
             listeners: {},
             value: 'attachment',
             renderer: function (value) {

@@ -80,6 +80,13 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @cfg {Array} criterias to ignore
      */
     criteriaIgnores: null,
+
+    /**
+     * @cfg {Bool} syncFields
+     * sync with filtertoolbar
+     */
+    syncFields: true,
+
     
     /**
      * bind value field of this.quickFilterRow to sync process
@@ -136,9 +143,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      */
     init: function(ftb) {
         this.ftb = ftb;
-        this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
-        this.ftb.onFieldChange   = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
-        this.ftb.deleteFilter    = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
+        if (this.syncFields) {
+            this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
+            this.ftb.onFieldChange = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
+            this.ftb.deleteFilter = this.ftb.deleteFilter.createInterceptor(this.onBeforeDeleteFilter, this);
+        }
+
+        this.origGetValue        = this.ftb.getValue;
+        this.ftb.getValue        = this.onGetValue.createDelegate(this);
         this.ftb.setValue        = this.ftb.setValue.createSequence(this.onSetValue, this);
         this.ftb.onRender        = this.ftb.onRender.createSequence(this.onRender, this);
         
@@ -154,9 +166,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
         this.quickFilter.onTrigger2Click = this.quickFilter.onTrigger2Click.createSequence(this.onQuickFilterTrigger, this);
-        
-        this.quickFilter.on('keyup', this.syncField, this);
-        this.quickFilter.on('change', this.syncField, this);
+
+        if (this.syncFields) {
+            this.quickFilter.on('keyup', this.syncField, this);
+            this.quickFilter.on('change', this.syncField, this);
+        }
         
         this.criteriaText = new Ext.Panel({
             border: 0,
@@ -294,8 +308,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * called when the (external) quick filter is cleared
      */
     onQuickFilterClear: function() {
-        this.ftb.deleteFilter(this.quickFilterRow);
+        if (this.syncFields) {
+            this.ftb.deleteFilter(this.quickFilterRow);
+        }
         this.quickFilter.reset();
+        this.onQuickFilterTrigger();
     },
     
     /**
@@ -321,23 +338,33 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Array} filters
      */
     onSetValue: function(filters) {
+        var _ = window.lodash;
+
         this.setCriteriaText(filters);
+
+        if (! this.syncFields) {
+            this.quickFilter.setValue(_.get(_.find(filters, {field: this.quickFilterField}), 'value', ''));
+        }
     },
-    
-    /**
-     * sets this.criteriaText according to filters
-     * 
-     * @param {Array} filters
-     */
-    setCriteriaText: function(filters) {
-        var text = '' , 
-            criterias = [];
-        
+
+    onGetValue: function() {
+        var value = this.origGetValue.call(this.ftb);
+
+        if (! this.syncFields) {
+            value.push({field: this.quickFilterField, operator: 'contains', value: this.quickFilter.getValue(), id: 'quickFilter'});
+        }
+
+        return value;
+    },
+
+    getCriteriasText: function(filters) {
+        var criterias = [];
+
         Ext.each(filters, function(f) {
             for (var i=0, criteria, ignore; i<this.criteriaIgnores.length; i++) {
                 criteria = this.criteriaIgnores[i];
                 ignore = true;
-                
+
                 for (var p in criteria) {
                     if (criteria.hasOwnProperty(p)) {
                         if (Ext.isString(criteria[p]) || Ext.isEmpty(f[p]) ) {
@@ -351,22 +378,32 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                         }
                     }
                 }
-                
-                if (ignore) {
+
+                if (ignore || f.id == 'quickFilter') {
                     // don't judge them as criterias
                     return;
                 }
             }
-            
-            if (this.ftb.filterModelMap[f.field]) {
+
+            if (this.ftb.filterModelMap && this.ftb.filterModelMap[f.field]) {
                 criterias.push(this.ftb.filterModelMap[f.field].label);
-            } else {
-                // no idea how to get the filterplugin for non ftb itmes
-                criterias.push(f.field);
+            } else if (f.condition == 'OR' || f.condition == 'AND'){
+                criterias = criterias.concat(this.getCriteriasText(f.filters));
             }
         }, this);
-        
-        
+
+        return criterias;
+    },
+
+    /**
+     * sets this.criteriaText according to filters
+     * 
+     * @param {Array} filters
+     */
+    setCriteriaText: function(filters) {
+        var text = '' , 
+            criterias = this.getCriteriasText(filters);
+
         if (! Ext.isEmpty(criterias)) {
             text = String.format(i18n.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criterias:', criterias.length), criterias.length) +
                    '<br />' +

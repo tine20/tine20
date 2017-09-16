@@ -143,7 +143,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             }, this);
 
             node.longName = node.name;
-            node.text = node.name = Ext.util.Format.htmlEncode(containerName);
+            node.text = node.name = containerName;
 
             parentNode.push(node);
         }, this);

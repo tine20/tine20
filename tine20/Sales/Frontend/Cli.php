@@ -55,7 +55,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $this->_addOutputLogWriter();
 
-        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__);
+        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__ . '::' . Tinebase_Core::getTinebaseId());
         if (! $freeLock) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Job already running - ' . __CLASS__ . '::' . __FUNCTION__);

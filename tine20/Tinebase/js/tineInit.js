@@ -117,6 +117,9 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.common.reload({
                     clearCache: true
                 });
+            } else if (e.ctrlKey && e.getKey() === e.S) {
+                e.StopEvent();
+                Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
             }
         });
         
@@ -129,7 +132,9 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
-            var target = e.getTarget('a',1 ,true);
+            var target = e.getTarget('a',1 ,true) ||
+                e.getTarget('input[type=text]',1 ,true) ||
+                e.getTarget('textarea',1 ,true);
             if (target) {
                 // allow native context menu for links
                 return;
@@ -787,7 +792,7 @@ Tine.Tinebase.tineInit = {
 
         // initialise window types
         var windowType = 'Browser';
-        Ext.ux.PopupWindow.prototype.url = 'index.php';
+        Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');

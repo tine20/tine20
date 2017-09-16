@@ -36,6 +36,11 @@ class Tinebase_FileSystem_Previews
     protected $_basePath = NULL;
 
     /**
+     * @var Tinebase_Model_Tree_Node
+     */
+    protected $_basePathNode = NULL;
+
+    /**
      * @var array
      */
     protected $_supportedFileExtensions = array(
@@ -93,11 +98,22 @@ class Tinebase_FileSystem_Previews
         if (null === $this->_basePath) {
             $this->_basePath = $this->_fsController->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS);
             if (!$this->_fsController->fileExists($this->_basePath)) {
-                $this->_fsController->mkdir($this->_basePath);
+                $this->_basePathNode = $this->_fsController->mkdir($this->_basePath);
             }
         }
 
         return $this->_basePath;
+    }
+
+    /**
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function getBasePathNode()
+    {
+        if (null === $this->_basePathNode) {
+            $this->_basePathNode = $this->_fsController->stat($this->_getBasePath());
+        }
+        return $this->_basePathNode;
     }
 
     /**

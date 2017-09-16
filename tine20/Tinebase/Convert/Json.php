@@ -147,9 +147,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 
                 $cfg = $resolveFields[$fields[0]];
 
-                if ($cfg['type'] == 'user') {
+                if ($cfg['type'] === 'user') {
                     $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
-                } else if ($cfg['type'] == 'container') {
+                } else if ($cfg['type'] === 'container') {
                     // TODO: resolve recursive records of records better in controller
                     // TODO: resolve containers
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -170,6 +170,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
                 foreach ($foreignRecordsArray as $id => $rec) {
                     if ($foreignRecords->getById($id) === false) {
+                        if ($cfg['type'] === 'user' && get_class($rec) === Tinebase_Model_User::class) {
+                            $rec = new Tinebase_Model_FullUser($rec->toArray(), true);
+                        }
                         $foreignRecords->addRecord($rec);
                     }
                 }

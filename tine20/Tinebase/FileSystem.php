@@ -771,8 +771,8 @@ class Tinebase_FileSystem implements
             if (null !== $personalNode && $parentNode->parent_id === $personalNode->getId()) {
                 $user = Tinebase_User::getInstance()->getFullUserById($parentNode->name);
                 $quota = isset(
-                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
-                    $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
                 if ($quota > 0) {
                     if (null === $localQuota) {
@@ -819,7 +819,7 @@ class Tinebase_FileSystem implements
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = $tinebaseApplication->xprops('state');
+        $tinebaseState = &$tinebaseApplication->xprops('state');
         if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
             $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
         }
@@ -905,8 +905,8 @@ class Tinebase_FileSystem implements
                         if (null !== $personalNode && $folderNode->parent_id === $personalNode->getId()) {
                             $user = $userController->getFullUserById($folderNode->name);
                             $quota = isset(
-                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA]) ?
-                                $user->xprops('configuration')[Tinebase_Model_FullUser::CONFIGURATION_PERSONAL_QUOTA] :
+                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
+                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                                 $totalByUser;
                             if ($quota > 0 && $size > $quota) {
                                 throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
@@ -2130,7 +2130,9 @@ class Tinebase_FileSystem implements
     }
 
     /**
-     * returns all children nodes, allows to set addition filters
+     * returns all children nodes, allows to set additional filters
+     * be careful with additional filters! The recursion only works on folders that match the filter!
+     * e.g. filter for type !== FOLDER do not work as recursion never starts!
      *
      * @param array         $_ids
      * @param array         $_additionalFilters
@@ -2159,7 +2161,7 @@ class Tinebase_FileSystem implements
         }
         $children = $this->search($searchFilter, null, true);
         if (count($children) > 0) {
-            $result = array_merge($result, $children, $this->getAllChildIds($children, $_additionalFilters, $_ignoreAcl));
+            $result = array_merge($children, $this->getAllChildIds($children, $_additionalFilters, $_ignoreAcl));
         }
 
         return $result;
@@ -3156,7 +3158,7 @@ class Tinebase_FileSystem implements
         $alarmController = Tinebase_Alarm::getInstance();
 
         do {
-            $node = $this->get($nodeId);
+            $node = $this->get($nodeId, true);
             $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
             if (count($notificationProps) === 0) {

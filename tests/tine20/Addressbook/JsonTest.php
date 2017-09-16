@@ -1979,6 +1979,7 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchLists($filter, array());
         self::assertEquals(1, $result['totalcount']);
         self::assertEquals('my test list', $result['results'][0]['name']);
+        self::assertTrue(isset($result['results'][0]['created_by']['accountDisplayName']), 'created_by is not resolved to user array');
     }
 
     /**

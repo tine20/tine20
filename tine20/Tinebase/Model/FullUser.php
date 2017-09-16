@@ -41,7 +41,7 @@
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
-    const CONFIGURATION_PERSONAL_QUOTA = 'personalQuota';
+    const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
 
     /**
      * list of zend inputfilter
@@ -128,7 +128,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 Tinebase_Model_User::VISIBILITY_HIDDEN, 
                 Tinebase_Model_User::VISIBILITY_DISPLAYED)
             ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
-            'configuration'         => array('allowEmpty' => true),
+            'xprops'                => array('allowEmpty' => true),
             'created_by'            => array('allowEmpty' => true),
             'creation_time'         => array('allowEmpty' => true),
             'last_modified_by'      => array('allowEmpty' => true),

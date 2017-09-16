@@ -95,15 +95,9 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
      * @return {Tine.Application}
      */
     getById: function(applicationId) {
-        var appObj = null;
-        Ext.each(Tine.Tinebase.registry.get('userApplications'), function(rawApp) {
-            if (rawApp.id === applicationId) {
-                appObj = this.get(rawApp.appName);
-                return false;
-            }
+        return this.apps.find(function(app) {
+            return app.id == applicationId;
         }, this);
-        
-        return appObj;
     },
     
     /**

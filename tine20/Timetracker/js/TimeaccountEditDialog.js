@@ -237,7 +237,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }], secondRow, lastRow] 
                 }, {
                     // activities and tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

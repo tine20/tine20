@@ -97,6 +97,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     requiredGrant: 'editGrant',
 
+    /**
+     * @cfg {Boolean} hideRelatedDegree
+     * true to hide the degree column
+     */
+    hideRelatedDegree: true,
+
+    /**
+     * @cfg {Number} pos
+     * position 200 = 100 + 100*3 -> means third one after app specific tabs
+     */
+    pos: 400,
+
     /* config */
     frame: true,
     border: true,
@@ -461,7 +473,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     {id: 'related_model', dataIndex: 'related_model', header: i18n._('Record'), editor: false, renderer: this.relatedModelRenderer.createDelegate(this), scope: this},
                     {id: 'related_record', dataIndex: 'related_record', header: i18n._('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
                     {id: 'remark', dataIndex: 'remark', header: i18n._('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 120},
-                    {id: 'related_degree', hidden: true, dataIndex: 'related_degree', header: i18n._('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
+                    {id: 'related_degree', hidden: this.hideRelatedDegree, dataIndex: 'related_degree', header: i18n._('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
                     {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: i18n._('Type'),  scope: this, width: 120, editor: true},
                     {id: 'creation_time', dataIndex: 'creation_time', editor: false, renderer: Tine.Tinebase.common.dateTimeRenderer, header: i18n._('Creation Time'), width: 140}
                 ]
@@ -801,7 +813,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var relatedApp = Tine.Tinebase.appMgr.get(appName); 
         var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
         var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
-        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy || Tine[appName][(model.toLowerCase() + 'Backend')];
+        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy
+            || Tine[appName][(model.toLowerCase() + 'Backend')]
+            || new Tine.Tinebase.data.RecordProxy({
+                appName: appName,
+                modelName: model,
+                recordClass: rc
+            });
         
         if (! Ext.isFunction(record.get)) {
             record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});

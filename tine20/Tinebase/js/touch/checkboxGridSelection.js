@@ -18,6 +18,10 @@ if (Ext.isTouchDevice) {
             cols = cm.columns || cm.config || [],
             hasCheckboxSelModel = false;
 
+        if (! (sm instanceof Ext.grid.RowSelectionModel)) {
+            return;
+        }
+
         Ext.each(cols, function (col) {
             hasCheckboxSelModel = hasCheckboxSelModel || col.dataIndex == 'checked' || col.id == 'checked';
         });

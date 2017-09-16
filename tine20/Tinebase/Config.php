@@ -563,6 +563,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_SOFT_QUOTA = 'softQuota';
     const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
 
+    const TINE20_URL = 'tine20URL';
+
 
     /**
      * (non-PHPdoc)
@@ -1736,9 +1738,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
-        /*
-
-    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';*/
+        self::TINE20_URL  => array(
+            //_('Tine20 URL')
+            'label' => 'Tine20 URL',
+            //_('The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.')
+            'description' => 'The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.',
+            'type' => 'string',
+            'default' => null,
+            'clientRegistryInclude' => true,
+            'setByAdminModule' => true,
+            'setBySetupModule' => true,
+        ),
     );
     
     /**

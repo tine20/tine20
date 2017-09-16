@@ -53,6 +53,12 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      */
     requiredGrant: 'editGrant',
 
+    /**
+     * @cfg {Number} pos
+     * position 300 = 100 + 100*2 -> means second one after app specific tabs
+     */
+    pos: 300,
+
     /* config */
     frame: true,
     border: true,

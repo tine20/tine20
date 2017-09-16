@@ -44,6 +44,12 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     requiredGrant: 'editGrant',
 
+    /**
+     * @cfg {Number} pos
+     * position 200 = 100 + 100*1 -> means first one after app specific tabs
+     */
+    pos: 200,
+
     /* config */
     frame: true,
     border: true,

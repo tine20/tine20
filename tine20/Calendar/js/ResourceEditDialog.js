@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -25,8 +25,31 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     tbarItems: [],
-    //mode: 'local',
-    
+
+    /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        // manage_resources right grants all grants
+        if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
+            // TODO use a loop here (or maybe adminGrant is sufficient?)
+            var _ = window.lodash;
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.readGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.syncGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.exportGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.adminGrant', true);
+        }
+
+        Tine.Calendar.ResourceEditDialog.superclass.onRecordLoad.call(this);
+    },
+
+    /**
+     *
+     * @returns {{xtype: string, border: boolean, plain: boolean, activeTab: number, border: boolean, items: [null,null,null]}}
+     */
     getFormItems: function() {
         this.grantsGridPanel = new Tine.widgets.container.GrantsGrid({
             grantContainer: {
@@ -122,7 +145,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]] 
                 }, {
                     // activities and tags
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     region: 'east',
                     width: 210,

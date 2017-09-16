@@ -189,7 +189,8 @@ Tine.Tinebase.common = {
     byteFormatter: function(value, forceUnit, decimals, useDecimalValues) {
         value = parseInt(value, 10);
         decimals = Ext.isNumber(decimals) ? decimals : 2;
-        var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator'),
+            suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
             divisor = useDecimalValues ? 1000 : 1024;
             
         if (forceUnit) {
@@ -200,7 +201,9 @@ Tine.Tinebase.common = {
                 if (value < Math.pow(divisor, i)) break;
             }
         }
-        return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(divisor, Math.max(1, i-1))), decimals)) + ' ' + suffix[i];
+        value = ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(divisor, Math.max(1, i-1))), decimals)) + ' ' + suffix[i];
+
+        return String(value).replace('.', decimalSeparator);
     },
     
     /**

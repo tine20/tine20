@@ -190,7 +190,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 'id' => 'adb_list_roles',
                 'application_id' => $application,
                 'model' => 'Addressbook_Model_ListRole',
-                'label' => 'List Roles' // _('List Roles')
+                'label' => 'List Functions' // _('List Functions')
             )));
         }
 

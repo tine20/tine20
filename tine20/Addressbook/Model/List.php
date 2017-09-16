@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -24,21 +24,6 @@
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Addressbook';
-    
     /**
      * list type: list (user defined lists)
      * 
@@ -63,60 +48,135 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'description',
         'email',
     );
-    
+
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array (
-        // tine 2.0 generic fields
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // modlog fields
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        
-        // list specific fields
-        'name'                  => array('presence' => 'required'),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'                  => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            Zend_Filter_Input::DEFAULT_VALUE => self::LISTTYPE_LIST,
-            array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
-        ),
-        'list_type'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'group_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'emails'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'memberroles'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'List',
+        'recordsName'       => 'Lists', // ngettext('List', 'Lists', n)
+        'hasRelations'      => true,
+        'hasCustomFields'   => true,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => true,
 
-        // tine 2.0 generic fields
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-        'paths'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'containerProperty' => 'container_id',
+
+        'containerName'     => 'Lists',
+        'containersName'    => 'Lists',
+        'containerUsesFilter' => true, // TODO true?
+
+        'titleProperty'     => 'name',//array('%s - %s', array('number', 'title')),
+        'appName'           => 'Addressbook',
+        'modelName'         => 'List',
+
+        'filterModel'       => array(
+            'path'              => array(
+                'filter'            => 'Tinebase_Model_Filter_Path',
+                'label'             => null,
+                'options'           => array()
+            ),
+            'showHidden'        => array(
+                'filter'            => 'Addressbook_Model_ListHiddenFilter',
+                'label'             => null,
+                'options'           => array()
+            ),
+            'contact'           => array(
+                'filter'            => 'Addressbook_Model_ListMemberFilter',
+                'label'             => null,
+                'options'           => array()
+            ),
+        ),
+
+        'fields'            => array(
+            'name'              => array(
+                'label'             => 'Name', //_('Percent')
+                'type'              => 'string',
+                'queryFilter'       => true,
+                'validators'        => array('presence' => 'required'),
+            ),
+            'description'       => array(
+                'label'             => 'Description', //_('Description')
+                'type'              => 'text',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'queryFilter'       => true,
+            ),
+            'members'           => array(
+                'label'             => 'Members', //_('Members')
+                'type'              => 'FOO',
+                'default'           => array(),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'email'             => array(
+                'label'             => 'Email', //_('Email')
+                'type'              => 'string',
+                'queryFilter'       => true,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'type'              => array(
+                'label'             => 'Type', //_('Type')
+                'type'              => 'string',
+                'default'           => self::LISTTYPE_LIST,
+                'validators'        => array(
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
+                ),
+            ),
+            'list_type'         => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'string',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'group_id'          => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'string',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'emails'            => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'string',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'memberroles'       => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'string',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'paths'             => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'FOO',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+        ),
     );
-    
+
     /**
-     * name of fields containing datetime or or an array of datetime information
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format:
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
      *
-     * @var array list of datetime fields
+     * @var array
      */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
+    protected static $_resolveForeignIdFields = array(
+        Tinebase_Model_User::class => array(
+            'created_by',
+            'last_modified_by'
+        )
     );
 
     /**

@@ -5,7 +5,7 @@
     <type>export</type>
     <plugin>Calendar_Export_Doc</plugin>
     <favorite>true</favorite>
-    <!-- <scope>multi</scope> -->
+    <scope>single</scope>
     <template>tine20:///Tinebase/folders/shared/export/templates/Calendar/calendar_export.docx</template>
     <!-- _('Word details') -->
     <label>Word details</label>

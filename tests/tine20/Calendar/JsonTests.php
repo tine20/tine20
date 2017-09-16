@@ -1449,16 +1449,160 @@ class Calendar_JsonTests extends Calendar_TestCase
         $searchResult = $this->_uit->searchResources($filer, array());
         $this->assertEquals(1, count($searchResult['results']), 'without manage grants only one record should be found');
     }
-    
+
+    /**
+     * assert add attendee does not work for non readable resources
+     */
+    public function testResourceAttendeeAddFail()
+    {
+        $nonreadableResourceData = $this->testSaveResource(array());
+
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $nonreadableResourceData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            )
+        ));
+
+        // manage resource right can do everything:
+        $persistentEventData = $this->_uit->saveEvent($event->toArray());
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
+        static::assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'one accepted');
+
+        // remove manage_resource right
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+        // reset class cache
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
+
+        try {
+            $this->_uit->saveEvent($event->toArray());
+            static::fail('it should not be possible to create an attender for a resource without read rights');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+    }
+
+    /**
+     * test that the Manage Resources right allows to add a "non readable" resource as attendee
+     * test that it is possible to change the attendee status of that "non readable" resource
+     * test that a status authkey will be produced for that "non readable" resource attendee
+     */
+    public function testResourceAttendeeNonReadAbleManageResources()
+    {
+        $editableResoureData = $this->testSaveResource();
+        $nonreadableResourceData = $this->testSaveResource(array());
+
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $editableResoureData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            ),
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $nonreadableResourceData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            )
+        ));
+
+        $persistentEventData = $this->_uit->saveEvent($event->toArray());
+
+        $this->assertEquals(2, count($persistentEventData['attendee']), 'resource without read grant must not be missing in attendee: '
+            . print_r($persistentEventData['attendee'], true));
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
+        $this->assertEquals(2, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'two accepted');
+        $this->assertEquals(2, count($attendee->filter('status_authkey', '/[a-z0-9]+/', TRUE)), 'one has authkey');
+
+        // status update should work for non editable resource
+        $attendee->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $persistentEventData['attendee'] = $attendee->toArray();
+        $updatedEventData = $this->_uit->saveEvent($persistentEventData);
+
+        $this->assertEquals(2, count($updatedEventData['attendee']), 'resource without read grant must not be missing in attendee: '
+            . print_r($updatedEventData['attendee'], true));
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
+        $this->assertEquals(2, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'two tentative');
+    }
+
+    /**
+     * test that no status auth key is returned for non editable resources
+     * test non readable resources are displayed as attenders
+     * test status updates do not work for non readable attenders
+     * test attendee updates do not remove non readable attenders
+     * test removing non readable attenders works
+     */
+    public function testResourceAttendeeNonReadAble()
+    {
+        $editableResoureData = $this->testSaveResource();
+        $nonreadableResourceData = $this->testSaveResource(array());
+
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $editableResoureData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            ),
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $nonreadableResourceData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            )
+        ));
+
+        $persistentEventData = $this->_uit->saveEvent($event->toArray());
+
+        // remove manage_resource right -> resource should still be there
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+        // reset class cache
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
+
+        $persistentEventData = $this->_uit->getEvent($persistentEventData['id']);
+        $this->assertEquals(2, count($persistentEventData['attendee']), 'resource without read grant must not be missing in attendee: '
+            . print_r($persistentEventData['attendee'], true));
+
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
+        $this->assertEquals(2, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'two accepted');
+        $this->assertEquals(1, count($attendee->filter('status_authkey', '/[a-z0-9]+/', TRUE)), 'one has authkey');
+
+        // saving event should not remove the non readable resource
+        // status update should only work for editable resource
+        $attendee->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $persistentEventData['attendee'] = $attendee->toArray();
+        $updatedEventData = $this->_uit->saveEvent($persistentEventData);
+
+        $this->assertEquals(2, count($updatedEventData['attendee']), 'resource without read grant must not be missing in attendee: '
+            . print_r($updatedEventData['attendee'], true));
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'one accepted');
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'one tentative');
+
+        // removing non readable resource should work
+        $attendee->removeRecord($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)->getFirstRecord());
+        $updatedEventData['attendee'] = $attendee->toArray();
+        $updatedEventData = $this->_uit->saveEvent($updatedEventData);
+
+        $this->assertEquals(1, count($updatedEventData['attendee']), 'resource without read grant must not be present in attendee: '
+            . print_r($updatedEventData['attendee'], true));
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'one tentative');
+    }
+
     /**
      * assert status authkey with editGrant
-     * assert stauts can be set with editGrant
-     * assert stauts can't be set without editGrant
+     * assert status can be set with editGrant
+     * assert status can't be set without editGrant
      */
     public function testResourceAttendeeGrants()
     {
         $editableResoureData = $this->testSaveResource();
-        $nonEditableResoureData = $this->testSaveResource(array('readGrant'));
+        $nonEditableResoureData = $this->testSaveResource(array('readGrant' => true));
+
+        // remove manage_resource right
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+        // reset class cache
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
         
         $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(

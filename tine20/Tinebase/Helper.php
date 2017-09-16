@@ -274,7 +274,12 @@ class Tinebase_Helper
      */
     public static function is_json($string)
     {
-        if (! is_string($string) || (substr($string, 0, 1) !== '[' && substr($string, 0, 1) !== '{')) {
+        if (! is_string($string)) {
+            return false;
+        }
+
+        $firstChar = substr($string, 0, 1);
+        if ($firstChar !== '[' && $firstChar !== '{' && $firstChar !== '"') {
             return false;
         }
         

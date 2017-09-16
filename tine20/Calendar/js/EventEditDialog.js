@@ -244,9 +244,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 }, {
                     // activities and tags
-                    // TODO make order of accordion items stateful
                     region: 'east',
-                    layout: 'accordion',
+                    layout: 'ux.multiaccordion',
                     animate: true,
                     width: 200,
                     split: true,

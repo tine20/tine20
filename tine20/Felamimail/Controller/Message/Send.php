@@ -818,7 +818,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param $_link
      * @param $_message
      *
-     * TODO insert above signature
+     * @TODO insert above signature
+     * @TODO rethink encrypted mails handling
      */
     protected function _insertDownloadLinkIntoMailBody($_link, $_message)
     {
@@ -829,8 +830,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         if ('text/html' === $_message->content_type) {
             $_message->body .= sprintf(
-                '<br />%s<br />',
-                $_link
+                '<br /><a href="%s">%s</a><br />',
+                $_link, urldecode($_link)
             );
         } else {
             $_message->body .= "\n" . $_link . "\n";

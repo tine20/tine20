@@ -10,6 +10,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 
 Tine.widgets.customfields.ConfigManager = function() {
     var stores = {};
+    var idMap = {};
     
     var getStore = function(app) {
         app = Tine.Tinebase.appMgr.get(app);
@@ -34,6 +35,7 @@ Tine.widgets.customfields.ConfigManager = function() {
             // place customefield keyFieldConfig in registry so we can use the standard widgets
             // keyfields are used for key/value customfields with a defined store 
             stores[app.appName].each(function(cfConfig) {
+                idMap[cfConfig.id] = cfConfig;
                 var definition = cfConfig.get('definition'),
                     options = definition.options ? definition.options : {},
                     keyFieldConfig = definition.keyFieldConfig ? definition.keyFieldConfig : null;
@@ -64,6 +66,19 @@ Tine.widgets.customfields.ConfigManager = function() {
     };
     
     return {
+        /**
+         * returns single field config by id
+         *
+         * @param customfieldId
+         * @param asField
+         * @return {Record}
+         */
+        getById: function(customfieldId, asField) {
+            var cfConfig = idMap[customfieldId];
+
+            return asField ? config2Field(cfConfig) : cfConfig;
+        },
+
         /**
          * returns a single field config
          * 

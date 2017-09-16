@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-07-13 14:52+0200\n"
+"PO-Revision-Date: 2017-08-24 15:00+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -553,7 +553,7 @@ msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
 
 #: js/LoginPanel.js:501
-msgid "Your username and/or your password are wrong!!!"
+msgid "Your username and/or your password are wrong!"
 msgstr "Ihr Benutzername und/oder Ihr Passwort ist falsch!"
 
 #: js/LoginPanel.js:503
@@ -1533,7 +1533,7 @@ msgstr "Erstellt von"
 #: js/widgets/dialog/AttachmentsGridPanel.js:137
 #: js/widgets/tree/ContextMenu.js:119
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: js/widgets/ActivitiesGridPanel.js:64
 msgid "Notes"
@@ -1565,7 +1565,7 @@ msgstr[1] "{0} bearbeiten"
 #: js/widgets/ActivitiesGridPanel.js:267 js/widgets/grid/FileUploadGrid.js:229
 #, python-brace-format
 msgid "Remove {0}"
-msgstr "Entferne {0}"
+msgstr "{0} entfernen"
 
 #: js/widgets/ActivitiesGridPanel.js:357
 msgid "Enter new note:"
@@ -1627,7 +1627,7 @@ msgstr "Wählen Sie ein Land ..."
 
 #: js/widgets/mainscreen/WestPanel.js:303
 msgid "containers"
-msgstr "Kontainer"
+msgstr "Container"
 
 #: js/widgets/mainscreen/WestPanel.js:330
 msgid "Favorites"
@@ -1673,7 +1673,7 @@ msgstr "ID bereits vorhanden"
 
 #: js/widgets/keyfield/ConfigGrid.js:259
 msgid "ID needs to follow the syntax PARENTID:ID"
-msgstr ""
+msgstr "ID muss folgendem Schema folgen PARENTID:ID"
 
 #: js/widgets/account/PickerGridPanel.js:148
 msgid "Search User"
@@ -2859,11 +2859,11 @@ msgstr "n.v."
 
 #: Config.php:555
 msgid "Account Deletion Event"
-msgstr ""
+msgstr "Account Löschungs Event"
 
 #: Config.php:557
 msgid "Configure what should happen to data of deleted users"
-msgstr ""
+msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
 
 #: Config.php:569
 msgid "Available Languages"
@@ -2875,11 +2875,11 @@ msgstr ""
 
 #: Config.php:582
 msgid "Default Locale"
-msgstr ""
+msgstr "Standard Sprache"
 
 #: Config.php:584
 msgid "Default locale for this installation."
-msgstr ""
+msgstr "Standard Sprache der Installation."
 
 #: Config.php:601
 msgid "Internet proxy config"
@@ -2927,7 +2927,7 @@ msgstr "Authentifizierungs-Backend Konfiguration"
 
 #: Config.php:690
 msgid "Second Factor Authentication Configuration"
-msgstr ""
+msgstr "Konfiguration der Zwei Faktor Authentifizierung"
 
 #: Config.php:700
 msgid "User Backend"
@@ -2939,19 +2939,19 @@ msgstr "Backend für Benutzerdaten"
 
 #: Config.php:710
 msgid "Replication master configuration"
-msgstr ""
+msgstr "Replikation Master Konfiguration"
 
 #: Config.php:712
 msgid "Replication master configuration."
-msgstr ""
+msgstr "Replikation Master Konfiguration."
 
 #: Config.php:726
 msgid "Replication slave configuration"
-msgstr ""
+msgstr "Replikation Slave Konfiguration"
 
 #: Config.php:728
 msgid "Replication slave configuration."
-msgstr ""
+msgstr "Replikation Slave Konfiguration."
 
 #: Config.php:751
 msgid "Full text configuration"
@@ -3371,119 +3371,119 @@ msgstr ""
 
 #: Config.php:1475
 msgid "currency symbol"
-msgstr ""
+msgstr "Währungssymbol"
 
 #: Config.php:1486
 msgid "Filesystem settings"
-msgstr ""
+msgstr "Dateisystem Einstellungen"
 
 #: Config.php:1488
 msgid "Filesystem settings."
-msgstr ""
+msgstr "Dateisystem Einstellungen."
 
 #: Config.php:1497
 msgid "Filesystem history"
-msgstr ""
+msgstr "Dateisystem Historie"
 
 #: Config.php:1499
 msgid "Filesystem keeps history, default is false."
-msgstr ""
+msgstr "Dateisystem behält Historie, Standard ist nein"
 
 #: Config.php:1508
 msgid "Filesystem number of revisions"
-msgstr ""
+msgstr "Dateisystem Anzahl der Revisionen"
 
 #: Config.php:1510
 msgid "Filesystem number of revisions being kept before they are automatically deleted."
-msgstr ""
+msgstr "Dateisystem Anzahl der Revisionen, die behalten werden, bevor sie automatisch gelöscht werden."
 
 #: Config.php:1519
 msgid "Filesystem months of revisions"
-msgstr ""
+msgstr "Dateisystem Monate der Revisionen"
 
 #: Config.php:1521
 msgid "Filesystem number of months revisions being kept before they are automatically deleted."
-msgstr ""
+msgstr "Dateisystem Anzahl der Monate die Revisionen behalten werden bevor sie automatisch gelöscht werden."
 
 #: Config.php:1530
 msgid "Filesystem index content"
-msgstr ""
+msgstr "Dateisystem indizierter Inhalt"
 
 #: Config.php:1532
 msgid "Filesystem index content."
-msgstr ""
+msgstr "Dateisystem indizierter Inhalt."
 
 #: Config.php:1541
 msgid "Filesystem enable notifications"
-msgstr ""
+msgstr "Dateisystem aktiviere Benachrichtigungen"
 
 #: Config.php:1543
 msgid "Filesystem enable notifications."
-msgstr ""
+msgstr "Dateisystem aktiviere Benachrichtigungen."
 
 #: Config.php:1552
 msgid "Filesystem create previews"
-msgstr ""
+msgstr "Dateisystem erstellt Vorschauen"
 
 #: Config.php:1554
 msgid "Filesystem create previews."
-msgstr ""
+msgstr "Dateisystem erstellt Vorschauen."
 
 #: Config.php:1563
 msgid "URL of preview service"
-msgstr ""
+msgstr "URL des Vorschau Service"
 
 #: Config.php:1565
 msgid "URL of preview service."
-msgstr ""
+msgstr "URL des Vorschau Service."
 
 #: Config.php:1577 Config.php:1579
 msgid "Quota settings"
-msgstr ""
+msgstr "Quota Einstellungen"
 
 #: Config.php:1588
 msgid "Include revisions"
-msgstr ""
+msgstr "Revisionen einbeziehen"
 
 #: Config.php:1590
 msgid "Should all revisions be used to calculate total usage?"
-msgstr ""
+msgstr "Sollen alle Revisionen verwendet werden um den gesammten Verbrauch zu berechnen?"
 
 #: Config.php:1599
 msgid "Total quota in MB"
-msgstr ""
+msgstr "Gesamte Quota in MB"
 
 #: Config.php:1601
 msgid "Total quota in MB (0 for unlimited)"
-msgstr ""
+msgstr "Gesamte Quota in MB (0 für unlimitiert)"
 
 #: Config.php:1610
 msgid "Total quota by user in MB"
-msgstr ""
+msgstr "Gesamte Quota nach Benutzer in MB"
 
 #: Config.php:1612
 msgid "Total quota by user in MB (0 for unlimited)"
-msgstr ""
+msgstr "Gesamte Quota nach Benutzer in MB (0 für unlimitiert)"
 
 #: Config.php:1621
 msgid "Soft quota in %"
-msgstr ""
+msgstr "Soft-Quota in %"
 
 #: Config.php:1623
 msgid "Soft quota in % (0-100, 0 means off)"
-msgstr ""
+msgstr "Soft-Quota in % (0-100, 0 heißt deaktiviert)"
 
 #: Config.php:1632
 msgid "Soft quota notification role"
-msgstr ""
+msgstr "Soft-Quota Benachrichtigung Rolle"
 
 #: Config.php:1634
 msgid "Name of the role to notify if soft quote is exceeded"
-msgstr ""
+msgstr "Name der Rolle, die eine Benachrichtigung erhält, sobald die soft Quota erreicht ist"
 
 #: Container.php:1101
 msgid "You are not allowed to delete your default container!"
-msgstr ""
+msgstr "Sie dürfen Ihren Standard Container nicht löschen!"
 
 #: Container.php:1865
 msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
@@ -3599,11 +3599,11 @@ msgstr "Das Recht, die Installation im Wartungsmodus zu verwenden."
 
 #: Acl/Rights.php:188
 msgid "Replication"
-msgstr ""
+msgstr "Replikation"
 
 #: Acl/Rights.php:189
 msgid "The right to access the replication data of all applications."
-msgstr ""
+msgstr "Das Recht auf die Replikations Daten aller Anwendungen zuzugreifen"
 
 #: Export/Pdf.php:437
 msgid "Created by"
@@ -3628,8 +3628,8 @@ msgstr "Gemeinsame Ordner"
 #: Model/RoleMember.php:34 Model/Application.php:49
 msgid "RoleMember"
 msgid_plural "RoleMembers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Rollen Mitglied"
+msgstr[1] "Rollen MItglieder"
 
 #: Model/RoleMember.php:49
 msgid "role_id"
@@ -3646,20 +3646,20 @@ msgstr ""
 #: Model/Container.php:70
 msgid "Container"
 msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Container"
+msgstr[1] "Container"
 
 #: Model/Container.php:103 Model/Application.php:84
 msgid "Order"
-msgstr ""
+msgstr "Reihenfolge"
 
 #: Model/Container.php:113
 msgid "Application"
-msgstr ""
+msgstr "Anwendung"
 
 #: Model/Container.php:118
 msgid "Owner"
-msgstr ""
+msgstr "Besitzer"
 
 #: Model/Container.php:123
 msgid "Model"
@@ -3667,39 +3667,39 @@ msgstr ""
 
 #: Model/Container.php:128
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: Model/Application.php:78
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: Model/Application.php:90
 msgid "Tables"
-msgstr ""
+msgstr "Tabellen"
 
 #: Model/Application.php:96
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #: Model/Role.php:39
 msgid "Role"
 msgid_plural "Roles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Rolle"
+msgstr[1] "Rollen"
 
 #: Model/Role.php:67
 msgid "Rights"
-msgstr ""
+msgstr "Rechte"
 
 #: Model/Role.php:79
 msgid "Members"
-msgstr ""
+msgstr "Mitglieder"
 
 #: Model/RoleRight.php:34
 msgid "RoleRight"
 msgid_plural "RoleRights"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Rollen Recht"
+msgstr[1] "Rollen Rechte"
 
 #: Notes.php:433
 msgid "by"

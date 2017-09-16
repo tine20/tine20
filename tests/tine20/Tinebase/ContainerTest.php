@@ -626,7 +626,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     public function testSearchContainerByOwner()
     {
         $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'owner_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
+            array('field' => 'owner_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+            array('field' => 'application_id', 'operator' => 'equals', 'value' =>
+                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId())
         ));
         $result = Tinebase_Container::getInstance()->search($filter);
         

@@ -506,6 +506,8 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
     { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
     { name: 'pin_protected', label: 'Pin Protected' }, // _('Pin Protected')
+    { name: 'quota', label: 'Quota'}, // _('Quota')
+    { name: 'effectiveAndLocalQuota', label: 'Effective Quota' }, // _('Effective Quota')
 
     { name: 'relations' },
     { name: 'customfields' },

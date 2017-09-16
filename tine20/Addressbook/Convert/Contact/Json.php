@@ -57,6 +57,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
             $pathController = Tinebase_Record_Path::getInstance();
             foreach ($_records as $record) {
                 $record->paths = $pathController->getPathsForRecord($record);
+                $pathController->cutTailAfterRecord($record, $record->paths);
             }
         }
     }

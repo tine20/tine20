@@ -75,6 +75,12 @@ class Setup_Controller
     protected $_helperLink = ' <a href="http://wiki.tine20.org/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
 
     /**
+     * the temporary super user role
+     * @var string
+     */
+    protected $_superUserRoleName = null;
+
+    /**
      * the singleton pattern
      *
      * @return Setup_Controller
@@ -549,35 +555,40 @@ class Setup_Controller
                     Tinebase_Application::getInstance()->updateApplication($_application);
 
                 } else {
-                    $update = new $className($this->_backend);
-                
-                    $classMethods = get_class_methods($update);
-              
-                    // we must do at least one update
-                    do {
-                        $functionName = 'update_' . $minor;
-                        
-                        try {
-                            $db = Setup_Core::getDb();
-                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-                        
-                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                                . ' Updating ' . $_application->name . ' - ' . $functionName
-                            );
-                            
-                            $update->$functionName();
-                        
-                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                
-                        } catch (Exception $e) {
-                            Tinebase_TransactionManager::getInstance()->rollBack();
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                            throw $e;
-                        }
-                            
-                        $minor++;
-                    } while(array_search('update_' . $minor, $classMethods) !== false);
+                    try {
+                        $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+                        $update = new $className($this->_backend);
+
+                        $classMethods = get_class_methods($update);
+
+                        // we must do at least one update
+                        do {
+                            $functionName = 'update_' . $minor;
+
+                            try {
+                                $db = Setup_Core::getDb();
+                                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                    . ' Updating ' . $_application->name . ' - ' . $functionName
+                                );
+
+                                $update->$functionName();
+
+                                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+                            } catch (Exception $e) {
+                                Tinebase_TransactionManager::getInstance()->rollBack();
+                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                                throw $e;
+                            }
+
+                            $minor++;
+                        } while (array_search('update_' . $minor, $classMethods) !== false);
+                    } finally {
+                        $this->_cleanUpUpdate();
+                    }
                 }
                 
                 $messages[] = "<strong> Updated " . $_application->name . " successfully to " .  $_majorVersion . '.' . $minor . "</strong>";
@@ -606,6 +617,121 @@ class Setup_Controller
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
         
         return $messages;
+    }
+
+    protected function _fixTinebase10_33()
+    {
+        // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
+        $updater = new Tinebase_Setup_Update_Release10($this->_backend);
+        if (version_compare(($oldVersion = $updater->getApplicationVersion('Tinebase')), '10.33') > -1) {
+            return;
+        }
+
+        $tables = array(
+            'roles' => '',
+            'role_rights' => '',
+            'role_accounts' => '',
+        );
+
+        foreach ($tables as $table => &$oldVersion) {
+            $oldVersion = $updater->getTableVersion($table);
+        }
+
+        $updater->update_26();
+        $updater->update_32();
+
+        foreach ($tables as $table => $oldVersion) {
+            $updater->setTableVersion($table, $oldVersion);
+        }
+
+        $updater->setApplicationVersion('Tinebase', $oldVersion);
+    }
+
+    /**
+     * prepare update
+     *
+     * - checks/disables action queue
+     * - creates superuser role for setupuser
+     *
+     * @see 0013414: update scripts should work without dedicated setupuser
+     * @param Tinebase_Model_User $_user
+     * @throws Tinebase_Exception
+     */
+    protected function _prepareUpdate(Tinebase_Model_User $_user)
+    {
+        // check action queue is empty and wait for it to finish
+        $timeStart = time();
+        while (Tinebase_ActionQueue::getInstance()->getQueueSize() > 0 && time() - $timeStart < 300) {
+            usleep(1000);
+        }
+        if (time() - $timeStart >= 300) {
+            throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
+        }
+        // set action to direct
+        Tinebase_ActionQueue::getInstance('Direct');
+
+        $this->_fixTinebase10_33();
+
+        $roleController = Tinebase_Acl_Roles::getInstance();
+        $applicationController = Tinebase_Application::getInstance();
+        $oldModLog = $roleController->modlogActive(false);
+        Tinebase_Model_User::forceSuperUser();
+
+        try {
+            Tinebase_Model_Role::setIsReplicable(false);
+            $this->_superUserRoleName = 'superUser' . Tinebase_Record_Abstract::generateUID();
+            $superUserRole = new Tinebase_Model_Role(array(
+                'name' => $this->_superUserRoleName
+            ));
+            $rights = array();
+
+            /** @var Tinebase_Model_Application $application */
+            foreach ($applicationController->getApplications() as $application) {
+                $appId = $application->getId();
+                foreach ($applicationController->getAllRights($appId) as $right) {
+                    $rights[] = array(
+                        'application_id' => $appId,
+                        'right' => $right,
+                    );
+                }
+            }
+            $superUserRole->rights = $rights;
+            $superUserRole->members = array(
+                array(
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    'account_id' => $_user->getId()
+                )
+            );
+
+            $roleController->create($superUserRole);
+        } finally {
+            Tinebase_Model_Role::setIsReplicable(true);
+            $roleController->modlogActive($oldModLog);
+        }
+    }
+
+    /**
+     * cleanup after update
+     *
+     * - removes setupuser superuser role
+     * - re-enables action queue
+     */
+    protected function _cleanUpUpdate()
+    {
+        $roleController = Tinebase_Acl_Roles::getInstance();
+        $oldModLog = $roleController->modlogActive(false);
+        try {
+            Tinebase_Model_Role::setIsReplicable(false);
+            if (null !== $this->_superUserRoleName) {
+                // TODO: check: will the role membership be deleted? How? DB constraint?
+                $roleController->delete($roleController->getRoleByName($this->_superUserRoleName));
+            }
+        } finally {
+            Tinebase_Model_Role::setIsReplicable(true);
+            $roleController->modlogActive($oldModLog);
+            Tinebase_Model_User::forceSuperUser(false);
+            $this->_superUserRoleName = null;
+        }
     }
 
     /**
@@ -1552,16 +1678,27 @@ class Setup_Controller
 
         $this->_clearCache();
 
+        //sanitize input
+        $_applications = array_unique(array_filter($_applications));
+
         $installedApps = Tinebase_Application::getInstance()->getApplications();
         
         // uninstall all apps if tinebase ist going to be uninstalled
-        if (count($installedApps) !== count($_applications) && in_array('Tinebase', $_applications)) {
+        if (in_array('Tinebase', $_applications)) {
             $_applications = $installedApps->name;
+        } else {
+            // prevent Addressbook and Admin from being uninstalled
+            if(($key = array_search('Addressbook', $_applications)) !== false) {
+                unset($_applications[$key]);
+            }
+            if(($key = array_search('Admin', $_applications)) !== false) {
+                unset($_applications[$key]);
+            }
         }
         
         // deactivate foreign key check if all installed apps should be uninstalled
         $deactivatedForeignKeyCheck = false;
-        if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
+        if (in_array('Tinebase', $_applications) && get_class($this->_backend) === 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
             $deactivatedForeignKeyCheck = true;
         }
@@ -1694,8 +1831,9 @@ class Setup_Controller
      * look for export & import definitions and put them into the db
      *
      * @param Tinebase_Model_Application $_application
+     * @param boolean $_onlyDefinitions
      */
-    public function createImportExportDefinitions($_application)
+    public function createImportExportDefinitions($_application, $_onlyDefinitions = false)
     {
         foreach (array('Import', 'Export') as $type) {
             $path =
@@ -1715,6 +1853,10 @@ class Setup_Controller
                         }
                     }
                 }
+            }
+
+            if (true === $_onlyDefinitions) {
+                continue;
             }
 
             $path =
@@ -1953,28 +2095,50 @@ class Setup_Controller
     protected function _sortUninstallableApplications($_applications)
     {
         $result = array();
+
+        // if not everything is going to be uninstalled, we need to check the dependencies of the applications
+        // that stay installed.
+        if (!isset($_applications['Tinebase'])) {
+            $installedApps = Tinebase_Application::getInstance()->getApplications()->name;
+            $xml = array();
+
+            do {
+                $changed = false;
+                $stillInstalledApps = array_diff($installedApps, array_keys($_applications));
+                foreach ($stillInstalledApps as $name) {
+                    if (!isset($xml[$name])) {
+                        try {
+                            $xml[$name] = $this->getSetupXml($name);
+                        } catch (Setup_Exception_NotFound $senf) {
+                            Tinebase_Exception::log($senf);
+                        }
+                    }
+                    $depends = isset($xml[$name]) ? (array) $xml[$name]->depends : array();
+                    if (isset($depends['application'])) {
+                        foreach ((array)$depends['application'] as $app) {
+                            if(isset($_applications[$app])) {
+                                unset($_applications[$app]);
+                                $changed = true;
+                            }
+                        }
+                    }
+                }
+            } while(true === $changed);
+        }
         
         // get all apps to uninstall ($name => $dependencies)
         $appsToSort = array();
         foreach($_applications as $name => $xml) {
             if ($name !== 'Tinebase') {
-                $depends = $xml ? (array) $xml->depends : array();
+                $appsToSort[$name] = array();
+                $depends = $xml ? (array)$xml->depends : array();
                 if (isset($depends['application'])) {
-                    if ($depends['application'] == 'Tinebase') {
-                        $appsToSort[$name] = array();
-                        
-                    } else {
-                        $depends['application'] = (array) $depends['application'];
-                        
-                        foreach ($depends['application'] as $app) {
-                            // don't add tinebase (all apps depend on tinebase)
-                            if ($app != 'Tinebase') {
-                                $appsToSort[$name][] = $app;
-                            }
+                    foreach ((array)$depends['application'] as $app) {
+                        // don't add tinebase (all apps depend on Tinebase)
+                        if ($app !== 'Tinebase') {
+                            $appsToSort[$name][] = $app;
                         }
                     }
-                } else {
-                    $appsToSort[$name] = array();
                 }
             }
         }
@@ -1984,8 +2148,6 @@ class Setup_Controller
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
 
             foreach($appsToSort as $name => $depends) {
-                //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " - $count $name - " . print_r($depends, true));
-                
                 // don't uninstall if another app depends on this one
                 $otherAppDepends = FALSE;
                 foreach($appsToSort as $innerName => $innerDepends) {
@@ -2012,7 +2174,6 @@ class Setup_Controller
         // Tinebase is uninstalled last
         if (isset($_applications['Tinebase'])) {
             $result['Tinebase'] = $_applications['Tinebase'];
-            unset($_applications['Tinebase']);
         }
         
         return $result;

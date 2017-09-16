@@ -34,7 +34,7 @@ Tine.Addressbook.ListRoleMemberFilterModel = Ext.extend(Tine.widgets.grid.Filter
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
         
         this.operators = ['equals'];
-        this.label = this.app.i18n._('List Role');
+        this.label = this.app.i18n._('List Function');
     },
     
     /**

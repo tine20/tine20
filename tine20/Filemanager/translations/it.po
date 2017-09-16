@@ -99,7 +99,7 @@ msgstr "Salva in locale"
 msgid "Preview"
 msgstr ""
 
-#: js/nodeActions.js:338 js/GrantsPanel.js:49
+#: js/nodeActions.js:338 js/GrantsPanel.js:57
 msgid "Publish"
 msgstr ""
 
@@ -115,11 +115,11 @@ msgstr ""
 msgid "Reload),"
 msgstr ""
 
-#: js/NodeTreePanel.js:509 js/NodeGridPanel.js:753
+#: js/NodeTreePanel.js:514 js/NodeGridPanel.js:768
 msgid "Upload Failed"
 msgstr "Caricamento fallito"
 
-#: js/NodeTreePanel.js:510 js/NodeGridPanel.js:754
+#: js/NodeTreePanel.js:515 js/NodeGridPanel.js:769
 msgid "Putting files in this folder is not allowed!"
 msgstr "Non è consentito inserire file in questa cartella!"
 
@@ -177,46 +177,46 @@ msgstr[1] "File"
 msgid "Public Links"
 msgstr ""
 
-#: js/NodeEditDialog.js:164 js/FilePicker.js:275 js/NotificationGridPanel.js:93
+#: js/NodeEditDialog.js:150 js/FilePicker.js:275 js/NotificationGridPanel.js:93
 #: js/NodeGridPanel.js:233
 msgid "Name"
 msgstr "Nome"
 
-#: js/NodeEditDialog.js:172 js/Model.js:595
+#: js/NodeEditDialog.js:158 js/Model.js:602
 msgid "Type"
 msgstr "Tipo"
 
-#: js/NodeEditDialog.js:184 js/Model.js:603 js/NodeGridPanel.js:308
+#: js/NodeEditDialog.js:170 js/Model.js:610 js/NodeGridPanel.js:308
 msgid "Indexed"
 msgstr ""
 
-#: js/NodeEditDialog.js:184
+#: js/NodeEditDialog.js:170
 msgid "Not yet indexed"
 msgstr ""
 
-#: js/NodeEditDialog.js:202 js/DownloadLinkGridPanel.js:254
+#: js/NodeEditDialog.js:188 js/DownloadLinkGridPanel.js:255
 #: js/NodeGridPanel.js:270
 msgid "Created By"
 msgstr "Creata da"
 
-#: js/NodeEditDialog.js:205 js/Model.js:597 js/DownloadLinkGridPanel.js:262
+#: js/NodeEditDialog.js:191 js/Model.js:604 js/DownloadLinkGridPanel.js:263
 #: js/NodeGridPanel.js:263
 msgid "Creation Time"
 msgstr "Data di creazione"
 
-#: js/NodeEditDialog.js:214
+#: js/NodeEditDialog.js:200
 msgid "Modified By"
 msgstr "Modificato da"
 
-#: js/NodeEditDialog.js:217
+#: js/NodeEditDialog.js:203
 msgid "Last Modified"
 msgstr "Ultima Modifica"
 
-#: js/NodeEditDialog.js:238 js/Model.js:598
+#: js/NodeEditDialog.js:224 js/Model.js:605
 msgid "Description"
 msgstr "Descrizione"
 
-#: js/NodeEditDialog.js:252
+#: js/NodeEditDialog.js:238
 msgid "Enter description"
 msgstr "Inserisci descrizione"
 
@@ -224,37 +224,37 @@ msgstr "Inserisci descrizione"
 msgid "Filemanager"
 msgstr "Filemanager"
 
-#: js/Model.js:91 js/RevisionPanel.js:34
+#: js/Model.js:93 js/RevisionPanel.js:34
 msgid "Revision"
 msgstr "Revisione"
 
-#: js/Model.js:242 js/Model.js:257
+#: js/Model.js:249 js/Model.js:264
 #, python-brace-format
 msgid "Copying data .. {0}"
 msgstr "Copia dati .. {0}"
 
-#: js/Model.js:245 js/Model.js:259
+#: js/Model.js:252 js/Model.js:266
 #, python-brace-format
 msgid "Moving data .. {0}"
 msgstr "Spostamento dati .. {0}"
 
-#: js/Model.js:263
+#: js/Model.js:270
 msgid "Please wait"
 msgstr "Attendi"
 
-#: js/Model.js:594
+#: js/Model.js:601
 msgid "Quick Search"
 msgstr "Ricerca veloce"
 
-#: js/Model.js:596 js/FilePicker.js:289 js/NodeGridPanel.js:247
+#: js/Model.js:603 js/FilePicker.js:289 js/NodeGridPanel.js:247
 msgid "Contenttype"
 msgstr "Contenttype"
 
-#: js/Model.js:602
+#: js/Model.js:609
 msgid "File Contents"
 msgstr ""
 
-#: js/Model.js:625
+#: js/Model.js:632
 msgid "Download Link"
 msgid_plural "Download Links"
 msgstr[0] ""
@@ -264,43 +264,43 @@ msgstr[1] ""
 msgid "Size"
 msgstr "Dimensione"
 
-#: js/DownloadLinkGridPanel.js:67
+#: js/DownloadLinkGridPanel.js:68
 msgid "Create Public Link"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:75
+#: js/DownloadLinkGridPanel.js:76
 msgid "Remove record"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:143
+#: js/DownloadLinkGridPanel.js:144
 msgid "Creating new Download Link..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:181
+#: js/DownloadLinkGridPanel.js:182
 msgid "Deleting Download Links..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:181
+#: js/DownloadLinkGridPanel.js:182
 msgid "Deleting Download Link..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:238 js/FilePublishedDialog.js:58
+#: js/DownloadLinkGridPanel.js:239 js/FilePublishedDialog.js:58
 msgid "Url"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:270
+#: js/DownloadLinkGridPanel.js:271
 msgid "Expiration Time"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:279
+#: js/DownloadLinkGridPanel.js:280
 msgid "Access Count"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:277
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:277
 msgid "Last Modified Time"
 msgstr "Data Ultima modifica"
 
-#: js/DownloadLinkGridPanel.js:294 js/NodeGridPanel.js:284
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:284
 msgid "Last Modified By"
 msgstr "Ultima modifica di"
 
@@ -312,7 +312,11 @@ msgstr ""
 msgid "This folder has own notification settings"
 msgstr ""
 
-#: js/DocumentPreview.js:98
+#: js/DocumentPreview.js:59
+msgid "Close"
+msgstr ""
+
+#: js/DocumentPreview.js:119
 msgid "No preview available."
 msgstr ""
 
@@ -365,7 +369,7 @@ msgid "Notification"
 msgstr ""
 
 #: js/NotificationGridPanel.js:35
-msgid "Notactiveification"
+msgid "Notification active"
 msgstr ""
 
 #: js/NotificationGridPanel.js:46
@@ -433,7 +437,7 @@ msgstr ""
 msgid "Send as e-mail"
 msgstr ""
 
-#: js/FilePublishedDialog.js:106 js/GrantsPanel.js:47
+#: js/FilePublishedDialog.js:106 js/GrantsPanel.js:55
 msgid "Download"
 msgstr ""
 
@@ -449,11 +453,19 @@ msgstr ""
 msgid "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
 msgstr ""
 
-#: js/GrantsPanel.js:48
+#: js/GrantsPanel.js:49
+msgid "This folder is pin protected"
+msgstr ""
+
+#: js/GrantsPanel.js:52
+msgid "If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents."
+msgstr ""
+
+#: js/GrantsPanel.js:56
 msgid "The grant to download files"
 msgstr ""
 
-#: js/GrantsPanel.js:50
+#: js/GrantsPanel.js:58
 msgid "The grant to create anonymous download links for files"
 msgstr ""
 
@@ -473,47 +485,47 @@ msgstr ""
 msgid "Hold-back in months"
 msgstr ""
 
-#: Controller/Node.php:430
+#: Controller/Node.php:461
 msgid "My folders"
 msgstr "Mie cartelle"
 
-#: Controller/Node.php:437
+#: Controller/Node.php:468
 msgid "Shared folders"
 msgstr "Cartelle condivise"
 
-#: Controller/Node.php:444
+#: Controller/Node.php:475
 msgid "Other users folders"
 msgstr "Cartelle di altri utenti"
 
-#: Controller/Node.php:1365
+#: Controller/Node.php:1411
 msgid "Received"
 msgstr ""
 
-#: Controller/Node.php:1366
+#: Controller/Node.php:1412
 msgid "To"
 msgstr ""
 
-#: Controller/Node.php:1367
+#: Controller/Node.php:1413
 msgid "Cc"
 msgstr ""
 
-#: Controller/Node.php:1368
+#: Controller/Node.php:1414
 msgid "Bcc"
 msgstr ""
 
-#: Controller/Node.php:1369
+#: Controller/Node.php:1415
 msgid "From (E-Mail)"
 msgstr ""
 
-#: Controller/Node.php:1370
+#: Controller/Node.php:1416
 msgid "From (Name)"
 msgstr ""
 
-#: Controller/Node.php:1371
+#: Controller/Node.php:1417
 msgid "Body"
 msgstr ""
 
-#: Controller/Node.php:1372
+#: Controller/Node.php:1418
 msgid "Attachments"
 msgstr ""
 
@@ -522,7 +534,7 @@ msgid "Public Download URL"
 msgstr ""
 
 #: Config.php:28
-msgid "Possible status. Please note that additional status might impact other Filemanager systems on export or syncronisation."
+msgid "Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules."
 msgstr ""
 
 #: Acl/Rights.php:104

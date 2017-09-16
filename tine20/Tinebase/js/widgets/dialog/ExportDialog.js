@@ -29,10 +29,16 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @cfg {String} appName
      */
     appName: null,
-
     /**
-     * @private
+     * @cfg {Number} height
      */
+    height: 150,
+    /**
+     * @cfg {Number} width
+     */
+    width: 400,
+
+    // private
     windowNamePrefix: 'ExportWindow_',
     loadMask: false,
     tbarItems: [],
@@ -124,8 +130,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 emptyText: i18n._('Select Export Definition ...'),
                 valueField: 'id',
                 value: (this.definitionsStore.getCount() > 0) ? this.definitionsStore.getAt(0).id : null 
-            }
-            ]
+            }]
         };
     },
     
@@ -146,17 +151,13 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     }
 });
 
-/**
- * credentials dialog popup / window
- */
 Tine.widgets.dialog.ExportDialog.openWindow = function (config) {
-    var window = Tine.WindowFactory.getWindow({
-        width: 400,
-        height: 150,
-        name: Tine.widgets.dialog.ExportDialog.windowNamePrefix + Ext.id(),
+    return Tine.WindowFactory.getWindow({
+        width: Tine.widgets.dialog.ExportDialog.prototype.width,
+        height: Tine.widgets.dialog.ExportDialog.prototype.height,
+        name: Tine.widgets.dialog.ExportDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ExportDialog',
         contentPanelConstructorConfig: config,
         modal: true
     });
-    return window;
 };

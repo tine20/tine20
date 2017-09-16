@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-07-13 13:40+0200\n"
+"PO-Revision-Date: 2017-08-24 13:02+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -1218,7 +1218,7 @@ msgstr "Verfügbare Ressourcen Typen"
 
 #: Config.php:296
 msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
-msgstr ""
+msgstr "Verfügbare Ressourcen Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
 
 #: Config.php:304
 msgid "Room"
@@ -1226,11 +1226,11 @@ msgstr "Raum"
 
 #: Config.php:310
 msgid "Free/Busy Types Available"
-msgstr ""
+msgstr "Verfügbare Frei/Belegt Typen"
 
 #: Config.php:312
 msgid "Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
-msgstr ""
+msgstr "Mögliche Frei/Belegt Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
 
 #: Config.php:319
 msgid "Free"
@@ -1250,7 +1250,7 @@ msgstr "Maximales Alter für Termine die synchronisiert werden dürfen (in Monat
 
 #: Config.php:339
 msgid "Filter timeslot for CalDAV events with SyncToken"
-msgstr ""
+msgstr "Filter Zeitpunkt für CalDAV Termine mit SyncToken"
 
 #: Config.php:350
 msgid "Timeslot for event notifications"
@@ -1346,7 +1346,7 @@ msgstr "Sende Vorläufig Benachrichtigungen"
 
 #: Config.php:459
 msgid "Send notifications to event organiziers of events that are tentative certain days before event is due"
-msgstr ""
+msgstr "Sende Benachrichtigungen an Termin Organisatoren, wenn der Termin eien gewisse Anzahl von Tagen vor dem Stattfinden immernoch vorläufig ist."
 
 #: Config.php:467 Config.php:468
 msgid "Enabled"
@@ -1358,7 +1358,7 @@ msgstr "Tage bevor Fälligkeits Datum"
 
 #: Config.php:474
 msgid "How many days before the events due date to start send notifications."
-msgstr ""
+msgstr "Ab wie viele Tage vor dem Stattfinden eines Termins sollen Benachrichtigungen versendet werden."
 
 #: Config.php:479
 msgid "Additional Filter"
@@ -1366,7 +1366,7 @@ msgstr "Zusätzliche Filter"
 
 #: Config.php:480
 msgid "Additional filter to limit events notifications should be send for."
-msgstr ""
+msgstr "Zusetzliche Filter um zu limitieren, wofür Termin Benachrichtigungen verschickt werden."
 
 #: Setup/Initialize.php:34 Setup/Update/Release3.php:164
 msgid "All events I attend"
@@ -1690,7 +1690,7 @@ msgstr "Setze standardmäßig Termine auf privat"
 
 #: Preference.php:210
 msgid "If enabled every created event is always privat"
-msgstr ""
+msgstr "Wenn aktiviert, werden neue Termine immer als privat angelegt"
 
 #: Preference.php:213
 msgid "First Day of Week"
@@ -1698,7 +1698,7 @@ msgstr "Erster Tag der Woche"
 
 #: Preference.php:214
 msgid "On what day the week should be starting"
-msgstr ""
+msgstr "An welchem Tag die Woche beginnen soll"
 
 #: Preference.php:217
 msgid "Default calendar strategy"
@@ -1706,11 +1706,11 @@ msgstr "Standard Kalender Strategie"
 
 #: Preference.php:218
 msgid "The calendar for new events if no container is selected"
-msgstr ""
+msgstr "Der Kalender für neue Termine, wenn kein Container selektiert wurde"
 
 #: Preference.php:222
 msgid "Calendars always selected regardless of all filter parameters."
-msgstr ""
+msgstr "Kalender die immer angezeigt werden, unabhängig von den eingestellten Filtern."
 
 #: Preference.php:305
 msgid "Never"
