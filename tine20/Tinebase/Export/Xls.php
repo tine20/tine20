@@ -394,6 +394,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 'XFIndex'       => $cell->getXfIndex()
             );
             $cell->setValue();
+            $cell->setXfIndex();
             // TODO update replacement cache in case we implement it
         }
     }

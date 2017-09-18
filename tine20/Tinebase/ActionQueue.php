@@ -33,7 +33,7 @@
      /**
       * holds queue instance
       * 
-      * @var Zend_Queue
+      * @var Tinebase_ActionQueue_Backend_Interface
       */
      protected $_queue = NULL;
      
@@ -55,6 +55,7 @@
     /**
      * the singleton pattern
      *
+     * @param string|null $_forceBackend
      * @return Tinebase_ActionQueue
      */
     public static function getInstance($_forceBackend = null)
@@ -76,6 +77,8 @@
     
     /**
      * constructor
+     *
+     * @param string|null $_forceBackend
      */
     private function __construct($_forceBackend = null)
     {
@@ -99,7 +102,7 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
                 __METHOD__ . '::' . __LINE__ . " Queue class name {$className} not found. Falling back to direct execution.");
             
-            $className = 'Tinebase_ActionQueue_Backend_Direct';
+            $className = Tinebase_ActionQueue_Backend_Direct::class;
         }
     
         $this->_queue = new $className($options); 
@@ -152,12 +155,12 @@
     public function processQueue()
     {
         // loop over all jobs
-        while($jobId = Tinebase_ActionQueue::getInstance()->waitForJob()) {
-            $job = $this->receive($jobId);
+        while(false !== ($jobId = $this->_queue->waitForJob())) {
+            $job = $this->_queue->receive($jobId);
             
             $this->executeAction($job);
             
-            $this->delete($jobId);
+            $this->_queue->delete($jobId);
         }
     }
 

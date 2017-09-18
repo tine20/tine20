@@ -62,7 +62,7 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      *
      * @param  integer  $jobId  the id of the job
      * @throws Tinebase_Exception_NotImplemented
-     * @return string           the job
+     * @return array           the job
      */
     public function receive($jobId)
     {
