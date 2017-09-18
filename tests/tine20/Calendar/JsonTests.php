@@ -2197,6 +2197,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
     }
 
+    public function testSearchAttendeersByTypeAndId()
+    {
+        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter())->getId();
+
+        $filter = json_decode('[{
+            "field":"type",
+            "value":["user"]
+        }, {
+            "field":"userFilter",
+            "value":{
+                "field":"id",
+                "operator":"in",
+                "value":[]
+            }
+        }]', true);
+        $filter[1]['value']['value'] = $allIds;
+
+        $result = $this->_uit->searchAttenders($filter, [], [], []);
+        $this->assertEquals(count($allIds), count($result['user']['results']));
+    }
+
     public function testSearchFreeTime()
     {
         $event = $this->_getEvent();
