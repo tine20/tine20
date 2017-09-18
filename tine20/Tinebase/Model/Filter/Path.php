@@ -53,8 +53,8 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)/* ||
-                empty($this->_value)*/) {
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH) ||
+                empty($this->_value)) {
             return;
         }
 
