@@ -1456,12 +1456,8 @@ class Addressbook_JsonTest extends TestCase
     /**
      * Tests if path info in query breaks backend
      */
-    public function testSearchContactsWithPathFilterIfPathDisabled()
+    public function testSearchContactsWithPathFilterOrCondition()
     {
-        if (Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $this->markTestSkipped('Test does not apply if path feature is enabled');
-        }
-
         $filter = [
             [
                 'condition' => 'OR',
