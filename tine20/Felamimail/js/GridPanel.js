@@ -897,7 +897,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 targetApp: appName,
                 targetPath: path
             },
-            timeout: 300000, // 5 minutes
+            timeout: 3600000, // 1 hour
             scope: this,
             success: function(result, request){
                 this.afterFileRecords(result, request);
