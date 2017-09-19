@@ -28,10 +28,14 @@ class MailFiler_Convert_Node_Json extends Tinebase_Convert_Tree_Node_Json
     {
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
 
-        $this->_resolveMessages($records);
+        $this->_resolveMessages($records, $multiple);
     }
 
-    protected function _resolveMessages($records)
+    /**
+     * @param $records
+     * @param boolean $multiple single or multiple nodes
+     */
+    protected function _resolveMessages($records, $multiple)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Resolving mails of nodes ....');
@@ -41,10 +45,13 @@ class MailFiler_Convert_Node_Json extends Tinebase_Convert_Tree_Node_Json
         foreach ($messages as $message) {
             $idx = $records->getIndexById($message->node_id);
             if (isset($idx) && $idx !== FALSE) {
-                // TODO body2html?
-                // TODO add config/preference for format?
-                $message->body = MailFiler_Controller_Message::getInstance()->getMessageBodyFromNode($message, $records[$idx]);
-                $message->attachments = MailFiler_Controller_Message::getInstance()->getAttachments($message);
+                if (! $multiple) {
+                    // only fetch body & attachments in single mode
+                    // TODO body2html?
+                    // TODO add config/preference for format?
+                    $message->body = MailFiler_Controller_Message::getInstance()->getMessageBodyFromNode($message, $records[$idx]);
+                    $message->attachments = MailFiler_Controller_Message::getInstance()->getAttachments($message);
+                }
                 $records[$idx]->message = $message;
             }
         }

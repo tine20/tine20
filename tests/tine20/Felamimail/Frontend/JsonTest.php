@@ -1296,6 +1296,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
         $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress), $emlNode['message']['to'], print_r($emlNode['message'], true));
         $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
+
+        $emlNode = $mailFilerJson->getNode($emlNode['id']);
         $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
         $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
 
@@ -1349,7 +1351,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
         $emlNode = $emlNodes['results'][0];
 
-        return $emlNode;
+        return $mailFilerJson->getNode($emlNode['id']);;
     }
 
     /**
