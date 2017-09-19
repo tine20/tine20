@@ -294,14 +294,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             try {
                 foreach ($contacts as $contact) {
-                    $note = new Tinebase_Model_Note(array(
-                        'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
-                        'note'                   => $noteText,
-                        'record_id'              => $contact->getId(),
-                        'record_model'           => 'Addressbook_Model_Contact',
-                    ));
-                    
-                    Tinebase_Notes::getInstance()->addNote($note);
+                    if (Tinebase_Core::getUser()->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_EDIT)
+                        || Tinebase_Core::getUser()->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_ADMIN)
+                    ) {
+                        $note = new Tinebase_Model_Note(array(
+                            'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                            'note' => $noteText,
+                            'record_id' => $contact->getId(),
+                            'record_model' => 'Addressbook_Model_Contact',
+                        ));
+                        Tinebase_Notes::getInstance()->addNote($note);
+                    }
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Saving note failed: ' . $noteText);

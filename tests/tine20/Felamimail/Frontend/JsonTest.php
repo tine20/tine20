@@ -135,7 +135,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
@@ -229,7 +229,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $webdavRoot->delete($path);
         }
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
     }
 
     /************************ test functions *********************************/
@@ -598,8 +598,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
      *
      * @param Addressbook_Model_Contact $contact
      * @param string $subject
+     * @param boolean $shouldFindNote
      */
-    protected function _checkEmailNote($contact, $subject)
+    protected function _checkEmailNote($contact, $subject, $shouldFindNote = true)
     {
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
@@ -615,7 +616,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 $emailNotes->addRecord($note);
             }
         }
-        $this->assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        if ($shouldFindNote) {
+            self::assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        } else {
+            self::assertEquals(0, $emailNotes->count(), 'email notes found');
+        }
         Tinebase_Notes::getInstance()->deleteNotes($emailNotes);
     }
 
@@ -1207,6 +1212,48 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * testMessageNoteForContactWithoutEditGrant
+     */
+    public function testMessageNoteForContactWithoutEditGrant()
+    {
+        // remove edit grant for user
+        $internalContacts = Tinebase_Container::getInstance()->getContainerByName(
+            'Addressbook',
+            'Internal Contacts',
+            Tinebase_Model_Container::TYPE_SHARED);
+        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+        ), array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => false,
+            Tinebase_Model_Grants::GRANT_EDIT     => false,
+            Tinebase_Model_Grants::GRANT_DELETE   => false,
+            Tinebase_Model_Grants::GRANT_ADMIN    => false,
+        )));
+        Tinebase_Container::getInstance()->setGrants($internalContacts->getId(), $grants, TRUE);
+
+        $subject = 'test note';
+        $messageData = $this->_getMessageData('', $subject);
+        $messageData['note'] = true;
+        $messageData['body'] .= "&nbsp;";
+
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject($subject);
+
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->_checkEmailNote($contact, $subject, false);
+    }
+
+    /**
      * testMessageWithInvalidICS
      *
      * @see 0008786: broken ics causes js error when showing details
@@ -1678,7 +1725,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // compare sieve scripts
         $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
-    
+
     /**
      * use another name for test sieve script
      */
