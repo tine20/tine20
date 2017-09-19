@@ -114,8 +114,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     /**
      * output result
+     *
+     * @param string $_target
      */
-    public function write()
+    public function write($_target = 'php://output')
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $this->_excelVersion . ').');
         $xlswriter = PHPExcel_IOFactory::createWriter($this->_excelObject, $this->_excelVersion);
@@ -124,7 +126,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         /** @noinspection PhpUndefinedMethodInspection */
         $xlswriter->setPreCalculateFormulas(FALSE);
 
-        $xlswriter->save('php://output');
+        $xlswriter->save($_target);
     }
 
     /**
