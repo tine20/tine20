@@ -244,8 +244,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'note', header: i18n._('Note'), dataIndex: 'note' },
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
-        { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
-        { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
+        { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
     ];
 
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
@@ -253,25 +252,4 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
     }
     
     return columns;
-};
-
-/**
- *list member role render
- *
- * @param value
- * @returns {string}
- * @constructor
- */
-Tine.Addressbook.ListMemberRoleRenderer = function(value) {
-    if (Ext.isArray(value)) {
-        var result = [];
-        Ext.each(value, function(memberrole) {
-            if (memberrole.list_role_id.name) {
-                result.push(memberrole.list_role_id.name);
-            }
-        });
-        return result.toString();
-    }
-
-    return '';
 };
