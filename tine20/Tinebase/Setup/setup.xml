@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.2</version>
+    <version>11.3</version>
+    <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
             <name>applications</name>
@@ -920,7 +921,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -955,6 +956,12 @@
                     <name>observed_event</name>
                     <type>text</type>
                     <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>do_acl</name>
+                    <type>boolean</type>
+                    <default>true</default>
                     <notnull>true</notnull>
                 </field>
                 <field>

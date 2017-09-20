@@ -2140,9 +2140,29 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.45
+     *
+     * add do_acl to record_observer
      */
     public function update_44()
+    {
+        if (!$this->_backend->columnExists('record_observer', 'do_acl')) {
+            $this->_backend->addCol('record_observer', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>do_acl</name>
+                        <type>boolean</type>
+                        <default>true</default>
+                        <notnull>true</notnull>
+                    </field>'));
+            $this->setTableVersion('record_observer', 6);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.45');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_45()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }
