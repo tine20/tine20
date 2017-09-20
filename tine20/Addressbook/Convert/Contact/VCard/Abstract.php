@@ -310,7 +310,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 $telField = 'tel_work';
             }
         } else {
-            $telField = 'work';
+            $telField = 'tel_work';
         }
         
         if (!empty($telField)) {

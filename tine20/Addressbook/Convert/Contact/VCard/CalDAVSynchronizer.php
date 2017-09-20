@@ -146,7 +146,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
                 $telField = 'tel_assistent';
             } else {
 	    // OTHER
-                $telField = 'other';
+                $telField = 'tel_other';
             }
         }
 
