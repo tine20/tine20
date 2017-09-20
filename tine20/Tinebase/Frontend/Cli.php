@@ -1378,7 +1378,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
-    public function createFullTextIndex()
+    public function upgradeMysql564()
     {
         if (! $this->_checkAdminRight()) {
             return -1;
@@ -1390,405 +1390,59 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $failures = array();
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>note</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>note</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('addressbook', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'addressbook';
-        }
+        $setupController = Setup_Controller::getInstance();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
 
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('cal_events', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'cal_events';
-        }
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setupController->getSetupXml($application->name);
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
 
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('metacrm_lead', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'metacrm_lead';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('events_event', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'events_event';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('projects_project', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'projects_project';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_contracts', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_contracts';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_products', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_products';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_customers', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_customers';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_suppliers', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_suppliers';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_purchase_invoices', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_purchase_invoices';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_sales_invoices', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_sales_invoices';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_offers', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_offers';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('sales_order_conf', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'sales_order_conf';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('tasks', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'tasks';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('timetracker_timesheet', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'timetracker_timesheet';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('timetracker_timeaccount', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'timetracker_timeaccount';
-        }
-
-        try {
-            if ($setupBackend->tableExists('path')) {
-                $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>path</name>
-                        <fulltext>true</fulltext>
-                        <field>
-                            <name>path</name>
-                        </field>
-                    </index>
-                ');
-                $setupBackend->addIndex('path', $declaration);
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
             }
-        } catch (Exception $e) {
-            $failures[] = 'path';
-        }
-
-        try {
-            if ($setupBackend->tableExists('path')) {
-                $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>shadow_path</name>
-                        <fulltext>true</fulltext>
-                        <field>
-                            <name>shadow_path</name>
-                        </field>
-                    </index>
-                ');
-                $setupBackend->addIndex('path', $declaration);
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
             }
-        } catch (Exception $e) {
-            $failures[] = 'shadow_path';
-        }
 
-        try {
-            if (!$setupBackend->tableExists('path')) {
-                $declaration = new Setup_Backend_Schema_Table_Xml('<table>
-                    <name>path</name>
-                    <version>2</version>
-                    <requirements>
-                        <required>mysql >= 5.6.4</required>
-                    </requirements>
-                    <declaration>
-                        <field>
-                            <name>id</name>
-                            <type>text</type>
-                            <length>40</length>
-                            <notnull>true</notnull>
-                        </field>
-                        <field>
-                            <name>path</name>
-                            <type>text</type>
-                            <length>65535</length>
-                            <notnull>true</notnull>
-                        </field>
-                        <field>
-                            <name>shadow_path</name>
-                            <type>text</type>
-                            <length>65535</length>
-                            <notnull>true</notnull>
-                        </field>
-                        <field>
-                            <name>creation_time</name>
-                            <type>datetime</type>
-                        </field>
-                        <index>
-                            <name>id</name>
-                            <primary>true</primary>
-                            <field>
-                                <name>id</name>
-                            </field>
-                        </index>
-                        <index>
-                        <name>path</name>
-                            <fulltext>true</fulltext>
-                            <field>
-                                <name>path</name>
-                            </field>
-                        </index>
-                        <index>
-                            <name>shadow_path</name>
-                            <fulltext>true</fulltext>
-                            <field>
-                                <name>shadow_path</name>
-                            </field>
-                        </index>
-                    </declaration>
-                </table>');
+            if (!empty($xml->tables)) {
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
+                        continue;
+                    }
 
-                $tmp = new Setup_Update_Abstract($setupBackend);
-                $tmp->createTable('path', $declaration, 'Tinebase', 2);
-
-                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-                if ($setupUser) {
-                    Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-                    Tinebase_Controller::getInstance()->rebuildPaths();
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                            . ' Could not find valid setupuser. Skipping rebuildPaths: you might need to run this manually.');
+                    // check for fulltext index
+                    foreach ($table->declaration->index as $index) {
+                        if (empty($index->fulltext)) {
+                            continue;
+                        }
+                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        try {
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                        } catch (Exception $e) {
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                        }
                     }
                 }
             }
-        } catch (Exception $e) {
-            $failures[] = 'create path';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>text_data</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>text_data</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('external_fulltext', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'external_fulltext';
-        }
-
-        try {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('tree_fileobjects', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'tree_fileobjects';
-        }
-
-        try {
-            try {
-                $setupBackend->dropIndex('tags', 'description');
-            } catch (Exception $e) {
-                // Ignore, if there is no index, we can just go on and create one.
-            }
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>description</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>description</name>
-                    </field>
-                </index>
-            ');
-            $setupBackend->addIndex('tags', $declaration);
-        } catch (Exception $e) {
-            $failures[] = 'tags';
         }
 
         if (count($failures) > 0) {
-            echo PHP_EOL . 'failures: ' . join(' ', $failures);
+            echo PHP_EOL . 'failures:' . PHP_EOL . join(PHP_EOL, $failures);
         }
 
         echo PHP_EOL . 'done' . PHP_EOL . PHP_EOL;
