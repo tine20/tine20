@@ -2146,7 +2146,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_44()
     {
-        if (!$this->_backend->columnExists('record_observer', 'do_acl')) {
+        if (!$this->_backend->columnExists('do_acl', 'record_observer')) {
             $this->_backend->addCol('record_observer', new Setup_Backend_Schema_Field_Xml('<field>
                         <name>do_acl</name>
                         <type>boolean</type>

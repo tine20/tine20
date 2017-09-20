@@ -154,6 +154,7 @@ class Tinebase_Record_PersistentObserver
         
         if ($_persistentObserver->isValid()) {
             $data = $_persistentObserver->toArray();
+            $data['do_acl'] = (isset($data['do_acl']) && false === $data['do_acl']) ? 0 : 1;
             
             $identifier = $this->_table->insert($data);
 
