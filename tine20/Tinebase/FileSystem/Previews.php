@@ -44,7 +44,7 @@ class Tinebase_FileSystem_Previews
      * @var array
      */
     protected $_supportedFileExtensions = array(
-        'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'docx', 'xlsx', 'pptx', 'pdf', 'jpg', 'jpeg', 'gif', 'tiff', 'png'
+        'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'jpg', 'jpeg', 'gif', 'tiff', 'png'
     );
 
     /**
