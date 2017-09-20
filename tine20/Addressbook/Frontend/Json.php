@@ -118,13 +118,35 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(), 'Addressbook_Model_ListFilter');
-        // FIXME: lists no longer have the "emails" property, was broken by 95b69f471d5b6ac6edc3305f606d14f876fff054
-//        if (!$dont_add) {
-//            foreach ($lists["results"] as $list) {
-//                array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
-//            }
-//        }
+        $oldFeatureValue = null;
+        $adbConfig = Addressbook_Config::getInstance();
+        try {
+
+            if (!$dont_add) {
+                // need to enable this feature to get the "emails" property
+                if (false === ($oldFeatureValue =
+                        $adbConfig->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW))) {
+                    $features = $adbConfig->get(Addressbook_Config::ENABLED_FEATURES);
+                    $features->{Addressbook_Config::FEATURE_LIST_VIEW} = true;
+                    $adbConfig->clearCache();
+                    Addressbook_Controller_List::destroyInstance();
+                }
+            }
+            $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(),
+                'Addressbook_Model_ListFilter');
+            if (!$dont_add) {
+                foreach ($lists["results"] as $list) {
+                    array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                }
+            }
+        } finally {
+            if (false === $oldFeatureValue) {
+                $features = $adbConfig->get(Addressbook_Config::ENABLED_FEATURES);
+                $features->{Addressbook_Config::FEATURE_LIST_VIEW} = false;
+                $adbConfig->clearCache();
+            }
+        }
+
         return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
     }
 
