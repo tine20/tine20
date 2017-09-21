@@ -141,7 +141,10 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             disabled:true
         });
 
-        this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+        // TODO: does user need rights for Filemanager?
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+        }
 
         this.actionUpdater.addActions([this.action_download, this.action_preview]);
         this.getTopToolbar().addItem(this.action_download);
@@ -153,7 +156,8 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     onRowDbClick: function () {
         var _ = window.lodash;
 
-        if (!Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+        // TODO: does user need rights for Filemanager?
+        if (! Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
             this.onDownload();
             return;
         }
