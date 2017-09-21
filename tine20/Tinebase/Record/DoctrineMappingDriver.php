@@ -64,8 +64,8 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         $table = $modelConfig->getTable();
         $table['name'] = SQL_TABLE_PREFIX . $table['name'];
 
-        // mysql supports full text for InnoDB as of 5.6 for everybody else: remove full text index
-        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6') ) {
+        // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
+        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4') ) {
             if (isset($table['indexes'])) {
                 $toDelete = array();
                 foreach($table['indexes'] as $key => $index) {
