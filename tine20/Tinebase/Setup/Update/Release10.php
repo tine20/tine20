@@ -2160,9 +2160,21 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.46
+     *
+     * fix pgsql index creation issue
      */
     public function update_45()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '10.46');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_46()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

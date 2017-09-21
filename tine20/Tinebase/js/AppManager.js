@@ -152,7 +152,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
     },
     
     /**
-     * checks wether a given app is enabled for current user or not
+     * checks whether a given app is enabled for current user or not
      */
     isEnabled: function(appName) {
         var app = this.apps.get(appName);

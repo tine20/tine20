@@ -386,11 +386,91 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 9.14
+     *
+     * fix pgsql index creation issue
+     */
+    public function update_13()
+    {
+        $db = Tinebase_Core::getDb();
+        if (!$db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $this->setApplicationVersion('Tinebase', '9.14');
+            return;
+        }
+
+        $failures = array();
+        $successes = array();
+        $setupBackend = Setup_Backend_Factory::factory();
+        $setupController = Setup_Controller::getInstance();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setupController->getSetupXml($application->name);
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
+
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
+            }
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
+            }
+
+            if (!empty($xml->tables)) {
+                /** @var SimpleXMLElement $table */
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            // in older versions of the code this method is not there yet, but then also
+                            // $table->requirements is empty always :)
+                            /** @noinspection PhpUndefinedMethodInspection */
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                    }
+
+                    // check for missing index
+                    /** @var SimpleXMLElement $index */
+                    foreach ($table->declaration->index as $index) {
+                        // ignore primary, foreign and fulltext indices
+                        if (!empty($index->primary) || !empty($index->foreign) || !empty($index->fulltext) ||
+                            !empty($index->unique)) {
+                            continue;
+                        }
+                        $stmt = $db->select()->from('pg_indexes')->where('"tablename" = \'' . SQL_TABLE_PREFIX .
+                            (string)$table->name . '\' AND "indexname" = \'' . SQL_TABLE_PREFIX . (string)$table->name .
+                            '_' . (string)$index->name . '\'')->query();
+                        if ($stmt->rowCount() === 0) {
+                            $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                            $successes[] = (string)$table->name . ': ' . (string)$index->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Created the following indices: ' . PHP_EOL . join(PHP_EOL, $successes));
+        
+        $this->setApplicationVersion('Tinebase', '9.14');
+    }
+
+    /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_13()
+    public function update_14()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }
