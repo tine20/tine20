@@ -92,7 +92,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $emailUser = Tinebase_EmailUser::getInstance();
         } catch (Tinebase_Exception_NotFound $tenf) {}
 
-        if (null !== $emailUser) {
+        // FIXME if you want quota info: in Tinebase_User_Plugin_LdapInterface, inspectGetUserByProperty has a second param!
+        if (null !== $emailUser && ! $emailUser instanceof Tinebase_User_Plugin_LdapInterface ) {
             foreach ($result as $user) {
                 $emailUser->inspectGetUserByProperty($user);
             }
