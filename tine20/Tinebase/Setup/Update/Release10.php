@@ -2065,4 +2065,16 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
         $this->setApplicationVersion('Tinebase', '10.42');
     }
+
+    /**
+     * update to 10.43
+     *
+     * fix pgsql index creation issue
+     */
+    public function update_42()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '10.43');
+    }
 }
