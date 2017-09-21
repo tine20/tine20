@@ -623,7 +623,7 @@ class Setup_Controller
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
         $updater = new Tinebase_Setup_Update_Release10($this->_backend);
-        if (version_compare(($oldVersion = $updater->getApplicationVersion('Tinebase')), '10.33') > -1) {
+        if (version_compare(($oldVersion = Setup_Update_Abstract::getAppVersion('Tinebase')), '10.33') > -1) {
             return;
         }
 
@@ -650,6 +650,7 @@ class Setup_Controller
     /**
      * prepare update
      *
+     * - check minimal required version is installed
      * - checks/disables action queue
      * - creates superuser role for setupuser
      *
@@ -659,6 +660,14 @@ class Setup_Controller
      */
     protected function _prepareUpdate(Tinebase_Model_User $_user)
     {
+        $setupXml = $this->getSetupXml('Tinebase');
+        if(!empty($setupXml->minimumRequiredVersion) &&
+            version_compare(Setup_Update_Abstract::getAppVersion('Tinebase'), $setupXml->minimumRequiredVersion) < 0 ) {
+            throw new Tinebase_Exception('Major version jumps are not allowed. Upgrade your current major Version ' .
+                'to the most recent minor Version, then upgrade to the most recent next major version. Repeat until ' .
+                'you reached the desired major version you want to upgrade to');
+        }
+
         // check action queue is empty and wait for it to finish
         $timeStart = time();
         while (Tinebase_ActionQueue::getInstance()->getQueueSize() > 0 && time() - $timeStart < 300) {

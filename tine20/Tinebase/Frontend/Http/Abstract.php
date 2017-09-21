@@ -39,11 +39,17 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         // get export object
         $export = Tinebase_Export::factory($_filter, $_options, $_controller);
         $format = $export->getFormat();
+        if ('pdf' === $format && ! Tinebase_Export::doPdfLegacyHandling()) {
+            $switchFormat = 'newPDF';
+        } else {
+            $switchFormat = $format;
+        }
+
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
 
-        switch ($format) {
+        switch ($switchFormat) {
             case 'pdf':
                 $ids = $_controller->search($_filter, NULL, FALSE, TRUE, 'export');
                 
@@ -71,6 +77,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'ods':
                 $result = $export->generate();
                 break;
+            case 'newPDF':
             case 'csv':
             case 'xls':
             case 'doc':
@@ -94,10 +101,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         }
         
         // output export file
-        switch ($format) {
+        switch ($switchFormat) {
             case 'pdf':
                 echo $pdfOutput;
                 break;
+            case 'newPDF':
             case 'xls':
             case 'doc':
             case 'docx':

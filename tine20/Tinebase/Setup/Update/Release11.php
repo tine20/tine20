@@ -33,4 +33,28 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_43();
         $this->setApplicationVersion('Tinebase', '11.2');
     }
+
+    /**
+     * update to 11.3
+     *
+     * add do_acl to record_observer
+     */
+    public function update_2()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_44();
+        $this->setApplicationVersion('Tinebase', '11.3');
+    }
+
+    /**
+     * update to 11.4
+     *
+     * fix pgsql index creation issue
+     */
+    public function update_3()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '11.4');
+    }
 }

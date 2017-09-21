@@ -60,7 +60,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_3()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_10();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '10.4');
     }
 
@@ -784,7 +784,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->_addRevisionPreviewCountCol();
 
         $count = $this->_db->update(SQL_TABLE_PREFIX . 'container', array('model' => 'Tinebase_Model_Tree_Node'),
-            $this->_db->quoteIdentifier('model') . ' = "Tinebase_Model_Node"');
+            $this->_db->quoteIdentifier('model') . ' = \'Tinebase_Model_Node\'');
         if ($count > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -2140,9 +2140,41 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.45
+     *
+     * add do_acl to record_observer
      */
     public function update_44()
+    {
+        if (!$this->_backend->columnExists('do_acl', 'record_observer')) {
+            $this->_backend->addCol('record_observer', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>do_acl</name>
+                        <type>boolean</type>
+                        <default>true</default>
+                        <notnull>true</notnull>
+                    </field>'));
+            $this->setTableVersion('record_observer', 6);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.45');
+    }
+
+    /**
+     * update to 10.46
+     *
+     * fix pgsql index creation issue
+     */
+    public function update_45()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '10.46');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_46()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

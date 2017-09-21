@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -25,17 +25,10 @@
  * @package     Tinebase
  * @subpackage  Filter
  *
- * @refactor this has some issues with the different cf types
+ * @refactor! this has some issues with the different cf types and the parent class Tinebase_Model_Filter_ForeignRecord
  */
-class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
+class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_ForeignRecord
 {
-    /**
-     * the filter used for querying the customfields table
-     * 
-     * @var Tinebase_Model_Filter_Abstract
-     */
-    protected $_subFilter = NULL;
-    
     /**
      * possible operators
      * 
@@ -62,7 +55,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
     {
         // no legacy handling
         if(!is_array($_fieldOrData)) {
-            throw new Tinebase_Exception_InvalidArgument('$_fieldOrDatamust be an array!');
+            throw new Tinebase_Exception_InvalidArgument('$_fieldOrData must be an array!');
         }
 
         $valueFilter = null;
@@ -70,16 +63,16 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         $this->_cfRecord = $be->get($_fieldOrData['value']['cfId']);
         $type = $this->_cfRecord->definition['type'];
         if ($type == 'date' || $type == 'datetime') {
-            $this->_subFilter = new Tinebase_Model_CustomField_ValueFilter(array());
-            $this->_subFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $_fieldOrData['value']['cfId'])));
+            $this->_filterGroup = new Tinebase_Model_CustomField_ValueFilter(array());
+            $this->_filterGroup->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $_fieldOrData['value']['cfId'])));
             $valueFilter = new Tinebase_Model_Filter_Date(array('field' => 'value', 'operator' => $_fieldOrData['operator'], 'value' => $_fieldOrData['value']['value']));
-            $this->_subFilter->addFilter($valueFilter);
+            $this->_filterGroup->addFilter($valueFilter);
         } elseif ($type == 'integer') {
             $valueFilter = new Tinebase_Model_Filter_Int($_fieldOrData, $_operator, $_value, $_options);
         } else if ($type == 'record' && is_array($_fieldOrData['value']['value'])) {
             $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-            $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
-            $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
+            $this->_controller = Tinebase_Core::getApplicationInstance($modelName);
+            $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
         } else if ($type == 'records') {
             // TODO support recordset
             throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
@@ -96,6 +89,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $this->_opSqlMap = array();
         }
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
+    }
+
+    /**
+     * get foreign controller
+     *
+     * @return Tinebase_Controller_Record_Abstract
+     */
+    protected function _getController()
+    {
+        if (! $this->_controller) {
+            $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
+            $this->_controller = Tinebase_Core::getApplicationInstance($modelName);
+        }
+
+        return $this->_controller;
     }
     
     /**
@@ -124,7 +132,9 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             || ! isset($this->_value['value'])) 
         {
             return;
-        } else if ($this->_cfRecord->definition['type'] !== 'record' && $this->_operator == 'in') {
+
+            // what is that?!? for record the operators AND / OR, in is not allowed for record?!?
+        } else if ($this->_cfRecord->definition['type'] !== 'record' && strtolower($this->_operator) == 'in') {
             throw new Tinebase_Exception_UnexpectedValue('Operator "in" not supported.');
         }
         
@@ -151,7 +161,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         switch ($this->_cfRecord->definition['type']) {
             case 'date':
             case 'datetime':
-                $customfields = Tinebase_CustomField::getInstance()->search($this->_subFilter);
+                $customfields = Tinebase_CustomField::getInstance()->search($this->_filterGroup);
                 if ($customfields->count()) {
                     $where = $db->quoteInto($idProperty . ' IN (?) ', $customfields->record_id);
                 } else {
@@ -160,8 +170,9 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 break;
             default:
                 if ($this->_cfRecord->definition['type'] === 'record' && is_array($value)) {
-                    $this->_subFilter->setFromArray($value);
-                    $ids = $this->_subFilterController->search($this->_subFilter, null, /*relations */
+                    $this->_removePrefixesFromFilterValue($value);
+                    $this->_filterGroup->setFromArray($value);
+                    $ids = $this->_getController()->search($this->_filterGroup, null, /*relations */
                         false, /* only ids */
                         true);
                     if (count($ids)) {
@@ -192,7 +203,24 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
      */
     public function toArray($valueToJson = false)
     {
-        $result = parent::toArray($valueToJson);
+        // TODO can't use direct parent - should be improved!
+        //$result = parent::toArray($valueToJson);
+        $result = array(
+            'field'     => $this->_field,
+            'operator'  => $this->_operator,
+            'value'     => $this->_value
+        );
+        if ($this->_isImplicit) {
+            $result['implicit'] = TRUE;
+        }
+        if ($this->_id) {
+            $result['id'] = $this->_id;
+        }
+        if ($this->_label) {
+            $result['label'] = $this->_label;
+        }
+        // above is code from \Tinebase_Model_Filter_Abstract::toArray
+
         if (strtolower($this->_cfRecord->definition['type']) == 'record') {
             try {
                 $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
@@ -213,7 +241,29 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
             }
         }
+        //$this->_returnPrefixes($result);
         
         return $result;
+    }
+
+    /**
+     * get filter information for toArray()
+     *
+     * @return array
+     */
+    protected function _getGenericFilterInformation()
+    {
+        // not needed ...
+        return array();
+    }
+
+    /**
+     * get foreign filter group
+     *
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _setFilterGroup()
+    {
+        // this is done in __construct (only for some types)
     }
 }

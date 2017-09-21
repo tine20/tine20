@@ -130,7 +130,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
@@ -224,7 +224,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $webdavRoot->delete($path);
         }
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
 
         // needed to clear cache of containers
         Tinebase_Container::getInstance()->resetClassCache();
@@ -596,8 +596,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
      *
      * @param Addressbook_Model_Contact $contact
      * @param string $subject
+     * @param boolean $shouldFindNote
      */
-    protected function _checkEmailNote($contact, $subject)
+    protected function _checkEmailNote($contact, $subject, $shouldFindNote = true)
     {
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
@@ -613,7 +614,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 $emailNotes->addRecord($note);
             }
         }
-        $this->assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        if ($shouldFindNote) {
+            self::assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        } else {
+            self::assertEquals(0, $emailNotes->count(), 'email notes found');
+        }
         Tinebase_Notes::getInstance()->deleteNotes($emailNotes);
     }
 
@@ -1296,6 +1301,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
         $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress), $emlNode['message']['to'], print_r($emlNode['message'], true));
         $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
+
+        $emlNode = $mailFilerJson->getNode($emlNode['id']);
         $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
         $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
 
@@ -1349,7 +1356,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
         $emlNode = $emlNodes['results'][0];
 
-        return $emlNode;
+        return $mailFilerJson->getNode($emlNode['id']);;
     }
 
     /**
@@ -1384,6 +1391,48 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertEquals(5, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
         $this->assertEquals('TS Lagerstände.jpg', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
         $this->assertContains('Siehe Dateien anbei', $emlNode['message']['body'], print_r($emlNode['message'], true));
+    }
+
+    /**
+     * testMessageNoteForContactWithoutEditGrant
+     */
+    public function testMessageNoteForContactWithoutEditGrant()
+    {
+        // remove edit grant for user
+        $internalContacts = Tinebase_Container::getInstance()->getContainerByName(
+            'Addressbook',
+            'Internal Contacts',
+            Tinebase_Model_Container::TYPE_SHARED);
+        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+        ), array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => false,
+            Tinebase_Model_Grants::GRANT_EDIT     => false,
+            Tinebase_Model_Grants::GRANT_DELETE   => false,
+            Tinebase_Model_Grants::GRANT_ADMIN    => false,
+        )));
+        Tinebase_Container::getInstance()->setGrants($internalContacts->getId(), $grants, TRUE);
+
+        $subject = 'test note';
+        $messageData = $this->_getMessageData('', $subject);
+        $messageData['note'] = true;
+        $messageData['body'] .= "&nbsp;";
+
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject($subject);
+
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->_checkEmailNote($contact, $subject, false);
     }
 
     /**
@@ -1852,7 +1901,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // compare sieve scripts
         $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
-
     public function testSieveEmailNotification()
     {
         $this->_setTestScriptname();
@@ -1870,7 +1918,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
         static::assertContains('test@test.de', $script->getSieve());
     }
-
     /**
      * use another name for test sieve script
      */

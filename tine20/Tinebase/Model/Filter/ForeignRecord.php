@@ -74,18 +74,25 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _removePrefixes()
     {
-        foreach ($this->_value as $idx => $filterData) {
+        $this->_prefixedFields = $this->_removePrefixesFromFilterValue($this->_value);
+    }
+
+    protected function _removePrefixesFromFilterValue(&$value)
+    {
+        $prefixedFields = array();
+        foreach ($value as $idx => $filterData) {
             if (! isset($filterData['field'])) {
                 continue;
             }
-            
+
             if (strpos($filterData['field'], ':') !== FALSE) {
-                $this->_value[$idx]['field'] = str_replace(':', '', $filterData['field']);
-                $this->_prefixedFields[] = $this->_value[$idx]['field'];
+                $value[$idx]['field'] = str_replace(':', '', $filterData['field']);
+                $prefixedFields[] = $value[$idx]['field'];
             }
         }
+        return $prefixedFields;
     }
-    
+
     /**
      * get foreign filter group
      * 
@@ -136,7 +143,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         
         $filters = $this->_getForeignFiltersForToArray($_valueToJson);
         
-        if ($this->_options && $this->_options['isGeneric']) {
+        if ($this->_options && isset($this->_options['isGeneric']) && $this->_options['isGeneric']) {
             $result['value'] = $this->_getGenericFilterInformation();
             $result['value']['filters'] = $filters;
         } else {

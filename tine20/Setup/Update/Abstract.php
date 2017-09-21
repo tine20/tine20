@@ -59,9 +59,22 @@ class Setup_Update_Abstract
      */
     public function getApplicationVersion($_application)
     {
-        $select = $this->_db->select()
+        return static::getAppVersion($_application);
+    }
+
+    /**
+     * get version number of a given application
+     * version is stored in database table "applications"
+     *
+     * @param string $_application
+     * @return string version number major.minor release
+     */
+    public static function getAppVersion($_application)
+    {
+        $db = Tinebase_Core::getDb();
+        $select = $db->select()
                 ->from(SQL_TABLE_PREFIX . 'applications')
-                ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
+                ->where($db->quoteIdentifier('name') . ' = ?', $_application);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();

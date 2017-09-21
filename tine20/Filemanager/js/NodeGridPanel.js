@@ -658,7 +658,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.EventObjet} e
      */
     onRowDblClick: function (grid, row, e) {
-        var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
         var _ = window.lodash;
         var prefs = this.app.getRegistry().get('preferences');
@@ -678,7 +677,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param rowRecord
      */
     expandFolder: function(rowRecord) {
-        var treePanel = this.treePanel || app.getMainScreen().getWestPanel().getContainerTreePanel();
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
         var currentFolderNode = treePanel.getNodeById(rowRecord.id);
 
         if (currentFolderNode) {
