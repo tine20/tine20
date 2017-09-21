@@ -48,6 +48,7 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
         'org_name'              => null,
         'org_unit'              => null,
         'tel_cell'              => null,
+        'tel_cell_private'      => null,
         'tel_fax'               => null,
         'tel_home'              => null,
         'tel_pager'             => null,
@@ -55,6 +56,30 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
         'tags'                  => null,
         'notes'                 => null,
     );
+    
+    /**
+     * (non-PHPdoc)
+     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
+     */
+    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
+    {
+        $telField = null;
+        
+        if (isset($property['TYPE'])) {
+            // CELL
+            if ($property['TYPE']->has('cell') && $property['TYPE']->has('work')) {
+                $telField = 'tel_cell';
+            } elseif ($property['TYPE']->has('cell')) {
+                $telField = 'tel_cell_private';
+            }
+        }
+        
+        if (!empty($telField)) {
+            $data[$telField] = $property->getValue();
+        } else {
+            parent::_toTine20ModelParseTel($data, $property);
+        }
+    }
     
     /**
      * (non-PHPdoc)
@@ -89,7 +114,8 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
         $card = $this->_fromTine20ModelRequiredFields($_record);
         $card->add('TEL', $_record->tel_work, array('TYPE' => 'WORK'));
         $card->add('TEL', $_record->tel_home, array('TYPE' => 'HOME'));
-        $card->add('TEL', $_record->tel_cell, array('TYPE' => 'CELL'));
+        $card->add('TEL', $_record->tel_cell, array('TYPE' => array('CELL', 'WORK')));
+        $card->add('TEL', $_record->tel_cell_private, array('TYPE' => array('CELL', 'HOME')));
         $card->add('TEL', $_record->tel_fax, array('TYPE' => 'FAX'));
         $card->add('TEL', $_record->tel_pager, array('TYPE' => 'PAGER'));
         $card->add('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname), array('TYPE' => 'WORK'));
