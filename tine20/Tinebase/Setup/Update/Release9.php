@@ -392,6 +392,10 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_13()
     {
+        if (version_compare($this->getTableVersion('Tinebase'), '10.45') < 0) {
+            return;
+        }
+
         $db = Tinebase_Core::getDb();
         if (!$db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             $this->setApplicationVersion('Tinebase', '9.14');
