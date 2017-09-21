@@ -50,6 +50,9 @@ a new major release of our business edition.
 Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with security patches and bug fixes for at least two 
 years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
 
+## Reporting security issues
+If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com). You can also create issues in our [forge](https://forge.tine20.org) and explain the issue there. Make sure you tick the privat flag there and write us your ticket number to the mail above! Once we resolved the issue, we can disable the privat state and announce it to the public.
+
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
 
