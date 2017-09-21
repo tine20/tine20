@@ -442,6 +442,10 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
                         }
                     }
 
+                    if (!$setupBackend->tableExists((string)$table->name)) {
+                        continue;
+                    }
+
                     // check for missing index
                     /** @var SimpleXMLElement $index */
                     foreach ($table->declaration->index as $index) {
