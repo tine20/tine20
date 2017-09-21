@@ -103,7 +103,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             }
         }
 
-        $createIndexStatement = '';
+        $createIndexStatement = array();
 
         foreach ($_table->indices as $index) {
             if ($index->foreign) {
@@ -112,7 +112,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             } else {
                 $statementSnippet = $this->getIndexDeclarations($index, $_table->name);
                 if (strpos($statementSnippet, 'CREATE INDEX') !== false) {
-                    $createIndexStatement = $statementSnippet;
+                    $createIndexStatement[] = $statementSnippet;
                 } else {
                     $statementSnippets[] = $statementSnippet;
                 }
@@ -513,8 +513,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             $this->execQueryVoid($statements['table']);
 
             // creates indexes
-            if (!empty($statements['index']))
-                $this->execQueryVoid($statements['index']);
+            foreach ($statements['index'] as $createIndex) {
+                $this->execQueryVoid($createIndex);
+            }
 
             // alters sequence
             if (!empty($statements['primary'])) {
