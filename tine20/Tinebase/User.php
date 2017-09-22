@@ -1058,7 +1058,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     $systemUser = null;
                 }
             } else {
-                $systemUser = null;
+                try {
+                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                } catch(Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                        ' no system user could be created');
+                    // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+                    Tinebase_Exception::log($e);
+                    $systemUser = null;
+                }
             }
 
         } catch (Exception $e) {
@@ -1066,7 +1075,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 ' no system user could be created');
             // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
             Tinebase_Exception::log($e);
-            $systemUser = null;
+            try {
+                $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+            } catch(Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                    ' no system user could be created');
+                // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+                Tinebase_Exception::log($e);
+                $systemUser = null;
+            }
         }
 
         // re-enable modlog stuff
