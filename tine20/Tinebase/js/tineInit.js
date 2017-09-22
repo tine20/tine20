@@ -117,8 +117,7 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.common.reload({
                     clearCache: true
                 });
-            } else if (e.ctrlKey && e.getKey() === e.S) {
-                e.StopEvent();
+            } else if (e.ctrlKey && e.getKey() === e.S ) {
                 Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
             }
         });
