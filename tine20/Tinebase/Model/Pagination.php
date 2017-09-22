@@ -87,11 +87,15 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             return;
         }
         $joined = array();
-        foreach ((array)$this->sort as $field) {
+        $this->sort = (array)$this->sort;
+        foreach ($this->xprops('sort') as &$field) {
             if (!isset($mapping[$field])) {
                 continue;
             }
             $mappingDef = $mapping[$field];
+            if (isset($mappingDef['fieldCallback'])) {
+                $field = call_user_func($mappingDef['fieldCallback'], $field);
+            }
             if (isset($joined[$mappingDef['table']])) {
                 continue;
             }
