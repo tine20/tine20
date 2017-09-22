@@ -60,7 +60,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_3()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_10();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '10.4');
     }
 
@@ -784,7 +784,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->_addRevisionPreviewCountCol();
 
         $count = $this->_db->update(SQL_TABLE_PREFIX . 'container', array('model' => 'Tinebase_Model_Tree_Node'),
-            $this->_db->quoteIdentifier('model') . ' = "Tinebase_Model_Node"');
+            $this->_db->quoteIdentifier('model') . ' = \'Tinebase_Model_Node\'');
         if ($count > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -1271,6 +1271,13 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <type>boolean</type>
                     <default>false</default>
                     <notnull>true</notnull>
+                </field>'));
+        }
+
+        if (! $this->_backend->columnExists('deleted_time', 'tree_nodes')) {
+            $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
                 </field>'));
         }
     }
@@ -2060,9 +2067,114 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.44
+     *
+     * add deleted_time to unique index for groups, roles, tree_nodes
      */
     public function update_43()
+    {
+        $this->_backend->dropIndex('groups', 'name');
+        $this->_backend->addIndex('groups', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>    
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+        $this->setTableVersion('groups', 7);
+
+        $this->_backend->dropIndex('roles', 'name');
+        $this->_backend->addIndex('roles', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>    
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+        $this->setTableVersion('roles', 4);
+
+        if (!$this->_backend->columnExists('deleted_time', 'tree_nodes')) {
+            $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>'));
+        }
+
+        $this->_backend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+        $this->_backend->dropIndex('tree_nodes', 'parent_id-name');
+        $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>parent_id-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+        $this->_backend->addForeignKey('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>tree_nodes::parent_id--tree_nodes::id</name>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <onupdate>cascade</onupdate>
+                        <!-- add ondelete? -->
+                    </reference>
+                </index>'));
+        $this->setTableVersion('tree_nodes', 8);
+
+        $this->setApplicationVersion('Tinebase', '10.44');
+    }
+
+    /**
+     * update to 10.45
+     *
+     * add do_acl to record_observer
+     */
+    public function update_44()
+    {
+        if (!$this->_backend->columnExists('do_acl', 'record_observer')) {
+            $this->_backend->addCol('record_observer', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>do_acl</name>
+                        <type>boolean</type>
+                        <default>true</default>
+                        <notnull>true</notnull>
+                    </field>'));
+            $this->setTableVersion('record_observer', 6);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.45');
+    }
+
+    /**
+     * update to 10.46
+     *
+     * fix pgsql index creation issue
+     */
+    public function update_45()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '10.46');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_46()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

@@ -41,7 +41,6 @@
                 <index>
                     <name>id</name>
                     <primary>true</primary>
-                    <unique>true</unique>
                     <field>
                         <name>id</name>
                     </field>
@@ -185,7 +184,6 @@
                 <index>
                     <name>id</name>
                     <primary>true</primary>
-                    <unique>true</unique>
                     <field>
                         <name>id</name>
                     </field>

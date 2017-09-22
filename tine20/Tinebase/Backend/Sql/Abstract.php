@@ -1365,7 +1365,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
         );
 
-        return $this->_db->update($this->_tablePrefix . $this->_tableName, array('is_deleted' => 1), $where);
+        $data = array('is_deleted' => 1);
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
+        if (isset($schema['deleted_time'])) {
+            $data['deleted_time'] = new Zend_Db_Expr('NOW()');
+        }
+        if (isset($schema['deleted_by'])) {
+            $data['deleted_by'] = Tinebase_Core::getUser()->getId();
+        }
+
+        return $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
     }
 
     /**

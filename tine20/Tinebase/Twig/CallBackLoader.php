@@ -103,7 +103,7 @@ class Tinebase_Twig_CallBackLoader implements Twig_LoaderInterface, Twig_SourceC
         if ($name !== $this->_name) {
             throw new Twig_Error_Loader('template ' . $name . ' not found');
         }
-        return $name;
+        return $name . $this->_creationTimeStamp;
     }
 
     /**

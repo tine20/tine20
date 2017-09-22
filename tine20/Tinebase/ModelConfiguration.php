@@ -1313,14 +1313,11 @@ class Tinebase_ModelConfiguration {
                 $fieldDef['config'] = array(
                     'refIdField'              => 'id',
                     'length'                  => 40,
-                    'appName'                 => 'Addressbook',
-                    'modelName'               => 'Contact',
-                    'recordClassName'         => 'Addressbook_Model_Contact',
-                    'controllerClassName'     => 'Addressbook_Controller_Contact',
-                    'filterClassName'         => 'Addressbook_Model_ContactFilter',
-                    'addFilters' => array(
-                        array('field' => 'type', 'operator' => 'equals', 'value' => 'user')
-                    )
+                    'appName'                 => 'Tinebase',
+                    'modelName'               => 'User',
+                    'recordClassName'         => Tinebase_Model_User::class,
+                    'controllerClassName'     => Tinebase_User::class,
+                    'filterClassName'         => Tinebase_Model_FullUserFilter::class,
                 );
                 $this->_recordFields[$fieldKey] = $fieldDef;
                 break;

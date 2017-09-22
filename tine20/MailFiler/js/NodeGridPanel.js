@@ -547,7 +547,7 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.Filemanager.NodeGridPanel, {
                 record: rowRecord
             });
         } else if (rowRecord.data.type == 'folder') {
-            Tine.MailFiler.NodeGridPanel.superclass.onRowDblClick.call(this, grid, row, e);
+            this.expandFolder(rowRecord);
         }
     },
 

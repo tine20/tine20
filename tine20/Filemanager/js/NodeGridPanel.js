@@ -658,38 +658,45 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.EventObjet} e
      */
     onRowDblClick: function (grid, row, e) {
-        var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
         var _ = window.lodash;
         var prefs = this.app.getRegistry().get('preferences');
 
-        if (prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
+        if (prefs && prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
             Tine.Filemanager.downloadFile(rowRecord);
-        } else if (this.previewsEnabled && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
+        } else if (this.previewsEnabled && prefs && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
             this.action_preview.execute();
         } else if (rowRecord.data.type == 'folder') {
-            var treePanel = this.treePanel || app.getMainScreen().getWestPanel().getContainerTreePanel();
+            this.expandFolder(rowRecord);
+        }
+    },
 
-            var currentFolderNode = treePanel.getNodeById(rowRecord.id);
+    /**
+     * expand folder node
+     *
+     * @param rowRecord
+     */
+    expandFolder: function(rowRecord) {
+        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
+        var currentFolderNode = treePanel.getNodeById(rowRecord.id);
 
-            if (currentFolderNode) {
-                currentFolderNode.select();
-                currentFolderNode.expand();
-                this.currentFolderNode = currentFolderNode;
-            } else {
-                // get   ftb path filter
-                this.filterToolbar.filterStore.each(function (filter) {
-                    var field = filter.get('field');
-                    if (field === 'path') {
-                        filter.set('value', '');
-                        filter.set('value', rowRecord.data);
-                        filter.formFields.value.setValue(rowRecord.get('path'));
+        if (currentFolderNode) {
+            currentFolderNode.select();
+            currentFolderNode.expand();
+            this.currentFolderNode = currentFolderNode;
+        } else {
+            // get   ftb path filter
+            this.filterToolbar.filterStore.each(function (filter) {
+                var field = filter.get('field');
+                if (field === 'path') {
+                    filter.set('value', '');
+                    filter.set('value', rowRecord.data);
+                    filter.formFields.value.setValue(rowRecord.get('path'));
 
-                        this.filterToolbar.onFiltertrigger();
-                        return false;
-                    }
-                }, this);
-            }
+                    this.filterToolbar.onFiltertrigger();
+                    return false;
+                }
+            }, this);
         }
     },
 

@@ -1488,4 +1488,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         return static::$_sortExternalMapping;
     }
+
+    /**
+     * @param array $_validators
+     */
+    public function setValidators(array $_validators)
+    {
+        $this->_validators = $_validators;
+    }
 }

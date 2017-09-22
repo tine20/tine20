@@ -4,7 +4,7 @@
  * @package     MailFiler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.ns('Tine.MailFiler');
@@ -20,6 +20,8 @@ Ext.ns('Tine.MailFiler');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.MailFiler.GridDetailsPanel
+ *
+ * @todo        extend Tine.Felamimail.GridDetailsPanel to re-use message functionality
  */
  Tine.MailFiler.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
@@ -106,19 +108,22 @@ Ext.ns('Tine.MailFiler');
     /**
      * (on) update details
      * 
-     * @param {Tine.MailFiler.Model.Message} record
+     * @param {Tine.MailFiler.Model.Node} record
      * @param {String} body
      * @private
      */
     updateDetails: function(record, body) {
-        this.nodeRecord = record;
         if (record.get('message') && Ext.isObject(record.get('message'))) {
-            this.record = new Tine.Felamimail.Model.Message(record.get('message'), record.get('message').id);
-
-            if (this.record.id === this.currentId) {
+            if (record.id === this.currentId) {
                 // nothing to do
+            } else if (! record.messageIsFetched()) {
+                this.waitForContent(record, this.getMessageRecordPanel().body);
             } else {
-                this.setTemplateContent(this.record, this.getMessageRecordPanel().body);
+                // FIXME update record in grid: currently the record is overwritten after the message was fetched ...
+                this.record = record;
+                this.attachments = this.record.get('message').attachments;
+                this.currentId = record.id;
+                this.setTemplateContent(this.record.get('message'), this.getMessageRecordPanel().body);
             }
         } else {
             this.layout.setActiveItem(this.getDefaultInfosPanel());
@@ -126,53 +131,65 @@ Ext.ns('Tine.MailFiler');
             this.record = null;
         }
     },
-    
-    /**
+
+     /**
+      * wait for body content
+      *
+      * @param {Tine.MailFiler.Model.Node} record
+      * @param {String} body
+      */
+     waitForContent: function(record, body) {
+         if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
+             this.refetchBody(record, {
+                 success: this.updateDetails.createDelegate(this, [record, body]),
+                 failure: function (exception) {
+                     Tine.log.debug(exception);
+                     this.getLoadMask().hide();
+                     if (exception.code == 404) {
+                         this.defaultTpl.overwrite(body, {msg: this.app.i18n._('Message not available.')});
+                     } else {
+                         Tine.MailFiler.fileRecordBackend.handleRequestException(exception);
+                     }
+                 },
+                 scope: this
+             });
+             this.defaultTpl.overwrite(body, {msg: ''});
+             this.getLoadMask().show();
+         } else {
+             this.getLoadMask().hide();
+         }
+     },
+
+     /**
+      * refetch message body
+      *
+      * @param {MailFiler model} record
+      * @param {Function} callback
+      * 
+      * @todo switch to MailFiler functions
+      */
+     refetchBody: function(record, callback) {
+         // cancel old request first
+         if (this.fetchBodyTransactionId && ! Tine.MailFiler.fileRecordBackend.isLoading(this.fetchBodyTransactionId)) {
+             Tine.log.debug('Tine.MailFiler.GridDetailsPanel::refetchBody -> cancelling current fetchBody request.');
+             Tine.MailFiler.fileRecordBackend.abort(this.fetchBodyTransactionId);
+         }
+         Tine.log.debug('Tine.MailFiler.GridDetailsPanel::refetchBody -> calling fetchBody');
+         this.fetchBodyTransactionId = Tine.MailFiler.fileRecordBackend.fetchBody(record, 'configured', callback);
+     },
+
+     /**
      * overwrite template with (body) content
-     * 
-     * @param {Tine.MailFiler.Model.Message} record
+     *
+     * @param {Object} messageData
      * @param {String} body
      */
-    setTemplateContent: function(record, body) {
-        this.currentId = record.id;
+    setTemplateContent: function(messageData, body) {
         this.getLoadMask().hide();
-
         this.doLayout();
-
-        this.tpl.overwrite(body, record.data);
+        this.tpl.overwrite(body, messageData);
 
         this.getEl().down('div').down('div').scrollTo('top', 0, false);
-
-        if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
-            Tine.log.debug('Tine.MailFiler.GridDetailsPanel::setTemplateContent about to handle preparedParts');
-            this.handlePreparedParts(record);
-        }
-    },
-    
-    /**
-     * handle invitation messages (show top + bottom panels)
-     * 
-     * @param {Tine.MailFiler.Model.Message} record
-     */
-    handlePreparedParts: function(record) {
-        var firstPreparedPart = this.record.get('preparedParts')[0],
-            mimeType = String(firstPreparedPart.contentType).split(/[ ;]/)[0],
-            mainType = Tine.MailFiler.MimeDisplayManager.getMainType(mimeType);
-            
-        if (! mainType) {
-            Tine.log.info('Tine.MailFiler.GridDetailsPanel::handlePreparedParts nothing found to handle ' + mimeType);
-            return;
-        }
-        
-        var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
-            detailsPanel = Tine.MailFiler.MimeDisplayManager.create(mainType, {
-                detailsPanel: this,
-                preparedPart: firstPreparedPart
-            });
-            
-        // quick hack till we have a card body here 
-        Ext.fly(bodyEl).update('');
-        detailsPanel.render(bodyEl);
     },
 
     /**
@@ -330,12 +347,19 @@ Ext.ns('Tine.MailFiler');
         switch (selector) {
             case 'span[class=tinebase-download-link]':
                 var idx = target.id.split(':')[1],
-                    attachment = this.record.get('attachments')[idx],
-                    nodeId = this.nodeRecord.get('id');
+                    // FIXME: somehow the message in the record is not persisted - this.attachments should be removed
+                    // FIXME:   when this is working correctly
+                    // attachment = this.record.get('message').attachments !== undefined
+                    //    ? this.record.get('message').attachments[idx]
+                    //    : null,
+                    attachment = this.attachments !== undefined
+                        ? this.attachments[idx]
+                        : null,
+                    nodeId = this.record.get('id');
 
                 // TODO support 'message/rfc822'?
                 // remove part id if set (that is the case in message/rfc822 attachments)
-                //var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.messageuid;
+                //var messageId = (this.record.get('message').id.match(/_/)) ? this.record.get('message').id.split('_')[0] : this.record.get('message').messageuid;
                 //if (attachment['content-type'] === 'message/rfc822') {
                 //
                 //    Tine.log.debug('Tine.MailFiler.GridDetailsPanel::onClick openWindow for:"' + messageId + '_' + attachment.partId + '".');
@@ -349,15 +373,19 @@ Ext.ns('Tine.MailFiler');
                 //} else {
 
                 // download attachment
-                new Ext.ux.file.Download({
-                    params: {
-                        requestType: 'HTTP',
-                        method: 'MailFiler.downloadAttachment',
-                        path: this.nodeRecord.get('path'),
-                        nodeId: nodeId,
-                        partId: attachment.partId
-                    }
-                }).start();
+                if (attachment) {
+                    new Ext.ux.file.Download({
+                        params: {
+                            requestType: 'HTTP',
+                            method: 'MailFiler.downloadAttachment',
+                            path: this.record.get('path'),
+                            nodeId: nodeId,
+                            partId: attachment.partId
+                        }
+                    }).start();
+                } else {
+                    Tine.log.warn('Attachment not found');
+                }
 
                 break;
         }

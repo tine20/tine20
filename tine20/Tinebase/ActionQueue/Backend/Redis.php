@@ -231,7 +231,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $jobId = $this->_redis->brpoplpush($this->_queueStructName, $this->_daemonStructName, $timeout);
         
         // did we run into a timeout
-        if ($jobId === FALSE || $jobId == '*-1') {
+        if ($jobId === FALSE || $jobId === '*-1') {
             return FALSE;
         }
         

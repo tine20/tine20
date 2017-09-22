@@ -64,12 +64,16 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
         
         $this->_resolvePathIds($modelName);
 
-        $idField = (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id';
-        $db = $_backend->getAdapter();
-        $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
         if (empty($this->_pathRecordIds)) {
-            $_select->where('1=0');
+            if (strpos($this->_operator, 'not') === false) {
+                $_select->where('1 = 0');
+            } else {
+                $_select->where('1 = 1');
+            }
         } else {
+            $idField = (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id';
+            $db = $_backend->getAdapter();
+            $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
             $_select->where($db->quoteInto("$qField IN (?)", $this->_pathRecordIds));
         }
     }
@@ -81,27 +85,20 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
     {
         if (! is_array($this->_pathRecordIds)) {
             $paths = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
-                array('field' => 'path', 'operator' => $this->_operator, 'value' => $this->_value)
+                array('field' => 'path', 'operator' => 'contains', 'value' => $this->_value)
             )));
 
             $this->_pathRecordIds = array();
             if ($paths->count() > 0) {
-                if (!is_array($this->_value)) {
-                    $this->_value = array($this->_value);
-                }
-                $searchTerms = array();
-                foreach ($this->_value as $value) {
-                    //replace full text meta characters
-                    //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-                    $value = preg_replace('#\W#u', ' ', $value);
-                    // replace multiple spaces with just one
-                    $searchTerms = array_merge($searchTerms, explode(' ', preg_replace('# +#u', ' ', trim($value))));
-                }
+
+                $searchTerms = Tinebase_Model_Filter_FullText::sanitizeValue($this->_value,
+                    Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4'));
 
                 if (count($searchTerms) < 1) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                            ' found paths, but search terms array is empty. value: ' . print_r($this->_value, true));
+                            ' found paths, but sanitized search terms array is empty. value: ' .
+                            print_r($this->_value, true));
                     }
                     return;
                 }

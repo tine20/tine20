@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -33,7 +33,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 11,
+        'version'           => 12,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
@@ -61,12 +61,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     'columns' => array('container_id')
                 )
             ),
-            // not now - is_deleted problem
-//            'uniqueConstraints' => array(
-//                'inventory_id' => array(
-//                    'columns' => array('inventory_id')
-//                )
-//            )
+            'uniqueConstraints' => array(
+                'inventory_id' => array(
+                    'columns' => array('inventory_id', 'deleted_time')
+                )
+            )
         ),
 
         'import'            => array(

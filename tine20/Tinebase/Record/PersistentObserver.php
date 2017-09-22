@@ -114,12 +114,19 @@ class Tinebase_Record_PersistentObserver
 
                 $_event->persistentObserver = $observer;
 
-                $rightsCheck = $controller->doRightChecks(false);
-                $containerAclCheck = $controller->doContainerACLChecks(false);
+                $rightsCheck = null;
+                $containerAclCheck = null;
+                if (!$observer->do_acl) {
+                    $rightsCheck = $controller->doRightChecks(false);
+                    $containerAclCheck = $controller->doContainerACLChecks(false);
+                }
 
                 $controller->handleEvent($_event);
-                $controller->doContainerACLChecks($containerAclCheck);
-                $controller->doRightChecks($rightsCheck);
+
+                if (!$observer->do_acl) {
+                    $controller->doContainerACLChecks($containerAclCheck);
+                    $controller->doRightChecks($rightsCheck);
+                }
             }
         } finally {
             $this->_outerCall = $setOuterCall;
@@ -147,6 +154,7 @@ class Tinebase_Record_PersistentObserver
         
         if ($_persistentObserver->isValid()) {
             $data = $_persistentObserver->toArray();
+            $data['do_acl'] = (isset($data['do_acl']) && false === $data['do_acl']) ? 0 : 1;
             
             $identifier = $this->_table->insert($data);
 
@@ -236,6 +244,21 @@ class Tinebase_Record_PersistentObserver
             $this->_db->quoteIdentifier('observed_event') .       ' = ' . $this->_db->quote((string)$_event)
         );
         
+        return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
+    }
+
+    /**
+     * returns all observables of a given observer model
+     *
+     * @param string $_model
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_PersistentObserver
+     */
+    public function getObservablesByObserverModel($_model)
+    {
+        $where = array(
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote($_model)
+        );
+
         return new Tinebase_Record_RecordSet('Tinebase_Model_PersistentObserver', $this->_table->fetchAll($where)->toArray(), true);
     }
 

@@ -20,6 +20,21 @@
  */
 class Tinebase_Export
 {
+    protected static $_pdfLegacyHandling = true;
+
+    /**
+     * @param bool $bool
+     * @return bool
+     */
+    public static function doPdfLegacyHandling($bool = true)
+    {
+        $oldValue = static::$_pdfLegacyHandling;
+        if (null !== $bool) {
+            static::$_pdfLegacyHandling = (bool)$bool;
+        }
+        return $oldValue;
+    }
+
     /**
      * get export object for given filter and format
      * 
@@ -55,7 +70,7 @@ class Tinebase_Export
             throw new Tinebase_Exception_InvalidArgument('Export definition ID or format required in options');
         }
         
-        if (preg_match('/pdf/i', $exportClass)) {
+        if (preg_match('/pdf/i', $exportClass) && true === static::$_pdfLegacyHandling) {
             // legacy
             $result = new $exportClass($_additionalOptions);
         } else {

@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -62,7 +62,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @var array
      */
-    protected $_personas = array();
+    protected $_personas = [];
     
     /**
      * unit in test
@@ -267,6 +267,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * removes records and their relations
      *
      * @param Tinebase_Record_RecordSet $records
+     * @param array $modelsToDelete
+     * @param array $typesToDelete
      */
     protected function _deleteRecordRelations($records, $modelsToDelete = array(), $typesToDelete = array())
     {
@@ -293,7 +295,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($user === null) {
             $user = Tinebase_Core::getUser();
         }
-        
+
+        /** @var Tinebase_Model_Container $personalContainer */
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             $user,
             $applicationName, 
@@ -313,6 +316,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param string $applicationName
      * @param string $model
+     * @return Tinebase_Model_Container
      */
     protected function _getTestContainer($applicationName, $model = null)
     {
@@ -339,7 +343,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * get test user email address
      * 
-     * @return test user email address
+     * @return string test user email address
      */
     protected function _getEmailAddress()
     {
@@ -386,9 +390,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         // make sure messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
+            Tinebase_ActionQueue::getInstance()->processQueue();
         }
-        
+
+        /** @noinspection PhpUndefinedMethodInspection */
         return self::getMailer()->getMessages();
     }
     
@@ -413,9 +418,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         // make sure all messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+            Tinebase_ActionQueue::getInstance()->processQueue();
         }
-        
+
+        /** @noinspection PhpUndefinedMethodInspection */
         self::getMailer()->flush();
     }
     
@@ -448,7 +454,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * get test temp file
      * 
-     * @return Tinebase_TempFile
+     * @return Tinebase_Model_TempFile
      */
     protected function _getTempFile()
     {
@@ -461,7 +467,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * remove right in all users roles
      * 
      * @param string $applicationName
-     * @param string $right
+     * @param string $rightToRemove
      * @param boolean $removeAdminRight
      * @return array original role rights by role id
      */
@@ -475,7 +481,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         foreach ($rolesOfUser as $roleId) {
             $roleRights[$roleId] = $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($roleId);
             foreach ($rights as $idx => $right) {
-                if ($right['application_id'] === $app->getId() && ($right['right'] === $rightToRemove || $right['right'] === Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                if ($right['application_id'] === $app->getId() && ($right['right'] === $rightToRemove || (
+                    true === $removeAdminRight && $right['right'] === Tinebase_Acl_Rights_Abstract::ADMIN))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Removing right ' . $right['right'] . ' from app ' . $applicationName . ' in role (id) ' . $roleId);
                     unset($rights[$idx]);
@@ -492,7 +499,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param integer $containerId
      * @param string $persona
-     * @param string $adminGrant
+     * @param boolean $personaAdminGrant
+     * @param boolean $userAdminGrant
      */
     protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true)
     {
@@ -531,7 +539,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * call handle cli function with params
      *
+     * @param string $command
      * @param array $_params
+     * @return string
      */
     protected function _cliHelper($command, $_params)
     {
@@ -552,6 +562,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $descriptionField
      * @param bool $delete
      * @param array $recordData
+     * @param bool $description
      * @return array
      * @throws Exception
      */
@@ -584,7 +595,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
         if (null !== $configuration && $configuration->modlogActive) {
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId']);
+            $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
+                print_r($savedRecord));
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
+                'created_by has wrong value: ' . print_r($savedRecord));
         }
 
         // Update description if record has
@@ -606,6 +620,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         $this->assertEquals(1, $result['totalcount']);
+
+        if (null !== $configuration && $configuration->modlogActive) {
+            $this->assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
+                'last_modified_by not present: ' . print_r($result));
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
+                'last_modified_by has wrong value: ' . print_r($result));
+        }
 
         if ($delete) {
             call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
@@ -708,8 +729,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         if ($persona instanceof Tinebase_Model_User) {
             $userId = $persona->getId();
-        } else if (is_string($persona)) {
+        } elseif (is_string($persona)) {
             $userId = $this->_personas[$persona]->getId();
+        } else {
+            $userId = '';
         }
         return Tinebase_FileSystem::getInstance()->getApplicationBasePath(
             $appName,

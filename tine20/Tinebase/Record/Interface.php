@@ -316,4 +316,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return null|Tinebase_Record_RecordSetDiff
      */
     public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo);
+
+    /**
+     * @param array $_validators
+     */
+    public function setValidators(array $_validators);
 }

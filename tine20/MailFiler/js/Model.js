@@ -47,6 +47,13 @@ Tine.MailFiler.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         var _ = window.lodash;
 
         return _.indexOf(['/', Tine.Tinebase.container.getMyFileNodePath(), '/personal', '/shared'], this.get('path')) >= 0;
+    },
+
+    /**
+     * @returns {boolean}
+     */
+    messageIsFetched: function() {
+        return this.get('message') !== undefined && this.get('message').body !== undefined;
     }
 });
     
@@ -71,7 +78,54 @@ Tine.MailFiler.Model.Node.createFromFile = function(file) {
 Tine.MailFiler.fileRecordBackend = new Tine.Filemanager.FileRecordBackend({
     appName: 'MailFiler',
     modelName: 'Node',
-    recordClass: Tine.MailFiler.Model.Node
+    recordClass: Tine.MailFiler.Model.Node,
+
+    /**
+     * fetches body and additional headers (which are needed for the preview panel) into given message
+     *
+     * @param {Message} message
+     * @param {String} mimeType
+     * @param {Function|Object} callback (NOTE: this has NOTHING to do with standard Ext request callback fn)
+     *
+     * @todo use mimeType?
+     */
+    fetchBody: function(record, mimeType, callback) {
+
+        // if (mimeType == 'configured') {
+        //     var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
+        //     if (account) {
+        //         mimeType = account.get('display_format');
+        //         if (!mimeType.match(/^text\//)) {
+        //             mimeType = 'text/' + mimeType;
+        //         }
+        //     } else {
+        //         // no account found, might happen for .eml emails
+        //         mimeType = 'text/plain';
+        //     }
+        // }
+
+        return this.loadRecord(record, {
+            //params: {mimeType: mimeType},
+            timeout: 120000, // 2 minutes
+            scope: this,
+            success: function(response, options) {
+                var nodeWithBody = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
+                Ext.copyTo(record.data, nodeWithBody.data, ['message']);
+                if (Ext.isFunction(callback)) {
+                    callback(record);
+                } else if (callback.success) {
+                    Ext.callback(callback.success, callback.scope, [record]);
+                }
+            },
+            failure: function(exception) {
+                if (callback.failure) {
+                    Ext.callback(callback.failure, callback.scope, [exception]);
+                } else {
+                    this.handleRequestException(exception);
+                }
+            }
+        });
+    }
 });
 
 
