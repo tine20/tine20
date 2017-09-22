@@ -850,7 +850,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             . " from: $_from until: $_until");
         
         $computationStartDate = clone $_event->dtstart;
-        $endDate = ($_event->rrule_until instanceof DateTime && $_until->isLater($_event->rrule_until))
+        $endDate = ($_event->rrule_until instanceof DateTime
+                && $_until instanceof Tinebase_DateTime
+                && $_until->isLater($_event->rrule_until))
             ? $_event->rrule_until
             : $_until;
         if (! $endDate instanceof Tinebase_DateTime) {
