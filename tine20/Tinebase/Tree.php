@@ -80,7 +80,7 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 /** @var Tinebase_Model_Tree_Node $record */
                 $record = $treeBackend->get($_modification->record_id, true);
-                if (isset($diff->diff['grants'])) {
+                if (isset($diff->diff['grants']) && $record->acl_node === $record->getId()) {
                     Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($record);
                 }
                 $record->applyDiff($diff);

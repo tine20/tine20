@@ -72,12 +72,21 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
     {
         $result = array();
         $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $model = $this->model;
         foreach (array('added', 'removed', 'modified') as $action) {
             if (count($this->{$action}) > 0) {
-                $result[] = count($this->{$action}) . ' ' . $translate->_($action);
+                $str = count($this->{$action}) . ' ' . $translate->_($action) . ': ';
+                $first = true;
+                foreach ($this->{$action} as $data) {
+                    /** @var Tinebase_Record_Abstract $record */
+                    $record = new $model($data, true);
+                    $str .= ($first ? '' : ', ') . $record->getTitle();
+                    $first = false;
+                }
+                $result[] = $str;
             }
         }
         
-        return implode(', ', $result);
+        return implode(' - ', $result);
     }
 }

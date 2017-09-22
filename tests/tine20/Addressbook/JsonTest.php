@@ -386,7 +386,8 @@ class Addressbook_JsonTest extends TestCase
 
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 '. $translate->_('added') .') customfields ( ->  ');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 '. $translate->_('added') .': ');
+        $this->_checkChangedNote($record['id'], ') customfields ( ->  ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);
@@ -1937,6 +1938,79 @@ Steuernummer 33/111/32212";
         $this->assertEquals($listRole['id'], $list['memberroles'][0]['list_role_id']['id'], 'member roles are not saved/returned in list: ' . print_r($list, true));
 
         return $list;
+    }
+
+    public function testAddMemberAndRole()
+    {
+        // create list without members / roles
+        $list = $this->_uit->saveList(array(
+            'name'                  => 'my test list',
+            'description'           => '',
+            'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
+        ));
+
+        // add one member / role
+        $contact = $this->_addContact();
+        $listRole = $this->_uit->saveListRole(array(
+            'name'          => 'my test name',
+            'description'   => 'my test description'
+        ));
+        $list['members'][] = $contact['id'];
+        $list['memberroles'][] = array(
+            'contact_id'   => $contact['id'],
+            'list_role_id' => $listRole['id'],
+        );
+
+        $list = $this->_uit->saveList($list);
+
+        // add second member / role
+        $contact = $this->_addContact();
+        $listRole = $this->_uit->saveListRole(array(
+            'name'          => 'my test name 2',
+            'description'   => 'my test description 2'
+        ));
+        $list['members'][] = $contact['id'];
+        $list['memberroles'][] = array(
+            'contact_id'   => $contact['id'],
+            'list_role_id' => $listRole['id'],
+        );
+
+        $list = $this->_uit->saveList($list);
+
+        // empty member / role
+        $list['members'] = [];
+        $list['memberroles'] = [];
+        $list = $this->_uit->saveList($list);
+
+        // get history of list
+        $historyFE = new Tinebase_Frontend_Json();
+        $notes = $historyFE->searchNotes(array(
+            array('field' => 'record_model',    'operator' => 'equals', 'value' => Addressbook_Model_List::class),
+            array('field' => 'record_id',       'operator' => 'equals', 'value' => $list['id']),
+        ), '');
+
+        static::assertEquals(4, $notes['totalcount']);
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        foreach (array(
+                array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )', 'memberroles (2 ' . $translate->_('removed') . ': my test name: ali PHPUNIT, my test name 2: ali PHPUNIT)'),
+                array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name 2: ali PHPUNIT)'),
+                array('members ( ->  0: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name: ali PHPUNIT)'),
+            ) as $expectedStrings) {
+            $found = false;
+            foreach ($notes['results'] as $note) {
+                $hits = 0;
+                foreach ($expectedStrings as $searchStr) {
+                    if (strpos($note['note'], $searchStr) !== false) {
+                        ++$hits;
+                    }
+                }
+                if ($hits === count($expectedStrings)) {
+                    $found = true;
+                    break;
+                }
+            }
+            static::assertTrue($found, 'did not find strings: ' . join(', ', $expectedStrings) . ' in notes: ' . print_r($notes, true));
+        }
     }
 
     public function testUpdateListWithRelation()

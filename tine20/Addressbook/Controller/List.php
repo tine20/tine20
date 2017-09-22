@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -86,16 +86,21 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @see Tinebase_Controller_Record_Abstract::get()
+     * get by id
      *
      * @param string $_id
      * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
      * @return Addressbook_Model_List
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        $result = new Tinebase_Record_RecordSet('Addressbook_Model_List', array(parent::get($_id, $_containerId)));
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_List',
+            array(parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted)));
         $this->_removeHiddenListMembers($result);
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $result->getFirstRecord();
     }
 
@@ -231,6 +236,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _fixEmptyContainerId($_listId)
     {
+        /** @var Addressbook_Model_List $list */
         $list = $this->_backend->get($_listId);
 
         if (empty($list->container_id)) {
@@ -466,6 +472,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($list->toArray(), TRUE));
 
+        /** @var Addressbook_Model_List $list */
         $list = $this->_backend->create($list);
 
         return $list;
@@ -504,6 +511,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         if (!$_filter->isFilterSet('showHidden')) {
             $hiddenFilter = $_filter->createFilter('showHidden', 'equals', FALSE);
+            /** @noinspection PhpDeprecationInspection */
             $hiddenFilter->setIsImplicit(TRUE);
             $_filter->addFilter($hiddenFilter);
         }
@@ -590,5 +598,64 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     public function getMemberships($contact)
     {
         return $this->_backend->getMemberships($contact);
+    }
+
+    /**
+     * set system notes
+     *
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   string $_systemNoteType
+     * @param   Tinebase_Record_RecordSet $_currentMods
+     */
+    protected function _setSystemNotes($_updatedRecord, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
+    {
+        $resolvedMods = $_currentMods;
+        if (null !== $_currentMods && Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED === $_systemNoteType) {
+            $resolvedMods = new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, array());
+            /** @var Tinebase_Model_ModificationLog $mod */
+            foreach ($_currentMods as $mod) {
+                $diff = new Tinebase_Record_Diff(json_decode($mod->new_value, true));
+                foreach ($diff->xprops('diff') as $attribute => &$value) {
+                    if ('members' === $attribute) {
+                        $this->_resolveMembersForNotes($value, $diff->xprops('oldData')['members']);
+                    }
+                }
+                $newMod = clone $mod;
+                $newMod->new_value = json_encode($diff->toArray());
+                $resolvedMods->addRecord($newMod);
+            }
+        }
+        parent::_setSystemNotes($_updatedRecord, $_systemNoteType, $resolvedMods);
+    }
+
+    protected function _resolveMembersForNotes(&$currentMembers, &$oldMembers)
+    {
+        $contactIds = array();
+        if (!empty($currentMembers)) {
+            $contactIds = array_merge($contactIds, $currentMembers);
+        }
+        if (!empty($oldMembers)) {
+            $contactIds = array_merge($contactIds, $oldMembers);
+        }
+        $contactIds = array_unique($contactIds);
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contactIds);
+
+        if (is_array($currentMembers)) {
+            foreach ($currentMembers as &$val) {
+                /** @var Addressbook_Model_Contact $contact */
+                if (false !== ($contact = $contacts->getById($val))) {
+                    $val = $contact->getTitle();
+                }
+            }
+        }
+
+        if (is_array($oldMembers)) {
+            foreach ($oldMembers as &$val) {
+                /** @var Addressbook_Model_Contact $contact */
+                if (false !== ($contact = $contacts->getById($val))) {
+                    $val = $contact->getTitle();
+                }
+            }
+        }
     }
 }
