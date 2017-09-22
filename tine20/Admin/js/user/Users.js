@@ -67,7 +67,7 @@ Tine.Admin.Model.UserArray = [
     { name: 'xprops'}
 ];
 
-Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserArray, {
+Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat(Tine.Admin.Model.UserArray), {
     appName: 'Admin',
     modelName: 'User',
     idProperty: 'accountId',
