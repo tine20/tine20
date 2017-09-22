@@ -117,6 +117,11 @@ Ext.ux.ItemRegistry.prototype = {
             var addItem = this.getItem(reg),
                 addPos = null;
 
+            if (! addItem) {
+                console.warn('item not found');
+                return;
+            }
+
             // insert item 
             this.cmp.items.each(function(item, idx) {
                 if (addItem.registerdItemPos < item.registerdItemPos) {
