@@ -1726,6 +1726,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function fakeDeletedExceptions($baseEvent, $exceptions)
     {
+        if (! $baseEvent->dtstart instanceof Tinebase_DateTime) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' No valid dtstart in baseevent: ' . print_r($baseEvent->toArray(), true));
+            return;
+        }
         $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
 
         // compute remaining exdates
