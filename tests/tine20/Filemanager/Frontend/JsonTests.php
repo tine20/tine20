@@ -1176,7 +1176,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->getNode($node['id']);
 
         $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer', $result['path']);
-        $this->assertTrue(isset($result['effectiveAndLocalQuota']['localQuota']), 'effectiveAndLocalQuota not present in result: ' . print_r($result, true));
+        $this->assertTrue(isset($result['effectiveAndLocalQuota']['localUsage']), 'effectiveAndLocalQuota not present in result: ' . print_r($result, true));
     }
 
     /**
