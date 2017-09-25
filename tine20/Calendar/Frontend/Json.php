@@ -671,7 +671,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
 
-            $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $events, $ignoreUIDs);
+            if (empty($attendee)) {
+                $result['freeBusyInfo'] = array();
+            } else {
+                $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $events, $ignoreUIDs);
+            }
         }
 
         return $result;
