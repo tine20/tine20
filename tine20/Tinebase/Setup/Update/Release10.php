@@ -2106,7 +2106,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </field>'));
         }
 
-        $this->_backend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+        try {
+            $this->_backend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         $this->_backend->dropIndex('tree_nodes', 'parent_id-name');
         $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>parent_id-name</name>
