@@ -596,9 +596,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
         if (null !== $configuration && $configuration->modlogActive) {
             $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
-                print_r($savedRecord));
+                print_r($savedRecord, true));
             $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
-                'created_by has wrong value: ' . print_r($savedRecord));
+                'created_by has wrong value: ' . print_r($savedRecord, true));
         }
 
         // Update description if record has
@@ -623,9 +623,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         if (null !== $configuration && $configuration->modlogActive) {
             $this->assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
-                'last_modified_by not present: ' . print_r($result));
+                'last_modified_by not present: ' . print_r($result, true));
             $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
-                'last_modified_by has wrong value: ' . print_r($result));
+                'last_modified_by has wrong value: ' . print_r($result, true));
         }
 
         if ($delete) {
