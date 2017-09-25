@@ -4,7 +4,7 @@
  *
  * @package     Inventory
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metawys.de
  */
 
@@ -16,35 +16,12 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Inventory_TestCase
  */
-class Inventory_TestCase extends PHPUnit_Framework_TestCase
+class Inventory_TestCase extends TestCase
 {
     /**
      * @var Inventory_Frontend_Json
      */
     protected $_json = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Inventory Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-    }
     
     /**
      * get InventoryItem record
@@ -91,16 +68,5 @@ class Inventory_TestCase extends PHPUnit_Framework_TestCase
                 'sort' => 'name',
                 'dir' => 'ASC',
         );
-    }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 }
