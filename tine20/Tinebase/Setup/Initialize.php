@@ -171,5 +171,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
         Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
         Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
     }
 }
