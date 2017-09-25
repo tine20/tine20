@@ -167,7 +167,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Record_Interface $_record
      * @param boolean                   $_doModLog
      * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_Interface Record|NULL
+     * @return Tinebase_Model_Tree_Node
      */
     public function update(Tinebase_Record_Interface $_record, $_doModLog = true)
     {
@@ -315,7 +315,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param  boolean                          $getDeleted = false
      * @param  boolean                          $throw = true
      * @throws Tinebase_Exception_NotFound
-     * @return Tinebase_Model_Tree_Node
+     * @return Tinebase_Model_Tree_Node|null
      */
     public function getChild($parentId, $childName, $getDeleted = false, $throw = true)
     {
