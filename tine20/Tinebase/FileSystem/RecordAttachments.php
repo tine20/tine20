@@ -264,9 +264,17 @@ class Tinebase_FileSystem_RecordAttachments
         $attachmentsDir = $this->getRecordAttachmentPath($record, true);
         $attachmentPath = $attachmentsDir . '/' . $attachment->name;
 
-        $nodeController = Filemanager_Controller_Node::getInstance();
-        $path = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($attachment->path));
-        $attachment = $this->_fsController->copy($path->statpath, $attachmentPath);
+        $nodePath = $this->_fsController->getPathOfNode($attachment, true);
+        if ($attachmentPath === $nodePath) {
+            $attachment = $this->_fsController->stat($attachmentPath, null, true);
+            if ($attachment->is_deleted) {
+                $this->_fsController->unDeleteFileNode($attachment->getId());
+                $this->_fsController->clearStatCache($attachmentPath);
+                $attachment = $this->_fsController->stat($attachmentPath);
+            }
+        } else {
+            $attachment = $this->_fsController->copy($nodePath, $attachmentPath);
+        }
 
         return $attachment;
     }

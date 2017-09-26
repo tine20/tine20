@@ -41,6 +41,8 @@
  * @property string                         transp
  * @property string                         status
  * @property string                         summary
+ * @property string                         recurid
+ * @property array                          exdate
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -522,10 +524,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $this->rrule_until = NULL;
         } else {
             $rrule = $this->rrule;
-            if (! $this->rrule instanceof Calendar_Model_Rrule) {
-                $rrule = new Calendar_Model_Rrule(array());
-                $rrule->setFromString($this->rrule);
-                $this->rrule = $rrule;
+            if (! $rrule instanceof Calendar_Model_Rrule) {
+                $rruleTmp = new Calendar_Model_Rrule(is_array($rrule) ? $rrule : array());
+                if (!is_array($rrule)) {
+                    $rruleTmp->setFromString($rrule);
+                }
+                $this->rrule = $rruleTmp;
+                $rrule = $rruleTmp;
             }
             
             if (isset($rrule->count)) {

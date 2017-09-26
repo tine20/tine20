@@ -1711,24 +1711,26 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * delete linked objects (notes, relations, attachments) of record
+     * delete linked objects (notes, relations, attachments, alarms) of record
      *
      * @param Tinebase_Record_Interface $_record
      */
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
-        // delete notes & relations
         if ($_record->has('notes')) {
             Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
         }
         
         if ($_record->has('relations')) {
-            // TODO check if this needs to be done, as we might already deleting this "from the other side"
             $this->deleteLinkedRelations($_record);
         }
 
         if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
+        }
+
+        if ($_record->has('alarms')) {
+            $this->_deleteAlarmsForIds(array($_record->getId()));
         }
     }
 
@@ -1755,6 +1757,11 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($_record->attachments as $attachment) {
                 Tinebase_FileSystem::getInstance()->unDeleteFileNode($attachment['id']);
             }
+        }
+
+        if ($_record->has('alarms') && count($_record->alarms) > 0) {
+            $_record->alarms->setId(null);
+            $this->_saveAlarms($_record);
         }
     }
     

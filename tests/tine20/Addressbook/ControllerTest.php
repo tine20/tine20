@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -22,12 +22,14 @@ class Addressbook_ControllerTest extends TestCase
     /**
      * @var array test objects
      */
-    protected $objects = array();
+    protected $objects = [];
 
     /**
      * @var Addressbook_Controller_Contact
      */
-    protected $_instance = NULL;
+    protected $_instance = null;
+
+    protected $_oldFileSystemConfig = null;
     
     /**
      * Sets up the fixture.

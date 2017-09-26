@@ -1591,7 +1591,7 @@ class Tinebase_FileSystem implements
     }
 
     /**
-     * delete file node
+     * undelete file node
      *
      * @param string $id
      * @param bool $updateDirectoryNodesHash
