@@ -149,7 +149,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
         
         $this->setExpectedException('Sabre\DAV\Exception\NotFound');
-        
+
+        Tinebase_WebDav_Collection_AbstractContainerTree::clearClassCache();
+        $this->_webdavTree = null;
         $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
     }
     

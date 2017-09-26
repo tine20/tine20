@@ -83,6 +83,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     /**
      * @var array
      */
+    protected $_instanceCache = array();
+
+    /**
+     * @var array
+     */
     protected static $_classCache = array (
         '_getUser' => array()
     );
@@ -120,6 +125,13 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('invalid container model given');
+        }
+    }
+
+    public static function clearClassCache()
+    {
+        foreach (static::$_classCache as &$val) {
+            $val = array();
         }
     }
 
@@ -164,6 +176,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     public function getChild($name)
     {
+        if (isset($this->_instanceCache[__FUNCTION__][$name])) {
+            return $this->_instanceCache[__FUNCTION__][$name];
+        }
+
         switch (count($this->_getPathParts())) {
             # path == /<applicationPrefix> (for example calendars)
             # return folders for currentuser, other users and 'shared' folder
@@ -171,16 +187,22 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             # * contact_id of user
             # * 'shared'
             case 1:
-                return $this->_getToplevelTree($name);
+                $child = $this->_getToplevelTree($name);
+                break;
 
             # path == /<applicationPrefix>/<contactid>|'shared'
             # list container
             case 2:
-                return $this->_getContainerTree($name);
+                $child = $this->_getContainerTree($name);
+                break;
 
             default:
                 throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
+
+        $this->_instanceCache[__FUNCTION__][$name] = $child;
+
+        return $child;
     }
 
     /**
@@ -294,8 +316,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     protected function _getSharedContainer($name)
     {
         if ($name instanceof Tinebase_Model_Container) {
-            $container = $name;
-        } elseif ($this->_useIdAsName) {
+            return $name;
+        }
+
+        if (isset(static::$_classCache[__FUNCTION__][$name])) {
+            return static::$_classCache[__FUNCTION__][$name];
+        }
+
+        if ($this->_useIdAsName) {
             try {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' First try to fetch container by uuid ..');
@@ -313,6 +341,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 Tinebase_Model_Container::TYPE_SHARED
             );
         }
+
+        static::$_classCache[__FUNCTION__][$name] = $container;
 
         return $container;
     }
@@ -370,8 +400,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     protected function _getPersonalContainer($name, $accountId)
     {
         if ($name instanceof Tinebase_Model_Container) {
-            $container = $name;
-        } elseif ($this->_useIdAsName) {
+            return $name;
+        }
+
+        $cacheKey = $name . ($this->_useIdAsName ? '' : $accountId);
+        if (isset(static::$_classCache[__FUNCTION__][$cacheKey])) {
+            return static::$_classCache[__FUNCTION__][$cacheKey];
+        }
+
+        if ($this->_useIdAsName) {
             // first try to fetch by uuid ...
             try {
                 $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
@@ -388,6 +425,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 $accountId
             );
         }
+
+        static::$_classCache[__FUNCTION__][$cacheKey] = $container;
 
         return $container;
     }
@@ -454,6 +493,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     public function getChildren()
     {
+        if (isset($this->_instanceCache[__FUNCTION__])) {
+            return $this->_instanceCache[__FUNCTION__];
+        }
+
         switch (count($this->_getPathParts())) {
             # path == /<applicationPrefix> (for example calendars)
             # return folders for currentuser, other users and 'shared' folder
@@ -471,7 +514,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 throw new Sabre\DAV\Exception\NotFound("Path $this->_path not found");
                 break;
         }
-        
+
+        $this->_instanceCache[__FUNCTION__] = $children;
         return $children;
     }
 
