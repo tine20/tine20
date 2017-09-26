@@ -398,7 +398,26 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if (!empty($recordCustomFields)) {
             $this->customfields = $recordCustomFields;
         }
-        
+
+        // convert data to record(s)
+        $modelConfiguration = static::getConfiguration();
+        if ($modelConfiguration /*&& $modelConfiguration->setRecordsFromArray*/) {
+            foreach($modelConfiguration->getFields() as $fieldName => $config) {
+                if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
+                    $config = $config['type'] === 'virtual' && isset($config['config']['type']) ? $config['config'] :
+                        $config;
+                    if (in_array($config['type'], ['record', 'records']) && isset($config['config']['appName']) &&
+                            isset($config['config']['modelName'])) {
+                        $modelName = $config['config']['appName'] . '_Model_' . $config['config']['modelName'];
+                        $this->{$fieldName} = $config['type'] == 'record' ?
+                            new $modelName($_data[$fieldName], $this->bypassFilters, $this->convertDates) :
+                            new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters,
+                                $this->convertDates);
+                    }
+                }
+            }
+        }
+
         $this->bypassFilters = $bypassFilter;
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
