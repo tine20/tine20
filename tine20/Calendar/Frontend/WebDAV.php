@@ -48,27 +48,35 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
      */
     public function getChild($name)
     {
+        if (isset($this->_instanceCache[__FUNCTION__][$name])) {
+            return $this->_instanceCache[__FUNCTION__][$name];
+        }
+
+        $child = null;
         // do this only for caldav requests
         if ($this->_useIdAsName && count($this->_getPathParts()) == 2 && in_array($name, array('inbox', 'outbox', 'dropbox'))) {
             switch ($name) {
                 case 'inbox':
-                    return new Calendar_Frontend_CalDAV_ScheduleInbox(Tinebase_Core::getUser());
-                    
+                    $child = new Calendar_Frontend_CalDAV_ScheduleInbox(Tinebase_Core::getUser());
                     break;
                     
                 case 'outbox':
-                    return new \Sabre\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
-                    
+                    $child = new \Sabre\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
                     break;
                     
                 case 'dropbox':
-                    return new Calendar_Frontend_CalDAV_Dropbox(Tinebase_Core::getUser());
-                    
+                    $child = new Calendar_Frontend_CalDAV_Dropbox(Tinebase_Core::getUser());
                     break;
             }
         }
-        
-        return parent::getChild($name);
+
+        if (null === $child) {
+            $child = parent::getChild($name);
+        }
+
+        $this->_instanceCache[__FUNCTION__][$name] = $child;
+
+        return $child;
     }
     
     /**
@@ -77,6 +85,10 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
      */
     public function getChildren()
     {
+        if (isset($this->_instanceCache[__FUNCTION__])) {
+            return $this->_instanceCache[__FUNCTION__];
+        }
+
         $children = parent::getChildren();
         
         // do this only for caldav request 
@@ -85,7 +97,9 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
             
             $children = array_merge($children, $tfwdavct->getChildren());
         }
-        
+
+        $this->_instanceCache[__FUNCTION__] = $children;
+
         return $children;
     }
 }

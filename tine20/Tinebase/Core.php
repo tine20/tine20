@@ -338,7 +338,8 @@ class Tinebase_Core
                 /** @noinspection PhpUndefinedClassInspection */
                 $xhprof_runs = new XHProfRuns_Default();
                 /** @noinspection PhpUndefinedMethodInspection */
-                $xhprof_runs->save_run($xhprof_data, "tine");
+                $runId = $xhprof_runs->save_run($xhprof_data, "tine");
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' xhprof runid: ' . $runId);
             }
         }
     }

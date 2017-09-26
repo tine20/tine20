@@ -228,7 +228,8 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         
         $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         $this->assertTrue($container instanceof Tinebase_Model_Container);
-        
+
+        Calendar_Frontend_WebDAV::clearClassCache();
         $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
         $this->assertEquals('B1B3BEA0-F1F9-409F-B1A0-43E41119F851', $subCollection->getName());
         
