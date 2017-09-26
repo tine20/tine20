@@ -210,7 +210,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Gets one entry (by id)
      *
-     * @param integer|Tinebase_Record_Interface $_id
+     * @param string|Tinebase_Record_Interface $_id
      * @param boolean $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound

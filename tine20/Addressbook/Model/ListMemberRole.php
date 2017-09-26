@@ -42,4 +42,16 @@ class Addressbook_Model_ListMemberRole extends Tinebase_Record_Abstract
         'list_role_id'         => array('allowEmpty' => false         ),
         'contact_id'           => array('allowEmpty' => false         ),
     );
+
+    /**
+     * returns the title of the record
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $listRole = Addressbook_Controller_ListRole::getInstance()->get($this->list_role_id);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->contact_id);
+        return $listRole->getTitle() . ': ' . $contact->getTitle();
+    }
 }

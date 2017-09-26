@@ -2072,7 +2072,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 if (isset($diff->diff['account_grants'])) {
-                    $this->setGrants($_modification->record_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $diff->diff['account_grants']), true, false);
+                    $this->setGrants($_modification->record_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $diff->diff['account_grants']['added']), true, false);
                 } else {
                     $record = $this->get($_modification->record_id, true);
                     $record->applyDiff($diff);

@@ -372,13 +372,18 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.initPagingToolbar.defer(50, this);
             return;
         }
-        // old browsers
-        if (!((! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || (Ext.isGecko && window.FileReader))) {
-            var text = new Ext.Panel({padding: 2, html: String.format(this.app.i18n._('The max. Upload Filesize is {0} MB'), Tine.Tinebase.registry.get('maxFileUploadSize') / 1048576 )});
-            this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
-            this.pagingToolbar.insert(12, text);
-            this.pagingToolbar.doLayout();
-        }
+
+        this.quotaBar = new Ext.Component({
+            html: '&nbsp;',
+            style: {
+                marginTop: '3px',
+                width: '100px',
+                height: '16px'
+            }
+        });
+        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(12, this.quotaBar);
+        this.pagingToolbar.doLayout();
     },
 
     /**
@@ -832,7 +837,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param options
      */
     onLoad: function(store, records, options){
-        var grid = this;
+        var _ = window.lodash,
+            quota = _.get(store, 'reader.jsonData.quota', false),
+            grid = this;
 
         for(var i=records.length-1; i>=0; i--) {
             var record = records[i];
@@ -846,6 +853,18 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
             }
+        }
+
+        if (quota) {
+            var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
+            this.quotaBar.show();
+            if (this.quotaBar.rendered) {
+                this.quotaBar.update(qhtml);
+            } else {
+                this.quotaBar.html = qhtml;
+            }
+        } else {
+            this.quotaBar.hide();
         }
     },
 

@@ -72,14 +72,14 @@ Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Model of a user group
  */
-Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create([
+Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
     {name: 'container_id'},
     {name: 'visibility'}
     //{name: 'groupMembers'}
-], {
+]), {
     appName: 'Admin',
     modelName: 'Group',
     idProperty: 'id',

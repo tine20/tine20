@@ -2048,18 +2048,17 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_42()
     {
-        if ($this->getTableVersion('accounts') < 14) {
-            try {
-                $this->_backend->dropCol('accounts', 'configuration');
-            } catch (Exception $e) {
-                // ignore .. :)
-            }
-
+        if ($this->_backend->columnExists('configuration', 'accounts')) {
+            $this->_backend->dropCol('accounts', 'configuration');
+        }
+        if (!$this->_backend->columnExists('xprops', 'accounts')) {
             $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('<field>
                     <name>xprops</name>
                     <type>text</type>
                     <length>65535</length>
                 </field>'));
+        }
+        if ($this->getTableVersion('accounts') < 14) {
             $this->setTableVersion('accounts', 14);
         }
 
@@ -2106,7 +2105,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </field>'));
         }
 
-        $this->_backend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+        try {
+            $this->_backend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         $this->_backend->dropIndex('tree_nodes', 'parent_id-name');
         $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>parent_id-name</name>
