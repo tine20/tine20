@@ -265,6 +265,9 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
             ));
             $missingEvents = Calendar_Controller_Event::getInstance()->search($missingEventsFilter);
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Deleting ' . count($missingEvents) . ' missing events');
+
             Calendar_Controller_Event::getInstance()->delete($missingEvents->id);
         }
     }
