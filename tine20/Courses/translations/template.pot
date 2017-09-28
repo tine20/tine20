@@ -33,48 +33,6 @@ msgstr ""
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr ""
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr ""
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:74 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr ""
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr ""
@@ -82,6 +40,12 @@ msgstr ""
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr ""
+
+#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/CourseEditDialog.js:204
 msgid "Course Name"
@@ -93,6 +57,10 @@ msgstr ""
 
 #: js/CourseEditDialog.js:221
 msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
+msgid "Internet Access"
 msgstr ""
 
 #: js/CourseEditDialog.js:256
@@ -111,16 +79,45 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
 msgstr ""
 
-#: Controller/Course.php:257
-msgid "Teacher Account"
+#: js/CourseGridPanel.js:50
+msgid "Type"
 msgstr ""
 
-#: Controller/Course.php:321
-msgid "My course"
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
+msgid "All courses"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
 msgstr ""
 
 #: Config.php:105
@@ -189,9 +186,20 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:30 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr ""
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
 msgstr ""
 
 #: Setup/Initialize.php:57
@@ -200,10 +208,6 @@ msgstr ""
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
 msgstr ""
 
 #: Acl/Rights.php:108
@@ -228,8 +232,4 @@ msgstr ""
 
 #: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
 msgstr ""

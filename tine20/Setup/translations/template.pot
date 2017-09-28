@@ -48,50 +48,6 @@ msgstr ""
 msgid "Install application"
 msgstr ""
 
-#: js/TreePanel.js:52
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/TreePanel.js:57
-msgid "Setup Checks"
-msgstr ""
-
-#: js/TreePanel.js:63
-msgid "Config Manager"
-msgstr ""
-
-#: js/TreePanel.js:69
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/TreePanel.js:75
-msgid "Email"
-msgstr ""
-
-#: js/TreePanel.js:81
-msgid "Application Manager"
-msgstr ""
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr ""
-
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr ""
@@ -153,12 +109,6 @@ msgstr ""
 msgid "CLI Required"
 msgstr ""
 
-#: js/Model.js:33
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr ""
@@ -173,7 +123,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
 #: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
-#: js/EmailPanel.js:146 js/EmailPanel.js:456
+#: js/EmailPanel.js:146 js/EmailPanel.js:476
 msgid "Backend"
 msgstr ""
 
@@ -215,7 +165,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:583 js/AuthenticationPanel.js:620
 #: js/AuthenticationPanel.js:626 js/AuthenticationPanel.js:632
 #: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:723
-#: js/EmailPanel.js:207 js/EmailPanel.js:272
+#: js/EmailPanel.js:217 js/EmailPanel.js:282
 msgid "Yes"
 msgstr ""
 
@@ -228,7 +178,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:583 js/AuthenticationPanel.js:620
 #: js/AuthenticationPanel.js:626 js/AuthenticationPanel.js:632
 #: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:723
-#: js/EmailPanel.js:207 js/EmailPanel.js:272
+#: js/EmailPanel.js:217 js/EmailPanel.js:282
 msgid "No"
 msgstr ""
 
@@ -252,8 +202,8 @@ msgstr ""
 #: js/AuthenticationPanel.js:388 js/AuthenticationPanel.js:637
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:330
 #: js/ConfigManagerPanel.js:350 js/ConfigManagerPanel.js:391
-#: js/ConfigManagerPanel.js:450 js/EmailPanel.js:195 js/EmailPanel.js:311
-#: js/EmailPanel.js:425
+#: js/ConfigManagerPanel.js:450 js/EmailPanel.js:205 js/EmailPanel.js:321
+#: js/EmailPanel.js:445
 msgid "Port"
 msgstr ""
 
@@ -263,7 +213,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:614
 #: js/ConfigManagerPanel.js:214 js/ConfigManagerPanel.js:245
-#: js/EmailPanel.js:190
+#: js/EmailPanel.js:200
 msgid "Password"
 msgstr ""
 
@@ -276,8 +226,8 @@ msgid "Start TLS"
 msgstr ""
 
 #: js/AuthenticationPanel.js:340 js/AuthenticationPanel.js:394
-#: js/AuthenticationPanel.js:631 js/EmailPanel.js:202 js/EmailPanel.js:318
-#: js/EmailPanel.js:432
+#: js/AuthenticationPanel.js:631 js/EmailPanel.js:212 js/EmailPanel.js:328
+#: js/EmailPanel.js:452
 msgid "SSL"
 msgstr ""
 
@@ -292,26 +242,26 @@ msgstr ""
 #: js/AuthenticationPanel.js:385 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:326 js/ConfigManagerPanel.js:346
 #: js/ConfigManagerPanel.js:387 js/ConfigManagerPanel.js:446
-#: js/EmailPanel.js:182 js/EmailPanel.js:307 js/EmailPanel.js:421
+#: js/EmailPanel.js:192 js/EmailPanel.js:317 js/EmailPanel.js:441
 msgid "Hostname"
 msgstr ""
 
-#: js/AuthenticationPanel.js:392 js/EmailPanel.js:199 js/EmailPanel.js:315
-#: js/EmailPanel.js:429
+#: js/AuthenticationPanel.js:392 js/EmailPanel.js:209 js/EmailPanel.js:325
+#: js/EmailPanel.js:449
 msgid "Secure Connection"
 msgstr ""
 
-#: js/AuthenticationPanel.js:394 js/EmailPanel.js:202 js/EmailPanel.js:318
-#: js/EmailPanel.js:324 js/EmailPanel.js:432
+#: js/AuthenticationPanel.js:394 js/EmailPanel.js:212 js/EmailPanel.js:328
+#: js/EmailPanel.js:334 js/EmailPanel.js:452
 msgid "None"
 msgstr ""
 
-#: js/AuthenticationPanel.js:394 js/EmailPanel.js:202 js/EmailPanel.js:318
-#: js/EmailPanel.js:432
+#: js/AuthenticationPanel.js:394 js/EmailPanel.js:212 js/EmailPanel.js:328
+#: js/EmailPanel.js:452
 msgid "TLS"
 msgstr ""
 
-#: js/AuthenticationPanel.js:399 js/EmailPanel.js:212
+#: js/AuthenticationPanel.js:399 js/EmailPanel.js:222
 msgid "Append domain to login name"
 msgstr ""
 
@@ -541,7 +491,7 @@ msgstr ""
 msgid "Setup Authentication"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:205 js/EmailPanel.js:186
+#: js/ConfigManagerPanel.js:205 js/EmailPanel.js:196
 msgid "Username"
 msgstr ""
 
@@ -651,142 +601,192 @@ msgstr ""
 msgid "Standard IMAP"
 msgstr ""
 
-#: js/EmailPanel.js:160
+#: js/EmailPanel.js:161
 msgid "Standard SMTP"
 msgstr ""
 
-#: js/EmailPanel.js:174
+#: js/EmailPanel.js:184
 msgid "Imap"
 msgstr ""
 
-#: js/EmailPanel.js:206
+#: js/EmailPanel.js:216
 msgid "Use system account"
 msgstr ""
 
-#: js/EmailPanel.js:217
+#: js/EmailPanel.js:227
 msgid "Use email address as login name"
 msgstr ""
 
-#: js/EmailPanel.js:263
+#: js/EmailPanel.js:273
 msgid "Cyrus Admin"
 msgstr ""
 
-#: js/EmailPanel.js:266
+#: js/EmailPanel.js:276
 msgid "Cyrus Admin Password"
 msgstr ""
 
-#: js/EmailPanel.js:271
+#: js/EmailPanel.js:281
 msgid "Use proxy auth"
 msgstr ""
 
-#: js/EmailPanel.js:299
+#: js/EmailPanel.js:309
 msgid "Smtp"
 msgstr ""
 
-#: js/EmailPanel.js:321
+#: js/EmailPanel.js:331
 msgid "Authentication"
 msgstr ""
 
-#: js/EmailPanel.js:324
+#: js/EmailPanel.js:334
 msgid "Login"
 msgstr ""
 
-#: js/EmailPanel.js:324
+#: js/EmailPanel.js:334
 msgid "Plain"
 msgstr ""
 
-#: js/EmailPanel.js:328
+#: js/EmailPanel.js:338
 msgid "Primary Domain"
 msgstr ""
 
-#: js/EmailPanel.js:332
+#: js/EmailPanel.js:342
 msgid "Secondary Domains (comma separated)"
 msgstr ""
 
-#: js/EmailPanel.js:336
+#: js/EmailPanel.js:346
 msgid "Notifications service address"
 msgstr ""
 
-#: js/EmailPanel.js:340
+#: js/EmailPanel.js:350
 msgid "Notification Username"
 msgstr ""
 
-#: js/EmailPanel.js:344
+#: js/EmailPanel.js:354
 msgid "Notification Password"
 msgstr ""
 
-#: js/EmailPanel.js:349
+#: js/EmailPanel.js:359
 msgid "Notifications local client (hostname or IP address)"
 msgstr ""
 
-#: js/EmailPanel.js:415
+#: js/EmailPanel.js:435
 msgid "SIEVE"
 msgstr ""
 
-#: js/EmailPanel.js:484
+#: js/EmailPanel.js:504
 msgid "MySql Hostname"
 msgstr ""
 
-#: js/EmailPanel.js:487
+#: js/EmailPanel.js:507
 msgid "MySql Database"
 msgstr ""
 
-#: js/EmailPanel.js:490
+#: js/EmailPanel.js:510
 msgid "MySql User"
 msgstr ""
 
-#: js/EmailPanel.js:493
+#: js/EmailPanel.js:513
 msgid "MySql Password"
 msgstr ""
 
-#: js/EmailPanel.js:497
+#: js/EmailPanel.js:517
 msgid "MySql Port"
 msgstr ""
 
-#: js/EmailPanel.js:513
+#: js/EmailPanel.js:533
 msgid "User or UID"
 msgstr ""
 
-#: js/EmailPanel.js:516
+#: js/EmailPanel.js:536
 msgid "Group or GID"
 msgstr ""
 
-#: js/EmailPanel.js:519
+#: js/EmailPanel.js:539
 msgid "Home Template"
 msgstr ""
 
-#: js/EmailPanel.js:521
+#: js/EmailPanel.js:541
 msgid "Password Scheme"
 msgstr ""
 
-#: js/EmailPanel.js:532
+#: js/EmailPanel.js:552
 msgid "PLAIN-MD5"
 msgstr ""
 
-#: js/EmailPanel.js:533
+#: js/EmailPanel.js:553
 msgid "MD5-CRYPT"
 msgstr ""
 
-#: js/EmailPanel.js:534
+#: js/EmailPanel.js:554
 msgid "SHA1"
 msgstr ""
 
-#: js/EmailPanel.js:535
+#: js/EmailPanel.js:555
 msgid "SHA256"
 msgstr ""
 
-#: js/EmailPanel.js:536
+#: js/EmailPanel.js:556
 msgid "SSHA256"
 msgstr ""
 
-#: js/EmailPanel.js:537
+#: js/EmailPanel.js:557
 msgid "SHA512"
 msgstr ""
 
-#: js/EmailPanel.js:538
+#: js/EmailPanel.js:558
 msgid "SSHA512"
 msgstr ""
 
-#: js/EmailPanel.js:539
+#: js/EmailPanel.js:559
 msgid "PLAIN"
+msgstr ""
+
+#: js/Model.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/TreePanel.js:52
+msgid "Terms and Conditions"
+msgstr ""
+
+#: js/TreePanel.js:57
+msgid "Setup Checks"
+msgstr ""
+
+#: js/TreePanel.js:63
+msgid "Config Manager"
+msgstr ""
+
+#: js/TreePanel.js:69
+msgid "Authentication/Accounts"
+msgstr ""
+
+#: js/TreePanel.js:75
+msgid "Email"
+msgstr ""
+
+#: js/TreePanel.js:81
+msgid "Application Manager"
+msgstr ""
+
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
 msgstr ""
