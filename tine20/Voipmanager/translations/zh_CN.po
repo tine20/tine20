@@ -1,216 +1,245 @@
-#
+# 
 # Translators:
+# vehery <spacen_zj@hotmail.com>, 2012
 # vehery <spacen_zj@hotmail.com>, 2012
 # 尹晓东 <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2017-09-19 12:08+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/tine20/tine20/language/zh_CN/)\n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/CallForwardPanel.js:84
-msgid "Forward immediately"
-msgstr "立刻发送"
-
-#: js/CallForwardPanel.js:94 js/CallForwardPanel.js:137
-#: js/CallForwardPanel.js:179
-msgid "Mode"
-msgstr "模式"
-
-#: js/CallForwardPanel.js:118 js/CallForwardPanel.js:160
-#: js/CallForwardPanel.js:203
-msgid "Number"
-msgstr "号码"
-
-#: js/CallForwardPanel.js:127
-msgid "Forward busy"
-msgstr "遇忙转移"
-
-#: js/CallForwardPanel.js:169
-msgid "Forward delayed"
-msgstr "转发延迟"
-
-#: js/CallForwardPanel.js:212
-msgid "Delay time"
-msgstr "延迟时间"
-
-#: js/Voipmanager.js:22
-msgid "Asterisk"
-msgstr "星号"
-
-#: js/Voipmanager.js:29 js/Models.js:458
-msgid "SipPeer"
-msgid_plural "SipPeers"
-msgstr[0] ""
-
-#: js/Voipmanager.js:39
-msgid "Dialplan"
-msgstr ""
-
-#: js/Voipmanager.js:50 js/Models.js:500 js/Asterisk/VoicemailEditDialog.js:55
-#: js/Asterisk/SipPeerEditDialog.js:75
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] "上下文"
-
-#: js/Voipmanager.js:60 js/Models.js:560
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] "留言"
-
-#: js/Voipmanager.js:70 js/Models.js:598
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] ""
-
-#: js/Voipmanager.js:80
-msgid "Queues"
-msgstr "队列"
-
-#: js/Voipmanager.js:96
-msgid "Snom"
-msgstr ""
-
-#: js/Voipmanager.js:103
-msgid "Phones"
-msgstr "电话"
-
-#: js/Voipmanager.js:113 js/Models.js:133 js/Snom/PhoneGridPanel.js:78
-msgid "Location"
-msgid_plural "Locations"
-msgstr[0] "位置"
-
-#: js/Voipmanager.js:123
-msgid "Templates"
-msgstr "模板"
-
-#: js/Voipmanager.js:133 js/Snom/TemplateEditDialog.js:80
-msgid "Keylayout"
-msgstr "键布局"
-
-#: js/Voipmanager.js:144 js/Models.js:357
-msgid "Setting"
-msgid_plural "Settings"
-msgstr[0] "设置"
-
-#: js/Voipmanager.js:154 js/Models.js:216 js/Snom/PhoneGridPanel.js:102
-msgid "Software"
-msgid_plural "Softwares"
-msgstr[0] "软件"
-
-#: js/Models.js:80 js/Snom/PhoneEditDialog.js:260
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "电话"
-
-#: js/Models.js:84
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "电话列表"
-
-#: js/Models.js:98 js/Models.js:152 js/Models.js:193 js/Models.js:235
-#: js/Models.js:313 js/Models.js:377 js/Models.js:481 js/Models.js:520
-#: js/Models.js:579 js/Models.js:617 js/Snom/LocationGridPanel.js:40
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:137
-msgid "locations list"
-msgid_plural "locations lists"
-msgstr[0] "位置列表"
-
-#: js/Models.js:174 js/Snom/PhoneGridPanel.js:87
-msgid "Template"
-msgid_plural "Templates"
-msgstr[0] "模板"
-
-#: js/Models.js:178
-msgid "templates list"
-msgid_plural "templates lists"
-msgstr[0] "模板列表"
-
-#: js/Models.js:220
-msgid "softwares list"
-msgid_plural "softwares lists"
-msgstr[0] "软件列表"
-
-#: js/Models.js:253
-msgid "SoftwareImage"
-msgid_plural "SoftwareImages"
-msgstr[0] "软件映象"
-
-#: js/Models.js:257
-msgid "softwareImages list"
-msgid_plural "softwareImages lists"
-msgstr[0] ""
-
-#: js/Models.js:294 js/Snom/LineGridPanel.js:264
-msgid "Line"
-msgid_plural "Lines"
-msgstr[0] "线"
-
-#: js/Models.js:298
-msgid "lines list"
-msgid_plural "lines lists"
-msgstr[0] "线路列表"
-
-#: js/Models.js:361
-msgid "setting list"
-msgid_plural "settings lists"
-msgstr[0] "设置列表"
-
-#: js/Models.js:462
-msgid "sipPeers list"
-msgid_plural "sipPeers lists"
-msgstr[0] ""
-
-#: js/Models.js:482 js/Snom/LocationEditDialog.js:41
-#: js/Snom/TemplateEditDialog.js:41 js/Snom/PhoneEditDialog.js:275
-#: js/Snom/LocationGridPanel.js:121 js/Asterisk/VoicemailEditDialog.js:68
-#: js/Asterisk/ContextGridPanel.js:49 js/Asterisk/SipPeerEditDialog.js:67
-#: js/Asterisk/ContextEditDialog.js:40
-msgid "Name"
-msgstr "名字"
-
-#: js/Models.js:504
-msgid "contexts list"
-msgid_plural "contexts lists"
-msgstr[0] "上下文列表"
-
-#: js/Models.js:564
-msgid "voicemails list"
-msgid_plural "voicemails lists"
-msgstr[0] "留言列表"
-
-#: js/Models.js:602
-msgid "meetmes list"
-msgid_plural "meetmes lists"
-msgstr[0] ""
-
-#: js/Snom/SoftwareEditDialog.js:60 js/Snom/SettingGridPanel.js:49
-#: js/Snom/SoftwareGridPanel.js:49 js/Snom/PhoneEditDialog.js:450
-#: js/Snom/TemplateGridPanel.js:49 js/Snom/SettingEditDialog.js:111
-#: js/Snom/SettingEditDialog.js:183 js/Asterisk/SipPeerGridPanel.js:49
+#: js/Snom/SoftwareEditDialog.js:60 js/Snom/TemplateGridPanel.js:49
+#: js/Snom/SettingGridPanel.js:49 js/Snom/SettingEditDialog.js:111
+#: js/Snom/SettingEditDialog.js:183 js/Snom/PhoneEditDialog.js:450
+#: js/Snom/SoftwareGridPanel.js:49 js/Asterisk/SipPeerGridPanel.js:49
 msgid "name"
 msgstr "名字"
 
-#: js/Snom/SoftwareEditDialog.js:66 js/Snom/LocationEditDialog.js:48
-#: js/Snom/TemplateEditDialog.js:48 js/Snom/SoftwareGridPanel.js:55
-#: js/Snom/LocationGridPanel.js:127 js/Snom/TemplateGridPanel.js:55
-#: js/Snom/SettingEditDialog.js:120 js/Asterisk/ContextGridPanel.js:58
-#: js/Asterisk/ContextEditDialog.js:48
+#: js/Snom/SoftwareEditDialog.js:66 js/Snom/TemplateGridPanel.js:55
+#: js/Snom/SettingEditDialog.js:120 js/Snom/TemplateEditDialog.js:48
+#: js/Snom/LocationEditDialog.js:48 js/Snom/LocationGridPanel.js:127
+#: js/Snom/SoftwareGridPanel.js:55 js/Asterisk/ContextEditDialog.js:48
+#: js/Asterisk/ContextGridPanel.js:58
 msgid "Description"
 msgstr "描述"
+
+#: js/Snom/TemplateGridPanel.js:42 js/Snom/LocationGridPanel.js:114
+#: js/Snom/SoftwareGridPanel.js:42 js/Asterisk/MeetmeGridPanel.js:42
+#: js/Asterisk/VoicemailGridPanel.js:42 js/Asterisk/ContextGridPanel.js:42
+msgid "id"
+msgstr "id"
+
+#: js/Snom/TemplateGridPanel.js:61
+msgid "Keylayout Id"
+msgstr "键布局 Id"
+
+#: js/Snom/TemplateGridPanel.js:68
+msgid "Settings Id"
+msgstr "设置 Id"
+
+#: js/Snom/TemplateGridPanel.js:75
+msgid "Software Id"
+msgstr "软件 Id"
+
+#: js/Snom/SettingGridPanel.js:42 js/Snom/PhoneGridPanel.js:60
+#: js/Asterisk/SipPeerGridPanel.js:42
+msgid "Id"
+msgstr "Id"
+
+#: js/Snom/SettingGridPanel.js:55 js/Snom/PhoneGridPanel.js:73
+msgid "description"
+msgstr "描述"
+
+#: js/Snom/SettingGridPanel.js:61 js/Snom/SettingEditDialog.js:124
+#: js/Snom/PhoneEditDialog.js:402
+msgid "web_language"
+msgstr "web 语言"
+
+#: js/Snom/SettingGridPanel.js:68 js/Snom/SettingEditDialog.js:146
+#: js/Snom/PhoneEditDialog.js:420 js/Asterisk/SipPeerGridPanel.js:144
+msgid "language"
+msgstr "语言"
+
+#: js/Snom/SettingGridPanel.js:75 js/Snom/SettingEditDialog.js:174
+#: js/Snom/PhoneEditDialog.js:444
+msgid "display_method"
+msgstr "显示方式"
+
+#: js/Snom/SettingGridPanel.js:82 js/Snom/SettingEditDialog.js:205
+#: js/Snom/PhoneEditDialog.js:467
+msgid "mwi_notification"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:89 js/Snom/SettingEditDialog.js:219
+#: js/Snom/PhoneEditDialog.js:477
+msgid "mwi_dialtone"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:96 js/Snom/SettingEditDialog.js:232
+#: js/Snom/PhoneEditDialog.js:486
+msgid "headset_device"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:103 js/Snom/SettingEditDialog.js:245
+#: js/Snom/PhoneEditDialog.js:495
+msgid "message_led_other"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:110 js/Snom/SettingEditDialog.js:258
+#: js/Snom/PhoneEditDialog.js:504
+msgid "global_missed_counter"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:117 js/Snom/SettingEditDialog.js:310
+#: js/Snom/PhoneEditDialog.js:540
+msgid "Pickup indication"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:124 js/Snom/SettingEditDialog.js:271
+#: js/Snom/PhoneEditDialog.js:513
+msgid "scroll_outgoing"
+msgstr ""
+
+#: js/Snom/SettingGridPanel.js:131 js/Snom/SettingEditDialog.js:284
+#: js/Snom/PhoneEditDialog.js:522
+msgid "show_local_line"
+msgstr "显示本地线路"
+
+#: js/Snom/SettingGridPanel.js:138 js/Snom/SettingEditDialog.js:297
+#: js/Snom/PhoneEditDialog.js:531
+msgid "show_call_status"
+msgstr "显示呼叫状态"
+
+#: js/Snom/SettingGridPanel.js:145 js/Snom/SettingEditDialog.js:190
+#: js/Snom/PhoneEditDialog.js:456
+msgid "call_waiting"
+msgstr "呼叫等待"
+
+#: js/Snom/SettingEditDialog.js:91 js/Snom/TemplateEditDialog.js:68
+#: js/Snom/PhoneEditDialog.js:384
+msgid "Settings"
+msgstr "设置"
+
+#: js/Snom/SettingEditDialog.js:131 js/Snom/SettingEditDialog.js:153
+#: js/Snom/SettingEditDialog.js:181 js/Snom/SettingEditDialog.js:197
+#: js/Snom/SettingEditDialog.js:212 js/Snom/SettingEditDialog.js:226
+#: js/Snom/SettingEditDialog.js:239 js/Snom/SettingEditDialog.js:252
+#: js/Snom/SettingEditDialog.js:265 js/Snom/SettingEditDialog.js:278
+#: js/Snom/SettingEditDialog.js:291 js/Snom/SettingEditDialog.js:304
+#: js/Snom/SettingEditDialog.js:317 js/Snom/PhoneEditDialog.js:406
+#: js/Snom/PhoneEditDialog.js:424 js/Snom/PhoneEditDialog.js:448
+#: js/Snom/PhoneEditDialog.js:460 js/Snom/PhoneEditDialog.js:471
+#: js/Snom/PhoneEditDialog.js:481 js/Snom/PhoneEditDialog.js:490
+#: js/Snom/PhoneEditDialog.js:499 js/Snom/PhoneEditDialog.js:508
+#: js/Snom/PhoneEditDialog.js:517 js/Snom/PhoneEditDialog.js:526
+#: js/Snom/PhoneEditDialog.js:535 js/Snom/PhoneEditDialog.js:544
+msgid "- factory default -"
+msgstr "-工厂缺省-"
+
+#: js/Snom/SettingEditDialog.js:182 js/Snom/PhoneEditDialog.js:449
+msgid "whole url"
+msgstr "全 url"
+
+#: js/Snom/SettingEditDialog.js:184 js/Snom/PhoneEditDialog.js:451
+msgid "number"
+msgstr "号码"
+
+#: js/Snom/SettingEditDialog.js:185 js/Snom/PhoneEditDialog.js:452
+msgid "name + number"
+msgstr "名字＋号码"
+
+#: js/Snom/SettingEditDialog.js:186 js/Snom/PhoneEditDialog.js:453
+msgid "number + name"
+msgstr "号码＋名字"
+
+#: js/Snom/SettingEditDialog.js:198 js/Snom/SettingEditDialog.js:253
+#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
+#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
+#: js/Snom/SettingEditDialog.js:318 js/Snom/LocationEditDialog.js:162
+#: js/Snom/LocationEditDialog.js:183 js/Snom/PhoneEditDialog.js:461
+#: js/Snom/PhoneEditDialog.js:500 js/Snom/PhoneEditDialog.js:509
+#: js/Snom/PhoneEditDialog.js:518 js/Snom/PhoneEditDialog.js:527
+#: js/Snom/PhoneEditDialog.js:536 js/Snom/PhoneEditDialog.js:545
+#: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
+#: js/Asterisk/VoicemailEditDialog.js:112
+msgid "on"
+msgstr "开"
+
+#: js/Snom/SettingEditDialog.js:199 js/Snom/PhoneEditDialog.js:462
+msgid "visual"
+msgstr "可视的"
+
+#: js/Snom/SettingEditDialog.js:200 js/Snom/PhoneEditDialog.js:463
+msgid "ringer"
+msgstr "振铃器"
+
+#: js/Snom/SettingEditDialog.js:201 js/Snom/SettingEditDialog.js:254
+#: js/Snom/SettingEditDialog.js:267 js/Snom/SettingEditDialog.js:280
+#: js/Snom/SettingEditDialog.js:293 js/Snom/SettingEditDialog.js:306
+#: js/Snom/SettingEditDialog.js:319 js/Snom/LocationEditDialog.js:163
+#: js/Snom/LocationEditDialog.js:184 js/Snom/PhoneEditDialog.js:464
+#: js/Snom/PhoneEditDialog.js:501 js/Snom/PhoneEditDialog.js:510
+#: js/Snom/PhoneEditDialog.js:519 js/Snom/PhoneEditDialog.js:528
+#: js/Snom/PhoneEditDialog.js:537 js/Snom/PhoneEditDialog.js:546
+#: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
+#: js/Asterisk/VoicemailEditDialog.js:113
+msgid "off"
+msgstr "关"
+
+#: js/Snom/SettingEditDialog.js:213 js/Snom/PhoneEditDialog.js:472
+msgid "silent"
+msgstr "安静"
+
+#: js/Snom/SettingEditDialog.js:214 js/Snom/PhoneEditDialog.js:473
+msgid "beep"
+msgstr "哔哔"
+
+#: js/Snom/SettingEditDialog.js:215 js/Snom/PhoneEditDialog.js:474
+msgid "reminder"
+msgstr "提醒器"
+
+#: js/Snom/SettingEditDialog.js:227 js/Snom/PhoneEditDialog.js:482
+msgid "normal"
+msgstr "正常"
+
+#: js/Snom/SettingEditDialog.js:228 js/Snom/PhoneEditDialog.js:483
+msgid "stutter"
+msgstr ""
+
+#: js/Snom/SettingEditDialog.js:240 js/Snom/PhoneEditDialog.js:491
+msgid "none"
+msgstr "没有"
+
+#: js/Snom/SettingEditDialog.js:241 js/Snom/PhoneEditDialog.js:492
+msgid "headset_rj"
+msgstr ""
+
+#: js/Snom/TemplateEditDialog.js:41 js/Snom/LocationEditDialog.js:41
+#: js/Snom/PhoneEditDialog.js:275 js/Snom/LocationGridPanel.js:121
+#: js/Asterisk/SipPeerEditDialog.js:67 js/Asterisk/ContextEditDialog.js:40
+#: js/Asterisk/ContextGridPanel.js:49 js/Asterisk/VoicemailEditDialog.js:68
+#: js/Models.js:482
+msgid "Name"
+msgstr "名字"
+
+#: js/Snom/TemplateEditDialog.js:55
+msgid "Software Version"
+msgstr "软件版本"
+
+#: js/Snom/TemplateEditDialog.js:80 js/Voipmanager.js:133
+msgid "Keylayout"
+msgstr "键布局"
 
 #: js/Snom/PhoneGridPanel.js:34
 msgid "reset phones HTTP authentication"
@@ -220,22 +249,28 @@ msgstr "重置电话 HTTP 授权"
 msgid "Open phones web gui"
 msgstr "打开手机的Web GUI"
 
-#: js/Snom/PhoneGridPanel.js:60 js/Snom/SettingGridPanel.js:42
-#: js/Asterisk/SipPeerGridPanel.js:42
-msgid "Id"
-msgstr "Id"
-
 #: js/Snom/PhoneGridPanel.js:67
 msgid "MAC address"
 msgstr "MAC 地址"
 
-#: js/Snom/PhoneGridPanel.js:73 js/Snom/SettingGridPanel.js:55
-msgid "description"
-msgstr "描述"
+#: js/Snom/PhoneGridPanel.js:78 js/Voipmanager.js:113 js/Models.js:133
+msgid "Location"
+msgid_plural "Locations"
+msgstr[0] "位置"
+
+#: js/Snom/PhoneGridPanel.js:87 js/Models.js:174
+msgid "Template"
+msgid_plural "Templates"
+msgstr[0] "模板"
 
 #: js/Snom/PhoneGridPanel.js:96
 msgid "IP Address"
 msgstr "IP 地址"
+
+#: js/Snom/PhoneGridPanel.js:102 js/Voipmanager.js:154 js/Models.js:216
+msgid "Software"
+msgid_plural "Softwares"
+msgstr[0] "软件"
 
 #: js/Snom/PhoneGridPanel.js:108
 msgid "current model"
@@ -261,75 +296,6 @@ msgstr "设置加载"
 msgid "last modified"
 msgstr "最后修改的"
 
-#: js/Snom/SettingGridPanel.js:61 js/Snom/PhoneEditDialog.js:402
-#: js/Snom/SettingEditDialog.js:124
-msgid "web_language"
-msgstr "web 语言"
-
-#: js/Snom/SettingGridPanel.js:68 js/Snom/PhoneEditDialog.js:420
-#: js/Snom/SettingEditDialog.js:146 js/Asterisk/SipPeerGridPanel.js:144
-msgid "language"
-msgstr "语言"
-
-#: js/Snom/SettingGridPanel.js:75 js/Snom/PhoneEditDialog.js:444
-#: js/Snom/SettingEditDialog.js:174
-msgid "display_method"
-msgstr "显示方式"
-
-#: js/Snom/SettingGridPanel.js:82 js/Snom/PhoneEditDialog.js:467
-#: js/Snom/SettingEditDialog.js:205
-msgid "mwi_notification"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:89 js/Snom/PhoneEditDialog.js:477
-#: js/Snom/SettingEditDialog.js:219
-msgid "mwi_dialtone"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:96 js/Snom/PhoneEditDialog.js:486
-#: js/Snom/SettingEditDialog.js:232
-msgid "headset_device"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:103 js/Snom/PhoneEditDialog.js:495
-#: js/Snom/SettingEditDialog.js:245
-msgid "message_led_other"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:110 js/Snom/PhoneEditDialog.js:504
-#: js/Snom/SettingEditDialog.js:258
-msgid "global_missed_counter"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:117 js/Snom/PhoneEditDialog.js:540
-#: js/Snom/SettingEditDialog.js:310
-msgid "Pickup indication"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:124 js/Snom/PhoneEditDialog.js:513
-#: js/Snom/SettingEditDialog.js:271
-msgid "scroll_outgoing"
-msgstr ""
-
-#: js/Snom/SettingGridPanel.js:131 js/Snom/PhoneEditDialog.js:522
-#: js/Snom/SettingEditDialog.js:284
-msgid "show_local_line"
-msgstr "显示本地线路"
-
-#: js/Snom/SettingGridPanel.js:138 js/Snom/PhoneEditDialog.js:531
-#: js/Snom/SettingEditDialog.js:297
-msgid "show_call_status"
-msgstr "显示呼叫状态"
-
-#: js/Snom/SettingGridPanel.js:145 js/Snom/PhoneEditDialog.js:456
-#: js/Snom/SettingEditDialog.js:190
-msgid "call_waiting"
-msgstr "呼叫等待"
-
-#: js/Snom/LineGridPanel.js:271
-msgid "Idle Text"
-msgstr "空闲文字"
-
 #: js/Snom/LocationEditDialog.js:54 js/Snom/LocationGridPanel.js:72
 msgid "Registrar"
 msgstr "注册商"
@@ -353,32 +319,6 @@ msgstr ""
 #: js/Snom/LocationEditDialog.js:152
 msgid "date_us_format"
 msgstr ""
-
-#: js/Snom/LocationEditDialog.js:162 js/Snom/LocationEditDialog.js:183
-#: js/Snom/PhoneEditDialog.js:461 js/Snom/PhoneEditDialog.js:500
-#: js/Snom/PhoneEditDialog.js:509 js/Snom/PhoneEditDialog.js:518
-#: js/Snom/PhoneEditDialog.js:527 js/Snom/PhoneEditDialog.js:536
-#: js/Snom/PhoneEditDialog.js:545 js/Snom/SettingEditDialog.js:198
-#: js/Snom/SettingEditDialog.js:253 js/Snom/SettingEditDialog.js:266
-#: js/Snom/SettingEditDialog.js:279 js/Snom/SettingEditDialog.js:292
-#: js/Snom/SettingEditDialog.js:305 js/Snom/SettingEditDialog.js:318
-#: js/Asterisk/VoicemailEditDialog.js:112 js/Asterisk/SipPeerEditDialog.js:160
-#: js/Asterisk/SipPeerEditDialog.js:171
-msgid "on"
-msgstr "开"
-
-#: js/Snom/LocationEditDialog.js:163 js/Snom/LocationEditDialog.js:184
-#: js/Snom/PhoneEditDialog.js:464 js/Snom/PhoneEditDialog.js:501
-#: js/Snom/PhoneEditDialog.js:510 js/Snom/PhoneEditDialog.js:519
-#: js/Snom/PhoneEditDialog.js:528 js/Snom/PhoneEditDialog.js:537
-#: js/Snom/PhoneEditDialog.js:546 js/Snom/SettingEditDialog.js:201
-#: js/Snom/SettingEditDialog.js:254 js/Snom/SettingEditDialog.js:267
-#: js/Snom/SettingEditDialog.js:280 js/Snom/SettingEditDialog.js:293
-#: js/Snom/SettingEditDialog.js:306 js/Snom/SettingEditDialog.js:319
-#: js/Asterisk/VoicemailEditDialog.js:113 js/Asterisk/SipPeerEditDialog.js:160
-#: js/Asterisk/SipPeerEditDialog.js:171
-msgid "off"
-msgstr "关"
 
 #: js/Snom/LocationEditDialog.js:173
 msgid "time_24_format"
@@ -432,24 +372,14 @@ msgstr "HTTP 用户"
 msgid "HTTP Password"
 msgstr "HTTP 密码"
 
-#: js/Snom/TemplateEditDialog.js:55
-msgid "Software Version"
-msgstr "软件版本"
-
-#: js/Snom/TemplateEditDialog.js:68 js/Snom/PhoneEditDialog.js:384
-#: js/Snom/SettingEditDialog.js:91
-msgid "Settings"
-msgstr "设置"
-
-#: js/Snom/SoftwareGridPanel.js:42 js/Snom/LocationGridPanel.js:114
-#: js/Snom/TemplateGridPanel.js:42 js/Asterisk/VoicemailGridPanel.js:42
-#: js/Asterisk/ContextGridPanel.js:42 js/Asterisk/MeetmeGridPanel.js:42
-msgid "id"
-msgstr "id"
-
 #: js/Snom/PhoneEditDialog.js:222
 msgid "Lines"
 msgstr "线"
+
+#: js/Snom/PhoneEditDialog.js:260 js/Models.js:80
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "电话"
 
 #: js/Snom/PhoneEditDialog.js:279
 msgid "Phone Model"
@@ -479,77 +409,15 @@ msgstr "当前软件版本"
 msgid "Settings Loaded at"
 msgstr "设置时加载"
 
-#: js/Snom/PhoneEditDialog.js:406 js/Snom/PhoneEditDialog.js:424
-#: js/Snom/PhoneEditDialog.js:448 js/Snom/PhoneEditDialog.js:460
-#: js/Snom/PhoneEditDialog.js:471 js/Snom/PhoneEditDialog.js:481
-#: js/Snom/PhoneEditDialog.js:490 js/Snom/PhoneEditDialog.js:499
-#: js/Snom/PhoneEditDialog.js:508 js/Snom/PhoneEditDialog.js:517
-#: js/Snom/PhoneEditDialog.js:526 js/Snom/PhoneEditDialog.js:535
-#: js/Snom/PhoneEditDialog.js:544 js/Snom/SettingEditDialog.js:131
-#: js/Snom/SettingEditDialog.js:153 js/Snom/SettingEditDialog.js:181
-#: js/Snom/SettingEditDialog.js:197 js/Snom/SettingEditDialog.js:212
-#: js/Snom/SettingEditDialog.js:226 js/Snom/SettingEditDialog.js:239
-#: js/Snom/SettingEditDialog.js:252 js/Snom/SettingEditDialog.js:265
-#: js/Snom/SettingEditDialog.js:278 js/Snom/SettingEditDialog.js:291
-#: js/Snom/SettingEditDialog.js:304 js/Snom/SettingEditDialog.js:317
-msgid "- factory default -"
-msgstr "-工厂缺省-"
-
-#: js/Snom/PhoneEditDialog.js:449 js/Snom/SettingEditDialog.js:182
-msgid "whole url"
-msgstr "全 url"
-
-#: js/Snom/PhoneEditDialog.js:451 js/Snom/SettingEditDialog.js:184
-msgid "number"
-msgstr "号码"
-
-#: js/Snom/PhoneEditDialog.js:452 js/Snom/SettingEditDialog.js:185
-msgid "name + number"
-msgstr "名字＋号码"
-
-#: js/Snom/PhoneEditDialog.js:453 js/Snom/SettingEditDialog.js:186
-msgid "number + name"
-msgstr "号码＋名字"
-
-#: js/Snom/PhoneEditDialog.js:462 js/Snom/SettingEditDialog.js:199
-msgid "visual"
-msgstr "可视的"
-
-#: js/Snom/PhoneEditDialog.js:463 js/Snom/SettingEditDialog.js:200
-msgid "ringer"
-msgstr "振铃器"
-
-#: js/Snom/PhoneEditDialog.js:472 js/Snom/SettingEditDialog.js:213
-msgid "silent"
-msgstr "安静"
-
-#: js/Snom/PhoneEditDialog.js:473 js/Snom/SettingEditDialog.js:214
-msgid "beep"
-msgstr "哔哔"
-
-#: js/Snom/PhoneEditDialog.js:474 js/Snom/SettingEditDialog.js:215
-msgid "reminder"
-msgstr "提醒器"
-
-#: js/Snom/PhoneEditDialog.js:482 js/Snom/SettingEditDialog.js:227
-msgid "normal"
-msgstr "正常"
-
-#: js/Snom/PhoneEditDialog.js:483 js/Snom/SettingEditDialog.js:228
-msgid "stutter"
-msgstr ""
-
-#: js/Snom/PhoneEditDialog.js:491 js/Snom/SettingEditDialog.js:240
-msgid "none"
-msgstr "没有"
-
-#: js/Snom/PhoneEditDialog.js:492 js/Snom/SettingEditDialog.js:241
-msgid "headset_rj"
-msgstr ""
-
 #: js/Snom/PhoneEditDialog.js:560
 msgid "Users"
 msgstr "用户"
+
+#: js/Snom/LocationGridPanel.js:40 js/Models.js:98 js/Models.js:152
+#: js/Models.js:193 js/Models.js:235 js/Models.js:313 js/Models.js:377
+#: js/Models.js:481 js/Models.js:520 js/Models.js:579 js/Models.js:617
+msgid "Quick Search"
+msgstr ""
 
 #: js/Snom/LocationGridPanel.js:58
 msgid "FW Interval"
@@ -559,17 +427,76 @@ msgstr "固件间隔"
 msgid "Admin Mode"
 msgstr "管理模式"
 
-#: js/Snom/TemplateGridPanel.js:61
-msgid "Keylayout Id"
-msgstr "键布局 Id"
+#: js/Snom/LineGridPanel.js:256 js/Models.js:294
+msgid "Line"
+msgid_plural "Lines"
+msgstr[0] "线"
 
-#: js/Snom/TemplateGridPanel.js:68
-msgid "Settings Id"
-msgstr "设置 Id"
+#: js/Snom/LineGridPanel.js:257
+msgid "Idle Text"
+msgstr "空闲文字"
 
-#: js/Snom/TemplateGridPanel.js:75
-msgid "Software Id"
-msgstr "软件 Id"
+#: js/Voipmanager.js:22
+msgid "Asterisk"
+msgstr "星号"
+
+#: js/Voipmanager.js:29 js/Models.js:458
+msgid "SipPeer"
+msgid_plural "SipPeers"
+msgstr[0] ""
+
+#: js/Voipmanager.js:39
+msgid "Dialplan"
+msgstr ""
+
+#: js/Voipmanager.js:50 js/Asterisk/SipPeerEditDialog.js:75
+#: js/Asterisk/VoicemailEditDialog.js:55 js/Models.js:500
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] "上下文"
+
+#: js/Voipmanager.js:60 js/Models.js:560
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] "留言"
+
+#: js/Voipmanager.js:70 js/Models.js:598
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] ""
+
+#: js/Voipmanager.js:80
+msgid "Queues"
+msgstr "队列"
+
+#: js/Voipmanager.js:96
+msgid "Snom"
+msgstr ""
+
+#: js/Voipmanager.js:103
+msgid "Phones"
+msgstr "电话"
+
+#: js/Voipmanager.js:123
+msgid "Templates"
+msgstr "模板"
+
+#: js/Voipmanager.js:144 js/Models.js:357
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "设置"
+
+#: js/Asterisk/MeetmeEditDialog.js:40 js/Asterisk/MeetmeGridPanel.js:49
+msgid "confno"
+msgstr "CONFNO"
+
+#: js/Asterisk/MeetmeEditDialog.js:48 js/Asterisk/MeetmeGridPanel.js:58
+msgid "pin"
+msgstr "个人身份号码"
+
+#: js/Asterisk/MeetmeEditDialog.js:56 js/Asterisk/MeetmeGridPanel.js:67
+msgid "adminpin"
+msgstr "管理员身份号码"
 
 #: js/Asterisk/VoicemailGridPanel.js:49 js/Asterisk/SipPeerGridPanel.js:151
 msgid "mailbox"
@@ -603,56 +530,145 @@ msgstr ""
 msgid "saycid"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:100 js/Asterisk/VoicemailEditDialog.js:125
+#: js/Asterisk/VoicemailGridPanel.js:100
+#: js/Asterisk/VoicemailEditDialog.js:125
 msgid "dialout"
 msgstr "播出"
 
-#: js/Asterisk/VoicemailGridPanel.js:107 js/Asterisk/VoicemailEditDialog.js:131
+#: js/Asterisk/VoicemailGridPanel.js:107
+#: js/Asterisk/VoicemailEditDialog.js:131
 msgid "callback"
 msgstr "回叫"
 
-#: js/Asterisk/VoicemailGridPanel.js:114 js/Asterisk/VoicemailEditDialog.js:154
+#: js/Asterisk/VoicemailGridPanel.js:114
+#: js/Asterisk/VoicemailEditDialog.js:154
 msgid "review"
 msgstr "回顾"
 
-#: js/Asterisk/VoicemailGridPanel.js:121 js/Asterisk/VoicemailEditDialog.js:158
+#: js/Asterisk/VoicemailGridPanel.js:121
+#: js/Asterisk/VoicemailEditDialog.js:158
 msgid "operator"
 msgstr "操作员"
 
-#: js/Asterisk/VoicemailGridPanel.js:128 js/Asterisk/VoicemailEditDialog.js:162
+#: js/Asterisk/VoicemailGridPanel.js:128
+#: js/Asterisk/VoicemailEditDialog.js:162
 msgid "envelope"
 msgstr "信封"
 
-#: js/Asterisk/VoicemailGridPanel.js:135 js/Asterisk/VoicemailEditDialog.js:137
+#: js/Asterisk/VoicemailGridPanel.js:135
+#: js/Asterisk/VoicemailEditDialog.js:137
 msgid "sayduration"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:142 js/Asterisk/VoicemailEditDialog.js:141
+#: js/Asterisk/VoicemailGridPanel.js:142
+#: js/Asterisk/VoicemailEditDialog.js:141
 msgid "saydurationm"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:149 js/Asterisk/VoicemailEditDialog.js:166
+#: js/Asterisk/VoicemailGridPanel.js:149
+#: js/Asterisk/VoicemailEditDialog.js:166
 msgid "sendvoicemail"
 msgstr "发送语音邮件"
 
-#: js/Asterisk/VoicemailGridPanel.js:156 js/Asterisk/VoicemailEditDialog.js:170
+#: js/Asterisk/VoicemailGridPanel.js:156
+#: js/Asterisk/VoicemailEditDialog.js:170
 msgid "delete"
 msgstr "删除"
 
-#: js/Asterisk/VoicemailGridPanel.js:163 js/Asterisk/VoicemailEditDialog.js:174
+#: js/Asterisk/VoicemailGridPanel.js:163
+#: js/Asterisk/VoicemailEditDialog.js:174
 msgid "nextaftercmd"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:170 js/Asterisk/VoicemailEditDialog.js:178
+#: js/Asterisk/VoicemailGridPanel.js:170
+#: js/Asterisk/VoicemailEditDialog.js:178
 msgid "forcename"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:177 js/Asterisk/VoicemailEditDialog.js:182
+#: js/Asterisk/VoicemailGridPanel.js:177
+#: js/Asterisk/VoicemailEditDialog.js:182
 msgid "forcegreetings"
 msgstr ""
 
-#: js/Asterisk/VoicemailGridPanel.js:184 js/Asterisk/VoicemailEditDialog.js:186
+#: js/Asterisk/VoicemailGridPanel.js:184
+#: js/Asterisk/VoicemailEditDialog.js:186
 msgid "hidefromdir"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:49
+msgid "Call Forwards"
+msgstr "呼叫转移"
+
+#: js/Asterisk/SipPeerEditDialog.js:60 js/Asterisk/VoicemailEditDialog.js:41
+msgid "General"
+msgstr "一般"
+
+#: js/Asterisk/SipPeerEditDialog.js:88
+msgid "Type"
+msgstr "类型"
+
+#: js/Asterisk/SipPeerEditDialog.js:97
+msgid "friend"
+msgstr "朋友"
+
+#: js/Asterisk/SipPeerEditDialog.js:98
+msgid "user"
+msgstr "用户"
+
+#: js/Asterisk/SipPeerEditDialog.js:99
+msgid "peer"
+msgstr "对等"
+
+#: js/Asterisk/SipPeerEditDialog.js:103
+msgid "Secret"
+msgstr "密钥"
+
+#: js/Asterisk/SipPeerEditDialog.js:110
+msgid "Callerid"
+msgstr "来电号码"
+
+#: js/Asterisk/SipPeerEditDialog.js:117 js/Asterisk/VoicemailEditDialog.js:47
+msgid "Mailbox"
+msgstr "信箱"
+
+#: js/Asterisk/SipPeerEditDialog.js:124
+msgid "Callgroup"
+msgstr "呼叫组"
+
+#: js/Asterisk/SipPeerEditDialog.js:131
+msgid "Pickup group"
+msgstr "代接组"
+
+#: js/Asterisk/SipPeerEditDialog.js:138
+msgid "Accountcode"
+msgstr "帐户代码"
+
+#: js/Asterisk/SipPeerEditDialog.js:145
+msgid "Language"
+msgstr "语言"
+
+#: js/Asterisk/SipPeerEditDialog.js:152
+msgid "NAT"
+msgstr "NAT"
+
+#: js/Asterisk/SipPeerEditDialog.js:163
+msgid "Qualify"
+msgstr "有资格"
+
+#: js/Asterisk/SipPeerEditDialog.js:174
+msgid "Direct Media (canreinvite)"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:184
+msgid "yes"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:185
+msgid "no"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:187
+msgid "nonat"
 msgstr ""
 
 #: js/Asterisk/SipPeerGridPanel.js:55
@@ -811,14 +827,6 @@ msgstr "呼叫限制"
 msgid "busy level"
 msgstr "繁忙级别"
 
-#: js/Asterisk/VoicemailEditDialog.js:41 js/Asterisk/SipPeerEditDialog.js:60
-msgid "General"
-msgstr "一般"
-
-#: js/Asterisk/VoicemailEditDialog.js:47 js/Asterisk/SipPeerEditDialog.js:117
-msgid "Mailbox"
-msgstr "信箱"
-
 #: js/Asterisk/VoicemailEditDialog.js:75
 msgid "Password"
 msgstr "密码"
@@ -827,82 +835,88 @@ msgstr "密码"
 msgid "Additional"
 msgstr "附加的"
 
-#: js/Asterisk/MeetmeGridPanel.js:49 js/Asterisk/MeetmeEditDialog.js:40
-msgid "confno"
-msgstr "CONFNO"
+#: js/CallForwardPanel.js:84
+msgid "Forward immediately"
+msgstr "立刻发送"
 
-#: js/Asterisk/MeetmeGridPanel.js:58 js/Asterisk/MeetmeEditDialog.js:48
-msgid "pin"
-msgstr "个人身份号码"
+#: js/CallForwardPanel.js:94 js/CallForwardPanel.js:137
+#: js/CallForwardPanel.js:179
+msgid "Mode"
+msgstr "模式"
 
-#: js/Asterisk/MeetmeGridPanel.js:67 js/Asterisk/MeetmeEditDialog.js:56
-msgid "adminpin"
-msgstr "管理员身份号码"
+#: js/CallForwardPanel.js:118 js/CallForwardPanel.js:160
+#: js/CallForwardPanel.js:203
+msgid "Number"
+msgstr "号码"
 
-#: js/Asterisk/SipPeerEditDialog.js:49
-msgid "Call Forwards"
-msgstr "呼叫转移"
+#: js/CallForwardPanel.js:127
+msgid "Forward busy"
+msgstr "遇忙转移"
 
-#: js/Asterisk/SipPeerEditDialog.js:88
-msgid "Type"
-msgstr "类型"
+#: js/CallForwardPanel.js:169
+msgid "Forward delayed"
+msgstr "转发延迟"
 
-#: js/Asterisk/SipPeerEditDialog.js:97
-msgid "friend"
-msgstr "朋友"
+#: js/CallForwardPanel.js:212
+msgid "Delay time"
+msgstr "延迟时间"
 
-#: js/Asterisk/SipPeerEditDialog.js:98
-msgid "user"
-msgstr "用户"
+#: js/Models.js:84
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "电话列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:99
-msgid "peer"
-msgstr "对等"
+#: js/Models.js:137
+msgid "locations list"
+msgid_plural "locations lists"
+msgstr[0] "位置列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:103
-msgid "Secret"
-msgstr "密钥"
+#: js/Models.js:178
+msgid "templates list"
+msgid_plural "templates lists"
+msgstr[0] "模板列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:110
-msgid "Callerid"
-msgstr "来电号码"
+#: js/Models.js:220
+msgid "softwares list"
+msgid_plural "softwares lists"
+msgstr[0] "软件列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:124
-msgid "Callgroup"
-msgstr "呼叫组"
+#: js/Models.js:253
+msgid "SoftwareImage"
+msgid_plural "SoftwareImages"
+msgstr[0] "软件映象"
 
-#: js/Asterisk/SipPeerEditDialog.js:131
-msgid "Pickup group"
-msgstr "代接组"
+#: js/Models.js:257
+msgid "softwareImages list"
+msgid_plural "softwareImages lists"
+msgstr[0] ""
 
-#: js/Asterisk/SipPeerEditDialog.js:138
-msgid "Accountcode"
-msgstr "帐户代码"
+#: js/Models.js:298
+msgid "lines list"
+msgid_plural "lines lists"
+msgstr[0] "线路列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:145
-msgid "Language"
-msgstr "语言"
+#: js/Models.js:361
+msgid "setting list"
+msgid_plural "settings lists"
+msgstr[0] "设置列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:152
-msgid "NAT"
-msgstr "NAT"
+#: js/Models.js:462
+msgid "sipPeers list"
+msgid_plural "sipPeers lists"
+msgstr[0] ""
 
-#: js/Asterisk/SipPeerEditDialog.js:163
-msgid "Qualify"
-msgstr "有资格"
+#: js/Models.js:504
+msgid "contexts list"
+msgid_plural "contexts lists"
+msgstr[0] "上下文列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:174
-msgid "Direct Media (canreinvite)"
-msgstr ""
+#: js/Models.js:564
+msgid "voicemails list"
+msgid_plural "voicemails lists"
+msgstr[0] "留言列表"
 
-#: js/Asterisk/SipPeerEditDialog.js:184
-msgid "yes"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:185
-msgid "no"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:187
-msgid "nonat"
-msgstr ""
+#: js/Models.js:602
+msgid "meetmes list"
+msgid_plural "meetmes lists"
+msgstr[0] ""

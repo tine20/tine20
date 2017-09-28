@@ -1,22 +1,125 @@
-#
+# 
 # Translators:
+# BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 # Niklas Ye <niklas@idontgetlaid.com>, 2013
 # BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-03-17 10:50+0000\n"
+"PO-Revision-Date: 2017-09-19 12:23+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/tine20/tine20/language/sv_SE/)\n"
-"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Lägg till ny användare"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Lägg till ny användare som medlem i en kurs"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Lägg till befintlig användare"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Lägg till befintlig användare som medlem i en kurs"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Namn"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Typ"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Misslyckades"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Fel uppstod vid försök att uppdatera kurserna"
+
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
+msgstr "Importera kurs medlemmar"
+
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
+msgstr "Lägg till ny medlem"
+
+#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "Kurser"
+
+#: js/CourseEditDialog.js:204
+msgid "Course Name"
+msgstr "Kurs namn "
+
+#: js/CourseEditDialog.js:211
+msgid "Course / School Type"
+msgstr "Kurs / Skol Typ"
+
+#: js/CourseEditDialog.js:221
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
+msgid "Internet Access"
+msgstr "Internet Tillgängligt"
+
+#: js/CourseEditDialog.js:256
+msgid "Members"
+msgstr "Medlemmar"
+
+#: js/CourseEditDialog.js:283
+msgid "Login"
+msgstr "Logga in"
+
+#: js/CourseEditDialog.js:287
+msgid "unknown"
+msgstr "Okänd"
+
+#: js/CourseEditDialog.js:292
+msgid "Reset Password"
+msgstr "Återställ lösenord"
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "post lista"
+msgstr[1] "post listor"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurs Typ"
+msgstr[1] "Kurs Typer"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -38,84 +141,6 @@ msgstr "Fel"
 msgid "Please fix the errors noted."
 msgstr "Vänligen åtgärda de fel som noterats."
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Namn"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Typ"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Misslyckades"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Fel uppstod vid försök att uppdatera kurserna"
-
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurser"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "post lista"
-msgstr[1] "post listor"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:74 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr "Internet Tillgängligt"
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurs Typ"
-msgstr[1] "Kurs Typer"
-
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr "Importera kurs medlemmar"
-
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr "Lägg till ny medlem"
-
-#: js/CourseEditDialog.js:204
-msgid "Course Name"
-msgstr "Kurs namn "
-
-#: js/CourseEditDialog.js:211
-msgid "Course / School Type"
-msgstr "Kurs / Skol Typ"
-
-#: js/CourseEditDialog.js:221
-msgid "Description"
-msgstr "Beskrivning"
-
-#: js/CourseEditDialog.js:256
-msgid "Members"
-msgstr "Medlemmar"
-
-#: js/CourseEditDialog.js:283
-msgid "Login"
-msgstr "Logga in"
-
-#: js/CourseEditDialog.js:287
-msgid "unknown"
-msgstr "Okänd"
-
-#: js/CourseEditDialog.js:292
-msgid "Reset Password"
-msgstr "Återställ lösenord"
-
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"
 msgstr "Lärare"
@@ -127,6 +152,15 @@ msgstr "Lärar Konto"
 #: Controller/Course.php:321
 msgid "My course"
 msgstr "Min kurs"
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Alla Kurser"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Standard favoriten som laddas på lektionsstart"
 
 #: Config.php:105
 msgid "Internet access options."
@@ -177,7 +211,9 @@ msgid "Student username schema"
 msgstr ""
 
 #: Config.php:176
-msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
 msgstr ""
 
 #: Config.php:183 Config.php:185
@@ -192,10 +228,9 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:30 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Alla Kurser"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurser"
 
 #: Setup/Initialize.php:57
 msgid "School"
@@ -204,35 +239,3 @@ msgstr ""
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurser"
-
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Lägg till ny användare"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Lägg till ny användare som medlem i en kurs"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Lägg till befintlig användare"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Lägg till befintlig användare som medlem i en kurs"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Standard favoriten som laddas på lektionsstart"

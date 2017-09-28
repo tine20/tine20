@@ -1,65 +1,94 @@
-#
+# 
 # Translators:
+# Enri Mullai <enri_mullai@albnet.net>, 2013
 # Enri Mullai <enri_mullai@albnet.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2017-09-19 20:38+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
-"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Modifiko konfigurimet e telefonit"
+#: Model/Call.php:43
+msgid "Call"
+msgstr "Thirrje"
 
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Thirr Numrin"
+#: Model/Call.php:44
+msgid "Calls"
+msgstr "Thirrje"
 
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Nis një thirrje dalëse"
+#: Model/Call.php:60 js/DialerPanel.js:76
+msgid "Line"
+msgstr "Linja"
 
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "ID e thirrësit"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "Fillo"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "Lidhur"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "Çlidhur"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "Kohëzgjatja"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "Duke tringëlluar"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "Drejtim"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "Burim"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "Destinacioni"
+
+#: Model/Call.php:128
+msgid "Contact"
+msgstr ""
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr ""
+
+#: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"
 msgstr "Telefonë"
 
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Nuk është zgjedhur asnjë telefon"
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "KOnfigurime"
 
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Ju lutem zgjidhni telefonin e kërkuar në \"pemë\"!"
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Linja"
 
-#: js/AddressbookGridPanelHook.js:40
-msgid "Call contact"
-msgstr "Thërrit Kontantin"
-
-#: js/AddressbookGridPanelHook.js:196
-msgid "Work"
-msgstr "Punë"
-
-#: js/AddressbookGridPanelHook.js:205
-msgid "Home"
-msgstr "Shtëpi"
-
-#: js/AddressbookGridPanelHook.js:214
-msgid "Cell"
-msgstr "Celular"
-
-#: js/AddressbookGridPanelHook.js:223
-msgid "Cell private"
-msgstr "Celular Privat"
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Përshkrimi"
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -73,13 +102,45 @@ msgstr "Thirrje dalëse"
 msgid "unknown number"
 msgstr "Numër i panjohur"
 
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Thërrit Kontantin"
 
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "Linja"
+#: js/AddressbookGridPanelHook.js:191
+msgid "Work"
+msgstr "Punë"
+
+#: js/AddressbookGridPanelHook.js:200
+msgid "Home"
+msgstr "Shtëpi"
+
+#: js/AddressbookGridPanelHook.js:209
+msgid "Cell"
+msgstr "Celular"
+
+#: js/AddressbookGridPanelHook.js:218
+msgid "Cell private"
+msgstr "Celular Privat"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Modifiko konfigurimet e telefonit"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Thirr Numrin"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Nis një thirrje dalëse"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "Nuk është zgjedhur asnjë telefon"
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "Ju lutem zgjidhni telefonin e kërkuar në \"pemë\"!"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -114,7 +175,8 @@ msgid "regex for local calls"
 msgstr ""
 
 #: Config.php:63
-msgid "identifies if a calling number is a local call without leading area code"
+msgid ""
+"identifies if a calling number is a local call without leading area code"
 msgstr ""
 
 #: Config.php:70
@@ -156,59 +218,3 @@ msgstr "Thirrje muajit të shkuar"
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
 msgstr "Thirrje hyrëse dhe dalëse të muajit të kaluar"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "KOnfigurime"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Linja"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Përshkrimi"
-
-#: Model/Call.php:43
-msgid "Call"
-msgstr "Thirrje"
-
-#: Model/Call.php:44
-msgid "Calls"
-msgstr "Thirrje"
-
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr "ID e thirrësit"
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr "Fillo"
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr "Lidhur"
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr "Çlidhur"
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr "Kohëzgjatja"
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr "Duke tringëlluar"
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr "Drejtim"
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr "Burim"
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr "Destinacioni"

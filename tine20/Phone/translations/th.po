@@ -1,65 +1,94 @@
-#
+# 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-10-25 08:24+0000\n"
-"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
+"PO-Revision-Date: 2017-09-19 19:55+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
-"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "จัดการการตั้งค่าโทรศัพท์"
+#: Model/Call.php:43
+msgid "Call"
+msgstr "โทร"
 
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "ติดต่อหมายเลข"
+#: Model/Call.php:44
+msgid "Calls"
+msgstr "โทร"
 
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "เริ่มการโทรออกใหม่"
+#: Model/Call.php:60 js/DialerPanel.js:76
+msgid "Line"
+msgstr "สาย"
 
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "หมายเลขผู้โทร"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "เริ่มต้น"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "ติดต่อแล้ว"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "ติดต่อไม่ได้"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "ระยะเวลา"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "กำลังรอสาย"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "ทิศทาง"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "แหล่ง"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "ปลายทาง"
+
+#: Model/Call.php:128
+msgid "Contact"
+msgstr ""
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "โทรศัพท์"
+
+#: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"
 msgstr "โทรศัพท์"
 
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "ไม่ได้เลือกโทรศัพท์ใด ๆ "
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "ค่าติดตั้ง"
 
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "กรุณาเลือกโทรศัพท์ที่ต้องการจากแผนผังต้นไม้"
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "สาย"
 
-#: js/AddressbookGridPanelHook.js:40
-msgid "Call contact"
-msgstr "โทรติดต่อ"
-
-#: js/AddressbookGridPanelHook.js:196
-msgid "Work"
-msgstr "ที่ทำงาน"
-
-#: js/AddressbookGridPanelHook.js:205
-msgid "Home"
-msgstr "ที่บ้าน"
-
-#: js/AddressbookGridPanelHook.js:214
-msgid "Cell"
-msgstr "มือถือ"
-
-#: js/AddressbookGridPanelHook.js:223
-msgid "Cell private"
-msgstr "โทรศัพท์เคลื่อนที่ ส่วนตัว"
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "การอธิบาย"
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -73,13 +102,45 @@ msgstr "เบอร์โทรออก"
 msgid "unknown number"
 msgstr "หมายเลขที่ไม่รู้จัก"
 
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "โทรศัพท์"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "โทรติดต่อ"
 
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "สาย"
+#: js/AddressbookGridPanelHook.js:191
+msgid "Work"
+msgstr "ที่ทำงาน"
+
+#: js/AddressbookGridPanelHook.js:200
+msgid "Home"
+msgstr "ที่บ้าน"
+
+#: js/AddressbookGridPanelHook.js:209
+msgid "Cell"
+msgstr "มือถือ"
+
+#: js/AddressbookGridPanelHook.js:218
+msgid "Cell private"
+msgstr "โทรศัพท์เคลื่อนที่ ส่วนตัว"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "จัดการการตั้งค่าโทรศัพท์"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "ติดต่อหมายเลข"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "เริ่มการโทรออกใหม่"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "ไม่ได้เลือกโทรศัพท์ใด ๆ "
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "กรุณาเลือกโทรศัพท์ที่ต้องการจากแผนผังต้นไม้"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -114,7 +175,8 @@ msgid "regex for local calls"
 msgstr ""
 
 #: Config.php:63
-msgid "identifies if a calling number is a local call without leading area code"
+msgid ""
+"identifies if a calling number is a local call without leading area code"
 msgstr ""
 
 #: Config.php:70
@@ -156,59 +218,3 @@ msgstr "เบอร์ที่ติดต่อเดือนที่แล
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
 msgstr "เบอร์โทรเข้า/ออกของเดือนที่แล้ว"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "ค่าติดตั้ง"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "สาย"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: Model/Call.php:43
-msgid "Call"
-msgstr "โทร"
-
-#: Model/Call.php:44
-msgid "Calls"
-msgstr "โทร"
-
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr "หมายเลขผู้โทร"
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr "เริ่มต้น"
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr "ติดต่อแล้ว"
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr "ติดต่อไม่ได้"
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr "ระยะเวลา"
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr "กำลังรอสาย"
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr "ทิศทาง"
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr "แหล่ง"
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr "ปลายทาง"

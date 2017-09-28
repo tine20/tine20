@@ -1,30 +1,30 @@
-#
+# 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
+"PO-Revision-Date: 2017-09-19 19:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
-"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "อุปกรณ์"
+#: Acl/Rights.php:104
+msgid "Manage ActiveSync devices"
+msgstr ""
 
-#: js/Model.js:42
-msgid "Devices"
-msgstr "อุปกรณ์"
+#: Acl/Rights.php:105
+msgid "See, edit and delete ActiveSync devices"
+msgstr ""
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -119,10 +119,14 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "อุปกรณ์"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "อุปกรณ์"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -157,6 +161,35 @@ msgstr ""
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr ""
+
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "สมุดรายชื่อหลัก"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "สมุดรายชื่อหลักที่จะสร้างการติดต่อใหม่เข้าไป"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "ปฏิทินหลัก"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "ปฏิทินหลักที่จะสร้างเหตุการณ์ใหม่เข้าไป"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "รายชื่อหน้าที่หลัก"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
 
 #: Config.php:52
 msgid "Default policy for new devices"
@@ -197,35 +230,3 @@ msgstr "นโยบายหลัก"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "นโยบายหลักได้ถูกคัดลอกแล้วระหว่างการติดตั้ง"
-
-#: Acl/Rights.php:104
-msgid "Manage ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:105
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "สมุดรายชื่อหลัก"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "สมุดรายชื่อหลักที่จะสร้างการติดต่อใหม่เข้าไป"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "ปฏิทินหลัก"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "ปฏิทินหลักที่จะสร้างเหตุการณ์ใหม่เข้าไป"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "รายชื่อหน้าที่หลัก"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
