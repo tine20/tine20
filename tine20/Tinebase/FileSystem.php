@@ -789,7 +789,7 @@ class Tinebase_FileSystem implements
             }
         }
 
-        if (null === $localQuota) {
+        if (null === $localQuota && $total > 0) {
             $localQuota = $total;
             $localSize = $totalUsage;
         }
@@ -797,10 +797,10 @@ class Tinebase_FileSystem implements
         return array(
             'localQuota'        => $localQuota,
             'localUsage'        => $localSize,
-            'localFree'         => $localQuota > $localSize ? $localQuota - $localSize : 0,
+            'localFree'         => $localQuota !== null && $localQuota > $localSize ? $localQuota - $localSize : 0,
             'effectiveQuota'    => $effectiveQuota,
             'effectiveUsage'    => $effectiveUsage,
-            'effectiveFree'     => $effectiveFree,
+            'effectiveFree'     => $effectiveFree < 0 ? 0 : $effectiveFree,
         );
     }
 
@@ -1306,6 +1306,7 @@ class Tinebase_FileSystem implements
     
     /**
      * create directory
+     * needs to be /appid/folders/...asYouLikeFromHereOn
      * 
      * @param string $path
      * @return Tinebase_Model_Tree_Node
@@ -1329,7 +1330,7 @@ class Tinebase_FileSystem implements
                 try {
                     $node = $this->stat('/' . implode('/', $currentPath));
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    $node = $this->createDirectoryTreeNode($parentNode, $pathPart);
+                    $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
 
                     $this->_addStatCache($currentPath, $node);
                 }
@@ -1701,12 +1702,14 @@ class Tinebase_FileSystem implements
     
     /**
      * create directory
+     * needs to be /appid/folders/...asYouLikeFromHereOn
      * 
      * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $name
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function createDirectoryTreeNode($_parentId, $name)
+    protected function _createDirectoryTreeNode($_parentId, $name)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -1720,13 +1723,25 @@ class Tinebase_FileSystem implements
                     $object->is_deleted = 0;
                     $this->_fileObjectBackend->update($object);
                 }
-                //we can use _treeNodeBackend as we called get further up
-                $treeNode = $this->_treeNodeBackend->update($deletedNode);
+                $treeNode = $this->_getTreeNodeBackend()->update($deletedNode);
             } else {
 
                 $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
                     ? $_parentId
                     : ($_parentId ? $this->get($_parentId) : null);
+
+                if (null === $parentNode) {
+                    try {
+                        $appId = Tinebase_Application::getInstance()->getApplicationById($name)->getId();
+                        if ($appId !== $name) {
+                            throw new Tinebase_Exception_InvalidArgument('path needs to start with /appId/folders/...');
+                        }
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        throw new Tinebase_Exception_InvalidArgument('path needs to start with /appId/folders/...');
+                    }
+                } elseif (null === $parentNode->parent_id && $name !== 'folders') {
+                    throw new Tinebase_Exception_InvalidArgument('path needs to start with /appId/folders/...');
+                }
 
                 $directoryObject = new Tinebase_Model_Tree_FileObject(array(
                     'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,

@@ -101,7 +101,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 // in case of path change we need to reload the node (children) as well
                 // as the path of all children changed as well
                 if (node.hasChildNodes() && pathChange && ! node.loading) {
-                    node.reload();
+                    if (! node.bufferedReload) {
+                        node.bufferedReload = Function.createBuffered(node.reload, 100, node);
+                    }
+                    node.bufferedReload();
                 }
             }
 

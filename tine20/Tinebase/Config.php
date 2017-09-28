@@ -1727,8 +1727,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::QUOTA_SQ_NOTIFICATION_ROLE => array(
                     //_('Soft quota notification role')
                     'label'                 => 'Soft quota notification role',
-                    //_('Name of the role to notify if soft quote is exceeded')
-                    'description'           => 'Name of the role to notify if soft quote is exceeded',
+                    //_('Name of the role to notify if soft quota is exceeded')
+                    'description'           => 'Name of the role to notify if soft quota is exceeded',
                     'type'                  => 'string',
                     'clientRegistryInclude' => true,
                     'setByAdminModule'      => true,

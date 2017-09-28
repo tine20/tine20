@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metaways.de>
  */
 
@@ -256,5 +256,23 @@ class Inventory_JsonTest extends Inventory_TestCase
         // check if favicon is delivered
         $image = Tinebase_Model_Image::getImageFromImageURL($savedInvItem['image']);
         $this->assertEquals(52, $image->width);
+    }
+
+    /**
+     * testAttachMultipleTagsToMultipleRecord for mcv2 records
+     */
+    public function testAttachMultipleTagsToMultipleRecord()
+    {
+        $item = $this->testCreateInventoryItem();
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $tag = $this->_getTag();
+        $tag = Tinebase_Tags::getInstance()->create($tag);
+
+        $result = $tinebaseJson->attachTagToMultipleRecords(
+            array(array('field' => 'id', 'operator' => 'equals', 'value' => $item['id'])),
+            'Inventory_Model_InventoryItemFilter',
+            $tag->getId()
+        );
+        self::assertTrue(isset($result['success']) && $result['success']);
     }
 }

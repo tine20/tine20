@@ -31,12 +31,16 @@ Tine.widgets.grid.QuotaRenderer = function(usage, limit, useSoftQuota) {
         ).compile();
     }
 
+    usage = parseInt(usage);
+    limit = parseInt(limit);
+
     var data = {
         usage: usage,
+        limit: limit,
         percent: limit ? Math.round(usage/limit * 100) : null,
         quota: Tine.Tinebase.configManager.get('quota'),
         cls: limit ?
-            'PercentRenderer-progress-barBelow':
+            'PercentBar-below':
             'QuotaRenderer-unlimited',
         qtip: limit ? (String.format(i18n._('{0} available (total: {1})'),
             Tine.Tinebase.common.byteRenderer(limit - usage),
@@ -44,11 +48,11 @@ Tine.widgets.grid.QuotaRenderer = function(usage, limit, useSoftQuota) {
     };
 
     // this will enable a color scheme for soft quota or reached limit
-    if (limit && useSoftQuota && data.percentage >= data.quota.softQuota) {
-        data.cls = "PercentRenderer-progress-barOver";
+    if (data.limit && useSoftQuota && data.percent >= data.quota.softQuota) {
+        data.cls = "PercentBar-over";
     }
-    if (limit && data.usage >= limit) {
-        data.cls = "PercentRenderer-progress-barLimit";
+    if (data.limit && data.usage >= data.limit) {
+        data.cls = "PercentBar-limit";
     }
 
      return Tine.widgets.grid.QuotaRenderer.tpl.apply(data);

@@ -49,7 +49,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $this->_basePath = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/internal/phpunit';
+        $this->_basePath = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/folders/phpunit';
         
         Tinebase_FileSystem::getInstance()->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
         

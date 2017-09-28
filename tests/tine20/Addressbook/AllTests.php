@@ -37,6 +37,7 @@ class Addressbook_AllTests
         $suite->addTestSuite('Addressbook_Model_ContactIdFilterTest');
         $suite->addTestSuite('Addressbook_Export_DocTest');
         $suite->addTestSuite('Addressbook_Export_XlsTest');
+        $suite->addTestSuite(Addressbook_ListControllerTest::class);
 
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
             $suite->addTestSuite('Addressbook_LdapSyncTest');

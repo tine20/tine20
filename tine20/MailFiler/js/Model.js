@@ -107,6 +107,7 @@ Tine.MailFiler.fileRecordBackend = new Tine.Filemanager.FileRecordBackend({
         return this.loadRecord(record, {
             //params: {mimeType: mimeType},
             timeout: 120000, // 2 minutes
+            suppressBusEvents: true,
             scope: this,
             success: function(response, options) {
                 var nodeWithBody = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});

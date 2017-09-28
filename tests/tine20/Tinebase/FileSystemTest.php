@@ -107,6 +107,27 @@ class Tinebase_FileSystemTest extends TestCase
         
         return $testPath;
     }
+
+    public function testMkdirFailAppId()
+    {
+        try {
+            $this->_controller->mkdir('/shalalala');
+            static::fail('it should not be possible to create a path like /shalalala');
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            static::assertEquals('path needs to start with /appId/folders/...', $teia->getMessage());
+        }
+    }
+
+    public function testMkdirFailFoldersPart()
+    {
+        try {
+            $path = '/' . Tinebase_Core::getTinebaseId() . '/shalalala';
+            $this->_controller->mkdir($path);
+            static::fail('it should not be possible to create a path like ' . $path);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            static::assertEquals('path needs to start with /appId/folders/...', $teia->getMessage());
+        }
+    }
     
     public function testDirectoryHashUpdate()
     {

@@ -2139,15 +2139,47 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        /** @var Calendar_Model_Event $persistentEvent */
         $persistentEvent = $this->_eventController->create($event);
         $persistentEvent->setTimezone(Tinebase_Core::getUserTimezone());
 
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), [$persistentEvent->toArray()]);
-        $this->assertEquals(1, count($fbinfo));
-        $this->assertEquals(2, count(array_pop($fbinfo)));
+        unset($persistentEvent->rrule);
 
-        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), [$persistentEvent->toArray()], array($persistentEvent->uid));
-        $this->assertEquals(0, count(array_pop($fbinfo)));
+        $eventData = [$persistentEvent->toArray()];
+        $eventData[0]['id'] = Tinebase_Record_Abstract::generateUID();
+        $persistentEvent->dtstart->addMinute(10);
+        $persistentEvent->dtend->addMinute(10);
+        $eventData[] = $persistentEvent->toArray();
+        $eventData[1]['id'] = Tinebase_Record_Abstract::generateUID();
+        $persistentEvent->dtstart->addMinute(5);
+        $persistentEvent->dtend->addMinute(5);
+        $eventData[] = $persistentEvent->toArray();
+        $eventData[2]['id'] = Tinebase_Record_Abstract::generateUID();
+        // to test sorting, we add a late event as first element of the array
+        $persistentEvent->dtstart->addDay(1)->subMinute(15);
+        $persistentEvent->dtend->addDay(1)->subMinute(15);
+        array_unshift($eventData, $persistentEvent->toArray());
+
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $eventData);
+        // 4 events
+        $this->assertEquals(4, count($fbinfo));
+        // the +1 day
+        $this->assertEquals(2, count($fbinfo[$eventData[0]['id']]));
+        // the unchanged date
+        $this->assertEquals(2, count($fbinfo[$eventData[1]['id']]));
+        // the +10 minutes
+        $this->assertEquals(2, count($fbinfo[$eventData[2]['id']]));
+        // the +15 minutes
+        $this->assertEquals(0, count($fbinfo[$eventData[3]['id']]));
+
+        $fbinfo = $this->_uit->getFreeBusyInfo($persistentEvent->attendee->toArray(), $eventData, array($persistentEvent->uid));
+        // 4 events
+        $this->assertEquals(4, count($fbinfo));
+        // no conflicts for all of them
+        foreach ($fbinfo as $fb) {
+            static::assertEquals(0, count($fb));
+        }
     }
 
     public function testSearchAttenders()

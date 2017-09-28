@@ -424,13 +424,13 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                     $modified->addRecord($diff);
                 }
             } else {
-                $added->addRecord($grantOne);
+                $removed->addRecord($grantOne);
             }
         }
 
         /** @var Tinebase_Model_Grants $grantTwo */
         foreach ($shallowCopyTwo as $grantTwo) {
-            $removed->addRecord($grantTwo);
+            $added->addRecord($grantTwo);
         }
 
         $result = new Tinebase_Record_RecordSetDiff(array(

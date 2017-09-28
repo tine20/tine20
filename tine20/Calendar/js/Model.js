@@ -158,6 +158,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     getMyAttenderRecord: function() {
         var attendeeStore = this.getAttendeeStore();
         return Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
+    },
+
+    getSchedulingData: function() {
+        var _ = window.lodash;
+
+        return _.pick(this.data, ['id', 'uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
+            'transp', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'exdate', 'rrule_constraints']);
     }
 });
 
@@ -871,7 +878,9 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
             fbEvents = _.union([].concat(this.freeBusyEventsProvider()));
 
         _.set(options, 'params.ignoreUIDs', _.union(_.map(fbEvents, 'data.uid')));
-        _.set(options, 'params.events', _.map(fbEvents, 'data'));
+        _.set(options, 'params.events', _.map(fbEvents, function(event) {
+            return event.getSchedulingData();
+        }));
 
         return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.apply(this, arguments);
     },

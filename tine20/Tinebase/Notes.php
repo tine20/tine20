@@ -497,7 +497,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_object($val)) {
                                 $val = $val->toArray();
                             }
-                            $oldDataString = ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                            $oldDataString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
                         }
                     } else {
                         $oldDataString = $oldData;
@@ -508,7 +508,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_object($val)) {
                                 $val = $val->toArray();
                             }
-                            $valueString = ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                            $valueString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
                         }
                     } else {
                         $valueString = $value;

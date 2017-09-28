@@ -561,24 +561,129 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
         $calendarController = Calendar_Controller_Event::getInstance();
         $fbInfo = [];
+        $periods = [];
+        $aggregatedPeriods = [];
 
         foreach($events as $event) {
-            $eventRecord = new Calendar_Model_Event(array(), TRUE);
+            $eventRecord = new Calendar_Model_Event([], TRUE);
             $eventRecord->setFromJsonInUsersTimezone($event);
 
-            if ($eventRecord->dtstart === null) {
+            if ($eventRecord->dtstart === null || empty($eventRecord->getId())) {
                 continue;
             }
 
-            $periods = $calendarController->getBlockingPeriods($eventRecord, array(
+            $eventPeriods = $calendarController->getBlockingPeriods($eventRecord, [
                 'from'  => $eventRecord->dtstart,
                 'until' => $eventRecord->dtstart->getClone()->addMonth(2)
-            ));
+            ], true);
+            usort($eventPeriods, function ($a, $b) {
+                return $a['from']->compare($b['from']);
+            });
+            $fbInfo[$eventRecord->getId()] = [];
+            $periods[$eventRecord->getId()] = $eventPeriods;
+            $aggregatedPeriods = array_merge($aggregatedPeriods, $eventPeriods);
 
-            $fbInfo[$eventRecord->getId()] = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs)->toArray();
+            /*$periods = $calendarController->getBlockingPeriods($eventRecord, [
+                'from'  => $eventRecord->dtstart,
+                'until' => $eventRecord->dtstart->getClone()->addMonth(2)
+            ]);
+
+            $fbInfo[$eventRecord->getId()] = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs)->toArray();*/
+        }
+
+        if (count($aggregatedPeriods = $this->_reduceAggregatePeriods($aggregatedPeriods)) === 0) {
+            return $fbInfo;
+        }
+
+        $allFb = $calendarController->getFreeBusyInfo($this->_createPeriodFilter($aggregatedPeriods), $attendee,
+            $ignoreUIDs);
+        if ($allFb->count() === 0) {
+            return $fbInfo;
+        }
+        $allFb->sort(function (Calendar_Model_FreeBusy $a, Calendar_Model_FreeBusy $b) {
+            return $a->dtstart->compare($b->dtstart);
+        });
+
+        foreach ($periods as $eventId => $eventPeriods) {
+            $seekTo = 0;
+            foreach ($eventPeriods as $period) {
+                if ($period['from']->compare($allFb->getLastRecord()->dtend) !== -1) {
+                    break;
+                }
+                /** @var ArrayIterator $iterator */
+                $iterator = $allFb->getIterator();
+                $iterator->seek($seekTo);
+                $i = $seekTo;
+                $lastDtStart = null;
+                while ($iterator->valid()) {
+                    /** @var Calendar_Model_FreeBusy $fb */
+                    $fb = $iterator->current();
+                    if ($period['from']->compare($fb->dtend) === -1) {
+                        if ($period['until']->compare($fb->dtstart) === 1) {
+                            // cache toArray result?
+                            $fbInfo[$eventId][] = $fb->toArray();
+                        } else {
+                            continue 2;
+                        }
+                        ++$i;
+                    } elseif ($lastDtStart === null) {
+                        $lastDtStart = $fb->dtstart;
+                    } elseif ($lastDtStart->compare($fb->dtstart) !== 0) {
+                        break;
+                    }
+                    $iterator->next();
+                }
+                $seekTo = $i;
+            }
         }
 
         return $fbInfo;
+    }
+
+    /**
+     * @param array $periods
+     * @return Calendar_Model_EventFilter
+     */
+    protected function _createPeriodFilter(array $periods)
+    {
+        $periodFilters = [];
+        foreach ($periods as $period) {
+            $periodFilters[] = [
+                'field' => 'period',
+                'operator' => 'within',
+                'value' => $period,
+            ];
+        }
+        return new Calendar_Model_EventFilter($periodFilters, Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+    }
+
+    /**
+     * @param array $periods
+     * @return array
+     */
+    protected function _reduceAggregatePeriods(array $periods)
+    {
+        if (count($periods) === 0) {
+            return [];
+        }
+        usort($periods, function ($a, $b) {
+            return $a['from']->compare($b['from']);
+        });
+
+        reset($periods);
+        $result = [current($periods)];
+        $i = 0;
+        foreach ($periods as $period) {
+            if ($result[$i]['until']->compare($period['from']) !== -1) {
+                if ($result[$i]['until']->compare($period['until']) === -1) {
+                    $result[$i]['until'] = $period['until'];
+                }
+            } else {
+                $result[++$i] = $period;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -671,7 +776,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
 
-            $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $events, $ignoreUIDs);
+            if (empty($attendee)) {
+                $result['freeBusyInfo'] = array();
+            } else {
+                $result['freeBusyInfo'] = $this->getFreeBusyInfo($attendee, $events, $ignoreUIDs);
+            }
         }
 
         return $result;

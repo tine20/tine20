@@ -385,11 +385,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         this.initFilterPanel();
-        
-        // init store
+
+        this.bufferedLoadGridData = Function.createBuffered(this.loadGridData, 100, this);
+
         this.initStore();
         
-        // init (ext) grid
         this.initGrid();
 
         // init actions
@@ -445,7 +445,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             // we can't evaluate the filters on client side to check compute if this affects us
             // so just lets reload
-            this.loadGridData({
+            this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered'
             });
         }
@@ -2110,7 +2110,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.loadGridData({
+            this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered'
             });
         }
@@ -2324,7 +2324,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onAfterDelete: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
 
-        this.loadGridData({
+        this.bufferedLoadGridData({
             removeStrategy: 'keepBuffered'
         });
     },
@@ -2355,7 +2355,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onAfterEdit: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
 
-        this.loadGridData({
+        this.bufferedLoadGridData({
             removeStrategy: 'keepBuffered'
         });
     }

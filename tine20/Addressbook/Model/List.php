@@ -21,6 +21,7 @@
  * @property    array       $memberroles
  * @property    string      $email
  * @property    string      $type                 type of list
+ * @property    string      $emails
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {

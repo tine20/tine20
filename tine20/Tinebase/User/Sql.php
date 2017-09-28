@@ -551,7 +551,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $failedTests = array();
         
         $policy = array(
-            Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII             => '/[^\x00-\x7F]/',
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => null,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
@@ -563,7 +563,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         foreach ($policy as $key => $regex) {
             $test = $this->_testPolicy($password, $key, $regex);
             if ($test !== true) {
-                $failedTests[$key] = $test;
+                $config = Tinebase_Config::getInstance()->getDefinition($key);
+                $failedTests[$config['label']] = $test;
             }
         }
         
@@ -572,7 +573,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 . ' ' . print_r($failedTests, true));
             
             $policyException = new Tinebase_Exception_PasswordPolicyViolation('Password failed to match the following policy requirements: ' 
-                . implode('|', array_keys($failedTests)));
+                . implode(' | ', array_keys($failedTests)));
             throw $policyException;
         }
     }

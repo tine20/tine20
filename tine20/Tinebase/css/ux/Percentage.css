@@ -4,19 +4,51 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+
 .PercentRenderer {
     height: 12px;
+    position: relative;
 }
 
+.x-toolbar .PercentRendererText div,
 .PercentRendererText {
     color:#000000;
     font-size:9px;
     font-weight:bold;
     left:0pt;
-    overflow:hidden;
     padding:0px 5px;
     position:absolute;
     text-align:center;
+}
+
+.PercentBar-unlimited {
+    border-top-color:#d1e4fd;
+    border-bottom-color:#7fa9e4;
+    border-right-color:#7fa9e4;
+}
+
+.PercentBar-below {
+    background-color:#9cbfee;
+    background-image:url(../../../images/progress/progress-bgGreen.gif) !important;
+    border-top-color:#c6e8ae !important;
+    border-bottom-color:#7fa9e4;
+    border-right-color:#7fa9e4;
+}
+
+.PercentBar-over {
+    background-color:#9cbfee;
+    background-image:url(../../../images/progress/progress-bgYellow.gif) !important;
+    border-top-color:#fff5b8 !important;
+    border-bottom-color:#7fa9e4;
+    border-right-color:#7fa9e4;
+}
+
+.PercentBar-limit {
+    background-color:#9cbfee;
+    background-image:url(../../../images/progress/progress-bgRed.gif) !important;
+    border-top-color:#f7bfbf !important;
+    border-bottom-color:#7fa9e4;
+    border-right-color:#7fa9e4;
 }
 
 /* some progress bar colors */
@@ -31,7 +63,7 @@
 .PercentRenderer-progress-bar80 { background-color: #ab8 !important; background-image: none; }
 .PercentRenderer-progress-bar90 { background-color: #9b8 !important; background-image: none; }
 .PercentRenderer-progress-bar100 { background-color: #8c7 !important; background-image: none; }
-.PercentRenderer-progress-barBelow { background-color: #a9fa79 !important; background-image: none; }
-.PercentRenderer-progress-barOver { background-color: #F7FE2E !important; background-image: none; }
-.PercentRenderer-progress-barLimit { background-color: #f77a4d !important; background-image: none; }
-.QuotaRenderer-unlimited {background-color: transparent !important; background-image: none; border: none; padding-top:1px; }
+.PercentRenderer-progress-barBelow { background-color: #8c7 !important; background-image: none !important; }
+.PercentRenderer-progress-barOver { background-color: #fed35d !important; background-image: none !important; }
+.PercentRenderer-progress-barLimit { background-color: #f77a4d !important; background-image: none !important; }
+.QuotaRenderer-unlimited {background-color: transparent !important; background-image: none !important; border: none; padding-top:1px; position: relative}

@@ -278,9 +278,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             "until" => DateTime  (defaults to dtstart + 2 years)
             "max"   => Integer   (defaults to 25)
         )
-     * @return Calendar_Model_EventFilter
+     * @param boolean                       $returnRawData
+     * @return Calendar_Model_EventFilter|array
      */
-    public function getBlockingPeriods($event, $checkPeriod = array())
+    public function getBlockingPeriods($event, $checkPeriod = array(), $returnRawData = false)
     {
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
 
@@ -296,23 +297,25 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Calendar_Model_Rrule::mergeRecurrenceSet($eventSet, $from, $until);
         }
 
-        $periodFilters = array();
+        $periodFilters = [];
         foreach ($eventSet as $candidate) {
             if ($candidate->transp != Calendar_Model_Event::TRANSP_TRANSP) {
-                $periodFilters[] = array(
+                $periodFilters[] = $returnRawData ? [
+                    'from' => $candidate->dtstart,
+                    'until' => $candidate->dtend,
+                ] : [
                     'field' => 'period',
                     'operator' => 'within',
-                    'value' => array(
+                    'value' => [
                         'from' => $candidate->dtstart,
                         'until' => $candidate->dtend,
-                    ),
-                );
+                    ],
+                ];
             }
         }
 
-        $filter = new Calendar_Model_EventFilter($periodFilters, Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
-
-        return $filter;
+        return $returnRawData ? $periodFilters :
+            new Calendar_Model_EventFilter($periodFilters, Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
     }
 
     /**
@@ -456,17 +459,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $resources = Calendar_Controller_Resource::getInstance()->getMultiple(array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
         }
 
-        $processedEvents = array();
+        $processedEventIds = array();
 
         foreach ($conflictingPeriods as $conflictingPeriod) {
             $event = $conflictingPeriod['event'];
 
             // one event may conflict multiple periods
-            if (in_array($event, $processedEvents)) {
+            if (isset($processedEventIds[$event->getId()])) {
                 continue;
             }
 
-            $processedEvents[] = $event;
+            $processedEventIds[$event->getId()] = true;
 
             // skip events with ignoreUID
             if (in_array($event->uid, $_ignoreUIDs)) {
@@ -1726,6 +1729,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function fakeDeletedExceptions($baseEvent, $exceptions)
     {
+        if (! $baseEvent->dtstart instanceof Tinebase_DateTime) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' No valid dtstart in baseevent: ' . print_r($baseEvent->toArray(), true));
+            return;
+        }
         $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
 
         // compute remaining exdates

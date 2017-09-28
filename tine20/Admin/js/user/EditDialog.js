@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 /*global Ext, Tine*/
@@ -15,7 +15,7 @@ Ext.ns('Tine.Admin.user');
  * @class       Tine.Admin.UserEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
- * NOTE: this class dosn't use the user namespace as this is not yet supported by generic grid
+ * NOTE: this class doesn't use the user namespace as this is not yet supported by generic grid
  * 
  * <p>User Edit Dialog</p>
  * <p>
@@ -101,7 +101,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.storeGroups.loadData(this.record.get('groups'));
             this.storeRoles.loadData(this.record.get('accountRoles'));
         }
-        
+
+        var fileSystem = this.record.get('effectiveAndLocalQuota');
+        if (fileSystem && fileSystem.localUsage) {
+            this.getForm().findField('personalFSSize').setValue(parseInt(fileSystem.localUsage));
+        }
+
+        var xprops = this.record.get('xprops');
+        xprops = Ext.isObject(xprops) ? xprops : {};
+        if (xprops.personalFSQuota) {
+            this.getForm().findField('personalFSQuota').setValue(xprops.personalFSQuota);
+        }
+
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -156,6 +167,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('accountRoles', newRoles);
         
         this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
+
+        var xprops = {};
+        xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
+        Tine.Tinebase.common.assertComparable(xprops);
+        this.record.set('xprops', xprops);
     },
     
     /**
@@ -456,7 +472,48 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return [];
     },
-    
+
+    /**
+     * Init Filesystem tab items
+     *
+     * @return {Array} - array of tab items
+     */
+    initFilesystem: function () {
+        return [{
+            xtype: 'fieldset',
+            title: this.app.i18n.gettext('Filesystem Quota'),
+            autoHeight: true,
+            checkboxToggle: true,
+            layout: 'hfit',
+            listeners: {
+                scope: this,
+                collapse: function () {
+                    this.getForm().findField('personalQuota').setValue(null);
+                }
+            },
+            items: [{
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype: 'textfield',
+                    anchor: '100%',
+                    columnWidth: 0.666
+                },
+                items: [[{
+                    fieldLabel: this.app.i18n.gettext('Quota'),
+                    emptyText: this.app.i18n.gettext('no quota set'),
+                    name: 'personalFSQuota',
+                    xtype: 'extuxbytesfield'
+                }], [{
+                    fieldLabel: this.app.i18n.gettext('Current Filesystem usage'),
+                    name: 'personalFSSize',
+                    xtype: 'extuxbytesfield',
+                    disabled: true
+                }]]
+            }]
+        }];
+    },
+
     /**
      * Init IMAP tab items
      * 
@@ -466,7 +523,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (Tine.Admin.registry.get('manageImapEmailUser')) {
             return [{
                 xtype: 'fieldset',
-                title: this.app.i18n.gettext('IMAP Quota (MB)'),
+                title: this.app.i18n.gettext('IMAP Quota'),
                 autoHeight: true,
                 checkboxToggle: true,
                 layout: 'hfit',
@@ -488,23 +545,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Quota'),
                         emptyText: this.app.i18n.gettext('no quota set'),
                         name: 'emailMailQuota',
-                        xtype: 'uxspinner',
-                        strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                            incrementValue : 10,
-                            alternateIncrementValue: 50,
-                            minValue: 0,
-                            allowDecimals : false
-                        })
+                        xtype: 'extuxbytesfield'
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Current Mailbox size'),
                         name: 'emailMailSize',
-                        xtype: 'displayfield',
-                        style: this.displayFieldStyle
+                        xtype: 'extuxbytesfield',
+                        disabled: true
                     }]]
                 }]
             }, {
                 xtype: 'fieldset',
-                title: this.app.i18n.gettext('Sieve Quota (MB)'),
+                title: this.app.i18n.gettext('Sieve Quota'),
                 autoHeight: true,
                 checkboxToggle: true,
                 layout: 'hfit',
@@ -526,18 +577,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Quota'),
                         emptyText: this.app.i18n.gettext('no quota set'),
                         name: 'emailSieveQuota',
-                        xtype: 'uxspinner',
-                        strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                            incrementValue : 10,
-                            alternateIncrementValue: 50,
-                            minValue: 0,
-                            allowDecimals : false
-                        })
+                        xtype: 'extuxbytesfield'
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Current Sieve size'),
                         name: 'emailSieveSize',
-                        xtype: 'displayfield',
-                        style: this.displayFieldStyle
+                        xtype: 'extuxbytesfield',
+                        disabled: true
                     }]
                     ]
                 }]
@@ -1019,6 +1064,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 frame: true,
                 items: this.initFileserver()
+            }, {
+                title: this.app.i18n.gettext('Filesystem'),
+                border: false,
+                frame: true,
+                items: this.initFilesystem()
             }, {
                 title: this.app.i18n.gettext('IMAP'),
                 disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),

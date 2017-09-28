@@ -35,31 +35,38 @@ class MailFiler_Model_Node extends Tinebase_Model_Tree_Node
     protected static $_sortExternalMapping = array(
         'subject'       => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'from_email'    => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'from_name'     => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'sender'        => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'received'      => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'sent'          => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
         'to_flat'       => array(
             'table'         => 'mailfiler_message',
-            'on'            => 'tree_nodes.id = mailfiler_message.node_id'
+            'on'            => 'tree_nodes.id = mailfiler_message.node_id',
+            'fieldCallback' => array(self::class, 'addMin'),
         ),
     );
 
@@ -75,5 +82,14 @@ class MailFiler_Model_Node extends Tinebase_Model_Tree_Node
     {
         $this->_validators['message'] = array(Zend_Filter_Input::ALLOW_EMPTY => true);
         parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+
+    /**
+     * @param string $val
+     * @return string
+     */
+    public static function addMin($val)
+    {
+        return 'MIN(' . $val . ')';
     }
 }

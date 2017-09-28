@@ -185,8 +185,8 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         );
         $this->_setPwPolicies($policies);
         
-        $this->_assertPolicy('nOve!ry1leverPw2ä', 'pwPolicyOnlyASCII|pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers');
-        $this->_assertPolicy('', 'pwPolicyMinLength');
+        $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
+        $this->_assertPolicy('', 'Minimum length');
     }
     
     /**
@@ -236,10 +236,10 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->_setPwPolicies(array(
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => TRUE
         ));
-        $this->_assertPolicy('sclever', 'pwPolicyForbidUsername');
-        $this->_assertPolicy('clever', 'pwPolicyForbidUsername');
-        $this->_assertPolicy('cle', 'pwPolicyForbidUsername');
-        $this->_assertPolicy('ver', 'pwPolicyForbidUsername');
+        $this->_assertPolicy('sclever', 'Forbid part of username');
+        $this->_assertPolicy('clever', 'Forbid part of username');
+        $this->_assertPolicy('cle', 'Forbid part of username');
+        $this->_assertPolicy('ver', 'Forbid part of username');
         $this->_assertPolicy('sClever123!', '', TRUE); // valid
 
         // skip this test for AD backends because it has some strict pws policies
