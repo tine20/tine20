@@ -143,7 +143,9 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
-            this.postMessage('update', response.responseText);
+            if (! options.suppressBusEvents) {
+                this.postMessage('update', response.responseText);
+            }
             return [this.recordReader(response)];
         };
         
@@ -216,8 +218,10 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
-            // do we need to distingush create/update?
-            this.postMessage('update', response.responseText);
+            if (! options.suppressBusEvents) {
+                // do we need to distingush create/update?
+                this.postMessage('update', response.responseText);
+            }
             return [this.recordReader(response)];
         };
         
@@ -276,9 +280,11 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             var _ = window.lodash,
                 me = this;
 
-            _.each(records, function(record) {
-                me.postMessage('delete', record.data);
-            });
+            if (! options.suppressBusEvents) {
+                _.each(records, function (record) {
+                    me.postMessage('delete', record.data);
+                });
+            }
         };
 
         // increase timeout as this can take a long time (2 mins)
@@ -513,7 +519,6 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
 
     /**
      * posts message about record crud action on central message bus
-     *
      * NOTE: we don't use the Ext internal write event as:
      *       a) to deal with cross window issues we only publish bare data
      *       b) to be able mix with other libraries

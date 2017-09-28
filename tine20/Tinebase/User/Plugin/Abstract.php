@@ -159,11 +159,12 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     protected function _getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
     {
+        $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
         if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
             $emailUsername = $user->accountEmailAddress;
         } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
             $emailUsername = $user->getId() . '@' . $this->_config['instanceName'];
-        } else if (isset($this->_config['domain']) && $this->_config['domain'] !== null) {
+        } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
             $emailUsername = $this->_appendDomain($user->accountLoginName);
         } else if ($alternativeLoginName !== null) {
             $emailUsername = $emailAddress;

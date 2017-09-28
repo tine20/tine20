@@ -789,7 +789,7 @@ class Tinebase_FileSystem implements
             }
         }
 
-        if (null === $localQuota) {
+        if (null === $localQuota && $total > 0) {
             $localQuota = $total;
             $localSize = $totalUsage;
         }
@@ -797,10 +797,10 @@ class Tinebase_FileSystem implements
         return array(
             'localQuota'        => $localQuota,
             'localUsage'        => $localSize,
-            'localFree'         => $localQuota > $localSize ? $localQuota - $localSize : 0,
+            'localFree'         => $localQuota !== null && $localQuota > $localSize ? $localQuota - $localSize : 0,
             'effectiveQuota'    => $effectiveQuota,
             'effectiveUsage'    => $effectiveUsage,
-            'effectiveFree'     => $effectiveFree,
+            'effectiveFree'     => $effectiveFree < 0 ? 0 : $effectiveFree,
         );
     }
 

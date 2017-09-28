@@ -111,10 +111,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * add Tinebase_Record_Interface like object to internal list (it is not inserted if record is already in set)
      *
      * @param Tinebase_Record_Interface $_record
-     * @param integer $_index
      * @return int index in set of inserted record or index of existing record
      */
-    public function addRecord(Tinebase_Record_Interface $_record, $_index = NULL)
+    public function addRecord(Tinebase_Record_Interface $_record)
     {
         if (! $_record instanceof $this->_recordClass) {
             throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class ('
@@ -131,7 +130,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         $this->_listOfRecords[] = $_record;
         end($this->_listOfRecords);
-        $index = ($_index !== NULL) ? $_index : key($this->_listOfRecords);
+        $index = key($this->_listOfRecords);
         
         // maintain indices
         if ($recordId) {
