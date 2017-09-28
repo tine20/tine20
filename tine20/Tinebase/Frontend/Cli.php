@@ -1486,6 +1486,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
+    public function cleanAclTables()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Controller::getInstance()->cleanAclTables();
+    }
+
     public function waitForActionQueueToEmpty()
     {
         $actionQueue = Tinebase_ActionQueue::getInstance();

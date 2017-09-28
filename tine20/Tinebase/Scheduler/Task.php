@@ -451,6 +451,29 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_FileSystem::recalculateRevisionSize and recalculateFolderSize in scheduler.');
     }
+
+    /**
+     * add acl tables cleanup task to scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addAclTableCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+            return;
+        }
+
+        $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_Controller',
+            'action'        => 'cleanAclTables',
+        ));
+
+        $_scheduler->addTask('Tinebase_AclTablesCleanup', $task);
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_Controller::cleanAclTables in scheduler.');
+    }
     
     /**
      * run requests

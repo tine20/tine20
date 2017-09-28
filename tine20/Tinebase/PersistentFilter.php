@@ -83,7 +83,8 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
         $this->_backend = new Tinebase_PersistentFilter_Backend_Sql();
         $this->_grantsBackend = new Tinebase_Backend_Sql_Grants(array(
             'modelName' => $this->_grantsModel,
-            'tableName' => 'filter_acl'
+            'tableName' => 'filter_acl',
+            'recordTable' => 'filter'
         ));
     }
 

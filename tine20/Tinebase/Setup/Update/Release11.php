@@ -57,4 +57,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release9->update_13();
         $this->setApplicationVersion('Tinebase', '11.4');
     }
+
+    /**
+     * update to 11.5
+     *
+     * add acl table cleanup task
+     */
+    public function update_4()
+    {
+        $release9 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release9->update_46();
+        $this->setApplicationVersion('Tinebase', '11.5');
+    }
 }
