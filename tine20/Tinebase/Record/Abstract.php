@@ -497,7 +497,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         if ($_recursive) {
             foreach ($recordArray as $property => $value) {
-                if ($this->_hasToArray($value)) {
+                if (is_object($value) && method_exists($value, 'toArray')) {
                     $recordArray[$property] = $value->toArray();
                 }
             }
