@@ -186,16 +186,21 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
 
     /**
      * test getCreateFile
-     * 
+     *
+     * @param boolen $_useNumericId
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreateFile()
+    public function testCreateFile($_useNumericId = false)
     {
         $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
-        
-        $id = Tinebase_Record_Abstract::generateUID();
+
+        if (true === $_useNumericId) {
+            $id = (string)rand(10000, 100000000);
+        } else {
+            $id = Tinebase_Record_Abstract::generateUID();
+        }
         
         $etag = $container->createFile("$id.ics", $vcalendarStream);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
@@ -422,5 +427,20 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
         
         return $vcalendar;
+    }
+
+    /**
+     * this test will test for event with a numeric id, which caused issues with postgres
+     * see https://forge.tine20.org/view.php?id=13494
+     */
+    public function testGetChanges()
+    {
+        // create an event with numeric id -> potential postgres issue, fixed in \Calendar_Backend_Sql::getUidOfBaseEvents
+        $event = $this->testCreateFile(true);
+
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        $result = $container->getChanges('0');
+
+        static::assertTrue(isset($result['create'][$event->getRecord()->uid]));
     }
 }
