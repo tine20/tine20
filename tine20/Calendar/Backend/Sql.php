@@ -963,6 +963,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             return array();
         }
 
+        array_walk($eventIds, function (&$val) { if (!is_string($val)) { $val = (string)$val; }});
+
         // we might want to return is_deleted = true here! so no condition to filter deleted events!
         $select = $this->_db->select()
             ->from($this->_tablePrefix . $this->_tableName, 'uid')
