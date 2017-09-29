@@ -104,6 +104,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         parent::tearDown();
 
         if (count($this->_rmDir) > 0) {
+            Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+            Tinebase_FileSystem::getInstance()->resetBackends();
             foreach ($this->_rmDir as $dir) {
                 $this->_getUit()->deleteNodes($dir);
             }
@@ -546,6 +548,62 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
         
         return $filepaths;
+    }
+
+    public function testQuotaFail()
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $orgQuotaConfig = clone $quotaConfig;
+        $applicationController = Tinebase_Application::getInstance();
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+        $tinebaseState = &$tinebaseApplication->xprops('state');
+        $orgSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
+        $orgRevisionSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+        try {
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 10000000;
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 10000000;
+            $applicationController->updateApplication($tinebaseApplication);
+            $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1;
+
+            $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+            $this->_rmDir[] = $sharedContainerNode['path'];
+
+            $filepaths = array(
+                $sharedContainerNode['path'] . '/file1',
+            );
+            $tempPath = Tinebase_TempFile::getTempPath();
+            $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+            file_put_contents($tempPath, 'someData');
+
+            // create empty file
+            $result = $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE);
+
+            // we need to commit here...
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            // now add data
+            try {
+                $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds,
+                    true);
+                static::fail('quota should be exceeded, but createNodes succeeded');
+            } catch (Tinebase_Exception_Record_NotAllowed $terna) {}
+
+            // check file is there but empty
+            $node = $this->_getUit()->getNode($result[0]['id']);
+
+            static::assertTrue(empty($node['revision']) && empty($node['revision_size']) && empty($node['hash']) &&
+                empty($node['size']), print_r($node, true));
+
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $orgQuotaConfig;
+            $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+            $tinebaseState = &$tinebaseApplication->xprops('state');
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = $orgSize;
+            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = $orgRevisionSize;
+            $applicationController->updateApplication($tinebaseApplication);
+        }
     }
 
 
