@@ -69,4 +69,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release9->update_46();
         $this->setApplicationVersion('Tinebase', '11.5');
     }
+
+    /**
+     * update to 11.6
+     *
+     * fix pgsql index creation issue (again! as it did not work in the previous CE release)
+     */
+    public function update_5()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_13();
+        $this->setApplicationVersion('Tinebase', '11.6');
+    }
 }
