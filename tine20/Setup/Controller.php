@@ -1081,7 +1081,7 @@ class Setup_Controller
     public function saveAuthentication($_authenticationData)
     {
         if ($this->isInstalled('Tinebase')) {
-            // NOTE: Tinebase_Setup_Initialiser calls this function again so
+            // NOTE: Tinebase_Setup_Initialize calls this function again so
             //       we come to this point on initial installation _and_ update
             $this->_updateAuthentication($_authenticationData);
         } else {

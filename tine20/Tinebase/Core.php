@@ -758,8 +758,10 @@ class Tinebase_Core
                         break;
                         
                     case 'Redis':
-                        $host = $config->caching->host ? $config->caching->host : ($config->caching->redis->host ? $config->caching->redis->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port : ($config->caching->redis->port ? $config->caching->redis->port : 6379);
+                        $host = $config->caching->host ? $config->caching->host :
+                            ($config->caching->redis && $config->caching->redis->host ? $config->caching->redis->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port :
+                            ($config->caching->redis && $config->caching->redis->port ? $config->caching->redis->port : 6379);
                         if ($config->caching && $config->caching->prefix) {
                             $prefix = $config->caching->prefix;
                         } else if ($config->caching && $config->caching->redis && $config->caching->redis->prefix) {
