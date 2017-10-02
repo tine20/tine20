@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add 'getTitleTranslation' function?
@@ -19,6 +19,8 @@
  */
 class Tinebase_Application
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
     /**
      * application enabled
      *
@@ -50,6 +52,16 @@ class Tinebase_Application
      * @var Tinebase_Backend_Sql
      */
     protected $_backend;
+
+    /**
+     * @var bool
+     */
+    protected $_omitModLog = false;
+
+    /**
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_Application';
     
     /**
      * the constructor
@@ -87,6 +99,14 @@ class Tinebase_Application
         }
         
         return self::$instance;
+    }
+
+    /**
+     * @param bool $boolean
+     */
+    public function omitModLog($boolean)
+    {
+        $this->_omitModLog = (bool)$boolean;
     }
     
     /**
@@ -136,7 +156,8 @@ class Tinebase_Application
         if (!$application) {
             throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
-        
+
+        /** @var Tinebase_Model_Application $application */
         return $application;
     }
     
@@ -327,7 +348,10 @@ class Tinebase_Application
         $application = $this->_getBackend()->create($application);
         
         $this->resetClassCache();
-        
+
+        $this->_writeModLog($application, null);
+
+        /** @var Tinebase_Model_Application $application */
         return $application;
     }
     
@@ -483,7 +507,8 @@ class Tinebase_Application
         $result = $this->_getBackend()->update($_application);
         
         $this->resetClassCache();
-        
+
+        /** @var Tinebase_Model_Application $result */
         return $result;
     }
     
@@ -659,5 +684,30 @@ class Tinebase_Application
             'appName'   => $appName,
             'modelName' => $modelName
         );
+    }
+
+    /**
+     * apply modification logs from a replication master locally
+     *
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @throws Tinebase_Exception
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+
+        switch ($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                /** @var Tinebase_Model_Application $record */
+                $record = new $model($diff->diff);
+
+                Setup_Controller::getInstance()->installApplications([$record->name],
+                    [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
+                break;
+
+            default:
+                throw new Tinebase_Exception('unsupported Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+        }
     }
 }

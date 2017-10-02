@@ -1344,7 +1344,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if ($currentRecordType !== $modification->record_type || !isset($controller)) {
                     $currentRecordType = $modification->record_type;
                     if (!isset($controllerCache[$modification->record_type])) {
-                        $controller = Tinebase_Core::getApplicationInstance($modification->record_type);
+                        $controller = Tinebase_Core::getApplicationInstance($modification->record_type, '', true);
                         $controllerCache[$modification->record_type] = $controller;
                     } else {
                         $controller = $controllerCache[$modification->record_type];

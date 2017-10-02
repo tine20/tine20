@@ -5,11 +5,10 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- 
  * @package     Setup
  */
 class Setup_Backend_Schema_Table_Factory
@@ -17,8 +16,9 @@ class Setup_Backend_Schema_Table_Factory
   /**
      * factory function to return a selected 
      *
-     * @param string $type
-     * @return object
+     * @param string $_type
+     * @param string $_definition
+     * @return Setup_Backend_Schema_Table_Abstract
      */
     static public function factory($_type, $_definition)
     {
@@ -27,6 +27,7 @@ class Setup_Backend_Schema_Table_Factory
             $_type = 'Xml';
         }
         $className = 'Setup_Backend_Schema_Table_' . ucfirst($_type);
+        /** @var Setup_Backend_Schema_Table_Abstract $instance */
         $instance = new $className($_definition);
                       
         return $instance;
@@ -35,8 +36,8 @@ class Setup_Backend_Schema_Table_Factory
     /**
      * returns default simple record table
      *
-     * @param $tablename
-     * @return object
+     * @param string $tablename
+     * @return Setup_Backend_Schema_Table_Abstract
      */
     static public function getSimpleRecordTable($tablename)
     {
