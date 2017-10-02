@@ -16,8 +16,8 @@
  * @property string id
  * @property string start
  * @property string limit
- * @property string sort
- * @property string dir
+ * @property string|array sort
+ * @property string|array dir
  */
 class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 {
@@ -43,11 +43,12 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         'limit'                => array('allowEmpty'    => true,  
                                         'Int',
                                         'default'       => 0            ),
+        // can be array for multiple sort rows
         'sort'                 => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
+        // can be array of sort dirs for multiple sort rows
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
-                                        array('InArray', array('ASC', 'DESC')),
                                         'default'       => 'ASC'        )
     );
     
@@ -99,8 +100,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     {
         if (is_array($this->sort)) {
             $order = array();
-            foreach ($this->sort as $sort) {
-                $order[] = $sort . ' ' . $this->dir;
+            foreach ($this->sort as $index => $sort) {
+                $order[] = $sort . ' ' . (is_array($this->dir)
+                        ? $this->dir[$index]
+                        : $this->dir
+                    );
             }
         } else {
             $order = array($this->sort . ' ' . $this->dir);

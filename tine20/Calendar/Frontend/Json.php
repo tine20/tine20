@@ -725,7 +725,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $contactFilter[] = $filters['userFilter'];
             }
             $contactPaging = $paging;
-            $contactPaging['sort'] = 'n_fileas';
+            $contactPaging['sort'] = array('type', 'n_fileas');
+            $contactPaging['dir'] = array('DESC', 'ASC');
             $result[Calendar_Model_Attender::USERTYPE_USER] = $addressBookFE->searchContacts($contactFilter, $contactPaging);
         }
 
