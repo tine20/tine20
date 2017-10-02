@@ -49,6 +49,24 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
     
     // private
     doCall : function(c, m, args) {
+        var promise = new Promise(function(fulfill, reject) {
+            var cb = args[m.len];
+            if (! Ext.isFunction(cb)) {
+                cb = Ext.emptyFn;
+                args.push(cb);
+                args.push(window);
+
+            }
+
+            args[m.len] = cb.createSequence(function(result, e) {
+                if (e.status == 'failure') {
+                    reject(e);
+                } else {
+                    fulfill(result);
+                }
+            });
+        });
+
         // support named/hashed parameters e.g. from DirectProxy
         if (args[args.length-1].paramsAsHash) {
             var o = args.shift();
@@ -57,7 +75,9 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
             }
         }
         
-        return Ext.ux.direct.JsonRpcProvider.superclass.doCall.call(this, c, m, args);
+        Ext.ux.direct.JsonRpcProvider.superclass.doCall.call(this, c, m, args);
+
+        return promise;
     },
     
     // private
@@ -94,7 +114,26 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
             id: t.tid
         };
     },
-    
+
+    // private
+    createMethod : function(c, m){
+        var f;
+        if(!m.formHandler){
+            f = function(){
+                return this.doCall(c, m, Array.prototype.slice.call(arguments, 0));
+            }.createDelegate(this);
+        }else{
+            f = function(form, callback, scope){
+                return this.doForm(c, m, form, callback, scope);
+            }.createDelegate(this);
+        }
+        f.directCfg = {
+            action: c,
+            method: m
+        };
+        return f;
+    },
+
     // private
     onData: function(opt, success, xhr) {
         var rs = [].concat(Ext.decode(xhr.responseText));
