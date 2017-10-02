@@ -995,6 +995,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_inspectAfterCreate($result, $_record);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
+                . ' Created new record in ' . $this->_tableName . ' with id ' . $_record->getId()
+            );
+
         } catch(Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
