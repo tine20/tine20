@@ -233,7 +233,10 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             id: 'summary',
             header: app.i18n._("Summary"),
             width: 200,
-            dataIndex: 'summary'
+            dataIndex: 'summary',
+            renderer: function(summary, metadata, event) {
+                return event.getTitle();
+            }
         }, {
             id: 'location',
             header: app.i18n._("Location"),

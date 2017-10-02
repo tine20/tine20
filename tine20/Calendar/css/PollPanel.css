@@ -1,0 +1,22 @@
+.cal-polls-set-definite-action {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-important.png);
+}
+.cal-pollpanel-alternativeevents-currentevent .x-grid3-cell-inner {
+    font-weight: bold;
+}
+
+.cal-pollpanel-alternativeevents-statustoken {
+    padding: 2px;
+    border-radius: 3px;
+    background-color: #dfe8f6;
+    margin-right: 2px;
+}
+
+.cal-pollpanel-alternativeevents-statuscount {
+    margin-left: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-weight: bolder;
+    border-radius: 3px;
+    /*background-color: white;*/
+}

@@ -1768,27 +1768,25 @@ class Setup_Controller
                 }
             }
 
-            // do we have modelconfig + doctrine
-            else {
-                $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
-                $models = $application->getModels(true /* MCv2only */);
+            // do modelconfig + doctrine
+            $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
+            $models = $application->getModels(true /* MCv2only */);
 
-                if (count($models) > 0) {
-                    // create tables using doctrine 2
-                    Setup_SchemaTool::createSchema($_xml->name, $models);
+            if (count($models) > 0) {
+                // create tables using doctrine 2
+                Setup_SchemaTool::createSchema($_xml->name, $models);
 
-                    // adopt to old workflow
-                    /** @var Tinebase_Record_Abstract $model */
-                    foreach ($models as $model) {
-                        $modelConfiguration = $model::getConfiguration();
-                        $createdTables[] = (object)array(
-                            'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                            'version' => $modelConfiguration->getVersion(),
-                        );
-                    }
+                // adopt to old workflow
+                /** @var Tinebase_Record_Abstract $model */
+                foreach ($models as $model) {
+                    $modelConfiguration = $model::getConfiguration();
+                    $createdTables[] = (object)array(
+                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                        'version' => $modelConfiguration->getVersion(),
+                    );
                 }
             }
-    
+
             $application = new Tinebase_Model_Application(array(
                 'name'      => (string)$_xml->name,
                 'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,

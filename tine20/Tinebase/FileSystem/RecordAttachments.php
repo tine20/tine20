@@ -178,7 +178,15 @@ class Tinebase_FileSystem_RecordAttachments
             : new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', (array)$record->attachments, TRUE);
         
         $attachmentDiff = $currentAttachments->diff($attachmentsToSet);
-        
+
+        foreach ($attachmentDiff->removed as $removed) {
+            $this->_fsController->deleteFileNode($removed);
+        }
+
+        foreach ($attachmentDiff->modified as $modified) {
+            $this->_fsController->update($attachmentsToSet->getById($modified->getId()));
+        }
+
         foreach ($attachmentDiff->added as $added) {
             try {
                 $this->addRecordAttachment($record, $added->name, $added);
@@ -191,14 +199,6 @@ class Tinebase_FileSystem_RecordAttachments
                     ' Could not add new attachment ' . print_r($added->toArray(), TRUE) . ' to record: ' . print_r($record->toArray(), TRUE));
                 Tinebase_Exception::log($tenf);
             }
-        }
-        
-        foreach ($attachmentDiff->removed as $removed) {
-            $this->_fsController->deleteFileNode($removed);
-        }
-        
-        foreach ($attachmentDiff->modified as $modified) {
-            $this->_fsController->update($attachmentsToSet->getById($modified->getId()));
         }
     }
     

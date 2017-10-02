@@ -188,6 +188,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const TENTATIVE_NOTIFICATIONS_FILTER = 'filter';
 
     /**
+     * @var string
+     */
+    const POLL_MUTE_ALTERNATIVES_NOTIFICATIONS = 'pollMuteAlternativesNotifications';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -483,6 +488,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 ),
             ),
             'default'               => array(),
+        ),
+        self::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS => array(
+            //_('Mute Event Notifications for Polls')
+            'label'                 => 'Mute Event Notifications for Polls',
+            //_('Do not send invitations notifications for alternatie events in an active poll.')
+            'description'           => 'Do not send invitations notifications for alternatie events in an active poll.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => true,
+            'default'               => false
         ),
     );
     

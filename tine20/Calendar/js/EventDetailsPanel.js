@@ -70,7 +70,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             status = null,
             recur = null;
         
-        ret += Ext.util.Format.htmlEncode(summary);
+        ret += Ext.util.Format.htmlEncode(this.record.getTitle());
         
         if (myAttenderRecord) {
             status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));

@@ -935,7 +935,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         return result;
     },
-    
+
     /**
      * disable contents not panel
      */

@@ -592,6 +592,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             Tinebase_Exception::log($zdae);
             $this->_cachedApplicationConfig = array();
             return;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // application might not yet exist
+            Tinebase_Exception::log($tenf);
+            $this->_cachedApplicationConfig = array();
+            return;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');

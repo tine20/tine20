@@ -23,7 +23,21 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Calendar';
-    
+
+    /**
+     * All configured models
+     * @var array
+     */
+    protected $_configuredModels = [
+        'Poll'
+    ];
+
+    /**
+     * @see Tinebase_Frontend_Json_Abstract
+     */
+    protected $_relatableModels = array(
+        'Calendar_Model_Resource'
+    );
     /**
      * creates an exception instance of a recurring event
      *
@@ -785,5 +799,39 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         return $result;
+    }
+
+    /**
+     * get alternative events for poll identified by its id
+     *
+     * NOTE: the event itself is a alternative events as well.
+     *
+     * @param string $pollId
+     * @return array array results -> array of events
+     */
+    public function getPollEvents($pollId)
+    {
+        $alternativeEvents = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
+
+        return [
+            'results' => $this->_multipleRecordsToJson($alternativeEvents),
+            'totalcount' => count($alternativeEvents),
+        ];
+    }
+
+    /**
+     * set the definite event by deleting all other alternative events and close poll
+     *
+     * @param array $event
+     * @return array updated event
+     */
+    public function setDefinitePollEvent($event)
+    {
+        $eventRecord = new Calendar_Model_Event(array(), TRUE);
+        $eventRecord->setFromJsonInUsersTimezone($event);
+
+        Calendar_Controller_Poll::getInstance()->setDefiniteEvent($eventRecord);
+
+        return $this->getEvent($event['id']);
     }
 }

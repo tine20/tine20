@@ -42,6 +42,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         
         Calendar_Model_Attender::resolveAttendee($_record->attendee, TRUE, $_record);
         self::resolveRrule($_record);
+        self::resolvePoll($_record);
         self::resolveOrganizer($_record);
         self::resolveGrantsOfExternalOrganizers($_record);
     }
@@ -62,6 +63,32 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
                 if ($event->rrule_constraints instanceof Calendar_Model_EventFilter) {
                     $event->rrule_constraints = $event->rrule_constraints->toArray(true);
                 }
+            }
+        }
+    }
+
+    /**
+     * resolves poll of given event(s)
+     *
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+     */
+    static public function resolvePoll($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet ?
+            $_events :
+            new Tinebase_Record_RecordSet(Calendar_Model_Event::class, array($_events));
+
+        $pollIds = array_unique($events->poll_id);
+        $polls = Calendar_Controller_Poll::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Poll::class,[
+                ['field' => 'id', 'operator' => 'in', 'value' => $pollIds],
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+            ])
+        );
+
+        foreach ($events as $event) {
+            if ($event->poll_id) {
+                $event->poll_id = $polls->getById($event->poll_id);
             }
         }
     }
@@ -129,6 +156,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
         Calendar_Convert_Event_Json::resolveRrule($_records);
+        Calendar_Convert_Event_Json::resolvePoll($_records);
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);

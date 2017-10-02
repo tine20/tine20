@@ -946,7 +946,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             throw $e;
         }
         
-        $updatedEvent = $this->get($event->getId());
+        $updatedEvent = $this->get($event->getId(), null, true, true);
 
         if ($skipEvent === false) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
@@ -1869,7 +1869,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         parent::_inspectAlarmSet($_record, $_alarm);
         $this->adoptAlarmTime($_record, $_alarm, 'time');
     }
-    
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        Calendar_Controller_Poll::getInstance()->inspectBeforeCreateEvent($_record);
+        parent::_inspectBeforeCreate($_record);
+    }
+
     /**
      * inspect update of one record
      * 
@@ -2011,6 +2023,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     break;
             }
         }
+
+        Calendar_Controller_Poll::getInstance()->inspectBeforeUpdateEvent($_record, $_oldRecord);
     }
     
     /**
@@ -2164,6 +2178,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 'deletedIds' => $_ids
             ]));
         }
+        Calendar_Controller_Poll::getInstance()->inspectDeleteEvents($events);
         
         return array_unique($_ids);
     }
@@ -2593,6 +2608,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, Tinebase_Model_Container $calendar = NULL)
     {
         // apply defaults
+        $attender->id                = null;
         $attender->user_type         = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
         $attender->cal_event_id      =  $event->getId();
         $calendar = ($calendar) ? $calendar : Tinebase_Container::getInstance()->getContainerById($event->container_id);

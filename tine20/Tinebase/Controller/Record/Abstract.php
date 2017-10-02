@@ -1059,7 +1059,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         /** @noinspection PhpUndefinedVariableInspection */
-        return $this->get($updatedRecord->getId());
+        return $this->get($updatedRecord->getId(), null, true, true);
     }
     
     /**
@@ -1977,9 +1977,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
         if (! $_record->alarms instanceof Tinebase_Record_RecordSet) {
-            $_record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+            $_record->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
         }
-        $alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
 
         // create / update alarms
         foreach ($_record->alarms as $alarm) {

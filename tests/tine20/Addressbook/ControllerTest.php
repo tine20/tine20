@@ -575,7 +575,7 @@ class Addressbook_ControllerTest extends TestCase
 
         $createdContact = $this->_instance->create($contact);
 
-        // update contact, add more notes, relations, tags, attachements, customfields
+        // update contact, add more notes, relations, tags, attachments, customfields
         /** @var Addressbook_Model_Contact $updateContact */
         $updateContact = $this->objects['updatedContact'];
         $updateContact->setId($createdContact->getId());

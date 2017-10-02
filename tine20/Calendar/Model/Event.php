@@ -139,6 +139,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         //'exrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         //'rdate'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'poll_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // calendar helper fields
 
         'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
@@ -642,7 +643,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
             $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE, $this->convertDates);
         }
-        
+
+        if (isset($_data['poll_id']) && is_array($_data['poll_id'])) {
+            $_data['poll_id'] = new Calendar_Model_Poll($_data['poll_id'], $this->bypassFilters, $this->convertDates);
+        }
+
         parent::setFromArray($_data);
     }
     
