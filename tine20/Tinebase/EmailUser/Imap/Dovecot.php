@@ -303,9 +303,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
         $select = $this->_db->select()
-        
             ->from(array($this->_userTable), $_cols)
-
             // Left Join Quotas Table
             ->joinLeft(
                 array($this->_quotasTable), // table
@@ -316,24 +314,31 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
                     $this->_propertyMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveSize'] // emailSieveSize
                 ) : array()
             )
-            
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
-        
-        // append domain if set or domain IS NULL
-        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
-            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+
+        $schema = $this->getSchema();
+        // append instancename OR domain if set or domain IS NULL
+        if (isset($this->_config['instanceName'])
+            && ! empty($this->_config['instanceName'])
+            && array_key_exists('instancename', $schema))
+        {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'instancename') . ' = ?',
+                $this->_config['instanceName']);
+        } else if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',
+                $this->_config['domain']);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
-        
+
         return $select;
     }
     
     /**
      * converts raw data from adapter into a single record / do mapping
      *
-     * @param  array                    $_data
+     * @param  array $_rawdata
      * @return Tinebase_Model_EmailUser
      */
     protected function _rawDataToRecord(array $_rawdata)
@@ -380,7 +385,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         $rawData = array();
         
         if (isset($_newUserProperties->imapUser)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
             
             foreach ($_newUserProperties->imapUser as $key => $value) {
                 $property = (isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping)) ? $this->_propertyMapping[$key] : false;
