@@ -46,17 +46,6 @@ class Tinebase_Application
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
-    
-    /**
-     * 
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_backend;
-
-    /**
-     * @var bool
-     */
-    protected $_omitModLog = false;
 
     /**
      * @var string
