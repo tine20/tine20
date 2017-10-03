@@ -2186,4 +2186,24 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '10.47');
     }
+
+    /**
+     * update to 10.48
+     *
+     * add full text index on customfield.value
+     */
+    public function update_47()
+    {
+        try {
+            $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>value</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>value</name>
+                    </field>
+                </index>'));
+            $this->setTableVersion('customfield', 4);
+        } catch (Exception $e) {}
+        $this->setApplicationVersion('Tinebase', '10.48');
+    }
 }

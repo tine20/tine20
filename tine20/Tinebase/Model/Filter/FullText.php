@@ -46,8 +46,12 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         $db = $_select->getAdapter();
 
         $not = false;
+        $in = false;
         if (false !== strpos($this->_operator, 'not')) {
             $not = true;
+        }
+        if ($this->_operator === 'in') {
+            $in = true;
         }
         if ($this->_operator !== 'contains' && $this->_operator !== 'notcontains') {
             if (true === $not) {
@@ -76,7 +80,8 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             if (false === $not && Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
 
-            $filterGroup = new Tinebase_Model_Filter_FilterGroup();
+            $filterGroup = new Tinebase_Model_Filter_FilterGroup(array(), $in ?
+                Tinebase_Model_Filter_FilterGroup::CONDITION_OR : Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
 
             foreach ($values as $value) {
                 $filter = new Tinebase_Model_Filter_Text($this->_field, $this->_operator, $value, isset($this->_options['tablename']) ? array('tablename' => $this->_options['tablename']) : array());
@@ -90,7 +95,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             $searchTerm = '';
 
             foreach ($values as $value) {
-                $searchTerm .= ($searchTerm !== '' ? ', ' : '') . '+' . $value . '*';
+                $searchTerm .= ($searchTerm !== '' ? ', ' : '') . ($in ? '' : '+') . $value . '*';
             }
 
             $_select->where('MATCH (' . $field . $db->quoteInto(') AGAINST (? IN BOOLEAN MODE)', $searchTerm));

@@ -149,29 +149,45 @@ class Inventory_JsonTest extends Inventory_TestCase
      */
     public function testSearchByCustomfield()
     {
-        $cf = $this->_getCustomField();
-        $invItem = $this->testCreateInventoryItem();
-        $invItem['customfields']['invcustom'] = 'abc';
-        $returnedRecord = $this->_json->saveInventoryItem($invItem);
-        $this->assertEquals('abc', $returnedRecord['customfields']['invcustom']);
-        
-        $filter = array(array(
-            'condition' => 'AND',
-            'filters' => array(array(
-                'field' => 'customfield',
-                'operator' => 'contains',
-                'value' => array(
-                    'cfId' => $cf->getId(),
-                    'value' => 'abc',
+        try {
+            $cf = $this->_getCustomField();
+            $invItem = $this->testCreateInventoryItem();
+            $invItem['customfields']['invcustom'] = 'abc';
+            $returnedRecord = $this->_json->saveInventoryItem($invItem);
+            $this->assertEquals('abc', $returnedRecord['customfields']['invcustom']);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = null;
+
+            $filter = array(
+                array(
+                    'condition' => 'AND',
+                    'filters' => array(
+                        array(
+                            'field' => 'customfield',
+                            'operator' => 'contains',
+                            'value' => array(
+                                'cfId' => $cf->getId(),
+                                'value' => 'abc',
+                            )
+                        )
+                    ),
+                    'id' => 'ext-comp-1222',
+                    'label' => 'Inventargegenstände'
                 )
-            )),
-            'id' => 'ext-comp-1222',
-            'label' => 'Inventargegenstände'
-        ));
-        
-        $searchResult = $this->_json->searchInventoryItems($filter, array());
-        $this->assertEquals(1, $searchResult['totalcount'], 'not found: ' . print_r($searchResult, true));
-        $this->assertEquals($filter, $searchResult['filter']);
+            );
+
+            $searchResult = $this->_json->searchInventoryItems($filter, array());
+            $this->assertEquals(1, $searchResult['totalcount'], 'not found: ' . print_r($searchResult, true));
+            $this->assertEquals($filter, $searchResult['filter']);
+        } finally {
+            if (null !== $returnedRecord && isset($returnedRecord['id'])) {
+                $this->_json->delete([$returnedRecord['id']]);
+            }
+            if (null !== $cf) {
+                Tinebase_CustomField::getInstance()->deleteCustomField($cf);
+            }
+        }
     }
     
 
