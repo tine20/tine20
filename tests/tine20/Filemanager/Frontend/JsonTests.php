@@ -382,7 +382,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         );
         $result = $this->_searchHelper(
             $filter,
-            $this->_personas['sclever']->accountDisplayName,
+            $this->_personas['sclever']->accountLoginName,
             /* $_toplevel */ false,
             /* $_checkAccountGrants */ false
         );
@@ -395,8 +395,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
         self::assertFalse($found, 'own personal node found! ' . print_r($result['results'], true));
         // check correct path resolving
-        $node = $this->_getNodeByNameFromResult($this->_personas['sclever']->accountDisplayName, $result);
-        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountDisplayName;
+        $node = $this->_getNodeByNameFromResult($this->_personas['sclever']->accountLoginName, $result);
+        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountLoginName;
         self::assertEquals($path, $node['path']);
         self::assertEquals(1, $result['totalcount'],
             'only expected sclever personal folder in result. got: ' . print_r($result['results'], true));
