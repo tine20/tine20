@@ -290,7 +290,7 @@ class Tinebase_Application
     /**
      * set application state
      *
-     * @param   array   $_applicationIds application ids to set new state for
+     * @param   string|array|Tinebase_Model_Application|Tinebase_Record_RecordSet   $_applicationIds application ids to set new state for
      * @param   string  $state the new state
      * @throws  Tinebase_Exception_InvalidArgument
      */
