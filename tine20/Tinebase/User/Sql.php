@@ -1312,7 +1312,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * returns number of current not-disabled, non-system users
      *
-     * @return number
+     * @return string
      */
     public function countNonSystemUsers()
     {
@@ -1416,6 +1416,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 $record = new Tinebase_Model_FullUser($diff->diff);
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
+                $this->_addJustEmailDomainAfterReplication($record);
                 $this->addUser($record);
                 break;
 
@@ -1435,10 +1436,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 }
 
                 if (!$diff->isEmpty()) {
+                    /** @var Tinebase_Model_FullUser $record */
                     $record = $this->getUserById($modification->record_id, 'Tinebase_Model_FullUser');
                     $currentRecord = clone $record;
                     $record->applyDiff($diff);
                     Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
+                    if (isset($diff->diff['accountEmailAddress'])) {
+                        $this->_addJustEmailDomainAfterReplication($record);
+                    }
                     $this->updateUser($record);
                 }
                 break;
@@ -1450,5 +1455,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             default:
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
         }
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     */
+    protected function _addJustEmailDomainAfterReplication(Tinebase_Model_FullUser $user)
+    {
+        if (empty($user->accountEmailAddress) || strpos($user->accountEmailAddress, '@') === false) {
+            return;
+        }
+        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
+        $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
     }
 }
