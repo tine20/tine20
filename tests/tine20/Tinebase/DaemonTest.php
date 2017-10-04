@@ -54,6 +54,9 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (! extension_loaded('redis') ) {
+            static::markTestSkipped('redis extension required for these tests');
+        }
     }
 
     protected function tearDown()
