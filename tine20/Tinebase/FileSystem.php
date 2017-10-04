@@ -2795,7 +2795,7 @@ class Tinebase_FileSystem implements
                     $otherAccount->name,
                     'Tinebase_Model_FullUser'
                 );
-                $otherAccount->name = $account->accountDisplayName;
+                $otherAccount->name = $account->accountLoginName;
             }
         }
 
