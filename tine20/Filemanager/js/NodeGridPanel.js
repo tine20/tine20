@@ -426,9 +426,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: this.app.appName + 'IconCls',
             actionUpdater: function(action) {
                 var _ = window.lodash,
-                    allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false);
+                    allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false),
+                    isVirtual = false;
 
-                action.setDisabled(!allowAdd);
+                try {
+                    isVirtual = this.currentFolderNode.attributes.nodeRecord.isVirtual();
+                } catch(e) {}
+
+                action.setDisabled(!allowAdd || isVirtual);
             }.createDelegate(this)
         };
     },

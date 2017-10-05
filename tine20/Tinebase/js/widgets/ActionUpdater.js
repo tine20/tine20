@@ -233,9 +233,7 @@
             recordGrants = _.get(records[i], this.grantsPath);
             
             for (var grant in grants) {
-                if (grants.hasOwnProperty(grant) && recordGrants && recordGrants.hasOwnProperty(grant)) {
-                    grants[grant] = grants[grant] & recordGrants[grant];
-                }
+                grants[grant] = _.get(grants, grant, false) && _.get(recordGrants, grant, false);
             }
         }
         // if calculated admin right is true, overwrite all grants with true

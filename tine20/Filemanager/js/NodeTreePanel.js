@@ -312,6 +312,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         });
 
         this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: this.recordClass,
+            evalGrants: true,
             actions: this.ctxMenu.items
         });
     },
