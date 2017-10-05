@@ -268,6 +268,21 @@ class Addressbook_JsonTest extends TestCase
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThanOrEqual(0, $contacts['totalcount'], 'getting other peoples contacts failed');
+
+        // all the way down \Tinebase_Model_Filter_FilterGroup::setFromArray
+        // \Tinebase_Model_Filter_FilterGroup::_createStandardFilterFromArray
+        // \Tinebase_Model_Filter_FilterGroup::createFilter
+        // options will be overwritten: $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array(), array('parentFilter' => $self));
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'in',   'value' => array(
+                'id'    => 'otherUsers',
+                'name'  => 'Adressbücher anderer Benutzer',
+                'path'  => '/personal'
+            ), 'options' => array('ignoreAcl' => true)),
+        );
+        $contacts1 = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertEquals(count($contacts['results']), count($contacts1['results']));
     }
 
     /**
