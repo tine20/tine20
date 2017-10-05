@@ -394,6 +394,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: this.recordClass,
             evalGrants: this.evalGrants
         });
 
