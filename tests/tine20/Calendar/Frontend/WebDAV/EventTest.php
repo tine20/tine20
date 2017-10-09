@@ -231,8 +231,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         // check rrule_until normalisation
         $record = $event->getRecord();
-        $this->assertEquals('2011-10-30 22:59:59', $record->rrule_until->toString(), 'rrule_until not normalised');
-        $this->assertEquals('2011-10-30 22:59:59', $record->rrule->until->toString(), 'rrule->until not normalised');
+        $this->assertEquals('2011-10-30 06:00:00', $record->rrule_until->toString(), 'rrule_until not normalised');
+        $this->assertEquals('2011-10-30 06:00:00', $record->rrule->until->toString(), 'rrule->until not normalised');
         
         return $event;
     }
