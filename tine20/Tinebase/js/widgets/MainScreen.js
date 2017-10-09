@@ -83,7 +83,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             split: true,
             width: 200,
             minSize: 100,
-            maxSize: 300,
             border: false,
             collapsible:true,
             collapseMode: 'mini',
