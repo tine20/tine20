@@ -1301,6 +1301,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         $dtEnd->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
 
+        // prevent unpredictable new rrule
         if ($originalDtStart->compare($dtStart) !== 0 ||
             (($orgDiff = $baseEvent->dtend->diff($baseEvent->dtstart)) &&
                 ($newDiff = $dtEnd->diff($dtStart)) &&
@@ -1313,7 +1314,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             )) {
             if (strpos($baseEvent->rrule->byday, ',') !== false ||
                 strpos($baseEvent->rrule->bymonthday, ',') !== false ) {
-                throw new Tinebase_Exception_UnexpectedValue('dont change complex stuff like that');
+                // _('The new recurrence rule is unpredictable. Please choose a valid recurrence rule')
+                throw new Tinebase_Exception_SystemGeneric('The new recurrence rule is unpredictable. Please choose a valid recurrence rule');
             }
         }
 
