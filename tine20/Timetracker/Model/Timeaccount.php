@@ -236,7 +236,18 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     )
                 )
             ),
-
+            'contract'       => array(
+                'type'                  => 'virtual',
+                'config'                => array(
+                    'type'                  => 'relation',
+                    'label'                 => 'Contract',    // _('Contract')
+                    'config'                => array(
+                        'appName'               => 'Sales',
+                        'modelName'             => 'Contract',
+                        'type'                  => 'TIME_ACCOUNT'
+                    )
+                )
+            ),
         )
     );
 
