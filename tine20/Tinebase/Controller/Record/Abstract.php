@@ -565,11 +565,7 @@ abstract class Tinebase_Controller_Record_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-            // add personal container id if container id is missing in record
-            if ($_record->has('container_id') && empty($_record->container_id)) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-                $_record->container_id = $containers[0]->getId();
-            }
+            $this->_setContainerId($_record);
 
             $_record->isValid(TRUE);
 
@@ -614,6 +610,23 @@ abstract class Tinebase_Controller_Record_Abstract
         return $this->get($createdRecord);
     }
 
+    /**
+     * sets personal container id if container id is missing in record - can be overwritten to set a different container
+     *
+     * @param $_record
+     */
+    protected function _setContainerId(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->has('container_id') && empty($_record->container_id)) {
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+            $_record->container_id = $containers[0]->getId();
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface|null $_oldRecord
+     */
     protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
     {
         $className = get_class($_record);

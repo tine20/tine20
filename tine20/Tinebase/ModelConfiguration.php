@@ -27,6 +27,7 @@
  * @property string     $recordsName Human readable name of multiple records
  * @property string     $moduleName The name of the module if it doesn't fit to the recordsName, e.g. used in frontend module tree panel
  * @property string     $containerProperty The property of the container, if any
+ * @property string     $grantsModel acl grants model
  * @property boolean    $containerUsesFilter set this to false, if no filter and grid column should be created - default is true
  * @property boolean    $hasPersonalContainer set this to false, if personal containers should be ommited - default is true
  * @property string     $titleProperty The property of the title, if any - if an array is given, the second item is the array of arguments for vsprintf, the first the format string
@@ -151,7 +152,14 @@ class Tinebase_ModelConfiguration {
      * @var string
      */
     protected $_containerProperty = NULL;
-    
+
+    /**
+     * The grants model of containers, if any
+     *
+     * @var string
+     */
+    protected $_grantsModel = 'Tinebase_Model_Grants';
+
     /**
      * set this to false, if no filter and grid column should be created
      * 
@@ -707,7 +715,7 @@ class Tinebase_ModelConfiguration {
      * @var array
     */
     protected $_frontendProperties = array(
-        'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
+        'containerProperty', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',

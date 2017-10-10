@@ -148,7 +148,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         $_records->sortByPagination($_pagination);
         
-        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, array('container_id'));
+        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, null, array('container_id'));
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;

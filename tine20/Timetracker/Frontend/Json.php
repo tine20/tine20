@@ -73,7 +73,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'Timetracker_Model_Timesheet':
                 $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
-                $_record['timeaccount_id']['account_grants'] = Timetracker_Model_TimeaccountGrants::getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
+                $_record['timeaccount_id']['account_grants'] = Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_record['timeaccount_id']);
                 $_record['timeaccount_id']['account_grants'] = $this->_resolveTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
                 Tinebase_User::getInstance()->resolveUsers($_record, 'account_id');
 
@@ -93,7 +93,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $recordArray = parent::_recordToJson($_record);
 
                 // When editing a single TA we send _ALL_ grants to the client
-                $recordArray['grants'] = Timetracker_Model_TimeaccountGrants::getTimeaccountGrants($_record)->toArray();
+                $recordArray['grants'] = Timetracker_Controller_Timeaccount::getInstance()->getRecordGrants($_record)->toArray();
                 foreach($recordArray['grants'] as &$value) {
                     switch($value['account_type']) {
                         case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
@@ -144,7 +144,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 $invoices = FALSE;
                 
-                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
+                Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
 
                 foreach ($_records as $record) {
                     $idx = $timeaccounts->getIndexById($record->timeaccount_id);
@@ -162,7 +162,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
             case 'Timetracker_Model_Timeaccount':
                 // resolve timeaccounts grants
-                Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+                Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
                 $this->_resolveTimeaccountGrants($_records);
                 break;
         }
