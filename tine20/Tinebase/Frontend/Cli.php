@@ -331,7 +331,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
 
-        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__ . '::' . Tinebase_Core::getTinebaseId());
+        $freeLock = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (! $freeLock) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Job already running.');

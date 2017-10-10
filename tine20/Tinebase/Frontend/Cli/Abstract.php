@@ -32,21 +32,6 @@ class Tinebase_Frontend_Cli_Abstract
     protected $_help = array();
 
     /**
-     * aquire a lock to prevent parallel execution in a multi server environment
-     *
-     * @param string $id
-     * @return bool
-     */
-    protected function _aquireMultiServerLock($id)
-    {
-        $result = Tinebase_Lock::aquireDBSessionLock($id);
-        if ( true === $result || null === $result ) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * echos usage information
      *
      */
