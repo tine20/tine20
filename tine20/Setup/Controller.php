@@ -717,7 +717,7 @@ class Setup_Controller
                 $required = Tinebase_Helper::convertToBytes($newValue);
                 $set = Tinebase_Helper::convertToBytes($oldValue);
                 
-                if ( $set < $required) {
+                if ($set > -1 && $set < $required) {
                     $result[] = array(
                         'key'       => $variable,
                         'value'     => FALSE,
