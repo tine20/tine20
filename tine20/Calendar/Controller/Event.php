@@ -1526,8 +1526,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $rrule->count = $idx+1;
             } else {
-                $lastBaseOccurence = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $_event->getOriginalDtStart()->subSecond(1), -1);
-                $rrule->until = $lastBaseOccurence ? $lastBaseOccurence->getOriginalDtStart() : $baseEvent->dtstart;
+                $rrule->until = $_event->getOriginalDtStart();
+                $rrule->until->subSecond(1);
             }
             $baseEvent->rrule = (string) $rrule;
             $baseEvent->exdate = $pastExdates;

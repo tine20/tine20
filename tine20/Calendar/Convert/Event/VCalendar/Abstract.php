@@ -232,9 +232,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         // repeating event properties
         if ($event->rrule) {
+            $event->rrule = $event->rrule instanceof Calendar_Model_Rrule ? $event->rrule : Calendar_Model_Rrule::getRruleFromString($event->rrule);
+            $event->rrule->setTimezone('UTC');
             if ($event->is_all_day_event == true) {
                 $vevent->add('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
-                    $dtUntil = new Tinebase_DateTime($matches[1]);
+                    $dtUntil = new Tinebase_DateTime($matches[1], 'UTC');
                     $dtUntil->setTimezone((string) Tinebase_Core::getUserTimezone());
                     
                     return 'UNTIL=' . $dtUntil->format('Ymd');

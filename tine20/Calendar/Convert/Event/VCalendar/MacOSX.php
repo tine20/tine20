@@ -187,7 +187,10 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
                 Calendar_Model_Event::CLASS_PRIVATE;
         }
 
-        // 10.10 sends UNTIL in wrong timezone for all day events
+        // 10.10 sends UNTIL in wrong timezone for all day events it sends 23:59:59 UTC - which is the next day
+        // in users timezone already. BUT the client itselfs stick to the error and shows the extra event
+        // for edit - thisandfuture this behaviour leads to double events therefore we skip the wrong event
+        // even if the client shows it
         if ($event->is_all_day_event && version_compare($this->_version, '10.10', '>=')) {
             $event->rrule = preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) use ($vevent) {
                 // refetch UNTIL from vevent and drop timepart
