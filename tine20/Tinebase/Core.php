@@ -1884,4 +1884,19 @@ class Tinebase_Core
     {
         static::$_delegatorCache = array();
     }
+
+    /**
+     * acquire a lock to prevent parallel execution in a multi server environment
+     *
+     * @param string $id
+     * @return bool
+     */
+    public static function acquireMultiServerLock($id)
+    {
+        $result = Tinebase_Lock::aquireDBSessionLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
+    }
 }
