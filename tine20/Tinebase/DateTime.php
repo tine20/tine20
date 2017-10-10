@@ -575,7 +575,21 @@ class Tinebase_DateTime extends DateTime
         parent::modify($modify);
         return $this;
     }
-    
+
+    /**
+     * apply time part of diff only
+     *
+     * @param DateInterval $diff
+     * @return Tinebase_DateTime $this
+     */
+    public function modifyTime(DateInterval $diff)
+    {
+        $timeString = $this->getClone()->add($diff)->format('H:i:s');
+        list($hours, $minutes, $seconds) = explode(':', $timeString);
+
+        return $this->setTime($hours, $minutes, $seconds);
+    }
+
     /**
      * Returns the difference between two DateTime objects
      * 

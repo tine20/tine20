@@ -64,7 +64,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @var boolean
      */
     protected $_sendNotifications = TRUE;
-    
+
+    /**
+     * skip scheduling adoptions for exdates/rrule
+     *
+     * @var bool $_skipRecurAdoptions
+     */
+    protected $_skipRecurAdoptions = false;
+
     /**
      * @see Tinebase_Controller_Record_Abstract
      * 
@@ -1585,13 +1592,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if ($this->_skipRecurAdoptions) {
+            return;
+        }
+
         // if dtstart of an event changes, we update the originator_tz, alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::getUserTimezone();
             if (! empty($_record->rrule)) {
-                $diff = $_oldRecord->dtstart->diff($_record->dtstart);
+                $diff = $_oldRecord->dtstart->getClone()->setTimezone($_oldRecord->originator_tz)
+                    ->diff($_record->dtstart->getClone()->setTimezone($_record->originator_tz));
                 $this->_updateRecurIdOfExdates($_record, $diff);
+
+                if ($_record->rrule->until instanceof Tinebase_DateTime) {
+                    $_record->rrule->until->modifyTime($diff);
+                }
             }
         }
         
@@ -1730,17 +1746,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // update exceptions
         $exceptions = $this->getRecurExceptions($_record);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
-        $exdates = array();
+
         foreach ($exceptions as $exception) {
             $exception->recurid = new Tinebase_DateTime(substr($exception->recurid, -19));
-            Calendar_Model_Rrule::addUTCDateDstFix($exception->recurid, $diff, $_record->originator_tz);
-            $exdates[] = $exception->recurid;
-            
+            $exception->recurid->modifyTime($diff);
+
             $exception->setRecurId($_record->getId());
             $this->_backend->update($exception);
         }
-        
-        $_record->exdate = $exdates;
+
+        if (is_array($_record->exdate)) {
+            foreach ($_record->exdate as $exdate) {
+                $exdate->modifyTime($diff);
+            }
+        }
+
+        $missingExdates = array_diff($exceptions->getOriginalDtStart(), (array)$_record->exdate);
+        $_record->exdate = array_merge((array)$_record->exdate, $missingExdates);
     }
     
     /**
@@ -2763,5 +2785,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $updateCount;
+    }
+
+
+    /**
+     * set/get the skipRecurAdoptions state
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function skipRecurAdoptions()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_skipRecurAdoptions', $value);
     }
 }

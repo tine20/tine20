@@ -280,7 +280,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
         return $this->_setBooleanMemberVar('_sendNotifications', $value);
     }
-    
+
     /**
      * set/get a boolean member var
      * 

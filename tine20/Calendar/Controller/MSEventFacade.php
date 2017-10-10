@@ -352,13 +352,21 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $newPersistentExceptions = $exceptions->filter('is_deleted', 0);
 
-        $migration = $this->_getExceptionsMigration($currentPersistentExceptions, $newPersistentExceptions);
+        $dtStartDiff = $_event->dtstart->getClone()->setTimezone($_event->originator_tz)
+            ->diff($currentOriginEvent->dtstart->getClone()->setTimezone($currentOriginEvent->originator_tz));
+        $migration = $this->_getExceptionsMigration($currentPersistentExceptions, $newPersistentExceptions, $dtStartDiff);
 
         $this->_eventController->delete($migration['toDelete']->getId());
-        
+
         // NOTE: we need to exclude the toCreate exdates here to not confuse computations in createRecurException!
-        $_event->exdate = array_diff($exceptions->getOriginalDtStart(), $migration['toCreate']->getOriginalDtStart());
-        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
+        $_event->exdate = array_diff($exceptions->getOriginalDtStart(), $migration['toCreate']->getOriginalDtStart($dtStartDiff));
+
+        $skipRecurAdoptions = $this->_eventController->skipRecurAdoptions(true);
+        try {
+            $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
+        } finally {
+            $this->_eventController->skipRecurAdoptions($skipRecurAdoptions);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Found ' . count($migration['toCreate']) . ' exceptions to create and ' . count($migration['toUpdate']) . ' to update.');
@@ -688,10 +696,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @param Tinebase_Record_RecordSet $_events
      * @param array                     $_dtstarts
      */
-    protected function _filterEventsByDTStarts($_events, $_dtstarts)
+    protected function _filterEventsByDTStarts($_events, $_dtstarts, $dtStartDiff=null)
     {
         $filteredSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $allDTStarts = $_events->getOriginalDtStart();
+        $allDTStarts = $_events->getOriginalDtStart($dtStartDiff);
         
         $existingIdxs = array_intersect($allDTStarts, $_dtstarts);
         
@@ -945,8 +953,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * 
      * @param Tinebase_Record_RecordSet $_currentPersistentExceptions
      * @param Tinebase_Record_RecordSet $_newPersistentExceptions
+     * @param DateInterval              $dtStartDiff
      */
-    protected function _getExceptionsMigration($_currentPersistentExceptions, $_newPersistentExceptions)
+    protected function _getExceptionsMigration($_currentPersistentExceptions, $_newPersistentExceptions, $dtStartDiff)
     {
         $migration = array();
         
@@ -956,16 +965,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // get dtstarts
         $currDtStart = $_currentPersistentExceptions->getOriginalDtStart();
-        $newDtStart = $_newPersistentExceptions->getOriginalDtStart();
-        
+        $newDtStart = $_newPersistentExceptions->getOriginalDtStart($dtStartDiff);
+
         // compute migration in terms of dtstart
         $toDeleteDtStart = array_diff($currDtStart, $newDtStart);
         $toCreateDtStart = array_diff($newDtStart, $currDtStart);
         $toUpdateDtSTart = array_intersect($currDtStart, $newDtStart);
         
         $migration['toDelete'] = $this->_filterEventsByDTStarts($_currentPersistentExceptions, $toDeleteDtStart);
-        $migration['toCreate'] = $this->_filterEventsByDTStarts($_newPersistentExceptions, $toCreateDtStart);
-        $migration['toUpdate'] = $this->_filterEventsByDTStarts($_newPersistentExceptions, $toUpdateDtSTart);
+        $migration['toCreate'] = $this->_filterEventsByDTStarts($_newPersistentExceptions, $toCreateDtStart, $dtStartDiff);
+        $migration['toUpdate'] = $this->_filterEventsByDTStarts($_newPersistentExceptions, $toUpdateDtSTart, $dtStartDiff);
         
         // get ids for toUpdate
         $idxIdMap = $this->_filterEventsByDTStarts($_currentPersistentExceptions, $toUpdateDtSTart)->getId();
@@ -977,7 +986,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 $migration['toUpdate']->removeRecord($toUpdate);
             }
         }
-        
+
         return $migration;
     }
     

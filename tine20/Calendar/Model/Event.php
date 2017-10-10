@@ -333,7 +333,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * 
      * @return Tinebase_DateTime
      */
-    public function getOriginalDtStart()
+    public function getOriginalDtStart($dtStartDiff=null)
     {
         $origianlDtStart = $this->dtstart instanceof stdClass ? clone $this->dtstart : $this->dtstart;
         
@@ -349,7 +349,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $origianlDtStart = new Tinebase_DateTime($origianlDtStartString, 'UTC');
             }
         }
-        
+
+        if ($dtStartDiff instanceof DateInterval) {
+            $origianlDtStart->modifyTime($dtStartDiff);
+        }
         return $origianlDtStart;
     }
     

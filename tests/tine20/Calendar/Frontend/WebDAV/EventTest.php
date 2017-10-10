@@ -553,6 +553,60 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals('New Event', $record->summary);
     }
 
+    public function testPutEventFromMacOsXSierraThisAndFuture()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        // create series with exceptions
+        $id = '025F3A29-25F7-4BAD-8F8D-BD3EBD2BDB21';
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_calendar_10.12_THISANDFUTURE.ics');
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+
+
+        // NOTE: THISANDFUTURE update (comes with two requests)
+
+        // first request is the future part of the series after the split (keeps old uid)
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_calendar_10.12_THISANDFUTURE-update-THISANDFUTURE.ics', 'r');
+        $event->put($vcalendarStream);
+        $futurerecord = $event->getRecord();
+        $futurerecord->exdate->sort('dtstart');
+
+        // second request is the past part of the series with a new uid
+        $id = 'FB8150C1-E7C6-4758-9E92-BB8BCA48F808';
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_calendar_10.12_THISANDFUTURE-past.ics');
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        $pastrecord = $event->getRecord();
+
+        $this->assertCount(2, $futurerecord->exdate);
+        $this->assertEquals('025F3A29-25F7-4BAD-8F8D-BD3EBD2BDB21-2017-10-21 00:15:00', $futurerecord->exdate[0]->recurid);
+        $this->assertEquals('025F3A29-25F7-4BAD-8F8D-BD3EBD2BDB21-2017-11-17 01:15:00', $futurerecord->exdate[1]->recurid);
+
+        $this->assertCount(1, $pastrecord->exdate);
+        $this->assertEquals('FB8150C1-E7C6-4758-9E92-BB8BCA48F808-2017-10-16 23:15:00', $pastrecord->exdate[0]->recurid);
+    }
+
+    public function testPutEventFromMacOsXSierraThisAndFutureOverDST()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        // create series with exceptions
+        $id = 'F8224438-A3ED-42DB-90BB-ACF20C6449F5';
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_calendar_10.12_TEST-THISANDFUTURE-OVER-DST.ics');
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+
+
+        // first request is the future part of the series after the split (keeps old uid)
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_calendar_10.12_TEST-THISANDFUTURE-OVER-DST-update-THISANDFUTURE-after-DST-bound.ics', 'r');
+        $event->put($vcalendarStream);
+        $futurerecord = $event->getRecord();
+        $futurerecord->exdate->sort('dtstart');
+
+        $this->assertCount(1, $futurerecord->exdate);
+        $this->assertEquals('F8224438-A3ED-42DB-90BB-ACF20C6449F5-2017-11-04 19:00:00', $futurerecord->exdate[0]->recurid);
+
+    }
+
+
     /**
      * test updating existing event when attendee or organizer email changed in the meantime
      */
