@@ -716,7 +716,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected function _convertDateTimeToString(&$_toConvert, $_format)
     {
         //$_format = "Y-m-d H:i:s";
-        foreach ($_toConvert as $field => &$value) {
+        foreach ($_toConvert as $field => $value) {
             if (! $value) {
                 if (in_array($field, $this->_datetimeFields)) {
                     $_toConvert[$field] = NULL;
@@ -724,7 +724,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif ($value instanceof DateTime) {
                 $_toConvert[$field] = $value->format($_format);
             } elseif (is_array($value)) {
-                $this->_convertDateTimeToString($value, $_format);
+                $this->_convertDateTimeToString($_toConvert[$field], $_format);
             }
         }
     }
