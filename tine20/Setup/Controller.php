@@ -634,15 +634,15 @@ class Setup_Controller
             'role_accounts' => '',
         );
 
-        foreach ($tables as $table => &$oldVersion) {
-            $oldVersion = $updater->getTableVersion($table);
+        foreach ($tables as $table => &$oldTblVersion) {
+            $oldTblVersion = $updater->getTableVersion($table);
         }
 
         $updater->update_26();
         $updater->update_32();
 
-        foreach ($tables as $table => $oldVersion) {
-            $updater->setTableVersion($table, $oldVersion);
+        foreach ($tables as $table => $oldTblVersion) {
+            $updater->setTableVersion($table, $oldTblVersion);
         }
 
         $updater->setApplicationVersion('Tinebase', $oldVersion);
