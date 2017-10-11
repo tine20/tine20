@@ -81,4 +81,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release9->update_13();
         $this->setApplicationVersion('Tinebase', '11.6');
     }
+
+    /**
+     * update to 11.7
+     *
+     * add full text index to customfield
+     */
+    public function update_6()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_47();
+        $this->setApplicationVersion('Tinebase', '11.7');
+    }
 }

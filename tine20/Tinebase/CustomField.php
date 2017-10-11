@@ -764,11 +764,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param bool $_getRelations (unused)
      * @param boolean $_onlyIds (unused)
      * @param string $_action
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet|array
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $result = $this->_backendValue->search($_filter, $_pagination);
+        $result = $this->_backendValue->search($_filter, $_pagination, $_onlyIds ? Tinebase_Backend_Sql_Abstract::IDCOL
+            : Tinebase_Backend_Sql_Abstract::ALLCOL);
         return $result;
     }
     

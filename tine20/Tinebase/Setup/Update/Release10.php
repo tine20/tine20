@@ -2187,9 +2187,30 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.48
+     *
+     * add full text index on customfield.value
      */
     public function update_47()
+    {
+        try {
+            $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>value</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>value</name>
+                    </field>
+                </index>'));
+            $this->setTableVersion('customfield', 4);
+        } catch (Exception $e) {
+        }
+        $this->setApplicationVersion('Tinebase', '10.48');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_48()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }
