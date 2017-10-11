@@ -603,7 +603,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * delete an user in ldap backend
      *
-     * @param int $_userId
+     * @param string|Tinebase_Model_User $_userId
      */
     public function deleteUserInSyncBackend($_userId)
     {
