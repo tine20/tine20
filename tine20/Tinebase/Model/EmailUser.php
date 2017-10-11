@@ -41,7 +41,7 @@
 class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract 
 {
    
-    protected $_identifier = 'emailUID';
+    protected $_identifier = 'emailUserId';
     
     /**
      * application the record belongs to
