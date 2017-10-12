@@ -262,8 +262,9 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             period: this.calPanel.getTopToolbar().periodPicker.getPeriod(),
             updatePeriod: this.updatePeriod.createDelegate(this)
         }, config));
-        
-        this.calPanel.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
+
+        // NOTE: this is already done by the view itself - don't have dublicate events in mainscreen!
+        // this.calPanel.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
         this.calPanel.view.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
         this.calPanel.view.getSelectionModel().relayEvents(view.getSelectionModel(), 'selectionchange');
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
