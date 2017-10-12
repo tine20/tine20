@@ -92,15 +92,12 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
     }
 
     /**
-     * @param $record
+     * @param Tinebase_Record_Interface $record
      * @return string
      */
-    protected function _getContainerName($record)
+    protected function _getContainerName(Tinebase_Record_Interface $record)
     {
-        $containerName = $record->title;
-        if (!empty($record->number)) {
-            $containerName = $record->number . ' ' . $containerName;
-        }
+        $containerName = $record->getTitle();
         return $containerName;
     }
 
