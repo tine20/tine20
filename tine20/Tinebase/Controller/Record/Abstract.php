@@ -618,6 +618,12 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _setContainerId(Tinebase_Record_Interface $_record)
     {
         if ($_record->has('container_id') && empty($_record->container_id)) {
+            $configuration = $_record->getConfiguration();
+            if ($configuration && ! $configuration->hasPersonalContainer) {
+                // as model has no personal containers, we can't use that as default container
+                throw new Tinebase_Exception_SystemGeneric('Container must be given');
+            }
+
             $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
             $_record->container_id = $containers[0]->getId();
         }
