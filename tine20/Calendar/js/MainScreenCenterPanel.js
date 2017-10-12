@@ -1385,8 +1385,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onKeyDown: function (e) {
         if (e.ctrlKey) {
-            switch (e.getKey()) 
-            {
+            switch (e.getKey()) {
             case e.A:
                 // select only current page
                 //this.grid.getSelectionModel().selectAll(true);
@@ -1406,6 +1405,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 break;
             }
         } else if (e.getKey() === e.DELETE) {
+            e.stopEvent();
             if (! this.action_deleteRecord.isDisabled()) {
                 this.onDeleteRecords.call(this);
             }

@@ -40,7 +40,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? this.plugins.concat(Ext.decode(this.initialConfig.plugins)) : [];
         
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
-        
+
         this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu', 'keydown']);
     },
     
