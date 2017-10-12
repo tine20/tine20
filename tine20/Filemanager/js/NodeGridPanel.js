@@ -745,9 +745,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             targetNode = grid.currentFolderNode,
             gridStore = grid.store,
             rowIndex = false,
+            me = this,
             targetFolderPath = grid.currentFolderNode.attributes.path,
             addToGrid = true,
-            dropAllowed = false,
             nodeRecord = null;
 
         if(event && event.getTarget()) {
@@ -779,47 +779,65 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var files = fileSelector.getFileList();
 
-        var filePathsArray = [], uploadKeyArray = [];
+        var filePathsArray = [], uploadKeyArray = [], promises = [];
 
         Ext.each(files, function (file) {
-            if ("" === file.type) {
-                return true;
-            }
+            var promise = new Promise(function (fullfill, reject) {
+                me.isFile(file).then(function () {
+                    var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
+                        filePath = targetFolderPath + '/' + fileRecord.get('name');
 
-            var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
-                filePath = targetFolderPath + '/' + fileRecord.get('name');
+                    fileRecord.set('path', filePath);
+                    var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
+                    if (existingRecordIdx < 0) {
+                        gridStore.add(fileRecord);
+                    }
 
-            fileRecord.set('path', filePath);
-            var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
-            if(existingRecordIdx < 0) {
-                gridStore.add(fileRecord);
-            }
+                    var upload = new Ext.ux.file.Upload({
+                        fmDirector: grid,
+                        file: file,
+                        fileSelector: fileSelector,
+                        id: filePath
+                    });
 
-            var upload = new Ext.ux.file.Upload({
-                fmDirector: grid,
-                file: file,
-                fileSelector: fileSelector,
-                id: filePath
+                    filePathsArray.push(filePath);
+                    uploadKeyArray.push(Tine.Tinebase.uploadManager.queueUpload(upload));
+                }, me).then(function () {
+                    fullfill();
+                }).catch(function() {
+                    fullfill();
+                });
             });
+            promises.push(promise);
+        });
 
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
+        Promise.all(promises).then(function () {
+            if (0 === uploadKeyArray.length) {
+                return;
+            }
 
-            filePathsArray.push(filePath);
-            uploadKeyArray.push(uploadKey);
-
-        }, this);
-
-        if (0 === uploadKeyArray.length) {
-            return;
-        }
-
-        var params = {
+            var params = {
                 filenames: filePathsArray,
                 type: "file",
                 tempFileIds: [],
                 forceOverwrite: false
-        };
-        Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, true);
+            };
+            Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, true);
+        });
+    },
+
+    isFile: function (file) {
+        return new Promise(function (resolve, reject) {
+            var fr = new FileReader();
+            fr.onload = function () {
+                if (fr.result === null) {
+                    reject();
+                }
+
+                resolve();
+            };
+            fr.readAsText(file);
+        });
     },
 
     /**
