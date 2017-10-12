@@ -1253,7 +1253,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var me = this;
         return Tine.Felamimail.MessageEditDialog.superclass.isValid.call(me).then(function(){
             if (me.attachmentGrid.isUploading()) {
-                reject(me.app.i18n._('Files are still uploading.'));
+                return Promise.reject(me.app.i18n._('Files are still uploading.'));
             }
 
             return me.validateRecipients();
