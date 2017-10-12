@@ -500,7 +500,8 @@ Tine.Tinebase.ApplicationStarter = {
                                     registry = app.getRegistry(),
                                     ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
                                     
-                                var container = (ctp ? ctp.getDefaultContainer() : null) || (registry ? registry.get("default" + modelName + "Container") : null);
+                                var container = (ctp && Ext.isFunction(ctp.getDefaultContainer) ? ctp.getDefaultContainer() : null)
+                                    || (registry ? registry.get("default" + modelName + "Container") : null);
                                 
                                 if (container) {
                                     dd[modelConfig.containerProperty] = container;
