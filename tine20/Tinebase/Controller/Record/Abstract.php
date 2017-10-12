@@ -829,7 +829,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return NULL;
         }
 
-        $filterClass = $this->_modelName . 'Filter';
         $filterData = (count($filters) > 1) ? array(array('condition' => 'OR', 'filters' => $filters)) : $filters;
 
         // exclude own record if it has an id
@@ -839,7 +838,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClass($filterData);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($filter->toArray(), TRUE));
