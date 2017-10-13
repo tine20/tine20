@@ -124,14 +124,19 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             } elseif ($type === 'integer') {
                 $filterClass = Tinebase_Model_Filter_Int::class;
             } elseif ($type === 'bool') {
-                $filterClass = Tinebase_Model_Filter_Text::class;
+                //$filterClass = Tinebase_Model_Filter_Text::class;
+                $filterClass = Tinebase_Model_Filter_Id::class;
                 $_fieldOrData['value']['value'] = $_fieldOrData['value']['value'] ? '1' : '0';
-            } elseif ($type === 'record' && is_array($_fieldOrData['value']['value'])) {
-                $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-                $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
-                $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
-                $filterClass = null;
-                $this->_operators = array('AND', 'OR');
+            } elseif ($type === 'record') {
+                if (is_array($_fieldOrData['value']['value'])) {
+                    $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
+                    $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
+                    $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
+                    $filterClass = null;
+                    $this->_operators = array('AND', 'OR');
+                } else {
+                    $filterClass = Tinebase_Model_Filter_Id::class;
+                }
             } elseif ($type === 'records') {
                 // TODO support recordset
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
@@ -196,7 +201,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $this->_subFilter->setFromArray($value);
             $ids = $this->_subFilterController->search($this->_subFilter, null, false, true);
             if (count($ids)) {
-                $this->_valueFilter = new Tinebase_Model_Filter_FullText(
+                $this->_valueFilter = new Tinebase_Model_Filter_Id(
                     [
                         'field' => 'value',
                         'operator' => 'in',
@@ -208,12 +213,19 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             }
         }
         if (null !== $this->_valueFilter) {
+            $valueIdentifier = $db->quoteIdentifier("{$this->_correlationName}.value");
             if (!$this->_value['value']) {
-                $valueIdentifier = $db->quoteIdentifier("{$this->_correlationName}.value");
-                $_select->where($db->quoteInto($valueIdentifier. ' IS NULL OR ' . $valueIdentifier . ' = ?',
+                $_select->where($db->quoteInto($valueIdentifier . ' IS NULL OR ' . $valueIdentifier . ' = ?',
                     $this->_value['value']));
             } else {
-                $this->_valueFilter->appendFilterSql($_select, $_backend);
+                if (strpos($this->_operator, 'not') === 0) {
+                    $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+                    $this->_valueFilter->appendFilterSql($groupSelect, $_backend);
+                    $groupSelect->orWhere($valueIdentifier . ' IS NULL');
+                    $groupSelect->appendWhere(Zend_Db_Select::SQL_OR);
+                } else {
+                    $this->_valueFilter->appendFilterSql($_select, $_backend);
+                }
             }
         }
     }

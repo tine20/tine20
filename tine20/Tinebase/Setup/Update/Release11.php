@@ -93,4 +93,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_47();
         $this->setApplicationVersion('Tinebase', '11.7');
     }
+
+    /**
+     * update to 11.8
+     *
+     * add index(255) on customfield.value
+     */
+    public function update_7()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_48();
+        $this->setApplicationVersion('Tinebase', '11.8');
+    }
 }
