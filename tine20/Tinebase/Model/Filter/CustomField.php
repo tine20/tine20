@@ -45,6 +45,9 @@
  */
 class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 {
+    const OPT_FORCE_FULLTEXT = 'forceFullText';
+    const OPT_FORCE_TYPE = 'forceType';
+
     /**
      * the filter used for querying the customfields table
      * 
@@ -113,9 +116,14 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         $this->_valueFilterOptions['tablename'] = $this->_correlationName;
         $be = new Tinebase_CustomField_Config();
         $this->_cfRecord = $be->get($_fieldOrData['value']['cfId']);
-        $type = $this->_cfRecord->definition['type'];
-        $forceFullText = isset($_fieldOrData['value']['forceFullText']) ?
-            (bool)$_fieldOrData['value']['forceFullText'] : false;
+        if (isset($_fieldOrData['value'][self::OPT_FORCE_TYPE])) {
+            $type = $_fieldOrData['value'][self::OPT_FORCE_TYPE];
+        } else {
+            $type = $this->_cfRecord->definition['type'];
+        }
+
+        $forceFullText = isset($_fieldOrData['value'][self::OPT_FORCE_FULLTEXT]) ?
+            (bool)$_fieldOrData['value'][self::OPT_FORCE_FULLTEXT] : false;
         $filterClass = Tinebase_Model_Filter_FullText::class;
 
         if (!$forceFullText) {
