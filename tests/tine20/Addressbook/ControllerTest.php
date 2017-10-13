@@ -488,4 +488,67 @@ class Addressbook_ControllerTest extends TestCase
         $count = $this->_instance->searchCount($filter);
         $this->assertEquals(1, $count);
     }
+
+    public function testCustomFieldRelationLoop()
+    {
+        $contact = $this->_addContact();
+
+        $cField1 = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => [
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'record',
+                'recordConfig' => ['value' => ['records' => 'Tine.Crm.Model.Lead']],
+                'uiconfig' => [
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                ]
+            ]
+        ]));
+
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'),
+            'Crm',
+            Zend_Registry::get('currentAccount'),
+            Tinebase_Model_Grants::GRANT_EDIT
+        );
+        if($personalContainer->count() === 0) {
+            $personalContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
+        } else {
+            $personalContainer = $personalContainer[0];
+        }
+
+        $lead = Crm_Controller_Lead::getInstance()->create(new Crm_Model_Lead(array(
+            'lead_name'     => 'PHPUnit',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container_id'  => $personalContainer->id,
+            'start'         => Tinebase_DateTime::now(),
+            'description'   => 'Description',
+            'end'           => Tinebase_DateTime::now(),
+            'turnover'      => '200000',
+            'probability'   => 70,
+            'end_scheduled' => Tinebase_DateTime::now(),
+            'relations'     => [[
+                'related_model' => Addressbook_Model_Contact::class,
+                'related_backend' => 'sql',
+                'related_id' => $contact->getId(),
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type' => 'y'
+            ]]
+        )));
+
+        // this lead to an infinite loop before it was fixed
+        $contact->customfields = [
+            $cField1->name => $lead->getId()
+        ];
+        $contact->relations = null;
+        $contact = $this->_instance->update($contact);
+        static::assertEquals(1, count($contact->customfields));
+    }
 }
