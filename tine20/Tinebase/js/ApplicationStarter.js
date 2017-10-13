@@ -378,11 +378,11 @@ Tine.Tinebase.ApplicationStarter = {
                 // iterate models of this app
                 Ext.iterate(models, function(modelName, modelConfig) {
                     // create main screen
-                    if(! Tine[appName].hasOwnProperty('MainScreen')) {
+                    if (! Tine[appName].hasOwnProperty('MainScreen')) {
                         Tine[appName].MainScreen = Ext.extend(Tine.widgets.MainScreen, {
                             app: appName,
                             contentTypes: contentTypes,
-                            activeContentType: modelName
+                            activeContentType: modelConfig.createModule ? modelName : null
                         });
                     }
 
