@@ -225,8 +225,40 @@ class Admin_ControllerTest extends TestCase
         $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
         $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
 
-        $deleted = Admin_Controller_Customfield::getInstance()->delete($result->getId());
+        $deleted = Admin_Controller_Customfield::getInstance()->delete([$result->getId()]);
 
         $this->assertEquals(1, count($deleted));
+    }
+
+    public function testFailedListCreation()
+    {
+        $controllerMock = Admin_Controller_GroupMock::getInstance();
+        $result = null;
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = null;
+        try {
+            try {
+                $controllerMock->create(new Tinebase_Model_Group([
+                    'name' => __FUNCTION__
+                ]));
+                static::fail('exception expected');
+            } catch (Exception $e) {
+                static::assertEquals('kabum', $e->getMessage());
+            }
+
+            $result = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter([
+                ['field' => 'name', 'operator' => 'equals', 'value' => __FUNCTION__]
+            ]));
+            static::assertEquals(0, $result->count());
+        } finally {
+            if (null !== $result && $result->count() > 0) {
+                $oldPurge = Addressbook_Controller_List::getInstance()->purgeRecords(true);
+                try {
+                    Addressbook_Controller_List::getInstance()->delete($result);
+                } finally {
+                    Addressbook_Controller_List::getInstance()->purgeRecords($oldPurge);
+                }
+            }
+        }
     }
 }
