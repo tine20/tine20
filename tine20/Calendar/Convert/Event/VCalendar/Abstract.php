@@ -848,6 +848,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
                     // remove additional days from BYMONTHDAY property (BYMONTHDAY=11,15 => BYMONTHDAY=11)
                     $rruleString = preg_replace('/(BYMONTHDAY=)([\d]+),([,\d]+)/', '$1$2', $rruleString);
+
+                    // remove COUNT=9999 as we can't handle this large recordsets
+                    $rruleString = preg_replace('/;{0,1}COUNT=9999/', '', $rruleString);
                     
                     $event->rrule = $rruleString;
                     
