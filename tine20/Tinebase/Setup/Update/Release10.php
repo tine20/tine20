@@ -1490,6 +1490,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </reference>
                 </index>'));
 
+        $ids = $this->_db->select()->from(['acl' => SQL_TABLE_PREFIX . 'container_acl'], ['id'])->joinLeft(
+            array('c' => SQL_TABLE_PREFIX . 'container'),
+            $this->_db->quoteIdentifier(['acl', 'container_id']) . ' = ' . $this->_db->quoteIdentifier(['c', 'id']),
+            []
+        )->where($this->_db->quoteIdentifier(['c', 'id']) . ' IS NULL')->query()->fetchAll(Zend_Db::FETCH_NUM);
+        if (count($ids)) {
+            $allIds = [];
+            foreach($ids as $row) {
+                $allIds[] = $row[0];
+            }
+            $this->_db->query('DELETE FROM ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl') .
+                ' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $allIds));
+        }
+
         $this->_backend->addForeignKey('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>container_acl::container_id--container::id</name>
                     <field>

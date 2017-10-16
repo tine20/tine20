@@ -175,7 +175,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
-            // container does not make ACL checks, so we do it...
+            // container does not make ACL checks, so we do it... / and we don't trust the client: use current record container id!
+            $currentRecord = $this->get($_record->getId());
+            $_record->container_id = $currentRecord->container_id;
             $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
             if ($container->name !== $_record->name) {
                 if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_EDIT) &&
