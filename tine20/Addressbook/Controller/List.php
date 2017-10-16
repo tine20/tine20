@@ -203,11 +203,21 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $this->_checkGrant($list, 'update', TRUE, 'No permission to add list member.');
         $this->_checkGroupGrant($list, TRUE, 'No permission to add list member.');
 
-        $list = $this->_backend->addListMember($_listId, $_newMembers);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $list = $this->_backend->addListMember($_listId, $_newMembers);
 
-        if (true === $_addToGroup && ! empty($list->group_id)) {
-            foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_newMembers) as $userId) {
-                Admin_Controller_Group::getInstance()->addGroupMember($list->group_id, $userId, false);
+            if (true === $_addToGroup && ! empty($list->group_id)) {
+                foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_newMembers) as $userId) {
+                    Admin_Controller_Group::getInstance()->addGroupMember($list->group_id, $userId, false);
+                }
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
 
@@ -280,11 +290,21 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
         $this->_checkGroupGrant($list, TRUE, 'No permission to remove list member.');
 
-        $list = $this->_backend->removeListMember($_listId, $_removeMembers);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $list = $this->_backend->removeListMember($_listId, $_removeMembers);
 
-        if (true === $_removeFromGroup && ! empty($list->group_id)) {
-            foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_removeMembers) as $userId) {
-                Admin_Controller_Group::getInstance()->removeGroupMember($list->group_id, $userId, false);
+            if (true === $_removeFromGroup && ! empty($list->group_id)) {
+                foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_removeMembers) as $userId) {
+                    Admin_Controller_Group::getInstance()->removeGroupMember($list->group_id, $userId, false);
+                }
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
 

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -58,7 +58,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
     /**
      * the singleton pattern
      *
-     * @return Admin_Controller_Container
+     * @return Admin_Controller_Customfield
      */
     public static function getInstance() 
     {
