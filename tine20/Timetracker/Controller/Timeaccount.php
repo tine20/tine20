@@ -225,4 +225,14 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         
         return Sales_Controller_Contract::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
     }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE, $_filter = null)
+    {
+        // don't do anything here - timeaccount "contents" aka timesheets are deleted in _deleteLinkedObjects()
+    }
 }

@@ -292,6 +292,19 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         return true;
     }
 
+
+    /**
+     * delete linked objects (notes, relations, attachments, alarms) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        parent::_deleteLinkedObjects($_record);
+
+        Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
+    }
+
     /**
      * set record grants
      *
