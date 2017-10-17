@@ -40,7 +40,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      *
      * @param $_record
      */
-    protected function _setContainerId(Tinebase_Record_Interface $_record)
+    protected function _setContainer(Tinebase_Record_Interface $_record)
     {
         $this->_createContainer($_record);
     }

@@ -582,7 +582,7 @@ abstract class Tinebase_Controller_Record_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-            $this->_setContainerId($_record);
+            $this->_setContainer($_record);
 
             $_record->isValid(TRUE);
 
@@ -631,8 +631,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * sets personal container id if container id is missing in record - can be overwritten to set a different container
      *
      * @param $_record
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _setContainerId(Tinebase_Record_Interface $_record)
+    protected function _setContainer(Tinebase_Record_Interface $_record)
     {
         if ($_record->has('container_id') && empty($_record->container_id)) {
             $configuration = $_record->getConfiguration();
