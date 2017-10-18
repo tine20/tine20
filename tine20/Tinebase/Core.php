@@ -424,6 +424,11 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' initializing framework ('
+                . 'PID: ' . getmypid() . ')');
+        }
+
         // avoid autostart of sessions
         Zend_Session::setOptions(array(
             'strict' => true
