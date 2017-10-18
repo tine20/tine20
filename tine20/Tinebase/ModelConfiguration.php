@@ -876,7 +876,15 @@ class Tinebase_ModelConfiguration {
         }
         
         $this->_filters = array();
-        $this->_fields[$this->_idProperty] = array('id' => true, 'label' => NULL, 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'length' => 40);
+        $this->_fields[$this->_idProperty] = array(
+            'id' => true,
+            // show id column in DEBUG + DEVELOP modes
+            // TODO add configuration option to configure this on model basis
+            'label' => (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG') ? 'ID' : null,
+            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'length' => 40,
+            'shy' => true,
+        );
 
         if ($this->_hasCustomFields) {
             $this->_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
