@@ -458,6 +458,11 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
 
     public function testNotifications()
     {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (empty($smtpConfig)) {
+            $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+        
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
         self::flushMailer();
         $this->testCreatePoll();

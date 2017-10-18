@@ -1643,6 +1643,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     public function testRruleModLogUndo()
     {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsql will be dropped, roll back of data not supported on pgsql');
+        }
+
         $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $ownContactId = Tinebase_Core::getUser()->contact_id;
