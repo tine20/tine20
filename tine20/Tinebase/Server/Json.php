@@ -511,9 +511,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         );
         
         // check json key for all methods but some exceptions
-        if ( !(in_array($method, $anonymnousMethods)) && $jsonKey !== Tinebase_Core::get('jsonKey')) {
-        
-            if (! self::userIsRegistered()) {
+        if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
+
+            if (!self::userIsRegistered()) {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
