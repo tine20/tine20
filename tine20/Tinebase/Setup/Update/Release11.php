@@ -105,4 +105,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_48();
         $this->setApplicationVersion('Tinebase', '11.8');
     }
+
+    /**
+     * update to 11.9
+     *
+     * addFileSystemSanitizePreviewsTask
+     */
+    public function update_8()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_49();
+        $this->setApplicationVersion('Tinebase', '11.9');
+    }
 }

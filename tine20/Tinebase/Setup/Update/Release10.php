@@ -2242,10 +2242,22 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '10.49');
     }
 
-     /**
-     * update to 11.0
+    /**
+     * update to 10.50
+     *
+     * addFileSystemSanitizePreviewsTask
      */
     public function update_49()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '10.50');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_50()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }
