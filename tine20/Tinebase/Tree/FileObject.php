@@ -504,7 +504,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     protected function addNotIndexedWhere(Zend_Db_Select $_select)
     {
-        $_select->where($this->_db->quoteIdentifier($this->_tableName . '.indexedHash') . ' <> ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.hash'));
+        $quotedIndexedHash = $this->_db->quoteIdentifier($this->_tableName . '.indexed_hash');
+        $_select->where($quotedIndexedHash . ' IS NULL OR ' . $quotedIndexedHash . ' <> ' .
+            $this->_db->quoteIdentifier($this->_revisionsTableName . '.hash'));
     }
 
     /**
@@ -514,9 +516,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     {
         $this->_getSelectHook = array(array($this, 'addNotIndexedWhere'));
 
-        $fileObjects = $this->search(new Tinebase_Model_Tree_FileObjectFilter(
-                array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE)
-            ), null, true);
+        $fileObjects = $this->search(new Tinebase_Model_Tree_FileObjectFilter([
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+            ]), null, true);
 
         $this->_getSelectHook = array();
 

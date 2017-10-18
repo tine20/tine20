@@ -1188,6 +1188,43 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * checks if there are files missing previews and creates them synchronously
+     * that means this can be very time consuming
+     * also deletes previews of files that no longer exist
+     *
+     * @return int
+     */
+    public function fileSystemCheckPreviews()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->sanitizePreviews();
+
+        return 0;
+    }
+
+    /**
+     * recreates all previews
+     *
+     * @return int
+     */
+    public function fileSystemRecreateAllPreviews()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
+        Tinebase_FileSystem::getInstance()->sanitizePreviews();
+
+        return 0;
+    }
+
+    /**
      * repair a table
      * 
      * @param Zend_Console_Getopt $opts

@@ -868,4 +868,30 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals('filemanager notification', $headers['Subject'][0]);
         $this->assertTrue(strpos($headers['To'][0], Tinebase_Core::getUser()->accountEmailAddress) !== false);
     }
+
+    public function testGetNotIndexedObjectIds()
+    {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = false;
+        $this->_controller->resetBackends();
+
+        $file1 = $this->_controller->stat($this->testCreateFile());
+        $file2 = $this->_controller->stat($this->testCreateFile('shoo'));
+        static::assertEquals($file1->hash, $file2->hash);
+        static::assertNotEquals($file1->hash, $file1->indexed_hash);
+
+        $ids = $this->_controller->getFileObjectBackend()->getNotIndexedObjectIds();
+        static::assertGreaterThanOrEqual(2, count($ids));
+
+        // check for tika installation
+        if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
+            return;
+        }
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = true;
+        $this->_controller->resetBackends();
+
+        static::assertTrue($this->_controller->indexFileObject($ids[0]));
+        $ids1 = $this->_controller->getFileObjectBackend()->getNotIndexedObjectIds();
+        static::assertEquals(count($ids) - 1, count($ids1));
+    }
 }
