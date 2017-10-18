@@ -2228,7 +2228,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_48()
     {
-        try {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {try {
             $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>value_index</name>
                     <length>255</length>
@@ -2237,8 +2237,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </field>
                 </index>'));
             $this->setTableVersion('customfield', 5);
-        } catch (Exception $e) {
-        }
+        } catch (Exception $e) {Tinebase_Exception::log($e);
+            }}
         $this->setApplicationVersion('Tinebase', '10.49');
     }
 
