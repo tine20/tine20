@@ -218,7 +218,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
                 Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
                 
-                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && $group->list_id) {
                     $listBackend = new Addressbook_Backend_List();
                     $listBackend->addListMember($group->list_id, $user->contact_id);
                 }
