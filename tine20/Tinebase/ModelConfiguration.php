@@ -880,7 +880,9 @@ class Tinebase_ModelConfiguration {
             'id' => true,
             // show id column in DEBUG + DEVELOP modes
             // TODO add configuration option to configure this on model basis
-            'label' => (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG') ? 'ID' : null,
+            'label' => defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG')
+                ? 'ID'
+                : null,
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'length' => 40,
             'shy' => true,
