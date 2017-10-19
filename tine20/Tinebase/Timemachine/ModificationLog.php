@@ -1374,6 +1374,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $this->_externalInstanceId = null;
 
                 Tinebase_Exception::log($e, false);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Could not apply modification: ' . print_r($modification->toArray(), true));
 
                 $transactionManager->rollBack();
 
