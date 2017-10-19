@@ -974,13 +974,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (! this.evalGrants) {
             return;
         }
-        
-        var actions = [
-            this.action_saveAndClose,
-            this.action_applyChanges,
-            this.action_delete,
-            this.action_cancel
-        ];
         this.actionUpdater.updateActions(record);
     },
 

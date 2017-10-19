@@ -208,6 +208,8 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
+        // needed for action updater / save and close in edit dialog
+        readGrant: true,
         organizer: organizer,
         attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container)
     };
