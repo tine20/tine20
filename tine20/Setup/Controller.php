@@ -2401,6 +2401,10 @@ class Setup_Controller
 
             `cd $filesDir; tar xf $filesBackupFile`;
         }
+
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache after restore ...');
+        $this->_enableCaching();
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function compareSchema($options)
