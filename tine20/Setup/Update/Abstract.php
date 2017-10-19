@@ -38,7 +38,7 @@ class Setup_Update_Abstract
      * @var null|boolean
      */
     protected $_isReplicationMaster = null;
-    
+
     /** 
      * the constructor
      *
@@ -474,9 +474,13 @@ class Setup_Update_Abstract
      */
     public function updateSchema($appName, $modelNames)
     {
+        if (count($modelNames) === 0) {
+            return false;
+        }
+
         if (! Setup_Core::isDoctrineAvailable()) {
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ .
                 ' No doctrine ORM available -> disabling app ' . $appName);
 
             Tinebase_Application::getInstance()->setApplicationState(
@@ -489,7 +493,7 @@ class Setup_Update_Abstract
         $updateRequired = false;
         $setNewVersions = array();
         /** @var Tinebase_Record_Abstract $modelName */
-        foreach($modelNames as $modelName) {
+        foreach ($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());
             $currentVersion = $this->getTableVersion($tableName);
