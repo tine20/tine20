@@ -1680,6 +1680,11 @@ class Tinebase_Core
             $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         }
 
+        if (! in_array('Tinebase', $applications)) {
+            // prevent the case of no servers ... (maybe all apps are disabled?)
+            array_push($applications, 'Tinebase');
+        }
+
         // get list of plugins
         $plugins = array();
         foreach ($applications as $application) {
