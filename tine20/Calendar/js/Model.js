@@ -49,6 +49,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     //{ name: 'exrule' },
     //{ name: 'rdate' },
     { name: 'rrule' },
+    { name: 'poll_id' },
     { name: 'mute' },
     { name: 'is_all_day_event', type: 'bool'},
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
@@ -165,6 +166,15 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
 
         return _.pick(this.data, ['id', 'uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
             'transp', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'exdate', 'rrule_constraints']);
+    },
+
+    hasPoll: function() {
+        var _ = window.lodash;
+        return ! +_.get(this, 'data.poll_id.closed', true);
+    },
+
+    getTitle: function() {
+        return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
     }
 });
 

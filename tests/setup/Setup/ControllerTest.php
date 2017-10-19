@@ -89,12 +89,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $cacheId = 'unittestcache';
         $cache->save('something', $cacheId);
         
-        try {
-            $result = $this->_uit->uninstallApplications(array('ActiveSync'));
-        } catch (Tinebase_Exception_NotFound $e) {
-            $this->_uit->installApplications(array('ActiveSync'));
-            $result = $this->_uit->uninstallApplications(array('ActiveSync'));
-        }
+        $this->_uit->uninstallApplications(array('ActiveSync'));
         
         $this->assertFalse($cache->test($cacheId), 'cache is not cleared');
 
@@ -111,9 +106,30 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertTrue(isset($activeSyncApp));
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
+    }
 
-        // cleanup
-        $this->_uit->installApplications(array('ActiveSync'));
+    public function testReplicationInstall()
+    {
+        // uninstall and get instance sequence
+        $this->_uit->uninstallApplications(['ActiveSync']);
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        // install again and get modification logs
+        $this->_uit->installApplications(['ActiveSync']);
+        static::assertTrue($this->_uit->isInstalled('ActiveSync'));
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $applicationModifications = $modifications->filter('record_type', Tinebase_Model_Application::class);
+        static::assertEquals(1, $applicationModifications->count(), 'should have 1 mod logs to process');
+
+        // uninstall again
+        $this->_uit->uninstallApplications(['ActiveSync']);
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
+
+        // apply modification log => application should be installed again
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($applicationModifications);
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        static::assertTrue($this->_uit->isInstalled('ActiveSync'));
     }
     
     /**

@@ -164,7 +164,8 @@ Tine.Calendar.EventUI.prototype = {
 };
 
 Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {
-    var app = Tine.Tinebase.appMgr.get('Calendar'),
+    var _ = window.lodash,
+        app = Tine.Tinebase.appMgr.get('Calendar'),
         statusInfo = [];
     
     if (event.get('class') === 'PRIVATE') {
@@ -197,6 +198,13 @@ Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {
         statusInfo.push({
             status: 'attachment',
             text: app.i18n._('has attachments')
+        });
+    }
+
+    if (event.hasPoll()) {
+        statusInfo.push({
+            status: 'poll',
+            text: app.i18n._('is part of an open poll')
         });
     }
 

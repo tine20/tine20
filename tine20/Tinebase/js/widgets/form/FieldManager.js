@@ -140,6 +140,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'addressbookcontactpicker';
                     field.userOnly = true;
                     break;
+                case 'relation':
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
                         var picker = Tine.widgets.form.RecordPickerManager.get(fieldDefinition.config.appName, fieldDefinition.config.modelName, Ext.apply(field, config));
@@ -154,6 +155,11 @@ Tine.widgets.form.FieldManager = function() {
                 case 'text':
                     field.xtype = 'textarea';
                     field.height = 70; // 5 lines
+                    break;
+                case 'numberableStr':
+                case 'numberableInt':
+                    field.xtype = 'textfield';
+                    field.disabled = true;
                     break;
                 default:
                     field.xtype = 'textfield';

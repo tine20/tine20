@@ -476,7 +476,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         
         var data = {
             startTime: dtStart.format('H:i'),
-            summary: event.get('summary'),
+            summary: event.getTitle(),
             color: event.ui.color,
             bgColor: event.ui.bgColor,
             width: '100%'

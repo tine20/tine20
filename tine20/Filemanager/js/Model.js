@@ -47,9 +47,11 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
      * @returns {boolean}
      */
     isVirtual: function() {
-        var _ = window.lodash;
+        var _ = window.lodash,
+            path = this.get('path'),
+            parts = _.trim(path, '/').split('/');
 
-        return _.indexOf(['/', Tine.Tinebase.container.getMyFileNodePath(), '/personal', '/shared'], this.get('path')) >= 0;
+        return _.indexOf(['/', '/personal', '/shared'], path) >= 0 || (parts.length == 2 && parts[0] == 'personal');
     },
 
     getSystemLink: function() {

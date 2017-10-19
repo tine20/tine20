@@ -179,7 +179,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             split: true,
             width: 200,
             minSize: 100,
-            maxSize: 300,
             border: false,
             collapsible:true,
             collapseMode: 'mini',
@@ -430,6 +429,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      * @param {String} contentType to activate
      */
     setActiveContentType: function(contentType) {
+        if (contentType === null) {
+            // use first valid content type
+            if (this.contentTypes && this.contentTypes.length > 0) {
+                contentType = this.contentTypes[0].modelName;
+            }
+        }
         this.activeContentType = contentType;
 
         this.showWestCardPanel();

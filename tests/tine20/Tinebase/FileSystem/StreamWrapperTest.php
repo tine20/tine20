@@ -72,13 +72,22 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     public function testMkdir()
     {
         $testPath = $this->_basePath . '/PHPUNIT-VIA-STREAM';
-        
-        mkdir($testPath, 0777, true);
+
+        $this->assertTrue(mkdir($testPath, 0777, true), 'mkdir failed');
         
         $this->assertTrue(file_exists($testPath), 'path created by mkdir not found');
         $this->assertTrue(is_dir($testPath)     , 'path created by mkdir is not a directory');
         
         return $testPath;
+    }
+
+    public function testMkdirFail()
+    {
+        try {
+            mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() .
+                '/notAllowedHere');
+            static::fail('mkdir should throw exception');
+        } catch (Tinebase_Exception_InvalidArgument $teia) {}
     }
     
     public function testRmdir()
@@ -97,7 +106,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $testPath = $this->testMkdir()  . '/phpunit.txt';
         
         $fp = fopen($testPath, 'x');
-        fwrite($fp, 'phpunit');
+        static::assertEquals(7, fwrite($fp, 'phpunit'));
         fclose($fp);
         
         $this->assertTrue(file_exists($testPath) ,  'failed to create file');
@@ -112,7 +121,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $testPath = $this->testMkdir()  . '/phpunit.txt';
         
         $fp = fopen($testPath, 'x');
-        fwrite($fp, 'phpunit');
+        static::assertEquals(7, fwrite($fp, 'phpunit'));
         fclose($fp);
 
         $fp = fopen($testPath, 'r');
@@ -125,16 +134,16 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     public function testUpdateFile()
     {
         $testPath = $this->testMkdir()  . '/phpunit.txt';
-        
-        file_put_contents($testPath, 'phpunit1234');
+
+        static::assertEquals(11, file_put_contents($testPath, 'phpunit1234'));
         
         $this->assertTrue(file_exists($testPath) ,  'failed to create file');
         $this->assertTrue(is_file($testPath)     ,  'path created by mkdir is not a directory');
         $this->assertEquals(11, filesize($testPath), 'failed to write content to file');
         
         clearstatcache();
-        
-        file_put_contents($testPath, 'phpunit78');
+
+        static::assertEquals(9, file_put_contents($testPath, 'phpunit78'));
         $this->assertEquals(9, filesize($testPath), 'failed to update content of file');
     }
 
@@ -142,7 +151,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     {
         $testPath = $this->testCreateFile();
 
-        unlink($testPath);
+        static::assertTrue(unlink($testPath));
         clearstatcache();
         
         $this->assertFalse(file_exists($testPath) ,  'failed to unlink file');
@@ -163,11 +172,9 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $this->testCreateFile();
         
         $testPath2 = $testPath . '/RENAMED';
-        mkdir($testPath2, 0777, true);
-        
-        $children = scandir($testPath);
-        
-        rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt');
+        static::assertTrue(mkdir($testPath2, 0777, true));
+
+        static::assertTrue(rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt'));
         
         $children = scandir($testPath2);
         

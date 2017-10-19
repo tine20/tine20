@@ -130,7 +130,7 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function rename($_oldPath, $_newPath)
     {
-        return Tinebase_FileSystem::getInstance()->rename(substr($_oldPath, 9), substr($_newPath, 9));
+        return false !== Tinebase_FileSystem::getInstance()->rename(substr($_oldPath, 9), substr($_newPath, 9));
     }
     
     /**

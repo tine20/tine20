@@ -44,7 +44,11 @@ abstract class ActiveSync_TestCase extends TestCase
     protected $_testXMLOutput;
     
     protected $_testEmptyXML;
-    
+
+    const TYPE_ANDROID_5         = 'android5';
+    const TYPE_ANDROID_6         = 'android6';
+    const TYPE_ANDROID_7         = 'android7';
+
     /**
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::setUp()
@@ -239,17 +243,57 @@ abstract class ActiveSync_TestCase extends TestCase
         switch($_type) {
             case Syncroton_Model_Device::TYPE_ANDROID:
                 $device = new Syncroton_Model_Device(array(
-                    'deviceid'   => 'android-abcd',
+                    'deviceid'   => 'android-htcvision',
                     'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
                     'policykey'  => null,
                     'policyId'   => null,
                     'ownerId'    => Tinebase_Core::getUser()->getId(),
-                    'useragent'  => 'blabla',
+                    'useragent'  => 'Android-EAS/3.10.000.084109.405',
                     'acsversion' => '12.0',
                     'remotewipe' => 0
                 ));
                 break;
-                
+
+            case self::TYPE_ANDROID_5:
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => 'android-htcvision',
+                    'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
+                    'policykey'  => null,
+                    'policyId'   => null,
+                    'ownerId'    => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'Android/5.1.1-EAS-2.0',
+                    'acsversion' => '12.0',
+                    'remotewipe' => 0
+                ));
+                break;
+
+            case self::TYPE_ANDROID_6:
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => 'android-nexus5',
+                    'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
+                    'policykey'  => null,
+                    'policyId'   => null,
+                    'ownerId'    => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'Android-Mail/7.9.10.169126262.release',
+                    'os'         => 'Android 6.0.1',
+                    'acsversion' => '12.0',
+                    'remotewipe' => 0
+                ));
+                break;
+
+            case self::TYPE_ANDROID_7:
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => 'android-FRD-L09',
+                    'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
+                    'policykey'  => null,
+                    'policyId'   => null,
+                    'ownerId'    => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'Android/7.0-EAS-2.0',
+                    'acsversion' => '12.0',
+                    'remotewipe' => 0
+                ));
+                break;
+
             case Syncroton_Model_Device::TYPE_BLACKBERRY:
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'BB2B2449CA',
@@ -266,7 +310,7 @@ abstract class ActiveSync_TestCase extends TestCase
             case Syncroton_Model_Device::TYPE_WEBOS:
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'webos-abcd',
-                    'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
+                    'devicetype' => Syncroton_Model_Device::TYPE_WEBOS,
                     'policykey'  => null,
                     'policyId'   => null,
                     'ownerId'    => Tinebase_Core::getUser()->getId(),

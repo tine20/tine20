@@ -190,7 +190,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
 
             } else {
                 try {
-                    win.document.execCommand('print', false, null);
+                    if (!win.document.execCommand('print', false, null)) {
+                        win.print();
+                    }
                 } catch(e) {
                     win.print();
                 }

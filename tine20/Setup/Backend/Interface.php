@@ -178,14 +178,17 @@ interface Setup_Backend_Interface
     /**
      * removes a key from database table
      *
-     * @param string $_query
-     * @param string $_tableName
-     * @param string $_indexName name
-     * @return string
+     * @ param string $_query
+     * @ param string $_tableName
+     * @ param string $_indexName name
+     * @ return string
      *
     public function addDropIndex($_query, $_tableName, $_indexName);*/
-    
-    
+
+    /**
+     * @param string $_application
+     * @return boolean
+     */
     public function applicationExists($_application);
     
     /**

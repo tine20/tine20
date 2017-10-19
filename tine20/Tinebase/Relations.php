@@ -172,8 +172,8 @@ class Tinebase_Relations
         
         // update relations
         foreach ($toUpdate as $relationId) {
-            $current = $currentRelations[$currentRelations->getIndexById($relationId)];
-            $update = $relations[$relations->getIndexById($relationId)];
+            $current = $currentRelations->getById($relationId);
+            $update = $relations->getById($relationId);
             
             // update related records if explicitly needed
             if ($_inspectRelated) {

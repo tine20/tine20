@@ -1418,7 +1418,31 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         return $resoureData;
     }
-    
+
+    /**
+     * test new grats for a resource that had no grants before
+    **/
+    public function testSaveResourcesWithoutRights()
+    {
+        $resourceData = $this->testSaveResource(array());
+        $this->assertEmpty($resourceData['grants']);
+        // mimic client behavior
+        $resourceData['container_id'] = array ( 'account_grants' => array ( 'readGrant' => true, 'addGrant' => true,
+            'editGrant' => true, 'deleteGrant' => true, 'syncGrant' => true, 'exportGrant' => true, 'adminGrant' => true, ), );
+        $resourceData['grants'] = array(array_merge(array(
+            'readGrant' => true,
+            'editGrant' => true,
+            'deleteGrant' => true,
+            'adminGrant' => true), array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_type' => 'user'
+        )));
+
+        $savedResource = $this->_uit->saveResource($resourceData);
+        $this->assertEquals(1, count($savedResource['grants']), 'grants are not set!');
+    }
+
+
     /**
      * assert only resources with read grant are returned if the user has no manage right
      */

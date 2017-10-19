@@ -76,6 +76,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
     const TS_HOUR = 3600;
     const TS_DAY  = 86400;
+    const MAX_DAILY_RECUR_COUNT = 500;
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -875,7 +876,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
         $originatorsOriginalDtstart = $_event->dtstart->getClone()->setTimezone($_event->originator_tz);
 
-        while (true) {
+        // we only compute until $count == MAX_DAILY_RECUR_COUNT to avoid to get oom
+        $count = 0;
+        while (true && $count < self::MAX_DAILY_RECUR_COUNT) {
             $computationStartDate->addDay($_rrule->interval);
 
             $recurEvent = self::cloneEvent($_event);
@@ -913,7 +916,14 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     . " Found recurrence at " . $recurEvent->dtstart);
 
                 self::addRecurrence($recurEvent, $_recurSet);
+                $count++;
             }
+        }
+
+        if ($count === self::MAX_DAILY_RECUR_COUNT) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " We reached the MAX_DAILY_RECUR_COUNT of " . self::MAX_DAILY_RECUR_COUNT
+                . " - something is fishy about the processed rrule: " . print_r($_rrule->toArray(), true));
         }
     }
     

@@ -293,4 +293,12 @@ class Tinebase_FileSystem_Previews
             }
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function deleteAllPreviews()
+    {
+        return Tinebase_FileSystem::getInstance()->rmdir($this->_getBasePath(), true);
+    }
 }

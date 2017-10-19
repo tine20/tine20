@@ -119,7 +119,7 @@ class Timetracker_ControllerTest extends TestCase
                     'account_type' => 'user',
                     Tinebase_Model_Grants::GRANT_ADMIN => TRUE,
                 )));
-                Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+                Timetracker_Controller_Timeaccount::getInstance()->setGrants(
                     $this->_objects['timeaccount'],
                     $grants,
                     TRUE
@@ -385,7 +385,7 @@ class Timetracker_ControllerTest extends TestCase
         $ts = $_ts ? $_ts : $this->_objects['timesheet'];
         
         // remove BOOK_OWN + BOOK_ALL + ADMIN grant
-        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+        Timetracker_Controller_Timeaccount::getInstance()->setGrants(
             $this->_objects['timeaccount'],
             $_grants,
             TRUE
@@ -475,7 +475,7 @@ class Timetracker_ControllerTest extends TestCase
             Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
             Tinebase_Model_Grants::GRANT_EXPORT  => TRUE,
         )));
-        Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
+        Timetracker_Controller_Timeaccount::getInstance()->setGrants(
             $this->_objects['timeaccount'],
             $grants,
             TRUE

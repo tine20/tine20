@@ -232,9 +232,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         // repeating event properties
         if ($event->rrule) {
+            $event->rrule = $event->rrule instanceof Calendar_Model_Rrule ? $event->rrule : Calendar_Model_Rrule::getRruleFromString($event->rrule);
+            $event->rrule->setTimezone('UTC');
             if ($event->is_all_day_event == true) {
                 $vevent->add('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
-                    $dtUntil = new Tinebase_DateTime($matches[1]);
+                    $dtUntil = new Tinebase_DateTime($matches[1], 'UTC');
                     $dtUntil->setTimezone((string) Tinebase_Core::getUserTimezone());
                     
                     return 'UNTIL=' . $dtUntil->format('Ymd');
@@ -846,6 +848,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
                     // remove additional days from BYMONTHDAY property (BYMONTHDAY=11,15 => BYMONTHDAY=11)
                     $rruleString = preg_replace('/(BYMONTHDAY=)([\d]+),([,\d]+)/', '$1$2', $rruleString);
+
+                    // remove COUNT=9999 as we can't handle this large recordsets
+                    $rruleString = preg_replace('/;{0,1}COUNT=9999/', '', $rruleString);
                     
                     $event->rrule = $rruleString;
                     

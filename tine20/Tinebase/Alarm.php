@@ -28,7 +28,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Alarm';
+    protected $_modelName = Tinebase_Model_Alarm::class;
     
     /**
      * check for container ACLs?

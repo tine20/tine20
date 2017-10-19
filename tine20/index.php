@@ -10,10 +10,16 @@
  */
 
 $time_start = microtime(true);
+$pid = getmypid();
 
 require_once 'bootstrap.php';
 
 Tinebase_Core::set(Tinebase_Core::STARTTIME, $time_start);
+
+if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ')' . ' Start processing request ('
+        . 'PID: ' . $pid . ')');
+}
 
 Tinebase_Core::dispatchRequest();
 
@@ -26,6 +32,6 @@ if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
         ' METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD)
         . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
         . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
-        . ' / PID: ' . getmypid()
+        . ' / PID: ' . $pid
     );
 }

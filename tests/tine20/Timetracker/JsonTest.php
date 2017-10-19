@@ -59,7 +59,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // checks
         $this->assertEquals($timeaccount->description, $timeaccountData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']['accountId']);
-        $this->assertTrue(is_array($timeaccountData['container_id']));
+        $this->assertTrue(is_array($timeaccountData['container_id']), 'container id should be an array');
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
         $this->assertGreaterThan(0, count($timeaccountData['grants']));
 

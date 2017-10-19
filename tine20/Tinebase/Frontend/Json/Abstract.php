@@ -124,29 +124,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
         return NULL;
     }
-    
-    /**
-     * resolve containers and tags
-     *
-     * @param Tinebase_Record_RecordSet $_records
-     * @param array $_resolveProperties
-     */
-    public static function resolveContainersAndTags(Tinebase_Record_RecordSet $_records, $_resolveProperties = array('container_id', 'tags'))
-    {
-        $firstRecord = $_records->getFirstRecord();
-        
-        if ($firstRecord) {
-            if ($firstRecord->has('container_id') && in_array('container_id', $_resolveProperties)) {
-                Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
-            }
-            
-            if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties) && ! $firstRecord->tags instanceof Tinebase_Record_RecordSet) {
-                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-            }
-        }
-    }
-    
-    /************************** protected functions **********************/
 
     /**
      * Return a single record
@@ -155,6 +132,35 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param   Tinebase_Controller_Record_Interface $_controller the record controller
      * @return  array record data
      */
+
+    /************************** protected functions **********************/
+
+    /**
+     * resolve containers and tags
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param array $_resolveProperties
+     */
+    public static function resolveContainersAndTags(Tinebase_Record_RecordSet $_records, $modelConfiguration = null, $_resolveProperties = array('container_id', 'tags'))
+    {
+        $firstRecord = $_records->getFirstRecord();
+
+        if ($firstRecord) {
+            if ($firstRecord->has('container_id') && in_array('container_id', $_resolveProperties)) {
+                Tinebase_Container::getInstance()->getGrantsOfRecords(
+                    $_records,
+                    Tinebase_Core::getUser(),
+                    $modelConfiguration ? $modelConfiguration->containerProperty : 'container_id',
+                    $modelConfiguration ? $modelConfiguration->grantsModel : 'Tinebase_Model_Grants'
+                );
+            }
+
+            if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties) && ! $firstRecord->tags instanceof Tinebase_Record_RecordSet) {
+                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
+            }
+        }
+    }
     protected function _get($_uid, Tinebase_Controller_Record_Interface $_controller)
     {
         $record = $_controller->get($_uid);

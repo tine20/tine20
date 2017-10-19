@@ -30,7 +30,8 @@ class Calendar_Frontend_AllTests
         $suite->addTestSuite('Calendar_Frontend_ActiveSyncTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
         $suite->addTestSuite('Calendar_Frontend_iMIPTest');
-        
+        $suite->addTestSuite('Calendar_Frontend_Json_PollTest');
+
         return $suite;
     }
 }

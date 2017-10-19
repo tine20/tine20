@@ -18,6 +18,7 @@
  * @package     Tinebase
  * @subpackage  Record
  *
+ * @method getId()
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {

@@ -224,7 +224,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 stats = Locale.translationStats,
                 version = Tine.clientVersion.packageString.match(/\d+\.\d+\.\d+/),
                 language = Tine.Tinebase.registry.get('locale').language,
-                percentageCompleted = stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
+                // TODO make stats work again (currently displays 100% for all langs)
+                //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
+                percentageCompleted = undefined;
                 
             this.communityPanel = new Ext.Container({
                 layout: 'fit',

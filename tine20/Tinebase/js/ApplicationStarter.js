@@ -378,11 +378,11 @@ Tine.Tinebase.ApplicationStarter = {
                 // iterate models of this app
                 Ext.iterate(models, function(modelName, modelConfig) {
                     // create main screen
-                    if(! Tine[appName].hasOwnProperty('MainScreen')) {
+                    if (! Tine[appName].hasOwnProperty('MainScreen')) {
                         Tine[appName].MainScreen = Ext.extend(Tine.widgets.MainScreen, {
                             app: appName,
                             contentTypes: contentTypes,
-                            activeContentType: modelName
+                            activeContentType: modelConfig.createModule ? modelName : null
                         });
                     }
 
@@ -500,7 +500,8 @@ Tine.Tinebase.ApplicationStarter = {
                                     registry = app.getRegistry(),
                                     ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
                                     
-                                var container = (ctp ? ctp.getDefaultContainer() : null) || (registry ? registry.get("default" + modelName + "Container") : null);
+                                var container = (ctp && Ext.isFunction(ctp.getDefaultContainer) ? ctp.getDefaultContainer() : null)
+                                    || (registry ? registry.get("default" + modelName + "Container") : null);
                                 
                                 if (container) {
                                     dd[modelConfig.containerProperty] = container;

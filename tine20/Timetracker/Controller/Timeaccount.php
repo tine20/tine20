@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,22 +16,23 @@
  * @package     Timetracker
  * @subpackage  Controller
  */
-class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abstract
+class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Container
 {
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timeaccount();
         $this->_modelName = 'Timetracker_Model_Timeaccount';
+        $this->_grantsModel = 'Timetracker_Model_TimeaccountGrants';
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
+        $this->_manageRight = Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS;
     }
-    
-    protected $_doGrantChecks = TRUE;
     
     /**
      * don't clone. Use the singleton.
@@ -62,104 +63,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         return self::$_instance;
     }        
 
-    /****************************** overwritten functions ************************/    
-    
-    /**
-     * add one record
-     * - create new container as well
-     *
-     * @param   Timetracker_Model_Timeaccount $_record
-     * @return  Timetracker_Model_Timeaccount
-     * 
-     * @todo    check if container name exists ?
-     */
-    public function create(Tinebase_Record_Interface $_record)
-    {
-        $this->_checkRight('create');
-        
-        // create container and add container_id to record
-        $containerName = $_record->title;
-        if (!empty($_record->number)) {
-            $containerName = $_record->number . ' ' . $containerName;
-        }
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => $containerName,
-            'type'              => Tinebase_Model_Container::TYPE_SHARED,
-            'backend'           => $this->_backend->getType(),
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-            'model'             => 'Timetracker_Model_Timeaccount'
-        ));
-        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            Timetracker_Model_TimeaccountGrants::BOOK_OWN           => TRUE,
-            Timetracker_Model_TimeaccountGrants::VIEW_ALL           => TRUE,
-            Timetracker_Model_TimeaccountGrants::BOOK_ALL           => TRUE,
-            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE    => TRUE,
-            Tinebase_Model_Grants::GRANT_EXPORT                     => TRUE,
-            Tinebase_Model_Grants::GRANT_ADMIN                      => TRUE,
-        )));
-        
-        // add container with grants (all grants for creator) and ignore ACL here
-        $container = Tinebase_Container::getInstance()->addContainer(
-            $newContainer, 
-            $grants, 
-            TRUE
-        );
-
-        $_record->container_id = $container->getId();
-        
-        $timeaccount = parent::create($_record);
-        
-        // save grants
-        if (count($_record->grants) > 0) {
-            Timetracker_Model_TimeaccountGrants::setTimeaccountGrants($timeaccount, $_record->grants);
-        }        
-
-        return $timeaccount;
-    }    
-    
-    /**
-     * Returns a set of leads identified by their id's
-     * - overwritten because we use different grants here (MANAGE_TIMEACCOUNTS)
-     * 
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
-     */
-    public function getMultiple($_ids, $_ignoreACL = FALSE)
-    {
-        $this->_checkRight('get');
-        
-        $filter = new Timetracker_Model_TimeaccountFilter(array(
-            array('field' => 'id',          'operator' => 'in',     'value' => $_ids)
-        ));
-        $records = $this->search($filter);
-
-        return $records;
-    }
-    
-    /**
-     * update one record
-     * - save timeaccount grants
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @param   boolean $_duplicateCheck
-     * 
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
-    {
-        $timeaccount = parent::update($_record, $_duplicateCheck);
-
-        // save grants
-        if (count($_record->grants) > 0) {
-            Timetracker_Model_TimeaccountGrants::setTimeaccountGrants($timeaccount, $_record->grants);
-        }
-
-        return $timeaccount;
-    }
-    
     /**
      * delete linked objects / timesheets
      *
@@ -203,13 +106,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' timeaccounts.');
         }
 
-        return parent::_checkRight($_action);
-    }
-    
-    public function doGrantChecks()
-    {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_doGrantChecks', $value);
+        parent::_checkRight($_action);
     }
     
     /**
@@ -230,13 +127,13 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             return TRUE;
         }
         
-        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Tinebase_Model_Grants::GRANT_ADMIN);
+        $hasGrant = Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->getId(), Tinebase_Model_Grants::GRANT_ADMIN);
         
         switch ($_action) {
             case 'get':
                 $hasGrant = (
                     $hasGrant
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), array(
+                    || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->getId(), array(
                         Timetracker_Model_TimeaccountGrants::VIEW_ALL, 
                         Timetracker_Model_TimeaccountGrants::BOOK_OWN, 
                         Timetracker_Model_TimeaccountGrants::BOOK_ALL, 
@@ -262,8 +159,9 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     /**
      * Removes containers where current user has no access to
      * 
-     * @param Timetracker_Model_TimeaccountFilter $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action
+     * @throws Timetracker_Exception_UnexpectedValue
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
@@ -312,6 +210,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     
     /**
      * @param Sales_Model_Contract $contractId
+     * @return Tinebase_Record_RecordSet
      */
     public function getTimeaccountsBySalesContract($contractId)
     {
@@ -325,5 +224,15 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         ), 'AND');
         
         return Sales_Controller_Contract::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
+    }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE, $_filter = null)
+    {
+        // don't do anything here - timeaccount "contents" aka timesheets are deleted in _deleteLinkedObjects()
     }
 }

@@ -250,7 +250,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $this->name                 = $pathParts[count($pathParts) - 1];
         $this->containerType        = isset($this->containerType) && in_array($this->containerType, array(
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
-            Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            Tinebase_FileSystem::FOLDER_TYPE_RECORDS
         )) ? $this->containerType : $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
@@ -297,6 +298,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (! in_array($containerType, array(
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
             Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            Tinebase_FileSystem::FOLDER_TYPE_RECORDS,
             self::TYPE_ROOT
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
@@ -313,7 +315,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerOwner($_pathParts)
     {
-        $containerOwner = ($this->containerType !== Tinebase_Model_Container::TYPE_SHARED && isset($_pathParts[3])) ? $_pathParts[3] : NULL;
+        $containerOwner = ($this->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && isset($_pathParts[3])) ? $_pathParts[3] : NULL;
         
         return $containerOwner;
     }

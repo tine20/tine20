@@ -327,7 +327,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * gets identifier of record
      * 
-     * @return int identifier
+     * @return string identifier
      */
     public function getId()
     {
@@ -398,7 +398,26 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if (!empty($recordCustomFields)) {
             $this->customfields = $recordCustomFields;
         }
-        
+
+        // convert data to record(s)
+        $modelConfiguration = static::getConfiguration();
+        if ($modelConfiguration /*&& $modelConfiguration->setRecordsFromArray*/) {
+            foreach($modelConfiguration->getFields() as $fieldName => $config) {
+                if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
+                    $config = $config['type'] === 'virtual' && isset($config['config']['type']) ? $config['config'] :
+                        $config;
+                    if (in_array($config['type'], ['record', 'records']) && isset($config['config']['appName']) &&
+                            isset($config['config']['modelName'])) {
+                        $modelName = $config['config']['appName'] . '_Model_' . $config['config']['modelName'];
+                        $this->{$fieldName} = $config['type'] == 'record' ?
+                            new $modelName($_data[$fieldName], $this->bypassFilters, $this->convertDates) :
+                            new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters,
+                                $this->convertDates);
+                    }
+                }
+            }
+        }
+
         $this->bypassFilters = $bypassFilter;
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
@@ -501,7 +520,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if ($_recursive) {
             /** @var Tinebase_Record_Interface  $value */
             foreach ($recordArray as $property => $value) {
-                if ($this->_hasToArray($value)) {
+                if (is_object($value) && method_exists($value, 'toArray')) {
                     $recordArray[$property] = $value->toArray();
                 }
             }
@@ -721,7 +740,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected function _convertDateTimeToString(&$_toConvert, $_format)
     {
         //$_format = "Y-m-d H:i:s";
-        foreach ($_toConvert as $field => &$value) {
+        foreach ($_toConvert as $field => $value) {
             if (! $value) {
                 if (in_array($field, $this->_datetimeFields)) {
                     $_toConvert[$field] = NULL;
@@ -729,7 +748,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif ($value instanceof DateTime) {
                 $_toConvert[$field] = $value->format($_format);
             } elseif (is_array($value)) {
-                $this->_convertDateTimeToString($value, $_format);
+                $this->_convertDateTimeToString($_toConvert[$field], $_format);
             }
         }
     }
@@ -1359,7 +1378,34 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     }
                 }
             } elseif (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
-                $oldValue = new Tinebase_DateTime($oldValue);
+                if (null !== $oldValue) {
+                    if (is_array($oldValue)) {
+                        foreach($oldValue as &$value) {
+                            $value = new Tinebase_DateTime($value);
+                        }
+                        unset($value);
+                    } else {
+                        $oldValue = new Tinebase_DateTime($oldValue);
+                    }
+                }
+
+                // TODO use modelconf here!!!
+            } elseif (is_array($oldValue) && isset($diff->diff[$property]) && is_array($diff->diff[$property]) &&
+                    isset($diff->diff[$property]['model']) && isset($diff->diff[$property]['added']) &&
+                    in_array($property, ['relations', 'tags', 'alarms', 'attachments', 'notes', 'attendee'])) {
+                $model = $diff->diff[$property]['model'];
+                if ('attachments' !== $property) {
+                    /** @var Tinebase_Record_Abstract $instance */
+                    $instance = new $model(array(), true);
+                    $idProperty = $instance->getIdProperty();
+                    foreach ($oldValue as &$value) {
+                        $value[$idProperty] = null;
+                    }
+                    unset($value);
+                }
+                if (!in_array($property, ['notes', 'relations'])) {
+                    $oldValue = new Tinebase_Record_RecordSet($model, $oldValue);
+                }
             }
             $this->$property = $oldValue;
         }

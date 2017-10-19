@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -855,5 +855,30 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                     . $record->toArray());
             }
         }
+    }
+
+    public function cleanAclTables()
+    {
+        $treeNodeAcl = new Tinebase_Backend_Sql_Grants(array(
+            'modelName' => Tinebase_Model_Grants::class,
+            'tableName' => 'tree_node_acl',
+            'recordTable' => 'tree_nodes'
+        ));
+        $treeNodeAcl->cleanGrants();
+
+        $persistentFilterAcl = new Tinebase_Backend_Sql_Grants(array(
+            'modelName' => Tinebase_Model_PersistentFilterGrant::class,
+            'tableName' => 'filter_acl',
+            'recordTable' => 'filter'
+        ));
+        $persistentFilterAcl->cleanGrants();
+
+        $containerAcl = new Tinebase_Backend_Sql_Grants(array(
+            'modelName' => Tinebase_Model_Grants::class,
+            'tableName' => 'container_acl',
+            'recordTable' => 'container',
+            'recordColumn' => 'container_id'
+        ));
+        $containerAcl->cleanGrants();
     }
 }

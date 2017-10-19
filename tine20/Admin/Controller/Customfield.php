@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -58,7 +58,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
     /**
      * the singleton pattern
      *
-     * @return Admin_Controller_Container
+     * @return Admin_Controller_Customfield
      */
     public static function getInstance() 
     {
@@ -128,7 +128,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
             'value'     => (array) $ids
         )));
 
-        $result = $this->_customfieldController->search($filter, NULL, FALSE, TRUE);
+        $result = $this->_customfieldController->search($filter);
         if ($result->count() > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . count($result) . ' records still have custom field values.');

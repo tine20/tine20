@@ -424,6 +424,11 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' initializing framework ('
+                . 'PID: ' . getmypid() . ')');
+        }
+
         // avoid autostart of sessions
         Zend_Session::setOptions(array(
             'strict' => true
@@ -758,8 +763,10 @@ class Tinebase_Core
                         break;
                         
                     case 'Redis':
-                        $host = $config->caching->host ? $config->caching->host : ($config->caching->redis->host ? $config->caching->redis->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port : ($config->caching->redis->port ? $config->caching->redis->port : 6379);
+                        $host = $config->caching->host ? $config->caching->host :
+                            ($config->caching->redis && $config->caching->redis->host ? $config->caching->redis->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port :
+                            ($config->caching->redis && $config->caching->redis->port ? $config->caching->redis->port : 6379);
                         if ($config->caching && $config->caching->prefix) {
                             $prefix = $config->caching->prefix;
                         } else if ($config->caching && $config->caching->redis && $config->caching->redis->prefix) {
@@ -1700,6 +1707,11 @@ class Tinebase_Core
             $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         }
 
+        if (! in_array('Tinebase', $applications)) {
+            // prevent the case of no servers ... (maybe all apps are disabled?)
+            array_push($applications, 'Tinebase');
+        }
+
         // get list of plugins
         $plugins = array();
         foreach ($applications as $application) {
@@ -1881,5 +1893,20 @@ class Tinebase_Core
     public static function clearDelegatorCache()
     {
         static::$_delegatorCache = array();
+    }
+
+    /**
+     * acquire a lock to prevent parallel execution in a multi server environment
+     *
+     * @param string $id
+     * @return bool
+     */
+    public static function acquireMultiServerLock($id)
+    {
+        $result = Tinebase_Lock::aquireDBSessionLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
     }
 }

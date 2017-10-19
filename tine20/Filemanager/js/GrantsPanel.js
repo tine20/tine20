@@ -97,17 +97,19 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
     onRecordLoad: function(editDialog, record, ticketFn) {
         var _ = window.lodash,
             evalGrants = editDialog.evalGrants,
+            hasOwnGrants = record.get('acl_node') == record.id,
             hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');
-        this.hasOwnGrantsCheckbox.setValue(record.get('acl_node') == record.id);
+        this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
         this.pinProtectionCheckbox.setValue(record.get('pin_protected'));
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
 
         this.setReadOnly(! hasRequiredGrant);
+        this.grantsGrid.setReadOnly(!hasOwnGrants);
     },
 
     setReadOnly: function(readOnly) {

@@ -1295,7 +1295,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (! empty($quota) && isset($quota['STORAGE'])) {
             $_folder->quota_usage = $quota['STORAGE']['usage'];
-            $_folder->quota_limit = $quota['STORAGE']['limit'];
+            $_folder->quota_limit = $quota['STORAGE']['limit'] * 1024 * 1024; // is this value always in MB?
         } else {
             $_folder->quota_usage = 0;
             $_folder->quota_limit = 0;

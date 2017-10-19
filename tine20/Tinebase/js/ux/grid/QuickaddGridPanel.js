@@ -114,6 +114,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             }
         };
+
+        this.on('beforeedit', this.onBeforeEdit, this);
     },
     
     /**
@@ -123,7 +125,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(this.getCols(), function(column){
             if (column.quickaddField) {
                 column.quickaddField.render(this.getQuickAddWrap(column));
-                column.quickaddField.setDisabled(column.id != this.quickaddMandatory);
+                column.quickaddField.setDisabled(this.readOnly || column.id != this.quickaddMandatory);
                 column.quickaddField.on(this.quickaddHandlers);
             }
         },this);
@@ -163,9 +165,12 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             
             if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
                 if (this.fireEvent('newentry', data)){
-                    this.colModel.getColumnById(this.quickaddMandatory).quickaddField.setValue('');
-                    if(this.validate) {
-                        this.colModel.getColumnById(this.quickaddMandatory).quickaddField.clearInvalid();
+                    var quickAddField = this.colModel.getColumnById(this.quickaddMandatory).quickaddField;
+                    if (quickAddField.resetOnNew !== false) {
+                        quickAddField.setValue('');
+                        if (this.validate) {
+                            quickAddField.clearInvalid();
+                        }
                     }
                     if (this.resetAllOnNew) {
                         var columns = this.colModel.config;
@@ -267,12 +272,31 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onMandatoryFocus: function() {
+        if (this.readOnly) {
+            return;
+        }
+
         this.adding = true;
         Ext.each(this.getCols(true), function(item){
             if(item.quickaddField){
                 item.quickaddField.setDisabled(false);
             }
         }, this);
+    },
+
+    onBeforeEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+
+        Ext.each(this.getCols(true), function(item){
+            if(item.quickaddField){
+                item.quickaddField.setDisabled(readOnly || item.id != this.quickaddMandatory);
+            }
+        }, this);
     }
-        
 });
