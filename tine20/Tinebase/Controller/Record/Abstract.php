@@ -696,7 +696,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if (true === $checkValue || true === $createNewValue) {
-                $numberable = Tinebase_Numberable::getNumberable($className, $fieldDef['fieldName'], $fieldDef);
+                $numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef);
             }
 
             if (true === $checkValue) {
@@ -724,6 +724,18 @@ abstract class Tinebase_Controller_Record_Abstract
                 $numberable->free($_oldRecord->{$fieldDef['fieldName']});
             }
         }
+    }
+
+    /**
+     * @param $_record
+     * @param $className
+     * @param $fieldName
+     * @param $fieldConfig
+     * @return Tinebase_Numberable_Abstract
+     */
+    protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
+    {
+        return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
     /**
