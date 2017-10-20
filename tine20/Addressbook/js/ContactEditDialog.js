@@ -489,22 +489,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     },
 
     /**
-     * export pdf handler
-     */
-    onExportContact: function () {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Addressbook.exportContacts',
-                filter: Ext.encode([{field: 'id', operator: 'in', value: this.record.id}]),
-                options: Ext.util.JSON.encode({
-                    format: 'pdf'
-                })
-            }
-        });
-        downloader.start();
-    },
-
-    /**
      * parse address handler
      *
      * opens message box where user can paste address
