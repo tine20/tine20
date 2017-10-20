@@ -182,13 +182,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_useRecordPaths = false;
 
     /**
-     * don't get in an endless recursion in get related data
-     *
-     * @var array
-     */
-    protected $_getRelatedDataRecursion = [];
-
-    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -510,35 +503,25 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _getRelatedData($record)
     {
-        if (isset($this->_getRelatedDataRecursion[$record->getId()])) {
-            return;
+        if ($record->has('tags')) {
+            Tinebase_Tags::getInstance()->getTagsOfRecord($record);
         }
-        try {
-            // prevent endless recursion loop
-            $this->_getRelatedDataRecursion[$record->getId()] = true;
-
-            if ($record->has('tags')) {
-                Tinebase_Tags::getInstance()->getTagsOfRecord($record);
-            }
-            if ($record->has('relations')) {
-                $record->relations = Tinebase_Relations::getInstance()->getRelations(
-                    $this->_modelName,
-                    $this->_getBackendType(),
-                    $record->getId());
-            }
-            if ($record->has('alarms')) {
-                $this->getAlarms($record);
-            }
-            if ($this->resolveCustomfields()) {
-                $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
-                    Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
-                Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record, null, $cfConfigs);
-            }
-            if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
-                Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
-            }
-        } finally {
-            unset($this->_getRelatedDataRecursion[$record->getId()]);
+        if ($record->has('relations')) {
+            $record->relations = Tinebase_Relations::getInstance()->getRelations(
+                $this->_modelName,
+                $this->_getBackendType(),
+                $record->getId());
+        }
+        if ($record->has('alarms')) {
+            $this->getAlarms($record);
+        }
+        if ($this->resolveCustomfields()) {
+            $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record, null, $cfConfigs);
+        }
+        if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
         }
     }
 
