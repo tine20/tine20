@@ -36,8 +36,9 @@
 
 
 /**
- * plugin to handle smtp settings for simpleMail ldap schema or others
- * 
+ * plugin to handle smtp settings for simpleMail ldap schema or other 
+ * custom schemes to store mail settings outside user's dn
+ *
  * @package    Tinebase
  * @subpackage EmailUser
  */
@@ -55,7 +56,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         'emailForwards'    => 'mailforwardingaddress',
         'emailForwardOnly' => 'maildiscard:boolean'
     );
-    
+
     /**
      * objectclasses required for users (original = uid of Tine 2.0)
      *
@@ -71,28 +72,28 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
      * @var array
      */
     protected $_simpleMailConfig = NULL;
-    
+
     /**
      * second ldap directory connection
      *
      * @var Tinebase_Ldap
      */
     protected $_ldap = NULL;
-    
+
     /**
      * all properties of second ldap result (to compare before save)
      *
      * @var array
      */
     protected $_ldapRawData = NULL;
-    
+
     /**
      * this class is NOT suitable for IMAP
      *
      * @const 
      */
     protected $_backendType = Tinebase_Config::SMTP;
-    
+
     /**
      * the constructor 
      *
@@ -115,39 +116,63 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
             ));
             $this->_issetOrDefault($config['simplemail']['readonly'], false);
             $this->_issetOrDefault($config['simplemail']['scope'], Zend_Ldap::SEARCH_SCOPE_SUB);
-            
+
             $this->_simpleMailConfig = $config['simplemail'];
             $this->_propertyMapping = $config['simplemail']['property_mapping'];
             $this->_ldap = new Tinebase_Ldap(Tinebase_User::getBackendConfiguration());
-            #$this->_ldap->connect()->bind();
         }
         else {
             $this->_simpleMailConfig = NULL;
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . '  SMTP config: simpleMail is missing ldap base!');
         }
     }
-    
+
+    /*
+     * (non-PHPdoc)
+     * Last call if Ldap user is removed to remove remaining data of this backend, too. 
+     */
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user){
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete simpleMail data for user '. $_user['accountLoginName']);
+
+        if ($this->_ldapRawData === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cannot delete simpleMail data from unknown account');
+            return false;
+        }
+
+        foreach ($this->_propertyMapping as $property_name => $ldapName) {
+            $this->_deletePropertyFromLdapRawData($property_name, false);
+        }
+        $this->_saveOrUpdateSpecialResultToLdap();
+}
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_EmailUser_Ldap::_user2Ldap()
      */
     protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
-    {        
+    {
         if ($this->_simpleMailConfig['readonly'] == true) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  readonly ldap simpleMail schema ');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  readonly ldap simpleMail schema');
             return false;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  write ldap simpleMail schema ');
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  write ldap simpleMail schema');
+
+        if ($this->_ldapRawData === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown account (possibly new), guessed user's DN in ldap");
+            $originalUserDn = Tinebase_User::getInstance()->generateDn($_user);
+            $filter = $this->_prepareSpecialResultFilterForLdap($originalUserDn, $_user['accountLoginName']);
+            $this->_getSpecialResultDataFromLdap($filter);
+        }
+
         foreach ($this->_propertyMapping as $property_name => $ldapName) {
-            
+
             if (!isset($_user['smtpUser'][$property_name])) {
                 continue;
             }
-            
+
             $existing = $this->_getPropertiesFromLdapRawData($ldapName);
-            
+
             if (is_array($_user['smtpUser'][$property_name])) {
                 foreach (array_diff($_user['smtpUser'][$property_name], $existing) as $property) {
                     $this->_addPropertyToLdapRawData($property_name, $property);
@@ -163,18 +188,18 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 }
                 else {
                     $this->_deletePropertyFromLdapRawData($property_name, false);
-                    // if also an undeletable entry sets this, it needs to be overwriten at last
+                    // if also an undeletable entry sets this, it needs to be overwritten at last
                     if ($this->_getPropertiesFromLdapRawData($ldapName) == true) {
                         $this->_addPropertyToLdapRawData($property_name, false);
                     }
                 }
             }
-            
+
         }
-        
-        $this->_saveOrUpdateSpecialResultToLdap();        
+
+        $this->_saveOrUpdateSpecialResultToLdap();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_EmailUser_Ldap::_ldap2User()
@@ -182,35 +207,22 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
     protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
         $originalUser = parent::_ldap2User($_user, $_ldapEntry);
-        
+
         if ($this->_ldapRawData === null) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' read ldap simpleMail schema');
-            
-            // replace wildcards in config
-            array_walk_recursive($this->_simpleMailConfig, function(&$value, $property, $userdata ) {
-                if (strpos($value, '%s') !== false) {
-                    $value = str_replace('%s', $userdata['dn'], $value);
-                }
-                elseif (strpos($value, '%u') !== false) {
-                    $value = str_replace('%u', $userdata['user'], $value);
-                }
-            }, array(
-                'dn' => $_ldapEntry['dn'],
-                'user' => $_user['accountLoginName']
-            ));
-            
-            $this->_getSpecialResultDataFromLdap(); 
+            $filter = $this->_prepareSpecialResultFilterForLdap($_ldapEntry['dn'], $_user['accountLoginName']);
+            $this->_getSpecialResultDataFromLdap($filter);
         }
-        
+
         foreach ($this->_propertyMapping as $property => $ldapName) {
             $originalUser[$property] = $this->_getPropertiesFromLdapRawData($ldapName);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' simpleMail - Tinebase_EmailUser combined with ldap: '. print_r($originalUser, true));
-        
-        return $originalUser; 
+
+        return $originalUser;
     }
-    
+
     /*
      * * * * * * * * H E L P E R S * * * * * * * * * * 
      */
@@ -224,13 +236,27 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
             $test = $default;
         }
     }
-    
+
     /**
-     * (non-PHPdoc)
+     * @var		string The primary location for user's properties
+     * @var		string User's account name used for dn's uid=accountName mostly
+     * @return	string The special result ldap filter for searching existing entries
      */
-    protected function _getSpecialResultDataFromLdap() 
+    protected function _prepareSpecialResultFilterForLdap($originalDn, $originalAccount) 
     {
-        
+        // replace wildcards in config
+        array_walk_recursive($this->_simpleMailConfig, function(&$value, $property, $userdata ) {
+            if (strpos($value, '%s') !== false) {
+                $value = str_replace('%s', $userdata['dn'], $value);
+            }
+            elseif (strpos($value, '%u') !== false) {
+                $value = str_replace('%u', $userdata['user'], $value);
+            }
+        }, array(
+            'dn' => $originalDn,
+            'user' => $originalAccount
+        ));
+
         $filter = "&";
         foreach($this->_simpleMailConfig['skeleton'] as $attr => $val) {
             if (is_array($val)) {
@@ -242,17 +268,24 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 $filter .= '(' . $attr . '=' . $val . ')';
             }  
         }
-        
+        return $filter;
+    }
+
+    /**
+     * @var	string Ldap query filter 
+     */
+    protected function _getSpecialResultDataFromLdap($filter) 
+    {
         $ldap = $this->_ldap->searchEntries(
                     Zend_Ldap_Filter::string($filter),
                     $this->_simpleMailConfig['base'], 
                     $this->_simpleMailConfig['scope'],
                     array()
                 );
-        
+
         /* Make sure, the managed rdn is last in array and properties are
          * ultimately read from this rdn (if entries are doubled)
-         *  
+         *
          * Order of array matters: 
          *  - all entries anywhere
          *  - entries within the storage path
@@ -262,7 +295,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         $managedPath = Zend_Ldap_Dn::fromString($this->_simpleMailConfig['storage_base'], Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
         $managedDn = Zend_Ldap_Dn::fromString($this->_simpleMailConfig['storage_rdn'] . ',' . $this->_simpleMailConfig['storage_base'], Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
         $managedDnExisting = false;
-        
+
         foreach($ldap as $dn) {
             $dnArr = Zend_Ldap_Dn::fromString($dn['dn'], Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
             if ($dnArr->toString() == $managedDn->toString()) { 
@@ -277,20 +310,20 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 array_unshift($this->_ldapRawData, $dn);
             }
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' simpleMail - Tinebase_EmailUser combined with ldap: '. print_r($this->_ldapRawData, true));
     }
-    
+
     /**
      * (non-PHPdoc)
      */
-    protected function _saveOrUpdateSpecialResultToLdap() 
+    protected function _saveOrUpdateSpecialResultToLdap()
     {
         foreach ($this->_ldapRawData as $dn) {
             if (isset($dn['simplemail_readonly'])) {
                 continue;
             }
-            
+
             $keepEntryThreshold = 0;
             foreach ($this->_propertyMapping as $property => $ldapName) {
                 if (substr($ldapName, -8) == ':boolean') {
@@ -304,13 +337,13 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                     $keepEntryThreshold++;
                 }
             }
-            
+
             // check for any values of worth to be saved (compared to minimal entry)
             $dn = array_change_key_case($dn);
             $skeleton = array_change_key_case($this->_simpleMailConfig['skeleton']);
             $skeleton = array_merge($skeleton, Zend_Ldap_Dn::fromString($this->_simpleMailConfig['storage_rdn'])->getRdn() );
             $skeleton['dn'] = true; // Zend_Ldap_Dn always carries the DN
-            
+
             try {
                 if (count(array_diff_key($dn, $skeleton)) > $keepEntryThreshold) {
                     $this->_ldap->save(Zend_Ldap_Dn::fromString($dn['dn']), $dn);
@@ -322,10 +355,10 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
             catch (Zend_Ldap_Exception $ldapException) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' simpleMail - cannot modify ldap entry ('. $dn['dn']. '): '. $ldapException->getMessage());
             }
-            
+
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      */
@@ -348,7 +381,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         }
         return $properties;
     }
-    
+
     /**
      * (non-PHPdoc)
      */
@@ -359,7 +392,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
 
         // last elements holds managed DN (if any)
         $numberOfLdapElements = count($this->_ldapRawData);
-        
+
         if (($numberOfLdapElements == 0) || isset($this->_ldapRawData[$numberOfLdapElements-1]['simplemail_readonly'])) {
             $this->_ldapRawData[0] = $this->_simpleMailConfig['skeleton'];
             $this->_ldapRawData[0]['objectclass'][] = 'top';
@@ -367,7 +400,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
             $this->_ldapRawData[0] = array_merge($this->_ldapRawData[0], $managedDn->getRdn());
             $numberOfLdapElements ++;
         }
-        
+
         $ldapProperty = $this->_propertyMapping[$property];
         if (substr($ldapProperty, -8) == ':boolean') {
             $ldapProperty = substr($ldapProperty, 0, -8);
@@ -377,31 +410,31 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         elseif (!isset($this->_ldapRawData[$numberOfLdapElements-1][$ldapProperty])) {
             $this->_ldapRawData[$numberOfLdapElements-1][$ldapProperty] = array();
         }
-        
+
         if (!in_array($value, $this->_ldapRawData[$numberOfLdapElements-1][$ldapProperty])) {
             array_push($this->_ldapRawData[$numberOfLdapElements-1][$ldapProperty], $value);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      */
     protected function _deletePropertyFromLdapRawData($property, $value) 
     {
-        
+
         $ldapProperty = $this->_propertyMapping[$property];
         if (substr($ldapProperty, -8) == ':boolean') {
             $ldapProperty = substr($ldapProperty, 0, -8);
         }
-        
+
         $managedPath = Zend_Ldap_Dn::fromString($this->_simpleMailConfig['storage_base'], Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);
         foreach ($this->_ldapRawData as $index => $dn) {
-            
+
             // change only entries in storage_base path (if existing)
             if (isset($dn['simplemail_readonly']) || !isset($dn[$ldapProperty])) {
                 continue;
             }
-            
+
             if ($value === false) {
                 //unset doesn't remove attribute in ldap
                 $this->_ldapRawData[$index][$ldapProperty] = null;
@@ -413,8 +446,8 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 if (count($this->_ldapRawData[$index][$ldapProperty]) < 1) {
                     unset($this->_ldapRawData[$index][$ldapProperty]);
                 }
-            }            
-            
+            }
+
         }
     }
 }

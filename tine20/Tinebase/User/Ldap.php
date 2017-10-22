@@ -613,11 +613,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         try {
             $metaData = $this->_getMetaData($_userId);
-    
+
             if (! empty($metaData['dn'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' delete user ' . $metaData['dn'] .' from sync backend (LDAP)');
                 $this->_ldap->delete($metaData['dn']);
+            }
+
+            foreach ($this->_ldapPlugins as $plugin) {
+                $plugin->inspectDeleteUser($_userId);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
