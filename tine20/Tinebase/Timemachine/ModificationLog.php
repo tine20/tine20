@@ -278,7 +278,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @todo use backend search() + Tinebase_Model_ModificationLogFilter
      */
-    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL,  $_modifierId = NULL)
+    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL)
     {
         $id = ($_id instanceof Tinebase_Record_Interface) ? $_id->getId() : $_id;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -289,8 +289,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $select = $db->select()
             ->from($this->_tablename)
             ->order('instance_seq ASC')
-            ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' = ?', $application->id))
-            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $id));
+            ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' = ?', $application->id));
+
+        if (null !== $_id) {
+            $select->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $id));
+        }
         
         if ($_from) {
             $select->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' > ?', $_from->toString($isoDef)));
@@ -310,6 +313,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         
         if ($_modifierId) {
             $select->where($db->quoteInto($db->quoteIdentifier('modification_account') . ' = ?', $_modifierId));
+        }
+
+        if ($_fromInstanceId) {
+            $select->where($db->quoteInto($db->quoteIdentifier('instance_seq') . ' >= ?', $_fromInstanceId));
         }
        
         $stmt = $db->query($select);
@@ -1261,7 +1268,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        $result = Tinebase_Lock::aquireDBSessionLock(__FUNCTION__);
+        $result = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (false === $result) {
             // we are already running
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
@@ -1344,7 +1351,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if ($currentRecordType !== $modification->record_type || !isset($controller)) {
                     $currentRecordType = $modification->record_type;
                     if (!isset($controllerCache[$modification->record_type])) {
-                        $controller = Tinebase_Core::getApplicationInstance($modification->record_type);
+                        $controller = Tinebase_Core::getApplicationInstance($modification->record_type, '', true);
                         $controllerCache[$modification->record_type] = $controller;
                     } else {
                         $controller = $controllerCache[$modification->record_type];
@@ -1367,6 +1374,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $this->_externalInstanceId = null;
 
                 Tinebase_Exception::log($e, false);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Could not apply modification: ' . print_r($modification->toArray(), true));
 
                 $transactionManager->rollBack();
 

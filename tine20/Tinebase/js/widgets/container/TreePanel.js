@@ -124,6 +124,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     gridPanel: null,
 
+    /**
+     * TODO move fields to the right place
+     *
+     * @property {Array}
+     */
+    filtersToRemove: ['container_id', 'attender', 'path'],
+
     useArrows: true,
     border: false,
     autoScroll: true,
@@ -713,8 +720,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         ftb.supressEvents = true;
         ftb.filterStore.each(function(filter) {
             var field = filter.get('field');
-            // @todo find criteria what to remove
-            if (field === 'container_id' || field === 'attender' || field === 'path') {
+            if (this.filtersToRemove.indexOf(field) > -1) {
                 ftb.deleteFilter(filter);
             }
         }, this);

@@ -13,38 +13,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr ""
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119 js/Model.js:35
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128 js/Model.js:74
-msgid "Title"
-msgstr ""
-
-#: js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121 js/Model.js:75
-msgid "Number"
-msgstr ""
-
-#: js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134 js/Model.js:78
-msgid "Status"
-msgstr ""
-
-#: js/ProjectEditDialog.js:177 js/Model.js:76
-msgid "Description"
-msgstr ""
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
 msgstr ""
 
 #: js/ProjectGridPanel.js:75
@@ -54,6 +24,24 @@ msgstr ""
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
 msgstr ""
+
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr ""
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr ""
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr ""
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:39
 msgid "Project list"
@@ -67,6 +55,10 @@ msgstr ""
 
 #: js/Model.js:73
 msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:76 js/ProjectEditDialog.js:178
+msgid "Description"
 msgstr ""
 
 #: js/Model.js:87
@@ -85,8 +77,8 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
 msgstr ""
 
 #: js/ProjectAttendeeFilter.js:49
@@ -105,6 +97,10 @@ msgstr ""
 msgid "Select Project"
 msgstr ""
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr ""
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr ""
@@ -112,6 +108,22 @@ msgstr ""
 #: js/AddToProjectPanel.js:102
 #, python-brace-format
 msgid "Adding {0} Participants to project"
+msgstr ""
+
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr ""
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
 #: Config.php:38
@@ -159,6 +171,11 @@ msgstr ""
 msgid "Responsible"
 msgstr ""
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr ""
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr ""
@@ -179,27 +196,10 @@ msgstr ""
 msgid "My projects that are on hold"
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr ""
-
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr ""
 
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
 msgstr ""

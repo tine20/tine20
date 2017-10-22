@@ -674,7 +674,34 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
 
         var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
-        
+
+        if (event && event.get('poll_id') && event.get('editGrant')) {
+            require('./PollSetDefiniteEventAction');
+            menuitems = menuitems.concat(['-',{
+                text: this.app.i18n._('Set as definite event'),
+                iconCls: 'cal-polls-set-definite-action',
+                scope: this,
+                handler: function() {
+                    var me = this,
+                        ns = Tine.Calendar.eventActions.setDefiniteEventAction;
+                    ns.confirm()
+                        .then(function() {
+                            me.loadMask.show();
+                            return Tine.Calendar.setDefinitePollEvent(event.data);
+                        })
+                        .then(function() {
+                            var panel = me.getCalendarPanel(me.activeView),
+                                store = panel.getStore();
+
+                            store.load({refresh: true});
+                        })
+                        .catch(function(error) {
+                            me.loadMask.hide();
+                        });
+                }
+            }]);
+        }
+
         if (event) {
             this.action_copy_to.setDisabled(event.isRecurInstance() || event.isRecurException() || event.isRecurBase());
             menuitems = menuitems.concat(['-', this.action_cut, this.action_copy_to, '-']);
@@ -701,6 +728,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }],
             items: menuitems
         });
+
+        // run action updater
         ctxMenu.showAt(e.getXY());
     },
     
@@ -985,7 +1014,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(updatedEvent) {
-                if (updatedEvent.isRecurBase()) {
+                if (updatedEvent.isRecurBase() || updatedEvent.hasPoll()) {
                     store.load({refresh: true});
                 } else {
                     this.congruenceFilterCheck(event, updatedEvent);
@@ -1385,8 +1414,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onKeyDown: function (e) {
         if (e.ctrlKey) {
-            switch (e.getKey()) 
-            {
+            switch (e.getKey()) {
             case e.A:
                 // select only current page
                 //this.grid.getSelectionModel().selectAll(true);
@@ -1406,6 +1434,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 break;
             }
         } else if (e.getKey() === e.DELETE) {
+            e.stopEvent();
             if (! this.action_deleteRecord.isDisabled()) {
                 this.onDeleteRecords.call(this);
             }

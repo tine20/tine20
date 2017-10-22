@@ -1591,7 +1591,7 @@ class Tinebase_FileSystem implements
     }
 
     /**
-     * delete file node
+     * undelete file node
      *
      * @param string $id
      * @param bool $updateDirectoryNodesHash
@@ -2795,7 +2795,7 @@ class Tinebase_FileSystem implements
                     $otherAccount->name,
                     'Tinebase_Model_FullUser'
                 );
-                $otherAccount->name = $account->accountDisplayName;
+                $otherAccount->name = $account->accountLoginName;
             }
         }
 

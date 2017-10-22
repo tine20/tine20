@@ -1,24 +1,133 @@
 
-=TINE 2.0 RELEASENOTES=
+TINE 2.0 RELEASENOTES
+===
                     
   Release:     Caroline (2017.11)
-  Last change:
+  Last change: 2017-10-10
 
 GENERAL CHANGES
 ---
 
 * Replication
-* ... TODO
+
+Master-Slave setup, changes are replicated from master to any number of slaves
+
+* Modification Logs / Undo
+
+Almost all records now have modification logs with the ability to undo changes and undelete records 
+
+* System-Links to files, folders and applications
+
+Use a system-link to quickly access files, folders and applications within Tine 2.0
+
+* Tablet-Usability
+
+We greatly improved the usability of Tine 2.0 with a touchscreen
+
+* Export improvements
+
+Exports have been streamlined and export templates can now use the twig template language
+
+* Automatic Logout
+
+If configured, a user is automatically logged out if inactive for a defined time
+
+* Second Factor PIN
+
+A new second factor has been introduced: user pin
+
+* Second Factor to protect applications
+
+2F can be used to protected certain Tine 2.0 applications
+
+* Currency configuration
+
+The displayed currency can now be configured
+
+* Printing
+
+Printing has been improved all over Tine 2.0 and lots of single record dialogs have gotten a print button
 
 FILEMANAGER
 ---
 
-* separate ACL on all folder nodes
-* fulltext search with tika
-* preview service
-* ... TODO
+* Separate ACL on all folder nodes
+
+Subfolders can have different grants
+
+* Fulltext search with tika
+
+If a tika.jar is installed on the webserver, documents can be indexed and searched 
+
+* Preview service
+
+Use a preview service to create previews for lots of document types
+
+* Versions
+
+Tine 2.0 is keeping track of multiple versions of a file and you can download older versions
+
+* Usage
+
+Tine 2.0 now shows the file-usage by user and filetype in a folder and its subfolders 
+
+* New grants "publish" and "download"
+
+For better management of access to files
+
+* Password creation for download links
+
+Generates a random password
+
+* Notifications
+
+Users can get notifications if files or folders change
+
+ADDRESSBOOK
+---
+
+* Groups improvements
+
+For example, the contact's groups are now shown in the edit dialog
+
+* Serial Letters
+
+It is now possible to export multiple contacts in a docx template to send serial letters
 
 CALENDAR
 ---
 
-* .. TODO
+* Improved Attendee-Search
+
+Search now finds all possible attendees, you no longer have to switch the type.
+Attendee search directly shows the availability of the attender with a red or green ball
+
+* Timeline view
+
+Timeline view has been added
+
+* Calendar resources improvements
+
+Grants have been streamlined, maximum number of people can be set
+
+* dynamic recurrence exceptions
+
+for example during holidays, tine automatically creates recurrence exceptions for recurring events
+
+* automatic event search
+
+Find a timeslot for a given set of attendee for a new event
+
+EMAIL
+---
+
+* Attach files as system-link or anonymous download link
+
+This is great for sending big files
+
+* Notifications for emails
+
+The SIEVE notification API is now integrated in Tine 2.0 to send notifications to a configured e-mail address if mails arrive in the INBOX
+
+* E-Mails can be archived in the Filemanager module
+

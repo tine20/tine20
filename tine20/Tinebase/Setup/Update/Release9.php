@@ -392,7 +392,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_13()
     {
-        if (version_compare($this->getTableVersion('Tinebase'), '10.45') < 0) {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '10.45') < 0) {
             return;
         }
 

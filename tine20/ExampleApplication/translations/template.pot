@@ -13,30 +13,38 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleRecordEditDialog.js:50
-msgid "ExampleRecord"
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
+#: js/ExampleDetailsPanel.js:74 js/ExampleRecordEditDialog.js:67
 #: Model/ExampleRecord.php:80
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
+#: js/ExampleDetailsPanel.js:78 js/ExampleRecordEditDialog.js:73
 #: Model/ExampleRecord.php:91
 msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:50
+msgid "ExampleRecord"
 msgstr ""
 
 #: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:99
 msgid "Reason"
 msgstr ""
 
-#: js/ExampleDetailsPanel.js:56
-msgid "Total Example Records"
-msgstr ""
-
 #: js/Example.js:23
 msgid "New Example"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
 msgstr ""
 
 #: Config.php:108
@@ -117,10 +125,6 @@ msgstr ""
 msgid "Just an example string for test purpose"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr ""
-
 #: Model/ExampleRecord.php:35
 msgid "example record"
 msgid_plural "example records"
@@ -143,10 +147,6 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: Preference.php:60
-msgid "Default Example Record Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new records"
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr ""

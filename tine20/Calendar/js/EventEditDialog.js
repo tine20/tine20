@@ -11,6 +11,7 @@
 Ext.ns('Tine.Calendar');
 
 require('./FreeTimeSearchDialog');
+require('./PollPanel');
 
 /**
  * @namespace Tine.Calendar
@@ -239,7 +240,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             this.attendeeGridPanel,
                             this.rrulePanel,
-                            this.alarmPanel
+                            this.alarmPanel,
+                            // this.pollPanel
                         ]
                     }]
                 }, {
@@ -388,7 +390,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
-        
+
+        // this.pollPanel = new Tine.Calendar.PollPanel({
+        //     editDialog : this
+        // });
         this.rrulePanel = new Tine.Calendar.RrulePanel({
             eventEditDialog : this
         });

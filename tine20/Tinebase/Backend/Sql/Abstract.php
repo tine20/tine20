@@ -25,6 +25,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * placeholder for id column for search()/_getSelect()
      */
     const IDCOL             = '_id_';
+
+    /**
+     * placeholder for all columns for search()/_getSelect()
+     */
+    const ALLCOL            = '*';
     
     /**
      * fetch single column with db query
@@ -120,7 +125,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @var string
      */
-    protected $_defaultCountCol = '*';
+    protected $_defaultCountCol = self::ALLCOL;
     
     /**
      * Additional columns _getSelect()
@@ -254,7 +259,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function getByProperty($value, $property = 'name', $getDeleted = FALSE) 
     {
-        $select = $this->_getSelect('*', $getDeleted)
+        $select = $this->_getSelect(self::ALLCOL, $getDeleted)
             ->limit(1);
         
         if ($value !== NULL) {
@@ -355,13 +360,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $value = (array)$_value;
             $orderBy = $this->_tableName . '.' . ($_orderBy ? $_orderBy : $_property);
 
-            $select = $this->_getSelect('*', $_getDeleted)
+            $select = $this->_getSelect(self::ALLCOL, $_getDeleted)
                 ->where($columnName . 'IN (?)', $value)
                 ->order($orderBy . ' ' . $_orderDirection);
 
                 Tinebase_Backend_Sql_Abstract::traitGroup($select);
         } else {
-                $select = $this->_getSelect('*', $_getDeleted)->where('1=0');
+                $select = $this->_getSelect(self::ALLCOL, $_getDeleted)->where('1=0');
         }
         
         $this->_checkTracing($select);
@@ -487,7 +492,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  array|string|boolean                 $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = self::ALLCOL)
     {
         $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
         
@@ -501,8 +506,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
             $_cols = self::IDCOL;
-        } else if ($_cols === FALSE) {
-            $_cols = '*';
+        } elseif ($_cols === FALSE) {
+            $_cols = self::ALLCOL;
         }
         
         // (1) eventually get only ids or id/value pair
@@ -584,7 +589,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
 
-        $defaultCountCol = $this->_defaultCountCol == '*' ?  '*' : $this->_db->quoteIdentifier($this->_defaultCountCol);
+        $defaultCountCol = $this->_defaultCountCol == self::ALLCOL ?  self::ALLCOL : $this->_db->
+            quoteIdentifier($this->_defaultCountCol);
         
         $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
         foreach ($this->_additionalSearchCountCols as $column => $select) {
@@ -624,7 +630,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         $getIdValuePair = FALSE;
 
-        if ($_cols === '*') {
+        if ($_cols === self::ALLCOL) {
             $colsToFetch = array('id' => self::IDCOL);
         } else {
             $colsToFetch = (array) $_cols;
@@ -784,9 +790,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    protected function _getSelect($_cols = self::ALLCOL, $_getDeleted = FALSE)
     {
-        if ($_cols !== '*' ) {
+        if ($_cols !== self::ALLCOL ) {
             $cols = array();
             // make sure cols is an array, prepend tablename and fix keys
             foreach ((array) $_cols as $id => $col) {
@@ -794,7 +800,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
         } else {
-            $cols = array('*');
+            $cols = array(self::ALLCOL);
         }
 
         foreach ($this->_additionalColumns as $name => $column) {
@@ -834,7 +840,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $cols = (array) $_cols;
             foreach ($this->_foreignTables as $foreignColumn => $join) {
                 // only join if field is in cols
-                if (in_array('*', $cols) || (isset($cols[$foreignColumn]) || array_key_exists($foreignColumn, $cols))) {
+                if (in_array(self::ALLCOL, $cols) || (isset($cols[$foreignColumn]) || array_key_exists($foreignColumn, $cols))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign column: ' . $foreignColumn);
                     
                     $selectArray = ((isset($join['select']) || array_key_exists('select', $join)))
@@ -880,10 +886,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $interimColsJoins = array();
             foreach ($this->_foreignTables as $foreignColumn => $join) {
                 // only join if field is in cols
-                if (in_array('*', $finalCols) || (isset($finalCols[$foreignColumn]) || array_key_exists($foreignColumn, $finalCols))) {
+                if (in_array(self::ALLCOL, $finalCols) || (isset($finalCols[$foreignColumn]) || array_key_exists($foreignColumn, $finalCols))) {
                     $finalColsJoins[$join['table']] = 1;
                 }
-                if (in_array('*', $interimCols) || (isset($interimCols[$foreignColumn]) || array_key_exists($foreignColumn, $interimCols))) {
+                if (in_array(self::ALLCOL, $interimCols) || (isset($interimCols[$foreignColumn]) || array_key_exists($foreignColumn, $interimCols))) {
                     $interimColsJoins[$join['table']] = 1;
                 }
             }
@@ -995,6 +1001,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_inspectAfterCreate($result, $_record);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
+                . ' Created new record in ' . $this->_tableName . ' with id ' . $_record->getId()
+            );
+
         } catch(Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
@@ -1633,7 +1645,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             }
             
             // resolve * to single columns
-            if ($column[1] == '*') {
+            if ($column[1] == self::ALLCOL) {
 
                 $tableFields = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $column[0], $select->getAdapter());
                 foreach ($tableFields as $columnName => $schema) {

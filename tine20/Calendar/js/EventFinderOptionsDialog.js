@@ -103,7 +103,9 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
             iconCls: 'action_cancel'
         });
 
-        this.actionUpdater = new Tine.widgets.ActionUpdater();
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            evalGrants: false
+        });
 
         this.actionUpdater.addActions([
             this.action_saveAndClose,

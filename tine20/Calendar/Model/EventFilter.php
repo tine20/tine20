@@ -64,6 +64,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'base_event_id'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'rrule_constraints'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'poll_id'               => array('filter' => 'Tinebase_Model_Filter_Id'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_FullText'),

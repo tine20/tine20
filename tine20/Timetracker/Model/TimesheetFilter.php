@@ -111,7 +111,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
                 if ($grant != Timetracker_Model_TimeaccountGrants::BOOK_OWN) {
-                    $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+                    $result = array_merge($result, Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl($grant, TRUE));
                 }
             }
             $this->_validTimeaccounts = array_unique($result);
@@ -126,7 +126,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         $where = $db->quoteInto("$field IN (?)", empty($this->_validTimeaccounts) ? array('') : $this->_validTimeaccounts);
         
         // get timeaccounts with BOOK_OWN right (get only if no manual filter is set)
-        $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+        $bookOwnTS = Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
         if (! empty($bookOwnTS)) {
             $where .= ' OR (' . $db->quoteInto($field . ' IN (?)', $bookOwnTS)
                 . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';

@@ -38,9 +38,8 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
     /**
      * @var array filter model fieldName => definition
      */
-    protected $_filterModel = array(
-        'is_deleted'            => array(
-            'filter'                => 'Tinebase_Model_Filter_Bool'
-        )
-    );
+    protected $_filterModel = [
+        'is_deleted'            => ['filter' => 'Tinebase_Model_Filter_Bool'],
+        'type'                  => ['filter' => 'Tinebase_Model_Filter_Text']
+    ];
 }

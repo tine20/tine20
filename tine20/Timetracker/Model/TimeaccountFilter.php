@@ -79,7 +79,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . " Get all timeaccounts for user with required grants: " . print_r($this->_requiredGrants, TRUE));
             
-            $result = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($this->_requiredGrants, TRUE);
+            $result = Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl($this->_requiredGrants, TRUE);
             $this->_validTimeaccounts = $result;
             $this->_isResolved = TRUE;
             

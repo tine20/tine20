@@ -45,8 +45,8 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'RoleMember',
-        'recordsName'       => 'RoleMembers', // ngettext('RoleMember', 'RoleMembers', n)
+        'recordName'        => 'Application',
+        'recordsName'       => 'Applications', // ngettext('Application', 'Applications', n)
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
@@ -57,7 +57,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
-        'modelName'         => 'RoleMember',
+        'modelName'         => 'Application',
 
         'fields' => array(
             'name'              => array(
@@ -165,5 +165,15 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     {
         $versions = $this->getMajorAndMinorVersion();
         return $versions['major'];
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return true;
     }
 }

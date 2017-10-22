@@ -331,7 +331,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
 
-        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__ . '::' . Tinebase_Core::getTinebaseId());
+        $freeLock = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (! $freeLock) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Job already running.');
@@ -1188,6 +1188,43 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * checks if there are files missing previews and creates them synchronously
+     * that means this can be very time consuming
+     * also deletes previews of files that no longer exist
+     *
+     * @return int
+     */
+    public function fileSystemCheckPreviews()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->sanitizePreviews();
+
+        return 0;
+    }
+
+    /**
+     * recreates all previews
+     *
+     * @return int
+     */
+    public function fileSystemRecreateAllPreviews()
+    {
+
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
+        Tinebase_FileSystem::getInstance()->sanitizePreviews();
+
+        return 0;
+    }
+
+    /**
      * repair a table
      * 
      * @param Zend_Console_Getopt $opts
@@ -1484,6 +1521,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+    }
+
+    public function cleanAclTables()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Controller::getInstance()->cleanAclTables();
     }
 
     public function waitForActionQueueToEmpty()

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -89,7 +89,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     /**
      * the constructor
      *
-     * @param  array $options Options used in connecting, binding, etc.
+     * @param  array $_options Options used in connecting, binding, etc.
      */
     public function __construct(array $_options) 
     {
@@ -142,13 +142,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             }
         }
     }
-    
+
     /**
      * get syncable group by id from sync backend
-     * 
-     * @param  mixed  $_groupId  the groupid
-     * 
+     *
+     * @param  mixed $_groupId the groupid
      * @return Tinebase_Model_Group
+     * @throws Tinebase_Exception_Record_NotDefined
      */
     public function getGroupByIdFromSyncBackend($_groupId)
     {
@@ -333,14 +333,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         return $_groupMembers;
     }
-    
+
     /**
      * replace all current groupmemberships of user in sync backend
      *
-     * @param  mixed  $_userId
-     * @param  mixed  $_groupIds
-     * 
+     * @param  mixed $_userId
+     * @param  mixed $_groupIds
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function setGroupMembershipsInSyncBackend($_userId, $_groupIds)
     {
@@ -485,7 +485,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $memberships = $this->getGroupMemberships($_accountId);
+        $memberships = $this->getGroupMembershipsFromSyncBackend($_accountId);
         if (!in_array($groupId, $memberships)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skip removing group member, as $userId is not in group $groupId " . print_r($memberships, true));
              return;
@@ -716,12 +716,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         return $result->getFirst();
     }
-    
+
     /**
      * get metatada of existing user
      *
-     * @param  string  $_userId
+     * @param  string $_userId
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getUserMetaData($_userId)
     {
@@ -743,13 +744,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
 
         return $result->getFirst();
     }
-    
+
     /**
      * returns arrays of metainfo from given accountIds
      *
      * @param array $_accountIds
      * @param boolean $throwExceptionOnMissingAccounts
      * @return array of strings
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getAccountsMetaData(array $_accountIds, $throwExceptionOnMissingAccounts = TRUE)
     {
@@ -839,7 +841,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      * returns a single account dn
      *
      * @param string $_accountId
-     * @return string
+     * @return array
      */
     protected function _getAccountMetaData($_accountId)
     {
@@ -858,14 +860,14 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         return $newDn;
     }
-    
+
     /**
      * generates a gidnumber
      *
      * @todo add a persistent registry which id has been generated lastly to
      *       reduce amount of groupid to be transfered
-     * 
      * @return int
+     * @throws Tinebase_Exception_NotImplemented
      */
     protected function _generateGidNumber()
     {
@@ -926,12 +928,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         return $this->resolveGIdNumberToUUId($_groupId);
     }
-    
+
     /**
      * resolve gidnumber to UUID(for example entryUUID) attribute
-     * 
+     *
      * @param int $_gidNumber the gidnumber
-     * @return string 
+     * @return string
+     * @throws Tinebase_Exception_NotFound
      */
     public function resolveGIdNumberToUUId($_gidNumber)
     {
@@ -1044,6 +1047,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Group/Interface/Syncable::mergeMissingProperties
+     * @param Tinebase_Record_Interface $syncGroup
+     * @param Tinebase_Record_Interface $sqlGroup
      */
     public static function mergeMissingProperties($syncGroup, $sqlGroup)
     {

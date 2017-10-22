@@ -605,7 +605,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             });
 
-            var actionUpdater = new Tine.widgets.ActionUpdater();
+            var actionUpdater = new Tine.widgets.ActionUpdater({
+                evalGrants: false
+            });
             actionUpdater.addAction(exportAction);
             actionUpdater.updateActions([resource]);
 
@@ -933,7 +935,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         return result;
     },
-    
+
     /**
      * disable contents not panel
      */

@@ -114,6 +114,7 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             'body'  =>  'http://www.facebook.com/media/set/?set=a.164136103742229.1073741825.100004375207149&type=1&l=692e495b17'
                 . " Klicken Sie bitte noch auf den folgenden Link, um Ihre Teilnahme zu bestätigen:\n"
                 . 'http://www.kieler-linuxtage.de/vortragsplaner/wsAnmeldung.php?fkt=best&wsID=111&code=xxxx&eMail=abc@efh.com'
+                . '   &lt;http://my.serveer.com/job/job1/137/display/redirect?page=changes&gt;'
         ));
         
         $result = Felamimail_Message::replaceUris($message->body);
@@ -122,5 +123,6 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('a href="http://www.facebook.com/media/set/', $result);
         $this->assertContains('a href="http://www.kieler-linuxtage.de/', $result);
         $this->assertContains('eMail=abc@efh.com', $result);
+        $this->assertContains('a href="http://my.serveer.com/job/job1/137/display/redirect?page=changes"', $result);
     }
 }

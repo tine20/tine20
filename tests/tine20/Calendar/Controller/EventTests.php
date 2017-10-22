@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -19,6 +19,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * @var Calendar_Controller_Event controller unter test
      */
     protected $_controller;
+
+    protected $_oldFileSystemConfig = null;
     
     /**
      * (non-PHPdoc)
@@ -28,6 +30,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
+        $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
+    }
+
+    public function tearDown()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
+        parent::tearDown();
     }
     
     /**
@@ -1630,5 +1639,498 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         } catch (Tinebase_Exception_Record_Validation $terv) {
             $this->assertEquals('Bad Timezone: AWSTTTT', $terv->getMessage());
         }
+    }
+
+    public function testRruleModLogUndo()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsql will be dropped, roll back of data not supported on pgsql');
+        }
+
+        $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        $ownContactId = Tinebase_Core::getUser()->contact_id;
+        $scleverContactId = $this->_personas['sclever']->contact_id;
+
+        // create event with 2 attendees, no rrule
+        $event1 = $this->_getEvent(true);
+        $event1->summary = 'event 1';
+        $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', [
+            [
+                'user_id'   => $ownContactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'    => Calendar_Model_Attender::STATUS_DECLINED
+            ],[
+                'user_id'   => $scleverContactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'    => Calendar_Model_Attender::STATUS_DECLINED
+            ],
+        ]);
+
+        $createdEvent = $this->_controller->create($event1);
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $createdEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $createdEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+
+        // update attendee status
+        /** @var Calendar_Model_Attender $attender */
+        $attender = $createdEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord();
+        $attender->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusUpdate($createdEvent, $attender, $attender->status_authkey);
+        $updatedEvent = $this->_controller->get($createdEvent->getId());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+
+        // now make it a recurring event
+        $updatedEvent->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, $updatedEvent->dtend);
+
+        $deepLink = $nextOccurance->getDeepLink();
+        preg_match('/fakeid.*$/', $deepLink, $matches);
+        $id = $matches[0];
+
+        $recurInstance = $this->_controller->get($id);
+        static::assertTrue($recurInstance->isRecurInstance());
+        static::assertEquals($nextOccurance->getId(), $recurInstance->getId());
+
+        // create recur exception
+        $nextOccurance->summary = 'exception';
+        $this->_controller->createRecurException($nextOccurance);
+        $recurException = $this->_controller->get($id);
+        static::assertFalse($recurException->isRecurInstance());
+        static::assertEquals($nextOccurance->summary, $recurException->summary);
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $recurException->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $recurException->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
+        )));
+        static::assertEquals(2, count($events));
+
+        // update recur exception
+        $updatedException = clone $recurException;
+        $updatedException->dtstart->addMinute(1);
+        $updatedException = $this->_controller->update($updatedException);
+        static::assertEquals(1, $updatedException->dtstart->compare($recurException->dtstart));
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
+        )));
+        static::assertEquals(2, count($events));
+        $updatedEvent = $this->_controller->get($updatedEvent->getId());
+
+        // create a fallout exception
+        $fallout = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, $updatedException->dtend);
+        $fallout->summary = 'Abendbrot';
+        $fallout->last_modified_time = clone $updatedEvent->last_modified_time;
+        $persistentEventWithExdate = $this->_controller->createRecurException($fallout, true);
+        $updatedEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[0]));
+        static::assertEquals($updatedException->dtstart->format('c'), $updatedEvent->exdate[0]->getClone()->addMinute(1)
+            ->format('c'));
+        static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[1]));
+        static::assertEquals($persistentEventWithExdate->exdate[1]->format('c'), $updatedEvent->exdate[1]->format('c'));
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
+        )));
+        $this->assertEquals(2, count($events));
+
+        // change rrule
+        $rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $updatedEvent->dtend->getClone()->addDay(10)->format('Y-m-d H:i:s');
+        $updatedEvent->rrule = $rrule;
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertEquals(substr($rrule, 0, -8), substr((string)($updatedEvent->rrule), 0 , -8));
+
+        // just testing
+        $this->_controller->get($updatedException->getId());
+        $this->_controller->get($fallout->getId());
+
+        // delete it
+        $this->_controller->delete($updatedEvent->getId());
+        try {
+            $this->_controller->get($updatedEvent->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        try {
+            $this->_controller->get($updatedException->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        try {
+            $this->_controller->get($fallout->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', null,
+            Calendar_Model_Event::class, null, null, null, null, $instanceSeq + 1);
+        static::assertEquals(9, $modifications->count());
+
+        // undelete it
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertEquals(substr($rrule, 0, -8), substr((string)($undidEvent->rrule), 0 , -8));
+        static::assertEquals('Tinebase_DateTime', get_class($undidEvent->exdate[0]));
+        static::assertEquals($undidEvent->exdate[0]->format('c'), $updatedEvent->exdate[0]->format('c'));
+        static::assertEquals('Tinebase_DateTime', get_class($undidEvent->exdate[1]));
+        static::assertEquals($undidEvent->exdate[1]->format('c'), $updatedEvent->exdate[1]->format('c'));
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
+        )));
+        $this->assertEquals(2, count($events));
+        static::assertFalse($this->_controller->get($updatedException->getId())->isRecurInstance());
+        static::assertTrue($this->_controller->get($fallout->getId())->isRecurInstance());
+
+        // undo rrule change
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        $rrule = 'FREQ=DAILY;INTERVAL=1';
+        static::assertEquals($rrule, (string)($undidEvent->rrule));
+
+        // remove fall out exception
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertEquals(1, count($undidEvent->exdate));
+        static::assertEquals($undidEvent->exdate[0]->format('c'), $updatedEvent->exdate[0]->format('c'));
+
+        // undo update recur exception
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        $undidException = $this->_controller->get($updatedException->getId());
+        static::assertEquals($undidEvent->exdate[0]->format('c'), $undidException->dtstart->format('c'));
+        static::assertEquals($undidException->dtstart->format('c'), $updatedException->dtstart->getClone()->subMinute(1)->format('c'));
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $undidException->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undidException->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+
+        // delete recur exception
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertEquals(0, count($undidEvent->exdate));
+        try {
+            $this->_controller->get($updatedException->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+
+        // undo make it a recurring event
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertTrue(empty($undidEvent->rrule));
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undidEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+
+        // undo create
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        try {
+            $this->_controller->get($updatedEvent->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
+    public function testModLogUndo()
+    {
+        // activate ModLog in FileSystem!
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+        $filesystem = Tinebase_FileSystem::getInstance();
+        $filesystem->resetBackends();
+        Tinebase_Core::clearAppInstanceCache();
+        $ownContactId = Tinebase_Core::getUser()->contact_id;
+        $scleverContactId = $this->_personas['sclever']->contact_id;
+
+        $cField1 = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'model' => Calendar_Model_Event::class,
+            'definition' => [
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type' => 'string',
+                'uiconfig' => [
+                    'xtype' => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group' => 'unittest',
+                    'order' => 100,
+                ]
+            ]
+        )));
+        $cField2 = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'model' => Calendar_Model_Event::class,
+            'definition' => [
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type' => 'string',
+                'uiconfig' => [
+                    'xtype' => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group' => 'unittest',
+                    'order' => 100,
+                ]
+            ]
+        )));
+
+        // create event with notes, relations, tags, attachments, customfield
+        $event1 = $this->_getEvent(true);
+        $event1->summary = 'event 1';
+        $event1->notes = [new Tinebase_Model_Note([
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',
+        ])];
+        $event1->relations = [[
+            'related_id'        => $ownContactId,
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'type'              => 'foo'
+        ]];
+        $event1->tags = [['name' => 'testtag1']];
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'testAttachementData');
+        $event1->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', [
+            [
+                'name'      => 'testAttachementData.txt',
+                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+            ]
+        ], true);
+        $event1->customfields = [
+            $cField1->name => 'test field1'
+        ];
+        $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', [
+            [
+                'user_id'   => $ownContactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'    => Calendar_Model_Attender::STATUS_DECLINED
+            ],
+        ]);
+        $event1->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', [
+            new Tinebase_Model_Alarm([
+                'minutes_before' => 2880
+            ], TRUE)
+        ]);
+
+        $createdEvent = $this->_controller->create($event1);
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $createdEvent->attendee->getFirstRecord()
+            ->status);
+
+        // update event, add more notes, relations, tags, attachements, customfields, alarms, attendees
+        $updateEvent = clone $createdEvent;
+        $notes = $updateEvent->notes->toArray();
+        $notes[] = [
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note 2',
+        ];
+        $updateEvent->notes = $notes;
+        $relations = $updateEvent->relations->toArray();
+        $relations[] = [
+            'related_id'        => $ownContactId,
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_CHILD,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'type'              => 'bar'
+        ];
+        $updateEvent->relations = $relations;
+        $updateEvent->tags = clone $createdEvent->tags;
+        $updateEvent->tags->addRecord(new Tinebase_Model_Tag(['name' => 'testtag2'], true));
+        $updateEvent->attachments = clone $createdEvent->attachments;
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'moreTestAttachementData');
+        $updateEvent->attachments->addRecord(new Tinebase_Model_Tree_Node([
+            'name'      => 'moreTestAttachementData.txt',
+            'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+        ], true));
+        $updateEvent->xprops('customfields')[$cField2->name] = 'test field2';
+        $updateEvent->attendee->addRecord(new Calendar_Model_Attender([
+                'user_id'   => $scleverContactId,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+        ]));
+        $updateEvent->alarms->addRecord(new Tinebase_Model_Alarm([
+            'minutes_before' => 2880
+        ], TRUE));
+
+        $updatedEvent = $this->_controller->update($updateEvent);
+        static::assertEquals(2, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $updatedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+        /** @var Calendar_Model_Attender $attender */
+        $attender = $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord();
+        $attender->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $this->_controller->attenderStatusUpdate($updatedEvent, $attender, $attender->status_authkey);
+        $attender = $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord();
+        $attender->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusUpdate($updatedEvent, $attender, $attender->status_authkey);
+        $updatedEvent = $this->_controller->get($updateEvent->getId());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $updatedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+
+        // update event, remove one note, relation, tag, attachement, customfield, alarm, attendee
+        $updateEvent = clone $updatedEvent;
+        $notes = $updateEvent->notes->toArray();
+        array_pop($notes);
+        $updateEvent->notes = $notes;
+        $relations = $updateEvent->relations->toArray();
+        array_pop($relations);
+        $updateEvent->relations = $relations;
+        $updateEvent->tags->removeFirst();
+        $updateEvent->attachments->removeFirst();
+        $updateEvent->xprops('customfields')[$cField2->name] = null;
+        $updateEvent->attendee->removeRecord($updateEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord());
+        $updateEvent->alarms->removeFirst();
+
+        $updatedEvent = $this->_controller->update($updateEvent);
+        static::assertEquals(1, $updatedEvent->notes->count());
+        static::assertEquals(1, $updatedEvent->relations->count());
+        static::assertEquals(1, $updatedEvent->tags->count());
+        static::assertEquals(1, $updatedEvent->attachments->count());
+        static::assertEquals(1, count($updatedEvent->customfields));
+        static::assertEquals(1, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->getFirstRecord()->status);
+        static::assertEquals(1, $updatedEvent->alarms->count());
+
+        // reschedule the event
+        $updateEvent = clone $updatedEvent;
+        $updateEvent->dtstart->addDay(1);
+        $updateEvent->dtend->addDay(1);
+        $updatedEvent = $this->_controller->update($updateEvent);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->getFirstRecord()->status);
+
+        $event = clone $updatedEvent;
+        // delete it
+        $this->_controller->delete($event->getId());
+        try {
+            $this->_controller->get($event->getId());
+            static::fail('delete did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+
+        $event->seq = 0;
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
+        static::assertEquals(5, $modifications->count());
+
+        // undelete it
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedEvent = $this->_controller->get($event->getId());
+        static::assertEquals(1, $undeletedEvent->notes->count());
+        static::assertEquals(1, $undeletedEvent->relations->count());
+        static::assertEquals(1, $undeletedEvent->tags->count());
+        static::assertEquals(1, $undeletedEvent->attachments->count());
+        static::assertEquals(1, count($undeletedEvent->customfields));
+        static::assertEquals(1, $undeletedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->getFirstRecord()
+            ->status);
+        static::assertEquals(1, $undeletedEvent->alarms->count());
+
+        // undo the reschedule
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $unrescheduledEvent = $this->_controller->get($event->getId());
+        static::assertEquals(1, $unrescheduledEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $unrescheduledEvent->attendee->getFirstRecord()
+            ->status);
+
+        // undelete the removed related data
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedEvent = $this->_controller->get($event->getId());
+        static::assertEquals(2, $undeletedEvent->notes->count());
+        static::assertEquals(2, $undeletedEvent->relations->count());
+        static::assertEquals(2, $undeletedEvent->tags->count());
+        static::assertEquals(2, $undeletedEvent->attachments->count());
+        static::assertEquals(2, count($undeletedEvent->customfields));
+        static::assertEquals(2, $undeletedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $undeletedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        // this tests the special event undo mechanism to allow to set attendee status!
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undeletedEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+        static::assertEquals(2, $undeletedEvent->alarms->count());
+
+        // remove the added related data
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedEvent = $this->_controller->get($event->getId());
+        static::assertEquals(1, $undeletedEvent->notes->count());
+        static::assertEquals(1, $undeletedEvent->relations->count());
+        static::assertEquals(1, $undeletedEvent->tags->count());
+        static::assertEquals(1, $undeletedEvent->attachments->count());
+        static::assertEquals(1, count($undeletedEvent->customfields));
+        static::assertEquals(1, $undeletedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $undeletedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(1, $undeletedEvent->alarms->count());
+
+        // remove the created event
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        try {
+            $this->_controller->get($event->getId());
+            static::fail('event should not be found, it should have been deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 }

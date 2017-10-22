@@ -78,6 +78,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected $_calendarUser = NULL;
 
     /**
+     * @var bool
+     */
+    protected $_keepAttenderStatus = false;
+
+    /**
      * @var Calendar_Controller_Event
      */
     private static $_instance = NULL;
@@ -191,7 +196,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   bool                      $_checkBusyConflicts
-     * @return  Tinebase_Record_Interface
+     * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
@@ -875,7 +880,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   Tinebase_Record_Interface $_record
      * @param   bool                      $_checkBusyConflicts
      * @param   string                    $range
-     * @return  Tinebase_Record_Interface
+     * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
@@ -941,7 +946,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             throw $e;
         }
         
-        $updatedEvent = $this->get($event->getId());
+        $updatedEvent = $this->get($event->getId(), null, true, true);
 
         if ($skipEvent === false) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
@@ -1173,7 +1178,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array $_ids array of record identifiers
+     * @param   string|array $_ids array of record identifiers
      * @param   string $range
      * @return  NULL
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
@@ -1301,6 +1306,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         $dtEnd->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
 
+        // prevent unpredictable new rrule
         if ($originalDtStart->compare($dtStart) !== 0 ||
             (($orgDiff = $baseEvent->dtend->diff($baseEvent->dtstart)) &&
                 ($newDiff = $dtEnd->diff($dtStart)) &&
@@ -1313,7 +1319,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             )) {
             if (strpos($baseEvent->rrule->byday, ',') !== false ||
                 strpos($baseEvent->rrule->bymonthday, ',') !== false ) {
-                throw new Tinebase_Exception_UnexpectedValue('dont change complex stuff like that');
+                // _('The new recurrence rule is unpredictable. Please choose a valid recurrence rule')
+                throw new Tinebase_Exception_SystemGeneric('The new recurrence rule is unpredictable. Please choose a valid recurrence rule');
             }
         }
 
@@ -1535,8 +1542,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $rrule->count = $idx+1;
             } else {
-                $lastBaseOccurence = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $_event->getOriginalDtStart()->subSecond(1), -1);
-                $rrule->until = $lastBaseOccurence ? $lastBaseOccurence->getOriginalDtStart() : $baseEvent->dtstart;
+                $rrule->until = $_event->getOriginalDtStart();
+                $rrule->until->subSecond(1);
             }
             $baseEvent->rrule = (string) $rrule;
             $baseEvent->exdate = $pastExdates;
@@ -1647,6 +1654,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
+     * @return Calendar_Model_Event
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
@@ -1861,7 +1869,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         parent::_inspectAlarmSet($_record, $_alarm);
         $this->adoptAlarmTime($_record, $_alarm, 'time');
     }
-    
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        Calendar_Controller_Poll::getInstance()->inspectBeforeCreateEvent($_record);
+        parent::_inspectBeforeCreate($_record);
+    }
+
     /**
      * inspect update of one record
      * 
@@ -2003,6 +2023,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     break;
             }
         }
+
+        Calendar_Controller_Poll::getInstance()->inspectBeforeUpdateEvent($_record, $_oldRecord);
     }
     
     /**
@@ -2150,13 +2172,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $_ids = array_merge($_ids, $exceptionIds);
             }
 
+            // TODO make this undoable!
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectDeleteEvent([
                 'observable' => $event,
                 'deletedIds' => $_ids
             ]));
         }
-        
-        $this->_deleteAlarmsForIds($_ids);
+        Calendar_Controller_Poll::getInstance()->inspectDeleteEvents($events);
         
         return array_unique($_ids);
     }
@@ -2586,6 +2608,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, Tinebase_Model_Container $calendar = NULL)
     {
         // apply defaults
+        $attender->id                = null;
         $attender->user_type         = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
         $attender->cal_event_id      =  $event->getId();
         $calendar = ($calendar) ? $calendar : Tinebase_Container::getInstance()->getContainerById($event->container_id);
@@ -2615,7 +2638,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $attender->displaycontainer_id = $resource->container_id;
         }
         
-        if ($attender->displaycontainer_id) {
+        if ($attender->displaycontainer_id && !$this->_keepAttenderStatus) {
             // check if user is allowed to set status
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
@@ -2723,7 +2746,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         // reset status if user has no right and authkey is wrong
-        if ($attender->displaycontainer_id && $attender->status_authkey !== $currentAttender->status_authkey) {
+        if ($attender->displaycontainer_id && $attender->status_authkey !== $currentAttender->status_authkey &&
+                !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
                         Tinebase_Model_Grants::GRANT_EDIT)
@@ -2748,7 +2772,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         // reset all status but calUser on reschedule except resources (Resources might have a configured default value)
-        if ($isRescheduled && !$attender->isSame($this->getCalendarUser())) {
+        if ($isRescheduled && !$attender->isSame($this->getCalendarUser()) && !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 //If resource has a default status reset to this
                 $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
@@ -3136,5 +3160,46 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         return $fixedCalendars;
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @param bool $_dryRun
+     */
+    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $_modification, $_dryRun)
+    {
+        $oldKeepAttenderStatus = $this->_keepAttenderStatus;
+        $this->_keepAttenderStatus = true;
+        try {
+            if (Tinebase_Timemachine_ModificationLog::CREATED === $_modification->change_type) {
+                if (!$_dryRun) {
+                    $this->delete(array($_modification->record_id));
+                }
+            } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $_modification->change_type) {
+                $deletedRecord = $this->get($_modification->record_id, null, true, true);
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                /** @var Calendar_Model_Event $record */
+                $record = new $model($diff->oldData, true);
+                foreach (Tinebase_Model_Grants::getAllGrants() as $grant) {
+                    if ($record->has($grant)) {
+                        $record->{$grant} = $deletedRecord->{$grant};
+                    }
+                }
+                if (!$_dryRun) {
+                    $this->unDelete($record);
+                }
+            } else {
+                $record = $this->get($_modification->record_id, null, true, true);
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $record->undo($diff);
+
+                if (!$_dryRun) {
+                    $this->update($record);
+                }
+            }
+        } finally {
+            $this->_keepAttenderStatus = $oldKeepAttenderStatus;
+        }
     }
 }

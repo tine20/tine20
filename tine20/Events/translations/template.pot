@@ -56,26 +56,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: js/CalendarEventGridPanel.js:71
-msgid "Type"
-msgstr ""
-
-#: js/CalendarEventGridPanel.js:231
-msgid "DISASSEMBLY"
-msgstr ""
-
-#: js/CalendarEventGridPanel.js:233
-msgid "ASSEMBLY"
-msgstr ""
-
-#: js/CalendarEventGridPanel.js:235
-msgid "MAIN"
-msgstr ""
-
-#: js/CalendarEventGridPanel.js:268
-msgid "Main Event"
-msgstr ""
-
 #: js/EventEditDialog.js:123
 msgid "Ignore Scheduling Conflict"
 msgstr ""
@@ -134,28 +114,56 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: js/EventEditDialog.js:330
+#: js/EventEditDialog.js:329
 msgid "Description"
 msgstr ""
 
-#: js/EventEditDialog.js:344
+#: js/EventEditDialog.js:343
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:356
+#: js/EventEditDialog.js:355
 msgid "Calendar Entries"
 msgstr ""
 
-#: js/EventEditDialog.js:420
+#: js/EventEditDialog.js:419
 msgid "Start date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:434
+#: js/EventEditDialog.js:433
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:437
+#: js/EventEditDialog.js:436
 msgid "End date must be after start date"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:71
+msgid "Type"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:231
+msgid "DISASSEMBLY"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:233
+msgid "ASSEMBLY"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:235
+msgid "MAIN"
+msgstr ""
+
+#: js/CalendarEventGridPanel.js:268
+msgid "Main Event"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Event Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new Events"
 msgstr ""
 
 #: Config.php:57
@@ -186,18 +194,6 @@ msgstr ""
 msgid "Target Groups"
 msgstr ""
 
-#: Setup/Initialize.php:34
-msgid "All Events"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "All existing Events"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Events"
-msgstr ""
-
 #: Model/Event.php:50
 msgid "Event"
 msgid_plural "Events"
@@ -222,10 +218,14 @@ msgstr ""
 msgid "Optional date"
 msgstr ""
 
-#: Preference.php:60
-msgid "Default Event Container"
+#: Setup/setup.xml:4
+msgid "Events"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default container for new Events"
+#: Setup/Initialize.php:34
+msgid "All Events"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "All existing Events"
 msgstr ""

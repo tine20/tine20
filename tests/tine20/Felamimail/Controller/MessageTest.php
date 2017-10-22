@@ -602,7 +602,7 @@ class Felamimail_Controller_MessageTest extends TestCase
                     $this->assertTrue(! empty($message->body));
                     
                     echo "body: " . $message->body . "\n";
-                    echo "attachements: ";
+                    echo "attachments: ";
                     print_r($message->attachments);
 
                     print_r($message->structure);

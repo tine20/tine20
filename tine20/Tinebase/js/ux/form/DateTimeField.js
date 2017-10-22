@@ -155,9 +155,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.dateField = new dateField(Ext.apply({
             lazyRender: false,
             renderTo: this.el,
-            readOnly: this.readOnly,
+            readOnly: this.readOnly || this.dateFieldReadOnly,
             hideTrigger: this.hideTrigger,
-            disabled: this.disabled,
+            disabled: this.disabled || this.dateFieldDisabled,
             tabIndex: this.tabIndex === -1 ? this.tabIndex : false,
             allowBlank: this.allowBlank,
             value: this.value,
@@ -174,9 +174,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             lazyRender: false,
             increment: this.increment,
             renderTo: this.el,
-            readOnly: this.readOnly,
+            readOnly: this.readOnly || this.timeFieldReadOnly,
             hideTrigger: this.hideTrigger,
-            disabled: this.disabled,
+            disabled: this.disabled || this.timeFieldDisabled,
             editable: this.timeEditable,
             tabIndex: this.tabIndex === -1 ? this.tabIndex : false,
             allowBlank: this.allowBlank,
@@ -241,26 +241,42 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     setDisabled: function (bool, what) {
-        if (what !== 'time' && this.dateField) {
-            this.dateField.setDisabled(bool);
+        if (what !== 'time') {
+            if (this.dateField) {
+                this.dateField.setDisabled(bool);
+            } else {
+                this.dateFieldDisabled = true;
+            }
         }
         
-        if (what !== 'date' && this.timeField) {
-            this.timeField.setDisabled(bool);
+        if (what !== 'date') {
+            if(this.timeField) {
+                this.timeField.setDisabled(bool);
+            } else {
+                this.timeFieldDisabled = true;
+            }
         }
         
         Ext.ux.form.DateTimeField.superclass.setDisabled.call(this, bool);
     },
     
     setReadOnly: function (bool, what) {
-        if (what !== 'time' && this.dateField) {
-            this.dateField.setReadOnly(bool);
+        if (what !== 'time' ) {
+            if (this.dateField) {
+                this.dateField.setReadOnly(bool);
+            } else {
+                this.dateFieldReadOnly = true;
+            }
         }
         
-        if (what !== 'date' && this.timeField) {
-            this.timeField.setReadOnly(bool);
+        if (what !== 'date') {
+            if (this.timeField) {
+                this.timeField.setReadOnly(bool);
+            } else {
+                this.timeFieldReadOnly = true;
+            }
         }
-        
+
         Ext.ux.form.DateTimeField.superclass.setReadOnly.call(this, bool);
     },
     

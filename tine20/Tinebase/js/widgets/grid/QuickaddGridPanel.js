@@ -171,7 +171,11 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 items: items
             });
         }
-        
+
+        if (this.readOnly) {
+            this.deleteAction.setDisabled(true);
+        }
+
         return this.contextMenu;
     },
 
@@ -220,10 +224,14 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * 
      * @return {Array}
      */
-    getFromStoreAsArray: function() {
+    getFromStoreAsArray: function(deleteAutoIds) {
         var result = [];
         this.store.each(function(record) {
-            result.push((this.dataField === null) ? record.data : record.get(this.dataField));
+            var data = (this.dataField === null) ? record.data : record.get(this.dataField);
+            if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
+                delete data.id;
+            }
+            result.push(data);
         }, this);
 
         return result;

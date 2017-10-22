@@ -13,77 +13,38 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/nodeActions.js:28
-msgid "Create Folder"
+#: js/GridDetailsPanel.js:149
+msgid "Message not available."
 msgstr ""
 
-#: js/nodeActions.js:37
-msgid "New Folder"
+#: js/GridDetailsPanel.js:204 js/MailDetailsPanel.js:48 js/NodeGridPanel.js:100
+#: js/Model.js:151 Model/Message.php:49
+msgid "Subject"
 msgstr ""
 
-#: js/nodeActions.js:37
-msgid "Please enter the name of the new folder:"
+#: js/GridDetailsPanel.js:205 js/MailDetailsPanel.js:49
+msgid "From"
 msgstr ""
 
-#: js/nodeActions.js:40
-#, python-brace-format
-msgid "No {0} added"
+#: js/GridDetailsPanel.js:206 js/MailDetailsPanel.js:50
+msgid "Add"
 msgstr ""
 
-#: js/nodeActions.js:40 js/nodeActions.js:127 js/GridContextMenu.js:40
-#, python-brace-format
-msgid "You have to supply a {0} name!"
+#: js/GridDetailsPanel.js:207 js/MailDetailsPanel.js:51
+msgid "Add contact to addressbook"
 msgstr ""
 
-#: js/nodeActions.js:73
-msgid "Edit Properties"
+#: js/GridDetailsPanel.js:208 js/MailDetailsPanel.js:52
+msgid "Date"
 msgstr ""
 
-#: js/nodeActions.js:106
-msgid "Rename"
+#: js/GridDetailsPanel.js:210 js/MailDetailsPanel.js:54
+#: js/MailDetailsPanel.js:252
+msgid "Show or hide header information"
 msgstr ""
 
-#: js/nodeActions.js:120
-#, python-brace-format
-msgid "Rename {0}"
-msgstr ""
-
-#: js/nodeActions.js:121 js/GridContextMenu.js:34
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr ""
-
-#: js/nodeActions.js:127 js/GridContextMenu.js:40
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr ""
-
-#: js/nodeActions.js:151
-msgid "Delete"
-msgstr ""
-
-#: js/nodeActions.js:178 js/GridContextMenu.js:144
-msgid "Do you really want to delete the following files?"
-msgstr ""
-
-#: js/nodeActions.js:213
-msgid "Move"
-msgstr ""
-
-#: js/nodeActions.js:224
-msgid "Move Items"
-msgstr ""
-
-#: js/nodeActions.js:246 js/MailFiler.js:32 js/NodeEditDialog.js:49
-msgid "Save locally"
-msgstr ""
-
-#: js/nodeActions.js:270
-msgid "Preview"
-msgstr ""
-
-#: js/MailFiler.js:24
-msgid "MailFiler"
+#: js/GridDetailsPanel.js:307 js/MailDetailsPanel.js:127
+msgid "Attachments"
 msgstr ""
 
 #: js/ExceptionHandler.js:32
@@ -113,12 +74,218 @@ msgstr ""
 msgid "Item with this name already exists!"
 msgstr ""
 
-#: js/NodeEditDialog.js:57 js/NodeGridPanel.js:393
+#: js/GridContextMenu.js:34 js/nodeActions.js:121
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/GridContextMenu.js:40 js/nodeActions.js:127
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr ""
+
+#: js/GridContextMenu.js:40 js/nodeActions.js:40 js/nodeActions.js:127
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/GridContextMenu.js:140 js/nodeActions.js:178
+msgid "Do you really want to delete the following files?"
+msgstr ""
+
+#: js/NodeGridPanel.js:78
+msgid "Tags"
+msgstr ""
+
+#: js/NodeGridPanel.js:86 js/NodeEditDialog.js:216
+msgid "Name"
+msgstr ""
+
+#: js/NodeGridPanel.js:93 js/Model.js:159
+msgid "Flags"
+msgstr ""
+
+#: js/NodeGridPanel.js:107 js/Model.js:152
+msgid "From (Email)"
+msgstr ""
+
+#: js/NodeGridPanel.js:114 js/Model.js:153
+msgid "From (Name)"
+msgstr ""
+
+#: js/NodeGridPanel.js:121
+msgid "Sender"
+msgstr ""
+
+#: js/NodeGridPanel.js:129 js/Model.js:155
+msgid "To"
+msgstr ""
+
+#: js/NodeGridPanel.js:136
+msgid "Sent"
+msgstr ""
+
+#: js/NodeGridPanel.js:144 js/Model.js:162
+msgid "Received"
+msgstr ""
+
+#: js/NodeGridPanel.js:151
+msgid "Size"
+msgstr ""
+
+#: js/NodeGridPanel.js:159 js/Model.js:146
+msgid "Contenttype"
+msgstr ""
+
+#: js/NodeGridPanel.js:168 js/Model.js:35 js/NodeEditDialog.js:136
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/NodeGridPanel.js:176 js/Model.js:147 js/NodeEditDialog.js:234
+msgid "Creation Time"
+msgstr ""
+
+#: js/NodeGridPanel.js:184 js/NodeEditDialog.js:231
+msgid "Created By"
+msgstr ""
+
+#: js/NodeGridPanel.js:191
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/NodeGridPanel.js:199
+msgid "Last Modified By"
+msgstr ""
+
+#: js/NodeGridPanel.js:237
+msgid "Answered"
+msgstr ""
+
+#: js/NodeGridPanel.js:240
+msgid "Forwarded"
+msgstr ""
+
+#: js/NodeGridPanel.js:243
+msgid "Tine20"
+msgstr ""
+
+#: js/NodeGridPanel.js:301
+msgid "Folder Up"
+msgstr ""
+
+#: js/NodeGridPanel.js:362
+msgid "Reply"
+msgstr ""
+
+#: js/NodeGridPanel.js:372
+msgid "Reply To All"
+msgstr ""
+
+#: js/NodeGridPanel.js:382
+msgid "Forward"
+msgstr ""
+
+#: js/NodeGridPanel.js:391 js/NodeEditDialog.js:57
 msgid "Print Message"
 msgstr ""
 
-#: js/NodeEditDialog.js:121 js/NodeGridPanel.js:455
+#: js/NodeGridPanel.js:453 js/NodeEditDialog.js:121
 msgid "Print Preview"
+msgstr ""
+
+#: js/NodeGridPanel.js:474
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr ""
+
+#: js/NodeGridPanel.js:493
+msgid "Original message"
+msgstr ""
+
+#: js/nodeActions.js:28
+msgid "Create Folder"
+msgstr ""
+
+#: js/nodeActions.js:37
+msgid "New Folder"
+msgstr ""
+
+#: js/nodeActions.js:37
+msgid "Please enter the name of the new folder:"
+msgstr ""
+
+#: js/nodeActions.js:40
+#, python-brace-format
+msgid "No {0} added"
+msgstr ""
+
+#: js/nodeActions.js:73
+msgid "Edit Properties"
+msgstr ""
+
+#: js/nodeActions.js:106
+msgid "Rename"
+msgstr ""
+
+#: js/nodeActions.js:120
+#, python-brace-format
+msgid "Rename {0}"
+msgstr ""
+
+#: js/nodeActions.js:151
+msgid "Delete"
+msgstr ""
+
+#: js/nodeActions.js:213
+msgid "Move"
+msgstr ""
+
+#: js/nodeActions.js:224
+msgid "Move Items"
+msgstr ""
+
+#: js/nodeActions.js:246 js/MailFiler.js:32 js/NodeEditDialog.js:49
+msgid "Save locally"
+msgstr ""
+
+#: js/nodeActions.js:270
+msgid "Preview"
+msgstr ""
+
+#: js/MailFiler.js:24
+msgid "MailFiler"
+msgstr ""
+
+#: js/Model.js:32 js/NodeEditDialog.js:136
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:144
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:145 js/NodeEditDialog.js:223
+msgid "Type"
+msgstr ""
+
+#: js/Model.js:148 js/NodeEditDialog.js:274
+msgid "Description"
+msgstr ""
+
+#: js/Model.js:156
+msgid "To Flat"
+msgstr ""
+
+#: js/Model.js:157
+msgid "Cc"
+msgstr ""
+
+#: js/Model.js:158
+msgid "Bcc"
 msgstr ""
 
 #: js/NodeEditDialog.js:134
@@ -129,175 +296,16 @@ msgstr ""
 msgid "edit file"
 msgstr ""
 
-#: js/NodeEditDialog.js:136 js/Model.js:45 js/NodeGridPanel.js:170
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/NodeEditDialog.js:136 js/Model.js:42
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/NodeEditDialog.js:223 js/NodeGridPanel.js:87
-msgid "Name"
-msgstr ""
-
-#: js/NodeEditDialog.js:230 js/Model.js:100
-msgid "Type"
-msgstr ""
-
-#: js/NodeEditDialog.js:238 js/NodeGridPanel.js:186
-msgid "Created By"
-msgstr ""
-
-#: js/NodeEditDialog.js:241 js/Model.js:102 js/NodeGridPanel.js:178
-msgid "Creation Time"
-msgstr ""
-
-#: js/NodeEditDialog.js:250
+#: js/NodeEditDialog.js:243
 msgid "Modified By"
 msgstr ""
 
-#: js/NodeEditDialog.js:253
+#: js/NodeEditDialog.js:246
 msgid "Last Modified"
 msgstr ""
 
-#: js/NodeEditDialog.js:281 js/Model.js:103
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:295
+#: js/NodeEditDialog.js:288
 msgid "Enter description"
-msgstr ""
-
-#: js/Model.js:99
-msgid "Quick Search"
-msgstr ""
-
-#: js/Model.js:101 js/NodeGridPanel.js:161
-msgid "Contenttype"
-msgstr ""
-
-#: js/Model.js:106 js/GridDetailsPanel.js:187 js/NodeGridPanel.js:101
-#: js/MailDetailsPanel.js:48 Model/Message.php:48
-msgid "Subject"
-msgstr ""
-
-#: js/Model.js:107 js/NodeGridPanel.js:108
-msgid "From (Email)"
-msgstr ""
-
-#: js/Model.js:108 js/NodeGridPanel.js:115
-msgid "From (Name)"
-msgstr ""
-
-#: js/Model.js:109 js/NodeGridPanel.js:130
-msgid "To"
-msgstr ""
-
-#: js/Model.js:110
-msgid "Cc"
-msgstr ""
-
-#: js/Model.js:111
-msgid "Bcc"
-msgstr ""
-
-#: js/Model.js:112 js/NodeGridPanel.js:94
-msgid "Flags"
-msgstr ""
-
-#: js/Model.js:115 js/NodeGridPanel.js:146
-msgid "Received"
-msgstr ""
-
-#: js/GridDetailsPanel.js:188 js/MailDetailsPanel.js:49
-msgid "From"
-msgstr ""
-
-#: js/GridDetailsPanel.js:189 js/MailDetailsPanel.js:50
-msgid "Add"
-msgstr ""
-
-#: js/GridDetailsPanel.js:190 js/MailDetailsPanel.js:51
-msgid "Add contact to addressbook"
-msgstr ""
-
-#: js/GridDetailsPanel.js:191 js/MailDetailsPanel.js:52
-msgid "Date"
-msgstr ""
-
-#: js/GridDetailsPanel.js:193 js/MailDetailsPanel.js:54
-#: js/MailDetailsPanel.js:252
-msgid "Show or hide header information"
-msgstr ""
-
-#: js/GridDetailsPanel.js:290 js/MailDetailsPanel.js:127
-msgid "Attachments"
-msgstr ""
-
-#: js/NodeGridPanel.js:79
-msgid "Tags"
-msgstr ""
-
-#: js/NodeGridPanel.js:122
-msgid "Sender"
-msgstr ""
-
-#: js/NodeGridPanel.js:138
-msgid "Sent"
-msgstr ""
-
-#: js/NodeGridPanel.js:153
-msgid "Size"
-msgstr ""
-
-#: js/NodeGridPanel.js:193
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/NodeGridPanel.js:201
-msgid "Last Modified By"
-msgstr ""
-
-#: js/NodeGridPanel.js:239
-msgid "Answered"
-msgstr ""
-
-#: js/NodeGridPanel.js:242
-msgid "Forwarded"
-msgstr ""
-
-#: js/NodeGridPanel.js:245
-msgid "Tine20"
-msgstr ""
-
-#: js/NodeGridPanel.js:303
-msgid "Folder Up"
-msgstr ""
-
-#: js/NodeGridPanel.js:364
-msgid "Reply"
-msgstr ""
-
-#: js/NodeGridPanel.js:374
-msgid "Reply To All"
-msgstr ""
-
-#: js/NodeGridPanel.js:384
-msgid "Forward"
-msgstr ""
-
-#: js/NodeGridPanel.js:476
-#, python-brace-format
-msgid "On {0}, {1} wrote"
-msgstr ""
-
-#: js/NodeGridPanel.js:495
-msgid "Original message"
 msgstr ""
 
 #: Config.php:26
@@ -308,6 +316,26 @@ msgstr ""
 msgid ""
 "Possible status. Please note that additional status might impact other "
 "MailFiler systems on export or syncronisation."
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
 msgstr ""
 
 #: Acl/Rights.php:104
@@ -324,24 +352,4 @@ msgstr ""
 
 #: Acl/Rights.php:109
 msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
 msgstr ""

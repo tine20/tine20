@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -33,6 +33,27 @@ class Tinebase_User_LdapTest extends TestCase
             $this->markTestSkipped('LDAP backend not enabled');
         }
         $this->_backend = Tinebase_User::factory(Tinebase_User::LDAP);
+        /** @var Tinebase_Group_Ldap $groupBackend */
+        $groupBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
+
+        try {
+            try {
+                $user = $this->_backend->getUserByLoginName('tine20phpunituser');
+            } catch (Tinebase_Exception_NotFound $e) {
+                $user = $this->_backend->getUserByPropertyFromSyncBackend('accountLoginName', 'tine20phpunituser');
+            }
+            try {
+                foreach ($groupBackend->getGroupMembershipsFromSyncBackend($user) as $groupId) {
+                    $groupBackend->removeGroupMember($groupId, $user);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+            try {
+                $this->_backend->deleteUser($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+            try {
+                $this->_backend->deleteUserInSyncBackend($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        } catch(Tinebase_Exception_NotFound $e) {}
 
         parent::setUp();
     }

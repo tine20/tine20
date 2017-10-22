@@ -101,7 +101,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
                 $updateObserver = new Tinebase_Model_PersistentObserver(array(
                     'observable_model'      => 'Tinebase_Model_Container',
                     'observable_identifier' => $resource->container_id,
-                    'observer_model'        => $this->_modelName,
+                    'observer_model'        => 'Calendar_Model_Resource',
                     'observer_identifier'   => $resource->getId(),
                     'observed_event'        => 'Tinebase_Event_Record_Update'
                 ));
@@ -110,7 +110,7 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
                 $deleteObserver = new Tinebase_Model_PersistentObserver(array(
                     'observable_model'      => 'Tinebase_Model_Container',
                     'observable_identifier' => $resource->container_id,
-                    'observer_model'        => $this->_modelName,
+                    'observer_model'        => 'Calendar_Model_Resource',
                     'observer_identifier'   => $resource->getId(),
                     'observed_event'        => 'Tinebase_Event_Record_Delete'
                 ));

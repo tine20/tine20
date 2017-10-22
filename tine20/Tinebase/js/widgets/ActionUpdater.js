@@ -230,12 +230,14 @@
         
         var recordGrants;
         for (var i=0; i<records.length; i++) {
-            recordGrants = _.get(records[i], this.grantsPath);
-            
+            recordGrants = _.get(records[i], this.grantsPath, null);
+            // NOTE: we skip grant update for records without grantsPath
+            if (recordGrants === null) {
+                continue;
+            }
+
             for (var grant in grants) {
-                if (grants.hasOwnProperty(grant) && recordGrants && recordGrants.hasOwnProperty(grant)) {
-                    grants[grant] = grants[grant] & recordGrants[grant];
-                }
+                grants[grant] = _.get(grants, grant, false) && _.get(recordGrants, grant, false);
             }
         }
         // if calculated admin right is true, overwrite all grants with true

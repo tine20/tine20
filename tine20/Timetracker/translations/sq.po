@@ -1,154 +1,253 @@
-#
+# 
 # Translators:
 # Enri Mullai <enri_mullai@albnet.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
+"PO-Revision-Date: 2017-09-19 20:38+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
-"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Acl/Rights.php:121
+msgid "Manage timeaccounts"
+msgstr "Menaxho llogaritë kohore"
+
+#: Acl/Rights.php:122
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Shto, modifiko dhe fshij llogaritë kohore (përfshirë të gjithë E drejta e tabelës kohore)"
+
+#: Acl/Rights.php:125 Acl/Rights.php:126
+msgid "Add timeaccounts"
+msgstr "Shto llogari kohore"
+
+#: Acl/Rights.php:129
+msgid "Manage shared timeaccount favorites"
+msgstr "Menaxho preferencialet e llogarive kohore të ndara"
+
+#: Acl/Rights.php:130
+msgid "Create or update shared timeaccount favorites"
+msgstr "Krijo ose përditëso llogari kohore preferenciale të ndara"
+
+#: Acl/Rights.php:133
+msgid "Manage shared timesheet favorites"
+msgstr "Menaxho preferenciale tabelash kohore të ndara"
+
+#: Acl/Rights.php:134
+msgid "Create or update shared timesheet favorites"
+msgstr "Krijo ose përditëso preferencialet e tabelave kohore të ndara"
+
+#: Model/Timesheet.php:33 js/TimesheetEditDialog.js:224
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "Tabelë kohore"
+msgstr[1] "Tabela Kohore"
+
+#: Model/Timesheet.php:53 js/TimesheetEditDialog.js:176
+msgid "Account"
+msgstr "Llogari"
+
+#: Model/Timesheet.php:60
+msgid "Time Account (Number - Title)"
+msgstr "Llogari Kohore (Numër - Titull)"
+
+#: Model/Timesheet.php:91 Model/Timesheet.php:96 js/TimesheetEditDialog.js:181
+msgid "Billable"
+msgstr "E faturueshme"
+
+#: Model/Timesheet.php:104 Model/Timeaccount.php:160
+msgid "Cleared in"
+msgstr "Pastruar në"
+
+#: Model/Timesheet.php:111 Model/Timeaccount.php:164
+#: js/TimeaccountEditDialog.js:189 js/TimesheetEditDialog.js:205
+msgid "Invoice"
+msgstr ""
+
+#: Model/Timesheet.php:129 js/TimesheetEditDialog.js:187
+msgid "Cleared"
+msgstr "E pastruar"
+
+#: Model/Timesheet.php:141 js/TimesheetEditDialog.js:262
+msgid "Date"
+msgstr "Datë"
+
+#: Model/Timesheet.php:149
+msgid "Start time"
+msgstr "Koha e fillimit"
+
+#: Model/Timesheet.php:156 js/TimesheetEditDialog.js:257
+msgid "Duration"
+msgstr "Kohëzgjatja"
+
+#: Model/Timesheet.php:163 Model/Timeaccount.php:117
+#: js/TimesheetGridPanel.js:150 js/TimeaccountEditDialog.js:233
+#: js/TimesheetEditDialog.js:273
+msgid "Description"
+msgstr "Përshkrim"
+
+#: Model/Timesheet.php:171
+msgid "Time Account closed"
+msgstr "Llogari Kohore e mbyllur"
+
+#: Model/Timesheet.php:214 Model/Timeaccount.php:608
+msgid "hour"
+msgstr ""
+
+#: Model/Timeaccount.php:54
+msgid "Timeaccount"
+msgid_plural "Timeaccounts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Timeaccount.php:73 js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "Marrëveshje"
+
+#: Model/Timeaccount.php:103 js/TimeaccountEditDialog.js:227
+msgid "Title"
+msgstr "Titull"
+
+#: Model/Timeaccount.php:110 js/TimeaccountEditDialog.js:221
+msgid "Number"
+msgstr "Numër"
+
+#: Model/Timeaccount.php:144 js/TimeaccountEditDialog.js:99
+msgid "Status"
+msgstr "Staus"
+
+#: Model/Timeaccount.php:176 js/TimeaccountEditDialog.js:107
+msgid "Billed"
+msgstr "Faturuar"
+
+#: Model/Timeaccount.php:185 js/TimeaccountEditDialog.js:149
+msgid "Cleared at"
+msgstr "Pastruar në"
+
+#: Model/Timeaccount.php:190 js/TimeaccountEditDialog.js:133
+msgid "Booking deadline"
+msgstr "Afati i fundit i rezervimit"
+
+#: Model/Timeaccount.php:212 js/TimeaccountResponsibleFilterModel.js:30
+msgid "Responsible"
+msgstr ""
+
+#: Model/Timeaccount.php:229 js/TimeaccountEditDialog.js:155
+msgid "Cost Center"
+msgstr "Qëndra e kostove"
+
+#: Model/Timeaccount.php:233 js/TimeaccountEditDialog.js:170
+msgid "Responsible Person"
+msgstr ""
+
+#: js/Timetracker.js:19 js/Timetracker.js:24 js/Timetracker.js:50
+#: js/TimeAccountStatusFilterModel.js:46 js/TimeaccountEditDialog.js:105
+msgid "closed"
+msgstr "mbyllur"
+
+#: js/Timetracker.js:50 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:105
+msgid "open"
+msgstr "hapur"
+
+#: js/DurationSpinner.js:95
+msgid "Not a valid time"
+msgstr "Kohë jo e vlefshme"
+
 #: js/TimeaccountPickerCombo.js:46
 msgid "Show closed"
 msgstr "Trego të mbyllurat"
 
-#: js/TimeaccountGridPanel.js:64
-msgid "Close Timeaccount"
+#: js/TimeaccountResponsibleFilterModel.js:32
+msgid "without responsible"
 msgstr ""
-
-#: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:73
-msgid "Contract"
-msgstr "Marrëveshje"
 
 #: js/TimeAccountContractFilterModel.js:32
 msgid "without contract"
 msgstr "pa marrëveshje"
+
+#: js/TimeaccountGridPanel.js:61
+msgid "Export Timeaccounts"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:70 js/TimesheetGridPanel.js:227
+msgid "Export as ODS"
+msgstr "Eksporto si ODS"
+
+#: js/TimeaccountGridPanel.js:111
+msgid "Close Timeaccount"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:63
+msgid "timeframe"
+msgstr "korniza kohore"
+
+#: js/TimesheetGridPanel.js:87
+msgid "summary"
+msgstr "përmbledhje"
+
+#: js/TimesheetGridPanel.js:90
+msgid "Total Timesheets"
+msgstr "Totali Tabelave kohore"
+
+#: js/TimesheetGridPanel.js:91
+msgid "Billable Timesheets"
+msgstr "Tabela kohore të faturueshme"
+
+#: js/TimesheetGridPanel.js:92
+msgid "Total Time"
+msgstr "Koha totale"
+
+#: js/TimesheetGridPanel.js:93
+msgid "Time of Billable Timesheets"
+msgstr "Koha e tabelave kohore të faturueshme"
+
+#: js/TimesheetGridPanel.js:164
+msgid "Detail"
+msgstr "Detaj"
+
+#: js/TimesheetGridPanel.js:217
+msgid "Export Timesheets"
+msgstr "Eksporto Tabelat kohore"
+
+#: js/TimesheetGridPanel.js:234
+msgid "Export as CSV"
+msgstr "Eksporto si CSV"
+
+#: js/TimesheetGridPanel.js:241
+msgid "Export as ..."
+msgstr "Eksporto si..."
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "Llogari kohore - Status"
 
 #: js/TimeAccountBilledFilterModel.js:24
 msgid "Time Account - Billed"
 msgstr "Llogari kohore - Faturuar"
 
 #: js/TimeAccountBilledFilterModel.js:46 js/TimeaccountEditDialog.js:115
-#: Setup/setup.xml:88
+#: Setup/setup.xml:87
 msgid "not yet billed"
 msgstr "e pafaturuar akoma"
 
 #: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:116
-#: Setup/setup.xml:89
+#: Setup/setup.xml:88
 msgid "to bill"
 msgstr "për tu faturuar"
 
 #: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:117
-#: Setup/setup.xml:90
+#: Setup/setup.xml:89
 msgid "billed"
 msgstr "faturuar"
-
-#: js/TimesheetEditDialog.js:186 Model/Timesheet.php:50
-msgid "Account"
-msgstr "Llogari"
-
-#: js/TimesheetEditDialog.js:191 Model/Timesheet.php:89 Model/Timesheet.php:94
-msgid "Billable"
-msgstr "E faturueshme"
-
-#: js/TimesheetEditDialog.js:197 Model/Timesheet.php:133
-msgid "Cleared"
-msgstr "E pastruar"
-
-#: js/TimesheetEditDialog.js:207 js/TimeaccountEditDialog.js:128
-msgid "Cleared In"
-msgstr "Pastruar në"
-
-#: js/TimesheetEditDialog.js:215 js/TimeaccountEditDialog.js:189
-#: Model/Timeaccount.php:166 Model/Timesheet.php:110
-msgid "Invoice"
-msgstr ""
-
-#: js/TimesheetEditDialog.js:234 Model/Timesheet.php:26
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "Tabelë kohore"
-msgstr[1] "Tabela Kohore"
-
-#: js/TimesheetEditDialog.js:251 js/TimeaccountEditDialog.js:205
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Llogaria kohore"
-msgstr[1] "Llogaritë kohore"
-
-#: js/TimesheetEditDialog.js:252
-msgid "Select Time Account..."
-msgstr "Zgjidh Llogarine kohore"
-
-#: js/TimesheetEditDialog.js:258 Model/Timesheet.php:160
-msgid "Duration"
-msgstr "Kohëzgjatja"
-
-#: js/TimesheetEditDialog.js:264 Model/Timesheet.php:145
-msgid "Date"
-msgstr "Datë"
-
-#: js/TimesheetEditDialog.js:269
-msgid "Start"
-msgstr "Fillo"
-
-#: js/TimesheetEditDialog.js:270
-msgid "not set"
-msgstr "e pa caktuar"
-
-#: js/TimesheetEditDialog.js:275 js/TimeaccountEditDialog.js:233
-#: js/TimesheetGridPanel.js:160 Model/Timeaccount.php:117
-#: Model/Timesheet.php:167
-msgid "Description"
-msgstr "Përshkrim"
-
-#: js/TimesheetEditDialog.js:276
-msgid "Enter description..."
-msgstr "Vendosni përshkrimin"
-
-#: js/TimesheetEditDialog.js:334
-msgid "Failed"
-msgstr "Dështoi"
-
-#: js/TimesheetEditDialog.js:335
-#, python-brace-format
-msgid "Could not save {0}."
-msgstr "Nuk mund të ruhej {0}."
-
-#: js/TimesheetEditDialog.js:336
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "Afati i rezervimit për këtë Llogari kohore është tejkaluar"
-
-#: js/TimesheetEditDialog.js:344 js/TimesheetEditDialog.js:356
-msgid "Closed Timeaccount Warning!"
-msgstr ""
-
-#: js/TimesheetEditDialog.js:345
-msgid "The selected Time Account is already closed."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:357
-msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
-msgstr ""
-
-#: js/Timetracker.js:19 js/Timetracker.js:24 js/Timetracker.js:50
-#: js/TimeaccountEditDialog.js:105 js/TimeAccountStatusFilterModel.js:46
-msgid "closed"
-msgstr "mbyllur"
-
-#: js/Timetracker.js:50 js/TimeaccountEditDialog.js:105
-#: js/TimeAccountStatusFilterModel.js:46
-msgid "open"
-msgstr "hapur"
 
 #: js/TimeaccountEditDialog.js:61
 msgid "Add New Timeaccount"
@@ -166,17 +265,9 @@ msgstr "Çmim njësie"
 msgid "Budget"
 msgstr "Buxhet"
 
-#: js/TimeaccountEditDialog.js:99 Model/Timeaccount.php:145
-msgid "Status"
-msgstr "Staus"
-
-#: js/TimeaccountEditDialog.js:107 Model/Timeaccount.php:182
-msgid "Billed"
-msgstr "Faturuar"
-
-#: js/TimeaccountEditDialog.js:133 Model/Timeaccount.php:202
-msgid "Booking deadline"
-msgstr "Afati i fundit i rezervimit"
+#: js/TimeaccountEditDialog.js:128 js/TimesheetEditDialog.js:197
+msgid "Cleared In"
+msgstr "Pastruar në"
 
 #: js/TimeaccountEditDialog.js:141
 msgid "none"
@@ -186,29 +277,15 @@ msgstr "askush"
 msgid "last week"
 msgstr "javën e shkuar"
 
-#: js/TimeaccountEditDialog.js:149 Model/Timeaccount.php:196
-msgid "Cleared at"
-msgstr "Pastruar në"
-
-#: js/TimeaccountEditDialog.js:155 Model/Timeaccount.php:241
-msgid "Cost Center"
-msgstr "Qëndra e kostove"
-
-#: js/TimeaccountEditDialog.js:170 Model/Timeaccount.php:245
-msgid "Responsible Person"
-msgstr ""
-
 #: js/TimeaccountEditDialog.js:179
 msgid "Timesheets are billable"
 msgstr "Tabelat kohore janë të faturueshme"
 
-#: js/TimeaccountEditDialog.js:221 Model/Timeaccount.php:110
-msgid "Number"
-msgstr "Numër"
-
-#: js/TimeaccountEditDialog.js:227 Model/Timeaccount.php:103
-msgid "Title"
-msgstr "Titull"
+#: js/TimeaccountEditDialog.js:205 js/TimesheetEditDialog.js:241
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Llogaria kohore"
+msgstr[1] "Llogaritë kohore"
 
 #: js/TimeaccountEditDialog.js:258
 msgid "Access"
@@ -266,70 +343,68 @@ msgstr "Përfshin të gjithë të drejtat e tjera"
 msgid "Permissions"
 msgstr "Autorizime"
 
+#: js/TimesheetEditDialog.js:242
+msgid "Select Time Account..."
+msgstr "Zgjidh Llogarine kohore"
+
+#: js/TimesheetEditDialog.js:267
+msgid "Start"
+msgstr "Fillo"
+
+#: js/TimesheetEditDialog.js:268
+msgid "not set"
+msgstr "e pa caktuar"
+
+#: js/TimesheetEditDialog.js:274
+msgid "Enter description..."
+msgstr "Vendosni përshkrimin"
+
+#: js/TimesheetEditDialog.js:332
+msgid "Failed"
+msgstr "Dështoi"
+
+#: js/TimesheetEditDialog.js:333
+#, python-brace-format
+msgid "Could not save {0}."
+msgstr "Nuk mund të ruhej {0}."
+
+#: js/TimesheetEditDialog.js:334
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr "Afati i rezervimit për këtë Llogari kohore është tejkaluar"
+
+#: js/TimesheetEditDialog.js:343 js/TimesheetEditDialog.js:355
+msgid "Closed Timeaccount Warning!"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:344
+msgid "The selected Time Account is already closed."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:356
+msgid ""
+"The selected Time Account is already closed. Do you wish to continue anyway?"
+msgstr ""
+
 #: js/DurationSlider.js:94
 #, python-brace-format
 msgid "{0}"
 msgstr "{0}"
 
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "Llogari kohore - Status"
+#: Preference.php:64
+msgid "Timesheets ODS export configuration"
+msgstr "Konfigurimi i eksportimit ODS të Tabelave kohore "
 
-#: js/DurationSpinner.js:97
-msgid "Not a valid time"
-msgstr "Kohë jo e vlefshme"
+#: Preference.php:65
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Përdor këtë konfigurim për eksportin ODS të tabelave kohore"
 
-#: js/TimeaccountResponsibleFilterModel.js:30 Model/Timeaccount.php:224
-msgid "Responsible"
-msgstr ""
+#: Preference.php:116
+msgid "default"
+msgstr "paracaktuar"
 
-#: js/TimeaccountResponsibleFilterModel.js:32
-msgid "without responsible"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:73
-msgid "timeframe"
-msgstr "korniza kohore"
-
-#: js/TimesheetGridPanel.js:97
-msgid "summary"
-msgstr "përmbledhje"
-
-#: js/TimesheetGridPanel.js:100
-msgid "Total Timesheets"
-msgstr "Totali Tabelave kohore"
-
-#: js/TimesheetGridPanel.js:101
-msgid "Billable Timesheets"
-msgstr "Tabela kohore të faturueshme"
-
-#: js/TimesheetGridPanel.js:102
-msgid "Total Time"
-msgstr "Koha totale"
-
-#: js/TimesheetGridPanel.js:103
-msgid "Time of Billable Timesheets"
-msgstr "Koha e tabelave kohore të faturueshme"
-
-#: js/TimesheetGridPanel.js:174
-msgid "Detail"
-msgstr "Detaj"
-
-#: js/TimesheetGridPanel.js:227
-msgid "Export Timesheets"
-msgstr "Eksporto Tabelat kohore"
-
-#: js/TimesheetGridPanel.js:237
-msgid "Export as ODS"
-msgstr "Eksporto si ODS"
-
-#: js/TimesheetGridPanel.js:244
-msgid "Export as CSV"
-msgstr "Eksporto si CSV"
-
-#: js/TimesheetGridPanel.js:251
-msgid "Export as ..."
-msgstr "Eksporto si..."
+#: Setup/setup.xml:4
+msgid "Timetracker"
+msgstr "Matësi kohor"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
@@ -362,110 +437,3 @@ msgstr "Llogari kohore akoma të pa faturuara"
 #: Setup/Initialize.php:141 Setup/Update/Release5.php:109
 msgid "Timeaccounts already billed"
 msgstr "Llogari kohore të faturuara "
-
-#: Setup/setup.xml:4
-msgid "Timetracker"
-msgstr "Matësi kohor"
-
-#: Acl/Rights.php:121
-msgid "Manage timeaccounts"
-msgstr "Menaxho llogaritë kohore"
-
-#: Acl/Rights.php:122
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Shto, modifiko dhe fshij llogaritë kohore (përfshirë të gjithë E drejta e tabelës kohore)"
-
-#: Acl/Rights.php:125 Acl/Rights.php:126
-msgid "Add timeaccounts"
-msgstr "Shto llogari kohore"
-
-#: Acl/Rights.php:129
-msgid "Manage shared timeaccount favorites"
-msgstr "Menaxho preferencialet e llogarive kohore të ndara"
-
-#: Acl/Rights.php:130
-msgid "Create or update shared timeaccount favorites"
-msgstr "Krijo ose përditëso llogari kohore preferenciale të ndara"
-
-#: Acl/Rights.php:133
-msgid "Manage shared timesheet favorites"
-msgstr "Menaxho preferenciale tabelash kohore të ndara"
-
-#: Acl/Rights.php:134
-msgid "Create or update shared timesheet favorites"
-msgstr "Krijo ose përditëso preferencialet e tabelave kohore të ndara"
-
-#: Model/Timeaccount.php:54
-msgid "Timeaccount"
-msgid_plural "Timeaccounts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Timeaccount.php:161 Model/Timesheet.php:102
-msgid "Cleared in"
-msgstr "Pastruar në"
-
-#: Model/Timeaccount.php:639 Model/Timesheet.php:218
-msgid "hour"
-msgstr ""
-
-#: Model/Timesheet.php:57
-msgid "Time Account (Number - Title)"
-msgstr "Llogari Kohore (Numër - Titull)"
-
-#: Model/Timesheet.php:153
-msgid "Start time"
-msgstr "Koha e fillimit"
-
-#: Model/Timesheet.php:175
-msgid "Time Account closed"
-msgstr "Llogari Kohore e mbyllur"
-
-#: Preference.php:64
-msgid "Timesheets ODS export configuration"
-msgstr "Konfigurimi i eksportimit ODS të Tabelave kohore "
-
-#: Preference.php:65
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Përdor këtë konfigurim për eksportin ODS të tabelave kohore"
-
-#: Preference.php:116
-msgid "default"
-msgstr "paracaktuar"
-
-#~ msgid "New Timesheet"
-#~ msgstr "Tabelë Kohore e re"
-
-#~ msgid "Tags"
-#~ msgstr "Etiketa"
-
-#~ msgid "Mass Update"
-#~ msgstr "Përditësim masiv"
-
-#~ msgid "Update field:"
-#~ msgstr "Përditësimi dështoi:"
-
-#~ msgid "timesheets list"
-#~ msgid_plural "timesheets lists"
-#~ msgstr[0] "Listë tabelash kohore"
-#~ msgstr[1] "Lista tabelash kohore"
-
-#~ msgid "Quick Search"
-#~ msgstr "Kërkim i Shpejtë"
-
-#~ msgid "Last Modified Time"
-#~ msgstr "Koha e modifikimit të fundit"
-
-#~ msgid "Last Modified By"
-#~ msgstr "Modifikimi i fundit nga"
-
-#~ msgid "Creation Time"
-#~ msgstr "Koha e krijimit"
-
-#~ msgid "Created By"
-#~ msgstr "Krijuar nga"
-
-#~ msgid "timeaccount list"
-#~ msgid_plural "timeaccount lists"
-#~ msgstr[0] "listë llogarish kohore"
-#~ msgstr[1] "lista llogarish kohore"

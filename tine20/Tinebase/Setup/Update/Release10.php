@@ -1490,6 +1490,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     </reference>
                 </index>'));
 
+        $ids = $this->_db->select()->from(['acl' => SQL_TABLE_PREFIX . 'container_acl'], ['id'])->joinLeft(
+            array('c' => SQL_TABLE_PREFIX . 'container'),
+            $this->_db->quoteIdentifier(['acl', 'container_id']) . ' = ' . $this->_db->quoteIdentifier(['c', 'id']),
+            []
+        )->where($this->_db->quoteIdentifier(['c', 'id']) . ' IS NULL')->query()->fetchAll(Zend_Db::FETCH_NUM);
+        if (count($ids)) {
+            $allIds = [];
+            foreach($ids as $row) {
+                $allIds[] = $row[0];
+            }
+            $this->_db->query('DELETE FROM ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'container_acl') .
+                ' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $allIds));
+        }
+
         $this->_backend->addForeignKey('container_acl', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>container_acl::container_id--container::id</name>
                     <field>
@@ -2175,9 +2189,75 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.47
+     *
+     * add acl table cleanup task
      */
     public function update_46()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '10.47');
+    }
+
+    /**
+     * update to 10.48
+     *
+     * add full text index on customfield.value
+     */
+    public function update_47()
+    {
+        try {
+            $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>value</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>value</name>
+                    </field>
+                </index>'));
+            $this->setTableVersion('customfield', 4);
+        } catch (Exception $e) {
+        }
+        $this->setApplicationVersion('Tinebase', '10.48');
+    }
+
+    /**
+     * update to 10.49
+     *
+     * add index(255) on customfield.value
+     */
+    public function update_48()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {try {
+            $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>value_index</name>
+                    <length>255</length>
+                    <field>
+                        <name>value</name>
+                    </field>
+                </index>'));
+            $this->setTableVersion('customfield', 5);
+        } catch (Exception $e) {Tinebase_Exception::log($e);
+            }}
+        $this->setApplicationVersion('Tinebase', '10.49');
+    }
+
+    /**
+     * update to 10.50
+     *
+     * addFileSystemSanitizePreviewsTask
+     */
+    public function update_49()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '10.50');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_50()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

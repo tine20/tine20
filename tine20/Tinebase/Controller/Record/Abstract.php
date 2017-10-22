@@ -178,6 +178,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_useRecordPaths = false;
 
     /**
+     * don't get in an endless recursion in get related data
+     *
+     * @var array
+     */
+    protected $_getRelatedDataRecursion = [];
+
+    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -467,28 +474,38 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _getRelatedData($record)
     {
-        if ($record->has('tags')) {
-            Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+        if (isset($this->_getRelatedDataRecursion[$record->getId()])) {
+            return;
         }
-        if ($record->has('relations')) {
-            $record->relations = Tinebase_Relations::getInstance()->getRelations(
-                $this->_modelName,
-                $this->_getBackendType(),
-                $record->getId());
-        }
-        if ($record->has('alarms')) {
-            $this->getAlarms($record);
-        }
-        if ($this->resolveCustomfields()) {
-            $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
-                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
-            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record, null, $cfConfigs);
-        }
-        if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
-            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
-        }
-        if ($record->has('notes')) {
-            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
+        try {
+            // prevent endless recursion loop
+            $this->_getRelatedDataRecursion[$record->getId()] = true;
+
+            if ($record->has('tags')) {
+                Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+            }
+            if ($record->has('relations')) {
+                $record->relations = Tinebase_Relations::getInstance()->getRelations(
+                    $this->_modelName,
+                    $this->_getBackendType(),
+                    $record->getId());
+            }
+            if ($record->has('alarms')) {
+                $this->getAlarms($record);
+            }
+            if ($this->resolveCustomfields()) {
+                $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                    Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+                Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record, null, $cfConfigs);
+            }
+            if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
+                Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+            }
+            if ($record->has('notes')) {
+                $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
+            }
+        } finally {
+            unset($this->_getRelatedDataRecursion[$record->getId()]);
         }
     }
 
@@ -565,11 +582,7 @@ abstract class Tinebase_Controller_Record_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-            // add personal container id if container id is missing in record
-            if ($_record->has('container_id') && empty($_record->container_id)) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-                $_record->container_id = $containers[0]->getId();
-            }
+            $this->_setContainer($_record);
 
             $_record->isValid(TRUE);
 
@@ -614,6 +627,30 @@ abstract class Tinebase_Controller_Record_Abstract
         return $this->get($createdRecord);
     }
 
+    /**
+     * sets personal container id if container id is missing in record - can be overwritten to set a different container
+     *
+     * @param $_record
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _setContainer(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->has('container_id') && empty($_record->container_id)) {
+            $configuration = $_record->getConfiguration();
+            if ($configuration && ! $configuration->hasPersonalContainer) {
+                // as model has no personal containers, we can't use that as default container
+                throw new Tinebase_Exception_SystemGeneric('Container must be given');
+            }
+
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+            $_record->container_id = $containers[0]->getId();
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface|null $_oldRecord
+     */
     protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
     {
         $className = get_class($_record);
@@ -829,7 +866,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return NULL;
         }
 
-        $filterClass = $this->_modelName . 'Filter';
         $filterData = (count($filters) > 1) ? array(array('condition' => 'OR', 'filters' => $filters)) : $filters;
 
         // exclude own record if it has an id
@@ -839,7 +875,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClass($filterData);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($filter->toArray(), TRUE));
@@ -1024,7 +1060,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         /** @noinspection PhpUndefinedVariableInspection */
-        return $this->get($updatedRecord->getId());
+        return $this->get($updatedRecord->getId(), null, true, true);
     }
     
     /**
@@ -1676,24 +1712,26 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * delete linked objects (notes, relations, attachments) of record
+     * delete linked objects (notes, relations, attachments, alarms) of record
      *
      * @param Tinebase_Record_Interface $_record
      */
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
-        // delete notes & relations
         if ($_record->has('notes')) {
             Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
         }
         
         if ($_record->has('relations')) {
-            // TODO check if this needs to be done, as we might already deleting this "from the other side"
             $this->deleteLinkedRelations($_record);
         }
 
         if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
+        }
+
+        if ($_record->has('alarms')) {
+            $this->_deleteAlarmsForIds(array($_record->getId()));
         }
     }
 
@@ -1720,6 +1758,11 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($_record->attachments as $attachment) {
                 Tinebase_FileSystem::getInstance()->unDeleteFileNode($attachment['id']);
             }
+        }
+
+        if ($_record->has('alarms') && count($_record->alarms) > 0) {
+            $_record->alarms->setId(null);
+            $this->_saveAlarms($_record);
         }
     }
     
@@ -1935,9 +1978,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
         if (! $_record->alarms instanceof Tinebase_Record_RecordSet) {
-            $_record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+            $_record->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
         }
-        $alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
 
         // create / update alarms
         foreach ($_record->alarms as $alarm) {

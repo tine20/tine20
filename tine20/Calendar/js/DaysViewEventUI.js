@@ -131,7 +131,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         var eventEl = view.templates.wholeDayEvent.insertFirst(view.wholeDayArea, {
             id: domId,
             tagsHtml: Tine.Tinebase.common.tagsRenderer(this.event.get('tags')),
-            summary: this.event.get('summary'),
+            summary: this.event.getTitle(),
             startTime: this.dtStart.format('H:i'),
             extraCls: extraCls,
             color: this.colorSet.color,
@@ -199,9 +199,9 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 
             var eventEl = view.templates.event.append(view.getDateColumnEl(currColNum), {
                 id: domId,
-                summary: isShortEvent ? '' : this.event.get('summary'),
+                summary: isShortEvent ? '' : this.event.getTitle(),
                 tagsHtml: isShortEvent ? '' : Tine.Tinebase.common.tagsRenderer(this.event.get('tags')),
-                startTime: isShortEvent ? this.dtStart.format('H:i') + ' ' +  this.event.get('summary') : this.dtStart.format('H:i'),
+                startTime: isShortEvent ? this.dtStart.format('H:i') + ' ' +  this.event.getTitle() : this.dtStart.format('H:i'),
                 extraCls: extraCls,
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,

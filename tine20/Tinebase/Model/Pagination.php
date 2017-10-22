@@ -16,8 +16,8 @@
  * @property string id
  * @property string start
  * @property string limit
- * @property string sort
- * @property string dir
+ * @property string|array sort
+ * @property string|array dir
  * @property string model
  */
 class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
@@ -44,11 +44,12 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         'limit'                => array('allowEmpty'    => true,  
                                         'Int',
                                         'default'       => 0            ),
+        // can be array for multiple sort rows
         'sort'                 => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
+        // can be array of sort dirs for multiple sort rows
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
-                                        array('InArray', array('ASC', 'DESC')),
                                         'default'       => 'ASC'        ),
         'model'                => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
@@ -107,7 +108,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     /**
      * Appends limit statement to a given select object
-     * 
+     *
      * @param  Zend_Db_Select $_select
      * @return void
      */
@@ -140,8 +141,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     protected function _getSortCols()
     {
         $order = array();
-        foreach ((array)$this->sort as $sort) {
-            $order[] = $sort . ' ' . $this->dir;
+        foreach ((array)$this->sort as $index => $sort) {
+            $order[] = $sort . ' ' . (is_array($this->dir)
+                        ? $this->dir[$index]
+                        : $this->dir
+                    );
         }
         return $order;
     }

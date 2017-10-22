@@ -136,6 +136,71 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
+        $this->_createCustomfields();
+        $this->_importContacts();
+    }
+
+    /**
+     * create customfields for addressbook
+     */
+    protected function _createCustomfields()
+    {
+        $customfields = array(
+            array('name' => 'cfbool', 'label' => 'Boolean Customfield', 'type' => 'boolean', 'uiconfig' => array(
+                'order' => '',
+                'group' => '',
+                'tab' => '')),
+            array('name' => 'cftextarea', 'label' => 'Textarea Customfield', 'type' => 'textarea', 'uiconfig' => array(
+                'order' => '',
+                'group' => '',
+                'tab' => 'Custom Text')),
+            array('name' => 'cftext', 'label' => 'Text Customfield', 'type' => 'text', 'uiconfig' => array(
+                'order' => '',
+                'group' => '',
+                'tab' => 'Custom Text')),
+            array(
+                'name' => 'cfrecord',
+                'label' => 'Lead Customfield',
+                'uiconfig' => array(
+                    'order' => '',
+                    'group' => '',
+                    'tab' => ''),
+                'type' => 'record',
+                'recordConfig' => array('value' => array('records' => 'Tine.Crm.Model.Lead'))
+            ),
+        );
+
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId();
+        foreach ($customfields as $customfield) {
+            $cfc = array(
+                'name' => $customfield['name'],
+                'application_id' => $appId,
+                'model' => 'Addressbook_Model_Contact',
+                'definition' => array(
+                    'uiconfig' => $customfield['uiconfig'],
+                    'label' => $customfield['label'],
+                    'type' => $customfield['type'],
+                )
+            );
+
+            if ($customfield['type'] == 'record') {
+                $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
+            }
+
+            $cf = new Tinebase_Model_CustomField_Config($cfc);
+            try {
+                Tinebase_CustomField::getInstance()->addCustomField($cf);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // already created
+            }
+        }
+    }
+
+    /**
+     * reads contacts and images into member vars
+     */
+    protected function _importContacts()
+    {
         $csvFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'out1000.csv';
         $imageFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'base64images.txt';
         if (! (file_exists($csvFile) && file_exists($imageFile))) {
@@ -144,12 +209,12 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $fhcsv = fopen($csvFile, 'r');
         $fhimages = fopen($imageFile, 'r');
         $i=0;
-        
+
         $femalePhotoIndex = 0;
         $malePhotoIndex   = 0;
-        
+
         $indexes = fgetcsv($fhcsv);
-        
+
         while ($row = fgetcsv($fhcsv)) {
             foreach($row as $index => $field) {
                 if ($indexes[$index] == 'gender') {
@@ -164,10 +229,10 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $this->_addresses[$i][$indexes[$index]] = $field;
                 }
             }
-            
+
             // get the base64 encoded photo
             $photo = fgets($fhimages);
-            
+
             // if photo exists, add to photo index
             if (! empty($photo)) {
                 if ($isMan) {
@@ -175,7 +240,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 } else {
                     $this->_photosFemale[] = $i;
                 }
-            // if no photo exists, take from photo index
+                // if no photo exists, take from photo index
             } else {
                 if ($isMan) {
                     $photo = $this->_images[$this->_photosMale[$malePhotoIndex]];
@@ -185,9 +250,9 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $femalePhotoIndex++;
                 }
             }
-            
+
             $this->_images[$i] = $photo;
-            
+
             $i++;
         }
         fclose($fhcsv);

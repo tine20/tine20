@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -97,8 +97,6 @@ class Tinebase_ApplicationTest extends TestCase
     
     /**
      * test update application
-     * 
-     * @return Tinebase_Model_Application
      */
     public function testDeleteApplication()
     {
@@ -199,7 +197,7 @@ class Tinebase_ApplicationTest extends TestCase
     {
         $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState('foobar');
+        Tinebase_Application::getInstance()->getApplicationsByState('foobar');
     }
     
     /**
@@ -289,6 +287,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Calendar_Model_Rrule',
                 'Calendar_Model_AttendeeRole',
                 'Calendar_Model_Event',
+                'Calendar_Model_Poll',
                 'Calendar_Model_FreeBusy',
                 'Calendar_Model_Exdate',
                 'Calendar_Model_Attender',
@@ -465,7 +464,7 @@ class Tinebase_ApplicationTest extends TestCase
 
         // remove bogus apps
         $remove = array('RequestTracker', 'Sipgate', 'Expressodriver', 'MailFiler');
-        foreach($remove as $r)
+        foreach ($remove as $r)
         {
             if (($key = array_search($r, $appNames)) !== false) {
                 unset($appNames[$key]);
@@ -473,7 +472,7 @@ class Tinebase_ApplicationTest extends TestCase
         }
 
         // check all expected models are there
-        foreach($expectedData as $appName => $expectedModels) {
+        foreach ($expectedData as $appName => $expectedModels) {
             if (array_search($appName, $appNames) !== false) {
                 foreach ($expectedModels as $expectedModel) {
                     $this->assertTrue(array_search($expectedModel, $models) !== false, 'did not find model: ' . $expectedModel);
@@ -482,7 +481,7 @@ class Tinebase_ApplicationTest extends TestCase
         }
 
         // if there is at least one model, remove the app
-        foreach($models as $model) {
+        foreach ($models as $model) {
             list($appName) = explode('_', $model);
             if (($key = array_search($appName, $appNames)) !== false) {
                 unset($appNames[$key]);
@@ -493,6 +492,13 @@ class Tinebase_ApplicationTest extends TestCase
         foreach ($appNames as $key => $appName) {
             $modelDir = __DIR__ . "../../tine20/$appName/Model/";
             if (! file_exists($modelDir)) {
+                unset($appNames[$key]);
+            }
+        }
+
+        // remove custom apps
+        foreach ($appNames as $key => $appName) {
+            if (!isset($expectedData[$appName])) {
                 unset($appNames[$key]);
             }
         }
@@ -509,6 +515,14 @@ class Tinebase_ApplicationTest extends TestCase
                         unset($models[$key]);
                     }
                 }
+            }
+        }
+
+        // remove custom app models
+        foreach ($models as $key => $modelName) {
+            list($appName,) = explode('_', $modelName, 2);
+            if (!isset($expectedData[$appName])) {
+                unset($models[$key]);
             }
         }
 

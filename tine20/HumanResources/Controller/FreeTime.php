@@ -71,10 +71,11 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        $fc = HumanResources_Controller_FreeDay::getInstance();
        $freetimeId = $_record->getId();
        
-       foreach($_record->freedays as $freedayArray) {
-           $freedayArray['freetime_id'] = $freetimeId;
-
-           $freeday = new HumanResources_Model_FreeDay($freedayArray);
+       foreach($_record->freedays as $freeday) {
+           if (is_array($freeday)) {
+               $freeday = new HumanResources_Model_FreeDay($freeday, true);
+           }
+           $freeday->freetime_id = $freetimeId;
            
            if ($freeday->id) {
                $freeDays->addRecord($fc->update($freeday));

@@ -54,6 +54,9 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (! extension_loaded('redis') ) {
+            static::markTestSkipped('redis extension required for these tests');
+        }
     }
 
     protected function tearDown()
@@ -88,6 +91,8 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 
     public function testGracefulShutDown()
     {
+        self::markTestSkipped('FIXME this fails at random');
+
         $this->testStart();
 
         @unlink('/var/run/tine20/DummyController.txt');

@@ -184,7 +184,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 }
                 $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
                 $foreignRecords->convertDates = true;
-                Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($foreignRecords);
+                Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($foreignRecords, $modelConfig);
                 $fr = $foreignRecords->getFirstRecord();
                 if ($fr && $fr->has('notes')) {
                     Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
@@ -508,7 +508,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
-        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records);
+        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $modelConfiguration);
 
         self::resolveAttachmentImage($records);
         

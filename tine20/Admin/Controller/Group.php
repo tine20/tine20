@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        make it possible to change default groups
  * @todo        extend abstract record controller
@@ -26,11 +26,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * @var Admin_Controller_Group
      */
     private static $_instance = NULL;
-        
-    /**
-     * @var Tinebase_SambaSAM_Ldap
-     */
-    protected $_samBackend = NULL;
 
     /**
      * the constructor
@@ -67,11 +62,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     /**
      * get list of groups
      *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
+     * @param string $filter
+     * @param string $sort
+     * @param string $dir
+     * @param int $start
+     * @param int $limit
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function search($filter = NULL, $sort = 'name', $dir = 'ASC', $start = NULL, $limit = NULL)
@@ -98,13 +93,14 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         return $result;
     }
-    
+
     /**
      * set all groups an user is member of
      *
-     * @param  mixed  $_userId   the account as integer or Tinebase_Model_User
-     * @param  mixed  $_groupIds
+     * @param  mixed $_userId the account as integer or Tinebase_Model_User
+     * @param  mixed $_groupIds
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function setGroupMemberships($_userId, $_groupIds)
     {
@@ -159,15 +155,14 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $group = Tinebase_Group::getInstance()->getGroupById($_groupId);
 
         return $group;
-    }  
+    }
 
-   /**
+    /**
      * add new group
      *
      * @param Tinebase_Model_Group $_group
-     * @param array $_groupMembers
-     * 
      * @return Tinebase_Model_Group
+     * @throws Exception
      */
     public function create(Tinebase_Model_Group $_group)
     {
@@ -175,32 +170,43 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         // avoid forging group id, get's created in backend
         unset($_group->id);
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $list = $this->createOrUpdateList($_group);
-            $_group->list_id = $list->getId();
-        }
-        
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
-        
+        $group = null;
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
-            $group = Tinebase_Group::getInstance()->addGroup($_group);
-        } catch (Exception $e) {
-            // remove list again, if group creation fails
-            if (isset($list)) {
-                $listsBackend = new Addressbook_Backend_List();
-                $listsBackend->delete($list);
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $list = $this->createOrUpdateList($_group);
+                $_group->list_id = $list->getId();
             }
-            throw $e;
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
+
+            try {
+                $group = Tinebase_Group::getInstance()->addGroup($_group);
+            } catch (Exception $e) {
+                // remove list again, if group creation fails
+                if (isset($list)) {
+                    $listsBackend = new Addressbook_Backend_List();
+                    $listsBackend->delete($list);
+                }
+                throw $e;
+            }
+
+            if (!empty($_group['members'])) {
+                Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
+            }
+
+            $event = new Admin_Event_CreateGroup();
+            $event->group = $group;
+            Tinebase_Event::fireEvent($event);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        if (!empty($_group['members']) ) {
-            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
-        }
-        
-        $event = new Admin_Event_CreateGroup();
-        $event->group = $group;
-        Tinebase_Event::fireEvent($event);
         
         return $group;
     }  
@@ -215,39 +221,45 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function update(Tinebase_Model_Group $_group, $_updateList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
-        
-        // update default user group if name has changed
-        $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
-        
-        $defaultGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
-        if ($oldGroup->name == $defaultGroupName && $oldGroup->name != $_group->name) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
-            );
-            Tinebase_User::setBackendConfiguration($_group->name, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
-            Tinebase_User::saveBackendConfiguration();
-        }
-        
+
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        if (true === $_updateList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $_group->list_id = $oldGroup->list_id;
-            $list = $this->createOrUpdateList($_group);
-            $_group->list_id = $list->getId();
+        try {
+            // update default user group if name has changed
+            $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
+
+            $defaultGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+            if ($oldGroup->name == $defaultGroupName && $oldGroup->name != $_group->name) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
+                );
+                Tinebase_User::setBackendConfiguration($_group->name, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+                Tinebase_User::saveBackendConfiguration();
+            }
+
+            if (true === $_updateList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $_group->list_id = $oldGroup->list_id;
+                $list = $this->createOrUpdateList($_group);
+                $_group->list_id = $list->getId();
+            }
+
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);
+
+            $group = Tinebase_Group::getInstance()->updateGroup($_group);
+
+            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group->members);
+
+            $event = new Admin_Event_UpdateGroup();
+            $event->group = $group;
+            Tinebase_Event::fireEvent($event);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);
-        
-        $group = Tinebase_Group::getInstance()->updateGroup($_group);
-        
-        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group->members);
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
-        $event = new Admin_Event_UpdateGroup();
-        $event->group = $group;
-        Tinebase_Event::fireEvent($event);
-        
+
         return $group;
     }
     
@@ -255,77 +267,96 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * add a new groupmember to a group
      *
      * @param int $_groupId
-     * @param int $_accountId
+     * @param int $_userId
      * @param  boolean $_addToList
      * @return void
      */
     public function addGroupMember($_groupId, $_userId, $_addToList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
-        
-        Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
-        
-        if (true === $_addToList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $group = $this->get($_groupId);
-            $user  = Tinebase_User::getInstance()->getUserById($_userId);
-            
-            if (! empty($user->contact_id) && ! empty($group->list_id)) {
-                if (! Addressbook_Controller_List::getInstance()->exists($group->list_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                        . ' Could not add member to list ' . $group->list_id . ' (it does not exist)');
-                } else {
-                    $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
-                    Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id, false);
-                    Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
+
+            if (true === $_addToList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $group = $this->get($_groupId);
+                $user  = Tinebase_User::getInstance()->getUserById($_userId);
+
+                if (! empty($user->contact_id) && ! empty($group->list_id)) {
+                    if (! Addressbook_Controller_List::getInstance()->exists($group->list_id)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Could not add member to list ' . $group->list_id . ' (it does not exist)');
+                    } else {
+                        $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
+                        Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id, false);
+                        Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
+                    }
                 }
             }
+
+            $event = new Admin_Event_AddGroupMember();
+            $event->groupId = $_groupId;
+            $event->userId  = $_userId;
+            Tinebase_Event::fireEvent($event);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        $event = new Admin_Event_AddGroupMember();
-        $event->groupId = $_groupId;
-        $event->userId  = $_userId;
-        Tinebase_Event::fireEvent($event);
     }
     
     /**
      * remove one groupmember from the group
      *
      * @param int $_groupId
-     * @param int $_accountId
+     * @param int $_userId
      * @param  boolean $_removeFromList
      * @return void
      */
     public function removeGroupMember($_groupId, $_userId, $_removeFromList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
-        
-        Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
-        
-        if (true === $_removeFromList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $group = $this->get($_groupId);
-            $user  = Tinebase_User::getInstance()->getUserById($_userId);
-            
-            if (!empty($user->contact_id) && !empty($group->list_id)) {
-                try {
-                    $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
-                    Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id, false);
-                    Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' catched exception: ' . get_class($tenf));
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
+
+            if (true === $_removeFromList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $group = $this->get($_groupId);
+                $user  = Tinebase_User::getInstance()->getUserById($_userId);
+
+                if (!empty($user->contact_id) && !empty($group->list_id)) {
+                    try {
+                        $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
+                        Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id, false);
+                        Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' catched exception: ' . get_class($tenf));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
+                    }
                 }
             }
+
+            $event = new Admin_Event_RemoveGroupMember();
+            $event->groupId = $_groupId;
+            $event->userId  = $_userId;
+            Tinebase_Event::fireEvent($event);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        $event = new Admin_Event_RemoveGroupMember();
-        $event->groupId = $_groupId;
-        $event->userId  = $_userId;
-        Tinebase_Event::fireEvent($event);
-        
     }
     
     /**
@@ -337,50 +368,63 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function delete($_groupIds)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
-        
-        // check default user group / can't delete this group
-        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
-        
-        if (in_array($defaultUserGroup->getId(), $_groupIds)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Can\'t delete default group: ' . $defaultUserGroup->name
-            );
-            foreach ($_groupIds as $key => $value) {
-                if ($value == $defaultUserGroup->getId()) {
-                    unset($_groupIds[$key]);
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+
+            // check default user group / can't delete this group
+            $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+
+            if (in_array($defaultUserGroup->getId(), $_groupIds)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Can\'t delete default group: ' . $defaultUserGroup->name
+                );
+                foreach ($_groupIds as $key => $value) {
+                    if ($value == $defaultUserGroup->getId()) {
+                        unset($_groupIds[$key]);
+                    }
                 }
             }
-        }
-        
-        if (empty($_groupIds)) {
-            return;
-        }
-        
-        $eventBefore = new Admin_Event_BeforeDeleteGroup();
-        $eventBefore->groupIds = $_groupIds;
-        Tinebase_Event::fireEvent($eventBefore);
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $listIds = array();
-            
-            foreach ($_groupIds as $groupId) {
-                $group = $this->get($groupId);
-                if (!empty($group->list_id)) {
-                    $listIds[] = $group->list_id;
+
+            if (empty($_groupIds)) {
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                return;
+            }
+
+            $eventBefore = new Admin_Event_BeforeDeleteGroup();
+            $eventBefore->groupIds = $_groupIds;
+            Tinebase_Event::fireEvent($eventBefore);
+
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $listIds = array();
+
+                foreach ($_groupIds as $groupId) {
+                    $group = $this->get($groupId);
+                    if (!empty($group->list_id)) {
+                        $listIds[] = $group->list_id;
+                    }
+                }
+
+                if (!empty($listIds)) {
+                    $listBackend = new Addressbook_Backend_List();
+                    $listBackend->delete($listIds);
                 }
             }
-            
-            if (!empty($listIds)) {
-                $listBackend = new Addressbook_Backend_List();
-                $listBackend->delete($listIds);
+
+            Tinebase_Group::getInstance()->deleteGroups($_groupIds);
+
+            $event = new Admin_Event_DeleteGroup();
+            $event->groupIds = $_groupIds;
+            Tinebase_Event::fireEvent($event);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
-        
-        Tinebase_Group::getInstance()->deleteGroups($_groupIds);
-        
-        $event = new Admin_Event_DeleteGroup();
-        $event->groupIds = $_groupIds;
-        Tinebase_Event::fireEvent($event);
     }
     
     /**

@@ -46,6 +46,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     
     /**
      * test to save a persistent filter
+     *
+     * @param array|null $filterData
+     * @return array
      */
     public function testSaveFilter($filterData = NULL)
     {
@@ -282,8 +285,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     
     /**
      * assert saved filer matches expections for $this->_testFilterData
-     * 
-     * @param array $savedFilter
+     *
+     * @param array $expectedFilterData
+     * @param array $savedFilterData
      * @return void
      */
     protected function _assertSavedFilterData($expectedFilterData, $savedFilterData)
@@ -324,15 +328,19 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     
     /**
      * returns data for an example persistent filter
-     * 
+     *
+     * @param Tinebase_Model_FullUser $user
      * @return array
      */
-    public static function getPersistentFilterData()
+    public static function getPersistentFilterData($user = null)
     {
+        if (null === $user) {
+            $user = Tinebase_Core::getUser();
+        }
         return array(
             'name'              => 'PHPUnit testFilter',
             'description'       => 'a test filter created by PHPUnit',
-            'account_id'        => Tinebase_Core::getUser()->getId(),
+            'account_id'        => $user->getId(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
             'model'             => 'Tasks_Model_TaskFilter',
             'filters'           => array(
@@ -359,7 +367,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
      * 
      * @param string $_field
      * @param array $_filterData
-     * @return array
+     * @return array|null
      */
     protected function &_getFilter($_field, $_filterData)
     {
@@ -368,6 +376,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                 return $filter;
             }
         }
+        return null;
     }
     
     /**

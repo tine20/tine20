@@ -402,7 +402,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $this->addFilterGroup($filter);
             }
         
-        } elseif ((isset($fieldModel['custom']) || array_key_exists('custom', $fieldModel)) && $fieldModel['custom'] == true) {
+        } elseif (isset($fieldModel['custom']) && $fieldModel['custom'] == true) {
             // silently skip data, as they will be evaluated by the concrete filtergroup
             $this->_customData[] = $_filterData;
         

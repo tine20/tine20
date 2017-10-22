@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -17,9 +17,9 @@
  * @subpackage  Record
  *
  * @property string model
- * @property array added
- * @property array removed
- * @property array modified
+ * @property Tinebase_Record_RecordSet added
+ * @property Tinebase_Record_RecordSet removed
+ * @property Tinebase_Record_RecordSet modified
  */
 class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract 
 {

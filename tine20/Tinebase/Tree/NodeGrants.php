@@ -3,10 +3,10 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  PersistentFilter
+ * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -87,7 +87,8 @@ class Tinebase_Tree_NodeGrants extends Tinebase_Controller_Record_Grants
         $this->_backend = new Tinebase_Tree_Node();
         $this->_grantsBackend = new Tinebase_Backend_Sql_Grants(array(
             'modelName' => $this->_grantsModel,
-            'tableName' => 'tree_node_acl'
+            'tableName' => 'tree_node_acl',
+            'recordTable' => 'tree_node'
         ));
     }
 

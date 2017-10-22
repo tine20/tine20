@@ -1,31 +1,29 @@
-#
+# 
 # Translators:
 # Tamás Faragó <>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
+"PO-Revision-Date: 2017-09-19 12:08+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Eszköz"
-msgstr[1] "Eszközök"
+#: Acl/Rights.php:104
+msgid "Manage ActiveSync devices"
+msgstr ""
 
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Eszközök"
+#: Acl/Rights.php:105
+msgid "See, edit and delete ActiveSync devices"
+msgstr ""
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -120,11 +118,15 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
-msgstr[1] ""
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Eszköz"
+msgstr[1] "Eszközök"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Eszközök"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -159,6 +161,36 @@ msgstr "újraállított"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Sync szűrő beállítása"
+
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Alapértelmezett Címjegyzék"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Alapértelmezett Naptár"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Alapértelmezett Naptár új események létrehozására."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Alapértelmezett Feladat Lista"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
 
 #: Config.php:52
 msgid "Default policy for new devices"
@@ -199,35 +231,3 @@ msgstr "Alapértelmezett szabály"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
-
-#: Acl/Rights.php:104
-msgid "Manage ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:105
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Alapértelmezett Címjegyzék"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Alapértelmezett Naptár"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Alapértelmezett Naptár új események létrehozására."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Alapértelmezett Feladat Lista"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."

@@ -176,7 +176,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     onRecordLoad: function(record) {
         this.record = record;
         
-        if (! this.record.get('editGrant') || this.record.isRecurException()) {
+        if (! this.record.get('editGrant') || this.record.isRecurException() || this.record.hasPoll()) {
             this.setDisabled(true);
         }
         

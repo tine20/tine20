@@ -290,7 +290,19 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
 
         $icalData = $twig->render('current.ics.twig', array('excludes' => array(2, 3)));
 
-        // NOTE: only future event shold be deleted
+        // NOTE: only future event should be deleted
         $this->_importHelper($icalData, 3, true, array('deleteMissing' => true), 'missing event was not deleted');
+    }
+
+    /**
+     * import event from joomla / jevents with special rrule (COUNT=9999)
+     */
+    public function testJoomlaJeventsWithCount9999()
+    {
+        $importEvents = $this->_importHelper('Joomla_jevents.ics', 1, false, array(
+            'onlyBasicData' => true
+        ));
+        $event = $importEvents->getFirstRecord();
+        self::assertEquals('Rich Sound Minis    4-8 Jahre', $event->summary);
     }
 }

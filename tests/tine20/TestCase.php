@@ -579,9 +579,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             throw new Exception('only allowed for json frontend tests suites');
         }
 
-        $newRecord = array(
-            $nameField => 'my test ' . $modelName
-        );
+        $newRecord = array();
+
+        if ($nameField) {
+            $newRecord[$nameField] = 'my test ' . $modelName;
+        }
 
         if ($description) {
             $newRecord[$descriptionField] = 'my test description';
@@ -593,35 +595,40 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $configuration = $realModelName::getConfiguration();
 
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
-        $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
-        if (null !== $configuration && $configuration->modlogActive) {
-            $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
-                print_r($savedRecord, true));
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
-                'created_by has wrong value: ' . print_r($savedRecord, true));
+        if ($nameField) {
+            $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+            if (null !== $configuration && $configuration->modlogActive) {
+                $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
+                    print_r($savedRecord, true));
+                $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
+                    'created_by has wrong value: ' . print_r($savedRecord, true));
+            }
         }
 
+        $recordWasUpdated = false;
         // Update description if record has
         if ($description) {
             $savedRecord[$descriptionField] = 'my updated description';
             $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
             $this->assertEquals('my updated description', $updatedRecord[$descriptionField]);
+            $savedRecord = $updatedRecord;
+            $recordWasUpdated = true;
         }
 
-        if (!$description) {
-            $updatedRecord = $savedRecord;
+        if ($nameField) {
+            // update name as well!
+            $savedRecord[$nameField] = 'my updated namefield';
+            $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
+            $this->assertEquals('my updated namefield', $updatedRecord[$nameField]);
+            $savedRecord = $updatedRecord;
+            $recordWasUpdated = true;
         }
 
-        // update name as well!
-        $updatedRecord[$nameField] = 'my updated namefield';
-        $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $updatedRecord);
-        $this->assertEquals('my updated namefield', $updatedRecord[$nameField]);
-
-        $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
+        $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         $this->assertEquals(1, $result['totalcount']);
 
-        if (null !== $configuration && $configuration->modlogActive) {
+        if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
             $this->assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
                 'last_modified_by not present: ' . print_r($result, true));
             $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
@@ -629,16 +636,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         if ($delete) {
-            call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
+            call_user_func(array($uit, 'delete' . $modelName . 's'), array($savedRecord['id']));
             try {
-                call_user_func(array($uit, 'get' . $modelName), $updatedRecord['id']);
+                call_user_func(array($uit, 'get' . $modelName), $savedRecord['id']);
                 $this->fail('should delete Record');
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
             }
         }
 
-        return $updatedRecord;
+        return $savedRecord;
     }
 
     /**

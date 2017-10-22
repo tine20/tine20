@@ -119,7 +119,7 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
         
         if ($this->_options['useTimesheetAcl'] == TRUE) {
             // get timeaccounts with BOOK_OWN right (get only if no manual filter is set)
-            $bookOwnTS = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+            $bookOwnTS = Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
             if (! empty($bookOwnTS)) {
                 $where .= ' OR (' . $db->quoteInto($field . ' IN (?)', $bookOwnTS)
                     . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
@@ -153,7 +153,6 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
     protected function _resolve()
     {
         if ($this->_isResolved) {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' already resolved');
             return;
         }
 
@@ -165,11 +164,9 @@ class Timetracker_Model_TimeaccountIdFilter extends Tinebase_Model_Filter_Abstra
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
                 //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
-                $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
+                $result = array_merge($result, Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl($grant, TRUE));
             }
             $result = array_unique($result);
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
             
             // finally compute timeaccount_ids which match the filter and required grants
             switch ($this->_operator) {

@@ -41,6 +41,8 @@
  * @property string                         transp
  * @property string                         status
  * @property string                         summary
+ * @property string                         recurid
+ * @property array                          exdate
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -137,6 +139,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         //'exrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         //'rdate'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'poll_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // calendar helper fields
 
         'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
@@ -522,10 +525,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $this->rrule_until = NULL;
         } else {
             $rrule = $this->rrule;
-            if (! $this->rrule instanceof Calendar_Model_Rrule) {
-                $rrule = new Calendar_Model_Rrule(array());
-                $rrule->setFromString($this->rrule);
-                $this->rrule = $rrule;
+            if (! $rrule instanceof Calendar_Model_Rrule) {
+                $rruleTmp = new Calendar_Model_Rrule(is_array($rrule) ? $rrule : array());
+                if (!is_array($rrule)) {
+                    $rruleTmp->setFromString($rrule);
+                }
+                $this->rrule = $rruleTmp;
+                $rrule = $rruleTmp;
             }
             
             if (isset($rrule->count)) {
@@ -537,17 +543,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->rrule_until = $lastOccurrence->dtend;
                 $this->exdate = $exdates;
             } else {
-                // set until to end of day in organizers timezone.
-                // NOTE: this is in contrast to the iCal spec which says until should be the
-                //       dtstart of the last occurence. But as the client with the name of the
-                //       spec sets it to the end of the day, we do it also.
-                if ($rrule->until instanceof Tinebase_DateTime && !$this->is_all_day_event) {
-                    $rrule->until->setTimezone($this->originator_tz);
-                    // NOTE: subSecond cause some clients send 00:00:00 for midnight
-                    $rrule->until->subSecond(1)->setTime(23, 59, 59);
-                    $rrule->until->setTimezone('UTC');
-                }
-                
                 $this->rrule_until = $rrule->until;
             }
         }
@@ -648,7 +643,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
             $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE, $this->convertDates);
         }
-        
+
+        if (isset($_data['poll_id']) && is_array($_data['poll_id'])) {
+            $_data['poll_id'] = new Calendar_Model_Poll($_data['poll_id'], $this->bypassFilters, $this->convertDates);
+        }
+
         parent::setFromArray($_data);
     }
     
