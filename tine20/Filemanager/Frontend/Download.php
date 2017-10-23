@@ -15,6 +15,8 @@
  * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        allow to download a folder as ZIP file
+ *
+ * ATTENTION all public methods in this class are reachable without tine authentification
  */
 class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
 {
