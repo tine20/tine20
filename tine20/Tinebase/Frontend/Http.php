@@ -12,6 +12,9 @@
 /**
  * HTTP interface to Tine
  *
+ * ATTENTION all public methods in this class are reachable without tine authentification
+ * use $this->checkAuth(); if method requires authentification
+ *
  * @package     Tinebase
  * @subpackage  Server
  */
@@ -177,7 +180,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function checkAuth()
     {
         try {
-            Tinebase_Core::getUser();
+            if (!Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+                header('HTTP/1.0 403 Forbidden');
+                exit;
+            }
         } catch (Exception $e) {
             header('HTTP/1.0 403 Forbidden');
             exit;
@@ -853,6 +859,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadRecordAttachment($nodeId, $recordId, $modelName)
     {
+        $this->checkAuth();
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
@@ -935,6 +943,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadTempfile($tmpfileId)
     {
+        $this->checkAuth();
+
         $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($tmpfileId);
         $this->_downloadFileNode($tmpFile, $tmpFile->path);
         exit;
