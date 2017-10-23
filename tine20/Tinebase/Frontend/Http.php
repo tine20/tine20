@@ -877,6 +877,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadPreview($_path, $_appId, $_type, $_num = 0, $_revision = null)
     {
+        $this->checkAuth();
+        
         $_revision = $_revision ?: null;
 
         if ($_path) {
