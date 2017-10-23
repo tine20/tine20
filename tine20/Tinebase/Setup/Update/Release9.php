@@ -459,6 +459,11 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
                             '_' . (string)$index->name . '\'')->query();
                         if ($stmt->rowCount() === 0) {
                             $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                            foreach ($declaration->field as $name) {
+                                if (!$this->_backend->columnExists($name, (string)$table->name)) {
+                                    continue 2;
+                                }
+                            }
                             $setupBackend->addIndex((string)$table->name, $declaration);
                             $successes[] = (string)$table->name . ': ' . (string)$index->name;
                         }
