@@ -110,8 +110,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'config' => array(
                     Tinebase_Numberable::STEPSIZE          => 1,
                     Tinebase_Numberable::BUCKETKEY         => 'ExampleApplication_Model_ExampleRecord#number_str',
-                    Tinebase_Numberable_String::CONF_PREFIX     => 'ER-',
-                    Tinebase_Numberable_String::CONF_ZEROFILL   => 0,
+                    Tinebase_Numberable_String::PREFIX     => 'ER-',
+                    Tinebase_Numberable_String::ZEROFILL   => 0,
                     // TODO implement that
 //                    'filters' => '', // group/filters - use to link with container for example
 //                    'allowClientSet' => '', // force?
