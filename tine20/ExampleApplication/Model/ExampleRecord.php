@@ -108,8 +108,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 //'queryFilter' => TRUE,
                 'type' => 'numberableStr',
                 'config' => array(
-                    Tinebase_Numberable::CONF_STEPSIZE          => 1,
-                    Tinebase_Numberable::CONF_BUCKETKEY         => 'ExampleApplication_Model_ExampleRecord#number_str',
+                    Tinebase_Numberable::STEPSIZE          => 1,
+                    Tinebase_Numberable::BUCKETKEY         => 'ExampleApplication_Model_ExampleRecord#number_str',
                     Tinebase_Numberable_String::CONF_PREFIX     => 'ER-',
                     Tinebase_Numberable_String::CONF_ZEROFILL   => 0,
                     // TODO implement that
@@ -130,8 +130,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 //'queryFilter' => TRUE,
                 'type' => 'numberableInt',
                 'config' => array(
-                    Tinebase_Numberable::CONF_STEPSIZE          => 1,
-                    Tinebase_Numberable::CONF_BUCKETKEY          => 'ExampleApplication_Model_ExampleRecord#number_int',
+                    Tinebase_Numberable::STEPSIZE          => 1,
+                    Tinebase_Numberable::BUCKETKEY          => 'ExampleApplication_Model_ExampleRecord#number_int',
                 )
             ),
         )
