@@ -20,6 +20,9 @@
     }, {
         "type": "git",
         "url": "http://git.syncroton.org/Syncroton"
+    }, {
+        "type": "git",
+        "url": "https://github.com/paulmhh/PHPWord"
     }],
     "require": {
         "zendframework/zendframework1": "1.12.20pl16 as 1.12.20",
@@ -27,15 +30,16 @@
         "syncroton/syncroton": "1.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",
-        "phpoffice/phpword": "v0.13.*",
         "sabre/dav": "1.8.*",
         "sabre/vobject": "3.5.3 as 2.1.0",
         "metaways/opendocument": "1.1",
+        "phpoffice/phpword": "v0.14.0 as v0.13.0",
         "metaways/timezoneconvert": "1.*",
-        "zendframework/zend-http": "2.4.*",
+        "zendframework/zend-http": "2.5.*",
         "doctrine/orm": "2.5.*",
         "twig/twig": "~1.0",
-        "phpoffice/phpspreadsheet": "dev-master"
+        "phpoffice/phpspreadsheet": "dev-master",
+        "zendframework/zend-router": "^2.5"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
