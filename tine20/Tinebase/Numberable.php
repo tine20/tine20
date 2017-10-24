@@ -19,9 +19,9 @@
 class Tinebase_Numberable extends Tinebase_Numberable_Abstract
 {
     protected static $_baseConfiguration = array(
-        self::CONF_TABLENAME        => 'numberable',
-        self::CONF_NUMCOLUMN        => 'number',
-        self::CONF_BUCKETCOLUMN     => 'bucket'
+        self::TABLENAME        => 'numberable',
+        self::NUMCOLUMN        => 'number',
+        self::BUCKETCOLUMN     => 'bucket'
     );
 
     protected static $_numberableCache = array();
