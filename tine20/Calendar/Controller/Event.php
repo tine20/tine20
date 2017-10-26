@@ -932,6 +932,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
                     }
                 }
+
+                $updatedEvent = $this->get($_record->getId());
+                $currentMods = $this->_writeModLog($updatedEvent, $event);
+                $this->_setSystemNotes($updatedEvent, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
 
             if ($_record->isRecurException() && in_array($range, array(Calendar_Model_Event::RANGE_ALL, Calendar_Model_Event::RANGE_THISANDFUTURE))) {

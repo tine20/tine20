@@ -2036,12 +2036,31 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->getFirstRecord()->status);
         static::assertEquals(1, $updatedEvent->alarms->count());
 
+        // update event, only add attendee
+        $updatedEvent->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'   => $ownContactId,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status'    => Calendar_Model_Attender::STATUS_TENTATIVE
+        ]));
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertEquals(2, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
+        // update event, only change attendee status
+        $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertEquals(2, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
         // reschedule the event
         $updateEvent = clone $updatedEvent;
         $updateEvent->dtstart->addDay(1);
         $updateEvent->dtend->addDay(1);
         $updatedEvent = $this->_controller->update($updateEvent);
-        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
         $event = clone $updatedEvent;
         // delete it
@@ -2055,7 +2074,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
-        static::assertEquals(5, $modifications->count());
+        static::assertEquals(7, $modifications->count());
 
         // undelete it
         $mod = $modifications->getLastRecord();
@@ -2069,8 +2088,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(1, $undeletedEvent->tags->count());
         static::assertEquals(1, $undeletedEvent->attachments->count());
         static::assertEquals(1, count($undeletedEvent->customfields));
-        static::assertEquals(1, $undeletedEvent->attendee->count());
-        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->getFirstRecord()
+        static::assertEquals(2, $undeletedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()
             ->status);
         static::assertEquals(1, $undeletedEvent->alarms->count());
 
@@ -2081,9 +2100,32 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
         )));
         $unrescheduledEvent = $this->_controller->get($event->getId());
-        static::assertEquals(1, $unrescheduledEvent->attendee->count());
+        static::assertEquals(2, $unrescheduledEvent->attendee->count());
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $unrescheduledEvent->attendee->getFirstRecord()
             ->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $unrescheduledEvent->attendee->getLastRecord()
+            ->status);
+
+        // undo update event, only change attendee status
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($event->getId());
+        static::assertEquals(2, $undidEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $undidEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undidEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
+        // undo update event, only add attendee
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($event->getId());
+        static::assertEquals(1, $undidEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undidEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
         // undelete the removed related data
         $mod = $modifications->getLastRecord();
