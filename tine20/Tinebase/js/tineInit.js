@@ -145,17 +145,31 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.MainContextMenu.showIf(e);
         }, this);
 
-        // open internal links in same window (use router)
         Ext.getBody().on('click', function(e) {
-            var target = e.getTarget('a',1 ,true);
-            if (target && target.getAttribute('target') == '_blank') {
-                var href = String(target.getAttribute('href'));
+            var target = e.getTarget('a', 1, true);
+
+            // open internal links in same window (use router)
+            if(window.isMainWindow === true) {
+                if (target && target.getAttribute('target') === '_blank') {
+                    var href = String(target.getAttribute('href'));
+
                     if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"
                         });
                     }
+                }
+            } else {
+                e.preventDefault();
+
+                if (e.ctrlKey || e.metaKey) {
+                    var window = window.open(target.getAttribute('href'), '_blank', null, true);
+                    window.opener = undefined;
+                } else {
+                    window.opener.location.href = target.getAttribute('href');
+                    window.close();
+                }
             }
         }, this);
     },
@@ -283,7 +297,7 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
-            var defaultApp = Tine.Tinebase.appMgr.getDefault()
+            var defaultApp = Tine.Tinebase.appMgr.getDefault();
             Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
         }});
 
