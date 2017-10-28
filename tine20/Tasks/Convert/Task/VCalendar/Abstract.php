@@ -98,7 +98,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
         }
         
         if(isset($task->completed)){
-             $vtodo->add('COMPLETED', $task->completed);
+            $vtodo->add('COMPLETED', $task->completed->getClone()->setTimezone('UTC'));
         }
 
         switch($task->priority) {
