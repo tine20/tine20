@@ -85,12 +85,12 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_task)
+    public function create(Tinebase_Record_Interface $_task, $_duplicateCheck = true)
     {
         $this->_handleCompleted($_task);
         $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::getUserTimezone();
         
-        $task = parent::create($_task);
+        $task = parent::create($_task, $_duplicateCheck);
         
         $this->_addAutomaticAlarms($task);
         
@@ -143,10 +143,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_task)
+    public function update(Tinebase_Record_Interface $_task, $_duplicateCheck = true)
     {
         $this->_handleCompleted($_task);
-        return parent::update($_task);
+        return parent::update($_task, $_duplicateCheck);
     }
     
     /**
