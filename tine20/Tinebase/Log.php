@@ -36,6 +36,12 @@ class Tinebase_Log extends Zend_Log
     protected $_flippedPriorities;
 
     /**
+     * Stores timezone information
+     * @var string
+     */
+    protected $_tz = NULL;
+
+    /**
      * Class constructor.  Create a new logger
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
@@ -157,5 +163,47 @@ class Tinebase_Log extends Zend_Log
             }
         }
         return $logLevel;
+    }
+
+    /**
+     * Log a message at a priority
+     *
+     * @param  string   $message   Message to log
+     * @param  integer  $priority  Priority of message
+     * @param  mixed    $extras    Extra information to log in event
+     * @return void
+     * @throws Zend_Log_Exception
+     */
+    public function log($message, $priority, $extras = null)
+    {
+        if ($this->_tz){
+            $oldTZ = date_default_timezone_get();
+            date_default_timezone_set($this->_tz);
+            parent::log($message, $priority, $extras);
+            date_default_timezone_set($oldTZ);
+        }
+        else
+            parent::log($message, $priority, $extras);
+    }
+
+    /**
+     * Sets the timezone for the log output
+     *
+     * @param  string   $_tz   valid PHP timezone or NULL for UTC
+     * @return void
+     */
+    public function setTimezone($_tz)
+    {
+        $this->_tz = $_tz;
+    }
+
+    /**
+     * Returns the timezone for the log output
+     *
+     * @return  string   $_tz   valid PHP timezone or NULL for UTC
+     */
+    public function getTimezone()
+    {
+        return($this->_tz);
     }
 }
