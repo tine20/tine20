@@ -2298,6 +2298,8 @@ class Setup_Controller
 
             $files = file_exists("$configDir/index.php") ? 'config.inc.php' : '.';
             `cd $configDir; tar cjf $backupDir/tine20_config.tar.bz2 $files`;
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of config file successful');
         }
 
         if (isset($options['db']) && $options['db']) {
@@ -2311,11 +2313,15 @@ class Setup_Controller
             );
 
             $this->_backend->backup($backupOptions);
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of DB successful');
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
         if ($options['files'] && $filesDir) {
             `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of files successful');
         }
     }
 
@@ -2335,11 +2341,11 @@ class Setup_Controller
         /**
          * @var $application Tinebase_Model_Application
          */
-        foreach($applications as $application) {
+        foreach ($applications as $application) {
             $tableDef = $this->getSetupXml($application->name);
             $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
 
-            foreach($structOnlys as $structOnly) {
+            foreach ($structOnlys as $structOnly) {
                 $tableName = $structOnly->xpath('./../name/text()');
                 $tables[] = SQL_TABLE_PREFIX . $tableName[0];
             }
@@ -2383,6 +2389,8 @@ class Setup_Controller
             }
 
             `cd $configDir; tar xf $configBackupFile`;
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of config file successful');
         }
 
         Setup_Core::setupConfig();
@@ -2390,6 +2398,8 @@ class Setup_Controller
 
         if (isset($options['db']) && $options['db']) {
             $this->_backend->restore($options['backupDir']);
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of DB successful');
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
@@ -2401,6 +2411,8 @@ class Setup_Controller
             }
 
             `cd $filesDir; tar xf $filesBackupFile`;
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of files successful');
         }
     }
 
