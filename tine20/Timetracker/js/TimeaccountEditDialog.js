@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -24,6 +24,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
     windowWidth: 800,
     windowHeight: 500,
+
+    /**
+     * don't eval grants as TAs have very special grants and we only show the dialog to users with MANAGE right
+     */
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -265,7 +270,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             })]
         };
     },
-    
+
     getGrantsGrid: function() {
         if (! this.grantsGrid) {
             this.grantsStore =  new Ext.data.JsonStore({
