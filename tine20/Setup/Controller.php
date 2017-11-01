@@ -1136,7 +1136,8 @@ class Setup_Controller
      */
     protected function _enableCaching()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Activate caching backend if available ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Activate caching backend if available ...');
         
         Tinebase_Core::setupCache();
     }
@@ -2414,6 +2415,10 @@ class Setup_Controller
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of files successful');
         }
+
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache after restore ...');
+        $this->_enableCaching();
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function compareSchema($options)
