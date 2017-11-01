@@ -746,7 +746,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function getPlainTextBody()
     {
-        $result = self::convertHTMLToPlainTextWithQuotes($this->body);
+        if ($this->content_type === Felamimail_Model_Message::CONTENT_TYPE_PLAIN) {
+            $result = $this->body;
+        } else {
+            $result = self::convertHTMLToPlainTextWithQuotes($this->body);
+        }
         
         return $result;
     }

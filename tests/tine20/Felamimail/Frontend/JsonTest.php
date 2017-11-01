@@ -1106,6 +1106,26 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
         $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
     }
+
+    /**
+     * testSendPlainMessageWithLessThenSign
+     *
+     * @todo add mantis issue
+     */
+    public function testSendPlainMessageWithLessThenSign()
+    {
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['content_type'] = 'text/plain';
+        $messageToSend['body'] = 'lalala < logloff​';
+
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject('test');
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        $fullMessage = $this->_json->getMessage($message['id']);
+
+        self::assertContains('lalala &lt; logloff​', $fullMessage['body']);
+    }
     
     /**
      * save message in folder (draft) test
