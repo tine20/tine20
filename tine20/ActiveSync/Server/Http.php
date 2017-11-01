@@ -63,6 +63,11 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         if (!$this->_checkUserPermissions($loginName)) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to handle ActiveSync request ('
+                . 'PID: ' . getmypid() . ')');
+        }
         
         $this->_initializeRegistry();
         

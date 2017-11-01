@@ -92,9 +92,12 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             
             return;
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' requestUri:' . $this->_request->getRequestUri());
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Starting to handle WebDAV request (requestUri:' . $this->_request->getRequestUri()
+                . ' PID: ' . getmypid() . ')'
+            );
         
         self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
         \Sabre\DAV\Server::$exposeVersion = false;
