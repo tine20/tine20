@@ -19,9 +19,10 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     public function get() 
     {
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
-        if (! $pathRecord->isRecordPath() && ! Tinebase_Core::getUser()->hasGrant(
-                $this->_getContainer(),
-                Tinebase_Model_Grants::GRANT_DOWNLOAD
+        if (! $pathRecord->isRecordPath() && ! Tinebase_FileSystem::getInstance()->checkPathACL(
+                $pathRecord->getParent(),
+                Tinebase_Model_Grants::GRANT_DOWNLOAD,
+                true, false
             )
         ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
@@ -65,7 +66,13 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
      */
     public function delete() 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+                $pathRecord->getParent(),
+                Tinebase_Model_Grants::GRANT_DELETE,
+                true, false
+            )
+        ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
@@ -74,7 +81,12 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     
     public function put($data)
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+                $pathRecord->getParent(),
+                Tinebase_Model_Grants::GRANT_EDIT,
+                true, false
+            )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
