@@ -844,9 +844,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             fr.onload = function () {
                 if (fr.result === null) {
                     reject();
+                } else {
+                    resolve();
                 }
-
-                resolve();
             };
             fr.readAsText(file);
         });
