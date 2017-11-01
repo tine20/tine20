@@ -76,7 +76,7 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         var startDate = firstOfMonth.add(Date.DAY, -1*startingPos + 1);
 
         // in some rare cases render might be too slow. But luckily we can ignore this because this is also rendered on click
-        if (this.rendered == false) {
+        if (this.rendered === false) {
             return;
         }
         
