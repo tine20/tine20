@@ -117,4 +117,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_49();
         $this->setApplicationVersion('Tinebase', '11.9');
     }
+
+    /**
+     * update to 11.10
+     *
+     * reimport all template files
+     */
+    public function update_10()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_50();
+        $this->setApplicationVersion('Tinebase', '11.10');
+    }
 }

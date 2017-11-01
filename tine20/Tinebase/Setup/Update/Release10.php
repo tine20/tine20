@@ -2255,9 +2255,66 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.51
+     *
+     * reimport all template files
      */
     public function update_50()
+    {
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $basePath = $fileSystem->getApplicationBasePath(
+                'Tinebase',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            ) . '/export/templates';
+
+        if (!$fileSystem->isDir($basePath)) {
+            $fileSystem->createAclNode($basePath);
+        }
+
+        $path = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR;
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $appPath = $path . $application->name . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
+            if (!is_dir($appPath)) {
+                continue;
+            }
+
+            $templateAppPath = $basePath . '/' . $application->name;
+            if (!$fileSystem->isDir($templateAppPath)) {
+                $fileSystem->createAclNode($templateAppPath);
+            }
+
+            foreach (new DirectoryIterator($appPath) as $item) {
+                if (!$item->isFile()) {
+                    continue;
+                }
+                if (false === ($content = file_get_contents($item->getPathname()))) {
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Could not import template: ' . $item->getPathname());
+                    continue;
+                }
+                if (false === ($file = $fileSystem->fopen($templateAppPath . '/' . $item->getFileName(), 'w'))) {
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' could not open ' . $templateAppPath . '/' . $item->getFileName() . ' for writting');
+                    continue;
+                }
+                fwrite($file, $content);
+                if (true !== $fileSystem->fclose($file)) {
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' write to ' . $templateAppPath . '/' . $item->getFileName() . ' did not succeed');
+                    continue;
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.51');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_51()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }
