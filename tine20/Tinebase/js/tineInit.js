@@ -164,8 +164,8 @@ Tine.Tinebase.tineInit = {
                 e.preventDefault();
 
                 if (e.ctrlKey || e.metaKey) {
-                    var window = window.open(target.getAttribute('href'), '_blank', null, true);
-                    window.opener = undefined;
+                    var win = window.open(target.getAttribute('href'), '_blank', null, true);
+                    win.opener = null;
                 } else {
                     window.opener.location.href = target.getAttribute('href');
                     window.close();
