@@ -643,7 +643,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         for (var i=0; i<this.filterModels.length; i++) {
             try {
                 var config = this.filterModels[i],
-                    fm = this.createFilterModel(config);
+                    fm;
+
+                if (config.valueType === 'fulltext' && !Tine.Tinebase.registry.get('fulltextAvailable')) {
+                    continue;
+                }
+
+                fm = this.createFilterModel(config);
             } catch (e) {
                 Tine.log.error('Could not create filter model - skipping');
                 Tine.log.error(e.stack ? e.stack : e);

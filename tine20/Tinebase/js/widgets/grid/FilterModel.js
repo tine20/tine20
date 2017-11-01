@@ -255,8 +255,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         // filter operators
         if (this.operators.length == 0) {
             switch (this.valueType) {
+                case 'fulltext':
+                    this.operators.push('wordstartswith');
+                    break;
                 case 'string':
-                    this.operators.push('contains', 'wordstartswith', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
+                    this.operators.push('contains', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');

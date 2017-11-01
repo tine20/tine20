@@ -83,7 +83,7 @@ Tine.MailFiler.Model.Node.getFilterModel = function() {
 //        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
         {label: app.i18n._('Contenttype'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+        {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
         {filtertype : 'tine.filemanager.pathfiltermodel', app : app}, 
         {filtertype : 'tinebase.tag', app : app},
         {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},

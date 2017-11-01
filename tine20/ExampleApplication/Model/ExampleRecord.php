@@ -84,7 +84,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'type'       => 'fulltext',
                 'nullable'   => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'Description',
+                'label'      => 'Description', // _('Description')
+                'queryFilter' => true,
             ),
             'status' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
