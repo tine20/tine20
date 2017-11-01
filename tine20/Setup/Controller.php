@@ -1133,7 +1133,8 @@ class Setup_Controller
      */
     protected function _enableCaching()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Activate caching backend if available ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Activate caching backend if available ...');
         
         Tinebase_Core::setupCache();
     }
