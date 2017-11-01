@@ -453,6 +453,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
         this.initToolbar();
         this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
+            initialLoadAfterRender: false,
             frame: false
         });
         this.supr().initComponent.apply(this, arguments);
