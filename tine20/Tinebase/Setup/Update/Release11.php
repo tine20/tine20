@@ -123,7 +123,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      *
      * reimport all template files
      */
-    public function update_10()
+    public function update_9()
     {
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_50();

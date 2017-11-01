@@ -110,7 +110,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'doc':
             case 'docx':
                 // redirect output to client browser
-                $export->write($result);
+                if (null === $result) {
+                    $export->write();
+                } else {
+                    $export->write($result);
+                }
                 break;
             default:
                 readfile($result);
