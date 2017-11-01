@@ -147,28 +147,29 @@ Tine.Tinebase.tineInit = {
 
         Ext.getBody().on('click', function(e) {
             var target = e.getTarget('a', 1, true);
+            if (target) {
+                // open internal links in same window (use router)
+                if (window.isMainWindow === true) {
+                    if (target.getAttribute('target') === '_blank') {
+                        var href = String(target.getAttribute('href'));
 
-            // open internal links in same window (use router)
-            if(window.isMainWindow === true) {
-                if (target && target.getAttribute('target') === '_blank') {
-                    var href = String(target.getAttribute('href'));
-
-                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
-                        target.set({
-                            href: decodeURI(href),
-                            target: "_self"
-                        });
+                        if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
+                            target.set({
+                                href: decodeURI(href),
+                                target: "_self"
+                            });
+                        }
                     }
-                }
-            } else {
-                e.preventDefault();
-
-                if (e.ctrlKey || e.metaKey) {
-                    var win = window.open(target.getAttribute('href'), '_blank', null, true);
-                    win.opener = null;
                 } else {
-                    window.opener.location.href = target.getAttribute('href');
-                    window.close();
+                    e.preventDefault();
+
+                    if (e.ctrlKey || e.metaKey) {
+                        var win = window.open(target.getAttribute('href'), '_blank', null, true);
+                        win.opener = null;
+                    } else {
+                        window.opener.location.href = target.getAttribute('href');
+                        window.close();
+                    }
                 }
             }
         }, this);
