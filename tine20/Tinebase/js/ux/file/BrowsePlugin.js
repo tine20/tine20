@@ -126,7 +126,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.component.mon(Ext.getDoc(), {
                 scope: this,
                 mousemove: this.hideLayerIf,
-                buffer: 250
+                buffer: 100
             });
             
             this.layerVisisble = true;
