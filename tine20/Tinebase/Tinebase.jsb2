@@ -1026,6 +1026,14 @@
           "path": "js/"
         },
         {
+          "text": "FileSelectionArea.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "FileSelectionDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }
@@ -1178,6 +1186,10 @@
         },
         {
           "text": "UidTriggerField.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "FileSelectionArea.css",
           "path": "css/widgets/"
         },
         {

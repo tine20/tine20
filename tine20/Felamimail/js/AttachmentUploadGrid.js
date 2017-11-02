@@ -28,6 +28,13 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
 
     initComponent: function () {
         this.app = this.app || Tine.Tinebase.appMgr.get('Felamimail');
+        this.events = [
+            /**
+             * Fired once files where selected from filemanager or from a local source
+             */
+            'filesSelected'
+        ];
+
         this.attachmentTypeStore = new Ext.data.JsonStore({
             fields: ['id', 'name'],
             data: this.getAttachmentMethods()
@@ -36,7 +43,39 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         Tine.Felamimail.AttachmentUploadGrid.superclass.initComponent.call(this);
 
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
+
+        this.initActions();
     },
+
+
+    /**
+     * initActions
+     */
+    initActions: function () {
+        this.action_download = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: false,
+            actionType: 'download',
+            text: i18n._('Download'),
+            handler: this.onDownload,
+            iconCls: 'action_download',
+            scope: this,
+            disabled:true
+        });
+
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+        }
+
+        this.actionUpdater.addActions([this.action_download, this.action_preview]);
+        this.getTopToolbar().addItem(this.action_download);
+        this.contextMenu.addItem(this.action_download);
+
+        // this.on('rowdblclick', this.onRowDbClick.createDelegate(this), this);
+    },
+
+    onDownload: Tine.widgets.grid.FileUploadGrid.prototype.onDownload,
+    onRowDbClick: Tine.widgets.dialog.AttachmentsGridPanel.prototype.onRowDbClick,
 
     onBeforeEdit: function (e) {
         var record = e.record;
@@ -160,6 +199,11 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
     },
 
     onFilesSelect: function (fileSelector, e) {
+        if (window.lodash.isArray(fileSelector)) {
+            this.onFileSelectFromFilemanager(fileSelector);
+            return;
+        }
+
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
@@ -180,10 +224,9 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
                 fileRecord.data.attachment_type = 'attachment';
                 this.store.add(fileRecord);
             }
-
-
         }, this);
 
+        this.fireEvent('filesSelected');
     },
 
     onFileSelectFromFilemanager: function (nodes) {
@@ -205,6 +248,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
                 });
             }
         });
-    },
 
+        this.fireEvent('filesSelected');
+    }
 });
