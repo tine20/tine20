@@ -2263,49 +2263,51 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_50()
     {
-        $fileSystem = Tinebase_FileSystem::getInstance();
-        $basePath = $fileSystem->getApplicationBasePath(
-                'Tinebase',
-                Tinebase_FileSystem::FOLDER_TYPE_SHARED
-            ) . '/export/templates';
+        if ($this->isReplicationMaster()) {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            $basePath = $fileSystem->getApplicationBasePath(
+                    'Tinebase',
+                    Tinebase_FileSystem::FOLDER_TYPE_SHARED
+                ) . '/export/templates';
 
-        if (!$fileSystem->isDir($basePath)) {
-            $fileSystem->createAclNode($basePath);
-        }
-
-        $path = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR;
-
-        /** @var Tinebase_Model_Application $application */
-        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $appPath = $path . $application->name . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
-            if (!is_dir($appPath)) {
-                continue;
+            if (!$fileSystem->isDir($basePath)) {
+                $fileSystem->createAclNode($basePath);
             }
 
-            $templateAppPath = $basePath . '/' . $application->name;
-            if (!$fileSystem->isDir($templateAppPath)) {
-                $fileSystem->createAclNode($templateAppPath);
-            }
+            $path = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR;
 
-            foreach (new DirectoryIterator($appPath) as $item) {
-                if (!$item->isFile()) {
+            /** @var Tinebase_Model_Application $application */
+            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+                $appPath = $path . $application->name . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
+                if (!is_dir($appPath)) {
                     continue;
                 }
-                if (false === ($content = file_get_contents($item->getPathname()))) {
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' Could not import template: ' . $item->getPathname());
-                    continue;
+
+                $templateAppPath = $basePath . '/' . $application->name;
+                if (!$fileSystem->isDir($templateAppPath)) {
+                    $fileSystem->createAclNode($templateAppPath);
                 }
-                if (false === ($file = $fileSystem->fopen($templateAppPath . '/' . $item->getFileName(), 'w'))) {
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' could not open ' . $templateAppPath . '/' . $item->getFileName() . ' for writting');
-                    continue;
-                }
-                fwrite($file, $content);
-                if (true !== $fileSystem->fclose($file)) {
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' write to ' . $templateAppPath . '/' . $item->getFileName() . ' did not succeed');
-                    continue;
+
+                foreach (new DirectoryIterator($appPath) as $item) {
+                    if (!$item->isFile()) {
+                        continue;
+                    }
+                    if (false === ($content = file_get_contents($item->getPathname()))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Could not import template: ' . $item->getPathname());
+                        continue;
+                    }
+                    if (false === ($file = $fileSystem->fopen($templateAppPath . '/' . $item->getFileName(), 'w'))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' could not open ' . $templateAppPath . '/' . $item->getFileName() . ' for writting');
+                        continue;
+                    }
+                    fwrite($file, $content);
+                    if (true !== $fileSystem->fclose($file)) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' write to ' . $templateAppPath . '/' . $item->getFileName() . ' did not succeed');
+                        continue;
+                    }
                 }
             }
         }
