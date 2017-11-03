@@ -87,13 +87,14 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      * @param string $_id
      * @param int $_containerId
      * @param bool         $_getRelatedData
-     * @return Tinebase_Record_RecordSet
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_Interface
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
         $containerId = $_containerId !== null ? $_containerId : $this->getSharedContractsContainer();
         
-        return parent::get($_id, $containerId, $_getRelatedData);
+        return parent::get($_id, $containerId, $_getRelatedData, $_getDeleted);
     }
     
 
@@ -108,14 +109,16 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         $this->_checkNumberType($_record);
         return parent::update($_record, $_duplicateCheck);
     }
-    
+
     /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
-     * @return  Sales_Model_Contract
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         // add container
         $_record->container_id = self::getSharedContractsContainer()->getId();

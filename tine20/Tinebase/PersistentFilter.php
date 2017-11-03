@@ -159,31 +159,32 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
             return $filter ? $filter->getId() : null;
         }
     }
-    
+
     /**
      * add one record
      *
-     * @param   Tinebase_Record_Interface $record
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         // check first if we already have a filter with this name for this account/application in the db
-        $this->_sanitizeAccountId($record);
+        $this->_sanitizeAccountId($_record);
         
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
-            'account_id'        => $record->account_id,
-            'application_id'    => $record->application_id,
-            'name'              => $record->name,
-            'model'             => $record->model,
+            'account_id'        => $_record->account_id,
+            'application_id'    => $_record->application_id,
+            'name'              => $_record->name,
+            'model'             => $_record->model,
         )));
         
         if (count($existing) > 0) {
-            $record->setId($existing->getFirstRecord()->getId());
-            $result = $this->update($record);
+            $_record->setId($existing->getFirstRecord()->getId());
+            $result = $this->update($_record);
         } else {
-            $result = parent::create($record);
+            $result = parent::create($_record);
         }
         
         return $result;

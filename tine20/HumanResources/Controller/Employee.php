@@ -329,19 +329,21 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_doPrivateCleanup($records);
         return $records;
     }
-    
+
 
     /**
      * get by id
      *
      * @param string $_id
      * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        $record = parent::get($_id, $_containerId);
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         $this->_doPrivateCleanup($record);
         return $record;
     }

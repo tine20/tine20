@@ -147,7 +147,7 @@ class Tasks_ControllerTest extends TestCase
                 default:
                     if ($value instanceof Tinebase_Record_Abstract || $value instanceof Tinebase_Record_RecordSet) {
                         $diff = $value->diff($utask->$field);
-                        $this->assertEquals(0, count($diff->diff), "field $field not equal: " . print_r($diff->toArray(), TRUE));
+                        $this->assertTrue($diff->isEmpty(), "field $field not equal: " . print_r($diff->toArray(), TRUE));
                     } else {
                         $this->assertEquals($value, $utask->$field, "field $field not equal: " . print_r($value, TRUE));
                     }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -350,8 +350,5 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $this->assertEquals('somevalue', $uit->xprops()['someproperty']);
         $this->assertEquals('baz', $uit->xprops()['foo']['bar']);
         $this->assertEquals(array('bar' => 'baz'), $uit->xprops()['foo']);
-
-        $this->setExpectedException('Exception');
-        $uit->xprops()['foo']['bar']['baz'] = 'error';
     }
 }

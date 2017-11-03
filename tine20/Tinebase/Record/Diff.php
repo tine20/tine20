@@ -87,7 +87,11 @@ class Tinebase_Record_Diff extends Tinebase_Record_Abstract
     public function isEmpty($toOmit = array())
     {
         if (count($toOmit) === 0) {
-            return (count($this->diff) === 0 ? count($this->oldData) === 0 : false);
+            if (! is_array($this->diff) || count($this->diff) === 0) {
+                return (! is_array($this->oldData) || count($this->oldData) === 0);
+            } else {
+                return false;
+            }
         }
 
         $diff = array_diff(array_keys($this->diff), $toOmit);

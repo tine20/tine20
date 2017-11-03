@@ -92,19 +92,23 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     {
         return Tinebase_Tags::getInstance()->getSearchTagsCount($_filter);
     }
-   
+
     /**
-     * fetch one tag identified by tagid
+     * get by id
      *
-     * @param int $_tagId
-     * @return Tinebase_Model_FullTag
+     * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_tagId)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        $fullTag = Tinebase_Tags::getInstance()->getFullTagById($_tagId, /* ignoreAcl = */ true);
+        $fullTag = Tinebase_Tags::getInstance()->getFullTagById($_id, /* ignoreAcl = */ true);
         
-        $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_tagId);
-        $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_tagId);
+        $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_id);
+        $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_id);
         
         return $fullTag;
     }  

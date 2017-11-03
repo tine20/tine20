@@ -157,8 +157,8 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         $syncrotonContact = new Syncroton_Model_Contact();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            // skip empty values
-            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
+            if ($this->_isEmptyValue($entry->$tine20Property)) {
+                // skip empty values
                 continue;
             }
             

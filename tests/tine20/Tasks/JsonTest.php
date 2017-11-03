@@ -291,7 +291,7 @@ class Tasks_JsonTest extends TestCase
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         
         // check
-        $count = count($tasks['totalcount']);
+        $count = $tasks['totalcount'];
         $this->assertGreaterThan(0, $count);
         
         // delete task

@@ -261,7 +261,8 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         $syncrotonEvent = new Syncroton_Model_Event();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            if ((empty($entry->$tine20Property) && $entry->$tine20Property != '0') || count($entry->$tine20Property) === 0) {
+            if ($this->_isEmptyValue($entry->$tine20Property)) {
+                // skip empty values
                 continue;
             }
             

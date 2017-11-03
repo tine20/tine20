@@ -8,13 +8,15 @@ TINE 2.0 RELEASENOTES
 GENERAL CHANGES
 ---
 
+* PHP 7.2 Support
+
 * Replication
 
 Master-Slave setup, changes are replicated from master to any number of slaves
 
 * Modification Logs / Undo
 
-Almost all records now have modification logs with the ability to undo changes and undelete records 
+Almost all records now have modification logs with the ability to undo changes and undelete records
 
 * System-Links to files, folders and applications
 
@@ -71,7 +73,7 @@ Subfolders can have different grants
 
 * Fulltext search with tika
 
-If a tika.jar is installed on the webserver, documents can be indexed and searched 
+If a tika.jar is installed on the webserver, documents can be indexed and searched
 
 * Preview service
 
@@ -83,7 +85,7 @@ Tine 2.0 is keeping track of multiple versions of a file and you can download ol
 
 * Usage
 
-Tine 2.0 now shows the file-usage by user and filetype in a folder and its subfolders 
+Tine 2.0 now shows the file-usage by user and filetype in a folder and its subfolders
 
 * New grants "publish" and "download"
 

@@ -73,7 +73,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * 
      * @todo    check if container name exists ?
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_checkRight('create');
         
@@ -109,7 +109,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
 
         $_record->container_id = $container->getId();
         
-        $timeaccount = parent::create($_record);
+        $timeaccount = parent::create($_record, $_duplicateCheck);
         
         // save grants
         if (count($_record->grants) > 0) {
@@ -203,7 +203,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' timeaccounts.');
         }
 
-        return parent::_checkRight($_action);
+        parent::_checkRight($_action);
     }
     
     public function doGrantChecks()

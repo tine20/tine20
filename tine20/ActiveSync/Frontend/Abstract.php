@@ -765,4 +765,14 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     abstract public function toTineModel(Syncroton_Model_IEntry $data, $entry = null);
     
     abstract public function toSyncrotonModel($entry, array $options = array());
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    protected function _isEmptyValue($value)
+    {
+        return empty($value) && $value != '0'
+            || is_array($value) && count($value) === 0;
+    }
 }

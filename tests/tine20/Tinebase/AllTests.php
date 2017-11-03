@@ -42,8 +42,6 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ExceptionTest');
         $suite->addTestSuite('Tinebase_LdapTest');
         $suite->addTestSuite('Tinebase_ModelConfigurationTest');
-        $suite->addTestSuite('Tinebase_Record_RecordTest');
-        $suite->addTestSuite('Tinebase_Record_RecordSetTest');
         $suite->addTestSuite('Tinebase_UserTest');
         $suite->addTestSuite('Tinebase_GroupTest');
         $suite->addTestSuite('Tinebase_ZendFilterTest');

@@ -58,15 +58,18 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Controller_Recor
             $this->_cache->clean(Zend_Cache::CLEANING_MODE_ALL);
         }
     }
-    
+
     /**
-    * get by id
-    * - results are cached
-    *
-    * @param string $_id the id of the peer
-    * @return Voipmanager_Model_Snom_Location
-    */
-    public function get($_id)
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
         if ($this->_cacheIdPrefix && $this->_cache) {
