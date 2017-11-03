@@ -118,6 +118,18 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     'field'     => 'container_id',
                     'operator'  => 'equals',
                     'value'     => $this->_container->getId()
+                ),
+                /** This is really needed to prevent memory overruns and not to return all calendar events of all times
+                  * IF there are no filters defined
+                  * It could be handled more elegantly by using user (config) defined time ranges
+                **/
+                array(
+                    'field'    => 'period',
+                    'operator'  => 'within',
+                    'value'     => array(
+                        'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
+                        'until' => Tinebase_DateTime::now()->addYear(4)
+                    )
                 )
             ));
 
@@ -304,7 +316,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 $periodFrom = Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom());
             }
             if ($periodUntil === null) {
-                $periodUntil = Tinebase_DateTime::now()->addYear(1000);
+                $periodUntil = Tinebase_DateTime::now()->addYear(4);
             }
 
             $filterArray[] = array(
@@ -324,17 +336,29 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         return array_keys($this->_calendarQueryCache);
     }
-    
+
     /**
-     * get max period (from) in months (default: 12000)
-     * 
+     * get max period (from) in months (default: 2)
+     *
      * @return integer
      */
     protected function _getMaxPeriodFrom()
     {
-        return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 12000);
+        // if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active
+        if ((Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED))  && (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT']))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+            $result = Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN, 100);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' SyncToken active: allow to filter for all calendar events => return ' . $result . ' months');
+            return $result;
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled or client does not support it');
+        return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
     }
-    
+
     /**
      * (non-PHPdoc)
      *
