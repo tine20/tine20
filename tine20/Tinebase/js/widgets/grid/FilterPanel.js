@@ -93,6 +93,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.advancedSearchEnabled = Tine.Tinebase.featureEnabled('featureShowAdvancedSearch') &&
             this.filterToolbarConfig.app.enableAdvancedSearch;
 
+        this.recordClass = this.filterToolbarConfig.recordClass;
+
         this.items = [{
             region: 'east',
             width: 200,

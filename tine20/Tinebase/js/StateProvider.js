@@ -61,6 +61,7 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
 
             // store back in registry (as needed for popups)
             stateInfo[name] = encodedValue;
+            Tine.Tinebase.registry.set('stateInfo', stateInfo);
         }
 
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
