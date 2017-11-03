@@ -241,6 +241,81 @@ class Tinebase_CustomFieldTest extends TestCase
         self::assertEquals(2, count($contact->customfields['test']));
         self::assertTrue(in_array($contact->customfields['test'][0]['org_name'], array('contact 1', 'contact 2')));
     }
+
+    public function testBoolCustomField()
+    {
+        $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
+            'name'              => 'test',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'bool')
+        )));
+
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'contact',
+            'customfields' => [$createdCustomField->name => 1]
+        )));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => 1
+            ]]
+        ]));
+        static::assertEquals(1, $result->count());
+        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => '1'
+            ]]
+        ]));
+        static::assertEquals(1, $result->count());
+        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => true
+            ]]
+        ]));
+        static::assertEquals(1, $result->count());
+        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => 0
+            ]]
+        ]));
+        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => '0'
+            ]]
+        ]));
+        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => false
+            ]]
+        ]));
+        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId' => $createdCustomField->getId(),
+                'value' => null
+            ]]
+        ]));
+        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+    }
+
     /**
      * @see 0012222: customfields with space in name are not shown
      */
