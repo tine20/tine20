@@ -362,14 +362,15 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     load : function(params, reader, callback, scope, arg){
         if(this.fireEvent("beforeload", this, params) !== false){
             
-            // move paging to own object
-            var _ = window.lodash,
-                paging = {
-                    sort:  _.get(params, 'paging.sort', params.sort),
-                    dir:   _.get(params, 'paging.dir', params.dir),
-                    start: _.get(params, 'paging.start', params.start),
-                    limit: _.get(params, 'paging.limit', params.limit)
-                };
+            // 2017-11-03 cweiss - NOTE: some ext widgets directly work on the paging params.
+            //   and don't update eventually existing params.paging properties. So we ALWAYS
+            //   NEED to construct a new paging object from the params here!
+            var paging = {
+                sort:  params.sort,
+                dir:   params.dir,
+                start: params.start,
+                limit: params.limit
+            };
             
             this.searchRecords(params.filter, paging, {
                 params: params,
