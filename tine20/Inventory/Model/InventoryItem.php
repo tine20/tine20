@@ -98,6 +98,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'      => 'Inventory ID' // _('Inventory ID')
             ),
             'description' => array(
+                // TODO convert to fulltext
                 'type'       => 'text',
                 'nullable'   => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

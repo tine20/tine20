@@ -216,6 +216,9 @@ Tine.Tinebase.ApplicationStarter = {
             case 'string':
             case 'text':
                 break;
+            case 'fulltext':
+                filter.valueType = 'fulltext';
+                break;
             case 'user':
                 filter.valueType = 'user';
                 break;
