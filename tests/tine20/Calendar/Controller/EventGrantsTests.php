@@ -216,13 +216,14 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     public function testGrantsByInheritedAttendeeContainerGrantsSearch()
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
-        
-        $loadedEvent = $this->_uit->search(new Calendar_Model_EventFilter(array(
+
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => "/personal/{$this->_getPersona('sclever')->getId()}"),
             array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
-        )))->getFirstRecord();
-        
-        $this->assertEquals(1, count($loadedEvent), 'event not found with search action!');
+        )));
+
+        $this->assertEquals(1, count($events), 'event not found with search action!');
+        $loadedEvent = $events->getFirstRecord();
         $this->assertTrue((bool)$loadedEvent->{Tinebase_Model_Grants::GRANT_READ}, 'event not readable');
         $this->assertEquals($persistentEvent->summary, $loadedEvent->summary);
     }

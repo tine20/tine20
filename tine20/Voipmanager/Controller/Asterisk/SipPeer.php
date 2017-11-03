@@ -67,10 +67,14 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#create($_record)
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_cache->clean('all', array('asteriskSipPeer'));
         

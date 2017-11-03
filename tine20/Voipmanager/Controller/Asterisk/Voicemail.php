@@ -57,14 +57,18 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
         
         return self::$_instance;
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#create($_record)
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
-        $result =  parent::create($_record);
+        $result =  parent::create($_record, $_duplicateCheck);
         
         if(isset(Tinebase_Core::getConfig()->asterisk)) {
             $this->publishConfiguration();
@@ -87,14 +91,19 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
         
         return $result;
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Controller/Record/Tinebase_Controller_Record_Abstract#update($_record)
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Voipmanager_Exception_Validation
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
-        $result =  parent::update($_record);
+        $result =  parent::update($_record, $_duplicateCheck);
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' update voicemail configuration');
         

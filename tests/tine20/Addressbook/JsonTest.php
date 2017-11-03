@@ -1700,7 +1700,7 @@ class Addressbook_JsonTest extends TestCase
         ));
         $allContactsWithoutTheTag = $this->_uit->searchContacts($filter, array());
 
-        $this->assertTrue(count($allContactsWithoutTheTag['totalcount']) > 0);
+        $this->assertTrue($allContactsWithoutTheTag['totalcount'] > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
 
         $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
@@ -1762,7 +1762,7 @@ Fax: +49 (0)40 343244-222";
         $this->assertTrue(is_array($result['contact']));
         $this->assertTrue((isset($result['unrecognizedTokens']) || array_key_exists('unrecognizedTokens', $result)));
         $this->assertTrue(count($result['unrecognizedTokens']) > 10 && count($result['unrecognizedTokens']) < 13,
-            'unrecognizedTokens number mismatch: ' . count('unrecognizedTokens'));
+            'unrecognizedTokens number mismatch: ' . count($result['unrecognizedTokens']));
         $this->assertEquals('p.schuele@metaways.de', $result['contact']['email']);
         $this->assertEquals('Pickhuben 2', $result['contact']['adr_one_street']);
         $this->assertEquals('Hamburg', $result['contact']['adr_one_locality']);

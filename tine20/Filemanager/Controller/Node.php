@@ -101,7 +101,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::update()
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         // be careful, don't put $_record in here, like that parent_id might be spoofed! It must be only the id!
         $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -159,7 +159,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        return parent::update($_record);
+        return parent::update($_record, $_duplicateCheck);
     }
     
     /**
@@ -250,9 +250,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @return  Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false)
     {
-        foreach (($results = $this->_backend->getMultipleTreeNodes($_ids)) as $node) {
+        foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
                 $this->_backend->getPathOfNode($node->getId(), true));
             if (! $this->_backend->checkPathACL($path, 'get', true, false)) {
@@ -289,10 +289,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
         /** @var Tinebase_Model_Tree_Node $record */
-        $record = parent::get($_id);
+        $record = parent::get($_id, $_getRelatedData, $_getDeleted);
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
         $this->_backend->checkPathACL($nodePath, 'get');

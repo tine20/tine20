@@ -75,14 +75,18 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
     {
         $this->_backend->deletePhoneLines($_phoneId);
     }
-    
+
     /**
-     * get snom_phone_line by id
+     * get by id
      *
-     * @param string $_id the id of the line
-     * @return Voipmanager_Model_Snom_Line
+     * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $id = Voipmanager_Model_Snom_Line::convertSnomLineIdToInt($_id);
         if (($result = $this->_cache->load('snomPhoneLine_' . $id)) === false) {
