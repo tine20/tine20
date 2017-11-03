@@ -1268,18 +1268,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        $result = Tinebase_Core::acquireMultiServerLock(__METHOD__);
-        if (false === $result) {
+        if (false === Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
             // we are already running
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                 ' failed to aquire DB lock, it seems we are already running in a parallel process.');
             return true;
-        }
-        if (null === $result) {
-            // DB backend does not suppport lock, no way we do replication without proper thread concurrency!
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                ' failed to aquire DB lock, the DB backend doesn\'t support locks. You should not run a replication on this type of DB backend!');
-            return false;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

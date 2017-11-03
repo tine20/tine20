@@ -353,6 +353,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      * remove all credential cache records before $_date
      * 
      * @param Tinebase_DateTime|string $_date
+     * @return bool
      */
     public function clearCacheTable($_date = NULL)
     {
@@ -373,6 +374,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         
         $tableName = $this->getTablePrefix() . $this->getTableName();
         $this->_db->delete($tableName, $where);
+
+        return true;
     }
     
     /**

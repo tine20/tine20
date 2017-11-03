@@ -252,6 +252,8 @@ class Tinebase_Group
     
     /**
      * import and sync groups from sync backend
+     *
+     * @return bool
      */
     public static function syncGroups()
     {
@@ -260,7 +262,7 @@ class Tinebase_Group
         if (! $groupBackend instanceof Tinebase_Group_Interface_SyncAble) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' No syncable group backend found - skipping syncGroups.');
-            return;
+            return true;
         }
         
         if (!$groupBackend->isDisabledBackend()) {
@@ -282,7 +284,7 @@ class Tinebase_Group
                 ), TRUE));
             }
         }
-            
+
         foreach ($groups as $group) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                 ' Sync group: ' . $group->name . ' - update or create group in local sql backend');
@@ -313,6 +315,8 @@ class Tinebase_Group
                 $groupBackend->addGroupInSqlBackend($group);
             }
         }
+
+        return true;
     }
     
     /**

@@ -74,86 +74,70 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     /**
      * send pending alarms
      *
-     * @param mixed $_eventName
-     * @return void
+     * @return bool
      * 
      * @todo sort alarms (by model/...)?
      * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
      */
-    public function sendPendingAlarms($_eventName)
+    public function sendPendingAlarms()
     {
-        $eventName = (is_array($_eventName)) ? $_eventName['eventName'] : $_eventName;
-        
-        $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
-        
-        if (! $job) {
-            return;
+        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
+            return true;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
-        
-        try {
-            // get all pending alarms
-            $filter = new Tinebase_Model_AlarmFilter(array(
-                array(
-                    'field'     => 'alarm_time', 
-                    'operator'  => 'before', 
-                    'value'     => Tinebase_DateTime::now()->subMinute(1)->get(Tinebase_Record_Abstract::ISO8601LONG)
-                ),
-                array(
-                    'field'     => 'sent_status', 
-                    'operator'  => 'equals', 
-                    'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
-                ),
-            ));
-            
-            $limit = Tinebase_Config::getInstance()->get(Tinebase_Config::ALARMS_EACH_JOB, 100);
-            $pagination = ($limit > 0) ? new Tinebase_Model_Pagination(array(
-                'limit' => $limit
-            )) : null;
-            
-            $alarms = $this->_backend->search($filter, $pagination);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
-            
-            // loop alarms and call sendAlarm in controllers
-            foreach ($alarms as $alarm) {
-                list($appName, , $itemName) = explode('_', $alarm->model);
-                $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-            
-                if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-                
-                    $alarm->sent_time = Tinebase_DateTime::now();
-                
-                    try {
-                        // NOTE: we set the status here, so controller can adopt the status itself
-                        $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
-                        $appController->sendAlarm($alarm);
-                    
-                    } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
-                        $alarm->sent_message = $e->getMessage();
-                        $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
-                    } 
-                
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Updating alarm status: ' . $alarm->sent_status);
-                
-                    $this->update($alarm);
+
+        // get all pending alarms
+        $filter = new Tinebase_Model_AlarmFilter(array(
+            array(
+                'field'     => 'alarm_time',
+                'operator'  => 'before',
+                'value'     => Tinebase_DateTime::now()->subMinute(1)->get(Tinebase_Record_Abstract::ISO8601LONG)
+            ),
+            array(
+                'field'     => 'sent_status',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
+            ),
+        ));
+
+        $limit = Tinebase_Config::getInstance()->get(Tinebase_Config::ALARMS_EACH_JOB, 100);
+        $pagination = ($limit > 0) ? new Tinebase_Model_Pagination(array(
+            'limit' => $limit
+        )) : null;
+
+        $alarms = $this->_backend->search($filter, $pagination);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
+
+        // loop alarms and call sendAlarm in controllers
+        foreach ($alarms as $alarm) {
+            list($appName, , $itemName) = explode('_', $alarm->model);
+            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+
+            if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
+
+                $alarm->sent_time = Tinebase_DateTime::now();
+
+                try {
+                    // NOTE: we set the status here, so controller can adopt the status itself
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                    $appController->sendAlarm($alarm);
+
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                    $alarm->sent_message = $e->getMessage();
+                    $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                 }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating alarm status: ' . $alarm->sent_status);
+
+                $this->update($alarm);
             }
-        
-            $job = Tinebase_AsyncJob::getInstance()->finishJob($job);
-        
-        } catch (Exception $e) {
-            // save new status 'failure'
-            $job = Tinebase_AsyncJob::getInstance()->finishJob($job, Tinebase_Model_AsyncJob::STATUS_FAILURE, $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Job failed: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' finished.');
+
+        Tinebase_Core::releaseMultiServerLock(__METHOD__);
+        return true;
     }
     
     /**

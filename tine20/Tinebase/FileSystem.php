@@ -2234,11 +2234,15 @@ class Tinebase_FileSystem implements
     
     /**
      * clears deleted files from filesystem + database
+     *
+     * @return bool
      */
     public function clearDeletedFiles()
     {
         $this->clearDeletedFilesFromFilesystem();
         $this->clearDeletedFilesFromDatabase();
+
+        return true;
     }
 
     /**
@@ -2986,6 +2990,8 @@ class Tinebase_FileSystem implements
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS
      * or folder specific settings
+     *
+     * @return bool
      */
     public function clearFileRevisions()
     {
@@ -3053,10 +3059,14 @@ class Tinebase_FileSystem implements
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' cleared ' . $count . ' file revisions');
+
+        return true;
     }
 
     /**
      * create preview for files without a preview, delete previews for already deleted files
+     *
+     * @return bool
      */
     public function sanitizePreviews()
     {
@@ -3415,6 +3425,9 @@ class Tinebase_FileSystem implements
         return $_alarm;
     }
 
+    /**
+     * @return bool
+     */
     public function notifyQuota()
     {
         $treeNodeBackend = $this->_getTreeNodeBackend();
@@ -3504,7 +3517,7 @@ class Tinebase_FileSystem implements
         $imapBackend = Tinebase_EmailUser::getInstance();
 
         if (!$imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-            return;
+            return true;
         }
 
         /** @var Tinebase_Model_EmailUser $emailUser */
@@ -3538,6 +3551,8 @@ class Tinebase_FileSystem implements
                 }
             }
         }
+
+        return true;
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)

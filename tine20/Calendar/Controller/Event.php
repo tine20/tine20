@@ -559,6 +559,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     /**
      * update all future constraints exdates
+     *
+     * @return bool
      */
     public function updateConstraintsExdates()
     {
@@ -585,6 +587,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . " cannot update constraints exdates for event {$constraintsEventId}: " . $e);
             }
         }
+
+        return true;
     }
 
     /**
@@ -3134,13 +3138,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         return $updateCount;
     }
 
+    /**
+     * @return bool
+     */
     public function sendTentativeNotifications()
     {
         $eventNotificationController = Calendar_Controller_EventNotifications::getInstance();
         $calConfig = Calendar_Config::getInstance();
         if (true !== $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
                 ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED}) {
-            return;
+            return true;
         }
 
         $days = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}->{Calendar_Config::TENTATIVE_NOTIFICATIONS_DAYS};
@@ -3163,6 +3170,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($this->search($filter) as $event) {
             $eventNotificationController->doSendNotifications($event, null, 'tentative');
         }
+
+        return true;
     }
 
     /**

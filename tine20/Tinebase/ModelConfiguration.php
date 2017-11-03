@@ -1038,7 +1038,7 @@ class Tinebase_ModelConfiguration {
                     // @todo: better handling of virtualfields
                     $this->_defaultData[$fieldKey] = $virtualField['default'];
                 }
-                $this->_virtualFields[] = $virtualField;
+                $this->_virtualFields[$fieldKey] = $virtualField;
                 $fieldDef['modlogOmit'] = true;
 
             } elseif ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
@@ -1319,7 +1319,7 @@ class Tinebase_ModelConfiguration {
                 break;
             case 'datetime':
                 // add to alarm fields
-                if ((isset($fieldDef['alarm']) || array_key_exists('alarm', $fieldDef))) {
+                if (isset($fieldDef['alarm'])) {
                     $this->_alarmDateTimeField = $fieldKey;
                 }
                 // add to datetime fields
@@ -1368,6 +1368,13 @@ class Tinebase_ModelConfiguration {
                 } catch (Exception $e) {
                     // no customfield filter available (yet?)
                     Tinebase_Exception::log($e);
+                }
+                break;
+            case 'virtual':
+                if (isset($fieldDef['config']) && isset($fieldDef['config']['type']) && 'datetime' ===
+                        $fieldDef['config']['type']) {
+                    // add to datetime fields
+                    $this->_datetimeFields[] = $fieldKey;
                 }
                 break;
             default:

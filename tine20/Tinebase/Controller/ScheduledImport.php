@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -62,7 +62,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     /**
      * Search and executed the next scheduled import
      * 
-     * @return null|array
+     * @return bool|array
      */
     public function runNextScheduledImport()
     {
@@ -70,7 +70,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             return $this->doScheduledImport($record)->toArray();
         }
         
-        return null;
+        return true;
     }
 
     /**

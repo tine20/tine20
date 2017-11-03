@@ -167,6 +167,6 @@ class Tinebase_ScheduledImportTest extends TestCase
 
         // check if import is deactivated
         $importRun = $this->_uit->runNextScheduledImport();
-        $this->assertTrue($importRun === null, 'import should not run: ' . print_r($importRun, true));
+        $this->assertTrue($importRun === true, 'import should not run: ' . print_r($importRun, true));
     }
 }

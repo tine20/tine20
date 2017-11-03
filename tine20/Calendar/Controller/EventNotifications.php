@@ -318,7 +318,7 @@
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organizer for external notifications
-            if ((null !== $_updater && $attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions)
+            if ((null !== $_updater && $attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions && $_action !== 'alarm')
                 || ($sendLevel < $_notificationLevel && (
                         ((is_object($organizer) && method_exists($attendee, 'getPreferredEmailAddress') && $attendee->getPreferredEmailAddress() != $organizer->getPreferredEmailAddress())
                         || (is_object($organizer) && !method_exists($attendee, 'getPreferredEmailAddress') && $attendee->email != $organizer->getPreferredEmailAddress()))

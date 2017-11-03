@@ -141,4 +141,47 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.11');
     }
+
+    /**
+     * update to 11.11
+     *
+     * remove scheduler table
+     * remove async_job table
+     * recreate scheduler tasks
+     */
+    public function update_11()
+    {
+        $this->_backend->dropTable('async_job', Tinebase_Core::getTinebaseId());
+        $this->_backend->dropTable('scheduler', Tinebase_Core::getTinebaseId());
+        $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
+
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addAlarmTask($scheduler);
+        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addImportTask($scheduler);
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        Tinebase_Scheduler_Task::addReplicationTask($scheduler);
+        Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+            Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
+            Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.12');
+    }
 }

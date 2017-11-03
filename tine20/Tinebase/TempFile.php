@@ -244,7 +244,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * remove all temp file records before $_date
      * 
      * @param Tinebase_DateTime|string $_date
-     * @return integer number of deleted records
+     * @return bool
      */
     public function clearTableAndTempdir($_date = NULL)
     {
@@ -274,7 +274,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $result = $this->delete($tempfiles->getArrayOfIds());
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $result . ' files.');
-        return $result;
+
+        return true;
     }
     
     /**

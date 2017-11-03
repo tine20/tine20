@@ -1612,21 +1612,15 @@ class Tinebase_Core
     /**
      * Singleton instance
      *
-     * @return Zend_Scheduler
+     * @return Tinebase_Scheduler
      */
     public static function getScheduler()
     {
-        if (! self::get(self::SCHEDULER) instanceof Zend_Scheduler) {
-            $scheduler =  new Zend_Scheduler();
-            $scheduler->setBackend(new Zend_Scheduler_Backend_Db(array(
-                'DbAdapter' => self::getDb(),
-                'tableName' => SQL_TABLE_PREFIX . 'scheduler',
-                'taskClass' => 'Tinebase_Scheduler_Task'
-            )));
-            
+        if (! ($scheduler = self::get(self::SCHEDULER)) instanceof Tinebase_Scheduler) {
+            $scheduler =  Tinebase_Scheduler::getInstance();
             self::set(self::SCHEDULER, $scheduler);
         }
-        return self::get(self::SCHEDULER);
+        return $scheduler;
     }
     
     /**

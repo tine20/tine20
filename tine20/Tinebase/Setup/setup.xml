@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.11</version>
+    <version>11.12</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -2988,62 +2988,6 @@
             </declaration>
         </table>
         <table>
-            <name>async_job</name>
-            <version>3</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>64</length>
-                </field>
-                <field>
-                    <name>start_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>end_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>status</name>
-                    <type>text</type>
-                    <length>32</length>
-                </field>
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <length>64</length>
-                </field>
-                <field>
-                    <name>message</name>
-                    <type>text</type>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>name-seq</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
-                    </field>
-                    <field>
-                        <name>seq</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        <table>
             <name>state</name>
             <version>3</version>
             <declaration>
@@ -3182,38 +3126,6 @@
                 </index>
             </declaration>
         </table>
-        <table>
-            <name>scheduler</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <length>11</length>
-                    <autoincrement>true</autoincrement>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>data</name>
-                    <type>text</type>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        
         <table>
             <name>departments</name>
             <version>2</version>
