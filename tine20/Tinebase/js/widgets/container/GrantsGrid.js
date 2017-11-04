@@ -120,7 +120,8 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 header: i18n._(this[grant + 'GrantTitle']),
                 tooltip: i18n._(this[grant + 'GrantDescription']),
                 dataIndex: grant + 'Grant',
-                width: 55
+                width: 55,
+                onBeforeCheck: this.onBeforeCheck.createDelegate(this)
             }));
         }, this);
     },
@@ -136,6 +137,10 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         } else if (! use && current) {
             cm.setConfig(lodash.filter(cm.config, lodash.negate(findFn)));
         }
+    },
+
+    onBeforeCheck: function(checkbox, record) {
+        return !this.readOnly;
     }
 });
 

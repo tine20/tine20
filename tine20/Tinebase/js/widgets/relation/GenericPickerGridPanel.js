@@ -474,6 +474,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {} o
      */
     onBeforeRowEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+            return;
+        }
+
         var model = o.record.get('related_model').split('_Model_');
         var app = model[0];
         model = model[1];

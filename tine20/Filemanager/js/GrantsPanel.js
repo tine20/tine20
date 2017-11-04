@@ -108,8 +108,8 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
 
-        this.setReadOnly(! hasRequiredGrant);
-        this.grantsGrid.setReadOnly(!hasOwnGrants);
+        this.setReadOnly(!hasRequiredGrant);
+        this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
     },
 
     setReadOnly: function(readOnly) {
