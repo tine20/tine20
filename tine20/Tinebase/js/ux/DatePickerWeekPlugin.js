@@ -74,6 +74,11 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
         
         // NOTE "+1" to ensure ISO week!
         var startDate = firstOfMonth.add(Date.DAY, -1*startingPos + 1);
+
+        // in some rare cases render might be too slow. But luckily we can ignore this because this is also rendered on click
+        if (this.rendered == false) {
+            return;
+        }
         
         var wkCells = Ext.DomQuery.select('td[class=x-date-picker-wk]', this.getEl().dom);
         for (var i=0, id; i<wkCells.length; i++) {
