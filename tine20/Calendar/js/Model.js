@@ -161,10 +161,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     },
 
     getSchedulingData: function() {
-        var _ = window.lodash;
+        var _ = window.lodash,
+            schedulingData = _.pick(this.data, ['uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
+                'transp', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'exdate', 'rrule_constraints']);
 
-        return _.pick(this.data, ['id', 'uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
-            'transp', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'exdate', 'rrule_constraints']);
+        // NOTE: for transistent events id is not part of data but we need the transistent id e.g. for freeBusy info
+        schedulingData.id = this.id;
+        return schedulingData;
     }
 });
 
