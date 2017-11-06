@@ -517,7 +517,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     getRecordFormItems: function() {
         return new Tine.widgets.form.RecordForm({
-            recordClass: this.recordClass
+            recordClass: this.recordClass,
+            editDialog: this
         });
     },
 
@@ -735,7 +736,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.containerSelectCombo
             ].concat(this.fbar);
         }
-        
     },
     
     /**

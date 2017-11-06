@@ -160,7 +160,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * fetch one contact identified by $_userId
      *
-     * @param   int $_userId
+     * @param   string $_userId
      * @param   boolean $_ignoreACL don't check acl grants
      * @return Addressbook_Model_Contact
      * @throws Addressbook_Exception_AccessDenied
