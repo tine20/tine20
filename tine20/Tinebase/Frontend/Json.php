@@ -292,7 +292,41 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $outTag->toArray();
     }
-    
+
+    /**
+     * @param $commencement
+     * @param $termOfContractInMonths
+     * @param $automaticContractExtensionInMonths
+     * @param $cancellationPeriodInMonths
+     * @return array
+     */
+    public function getTerminationDeadline(
+        $commencement,
+        $termOfContractInMonths,
+        $automaticContractExtensionInMonths,
+        $cancellationPeriodInMonths,
+        $today = null
+    ) {
+        date_default_timezone_set(Tinebase_Core::getUserTimezone());
+        $commencement = new Tinebase_DateTime($commencement);
+        $commencement->setTimezone('UTC');
+        date_default_timezone_set('UTC');
+
+        $deadline = Tinebase_Helper_Algorithm_TerminationDeadline::getInstance()->getTerminationDeadline(
+            $commencement,
+            $termOfContractInMonths,
+            $automaticContractExtensionInMonths,
+            $cancellationPeriodInMonths,
+            $today
+        );
+        $deadline->setTimezone(Tinebase_Core::getUserTimezone());
+        $deadline->setTime(0, 0);
+
+        return [
+            'terminationDeadline' => $deadline->format(Tinebase_Record_Abstract::ISO8601LONG)
+        ];
+    }
+
     /**
      * Used for updating multiple records
      * 

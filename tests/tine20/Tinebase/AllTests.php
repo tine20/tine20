@@ -77,6 +77,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_Delegators_DelegateTest');
         $suite->addTestSuite('Tinebase_DaemonTest');
         $suite->addTestSuite(Tinebase_FullTextTest::class);
+        $suite->addTestSuite(Tinebase_Helper_AllTests::class);
 
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
