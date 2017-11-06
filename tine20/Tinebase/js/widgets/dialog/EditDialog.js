@@ -808,6 +808,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     doCopyRecord: function() {
         this.record = this.doCopyRecordToReturn(this.record);
+
+        var _ = window.lodash,
+            hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant');
+
+        // unset container if user is not allowed to add record in original container
+        if(this.evalGrants && ! hasRequiredGrant) {
+            _.unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+        }
     },
 
     /**
