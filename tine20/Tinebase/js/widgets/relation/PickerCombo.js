@@ -49,6 +49,8 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
         this.items = [this.combo];
 
         this.deferredLoading();
+
+        Tine.widgets.relation.PickerCombo.superclass.initComponent.call(this);
     },
 
     /**
@@ -109,8 +111,6 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
 
         if (!this.editDialog.relationPickers) this.editDialog.relationPickers = [];
         this.editDialog.relationPickers.push(this);
-
-        Tine.widgets.relation.PickerCombo.superclass.initComponent.call(this);
     },
 
     /**
