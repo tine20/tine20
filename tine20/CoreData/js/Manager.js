@@ -66,7 +66,7 @@ Tine.CoreData.Manager = function() {
          */
         getToolbar: function (id, options) {
             if (toolbars.hasOwnProperty(id)) {
-                constr = toolbars[type];
+                var constr = toolbars[type];
                 if (! options) {
                     options = toolbars[id].options;
                 }
