@@ -545,7 +545,7 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     if (Tine[appName].hasOwnProperty(editDialogName)) {
                         var edp = Tine[appName][editDialogName].prototype;
-                        if (containerProperty) {
+                        if (containerProperty && edp.showContainerSelector !== false) {
                             edp.showContainerSelector = true;
                         }
                         Ext.apply(edp, {
