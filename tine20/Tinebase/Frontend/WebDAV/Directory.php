@@ -97,8 +97,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     public function createFile($name, $data = null) 
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
-        
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
+
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+                $pathRecord,
+                Tinebase_Model_Grants::GRANT_ADD,
+                true, false
+            )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
         
@@ -146,8 +151,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     public function createDirectory($name) 
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
-        
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
+
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+            $pathRecord,
+            Tinebase_Model_Grants::GRANT_ADD,
+            true, false
+        )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create folder: ' . $name);
         }
         
@@ -168,7 +178,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      */
     public function delete() 
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+            $pathRecord->getParent(),
+            Tinebase_Model_Grants::GRANT_DELETE,
+            true, false
+        )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
         

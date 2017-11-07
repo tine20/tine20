@@ -34,7 +34,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     /**
      * testgetNodeForPath
      */
-    public function testgetNodeForPath()
+    public function testGetNodeForPath()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath(null);
         
@@ -47,7 +47,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/');
     }
     
-    public function testgetNodeForPath_webdav()
+    public function testGetNodeForPath_webdav()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav');
         
@@ -63,7 +63,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/webdav');
     }
     
-    public function testgetNodeForPath_webdav_filemanager()
+    public function testGetNodeForPath_webdav_filemanager()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager');
         
@@ -90,7 +90,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tine20/vendor/sabre/dav/lib/Sabre/DAV/ObjectTree.php:72
      * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tests/tine20/Filemanager/Frontend/WebDAVTest.php:76
      */
-    public function testgetNodeForPath_webdav_filemanager_personal()
+    public function testGetNodeForPath_webdav_filemanager_personal()
     {
         $this->markTestSkipped('FIXME');
         
@@ -109,7 +109,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/personal');
     }
     
-    public function testgetNodeForPath_webdav_filemanager_currentuser()
+    public function testGetNodeForPath_webdav_filemanager_currentuser()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
         
@@ -129,7 +129,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     /**
      * @return Filemanager_Frontend_WebDAV_Directory
      */
-    public function testgetNodeForPath_webdav_filemanager_currentuser_unittestdirectory()
+    public function testGetNodeForPath_webdav_filemanager_currentuser_unittestdirectory()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
         
@@ -155,7 +155,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
     }
     
-    public function testgetNodeForPath_webdav_filemanager_shared()
+    public function testGetNodeForPath_webdav_filemanager_shared()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
         
@@ -174,7 +174,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * 
      * @return Filemanager_Frontend_WebDAV_Container
      */
-    public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory()
+    public function testGetNodeForPath_webdav_filemanager_shared_unittestdirectory()
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
 
@@ -193,22 +193,78 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     }
 
     /**
-     * testGetAcl of shared node
+     * testSharedACLs of shared node
      */
-    public function testGetAcl()
+    public function testSharedACLs()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
-        $node->createDirectory('unittestdirectory');
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
+        /** @var Filemanager_Frontend_WebDAV_Directory $sharedNode */
+        $sharedNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $sharedNode->createDirectory('unittestdirectory');
+        /** @var Filemanager_Frontend_WebDAV_Directory $createdNode */
+        $createdNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
 
-        $acl = $node->getAcl();
+        $acl = $createdNode->getAcl();
         self::assertEquals(6, count($acl));
+
+        $oldUser = Tinebase_Core::getUser();
+        /** @var Tinebase_Model_FullUser $sClever */
+        $sClever = $this->_personas['sclever'];
+
+        $fsNode = Tinebase_FileSystem::getInstance()->get($createdNode->getId());
+        $fsNode->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [new Tinebase_Model_Grants([
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'        => $sClever->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+        ])]);
+        Tinebase_FileSystem::getInstance()->update($fsNode);
+
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $sClever);
+
+            $sharedNode->createDirectory('anotherTestDirectories');
+
+            try {
+                $createdNode->createDirectory('moreTestDirectories');
+                static::fail('acl test failed');
+            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+
+            $fileManagerId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
+            /** @var Tinebase_Model_Role $role */
+            foreach (Tinebase_Acl_Roles::getInstance()->getAll() as $role) {
+                $altered = false;
+                $rights = array_filter(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()),
+                    function($val) use($fileManagerId, &$altered) {
+                        if ($fileManagerId === $val['application_id'] && $val['right'] ===
+                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS) {
+                            $altered = true;
+                            return false;
+                        }
+                        return true;
+                    });
+                if ($altered) {
+                    Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rights);
+                }
+            }
+            Tinebase_Acl_Roles::unsetInstance();
+
+            try {
+                $sharedNode->createDirectory('moreTestDirectories');
+                static::fail('creating shared folder in top level should require MANAGE_SHARED_FOLDERS right');
+            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+            try {
+                $createdNode->createDirectory('moreTestDirectories');
+                static::fail('acl test failed');
+            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+            Tinebase_Acl_Roles::unsetInstance();
+        }
     }
 
     /**
      * get child folders of shared dir
      */
-    public function testgetFoldersInShared()
+    public function testGetFoldersInShared()
     {
         // create folder in shared
         $path = Tinebase_FileSystem::getInstance()->getApplicationBasePath(

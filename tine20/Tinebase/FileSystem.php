@@ -2522,7 +2522,7 @@ class Tinebase_FileSystem implements
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', /** @noinspection PhpUnusedParameterInspection */ $_topLevelAllowed = true)
+    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true)
     {
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
@@ -2530,37 +2530,56 @@ class Tinebase_FileSystem implements
                     if ($_path->isToplevelPath()) {
                         $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
                     } else {
-                        $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                        $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                     }
                 } else {
                     $hasPermission = ($_action === 'get');
                 }
                 break;
             case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
-                if ($_action !== 'get') {
-                    // TODO check if app has MANAGE_SHARED_FOLDERS right?
-                    $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                // if is toplevel path and action is add, allow manage_shared_folders right
+                // if it is toplevel path and action is get allow
+                // else just do normal ACL node check
+                if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
-                        Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                    );
+                        Tinebase_Acl_Rights::ADMIN
+                    ))) {
+                    // admin, go ahead
+                    break;
+                }
+                if ($_path->isToplevelPath()) {
+                    if ('add' === $_action) {
+                        $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                            $_path->application->name,
+                            Tinebase_Core::getUser()->getId(),
+                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                        );
+                    } else {
+                        $hasPermission = 'get' === $_action;
+                    }
                 } else {
-                    $hasPermission = true;
+                    $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                 }
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
                 $hasPermission = ($_action === 'get');
                 break;
             default:
-                $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
         }
 
-        if (! $hasPermission) {
+        if (true === $_throw && ! $hasPermission) {
             throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' nodes in path ' . $_path->flatpath);
         }
+
+        return $hasPermission;
     }
 
     /**
+     * DO NOT USE THIS FUNCTION! checkPathACL is what you want to use!
+     * this function may only be used by checkPathACL (or if you are really sure of what you are doing!)
+     *
      * check if user has the permissions for the node
      *
      * does not start a transaction!
@@ -2569,7 +2588,7 @@ class Tinebase_FileSystem implements
      * @param string $_action get|update|...
      * @return boolean
      */
-    public function checkACLNode(Tinebase_Model_Tree_Node $_node, $_action = 'get')
+    protected function _checkACLNode(Tinebase_Model_Tree_Node $_node, $_action = 'get')
     {
         if (Tinebase_Core::getUser()->hasGrant($_node, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
             return true;
