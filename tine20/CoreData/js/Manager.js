@@ -29,6 +29,7 @@ Tine.CoreData.Manager = function() {
          * @returns Ext.form.Field|null
          */
         getGrid: function (id, options) {
+            var constr = null;
             if (grids.hasOwnProperty(id)) {
                 constr = grids[id].constr;
                 if (! options) {
@@ -49,6 +50,7 @@ Tine.CoreData.Manager = function() {
          * @returns Ext.form.Field|null
          */
         getEditDialog: function (id, options) {
+            var constr = null;
             if (editDialogs.hasOwnProperty(id)) {
                 constr = editDialogs[type];
             }
@@ -65,8 +67,9 @@ Tine.CoreData.Manager = function() {
          * TODO is this needed?
          */
         getToolbar: function (id, options) {
+            var constr = null;
             if (toolbars.hasOwnProperty(id)) {
-                var constr = toolbars[type];
+                constr = toolbars[type];
                 if (! options) {
                     options = toolbars[id].options;
                 }
