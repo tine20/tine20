@@ -2000,7 +2000,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
         if (! $_record->alarms instanceof Tinebase_Record_RecordSet) {
-            $_record->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
+            $_record->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class, $_record->alarms, true);
         }
         $alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
 
