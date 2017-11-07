@@ -2287,9 +2287,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onAfterDelete(recordIds);
                 },
                 failure: function (exception) {
-                    this.refreshAfterDelete(recordIds);
-                    this.loadGridData();
-                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    this.onDeleteFailure(recordIds, exception);
                 }
             };
 
@@ -2328,6 +2326,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.bufferedLoadGridData({
             removeStrategy: 'keepBuffered'
         });
+    },
+
+    /**
+     * do something on delete failure
+     *
+     * @param ids
+     * @param exception
+     */
+    onDeleteFailure: function(ids, exception) {
+        this.refreshAfterDelete(ids);
+        this.loadGridData();
+        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     },
 
     /**
