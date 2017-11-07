@@ -582,6 +582,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $oldQuotaConfig = clone $quotaConfig;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
+        $deletePaths =  [];
 
         try {
             $filePaths = $this->testCreateFileNodes(true);
@@ -589,6 +590,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
             $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
             $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
+            $deletePaths[] = dirname($file0Path);
+            $deletePaths[] = Tinebase_Model_Tree_Node_Path::createFromPath($targetPath)->statpath;
 
             $parentFolder = $this->_fsController->stat(dirname($file0Path));
             static::assertEquals(16, $parentFolder->size,
@@ -607,7 +610,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
             $this->_getUit()->moveNodes($file0Path, $targetPath, false);
 
-            $parentFolder = $this->_fsController->stat(dirname($file0Path));
+            $parentFolder = $this->_fsController->get($parentFolder->getId());
             static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
             $secondFolderNode = $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath($targetPath)->statpath);
             static::assertEquals(8, $secondFolderNode->size, 'one file with 8 bytes expected');
@@ -622,6 +625,62 @@ class Filemanager_Frontend_JsonTests extends TestCase
                     $secondFolderJson['effectiveAndLocalQuota']['localFree'],
                 'effectiveAndLocalQuota is not right: ' . print_r($secondFolderJson, true));
 
+            // test quota exceed
+            $targetPath = dirname($filePaths[0]);
+            $targetFile = $targetPath . '/badFile';
+            $parentFolder->quota = 9;
+            $this->_fsController->update($parentFolder);
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = null;
+
+            try {
+                $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
+                static::fail('Quota exceed did not work');
+            } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                static::assertEquals('quota exceeded', $e->getMessage());
+            }
+            // TODO add assertions!
+
+            // otherwise we get issues later during clean up...
+            Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} =
+                false;
+            $this->_fsController = Tinebase_FileSystem::getInstance();
+            $this->_fsController->resetBackends();
+
+            $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE);
+            $tempPath = Tinebase_TempFile::getTempPath();
+            $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+            file_put_contents($tempPath, 'someData');
+            try {
+                $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId],
+                    true);
+                static::fail('Quota exceed did not work');
+            } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                static::assertEquals('quota exceeded', $e->getMessage());
+            }
+            try {
+                $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
+                    Filemanager_Controller_Node::getInstance()->addBasePath($targetFile))->statpath);
+                static::fail('node create -> fail: clean up did not work');
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        } finally {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
+
+            foreach ($deletePaths as $path) {
+                $this->_fsController->rmdir($path, true);
+            }
+        }
+    }
+
+    public function testCreateFileAndQuota()
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $oldQuotaConfig = clone $quotaConfig;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
+
+        try {
         } finally {
             Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
         }
