@@ -1377,9 +1377,8 @@ class Tinebase_FileSystem implements
                 if ($recursive !== true) {
                     throw new Tinebase_Exception_InvalidArgument('directory not empty');
                 } else {
-                    /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
-                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
+                        if ($this->isDir($path . '/' . $child->name)) {
                             $this->rmdir($path . '/' . $child->name, true, true);
                         } else {
                             $this->unlink($path . '/' . $child->name, true);

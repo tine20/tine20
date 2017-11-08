@@ -771,14 +771,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 if (null === $_tempFileId) {
                     $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)), basename($_statpath));
                 } else {
-                    try {
-                        $this->_backend->copyTempfile($_tempFileId, $_statpath);
-                    } catch (Tinebase_Exception_Record_NotAllowed $e) {
-                        if ('quota exceeded' === $e->getMessage()) {
-                            $this->_backend->unlink($_statpath);
-                        }
-                        throw $e;
-                    }
+                    $this->_backend->copyTempfile($_tempFileId, $_statpath);
                 }
                 break;
 
