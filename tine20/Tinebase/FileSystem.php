@@ -1377,8 +1377,9 @@ class Tinebase_FileSystem implements
                 if ($recursive !== true) {
                     throw new Tinebase_Exception_InvalidArgument('directory not empty');
                 } else {
+                    /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
-                        if ($this->isDir($path . '/' . $child->name)) {
+                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
                             $this->rmdir($path . '/' . $child->name, true, true);
                         } else {
                             $this->unlink($path . '/' . $child->name, true);
@@ -3587,6 +3588,42 @@ class Tinebase_FileSystem implements
             }
         } catch(Exception $e) {
             // LOG
+        }
+    }
+
+    public function purgeDeletedNodes()
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+
+            $treeNodes = $this->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 1]
+            ]));
+
+            $counter = 0;
+            while ($treeNodes->count() > 0 && ++$counter < 1000) {
+                $data = $treeNodes->getClone(true);
+                /** @var Tinebase_Model_Tree_Node $node */
+                foreach ($data as $node) {
+                    if ($treeNodes->find('parent_id', $node->getId()) !== null) {
+                        continue;
+                    }
+                    $treeNodes->removeById($node->getId());
+
+                    $this->_treeNodeBackend->delete($node->getId());
+
+                    if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
+                        $this->_fileObjectBackend->delete($node->object_id);
+                    }
+                }
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
     }
 }
