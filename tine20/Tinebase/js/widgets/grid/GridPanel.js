@@ -59,6 +59,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     gridConfig: null,
     /**
+     * @cfg {Array} customColumnData
+     * Config Array for customizing column model columns
+     */
+    customColumnData: null,
+    /**
      * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
      */
@@ -595,6 +600,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
             
             columns = columns.concat(this.getCustomColumns());
+            columns = this.customizeColumns(columns);
             
             this.gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
@@ -612,6 +618,31 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getCustomColumns: function() {
         return [];
+    },
+
+    /**
+     * allows to customize columns
+     *
+     * @param columns Array
+     * @returns {Array}
+     */
+    customizeColumns: function(columns) {
+        if (this.customColumnData) {
+            var _ = window.lodash;
+
+            _.forEach(this.customColumnData, function(value) {
+                var column = _.find(columns, { id: value.id });
+                if (column) {
+                    // apply custom cfg
+                    column = Ext.applyIf(column, value);
+                }
+            });
+
+            Tine.log.debug('Tine.widgets.grid.GridPanel.customizeColumns - applied custom column config:');
+            Tine.log.debug(columns);
+        }
+
+        return columns;
     },
     
     /**
