@@ -1076,9 +1076,7 @@ class Tinebase_ModelConfiguration {
             $this->_setFieldFilterModel($fieldDef, $fieldKey);
 
             if (isset($fieldDef['queryFilter'])) {
-                if ($fieldDef['type'] !== 'fulltext' || Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
-                    $queryFilters[] = $fieldKey;
-                }
+                $queryFilters[] = $fieldKey;
             }
 
             // set validators
