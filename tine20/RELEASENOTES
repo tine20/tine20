@@ -3,7 +3,7 @@ TINE 2.0 RELEASENOTES
 ===
                     
   Release:     Caroline (2017.11)
-  Last change: 2017-10-10
+  Last change: 2017-11-08
 
 GENERAL CHANGES
 ---
@@ -47,6 +47,11 @@ The displayed currency can now be configured
 * Printing
 
 Printing has been improved all over Tine 2.0 and lots of single record dialogs have gotten a print button
+
+* Scheduler
+
+The LDAP-User/Group-Synchronisation has been added as a Tine 2.0 scheduler job. It is no longer required
+ to add a custom cronjob for this.
 
 FILEMANAGER
 ---
