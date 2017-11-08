@@ -185,6 +185,16 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_getRelatedDataRecursion = [];
 
     /**
+     * constants for actions
+     *
+     * @var string
+     */
+    const ACTION_GET = 'get';
+    const ACTION_CREATE = 'create';
+    const ACTION_UPDATE = 'update';
+    const ACTION_DELETE = 'delete';
+
+    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -217,7 +227,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = self::ACTION_GET)
     {
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
@@ -262,7 +272,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_action for right/acl check
      * @return int|array
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
         $this->checkFilterACL($_filter, $_action);
         
@@ -420,7 +430,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        $this->_checkRight('get');
+        $this->_checkRight(self::ACTION_GET);
         
         if (! $_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
@@ -436,7 +446,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
         } else {
             $record = $this->_backend->get($_id, $_getDeleted);
-            $this->_checkGrant($record, 'get');
+            $this->_checkGrant($record, self::ACTION_GET);
             
             // get related data only on request (defaults to TRUE)
             if ($_getRelatedData) {
@@ -455,11 +465,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function exists($id)
     {
-        $this->_checkRight('get');
+        $this->_checkRight(self::ACTION_GET);
         
         try {
             $record = $this->_backend->get($id);
-            $result = $this->_checkGrant($record, 'get', FALSE);
+            $result = $this->_checkGrant($record, self::ACTION_GET, FALSE);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $result = FALSE;
         }
@@ -518,7 +528,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
-        $this->_checkRight('get');
+        $this->_checkRight(self::ACTION_GET);
 
         // get all allowed containers and add them to getMultiple query
         $containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE)
@@ -547,7 +557,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
-        $this->_checkRight('get');
+        $this->_checkRight(self::ACTION_GET);
 
         $records = $this->_backend->getAll($_orderBy, $_orderDirection);
 
@@ -570,7 +580,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
-        $this->_checkRight('create');
+        $this->_checkRight(self::ACTION_CREATE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($_record->toArray(),true));
@@ -586,13 +596,13 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $_record->isValid(TRUE);
 
-            $this->_checkGrant($_record, 'create');
+            $this->_checkGrant($_record, self::ACTION_CREATE);
 
             // added _doForceModlogInfo behavior
             if ($_record->has('created_by')) {
                 $origRecord = clone ($_record);
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
-                $this->_forceModlogInfo($_record, $origRecord, 'create');
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, self::ACTION_CREATE);
+                $this->_forceModlogInfo($_record, $origRecord, self::ACTION_CREATE);
             }
 
             $this->_inspectBeforeCreate($_record);
@@ -963,7 +973,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if ($this->_doForceModlogInfo && ! empty($_origRecord)) {
             // on create
-            if ($_action == 'create') {
+            if ($_action == self::ACTION_CREATE) {
                 if (! empty($_origRecord->created_by)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - created_by: ' . $_origRecord->created_by);
                     $_record->created_by = $_origRecord->created_by;
@@ -983,7 +993,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             // on update
-            if ($_action == 'update') {
+            if ($_action == self::ACTION_UPDATE) {
                 if (! empty($_origRecord->last_modified_by)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - last_modified_by: ' . $_origRecord->last_modified_by);
                     $_record->last_modified_by = $_origRecord->last_modified_by;
@@ -1028,7 +1038,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $origRecord = clone ($_record);
             $this->_updateACLCheck($_record, $currentRecord);
             $this->_concurrencyManagement($_record, $currentRecord);
-            $this->_forceModlogInfo($_record, $origRecord, 'update');
+            $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             
             // NOTE removed the duplicate check because we can not remove the changed record yet
@@ -1087,14 +1097,14 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing ACL check ...');
         
         if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
-            $this->_checkGrant($_record, 'create');
-            $this->_checkRight('create');
+            $this->_checkGrant($_record, self::ACTION_CREATE);
+            $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
-            $this->_checkGrant($_currentRecord, 'delete');
-            $this->_checkRight('delete');
+            $this->_checkGrant($_currentRecord, self::ACTION_DELETE);
+            $this->_checkRight(self::ACTION_DELETE);
         } else {
-            $this->_checkGrant($_record, 'update', TRUE, 'No permission to update record.', $_currentRecord);
-            $this->_checkRight('update');
+            $this->_checkGrant($_record, self::ACTION_UPDATE, TRUE, 'No permission to update record.', $_currentRecord);
+            $this->_checkRight(self::ACTION_UPDATE);
         }
     }
 
@@ -1117,7 +1127,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $modLog->manageConcurrentUpdates(
             Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
             $_record, $_currentRecord);
-        $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
+        $modLog->setRecordMetaData($_record, self::ACTION_UPDATE, $_currentRecord);
     }
     
     /**
@@ -1229,7 +1239,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function concurrencyManagementAndModlogMultiple($_filterOrIds, $_oldData, $_newData)
     {
-        $ids = ($_filterOrIds instanceof Tinebase_Model_Filter_FilterGroup) ? $this->search($_filterOrIds, NULL, FALSE, TRUE, 'update') : $_filterOrIds;
+        $ids = ($_filterOrIds instanceof Tinebase_Model_Filter_FilterGroup) ? $this->search($_filterOrIds, NULL, FALSE, TRUE, self::ACTION_UPDATE) : $_filterOrIds;
         if (! is_array($ids) || count($ids) === 0) {
             return;
         }
@@ -1342,8 +1352,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function updateMultiple($_filter, $_data)
     {
-        $this->_checkRight('update');
-        $this->checkFilterACL($_filter, 'update');
+        $this->_checkRight(self::ACTION_UPDATE);
+        $this->checkFilterACL($_filter, self::ACTION_UPDATE);
         $getRelations = false;
         
         $this->_newRelations = NULL;
@@ -1537,7 +1547,7 @@ abstract class Tinebase_Controller_Record_Abstract
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            $this->_checkRight('delete');
+            $this->_checkRight(self::ACTION_DELETE);
             
             foreach ($records as $record) {
                 $this->_getRelatedData($record);
@@ -1677,7 +1687,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->_purgeRecords && !$_record->has('created_by')) {
             throw new Tinebase_Exception_InvalidArgument('record of type ' . get_class($_record) . ' can\'t be undeleted');
         }
-        $this->_checkGrant($_record, 'delete');
+        $this->_checkGrant($_record, self::ACTION_DELETE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Undeleting record ' . $_record->getId() . ' of type ' . $this->_modelName);
@@ -1705,12 +1715,12 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
-        $this->_checkGrant($_record, 'delete');
+        $this->_checkGrant($_record, self::ACTION_DELETE);
 
         $this->_deleteLinkedObjects($_record);
 
         if (! $this->_purgeRecords && $_record->has('created_by')) {
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, self::ACTION_DELETE, $_record);
             $this->_backend->update($_record);
         } else {
             $this->_backend->delete($_record);
@@ -1859,16 +1869,16 @@ abstract class Tinebase_Controller_Record_Abstract
         $hasGrant = FALSE;
         
         switch ($_action) {
-            case 'get':
+            case self::ACTION_GET:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_READ);
                 break;
-            case 'create':
+            case self::ACTION_CREATE:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
-            case 'update':
+            case self::ACTION_UPDATE:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT);
                 break;
-            case 'delete':
+            case self::ACTION_DELETE:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
@@ -1931,7 +1941,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
      */
-    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
         if (! $this->_doContainerACLChecks) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -1952,13 +1962,13 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Setting filter grants for action ' . $_action);
         switch ($_action) {
-            case 'get':
+            case self::ACTION_GET:
                 $_filter->setRequiredGrants(array(
                     Tinebase_Model_Grants::GRANT_READ,
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
-            case 'update':
+            case self::ACTION_UPDATE:
                 $_filter->setRequiredGrants(array(
                     Tinebase_Model_Grants::GRANT_EDIT,
                     Tinebase_Model_Grants::GRANT_ADMIN,
