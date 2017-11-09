@@ -433,7 +433,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public static function getPublicRoutes()
     {
-        static::$_publicRoutes;
+        return static::$_publicRoutes;
     }
 
     /**
@@ -441,6 +441,6 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public static function getAuthRoutes()
     {
-        static::$_authRoutes;
+        return static::$_authRoutes;
     }
 }
