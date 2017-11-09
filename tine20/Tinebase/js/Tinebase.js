@@ -11,6 +11,7 @@
 /**
  * webpack entry
  */
+require('es6-promise/auto');
 var lodash = require('lodash');
 var director = require('director');
 var postal = require('postal');
