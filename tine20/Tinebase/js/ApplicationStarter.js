@@ -271,6 +271,7 @@ Tine.Tinebase.ApplicationStarter = {
                 break;
             case 'float':
             case 'integer':
+            case 'money':
                 filter.valueType = 'number';
         }
         return filter;

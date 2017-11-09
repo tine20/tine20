@@ -779,6 +779,7 @@ class Tinebase_ModelConfiguration {
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
         'float'    => 'Tinebase_Model_Filter_Float',
+        'money'    => 'Tinebase_Model_Filter_Float',
         'record'   => 'Tinebase_Model_Filter_ForeignId',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
@@ -802,7 +803,7 @@ class Tinebase_ModelConfiguration {
     );
 
     /**
-     * This maps field types to their default validators, just zendfw validators can be used here.
+     * This maps field types to their default validators, just zend validators can be used here.
      * For using own validators, use _ownValidatorMapping instead. If no validator is given,
      * "array(Zend_Filter_Input::ALLOW_EMPTY => true)" will be used
      *
