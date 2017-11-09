@@ -15,11 +15,6 @@
 class qCal_Parser_Lexer_iCalendar extends qCal_Parser_Lexer {
 	
 	/**
-	 * @var string character(s) used to terminate lines
-	 */
-	protected $line_terminator;
-	
-	/**
 	 * Constructor 
 	 * @param string The iCalendar data to be parsed
 	 * @access public
@@ -27,7 +22,6 @@ class qCal_Parser_Lexer_iCalendar extends qCal_Parser_Lexer {
 	public function __construct($content) {
 	
 		parent::__construct($content);
-		$this->line_terminator = chr(13) . chr(10);
 	
 	}
 	/**
@@ -121,7 +115,9 @@ class qCal_Parser_Lexer_iCalendar extends qCal_Parser_Lexer {
 	protected function unfold($content) {
 	
 		$return = array();
-		$lines = explode($this->line_terminator, $content);
+		// handle linux AND windows line-breaks!
+		$content = str_replace("\r", "\n", $content);
+		$lines = explode("\n", $content);
 		foreach ($lines as $line) {
 			$checkempty = trim($line);
 			if (empty($checkempty)) continue;
