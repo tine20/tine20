@@ -68,7 +68,7 @@ class Tinebase_Server_Routing extends Tinebase_Server_Abstract implements Tineba
                 $routes = array_merge_recursive($routes, $this->_getAuthRoutes());
             }
 
-            $router = new \Zend\Router\Http\TreeRouteStack();
+            $router = new \Zend\Mvc\Router\Http\TreeRouteStack();
             $router->addRoutes($routes);
             // TODO we could figure out who implements getBaseUrl and set it in case tine is installed
             // TODO in a subdirectory and not at root path... see \Zend\Router\Http\TreeRouteStack::match
@@ -164,12 +164,12 @@ class Tinebase_Server_Routing extends Tinebase_Server_Abstract implements Tineba
     }
 
     /**
-     * @param \Zend\Router\Http\RouteMatch $route
+     * @param \Zend\Mvc\Router\Http\RouteMatch $route
      * @return bool
      * @throws Tinebase_Exception_InvalidArgument
      * @throws ReflectionException
      */
-    protected function _dispatchRoute(\Zend\Router\Http\RouteMatch $route)
+    protected function _dispatchRoute(\Zend\Mvc\Router\Http\RouteMatch $route)
     {
         $params = $route->getParams();
         if (!isset($params[self::PARAM_CLASS])) {
