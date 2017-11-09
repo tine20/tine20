@@ -154,7 +154,7 @@ class Tinebase_Server_Routing extends Tinebase_Server_Abstract implements Tineba
         foreach($allApplications as $application) {
             /** @var Tinebase_Controller_Abstract $appController */
             $appController = $application->name . '_Controller';
-            if (!class_exists($appController)) {
+            if (!class_exists($appController) || !method_exists($appController, 'getPublicRoutes')) {
                 continue;
             }
             $allRoutes = array_merge($allRoutes, $appController::getPublicRoutes());
@@ -210,7 +210,7 @@ class Tinebase_Server_Routing extends Tinebase_Server_Abstract implements Tineba
             $callable = [new $class, $method];
         }
 
-        if (false === call_user_func($callable, $orderedParams)) {
+        if (false === call_user_func_array($callable, $orderedParams)) {
             return false;
         }
         return true;

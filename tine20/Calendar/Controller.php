@@ -38,6 +38,105 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     protected $_applicationName = 'Calendar';
 
     /**
+     * public routes, overload member in concrete class to define public routes for the routing server
+     *
+     * @var array
+     */
+    protected static $_publicRoutes = [
+        'Calendar' => [
+            'type'      => 'literal',
+            'options'   => [
+                'route'     => '/Calendar',
+            ],
+            'may_terminate' => false,
+            'child_routes'  => [
+                'poll'          => [
+                    'type'          => 'literal',
+                    'options'       => [
+                        'route'         => '/poll',
+                        'defaults'      => [
+                            Tinebase_Server_Routing::PARAM_CLASS    => Calendar_Controller_Poll::class
+                        ],
+                    ],
+                    'may_terminate' => false,
+                    'child_routes'  => [
+                        'regex'         => [
+                            'type'          => 'regex',
+                            'options'       => [
+                                'regex'         => '/(?<pollId>[^/]+)(/(?<user>[^/]+)(/(?<authKey>[^/]+))?)?',
+                                'spec'          => '',
+                            ],
+                            'child_routes'  => [
+                                'GET'           => [
+                                    'type'          => 'method',
+                                    'options'       => [
+                                        'verb'          => 'GET',
+                                        'defaults'      => [
+                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiGetPoll'
+                                        ]
+                                    ]
+                                ],
+                                'POST'          => [
+                                    'type'          => 'method',
+                                    'options'       => [
+                                        'verb'          => 'POST',
+                                        'defaults'      => [
+                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiUpdateAttenderStatus'
+                                        ]
+                                    ]
+                                ],
+                                'PUT'           => [
+                                    'type'          => 'method',
+                                    'options'       => [
+                                        'verb'          => 'PUT',
+                                        'defaults'      => [
+                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiAddAttender'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'view'          => [
+                            'type'          => 'literal',
+                            'options'       => [
+                                'route'         => '/view',
+                            ],
+                            'child_routes'  => [
+                                'regex'         => [
+                                    'type'          => 'regex',
+                                    'options'       => [
+                                        'regex'         => '/(?<pollId>[^/]+)(/(?<user>[^/]+)(/(?<authKey>[^/]+))?)?',
+                                        'spec'          => '',
+                                        'defaults'      => [
+                                            Tinebase_Server_Routing::PARAM_METHOD => 'publicApiMainScreen'
+                                        ]
+                                    ]
+                                ],
+                                'agb'           => [
+                                    'type'          => 'literal',
+                                    'options'       => [
+                                        'route'         => '/agb',
+                                        'defaults'      => [
+                                            Tinebase_Server_Routing::PARAM_METHOD => 'publicApiGetAGB'
+                                        ]
+                                    ],
+                                ],
+                            ]
+                        ],
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    /**
+     * auth routes, overload member in concrete class to define auth routes for the routing server
+     *
+     * @var array
+     */
+    protected static $_authRoutes = [];
+
+    /**
      * don't clone. Use the singleton.
      *
      */

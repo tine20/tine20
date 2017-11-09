@@ -27,10 +27,11 @@ class Calendar_Frontend_AllTests
         $suite->addTest(Calendar_Frontend_CalDAV_AllTests::suite());
         $suite->addTest(Calendar_Frontend_WebDAV_AllTests::suite());
         
-        $suite->addTestSuite('Calendar_Frontend_ActiveSyncTest');
-        $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
-        $suite->addTestSuite('Calendar_Frontend_iMIPTest');
-        $suite->addTestSuite('Calendar_Frontend_Json_PollTest');
+        $suite->addTestSuite(Calendar_Frontend_ActiveSyncTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAVTest::class);
+        $suite->addTestSuite(Calendar_Frontend_iMIPTest::class);
+        $suite->addTestSuite(Calendar_Frontend_Json_PollTest::class);
+        $suite->addTestSuite(Calendar_Frontend_PollRoutingTest::class);
 
         return $suite;
     }

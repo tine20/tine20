@@ -193,6 +193,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const POLL_MUTE_ALTERNATIVES_NOTIFICATIONS = 'pollMuteAlternativesNotifications';
 
     /**
+     * @var string
+     */
+    const POLL_AGB = 'pollAGB';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -499,6 +504,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
             'setByAdminModule'      => true,
             'default'               => false
+        ),
+        self::POLL_AGB => array(
+            //_('AGBs for polls')
+            'label'                 => 'AGBs for polls',
+            //_('AGBs for polls')
+            'description'           => 'AGBs for polls',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => true,
+            'default'               => '',
         ),
     );
     

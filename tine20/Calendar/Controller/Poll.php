@@ -486,4 +486,54 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         return;
     }
+
+    public function publicApiMainScreen($pollId, $user = null, $authKey = null)
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Calendar/views');
+
+        $baseUrl = Tinebase_Core::getUrl() . '/';
+
+        $fileMap = Tinebase_Frontend_Http::getAssetsMap();
+        $view->jsFiles = [$baseUrl . $fileMap['Calendar/js/pollClient/src/index.es6.js']['js']];
+
+        if (TINE20_BUILDTYPE != 'RELEASE') {
+            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
+                $view->jsFiles[] = $baseUrl . 'webpack-dev-server.js';
+            } else {
+                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
+
+//        $this->Tinebase_Frontend_Http::_setMainscreenHeaders();
+        echo $view->render('pollClient.php');
+    }
+
+    public function publicApiGetPoll($pollId, $user = null, $authKey = null)
+    {
+        $poll = $this->get($pollId);
+
+        // @TODO: check if poll is password protected
+        // @TODO: resolve events,attendee etc.
+
+        echo json_encode($poll->toArray());
+    }
+
+    public function publicApiAddAttender($pollId)
+    {
+        echo 'OK: ' . $pollId;
+    }
+
+    public function publicApiUpdateAttenderStatus($pollId)
+    {
+        echo 'OK: ' . $pollId;
+    }
+
+    public function publicApiGetAGB()
+    {
+        echo Calendar_Config::getInstance()->get(Calendar_Config::POLL_AGB);
+    }
 }
