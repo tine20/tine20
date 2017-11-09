@@ -2086,7 +2086,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_43()
     {
-        $this->_backend->dropIndex('groups', 'name');
+        try {
+            $this->_backend->dropIndex('groups', 'name');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         $this->_backend->addIndex('groups', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>name</name>
                     <unique>true</unique>
