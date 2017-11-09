@@ -409,7 +409,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @todo move this to a generic __call interceptor setFrom<API>InUsersTimezone
      * 
-     * @param  string $_data json encoded data
+     * @param  string|array $_data json encoded data
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromJsonInUsersTimezone($_data)
@@ -1156,7 +1156,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * fills a record from json data
      *
-     * @param string $_data json encoded data
+     * @param string|array $_data json encoded data
      * @return void
      * 
      * @todo replace this (and setFromJsonInUsersTimezone) with Tinebase_Convert_Json::toTine20Model

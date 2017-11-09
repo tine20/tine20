@@ -131,7 +131,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 $filterClass = Tinebase_Model_Filter_Date::class;
             } elseif ($type === 'integer') {
                 $filterClass = Tinebase_Model_Filter_Int::class;
-            } elseif ($type === 'bool') {
+            } elseif ($type === 'bool' || $type === 'boolean') {
                 //$filterClass = Tinebase_Model_Filter_Text::class;
                 $filterClass = Tinebase_Model_Filter_Id::class;
                 $_fieldOrData['value']['value'] = $_fieldOrData['value']['value'] ? '1' : '0';

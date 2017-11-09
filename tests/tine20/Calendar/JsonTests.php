@@ -267,7 +267,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      * get filter array with container and period filter
      * 
      * @param string|int $containerId
-     * @return multitype:multitype:string Ambigous <number, multitype:>  multitype:string multitype:string
+     * @return array
      */
     protected function _getEventFilterArray($containerId = NULL)
     {
@@ -2366,5 +2366,63 @@ class Calendar_JsonTests extends Calendar_TestCase
         $result = $this->_uit->searchFreeTime($event->toArray(), $options);
         static::assertTrue(is_array($result) && count($result) === 4 && count($result['results']) === 1);
         static::assertEquals($expectedDtStart->toString(), $result['results'][0]['dtstart']);
+    }
+
+    public function testSearchByBoolCustomField()
+    {
+        $cfc = Tinebase_CustomFieldTest::getCustomField([
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'          => Calendar_Model_Event::class,
+            'definition'     => [
+                'type'          => 'bool'
+            ]
+        ]);
+        $cfc = Tinebase_CustomField::getInstance()->addCustomField($cfc);
+
+        $event = $this->_getEvent();
+        $event->customfields = [$cfc->name => 1];
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        $filter = $this->_getEventFilterArray();
+        $filter[] = [
+            'field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId'  => $cfc->getId(),
+                'value' => 1,
+            ]
+        ];
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+
+        $this->assertTrue(! empty($searchResultData['results']) && 1 === count($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+        $this->assertEquals($createdEvent->getId(), $resultEventData['id']);
+    }
+
+    public function testSearchByBooleanCustomField()
+    {
+        $cfc = Tinebase_CustomFieldTest::getCustomField([
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'          => Calendar_Model_Event::class,
+            'definition'     => [
+                'type'          => 'boolean'
+            ]
+        ]);
+        $cfc = Tinebase_CustomField::getInstance()->addCustomField($cfc);
+
+        $event = $this->_getEvent();
+        $event->customfields = [$cfc->name => 1];
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        $filter = $this->_getEventFilterArray();
+        $filter[] = [
+            'field' => 'customfield', 'operator' => 'equals', 'value' => [
+                'cfId'  => $cfc->getId(),
+                'value' => 1,
+            ]
+        ];
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+
+        $this->assertTrue(! empty($searchResultData['results']) && 1 === count($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+        $this->assertEquals($createdEvent->getId(), $resultEventData['id']);
     }
 }
