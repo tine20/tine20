@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
-    path: __dirname,
+    path: 'Tinebase/js',
     fullPath: false,
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
@@ -52,7 +52,7 @@ module.exports = {
         publicPath: '/',
         filename: '[name]-[hash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
-        libraryTarget: "umd",
+        libraryTarget: "umd"
     },
     devServer: {
         hot: false,
