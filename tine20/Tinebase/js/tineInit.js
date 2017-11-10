@@ -146,12 +146,13 @@ Tine.Tinebase.tineInit = {
         }, this);
 
         Ext.getBody().on('click', function(e) {
-            var target = e.getTarget('a', 1, true);
-            if (target) {
+            var target = e.getTarget('a', 1, true),
+                href = target ? target.getAttribute('href') : '';
+            
+            if (target && href && href != '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
                     if (target.getAttribute('target') === '_blank') {
-                        var href = String(target.getAttribute('href'));
 
                         if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
                             target.set({
@@ -164,10 +165,10 @@ Tine.Tinebase.tineInit = {
                     e.preventDefault();
 
                     if (e.ctrlKey || e.metaKey) {
-                        var win = window.open(target.getAttribute('href'), '_blank', null, true);
+                        var win = window.open(href, '_blank', null, true);
                         win.opener = null;
                     } else {
-                        window.opener.location.href = target.getAttribute('href');
+                        window.opener.location.href = href;
                         window.close();
                     }
                 }
