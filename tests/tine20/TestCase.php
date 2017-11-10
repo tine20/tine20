@@ -410,7 +410,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         
         return self::$_mailer;
     }
-    
+
+    /**
+     * reset test mailer
+     */
+    public static function resetMailer()
+    {
+        self::$_mailer = null;
+    }
+
     /**
      * flush mailer (send all remaining mails first)
      */

@@ -13,7 +13,9 @@
  *
  * @package     Calendar
  */
-class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
+class Calendar_Controller extends Tinebase_Controller_Event implements
+    Tinebase_Application_Container_Interface,
+    Felamimail_Controller_MassMailingPluginInterface
 {
     /**
      * holds the instance of the singleton
@@ -450,5 +452,15 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         }
 
         return $result;
+    }
+
+    /**
+     * @param Felamimail_Model_Message $_message
+     * @return null
+     */
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message)
+    {
+        Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message);
+        return;
     }
 }

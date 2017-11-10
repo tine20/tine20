@@ -15,7 +15,8 @@
  * @package Calendar
  * @subpackage  Controller
  */
-class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract
+class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract implements
+    Felamimail_Controller_MassMailingPluginInterface
 {
     /**
      * Model name
@@ -63,6 +64,16 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract
      * @var string id of poll currently being inspected
      */
     protected $_inspectedPoll = null;
+
+    /**
+     * @var array contains polls cached e. g. during prepareMassMailingMessage
+     */
+    protected $_cachedPolls = [];
+
+    /**
+     * @var array contains cached attenders for pollIds e. g. during prepareMassMailingMessage
+     */
+    protected $_cachedAttenders = [];
 
     /**
      * @var Calendar_Controller_Poll
@@ -419,5 +430,60 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract
         foreach($this->_syncFields as $fieldName) {
             $alternativeEvents->{$fieldName} = $event{$fieldName};
         }
+    }
+
+    /**
+     * @param Felamimail_Model_Message $_message
+     * @return null
+     */
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message)
+    {
+        if (!is_array($_message->to) || !isset($_message->to[0])) {
+            throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
+        }
+        $emailTo = $_message->to[0];
+        if (strpos($_message->body, '/Calendar/poll/view/') === false) {
+            // nothing to do for us
+            return;
+        }
+
+        if (!preg_match('#/Calendar/poll/view/([^/]+)/#', $_message->body, $matches)) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
+        }
+        $pollId = $matches[1];
+        $replaceUrl = $matches[0];
+
+        /** @var Calendar_Model_Poll $poll */
+        if (!isset($this->_cachedPolls[$pollId])) {
+            $poll = $this->get($pollId);
+            $poll->alternative_dates = $this->getPollEvents($pollId);
+            $this->_cachedPolls[$pollId] = $poll;
+        } else {
+            $poll = $this->_cachedPolls[$pollId];
+        }
+
+        if (!isset($this->_cachedAttenders[$pollId])) {
+            /** @var Calendar_Model_Event $event */
+            if (null === ($event = $poll->alternative_dates->getFirstRecord())) {
+                throw new Tinebase_Exception_UnexpectedValue('invalid poll ' . $pollId . ', no alternative_dates found');
+            }
+
+            $this->_cachedAttenders[$pollId] = [];
+            /** @var Calendar_Model_Attender $attender */
+            foreach ($event->attendee as $attender) {
+                // TODO what about groups? is it legal to invite groups to polls anyway?
+                foreach (array_filter(array_merge((array)$attender->getEmail(), $attender->getEmailsFromHistory()))
+                        as $email) {
+                    $this->_cachedAttenders[$pollId][$email] = $attender->status_authkey;
+                }
+            }
+        }
+
+        if (isset($this->_cachedAttenders[$pollId][$emailTo])) {
+            $_message->body = str_replace($replaceUrl, $replaceUrl . $emailTo . '/'
+                . $this->_cachedAttenders[$pollId][$emailTo], $_message->body);
+        }
+
+        return;
     }
 }

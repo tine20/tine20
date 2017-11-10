@@ -8,6 +8,7 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * @property Tinebase_Record_RecordSet      alternative_dates
  */
 class Calendar_Model_Poll extends Tinebase_Record_Abstract
 {

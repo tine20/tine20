@@ -161,7 +161,7 @@ abstract class Calendar_TestCase extends TestCase
     }
     
     /** return a test person
-     * @return 
+     * @return Tinebase_Model_FullUser
      */
     protected function _getPersona($loginName)
     {

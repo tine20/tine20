@@ -80,6 +80,10 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
+
+        if (Zend_Registry::isRegistered('personas')) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
     }
 
     /**
@@ -847,6 +851,47 @@ class Felamimail_Controller_MessageTest extends TestCase
             'filename mismatch of attachment' . print_r($completeForwardedMessage->attachments[0], TRUE));
         
         return $forwardedMessage;
+    }
+
+    /**
+     * @see 0013618: Felamimail Message - introduce mass mailing and plugins for it
+     */
+    public function testPollMassMailingMessage()
+    {
+        $pollTest = new Calendar_Frontend_Json_PollTest();
+        $pollTest->setUp();
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+
+        try {
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+            $event = $pollTest->testCreatePoll();
+
+            $massMailingMessage = new Felamimail_Model_Message([
+                'account_id' => $this->_account->getId(),
+                'subject' => 'test poll mass mailing',
+                'to' => [
+                    Tinebase_Core::getUser()->accountEmailAddress,
+                    $this->_personas['sclever']->accountEmailAddress
+                ],
+                'body' => '/Calendar/poll/view/' . $event['poll_id']['id'] . '/',
+                'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
+                'massMailingFlag' => true,
+            ]);
+
+            static::flushMailer();
+            Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
+            $messages = static::getMessages();
+            static::assertEquals(2, count($messages), 'expected 2 mails send');
+
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
+            $pollTest->tearDown();
+        }
     }
     
     /**
