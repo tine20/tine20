@@ -1909,4 +1909,19 @@ class Tinebase_Core
         }
         return false;
     }
+
+    /**
+     * release a lock to prevent parallel execution in a multi server environment
+     *
+     * @param string $id
+     * @return bool
+     */
+    public static function releaseMultiServerLock($id)
+    {
+        $result = Tinebase_Lock::releaseDBSessionLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
+    }
 }

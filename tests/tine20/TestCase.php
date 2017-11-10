@@ -155,7 +155,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _releaseDBLocks()
     {
         foreach ($this->_releaseDBLockIds as $lockId) {
-            Tinebase_Lock::releaseDBSessionLock($lockId);
+            Tinebase_Core::releaseMultiServerLock($lockId);
         }
 
         $this->_releaseDBLockIds = array();
