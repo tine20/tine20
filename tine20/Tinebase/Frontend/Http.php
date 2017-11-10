@@ -854,6 +854,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
+        $fileMap = $this->getAssetsMap();
+        $view->jsFiles = [$fileMap['Tinebase/js/postal.xwindow.js']['js']];
+
+        if (TINE20_BUILDTYPE != 'RELEASE') {
+            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
+                $view->jsFiles[] = 'webpack-dev-server.js';
+            } else {
+                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
+            }
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' getPostalXWindow');

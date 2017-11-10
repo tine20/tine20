@@ -42,16 +42,8 @@
           "path": "js/Locale/"
         },
         {
-          "text": "store2.js",
-          "path": "../library/Store/"
-        },
-        {
-          "text": "store.bind.js",
-          "path": "../library/Store/"
-        },
-        {
           "text": "store.compat.js",
-          "path": "../library/Store/"
+          "path": "js/ux/util/"
         },
         {
           "text": "addressparser.js",

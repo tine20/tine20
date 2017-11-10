@@ -39,8 +39,10 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
     if (entryFile /* && (baseName == 'Admin')*/) {
         entry[baseName + '/js/' + baseName] = entryFile;
     }
-
 });
+
+// additional 'real' entry points
+entry['Tinebase/js/postal.xwindow.js'] = baseDir + '/Tinebase/js/postal.xwindow.js';
 
 module.exports = {
     entry: entry,

@@ -16,6 +16,8 @@ var lodash = require('lodash');
 var director = require('director');
 var postal = require('postal');
 require('postal.federation');
+require('script-loader!store2');
+require('script-loader!store2/src/store.bind.js');
 require('postal.xwindow');
 require('postal.request-response');
 
