@@ -216,21 +216,29 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testComposeConfigDir()
     {
-        $this->markTestSkipped('FIXME: should be reactivated');
-
-        $confdfolder = Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER);
-        if (empty($confdfolder) || !is_readable($confdfolder)) {
-            $this->markTestSkipped('no confdfolder configured/readable');
+        $confdfolder = rtrim(Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER), '/');
+        if (empty($confdfolder) || !is_dir($confdfolder) || !is_writable($confdfolder)) {
+            static::markTestSkipped('confd folder not defined or not a writeable folder');
         }
 
-        $configValues = array('config1' => 'value1', 'config2' => 'value2');
-        foreach ($configValues as $configName => $expectedValue) {
-            $configValue = Tinebase_Config::getInstance()->get($configName);
-            $this->assertEquals($expectedValue, $configValue);
-        }
+        try {
+            static::assertTrue(copy(__DIR__ . '/files/conf.d/config1.inc.php', $confdfolder . '/config1.inc.php'));
+            static::assertTrue(copy(__DIR__ . '/files/conf.d/config2.inc.php', $confdfolder . '/config2.inc.php'));
+            Tinebase_Config::getInstance()->clearCache();
 
-        $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
-        $this->assertTrue(file_exists($cachedConfigFilename), 'cached config file does not exist: ' . $cachedConfigFilename);
+            $configValues = array('config1' => 'value1', 'config2' => 'value2');
+            foreach ($configValues as $configName => $expectedValue) {
+                $configValue = Tinebase_Config::getInstance()->get($configName);
+                $this->assertEquals($expectedValue, $configValue);
+            }
+
+            $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+            $this->assertTrue(file_exists($cachedConfigFilename),
+                'cached config file does not exist: ' . $cachedConfigFilename);
+        } finally {
+            unlink($confdfolder . '/config1.inc.php');
+            unlink($confdfolder . '/config2.inc.php');
+        }
     }
 
     /**
