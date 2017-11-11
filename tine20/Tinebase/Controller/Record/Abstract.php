@@ -294,7 +294,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         return $this->_setBooleanMemberVar('_sendNotifications', $setTo);
     }
-    
+
     /**
      * set/get a boolean member var
      * 
