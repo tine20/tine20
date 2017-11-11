@@ -516,12 +516,12 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ))));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
-        $this->assertEquals(7, count($events), 'there should be exactly 6 events');
+        $this->assertEquals(6, count($events), 'there should be exactly 6 events');
         
         $oldSeries = $events->filter('uid', $persistentEvent->uid);
         $newSeries = $events->filter('uid', $newBaseEvent->uid);
         $this->assertEquals(3, count($oldSeries), 'there should be exactly 3 events with old uid');
-        $this->assertEquals(4, count($newSeries), 'there should be exactly 3 events with new uid');
+        $this->assertEquals(3, count($newSeries), 'there should be exactly 3 events with new uid');
         
         $this->assertEquals(1, count($oldSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one old base event');
         $this->assertEquals(1, count($newSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one new base event');
@@ -530,7 +530,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(2, count($newSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one new persitent event exception');
         
         $this->assertEquals(1, count($oldSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one old fake event');
-        $this->assertEquals(1, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event'); //26 (reset)
+        $this->assertEquals(0, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event'); //26 (reset)
         
         $oldBaseEvent = $oldSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
         $newBaseEvent = $newSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
@@ -539,8 +539,9 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             new Tinebase_DateTime('2011-04-23 10:00:00'),
             new Tinebase_DateTime('2011-04-24 10:00:00'),
         )), 'exdate of old series');
-        
+
         $this->assertFalse(!!array_diff($newBaseEvent->exdate, array(
+            new Tinebase_DateTime('2011-04-26 14:00:00'),
             new Tinebase_DateTime('2011-04-27 14:00:00'),
             new Tinebase_DateTime('2011-04-28 14:00:00'),
         )), 'exdate of new series');
