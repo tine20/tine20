@@ -647,6 +647,7 @@ class Tinebase_Core
         
         if (isset($config->logger) && $config->logger->active) {
             try {
+                $logger->setTimezone($config->logger->tz);
                 $logger->addWriterByConfig($config->logger);
                 if ($config->logger->additionalWriters) {
                     foreach ($config->logger->additionalWriters as $writerConfig) {
