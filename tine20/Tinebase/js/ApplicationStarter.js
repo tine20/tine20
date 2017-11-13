@@ -119,15 +119,15 @@ Tine.Tinebase.ApplicationStarter = {
                                 return Ext.util.Format.htmlEncode(title);
                             };
                         } else {
-                            var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                            if (foreignRecordClass) {
-                                gridRenderer = function (value, row, record) {
+                            gridRenderer = function (value, row, record) {
+                                var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
+                                if (foreignRecordClass) {
                                     var titleProperty = foreignRecordClass.getMeta('titleProperty');
                                     return record && record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
-                                };
-                            } else {
-                                gridRenderer = null;
-                            }
+                                } else {
+                                    return value;
+                                }
+                            };
                         }
                     } else {
                         gridRenderer = null;
