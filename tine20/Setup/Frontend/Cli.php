@@ -51,8 +51,13 @@ class Setup_Frontend_Cli
     {
         // always set real setup user if Tinebase is installed
         if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            if (!Setup_Core::getUser() instanceof Tinebase_Model_User) {
+            try {
+                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $setupUser = 'setupuser';
+            }
+            if ($setupUser && ! Setup_Core::getUser() instanceof Tinebase_Model_User) {
                 Setup_Core::set(Tinebase_Core::USER, $setupUser);
             }
         } else {
