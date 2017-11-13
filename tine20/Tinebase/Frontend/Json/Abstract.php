@@ -288,9 +288,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $recordsFields = $config->recordsFields;
             
             if ($recordsFields) {
-                foreach (array_keys($recordsFields) as $property) {
+                foreach ($recordsFields as $property => $fieldDef) {
 
-                    $rcn = $recordsFields[$property]['config']['recordClassName'];
+                    $rcn = $fieldDef['config']['recordClassName'];
                     if ($record->has($property) && $record->{$property} && is_array($record->{$property})) {
                         $recordSet = new Tinebase_Record_RecordSet($rcn);
                         foreach ($record->{$property} as $recordArray) {

@@ -128,6 +128,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doRelatedCreateUpdateCheck  = false;
 
     /**
+     * set this to true to create / update / delete(?) dependent records
+     *
+     * @var boolean
+     */
+    protected $_handleDependentRecords = true;
+
+    /**
      * record alarm field
      *
      * @var string
@@ -614,7 +621,8 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
-            $this->_setRelatedData($createdRecord, $_record, null, TRUE);
+            $createdRecordWithRelated = $this->_setRelatedData($createdRecord, $_record, null, true, true);
+            $this->_inspectAfterSetRelatedDataCreate($createdRecordWithRelated, $_record);
             $this->_writeModLog($createdRecord, null);
             $this->_setSystemNotes($createdRecord);
 
@@ -949,6 +957,17 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect creation of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $createedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
+    {
+    }
+
+    /**
      * increase container content sequence
      * 
      * @param Tinebase_Record_Interface $record
@@ -1051,11 +1070,13 @@ abstract class Tinebase_Controller_Record_Abstract
             $updatedRecord = $this->_backend->update($_record);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
-            
+
             $this->_inspectAfterUpdate($updatedRecord, $_record, $currentRecord);
             $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, $currentRecord, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
+
+            $this->_inspectAfterSetRelatedDataUpdate($updatedRecordWithRelatedData, $_record, $currentRecord);
 
             $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
             $this->_setSystemNotes($updatedRecordWithRelatedData, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
@@ -1137,9 +1158,10 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $record          the update record
      * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
+     * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
@@ -1173,6 +1195,16 @@ abstract class Tinebase_Controller_Record_Abstract
             if (isset($record->notes) && is_array($record->notes)) {
                 $updatedRecord->notes = $record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
+            }
+        }
+        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())
+                && is_array($config->recordsFields)) {
+            foreach ($config->recordsFields as $property => $fieldDef) {
+                if ($isCreate) {
+                    $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
+                } else {
+                    $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
+                }
             }
         }
         
@@ -1224,6 +1256,18 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return  void
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+    }
+
+    /**
+     * inspect update of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
     }
 
@@ -1755,6 +1799,12 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
+            && is_array($config->recordsFields)) {
+            foreach ($config->recordsFields as $property => $fieldDef) {
+                $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+            }
+        }
     }
 
     /**
@@ -1785,6 +1835,13 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms') && count($_record->alarms) > 0) {
             $_record->alarms->setId(null);
             $this->_saveAlarms($_record);
+        }
+
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
+            && is_array($config->recordsFields)) {
+            foreach ($config->recordsFields as $property => $fieldDef) {
+                $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+            }
         }
     }
     
@@ -2202,7 +2259,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $new->addRecord($controller->create($record));
             }
     
-            $_createdRecord->{$_property} = $new->toArray();
+            $_createdRecord->{$_property} = $new;
         }
     }
 
@@ -2346,12 +2403,132 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $controller->delete($deleteIds);
         }
-        $_record->{$_property} = $existing->toArray();
+        $_record->{$_property} = $existing;
     }
-    
-    protected function _createDependentRecord($record, $_record, $_fieldConfig, $controller, $recordSet)
+
+    /**
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_property
+     * @param array $_fieldConfig
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    protected function _deleteDependentRecords($_record, $_property, $_fieldConfig)
     {
-        
+        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords']) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig['refIdField'])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig['controllerClassName'];
+        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        $controller = $ccn::getInstance();
+        $filterClassName = $_fieldConfig['filterClassName'];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . $_property);
+
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
+        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
+        //try {
+          //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+
+            // TODO fix this:
+            // bad work around. Fields of type record return ForeignId Filter, but that filter can not do equals.
+            // remove try  catch and look for
+            /*     Sales_ControllerTest.testAddDeleteProducts
+    Sales_JsonTest.testSearchContracts
+    Sales_JsonTest.testSearchContractsByProduct
+    Sales_JsonTest.testSearchEmptyDateTimeFilter
+    Sales_JsonTest.testAdvancedContractsSearch
+    Sales_InvoiceJsonTests.testCRUD
+    Sales_InvoiceJsonTests.testSanitizingProductId
+    HumanResources_JsonTests.testEmployee
+    HumanResources_JsonTests.testDateTimeConversion
+    HumanResources_JsonTests.testContractDates
+    HumanResources_JsonTests.testAddContract
+    HumanResources_JsonTests.testSavingRelatedRecord
+    HumanResources_JsonTests.testSavingRelatedRecordWithCorruptId
+    HumanResources_CliTests.testSetContractsEndDate */
+
+        //} catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        //}
+        $deleteIds = $controller->search($filter, null, false, true);
+
+        if (! empty($deleteIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteIds, 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+            }
+            $controller->delete($deleteIds);
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_property
+     * @param array $_fieldConfig
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    protected function _undeleteDependentRecords($_record, $_property, $_fieldConfig)
+    {
+        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords']) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig['refIdField'])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig['controllerClassName'];
+        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        $controller = $ccn::getInstance();
+        $filterClassName = $_fieldConfig['filterClassName'];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . $_property);
+
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
+        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
+        //try {
+        //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+
+        // TODO fix this:
+        // bad work around. Fields of type record return ForeignId Filter, but that filter can not do equals.
+        // remove try  catch and look for
+        /*     Sales_ControllerTest.testAddDeleteProducts
+Sales_JsonTest.testSearchContracts
+Sales_JsonTest.testSearchContractsByProduct
+Sales_JsonTest.testSearchEmptyDateTimeFilter
+Sales_JsonTest.testAdvancedContractsSearch
+Sales_InvoiceJsonTests.testCRUD
+Sales_InvoiceJsonTests.testSanitizingProductId
+HumanResources_JsonTests.testEmployee
+HumanResources_JsonTests.testDateTimeConversion
+HumanResources_JsonTests.testContractDates
+HumanResources_JsonTests.testAddContract
+HumanResources_JsonTests.testSavingRelatedRecord
+HumanResources_JsonTests.testSavingRelatedRecordWithCorruptId
+HumanResources_CliTests.testSetContractsEndDate */
+
+        //} catch (Tinebase_Exception_UnexpectedValue $teuv) {
+        $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', 1));
+        //}
+        $unDeleteRecords = $controller->search($filter);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO) && $unDeleteRecords->count() > 0) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' undeleting dependent records with id = "' . print_r($unDeleteRecords->getArrayOfIds(), 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+        }
+        foreach ($unDeleteRecords as $record) {
+            $controller->unDelete($record);
+        }
     }
 
     /**
@@ -2471,5 +2648,20 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->deleteByFilter($_filter);
             }
         }
+    }
+
+    /**
+     * if dependent records should not be handled, set this to false
+     *
+     * @param bool $toggle
+     * @return bool
+     */
+    public function setHandleDependentRecords($bool = null)
+    {
+        $oldValue = $this->_handleDependentRecords;
+        if (null !== $bool) {
+            $this->_handleDependentRecords = (bool)$bool;
+        }
+        return $oldValue;
     }
 }

@@ -98,23 +98,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * inspects delete action
-     *
-     * @param array $_ids
-     * @return array of ids to actually delete
-     */
-    protected function _inspectDelete(array $_ids)
-    {
-        $filter = new Sales_Model_AddressFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'in', 'value' => $_ids)));
-        
-        $addressController = Sales_Controller_Address::getInstance();
-        $addressController->delete($addressController->search($filter, NULL, FALSE, TRUE));
-
-        return $_ids;
-    }
-    
-    /**
      * resolves all virtual fields for the customer
      *
      * @param array $customer
@@ -153,24 +136,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * inspect creation of one record (after create)
-     *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     *
-     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
-     */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
-    {
-        $config = $_record::getConfiguration()->recordsFields;
-
-        foreach (array_keys($config) as $property) {
-            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
-        }
-    }
-    
-    /**
      * inspect update of one record (before update)
      *
      * @param   Tinebase_Record_Interface $_record      the update record
@@ -184,14 +149,8 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     {
         self::validateCurrencyCode($_record->currency);
         
-        $config = $_record::getConfiguration()->recordsFields;
-        
         if ($_record->number != $_oldRecord->number) {
             $this->_setNextNumber($_record, TRUE);
-        }
-        
-        foreach (array_keys($config) as $p) {
-            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
         }
     }
     

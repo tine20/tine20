@@ -1252,6 +1252,7 @@ class Tinebase_ModelConfiguration {
         $modelconfig = array();
         if (is_array($models)) {
             foreach ($models as $modelName) {
+                /** @var Tinebase_Record_Abstract $recordClass */
                 $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
                 $modelName = preg_replace('/^.+_Model_/', '', $modelName);
                 $config = $recordClass::getConfiguration();

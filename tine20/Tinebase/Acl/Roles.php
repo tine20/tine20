@@ -902,37 +902,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * inspect creation of one record (after create)
-     *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
-    {
-        $config = $_record::getConfiguration()->recordsFields;
-        foreach (array_keys($config) as $property) {
-            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
-        }
-    }
-
-    /**
-     * inspect update of one record (before update)
-     *
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
-     * @return  void
-     */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-        $config = $_record::getConfiguration()->recordsFields;
-
-        foreach (array_keys($config) as $p) {
-            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
-        }
-    }
-
-    /**
      * get by id
      *
      * @param string $_id

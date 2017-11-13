@@ -247,12 +247,6 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
     { 
         $_record->employee_id = $_oldRecord->employee_id;
         $_record->year = $_oldRecord->year;
-        
-        $config = $_record::getConfiguration()->recordsFields;
-        
-        foreach (array_keys($config) as $p) {
-            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
-        }
     }
     
     /**

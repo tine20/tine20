@@ -101,11 +101,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $config = $_record::getConfiguration()->recordsFields;
-        foreach (array_keys($config) as $property) {
-            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
-        }
-        
         $firstDate = $_createdRecord->employment_begin instanceof Tinebase_DateTime ? $_createdRecord->employment_begin : Tinebase_DateTime::now();
         $lastDate = $_createdRecord->employment_end instanceof Tinebase_DateTime ? $_createdRecord->employment_end : Tinebase_DateTime::now()->addYear(1);
         
@@ -252,12 +247,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_doPrivateCleanup($_record, $_oldRecord);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
-        
-        $config = $_record::getConfiguration()->recordsFields;
-        
-        foreach (array_keys($config) as $p) {
-            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
-        }
     }
     
     /**
@@ -269,28 +258,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     {
         // use textfilter for employee_id 
         $eFilter = new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId()));
-        
-        // delete free times
-        $filter = new HumanResources_Model_FreeTimeFilter(array(
-            ), 'AND');
-        $filter->addFilter($eFilter);
-        
-        HumanResources_Controller_FreeTime::getInstance()->deleteByFilter($filter);
-        
-        // delete contracts
-        $filter = new HumanResources_Model_ContractFilter(array(
-            ), 'AND');
-        $filter->addFilter($eFilter);
-        
-        HumanResources_Controller_Contract::getInstance()->deleteByFilter($filter);
-        
-        // delete costcenters
-        if ($_record->has('costcenters')) {
-            $filter = new HumanResources_Model_CostCenterFilter(array(
-                ), 'AND');
-            $filter->addFilter($eFilter);
-            HumanResources_Controller_CostCenter::getInstance()->deleteByFilter($filter);
-        }
         
         // delete accounts
         $filter = new HumanResources_Model_AccountFilter(array());

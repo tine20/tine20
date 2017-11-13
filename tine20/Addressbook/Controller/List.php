@@ -544,9 +544,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $record the update record
      * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean                   $returnUpdatedRelatedData
+     * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         /** @var Addressbook_Model_List $record */
         if (isset($record->memberroles)) {
@@ -580,7 +581,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        $result = parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData);
+        $result = parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
 
         return $result;
     }
