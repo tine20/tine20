@@ -1070,7 +1070,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         if (!$this->_userHasXpropsField()) {
             unset($accountData['xprops']);
-        } elseif (isset($accountData['xprops'])) {
+        } elseif (isset($accountData['xprops']) && is_array($accountData['xprops'])) {
             $accountData['xprops'] = json_encode($accountData['xprops']);
         }
         
