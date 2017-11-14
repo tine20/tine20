@@ -7,6 +7,7 @@
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
 use PhpOffice\PhpSpreadsheet\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -53,7 +54,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
      * Offertory_Import_OffertoryPlanXlsImport constructor.
      * @param array $_options
      */
-    public function __construct(array $_options = array())
+    public function __construct(array $_options = [])
     {
         parent::__construct($_options);
         $this->_setController();
@@ -69,10 +70,25 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
             return false;
         }
 
-        $row = $this->_rowToArray($_resource->current());
+        $row = $_resource->current();
+
+        $proceed = false;
+        foreach($row->getCellIterator() as $cell) {
+            /* @var $cell Cell */
+            if (!empty($cell->getValue())) {
+                $proceed = true;
+            }
+        }
+
+        if ($proceed === false) {
+            $_resource->next();
+            return false;
+        }
+
+        $rowArray = $this->_rowToArray($row);
         $_resource->next();
 
-        return $row;
+        return $rowArray;
     }
 
     /**
@@ -136,6 +152,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
      *
      * @param string $_data
      * @param array $_clientRecordData
+     * @return array|void
      */
     public function importData($_data, $_clientRecordData = [])
     {
