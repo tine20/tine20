@@ -442,12 +442,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
         }
         $emailTo = $_message->to[0];
-        if (strpos($_message->body, '/Calendar/poll/view/') === false) {
+        if (strpos($_message->body, '/Calendar/view/poll/') === false) {
             // nothing to do for us
             return;
         }
 
-        if (!preg_match('#/Calendar/poll/view/([^/]+)/#', $_message->body, $matches)) {
+        if (!preg_match('#/Calendar/view/poll/([^/]+)/#', $_message->body, $matches)) {
             throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
         }
         $pollId = $matches[1];
@@ -517,20 +517,86 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
     public function publicApiGetPoll($pollId, $user = null, $authKey = null)
     {
+        $oldValueACL = $this->doContainerACLChecks(false);
+        $oldValueRights = $this->doRightChecks(false);
+
         try {
             $poll = $this->get($pollId);
+            $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             return new \Zend\Diactoros\Response('php://memory', 404);
+        } finally {
+            $this->doContainerACLChecks($oldValueACL);
+            $this->doRightChecks($oldValueRights);
+        }
+        $alternative_dates->sort('dtstart');
+        $event = $alternative_dates[0];
+        $timezone = new DateTimeZone($event->originator_tz);
+        $dateformat = Tinebase_Record_Abstract::ISO8601LONG;
+        $event->setTimezone($timezone);
+        $poll->setTimezone($timezone);
+        $alternative_dates->setTimezone($timezone);
+
+        // NOTE: this is a public API so we reduce data to a minimum
+        $dates = [];
+        foreach ($alternative_dates as $date) {
+            $dates[] = [
+                'id' => $date->id,
+                'dtstart' => $date->dtstart->format($dateformat),
+                'dtend' => $date->dtend->format($dateformat),
+            ];
         }
 
-        // @TODO: check if poll is password protected
-        // @TODO: resolve events,attendee etc.
+        $attendee_status= [];
+        foreach ($event->attendee as $attendee){
+            $id = $attendee['user_type'] . '-' . $attendee['user_id'];
+            $status = [];
+            foreach ($alternative_dates as $date) {
+                $date_attendee = Calendar_Model_Attender::getAttendee($date->attendee, $attendee);
+                $status[] = [
+                    'id' => $date->id,
+                    'dtstart' => $date->dtstart->format($dateformat),
+                    'status' => $date_attendee->status,
+                    'status_authkey' => $date_attendee->status_authkey
+                ];
+            }
+            $attendee_status[] = [
+                'id' => $id,
+                'name' => $attendee->getName(),
+                'type' => $attendee['user_type'],
+                'status' => $status,
+            ];
+        }
 
-        return $poll;
+        $authorization = Tinebase_Core::get(Tinebase_Core::REQUEST)->getHeaders()->get('Authorization');
+
+        $authPassword = null;
+        if ($authorization) {
+            $authString = base64_decode(explode(' ', $authorization->getFieldValue())[1]);
+            $authPassword = explode(':', $authString)[1];
+        }
+
+        if ($poll->password && $authPassword !== $poll->password) {
+            return new \Zend\Diactoros\Response('php://memory', 401);
+        }
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write(json_encode(array_merge($poll->toArray(), [
+            'dates' => $dates,
+            'attendee_status' => $attendee_status,
+            'config' => [
+                'has_gtc' => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_AGB),
+                'status_available' => Calendar_Config::getInstance()->get(Calendar_Config::ATTENDEE_STATUS)->toArray(),
+                'current_contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray()
+            ]
+        ])));
+        return $response;
     }
 
     public function publicApiAddAttender($pollId)
     {
+        // @TODO prohibit add for locked polls
+        // @TODO do we need rate limiting here?
         $response = new \Zend\Diactoros\Response();
         $response->getBody()->write('OK: ' . $pollId);
         return $response;

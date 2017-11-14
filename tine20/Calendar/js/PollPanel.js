@@ -318,7 +318,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
         this.createPollCheckbox.resumeEvents();
 
         this.urlField.setValue(this.poll ?
-            Tine.Tinebase.common.getUrl() + 'Calendar/poll/' + this.poll.id : '');
+            Tine.Tinebase.common.getUrl() + 'Calendar/view/poll/' + this.poll.id : '');
         this.pollNameField.setValue(this.poll ? this.poll.get('name') : '');
         this.isPasswordProtectedCheckbox.setValue(this.poll ? !!this.poll.get('password') : false);
         this.pollPasswordField.setValue(this.poll && this.poll.get('password') ? this.poll.get('password') : '');

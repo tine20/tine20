@@ -154,6 +154,14 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_COLOR_BY = 'featureColorBy';
 
     /**
+     * FEATURE_POLLS
+     *
+     * @var string
+     */
+    const FEATURE_POLLS = 'featurePolls';
+
+
+    /**
      * EVENT_VIEW
      *
      * @var string
@@ -455,6 +463,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
                     'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
                 ),
+                self::FEATURE_POLLS => array(
+                    'label'         => 'Activate Poll for Events', //_('Activate Poll for Events')
+                    'description'   => 'Create alternative Events and let users as well as externals vote for the best option.', //_('Create alternative Events and let users as well as externals vote for the best option.')
+                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SPLIT_VIEW                        => true,
@@ -462,6 +475,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
                 self::FEATURE_COLOR_BY                          => true,
                 self::FEATURE_RECUR_EXCEPT                      => false,
+                self::FEATURE_POLLS                             => false,
             ),
         ),
         self::TENTATIVE_NOTIFICATIONS => array(
