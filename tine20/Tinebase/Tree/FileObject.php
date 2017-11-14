@@ -606,8 +606,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
-                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $currentRecord->hash !== $record->hash &&
-                    null !== $record->hash && !is_file($record->getFilesystemPath())) {
+                if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $record->size > 0
+                        && $currentRecord->hash !== $record->hash && null !== $record->hash
+                        && !is_file($record->getFilesystemPath())) {
                     Tinebase_Timemachine_ModificationLog::getInstance()->fetchBlobFromMaster($record->hash);
                 }
                 $this->update($record);

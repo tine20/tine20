@@ -108,7 +108,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
             Tinebase_FileSystem::getInstance()->resetBackends();
             Tinebase_FileSystem::getInstance()->purgeDeletedNodes();
             foreach ($this->_rmDir as $dir) {
-                $this->_getUit()->deleteNodes($dir);
+                try {
+                    $this->_getUit()->deleteNodes($dir);
+                } catch (Tinebase_Exception_NotFound $tenf) {}
             }
         }
 
@@ -2240,5 +2242,35 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(17, $usageInfo['createdBy'][$userId]['size']);
         $this->assertEquals(17, $usageInfo['createdBy'][$userId]['revision_size']);
         $this->assertEquals($userId, $usageInfo['contacts'][0]['id']);
+    }
+
+    public function testRecreateDeletedFileForReplication()
+    {
+        $result = $this->testCreateFileNodeWithTempfile();
+        $this->_rmDir[] = dirname($result['path']);
+        $this->_getUit()->deleteNodes($result['path']);
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        // now we recreate the file empty (as the JS client does it)
+        $this->_getUit()->createNode($result['path'], Tinebase_Model_Tree_FileObject::TYPE_FILE);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        static::assertEquals(2, $modifications->count(), 'expected 2 modification in the timemachine');
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+
     }
 }
