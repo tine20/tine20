@@ -10,12 +10,20 @@
 
 use PhpOffice\PhpSpreadsheet\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use PhpOffice\PhpSpreadsheet\Worksheet\RowIterator;
 
 /**
+ * Xls Importer
+ *
+ * Support for XML definition:
+ *  - source
+ *  - destination
+ *  - excelDate true|false|null If set, it converts an excel timestamp to a DateTime::ATOM string
+ *
  * @package     Tinebase
  * @subpackage  Import
  */
@@ -35,7 +43,8 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         'endRow' => null,
         'startColumn' => 'A',
         'endColumn' => null,
-        'headlineRow' => null
+        'headlineRow' => null,
+        'mapping' => []
     ];
 
     /**
@@ -57,6 +66,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     public function __construct(array $_options = [])
     {
         parent::__construct($_options);
+
         $this->_setController();
     }
 
@@ -73,7 +83,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         $row = $_resource->current();
 
         $proceed = false;
-        foreach($row->getCellIterator() as $cell) {
+        foreach ($row->getCellIterator() as $cell) {
             /* @var $cell Cell */
             if (!empty($cell->getValue())) {
                 $proceed = true;
