@@ -340,6 +340,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $currentMods = $this->_writeModLog($newRecord, $oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0) {
+            // add notes to tree_nodes!
             foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
                     $node) {
                 Tinebase_Notes::getInstance()->addSystemNote($node->getId(), Tinebase_Core::getUser(),

@@ -553,6 +553,33 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
+    public function testOverwriteFileNode()
+    {
+        $filepaths = $this->testCreateFileNodes(true);
+        $filepaths = [$filepaths[0]];
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        static::assertTrue(is_int($strLen = file_put_contents($tempPath, 'bla and blub data')));
+
+        $result = $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals('file1', $result[0]['name']);
+        $this->assertEquals($strLen, $result[0]['size']);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
+
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $result[0]['id'],
+            'Sql', false);
+        $this->assertEquals(3, $notes->count());
+        $this->assertEquals(2, ($notes = $notes->filter('note_type_id', 5))->count());
+
+        /** @var Tinebase_Model_Note $updateNote */
+        foreach ($notes as $updateNote) {
+            $this->assertTrue(strpos($updateNote->note, '| Changed fields:  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) size ( -> 8) hash ( -> aa01cd6bcf61a542ed9aab6a4f4e375d223fec63)') !== false ||
+                strpos($updateNote->note, '| Changed fields:  revision (1 -> 2) size (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false);
+        }
+    }
+
     public function testQuotaFail()
     {
         $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
