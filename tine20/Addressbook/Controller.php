@@ -8,7 +8,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -201,6 +201,25 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     'model' => 'Addressbook_Model_Industry',
                     'label' => 'Industries' // _('Industries')
             )));
+        }
+        return $result;
+    }
+
+    /**
+     * get default internal adb id
+     *
+     * @return string
+     */
+    public static function getDefaultInternalAddressbook()
+    {
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        $result = (isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) ?
+            $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] : NULL;
+
+        if (empty($result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' Default internal addressbook not found. Creating new config setting.');
+            $result = Addressbook_Setup_Initialize::setDefaultInternalAddressbook()->getId();
         }
         return $result;
     }

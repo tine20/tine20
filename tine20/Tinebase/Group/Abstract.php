@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        add search count function
@@ -203,14 +203,30 @@ abstract class Tinebase_Group_Abstract
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $configKey . ' not found. Check your user backend configuration.');
             $defaultGroupName = $_name;
         }
-        
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             $result = $this->getGroupByName($defaultGroupName);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
         } catch (Tinebase_Exception_Record_NotDefined $tenf) {
             // create group on the fly
-            $result = $this->addGroup(new Tinebase_Model_Group(array(
+            $group = new Tinebase_Model_Group(array(
                 'name'    => $defaultGroupName,
-            )));
+            ));
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+                // in this case it is ok to create the list without members
+                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+            }
+            $result = $this->addGroup($group);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
         
         return $result;
@@ -232,5 +248,10 @@ abstract class Tinebase_Group_Abstract
         ), TRUE);
     
         return $result;
+    }
+
+    public function sanitizeGroupListSync()
+    {
+        throw new Tinebase_Exception_NotImplemented();
     }
 }

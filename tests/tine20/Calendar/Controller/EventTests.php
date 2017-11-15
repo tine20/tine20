@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -851,7 +851,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
 
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
-        Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+        /*$defaultUserGroup->members = $defaultUserGroupMembers;
+        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($defaultUserGroup);*/
         
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
@@ -862,7 +864,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_controller->create($event);
-        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+
         // user as attender + group + all members
         $expectedAttendeeCount = 1 + 1 + count($defaultUserGroupMembers);
         if (in_array(Tinebase_Core::getUser()->getId(), $defaultUserGroupMembers)) {

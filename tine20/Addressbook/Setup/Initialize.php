@@ -93,14 +93,15 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeGroupLists()
     {
+        Tinebase_Core::getCache()->clean();
+        Tinebase_Group::getInstance()->resetClassCache();
         Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
         foreach (Tinebase_Group::getInstance()->getGroups() as $group) {
             $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
             $group->container_id = $this->_getInternalAddressbook()->getId();
             $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
-            $list = Admin_Controller_Group::getInstance()->createOrUpdateList($group);
-            
-            $group->list_id = $list->getId();
+            Admin_Controller_Group::getInstance()->createOrUpdateList($group);
+
             Tinebase_Group::getInstance()->updateGroup($group);
         }
     }

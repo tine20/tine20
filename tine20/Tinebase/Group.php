@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -150,53 +150,74 @@ class Tinebase_Group
         
         $userBackend  = Tinebase_User::getInstance();
         $groupBackend = Tinebase_Group::getInstance();
+        $adbInstalled = Tinebase_Application::getInstance()->isInstalled('Addressbook');
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
         
-        $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
-        
-        $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
-        if (! in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
-            $membershipsSyncBackend[] = $user->accountPrimaryGroup;
-        }
-        
-        $membershipsSqlBackend = $groupBackend->getGroupMemberships($user);
-        
-        sort($membershipsSqlBackend);
-        sort($membershipsSyncBackend);
-        if ($membershipsSqlBackend == $membershipsSyncBackend) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Group memberships are already in sync.');
-            return;
-        }
-        
-        $newGroupMemberships = array_diff($membershipsSyncBackend, $membershipsSqlBackend);
-        foreach ($newGroupMemberships as $groupId) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Add user to groupId " . $groupId);
-            // make sure new groups exist in sql backend / create empty group if needed
-            try {
-                $groupBackend->getGroupById($groupId);
-            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+            $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
+
+            $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
+            if (! in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
+                $membershipsSyncBackend[] = $user->accountPrimaryGroup;
+            }
+
+            $membershipsSqlBackend = $groupBackend->getGroupMemberships($user);
+
+            sort($membershipsSqlBackend);
+            sort($membershipsSyncBackend);
+            if ($membershipsSqlBackend == $membershipsSyncBackend) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Group memberships are already in sync.');
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                return;
+            }
+
+            $newGroupMemberships = array_diff($membershipsSyncBackend, $membershipsSqlBackend);
+            foreach ($newGroupMemberships as $groupId) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Add user to groupId " . $groupId);
+                // make sure new groups exist in sql backend / create empty group if needed
                 try {
-                    $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
-                    // TODO use exact exception class Ldap something?
-                } catch (Exception $e) {
-                    // we dont get the group? ok, just ignore it, maybe we don't have rights to view it.
-                    continue;
+                    $groupBackend->getGroupById($groupId);
+                } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                    try {
+                        $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
+                        // TODO use exact exception class Ldap something?
+                    } catch (Exception $e) {
+                        // we dont get the group? ok, just ignore it, maybe we don't have rights to view it.
+                        continue;
+                    }
+
+                    if ($adbInstalled) {
+                        // in this case its okto create the list without members, they will be added later
+                        // in self::syncListsOfUserContact
+                        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+                    }
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
+                    $groupBackend->addGroupInSqlBackend($group);
                 }
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
-                $groupBackend->addGroupInSqlBackend($group);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                .' Set new group memberships: ' . print_r($membershipsSyncBackend, TRUE));
+
+            $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
+            self::syncListsOfUserContact($groupIds, $user->contact_id);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            .' Set new group memberships: ' . print_r($membershipsSyncBackend, TRUE));
-        
-        $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
-        self::syncListsOfUserContact($groupIds, $user->contact_id);
     }
     
     /**
      * creates or updates addressbook lists for an array of group ids
-     * 
+     *
      * @param array $groupIds
      * @param string $contactId
      */
@@ -209,45 +230,39 @@ class Tinebase_Group
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             .' Syncing ' . count($groupIds) . ' group -> lists / memberships');
-        
-        $listBackend = new Addressbook_Backend_List();
-        
-        $listIds = array();
-        foreach ($groupIds as $groupId) {
-            // get single groups to make sure that container id is joined
-            $group = Tinebase_Group::getInstance()->getGroupById($groupId);
 
-            $list = NULL;
-            if (! empty($group->list_id)) {
+        $listController = Addressbook_Controller_List::getInstance();
+        $oldAcl = $listController->doContainerACLChecks(false);
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            foreach ($groupIds as $groupId) {
+                // get single groups to make sure that container id is joined
                 try {
-                    $list = $listBackend->get($group->list_id);
+                    $group = Tinebase_Group::getInstance()->getGroupById($groupId);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        .' List ' . $group->name . ' not found.');
+                    continue;
                 }
-            }
-            
-            // could not get list by list_id -> try to get by name 
-            // if no list can be found, create new one
-            if (! $list) {
-                $list = $listBackend->getByGroupName($group->name);
-                if (! $list) {
-                    $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
+
+                $group->members = Tinebase_Group::getInstance()->getGroupMembers($groupId);
+                $oldListId = $group->list_id;
+                $list = $listController->createOrUpdateByGroup($group);
+
+                if ($oldListId !== $list->getId()) {
+                    // list id changed / is new -> update group
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
+                    Tinebase_Group::getInstance()->updateGroup($group);
                 }
             }
 
-            if ($group->list_id !== $list->getId()) {
-                // list id changed / is new -> update group and make group visible
-                $group->list_id = $list->getId();
-                $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
-                Tinebase_Group::getInstance()->updateGroup($group);
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            $listController->doContainerACLChecks($oldAcl);
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
-            
-            $listIds[] = $list->getId();
         }
-        
-        $listBackend->setMemberships($contactId, $listIds);
     }
     
     /**
@@ -256,6 +271,7 @@ class Tinebase_Group
     public static function syncGroups()
     {
         $groupBackend = Tinebase_Group::getInstance();
+        $adbInstalled = Tinebase_Application::getInstance()->isInstalled('Addressbook');
 
         if (! $groupBackend instanceof Tinebase_Group_Interface_SyncAble) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
@@ -286,14 +302,25 @@ class Tinebase_Group
         foreach ($groups as $group) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                 ' Sync group: ' . $group->name . ' - update or create group in local sql backend');
+
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             try {
                 $sqlGroup = $groupBackend->getGroupById($group);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' Merge missing properties and update group.');
                 $groupBackend->mergeMissingProperties($group, $sqlGroup);
+
+                if ($adbInstalled) {
+                    $group->members = $groupBackend->getGroupMembers($group);
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+                }
+
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
                 $groupBackend->updateGroupInSqlBackend($group);
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
                 
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
                 // try to find group by name
@@ -302,15 +329,28 @@ class Tinebase_Group
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' Delete current sql group as it has the wrong id. Merge missing properties and create new group.');
-                    $groupBackend->mergeMissingProperties($group, $sqlGroup);
                     $groupBackend->deleteGroupsInSqlBackend(array($sqlGroup->getId()));
-                    
+                    $groupBackend->mergeMissingProperties($group, $sqlGroup);
+
                 } catch (Tinebase_Exception_Record_NotDefined $tern2) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' Group not found by ID and name, adding new group.');
                 }
+
+                if ($adbInstalled) {
+                    // in this case it is ok to create list without members
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+                }
+
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
                 $groupBackend->addGroupInSqlBackend($group);
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+            } finally {
+                if (null !== $transactionId) {
+                    Tinebase_TransactionManager::getInstance()->rollBack();
+                }
             }
         }
     }

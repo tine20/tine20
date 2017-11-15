@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        move visibility='displayed' check from getSelect to contact filter
  */
@@ -271,14 +271,19 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      * get list by group name
      * 
      * @param string $groupName
+     * @param string $containerId
      * @return NULL|Addressbook_Model_List
      */
-    public function getByGroupName($groupName)
+    public function getByGroupName($groupName, $containerId)
     {
-        $filter = new Addressbook_Model_ListFilter(array(
-            array('field' => 'name', 'operator' => 'equals', 'value' => $groupName),
-            array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
-        ));
+        if (empty($containerId)) {
+            $containerId = Addressbook_Controller::getDefaultInternalAddressbook();
+        }
+        $filter = new Addressbook_Model_ListFilter([
+            ['field' => 'name',         'operator' => 'equals', 'value' => $groupName],
+            ['field' => 'type',         'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP],
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
+        ]);
         
         $existingLists = $this->search($filter);
         

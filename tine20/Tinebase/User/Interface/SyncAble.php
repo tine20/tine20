@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -79,7 +79,7 @@ interface Tinebase_User_Interface_SyncAble
     /**
      * delete an user in ldap backend
      *
-     * @param int $_userId
+     * @param Tinebase_Model_User|string|int $_userId
      */
     public function deleteUserInSyncBackend($_userId);
     

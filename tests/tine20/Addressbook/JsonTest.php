@@ -2144,6 +2144,9 @@ Steuernummer 33/111/32212";
             $this->markTestSkipped('Path feature not actiavted');
         }
 
+        Tinebase_Core::getCache()->clean();
+        Tinebase_Group::getInstance()->resetClassCache();
+        
         $filter = array(
             array(
                 'field'    => 'query',

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -35,7 +35,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
             $this->_useRecordPaths = true;
         }
-        $this->_modelName = 'Addressbook_Model_List';
+        $this->_modelName = Addressbook_Model_List::class;
         $this->_applicationName = 'Addressbook';
     }
 
@@ -250,29 +250,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $list = $this->_backend->get($_listId);
 
         if (empty($list->container_id)) {
-            $list->container_id = $this->_getDefaultInternalAddressbook();
+            $list->container_id = Addressbook_Controller::getDefaultInternalAddressbook();
             $list = $this->_backend->update($list);
         }
 
         return $list;
-    }
-
-    /**
-     * get default internal adb id
-     *
-     * @return string
-     */
-    protected function _getDefaultInternalAddressbook()
-    {
-        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        $result = (isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) ? $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] : NULL;
-
-        if (empty($result)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Default internal addressbook not found. Creating new config setting.');
-            $result = Addressbook_Setup_Initialize::setDefaultInternalAddressbook()->getId();
-        }
-        return $result;
     }
 
     /**
@@ -434,14 +416,22 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
         try {
             if (empty($group->list_id)) {
-                $list = $this->_backend->getByGroupName($group->name);
+                $list = $this->_backend->getByGroupName($group->name, $group->container_id);
                 if (!$list) {
                     // jump to catch block => no list_id provided and no existing list for group found
                     throw new Tinebase_Exception_NotFound('list_id is empty');
                 }
                 $group->list_id = $list->getId();
             } else {
-                $list = $this->_backend->get($group->list_id);
+                try {
+                    $list = $this->_backend->get($group->list_id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $list = $this->_backend->getByGroupName($group->name, $group->container_id);
+                    if (!$list) {
+                        // jump to catch block => bad list_id provided and no existing list for group found
+                        throw new Tinebase_Exception_NotFound('list_id is empty');
+                    }
+                }
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -451,17 +441,19 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list->description = $group->description;
             $list->email = $group->email;
             $list->type = Addressbook_Model_List::LISTTYPE_GROUP;
-            $list->container_id = (empty($group->container_id)) ? $this->_getDefaultInternalAddressbook() : $group->container_id;
+            $list->container_id = (empty($group->container_id)) ?
+                Addressbook_Controller::getDefaultInternalAddressbook() : $group->container_id;
             $list->members = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
 
             // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update', $list);
 
             $list = $this->_backend->update($list);
             $list = $this->get($list->getId());
 
         } catch (Tinebase_Exception_NotFound $tenf) {
             $list = $this->createByGroup($group);
+            $group->list_id = $list->getId();
         }
 
         return $list;
@@ -473,14 +465,15 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Group $group
      * @return Addressbook_Model_List
      */
-    public function createByGroup($group)
+    protected function createByGroup($group)
     {
         $list = new Addressbook_Model_List(array(
             'name' => $group->name,
             'description' => $group->description,
             'email' => $group->email,
             'type' => Addressbook_Model_List::LISTTYPE_GROUP,
-            'container_id' => (empty($group->container_id)) ? $this->_getDefaultInternalAddressbook() : $group->container_id,
+            'container_id' => (empty($group->container_id)) ? Addressbook_Controller::getDefaultInternalAddressbook()
+                : $group->container_id,
             'members' => (isset($group->members)) ? $this->_getContactIds($group->members) : array(),
         ));
 
@@ -494,6 +487,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
         /** @var Addressbook_Model_List $list */
         $list = $this->_backend->create($list);
+
+        $group->list_id = $list->getId();
 
         return $list;
     }
@@ -513,10 +508,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         foreach ($_userIds as $userId) {
-            $user = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $userId);
-            if (!empty($user->contact_id)) {
-                $contactIds[] = $user->contact_id;
-            }
+            try {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $userId);
+                if (!empty($user->contact_id)) {
+                    $contactIds[] = $user->contact_id;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
         }
 
         return $contactIds;

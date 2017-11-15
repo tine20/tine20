@@ -1586,4 +1586,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         Tinebase_Controller::getInstance()->cleanAclTables();
     }
+
+    public function sanitizeGroupListSync()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+
+        return 0;
+    }
 }

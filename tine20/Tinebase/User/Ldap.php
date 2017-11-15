@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -603,7 +603,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * delete an user in ldap backend
      *
-     * @param int $_userId
+     * @param Tinebase_Model_User|string|int $_userId
      */
     public function deleteUserInSyncBackend($_userId)
     {
@@ -698,7 +698,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * get metadata of existing user
      *
-     * @param  string $_userId
+     * @param  Tinebase_Model_User|string|int $_userId
      * @return array
      * @throws Tinebase_Exception_NotFound
      */
