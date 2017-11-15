@@ -361,10 +361,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initActions();
         // init buttons and tbar
         this.initButtons();
-        // init container selector
-        this.initContainerSelector();
         // init record 
         this.initRecord();
+        // init container selector
+        this.initContainerSelector();
         // get items for this dialog
         this.items = this.getFormItems();
 
