@@ -582,10 +582,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function cleanupSessions()
     {
         $config = Tinebase_Core::getConfig();
+        $backendType = Tinebase_Session_Abstract::getConfiguredSessionBackendType();
         
-        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
-        
-        if (strtolower($backendType) == 'file') {
+        if (strpos($backendType, 'File') === 0) {
             $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400;
             $path = Tinebase_Session_Abstract::getSessionDir();
             
