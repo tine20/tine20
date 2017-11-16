@@ -216,16 +216,21 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         return $sessionLifetime;
     }
 
+    public static function getConfiguredSessionBackendType()
+    {
+        $config = Tinebase_Core::getConfig();
+        return ($config->session && $config->session->backend) ? ucfirst($config->session->backend) :
+            ucfirst(ini_get('session.save_handler'));
+    }
     /**
      * set session backend
      */
     public static function setSessionBackend()
     {
         $config = Tinebase_Core::getConfig();
-        $defaultSessionSaveHandler = ucfirst(ini_get('session.save_handler'));
         $defaultSessionSavePath = ini_get('session.save_path');
 
-        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : $defaultSessionSaveHandler;
+        $backendType = self::getConfiguredSessionBackendType();
         $maxLifeTime = self::getSessionLifetime();
         
         switch ($backendType) {
