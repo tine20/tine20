@@ -461,8 +461,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $this->_createMyConf($mycnf, $this->_config->database);
 
         $cmd = "bzcat $mysqlBackupFile"
-             . " | mysql --defaults-extra-file=$mycnf "
+             . " | mysql --defaults-extra-file=$mycnf -f "
              . escapeshellarg($this->_config->database->dbname);
+
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' restore cmd: ' . $cmd);
 
         exec($cmd);
         unlink($mycnf);
