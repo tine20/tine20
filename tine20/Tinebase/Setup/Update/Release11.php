@@ -129,4 +129,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_50();
         $this->setApplicationVersion('Tinebase', '11.10');
     }
+
+    /**
+     * update to 11.11
+     *
+     * remove timemachine_modlog_bkp if it exists
+     */
+    public function update_10()
+    {
+        $this->_backend->dropTable('timemachine_modlog_bkp');
+
+        $this->setApplicationVersion('Tinebase', '11.11');
+    }
 }
