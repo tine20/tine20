@@ -27,6 +27,7 @@ class Tinebase_FileSystemTest extends TestCase
     protected $_oldIndexContent;
     protected $_oldCreatePreview;
     protected $_oldNotification;
+    protected $_oldQuota;
 
     protected $_rmDir = array();
 
@@ -52,6 +53,7 @@ class Tinebase_FileSystemTest extends TestCase
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_oldCreatePreview = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
+        $this->_oldQuota = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
 
         $this->_controller = new Tinebase_FileSystem();
         $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
@@ -72,6 +74,7 @@ class Tinebase_FileSystemTest extends TestCase
         $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = $this->_oldIndexContent;
         $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = $this->_oldCreatePreview;
         $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS} = $this->_oldNotification;
+        Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 
         Tinebase_FileSystem::getInstance()->resetBackends();
 
@@ -893,5 +896,29 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertTrue($this->_controller->indexFileObject($ids[0]));
         $ids1 = $this->_controller->getFileObjectBackend()->getNotIndexedObjectIds();
         static::assertEquals(count($ids) - 1, count($ids1));
+    }
+
+    public function testQuotaNotifications()
+    {
+        $this->flushMailer();
+        $this->_controller->notifyQuota();
+        $messages = $this->getMessages();
+        static::assertEquals(0, count($messages), 'should not have received any notification email');
+
+        /** @var Tinebase_Model_Tree_Node $node */
+        $node = $this->_controller->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
+            array('field' => 'size', 'operator' => 'greater', 'value' => 2)
+        )), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord();
+        $node->quota = 1;
+        $this->_controller->update($node);
+        $this->_controller->notifyQuota();
+        $messages = $this->getMessages();
+        static::assertEquals(1, count($messages), 'should have received one notification email');
+        /** @var Tinebase_Mail $message */
+        $message = $messages[0];
+        static::assertEquals('filemanager quota notification', $message->getSubject());
+        static::assertEquals($this->_controller->getPathOfNode($node, true) . ' exceeded quota', $message->getBodyText()
+            ->getRawContent());
     }
 }

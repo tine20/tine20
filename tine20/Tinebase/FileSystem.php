@@ -3458,6 +3458,7 @@ class Tinebase_FileSystem implements
 
         $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
         $personalNode = null;
+        $notifiedNodes = [];
         if ($totalByUser > 0 && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $personalNode = $this->stat('/Filemanager/folders/personal');
             /** @var Tinebase_Model_Tree_Node $node */
@@ -3472,8 +3473,10 @@ class Tinebase_FileSystem implements
                 }
                 if ($size >= ($totalByUser * 0.99)) {
                     $this->_sendQuotaNotification($node, false);
+                    $notifiedNodes[$node->getId()] = true;
                 } elseif($softQuota > 0 && $size > ($totalByUser * $softQuota / 100)) {
                     $this->_sendQuotaNotification($node);
+                    $notifiedNodes[$node->getId()] = true;
                 }
             }
         }
@@ -3482,6 +3485,9 @@ class Tinebase_FileSystem implements
                     array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
                     array('field' => 'quota', 'operator' => 'greater', 'value' => 0)
                 ), '', array('ignoreAcl' => true))) as $node) {
+            if (isset($notifiedNodes[$node->getId()])) {
+                continue;
+            }
             if ($quotaIncludesRevisions) {
                 $size = $node->revision_size;
             } else {
@@ -3503,6 +3509,9 @@ class Tinebase_FileSystem implements
 
         /** @var Tinebase_Model_EmailUser $emailUser */
         foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
+            if ($emailUser->emailMailQuota < 1) {
+                continue;
+            }
             $alert = false;
             $softAlert = false;
             if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
