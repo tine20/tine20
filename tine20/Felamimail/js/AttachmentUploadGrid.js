@@ -116,7 +116,8 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         var combo = new Ext.form.ComboBox({
             blurOnSelect: true,
             expandOnFocus: true,
-            listWidth: 150,
+            listWidth: 250,
+            minListWidth: 250,
             mode: 'local',
             value: 'attachment',
             displayField: 'name',
