@@ -2319,4 +2319,17 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.51');
     }
+
+    /**
+     * update to 10.52
+     *
+     * add filesystem notify quota task to scheduler
+     */
+    public function update_51()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.52');
+    }
 }
