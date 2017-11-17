@@ -102,13 +102,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         if (!$this->_backend->columnExists('instance_id', 'timemachine_modlog')) {
 
-            $this->_backend->renameTable('timemachine_modlog', 'timemachine_modlog_bkp');
+            /*$this->_backend->renameTable('timemachine_modlog', 'timemachine_modlog_bkp');
             $db = Tinebase_Core::getDb();
             if ($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
                 $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_pkey_bkp');
                 $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq_bkp');
                 $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key" RENAME TO "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key_bkp"');
-            }
+            }*/
+            $this->_backend->dropTable('timemachine_modlog', Tinebase_Core::getTinebaseId());
 
             $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
                 <name>timemachine_modlog</name>
