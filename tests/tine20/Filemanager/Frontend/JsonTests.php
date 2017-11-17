@@ -576,7 +576,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         /** @var Tinebase_Model_Note $updateNote */
         foreach ($notes as $updateNote) {
             $this->assertTrue(strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) size ( -> 8) hash ( -> aa01cd6bcf61a542ed9aab6a4f4e375d223fec63)') !== false ||
-                strpos($updateNote->note, ':  revision (1 -> 2) size (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false, $updateNote->note . ' did not match');
+                strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) Größe ( -> 8) hash ( -> aa01cd6bcf61a542ed9aab6a4f4e375d223fec63)') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) size (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) Größe (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false,
+                $updateNote->note . ' did not match');
         }
     }
 
