@@ -1705,12 +1705,15 @@ abstract class Tinebase_Controller_Record_Abstract
         // move (update container id)
         $idsToMove = $records->getArrayOfIds();
         $filterClass = $this->_modelName . 'Filter';
-        if (! class_exists($filterClass)) {
-            throw new Tinebase_Exception_NotFound('Filter class ' . $filterClass . ' not found!');
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClass, [
+            ['field' => 'id', 'operator' => 'in', 'value' => $idsToMove]
+        ]);
+
+        if (!$filter) {
+            throw new Tinebase_Exception_NotFound('Filter ' . $filterClass . ' not found!');
         }
-        $filter = new $filterClass(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
-        ));
+
         /*$updateResult = */$this->updateMultiple($filter, array(
             $_containerProperty => $targetContainerId
         ));
