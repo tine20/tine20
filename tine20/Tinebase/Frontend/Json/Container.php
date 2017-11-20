@@ -261,7 +261,8 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
     public function moveRecordsToContainer($targetContainerId, $filterData, $applicationName, $model)
     {
         $filterModel = $applicationName . '_Model_' . $model . 'Filter';
-        $filter = new $filterModel(array());
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterModel);
         $filter->setFromArrayInUsersTimezone($filterData);
 
         $this->_longRunningRequest();
