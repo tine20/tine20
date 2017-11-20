@@ -2453,6 +2453,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         try {
             $event = $this->get($_event->getId());
+            $oldEvent = clone $event;
             
             if (! $event->attendee) {
                 throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
@@ -2522,6 +2523,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 'observable' => $event
             )));
 
+            // touch event to persist data changed by observers
             $this->_touch($event, true);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2533,7 +2535,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications && $_event->mute != 1) {
             $updatedEvent = $this->get($event->getId());
-            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $oldEvent);
         }
         
         return $updatedAttender;
