@@ -900,6 +900,11 @@ class Tinebase_FileSystemTest extends TestCase
 
     public function testQuotaNotifications()
     {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        if (empty($imapConfig)) {
+            static::markTestSkipped('no mail configuration');
+        }
+
         $this->flushMailer();
         $this->_controller->notifyQuota();
         $messages = $this->getMessages();
