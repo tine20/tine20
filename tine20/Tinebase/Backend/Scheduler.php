@@ -40,7 +40,7 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
             $_name));
 
         $stmt = $this->_db->query($select);
-        $result = $stmt->rowCount() > 0;
+        $result = null !== $stmt->columnCount();
         $stmt->closeCursor();
 
         return $result;

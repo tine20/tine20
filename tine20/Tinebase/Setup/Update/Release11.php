@@ -65,6 +65,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_4()
     {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '11.12') === -1) {
+            return;
+        }
         $release9 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release9->update_46();
         $this->setApplicationVersion('Tinebase', '11.5');
@@ -113,6 +116,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_8()
     {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '11.12') === -1) {
+            return;
+        }
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_49();
         $this->setApplicationVersion('Tinebase', '11.9');
@@ -183,5 +189,18 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '11.12');
+    }
+
+    /**
+     * update to 11.11
+     *
+     * rerun update 4 + 8 as we don't want them to run before update_11
+     */
+    public function update_12()
+    {
+        $this->update_4();
+        $this->update_8();
+
+        $this->setApplicationVersion('Tinebase', '11.13');
     }
 }
