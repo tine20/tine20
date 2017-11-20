@@ -85,25 +85,21 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'emailLastLogin'
     );
-    
+
     /**
-     * overwrite constructor to add more filters
+     * list of zend inputfilter
      *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
+     * this filter get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_filters['emailForwardOnly'] = new Zend_Filter_Empty(0);
-        $this->_filters['emailMailSize']    = new Zend_Filter_Empty(0);
-        $this->_filters['emailMailQuota']   = new Zend_Filter_Empty(0);
-        $this->_filters['emailForwards']    = new Zend_Filter_Empty(array());
-        $this->_filters['emailAliases']     = new Zend_Filter_Empty(array());
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+    protected $_filters = [
+        'emailForwardOnly'      => [['Empty', 0]],
+        'emailMailSize'         => [['Empty', 0]],
+        'emailMailQuota'        => [['Empty', 0]],
+        'emailForwards'         => [['Empty', []]],
+        'emailAliases'          => [['Empty', []]],
+    ];
     
     /**
      * sets the record related properties from user generated input.
