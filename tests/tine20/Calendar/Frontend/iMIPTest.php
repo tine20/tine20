@@ -70,6 +70,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         } catch (Exception $e) {
             // do nothing
         }
+
+        parent::setUp();
     }
 
     /**
@@ -89,6 +91,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
+
+        parent::tearDown();
     }
     
     /**
@@ -519,28 +523,15 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testInvitationExternalReply()
     {
-        $email = $email = $this->_getEmailAddress();
-        
-        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
-        $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
-        
-        $iMIP = new Calendar_Model_iMIP(array(
-            'id'             => Tinebase_Record_Abstract::generateUID(),
-            'ics'            => $ics,
-            'method'         => 'REPLY',
-            'originator'     => 'mail@corneliusweiss.de',
-        ));
-        
-        $this->assertEquals(1, $iMIP->getEvent()->seq);
-        $this->assertTrue(! empty($iMIP->getEvent()->last_modified_time));
-        
+        $iMIP = $this->_createiMIPFromFile('invitation_reply_external_accepted.ics');
+
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_id,
             'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
         ));
-        
+
         // create matching event
         $event = new Calendar_Model_Event(array(
             'summary'     => 'TEST7',
@@ -599,6 +590,59 @@ class Calendar_Frontend_iMIPTest extends TestCase
         } catch (Calendar_Exception_iMIP $cei) {
             $this->assertContains('iMIP preconditions failed: RECENT', $cei->getMessage());
         }
+    }
+
+    protected function _createiMIPFromFile($_filename)
+    {
+        $email = $email = $this->_getEmailAddress();
+
+        $ics = file_get_contents(dirname(__FILE__) . '/files/' . $_filename);
+        $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
+
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => $ics,
+            'method'         => 'REPLY',
+            'originator'     => 'mail@corneliusweiss.de',
+        ));
+
+        $this->assertEquals(1, $iMIP->getEvent()->seq);
+        $this->assertTrue(! empty($iMIP->getEvent()->last_modified_time));
+
+        return $iMIP;
+    }
+
+    public function testExternalReplyFromGoogle()
+    {
+        $iMIP = $this->_createiMIPFromFile('google_confirm.ics');
+        // force creation of external attendee
+        $externalAttendee = new Calendar_Model_Attender(array(
+            'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'       => 'mail@corneliusweiss.de',
+            'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
+        ));
+
+        // create matching event
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'testtermin google confirm',
+            'dtstart'     => '2017-11-16 10:30:00',
+            'dtend'       => '2017-11-16 11:30:00',
+            'attendee'    => $this->_getAttendee(),
+            'organizer'   => Tinebase_Core::getUser()->contact_id,
+            'uid'         => '62050f080e53ca8e00353ff0a89c6c6aa4af3dec',
+        ));
+        $event->attendee->addRecord($externalAttendee);
+        Calendar_Controller_Event::getInstance()->create($event);
+
+        // TEST NORMAL REPLY
+        try {
+            $result = $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST NORMAL REPLY autoProcess throws Exception: ' . $e);
+        }
+        unset($iMIP->existing_event);
+
+        self::assertTrue($result);
     }
 
     /**

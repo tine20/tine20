@@ -137,6 +137,11 @@
             $_alarm = null;
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " send notifications for event: ". print_r($_event->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_oldEvent) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " old event: ". print_r($_oldEvent->toArray(), TRUE));
+
         // we only send notifications to attendee
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet && 'tentative' !== $_action) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -145,8 +150,6 @@
         }
 
         if ($_event->dtend === NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . " ". print_r($_event->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
         }
         
@@ -171,8 +174,6 @@
             Calendar_Model_Attender::resolveAttendee($attendee);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . " " . print_r($_event->toArray(), true));
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
         
@@ -453,7 +454,7 @@
      * @param string $timezone
      * @param Zend_Locale $locale
      * @param Zend_Translate $translate
-     * @param atring $method
+     * @param string $method
      * @param Calendar_Model_Attender
      * @return string
      * @throws Tinebase_Exception_UnexpectedValue
