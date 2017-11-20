@@ -3501,10 +3501,16 @@ class Tinebase_FileSystem implements
         }
 
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
-        $imapBackend = Tinebase_EmailUser::getInstance();
+        $imapBackend = null;
+
+        try {
+            $imapBackend = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return true;
+        }
 
         if (!$imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-            return;
+            return true;
         }
 
         /** @var Tinebase_Model_EmailUser $emailUser */
@@ -3538,6 +3544,8 @@ class Tinebase_FileSystem implements
                 }
             }
         }
+
+        return true;
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
