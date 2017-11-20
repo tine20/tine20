@@ -133,6 +133,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.colModel.on('hiddenchange', this.syncFields, this);
         this.on('resize', this.syncFields);
         this.on('columnresize', this.syncFields);
+        this.colModel.on('columnmoved', this.syncFields, this);
+        this.view.on('beforerefresh', this.onBeforeRefresh, this);
+        this.view.on('refresh', this.onRefresh, this);
         this.syncFields();
         
         this.colModel.getColumnById(this.quickaddMandatory).quickaddField.on('focus', this.onMandatoryFocus, this);
@@ -262,7 +265,30 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }
     },
-    
+
+    // save our editors - they get overwritten on hd-refresh
+    onBeforeRefresh: function() {
+        Ext.each(this.getCols(), function(col) {
+            if (col.quickaddField && col.quickaddField.rendered) {
+                var el = col.quickaddField.el,
+                    hdEl = el.up('.x-grid3');
+
+                hdEl.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : el);
+            }
+        }, this);
+    },
+
+    // restore editors
+    onRefresh:  function() {
+        Ext.each(this.getCols(), function(col) {
+            if (col.quickaddField && col.quickaddField.rendered) {
+                var wrap = this.getQuickAddWrap(col);
+
+                wrap.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : col.quickaddField.el);
+            }
+        }, this);
+    },
+
     /**
      * @private
      */
