@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -276,6 +276,23 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
         $this->_assertMail('rwright', 'decline');
     }
+
+    /**
+     * testAttenderStatusUpdate
+     *
+     * @see 0013630: no emails are sent on external invitation reply
+     */
+    public function testAttenderStatusUpdate()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('rwright');
+        $persistentEvent = $this->_eventController->create($event);
+        $rwright = $persistentEvent->attendee[0];
+        $rwright->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        self::flushMailer();
+        $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
+        $this->_assertMail('rwright', 'accept');
+    }
     
     /**
      * testOrganizerNotificationSupress
@@ -290,7 +307,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
     }
     
@@ -307,7 +324,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf', 'decline');
     }
