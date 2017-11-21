@@ -162,6 +162,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
 
         $scheduler = Tinebase_Core::getScheduler();
+        // TODO create methods for fetching and creating all known application tasks (maybe with existence check)
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
@@ -177,7 +178,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
         Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
         Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
-        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        }
 
         if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
             Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);

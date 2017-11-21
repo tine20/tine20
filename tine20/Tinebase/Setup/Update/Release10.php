@@ -2213,7 +2213,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_46()
     {
         $scheduler = Tinebase_Core::getScheduler();
-        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        }
         $this->setApplicationVersion('Tinebase', '10.47');
     }
 
