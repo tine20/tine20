@@ -8,7 +8,7 @@ Ext.ns('Ext.ux.grid');
 
 /**
  * @class Ext.ux.grid.CheckColumn
- * @extends Object
+ * @extends Ext.util.Observable
  * GridPanel plugin to add a column with check boxes to a grid.
  * <p>Example usage:</p>
  * <pre><code>
@@ -47,10 +47,24 @@ Ext.ux.grid.CheckColumn = function(config){
         this.id = Ext.id();
     }
 
+    this.addEvents(
+
+        /**
+         * @event checkchange
+         * Fires when a check state changes
+         * @param {Ext.ux.grid.CheckColumn} this
+         * @param {boolean} newvalue
+         * @param {boolean} oldvalue
+         * @param {Ext.data.Record} record
+         */
+        'checkchange'
+    );
+
     this.renderer = this.renderer.createDelegate(this);
+    Ext.ux.grid.CheckColumn.superclass.constructor.call(this);
 };
 
-Ext.ux.grid.CheckColumn.prototype = {
+Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -80,19 +94,20 @@ Ext.ux.grid.CheckColumn.prototype = {
 
             if (this.onBeforeCheck(this, record)) {
                 record.set(this.dataIndex, !record.data[this.dataIndex]);
+                this.fireEvent('checkchange', this, record.data[this.dataIndex], !record.data[this.dataIndex], record);
             }
         }
     },
 
     renderer : function(v, p, record){
         p.css += ' x-grid3-check-col-td';
-        return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', v ? '-on' : '', this.createId());
+        return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', +v ? '-on' : '', this.createId());
     },
     
     createId : function(){
         return 'x-grid3-cc-' + this.id;
     }
-};
+});
 
 // register ptype
 Ext.preg('checkcolumn', Ext.ux.grid.CheckColumn);
