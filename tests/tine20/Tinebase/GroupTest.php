@@ -316,4 +316,29 @@ class Tinebase_GroupTest extends TestCase
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $sclever->accountPrimaryGroup);
     }
+
+    public function testModelUndo()
+    {
+        $group = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $group->members = Tinebase_Group::getInstance()->getGroupMembers($group->getId());
+        try {
+            $changedGroup = clone $group;
+            $removed1 = array_shift($changedGroup->xprops('members'));
+            $changedGroup->xprops('members')[] = $this->_personas['sclever']->getId();
+            $diff = $group->diff($changedGroup);
+
+            $removed2 = array_shift($changedGroup->xprops('members'));
+            $changedGroup->xprops('members')[] = $this->_personas['jmcblack']->getId();
+
+            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $changedGroup->members);
+            $changedGroup->undo($diff);
+
+            static::assertTrue(in_array($removed1, $changedGroup->members));
+            static::assertTrue(in_array($this->_personas['jmcblack']->getId(), $changedGroup->members));
+            static::assertFalse(in_array($removed2, $changedGroup->members));
+            static::assertFalse(in_array($this->_personas['sclever']->getId(), $changedGroup->members));
+        } finally {
+            Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $group->members);
+        }
+    }
 }
