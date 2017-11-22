@@ -3500,9 +3500,11 @@ class Tinebase_FileSystem implements
             }
         }
 
+        if ($quotaConfig->{Tinebase_Config::QUOTA_SKIP_IMAP_QUOTA}) {
+            return true;
+        }
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
         $imapBackend = null;
-
         try {
             $imapBackend = Tinebase_EmailUser::getInstance();
         } catch (Tinebase_Exception_NotFound $tenf) {
