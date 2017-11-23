@@ -12,6 +12,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
 
     selectType: 'both',
     selectAnyone: false,
+    selectMyself: true,
 
     userCombo: null,
     groupCombo: null,
@@ -19,14 +20,34 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     currentUser: null,
 
     editDialog: null,
+    actionUpdater: null,
 
     initComponent: function () {
+        var _ = window.lodash;
+
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
+
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: Tine.Filemanager.Model.Node,
+            evalGrants: true
+        });
+
         this.currentUser = Tine.Tinebase.registry.get('currentAccount');
         this.initColumns();
-        this.supr().initComponent.call(this);
+
+        if (!_.get(this.editDialog, 'record.data.account_grants.adminGrant', false)) {
+            this.selectType = 'myself';
+        }
+
+        Tine.Filemanager.NotificationGridPanel.superclass.initComponent.apply(this, arguments);
+
 
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
+
+        this.getSelectionModel().on('selectionchange', function (sm) {
+            this.actionUpdater.updateActions(sm);
+        }, this);
     },
 
     initColumns: function () {
@@ -75,7 +96,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
         var userHasAdminGrant = _.get(this.editDialog, 'record.data.account_grants.adminGrant', false);
 
         // get id if it's from notification props, if its a record which was added or if it's a group which was added
-        var id = _.get(record, 'data.account_id', _.get(record, 'data.accountId')) || _.get(record, 'data.group_id');
+        var id = (_.get(record, 'data.account_id', _.get(record, 'data.accountId')) || _.get(record, 'data.group_id')) || record.id;
 
         if (!userHasAdminGrant && id !== this.currentUser.accountId) {
             return false;
@@ -113,19 +134,51 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
 
         var iconCls = _.get(record, 'data.accountType') === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
 
-        return '<div class="' + iconCls + '">&#160;</div>' + Ext.util.Format.htmlEncode(_.get(record, 'data.accountName') || '');
+        return '<div class="' + iconCls + '">&#160;</div>' + Ext.util.Format.htmlEncode(_.get(record, 'data.accountName') || value);
     },
 
-    resetCombobox: function (combo) {
-        combo.collapse();
-        combo.clearValue();
-        combo.reset();
+    getContactSearchCombo: function () {
+        if (!this.userCombo) {
+            this.userCombo = new Tine.Addressbook.SearchCombo({
+                hidden: true,
+                accountsStore: this.store,
+                emptyText: i18n._('Search for users ...'),
+                newRecordClass: this.recordClass,
+                newRecordDefaults: this.recordDefaults,
+                recordPrefix: this.recordPrefix,
+                userOnly: true,
+                additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
+            });
+
+            this.userCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.userCombo], true);
+        }
+
+        return this.userCombo;
+    },
+
+    onAddMyself: function () {
+        var currentUser = Tine.Tinebase.registry.get('currentAccount'),
+            record,
+            recordData = (this.recordDefaults !== null) ? this.recordDefaults : {};
+
+        // user record
+        recordData['active'] = true;
+        recordData['summary'] = null;
+        recordData['accountId'] = currentUser.accountId;
+        recordData['accountType'] = 'user';
+        recordData['accountName'] = currentUser.accountDisplayName;
+
+        record = new this.recordClass(recordData, currentUser.accountId);
+
+        // check if already in
+        if (! this.store.getById(record.id)) {
+            this.store.add([record]);
+        }
     },
 
     onAddRecordFromCombo: function (recordToAdd, index, combo) {
-        var _ = window.lodash;
-
-        var id = _.get(recordToAdd, 'data.account_id') || _.get(recordToAdd, 'data.group_id');
+        var _ = window.lodash,
+            id = _.get(recordToAdd, 'data.account_id') || _.get(recordToAdd, 'data.group_id');
 
         // If there is no admin grant, only allow to edit the own record
         if (!_.get(this.editDialog, 'record.data.account_grants.adminGrant', false) && id !== this.currentUser.accountId) {
@@ -154,23 +207,58 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
 
     },
 
-    getContactSearchCombo: function () {
-        if (! this.userCombo) {
-            this.userCombo = new Tine.Addressbook.SearchCombo({
-                hidden: true,
-                accountsStore: this.store,
-                emptyText: i18n._('Search for users ...'),
-                newRecordClass: this.recordClass,
-                newRecordDefaults: this.recordDefaults,
-                recordPrefix: this.recordPrefix,
-                userOnly: true,
-                additionalFilters: (this.showHidden) ? [{field: 'showDisabled', operator: 'equals', value: true}] : []
-            });
+    /**
+     * init actions and toolbars
+     */
+    initActionsAndToolbars: function () {
+        this.actionRemove = new Ext.Action({
+            text: i18n._('Remove record'),
+            disabled: true,
+            scope: this,
+            handler: this.onRemove,
+            iconCls: 'action_deleteContact',
+            actionUpdater: function (action, grants, records, isFilterSelect) {
+                var adminGrant = window.lodash.get(this.editDialog, 'record.data.account_grants.adminGrant', false),
+                    accountId = window.lodash.get(records, '[0].data.accountId', null);
 
-            this.userCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.userCombo], true);
+                if (accountId !== null) {
+                    action.setDisabled(!adminGrant && (accountId !== this.currentUser.accountId));
+                }
+            }
+        });
+
+        var contextItems = [this.actionRemove];
+        this.contextMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tinebase-MainContextMenu'
+            }],
+            items: contextItems.concat(this.contextMenuItems)
+        });
+
+        // removes temporarily added items
+        this.contextMenu.on('hide', function () {
+            if (this.contextMenu.hasOwnProperty('tempItems') && this.contextMenu.tempItems.length) {
+                Ext.each(this.contextMenu.tempItems, function (item) {
+                    this.contextMenu.remove(item.itemId);
+                }, this);
+            }
+            this.contextMenu.tempItems = [];
+        }, this);
+
+        if (this.enableBbar) {
+            this.bbar = new Ext.Toolbar({
+                items: [
+                    this.actionRemove
+                ].concat(this.contextMenuItems)
+            });
         }
 
-        return this.userCombo;
+        if (this.enableTbar) {
+            this.initTbar();
+        }
+
+        this.actionUpdater.addActions([this.actionRemove]);
     },
 
     onRemove: function () {
@@ -183,7 +271,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     },
 
     getGroupSearchCombo: function () {
-        if (! this.groupCombo) {
+        if (!this.groupCombo) {
             this.groupCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 hidden: true,
                 accountsStore: this.store,

@@ -273,4 +273,12 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return "INTERVAL '" . $staticPart . ' ' . $timeUnit . "'";
     }
+
+    /**
+     * @return string
+     */
+    public function getRnd()
+    {
+        return 'random()';
+    }
 }

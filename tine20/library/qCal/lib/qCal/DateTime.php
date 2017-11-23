@@ -65,7 +65,13 @@ class qCal_DateTime {
 	 * @todo Should this accept qCal_Date and qCal_DateTime objects?
 	 */
 	public static function factory($datetime, $timezone = null) {
-	
+		if (substr($datetime,0,4)=='TZID') {
+			// Handle DateTime with Timezones
+			$buffer = explode(';', $datetime, 2);
+			$datetime = $buffer[1];
+			$buffer = explode('=', $buffer[0], 2);
+			$timezone = $buffer[1];
+		}	
 		if (is_null($timezone) || !($timezone instanceof qCal_Timezone)) {
 			// @todo Make sure this doesn't cause any issues 
 			// detect if we're working with a UTC string like "19970101T180000Z", where the Z means use UTC time

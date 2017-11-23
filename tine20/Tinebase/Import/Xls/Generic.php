@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+
 /**
  * @package     Tinebase
  * @subpackage  Import
@@ -50,7 +52,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
         foreach ($rowIterator->current()->getCellIterator($this->_options['startColumn'],
             $this->_options['endColumn']) as $cell) {
 
-            /* @var $cell Cell */
+            /* @var $cell \PhpOffice\PhpSpreadsheet\Cell */
             $this->_mapping[] = $cell->getValue();
         }
     }
@@ -66,9 +68,32 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
         $mappedData = [];
 
         foreach ($_data as $index => $data) {
-            $mappedData[$this->_mapping[$index]] = $data;
+            $mappedFieldName = $data;
+
+            foreach($this->_options['mapping']['field'] as $field) {
+                if ($field['source'] === $this->_mapping[$index]) {
+                    $mappedFieldName = $field['destination'];
+
+                    if (isset($field['excelDate']) && (bool)$field['excelDate'] === true) {
+                        $data = Date::excelToDateTimeObject($data, Tinebase_Core::getUserTimezone())->format(DateTime::ATOM);
+                    }
+                }
+            }
+
+            $mappedData[$mappedFieldName] = $data;
         }
 
         return $mappedData;
+    }
+
+    protected function _getMappedFieldBy($name)
+    {
+        foreach($this->_options['mapping']['field'] as $field) {
+            if ($field['source'] === $name) {
+                return $field['destination'];
+            }
+        }
+
+        return $name;
     }
 }

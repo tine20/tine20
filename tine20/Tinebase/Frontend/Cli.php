@@ -330,13 +330,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
-
-        $freeLock = Tinebase_Core::acquireMultiServerLock(__METHOD__);
-        if (! $freeLock) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                .' Job already running.');
-            return false;
-        }
         
         $userController = Tinebase_User::getInstance();
 
@@ -348,14 +341,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $scheduler = Tinebase_Core::getScheduler();
-        $responses = $scheduler->run();
+        $result = $scheduler->run();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r(array_keys($responses), TRUE));
-        
-        $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
-        echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
-        
-        return true;
+        return $result;
     }
 
     /**
@@ -906,27 +894,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $message = 'CRON FAIL';
 
         try {
-            $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
+            $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
             
-            if ($lastJob === NULL) {
+            if ($lastJob === NULL || ! $lastJob->last_run instanceof Tinebase_DateTime) {
                 $message .= ': NO LAST JOB FOUND';
                 $result = 1;
             } else {
-                if ($lastJob->end_time instanceof Tinebase_DateTime) {
-                    $duration = $lastJob->end_time->getTimestamp() - $lastJob->start_time->getTimestamp();
-                    $valueString = ' | duration=' . $duration . 's;;;;';
-                    $valueString .= ' end=' . $lastJob->end_time->getIso() . ';;;;';
-                } else {
-                    $valueString = '';
-                }
+                $valueString = ' | duration=' . $lastJob->last_duration . 's;;;;';
+                $valueString .= ' end=' . $lastJob->last_run->getClone()->addSecond($lastJob->last_duration)->getIso() . ';;;;';
                 
-                if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING && Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
-                    $message .= ': LAST JOB TOOK TOO LONG';
-                    $result = 1;
-                } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
-                    $message .= ': LAST JOB FAILED';
-                    $result = 1;
-                } else if (Tinebase_DateTime::now()->isLater($lastJob->start_time->addHour(1))) {
+                if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
                     $message .= ': NO JOB IN THE LAST HOUR';
                     $result = 1;
                 } else {

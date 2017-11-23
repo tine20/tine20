@@ -453,6 +453,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
         this.initToolbar();
         this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
+            initialLoadAfterRender: false,
             frame: false
         });
         this.supr().initComponent.apply(this, arguments);
@@ -486,22 +487,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.onRecordUpdate();
         var renderer = new Tine.Addressbook.Printer.ContactRenderer();
         renderer.print(this);
-    },
-
-    /**
-     * export pdf handler
-     */
-    onExportContact: function () {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Addressbook.exportContacts',
-                filter: Ext.encode([{field: 'id', operator: 'in', value: this.record.id}]),
-                options: Ext.util.JSON.encode({
-                    format: 'pdf'
-                })
-            }
-        });
-        downloader.start();
     },
 
     /**

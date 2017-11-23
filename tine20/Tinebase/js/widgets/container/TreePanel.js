@@ -253,20 +253,22 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         var sm = this.getSelectionModel();
 
-        sm.clearSelections(true);
+        if (sm && sm.selNodes) {
+            sm.clearSelections(true);
 
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
 
-            if (sm.isSelected(node)) {
+                if (sm.isSelected(node)) {
+                    sm.lastSelNode = node;
+                    continue;
+                }
+
+                sm.selNodes.push(node);
+                sm.selMap[node.id] = node;
                 sm.lastSelNode = node;
-                continue;
+                node.ui.onSelectedChange(true);
             }
-
-            sm.selNodes.push(node);
-            sm.selMap[node.id] = node;
-            sm.lastSelNode = node;
-            node.ui.onSelectedChange(true);
         }
 
         this.onFilterChange();

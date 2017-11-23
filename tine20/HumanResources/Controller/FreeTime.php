@@ -19,12 +19,6 @@
 class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * record set of freedays to create on create/update
-     * @var Tinebase_Record_RecordSet
-     */
-    protected $_freedaysToCreate = NULL;
-
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -59,49 +53,50 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         return self::$_instance;
     }
 
-   protected function _inspectBeforeUpdate($_record, $_oldRecord)
-   {
-       // if empty, no changes have been made
-       // @todo: lookforward: parts - parameter
-       if (empty($_record->freedays)) {
-           return;
-       }
-       
-       $freeDays = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
-       $fc = HumanResources_Controller_FreeDay::getInstance();
-       $freetimeId = $_record->getId();
-       
-       foreach($_record->freedays as $freeday) {
-           if (is_array($freeday)) {
-               $freeday = new HumanResources_Model_FreeDay($freeday, true);
-           }
-           $freeday->freetime_id = $freetimeId;
-           
-           if ($freeday->id) {
-               $freeDays->addRecord($fc->update($freeday));
-           } else {
-               $freeDays->addRecord($fc->create($freeday));
-           }
-       }
+    /**
+     * inspect update of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        $this->_inspect($updatedRecord);
+    }
 
-       $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
-       $filter->addFilter(new Tinebase_Model_Filter_Text('freetime_id', 'equals', $_record->getId()));
-       $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $freeDays->id));
-       $deleteFreedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
-       
-       // update first and last date
-       $freeDays->sort('date', 'ASC');
-       $_record->firstday_date = $freeDays->getFirstRecord()->date;
-       $freeDays->sort('date', 'DESC');
-       $_record->lastday_date = $freeDays->getFirstRecord()->date;
-       $_record->days_count = $freeDays->count();
-       $fc->delete($deleteFreedays->id);
-       $_record->freedays = $freeDays->toArray();
-       
-       if ($_record->type == 'sickness') {
-           $this->_handleOverwrittenVacation($_record);
-       }
-   }
+    /**
+     * inspect create of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $createdRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
+    {
+        $this->_inspect($createdRecord);
+    }
+
+    protected function _inspect($record)
+    {
+        if (empty($freeDays = $record->freedays)) {
+            return;
+        }
+
+        // update first and last date
+        $freeDays->sort('date', 'ASC');
+        $record->firstday_date = $freeDays->getFirstRecord()->date;
+        $freeDays->sort('date', 'DESC');
+        $record->lastday_date = $freeDays->getFirstRecord()->date;
+        $record->days_count = $freeDays->count();
+
+        $this->_backend->update($record);
+
+        if ($record->type == 'sickness') {
+            $this->_handleOverwrittenVacation($record);
+        }
+    }
    
    /**
     * inspect creation of one record (before create)
@@ -111,66 +106,9 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     */
    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
    {
-       $this->_freedaysToCreate = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
        if (is_array($_record->employee_id)) {
            $_record->employee_id = $_record->employee_id['id'];
        }
-       
-       if ($_record->freedays && ! empty($_record->freedays)) {
-           foreach($_record->freedays as $fd) {
-               if (! ($fd instanceof HumanResources_Model_FreeDay)) {
-                   $fd = new HumanResources_Model_FreeDay($fd);
-               }
-               $this->_freedaysToCreate->addRecord($fd);
-           }
-           // normalize first-,  last date and days_count
-           $this->_freedaysToCreate->sort('date', 'ASC');
-           $_record->firstday_date = $this->_freedaysToCreate->getFirstRecord()->date;
-           $this->_freedaysToCreate->sort('date', 'DESC');
-           $_record->lastday_date = $this->_freedaysToCreate->getFirstRecord()->date;
-           $_record->days_count = $this->_freedaysToCreate->count();
-       } else {
-           $_record->firstday_date = NULL;
-       }
-   }
-
-   /**
-    * inspect creation of one record (after create)
-    *
-    * @param   Tinebase_Record_Interface $_createdRecord
-    * @param   Tinebase_Record_Interface $_record
-    * @return  void
-    */
-   protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
-   {
-       $c = HumanResources_Controller_FreeDay::getInstance();
-       $this->_freedaysToCreate->freetime_id = $_createdRecord->getId();
-       
-       $fd = array();
-       foreach($this->_freedaysToCreate as $freeDay) {
-           $r = $c->create($freeDay);
-           $fd[] = $r->toArray();
-       }
-       $_createdRecord->freedays = $fd;
-       
-       if ($_record->type == 'sickness') {
-           $this->_handleOverwrittenVacation($_createdRecord);
-       }
-   }
-
-   /**
-    * delete linked objects (notes, relations, ...) of record
-    *
-    * @param Tinebase_Record_Interface $_record
-    */
-   protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
-   {
-       $filter = new HumanResources_Model_FreeDayFilter(array(
-           ), 'AND');
-       $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'equals', 'value' => $_record->getId())));
-       
-       HumanResources_Controller_FreeDay::getInstance()->deleteByFilter($filter);
-       parent::_deleteLinkedObjects($_record);
    }
    
    /**

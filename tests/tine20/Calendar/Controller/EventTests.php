@@ -1053,40 +1053,48 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 21:59:59';
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persistentEvent = $this->_controller->create($event);
-        
+
         $this->assertEquals('2009-04-30 21:59:59', $persistentEvent->rrule->until->toString(), 'rrule is not adapted');
-        
+
         $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
-        
+
         $exception->setId(NULL);
         unset($exception->rrule);
         unset($exception->exdate);
         $exception->setRecurId($event->getId());
-        $persistentException = $this->_controller->create($exception);
-        
-        $persistentEvent->dtstart->addHour(5);
-        $persistentEvent->dtend->addHour(5);
-        
-        $updatedEvent = $this->_controller->update($persistentEvent);
-        
+        $persistentException = $this->_controller->createRecurException($exception);
+
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
+        $loadedEvent->dtstart->addHour(5);
+        $loadedEvent->dtend->addHour(5);
+
+        $updatedEvent = $this->_controller->update($loadedEvent);
+
         $updatedException = $this->_controller->get($persistentException->getId());
-        
-        $this->assertEquals(1, count($updatedEvent->exdate), 'failed to reset exdate');
-        $this->assertEquals('2009-04-08 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
+        $exdates = array_map(function($date) {return $date->format(Tinebase_Record_Abstract::ISO8601LONG);}, $updatedEvent->exdate);
+
+        $this->assertEquals(2, count($updatedEvent->exdate), 'failed to reset exdate');
+        $this->assertTrue(in_array('2009-04-07 18:00:00', $exdates, 'fallout exception not exdate not adopted'));
+        $this->assertTrue(in_array('2009-04-08 18:00:00', $exdates, 'persistend exception not exdate not adopted'));
         $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
-        $this->assertEquals('2009-04-30 21:59:59', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'until in rrule must not be changed');
-        $this->assertEquals('2009-04-30 21:59:59', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'rrule_until must not be changed');
-        
+        $this->assertEquals('2009-04-30 02:59:59', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'until not changed');
+        $this->assertEquals('2009-04-30 02:59:59', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'rrule_until not changed');
+
         $updatedEvent->dtstart->subHour(5);
         $updatedEvent->dtend->subHour(5);
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $secondUpdatedException = $this->_controller->get($persistentException->getId());
-        $this->assertEquals('2009-04-08 13:00:00', $secondUpdatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate (sub)');
-        $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
+        $exdates = array_map(function($date) {return $date->format(Tinebase_Record_Abstract::ISO8601LONG);}, $updatedEvent->exdate);
+
+        $this->assertTrue(in_array('2009-04-07 13:00:00', $exdates, 'fallout exception not exdate not adopted'));
+        $this->assertTrue(in_array('2009-04-08 13:00:00', $exdates, 'persistend exception not exdate not adopted'));
+
+        $this->assertEquals('2009-04-30 21:59:59', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'until not changed');
+        $this->assertEquals('2009-04-30 21:59:59', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'rrule_until not changed');
     }
-    
+
     /**
      * testUpdateRecurDtstartOverDst
      */
@@ -1122,13 +1130,22 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
         $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
-        
-        $persistentEvent->dtstart->addDay(5); //30.
-        $persistentEvent->dtend->addDay(5);
+
+        $persistentEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
+        $persistentEvent->dtstart
+            ->setTimezone($persistentEvent->originator_tz)
+            ->addDay(5)
+            ->subHour(4)
+            ->setTimezone('UTC'); //30.
+        $persistentEvent->dtend
+            ->setTimezone($persistentEvent->originator_tz)
+            ->addDay(5)
+            ->subHour(4)
+            ->setTimezone('UTC');
         $from->addDay(5); //31
         $until->addDay(5); //08
         
-        $this->_controller->get($persistentEvent);
+//        $this->_controller->get($persistentEvent);
         $persistentEvent->seq = 3; // satisfy modlog
         $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
@@ -1142,9 +1159,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 
         $exceptions = $persistentEvents->filter('recurid', "/^{$persistentEvent->uid}-.*/", TRUE);
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($updatedPersistenEvent, $exceptions, $from, $until);
-        
-        // 31, 01, 02
-        $this->assertEquals(3, count($recurSet));
+
+        // 2009-04-01
+        $this->assertEquals(1, count($recurSet));
+
+        $this->assertEquals("FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-02 17:59:59",
+            (string) $updatedPersistenEvent->rrule);
     }
     
     public function testDeleteImplicitDeleteRcuringExceptions()
@@ -2036,12 +2056,31 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->getFirstRecord()->status);
         static::assertEquals(1, $updatedEvent->alarms->count());
 
+        // update event, only add attendee
+        $updatedEvent->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'   => $ownContactId,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status'    => Calendar_Model_Attender::STATUS_TENTATIVE
+        ]));
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertEquals(2, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
+        // update event, only change attendee status
+        $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertEquals(2, $updatedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
         // reschedule the event
         $updateEvent = clone $updatedEvent;
         $updateEvent->dtstart->addDay(1);
         $updateEvent->dtend->addDay(1);
         $updatedEvent = $this->_controller->update($updateEvent);
-        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
         $event = clone $updatedEvent;
         // delete it
@@ -2055,7 +2094,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
-        static::assertEquals(5, $modifications->count());
+        static::assertEquals(7, $modifications->count());
 
         // undelete it
         $mod = $modifications->getLastRecord();
@@ -2069,8 +2108,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(1, $undeletedEvent->tags->count());
         static::assertEquals(1, $undeletedEvent->attachments->count());
         static::assertEquals(1, count($undeletedEvent->customfields));
-        static::assertEquals(1, $undeletedEvent->attendee->count());
-        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->getFirstRecord()
+        static::assertEquals(2, $undeletedEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()
             ->status);
         static::assertEquals(1, $undeletedEvent->alarms->count());
 
@@ -2081,9 +2120,32 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
         )));
         $unrescheduledEvent = $this->_controller->get($event->getId());
-        static::assertEquals(1, $unrescheduledEvent->attendee->count());
+        static::assertEquals(2, $unrescheduledEvent->attendee->count());
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $unrescheduledEvent->attendee->getFirstRecord()
             ->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $unrescheduledEvent->attendee->getLastRecord()
+            ->status);
+
+        // undo update event, only change attendee status
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($event->getId());
+        static::assertEquals(2, $undidEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $undidEvent->attendee->filter('user_id', $ownContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undidEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
+
+        // undo update event, only add attendee
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undidEvent = $this->_controller->get($event->getId());
+        static::assertEquals(1, $undidEvent->attendee->count());
+        static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $undidEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
         // undelete the removed related data
         $mod = $modifications->getLastRecord();

@@ -86,11 +86,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     init: function(cmp){
         this.component = cmp;
-        if(cmp.handler) this.handler = cmp.handler;
-        this.scope = cmp.scope || window;
-        cmp.handler = null;
-        cmp.scope = null;
-        
+
+        if (cmp.handler && !Ext.isFunction(this.handler)) {
+            this.handler = cmp.handler;
+            cmp.handler = null;
+            this.scope = cmp.scope || window;
+            cmp.scope = null;
+        }
+
         cmp.on('afterrender', this.onRender, this);
         cmp.on('destroy', this.onDestroy, this);
     },
@@ -123,7 +126,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.component.mon(Ext.getDoc(), {
                 scope: this,
                 mousemove: this.hideLayerIf,
-                buffer: 250
+                buffer: 100
             });
             
             this.layerVisisble = true;

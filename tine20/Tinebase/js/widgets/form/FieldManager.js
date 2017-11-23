@@ -77,7 +77,7 @@ Tine.widgets.form.FieldManager = function() {
                 field['default'] = i18n._hidden(fieldDefinition['default']);
             }
 
-            switch(fieldType) {
+            switch (fieldType) {
                 case 'money':
                     field.xtype = 'extuxmoneyfield';
                     break;
@@ -141,9 +141,23 @@ Tine.widgets.form.FieldManager = function() {
                     field.userOnly = true;
                     break;
                 case 'relation':
+                    if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        field.xtype = 'tinerelationpickercombo';
+                        field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                        field.app = fieldDefinition.config.appName;
+                        field.relationType = fieldDefinition.config.type;
+                        field.modelUnique = true;
+                        // TODO pass degree and other options in config?
+                        field.relationDegree = 'sibling';
+                    }
+                    break;
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
-                        var picker = Tine.widgets.form.RecordPickerManager.get(fieldDefinition.config.appName, fieldDefinition.config.modelName, Ext.apply(field, config));
+                        var picker = Tine.widgets.form.RecordPickerManager.get(
+                            fieldDefinition.config.appName,
+                            fieldDefinition.config.modelName,
+                            Ext.apply(field, config)
+                        );
                         field = picker;
                     }
                     break;

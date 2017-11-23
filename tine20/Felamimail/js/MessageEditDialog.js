@@ -1028,11 +1028,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
             
             // add file upload button to toolbar
+
             this.action_addAttachment = this.attachmentGrid.getAddAction();
             this.action_addAttachment.plugins[0].dropElSelector = 'div[id=' + this.id + ']';
-            this.action_addAttachment.plugins[0].onBrowseButtonClick = function() {
+
+            this.attachmentGrid.on('filesSelected', function (nodes) {
                 this.southPanel.expand();
-            }.createDelegate(this);
+            }, this);
 
             this.btnAddAttachemnt = new Ext.Button(this.action_addAttachment);
             this.tbar.get(0).insert(1, Ext.apply(this.btnAddAttachemnt, {

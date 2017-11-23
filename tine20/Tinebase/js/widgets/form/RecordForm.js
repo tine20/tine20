@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.form');
 
@@ -25,6 +25,11 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
      */
     recordClass: null,
 
+    /**
+     * {Tine.widgets.dialog.EditDialog} editDialog
+     */
+    editDialog: null,
+
     initComponent: function() {
         var appName = this.recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
@@ -44,6 +49,12 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
                 if (field) {
                     // apply basic layout
                     field.columnWidth = 1;
+                    // add edit dialog
+                    // TODO do this for all fields??
+                    if (this.editDialog) {
+                        field.editDialog = this.editDialog;
+                    }
+
                     this.items.push([field]);
                 }
             }
@@ -51,7 +62,6 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
 
         Tine.widgets.form.RecordForm.superclass.initComponent.call(this);
     }
-
 });
 
 Ext.reg('recordform', Tine.widgets.form.RecordForm);

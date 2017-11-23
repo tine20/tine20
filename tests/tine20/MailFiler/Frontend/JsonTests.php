@@ -146,6 +146,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
         $testPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $testNodeName;
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
         $node = $result[0];
+        //$parentNode = $this->_json->getNode($node['parent_id']);
         // remove users grants
         $node['grants'] = array(array(
             'account_id' => Tinebase_Core::getUser()->getId(),
@@ -173,6 +174,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
                 self::assertEquals(1, count($foundNode['grants']),
                     'should find node with 1 grant: ' . print_r($foundNode, true));
                 $found = true;
+                //$parentNode = $this->_json->getNode($foundNode['parent_id']);
             }
         }
         self::assertTrue($found, 'should find node of user');

@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 Ext.namespace('Tine.Tinebase');
@@ -13,7 +13,7 @@ Ext.namespace('Tine.Tinebase');
  * Tinebase Application Starter
  * 
  * @namespace   Tine.Tinebase
- * @function    Tine.MailAccounting.MailAggregateGridPanel
+ * @function    Tine.Tinebase.ApplicationStarter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
@@ -21,7 +21,7 @@ Tine.Tinebase.ApplicationStarter = {
     
     /**
      * the applictions the user has access to
-     * @type 
+     * @type
      */
     userApplications: null,
     
@@ -119,15 +119,15 @@ Tine.Tinebase.ApplicationStarter = {
                                 return Ext.util.Format.htmlEncode(title);
                             };
                         } else {
-                            var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                            if (foreignRecordClass) {
-                                gridRenderer = function (value, row, record) {
+                            gridRenderer = function (value, row, record) {
+                                var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
+                                if (foreignRecordClass) {
                                     var titleProperty = foreignRecordClass.getMeta('titleProperty');
                                     return record && record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
-                                };
-                            } else {
-                                gridRenderer = null;
-                            }
+                                } else {
+                                    return value;
+                                }
+                            };
                         }
                     } else {
                         gridRenderer = null;
@@ -216,6 +216,9 @@ Tine.Tinebase.ApplicationStarter = {
             case 'string':
             case 'text':
                 break;
+            case 'fulltext':
+                filter.valueType = 'fulltext';
+                break;
             case 'user':
                 filter.valueType = 'user';
                 break;
@@ -268,6 +271,7 @@ Tine.Tinebase.ApplicationStarter = {
                 break;
             case 'float':
             case 'integer':
+            case 'money':
                 filter.valueType = 'number';
         }
         return filter;
@@ -542,7 +546,7 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     if (Tine[appName].hasOwnProperty(editDialogName)) {
                         var edp = Tine[appName][editDialogName].prototype;
-                        if (containerProperty) {
+                        if (containerProperty && edp.showContainerSelector !== false) {
                             edp.showContainerSelector = true;
                         }
                         Ext.apply(edp, {

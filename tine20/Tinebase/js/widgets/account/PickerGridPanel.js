@@ -15,46 +15,52 @@ Ext.ns('Tine.widgets.account');
 
 /**
  * Account Picker GridPanel
- * 
+ *
  * @namespace   Tine.widgets.account
  * @class       Tine.widgets.account.PickerGridPanel
  * @extends     Tine.widgets.grid.PickerGridPanel
- * 
+ *
  * <p>Account Picker GridPanel</p>
  * <p><pre>
  * TODO         use selectAction config?
  * </pre></p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @param       {Object} config
  * @constructor Create a new Tine.widgets.account.PickerGridPanel
  */
 Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     /**
-     * @cfg {String} one of 'user', 'group', 'both'
+     * @cfg {String} one of 'user', 'group', 'both', 'myself'
      * selectType
      */
     selectType: 'user',
-    
+
     /**
      * @cfg{String} selectTypeDefault 'user' or 'group' defines which accountType is selected when  {selectType} is true
      */
     selectTypeDefault: 'user',
-    
+
     /**
      * @cfg {Ext.Action}
      * selectAction
      */
     //selectAction: false,
-    
+
     /**
      * @cfg {bool}
      * add 'anyone' selection if selectType == 'both'
      */
     selectAnyone: true,
+
+    /**
+     * @cfg {bool}
+     * add button to add the current user
+     */
+    selectMyself: false,
 
     /**
      * @cfg {bool}
@@ -71,17 +77,17 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     /**
      * get only users with defined status (enabled, disabled, expired)
      * get all -> 'enabled expired disabled'
-     * 
+     *
      * @type String
      * @property userStatus
      */
     userStatus: 'enabled',
-    
+
     /**
      * @cfg {bool} have the record account properties an account prefix?
      */
     hasAccountPrefix: false,
-    
+
     /**
      * @cfg {String} recordPrefix
      */
@@ -92,13 +98,13 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      * @private
      */
     autoExpandColumn: 'name',
-    
+
     /**
      * @private
      */
     initComponent: function () {
         this.recordPrefix = (this.hasAccountPrefix) ? 'account_' : '';
-        
+
         this.recordClass = this.recordClass || Tine.Tinebase.Model.Account;
         this.groupRecordClass = this.groupRecordClass || Tine.Addressbook.Model.List;
         this.roleRecordClass = this.roleRecordClass || Tine.Tinebase.Model.Role;
@@ -119,8 +125,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         this.accountTypeSelector = this.getAccountTypeSelector();
 
         var items = [this.getSearchCombo('user'), this.getSearchCombo('group'), this.getSearchCombo('role')];
-
-        this.getSearchCombo(this.selectTypeDefault).show();
+        var combo = this.getSearchCombo(this.selectTypeDefault).show();
+        combo.setDisabled(this.selectType === 'myself');
 
         this.comboPanel = new Ext.Panel({
             layout: 'hfit',
@@ -128,7 +134,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             items: items,
             columnWidth: 1
         });
-        
+
         this.tbar = new Ext.Toolbar({
             items: [
                 this.accountTypeSelector,
@@ -137,10 +143,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             layout: 'column'
         });
     },
-    
+
     /**
      * define actions
-     * 
+     *
      * @return {Ext.Action}
      */
     getAccountTypeSelector: function () {
@@ -168,29 +174,41 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             iconCls: 'tinebase-accounttype-addanyone',
             handler: this.onAddAnyone
         };
-        
+        var myselfActionCfg = {
+            text: i18n._('Add Myself'),
+            scope: this,
+            iconCls: 'tinebase-accounttype-user',
+            handler: this.onAddMyself.createDelegate(this)
+        };
+
         // set items
         var items = [];
 
-        switch (this.selectType) 
-        {
-        case 'both':
-            items = items.concat([userActionCfg, groupActionCfg]);
-            if (this.selectRole) {
-                items.push(roleActionCfg)
-            }
-            if (this.selectAnyone) {
-                items.push(anyoneActionCfg);
-            }
-            break;
-        case 'user':
-            items = userActionCfg;
-            break;
-        case 'group':
-            items = groupActionCfg;
-            break;
+        switch (this.selectType) {
+            case 'both':
+                items = items.concat([userActionCfg, groupActionCfg]);
+                if (this.selectRole) {
+                    items.push(roleActionCfg)
+                }
+                if (this.selectAnyone) {
+                    items.push(anyoneActionCfg);
+                }
+                break;
+            case 'user':
+                items = [userActionCfg];
+                break;
+            case 'group':
+                items = [groupActionCfg];
+                break;
+            case 'myself':
+                items = [myselfActionCfg];
+                break;
         }
-        
+
+        if (this.selectType !== 'myself' && this.selectMyself === true) {
+            items.push(myselfActionCfg);
+        }
+
         // create action
         return new Ext.Action({
             width: 20,
@@ -203,7 +221,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             scope: this
         });
     },
-    
+
     /**
      * add anyone to grid
      */
@@ -213,7 +231,27 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         recordData[this.recordPrefix + 'name'] = i18n._('Anyone');
         recordData[this.recordPrefix + 'id'] = 0;
         var record = new this.recordClass(recordData, 0);
-        
+
+        // check if already in
+        if (! this.store.getById(record.id)) {
+            this.store.add([record]);
+        }
+    },
+
+    onAddMyself: function () {
+        var currentUser = Tine.Tinebase.registry.get('currentAccount'),
+            record,
+            recordData = (this.recordDefaults !== null) ? this.recordDefaults : {};
+
+        // user record
+        recordData[this.recordPrefix + 'id'] = currentUser.accountId;
+        recordData[this.recordPrefix + 'type'] = 'user';
+        recordData[this.recordPrefix + 'name'] = currentUser.accountDisplayName;
+        recordData[this.recordPrefix + 'data'] = currentUser;
+
+
+        record = new this.recordClass(recordData, currentUser.accountId);
+
         // check if already in
         if (! this.store.getById(record.id)) {
             this.store.add([record]);
@@ -222,7 +260,14 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
     getSearchCombo: function(type) {
         type = type == 'user' ? 'contact' : type;
-        return this['get' + Ext.util.Format.capitalize(type) + 'SearchCombo']();
+        var combo = this['get' + Ext.util.Format.capitalize(type) + 'SearchCombo']();
+
+        // This combobox doesn't need a validator.
+        combo.validator = function () {
+            return true;
+        };
+
+        return combo;
     },
 
     /**
@@ -245,7 +290,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
         return this.contactSearchCombo;
     },
-    
+
     /**
      * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
      */
@@ -308,10 +353,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
         return this.colModel;
     },
-    
+
     /**
      * @param {Record} recordToAdd
-     * 
+     *
      * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function (recordToAdd) {
@@ -352,12 +397,12 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         this.clearValue();
         this.reset();
     },
-    
+
     /**
-     * 
+     *
      * @param {String} show
      * @param {String} iconCls
-     * 
+     *
      */
     onSwitchCombo: function (show, iconCls) {
         Ext.each(['contact', 'group', 'role'], function(type) {

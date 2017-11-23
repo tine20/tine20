@@ -486,6 +486,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {} o
      */
     onBeforeRowEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+            return;
+        }
+
         var model = o.record.get('related_model').split('_Model_');
         var app = model[0];
         model = model[1];
@@ -526,7 +531,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {}
      */
     getTypeEditor: function(config, app) {
-        var data = [['', '']];
+        var data = [['', '-']];
         Ext.each(config, function(c){
             data.push([c.type.toUpperCase(), app.i18n._hidden(c.text)]);
         });
@@ -685,6 +690,23 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[o].app, this.keyFieldConfigs[o].name);
         } else if(this.keyFieldConfigs[f]) {
             renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[f].app, this.keyFieldConfigs[f].name);
+        } else {
+            // lookup other side
+            var _ = window.lodash,
+                ownRecordClass = Tine.Tinebase.data.RecordMgr.get(rec.get('own_model')),
+                foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(rec.get('related_model')),
+                foreignApp = foreignRecordClass ? Tine.Tinebase.appMgr.get(foreignRecordClass.getMeta('appName')) : null,
+                foreignRelConfs = foreignApp ? foreignApp.getRegistry().get('relatableModels') : [],
+                foreignRelConf = ownRecordClass ?_.find(foreignRelConfs, {
+                    relatedApp: ownRecordClass.getMeta('appName'),
+                    relatedModel: ownRecordClass.getMeta('modelName'),
+                }) : null,
+                foreignRelTypeConf = _.find(_.get(foreignRelConf, 'config', []), {type: value});
+
+
+            if (foreignRelTypeConf && foreignRelTypeConf.text) {
+                value = foreignApp.i18n._hidden(foreignRelTypeConf.text);
+            }
         }
 
         return renderer(value);

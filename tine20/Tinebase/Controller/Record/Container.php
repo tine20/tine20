@@ -52,15 +52,16 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * @param   Tinebase_Record_Interface $record          the update record
      * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
+     * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         if (count($record->grants) > 0) {
             $this->setGrants($updatedRecord, $record->grants);
         }
 
-        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData);
+        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
     }
 
     /**

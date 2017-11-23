@@ -138,16 +138,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.getTopToolbar().items.each(function (item) {
                 if (Ext.isFunction(item.setDisabled)) {
                     item.setDisabled(readOnly);
+                } else if (item) {
+                    item.disabled = readOnly;
                 }
             }, this);
         }
         if (_.get(this, 'actionRemove.setDisabled')) {
             this.actionRemove.setDisabled(readOnly);
         }
-        if (this.rendered) {
-            this.getEl()[(readOnly ? '' : 'un') + 'mask']();
-        }
-
     },
 
     /**

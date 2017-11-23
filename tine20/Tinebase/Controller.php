@@ -567,6 +567,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *        CLEANING_MODE_ALL -> removes complete cache structure (directories for file cache) + cache entries
      * 
      * @param string $_mode
+     * @return bool
      */
     public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_OLD)
     {
@@ -574,18 +575,21 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             __METHOD__ . '::' . __LINE__ . ' Cleaning up the cache (mode: ' . $_mode . ')');
         
         Tinebase_Core::getCache()->clean($_mode);
+
+        return true;
     }
     
     /**
      * cleanup old sessions files => needed only for filesystems based sessions
+     *
+     * @return bool
      */
     public function cleanupSessions()
     {
         $config = Tinebase_Core::getConfig();
+        $backendType = Tinebase_Session_Abstract::getConfiguredSessionBackendType();
         
-        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
-        
-        if (strtolower($backendType) == 'file') {
+        if (strpos($backendType, 'File') === 0) {
             $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400;
             $path = Tinebase_Session_Abstract::getSessionDir();
             
@@ -596,7 +600,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . " Could not cleanup sessions");
                 Tinebase_Exception::log($e);
-                return;
+                return false;
             }
             
             foreach ($dir as $fileinfo) {
@@ -613,6 +617,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             Tinebase_Config::getInstance()->set(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN, Tinebase_DateTime::now()->toString());
         }
+
+        return true;
     }
     
     /**
@@ -857,6 +863,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
     }
 
+    /**
+     * @return bool
+     */
     public function cleanAclTables()
     {
         $treeNodeAcl = new Tinebase_Backend_Sql_Grants(array(
@@ -880,5 +889,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'recordColumn' => 'container_id'
         ));
         $containerAcl->cleanGrants();
+
+        return true;
     }
 }

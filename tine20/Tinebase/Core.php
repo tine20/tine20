@@ -647,6 +647,9 @@ class Tinebase_Core
         
         if (isset($config->logger) && $config->logger->active) {
             try {
+                if ($config->logger->tz) {
+                    $logger->setTimezone($config->logger->tz);
+                }
                 $logger->addWriterByConfig($config->logger);
                 if ($config->logger->additionalWriters) {
                     foreach ($config->logger->additionalWriters as $writerConfig) {
@@ -1609,21 +1612,15 @@ class Tinebase_Core
     /**
      * Singleton instance
      *
-     * @return Zend_Scheduler
+     * @return Tinebase_Scheduler
      */
     public static function getScheduler()
     {
-        if (! self::get(self::SCHEDULER) instanceof Zend_Scheduler) {
-            $scheduler =  new Zend_Scheduler();
-            $scheduler->setBackend(new Zend_Scheduler_Backend_Db(array(
-                'DbAdapter' => self::getDb(),
-                'tableName' => SQL_TABLE_PREFIX . 'scheduler',
-                'taskClass' => 'Tinebase_Scheduler_Task'
-            )));
-            
+        if (! ($scheduler = self::get(self::SCHEDULER)) instanceof Tinebase_Scheduler) {
+            $scheduler =  Tinebase_Scheduler::getInstance();
             self::set(self::SCHEDULER, $scheduler);
         }
-        return self::get(self::SCHEDULER);
+        return $scheduler;
     }
     
     /**
@@ -1904,6 +1901,21 @@ class Tinebase_Core
     public static function acquireMultiServerLock($id)
     {
         $result = Tinebase_Lock::aquireDBSessionLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * release a lock to prevent parallel execution in a multi server environment
+     *
+     * @param string $id
+     * @return bool
+     */
+    public static function releaseMultiServerLock($id)
+    {
+        $result = Tinebase_Lock::releaseDBSessionLock($id . '::' . static::getTinebaseId());
         if ( true === $result || null === $result ) {
             return true;
         }

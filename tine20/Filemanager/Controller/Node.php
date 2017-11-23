@@ -103,11 +103,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record)
     {
+        // be careful, don't put $_record in here, like that parent_id might be spoofed! It must be only the id!
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
+            $this->_backend->getPathOfNode($_record->getId(), true));
+
         // we allow only notification updates for the current user itself if not admin right
-        if (! $this->_backend->checkACLNode($_record, 'admin')) {
-            if (! $this->_backend->checkACLNode($_record, 'get')) {
-                throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
-            }
+        if (! $this->_backend->checkPathACL($path, 'admin', true, false)) {
+            $this->_backend->checkPathACL($path, 'get');
 
             $usersNotificationSettings = null;
             $currentUserId = Tinebase_Core::getUser()->getId();
@@ -123,7 +125,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
             $currentRecord = $this->get($_record->getId());
 
-            if (! $this->_backend->checkACLNode($_record, 'update')) {
+            if (! $this->_backend->checkPathACL($path, 'update', true, false)) {
                 // we reset all input and then just apply the notification settings for the current user
                 $_record = $currentRecord;
                 $hasUpdateGrant = false;
@@ -256,16 +258,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         /** @var Tinebase_Model_Tree_Node $record */
         $record = parent::get($_id);
-
-        if (! $this->_backend->checkACLNode($record, 'get')) {
-            throw new Tinebase_Exception_AccessDenied('No permission to get node');
-        }
-
-        if ($record) {
-            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
-        }
-
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
+
+        $this->_backend->checkPathACL($nodePath, 'get');
+
+        $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
+
+
         $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
         $this->resolveGrants($record);
 
@@ -772,7 +771,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 if (null === $_tempFileId) {
                     $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)), basename($_statpath));
                 } else {
-                    $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                    try {
+                        $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                    } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                        if ('quota exceeded' === $e->getMessage()) {
+                            $this->_backend->unlink($_statpath);
+                        }
+                        throw $e;
+                    }
                 }
                 break;
 
@@ -1323,7 +1329,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     /**
      * Deletes a set of records.
      *
-     * If one of the records could not be deleted, no record is deleted
+     * returns a set of deleted records. If some records could not be deleted, the set of returned records will
+     * have been deleted anyway.
      *
      * NOTE: it is not possible to delete folders like this, it would lead to
      * Tinebase_Exception_InvalidArgument: can not unlink directories
@@ -1336,7 +1343,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $nodes = $this->getMultiple($_ids);
         /** @var Tinebase_Model_Tree_Node $node */
         foreach ($nodes as $node) {
-            if ($this->_backend->checkACLNode($node, 'delete')) {
+            if ($this->_backend->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(
+                    $this->_backend->getPathOfNode($node, true)), 'delete', true, false)) {
                 $this->_backend->deleteFileNode($node);
             } else {
                 $nodes->removeRecord($node);

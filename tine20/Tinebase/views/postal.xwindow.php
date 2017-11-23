@@ -12,15 +12,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-     <script src="Tinebase/js/node_modules/lodash/lodash.js"></script>
-     <script src="Tinebase/js/node_modules/jquery/dist/jquery.js"></script>
-     <script src="Tinebase/js/node_modules/postal/lib/postal.js"></script>
-     <script src="Tinebase/js/node_modules/postal.federation/lib/postal.federation.js"></script>
-     <script src="Tinebase/js/node_modules/postal.request-response/lib/postal.request-response.js"></script>
-     <script src="library/Store/store2.js"></script>
-     <script src="library/Store/store.bind.js"></script>
-     <script src="Tinebase/js/node_modules/postal.xwindow/lib/postal.xwindow.js"></script>
+    <meta charset="utf-8"><?php
+      foreach($this->jsFiles as $jsFile) {
+        echo "\n    <script src='{$jsFile}'></script>";
+      }?>
   </head>
   <body>
     <div>

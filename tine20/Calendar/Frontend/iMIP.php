@@ -54,11 +54,12 @@ class Calendar_Frontend_iMIP
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  string                $_status
+     * @return boolean
      */
     public function process($_iMIP, $_status = NULL)
     {
-        // client spoofing protection
-        $iMIP = Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
+        // client spoofing protection - throws exception if spoofed
+        Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
 
         return $this->_process($_iMIP, $_status);
     }
@@ -101,6 +102,11 @@ class Calendar_Frontend_iMIP
                 throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_iMIP->event instanceof Calendar_Model_Event) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Event: ' . print_r($_iMIP->event->toArray(), true));
+        }
         
         $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
         
@@ -116,8 +122,6 @@ class Calendar_Frontend_iMIP
         $_iMIP->preconditionsChecked = TRUE;
         
         if ($_throwException && ! $preconditionCheckSuccessful) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_iMIP->event instanceof Calendar_Model_Event) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Event: ' . print_r($_iMIP->event->toArray(), true));
             throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
         }
         
@@ -477,11 +481,16 @@ class Calendar_Frontend_iMIP
         
         if (! $eventAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' originator is not attendee in existing event - originator: ' . print_r($_iMIP->originator, true));
             $result = FALSE;
         }
         
         if (! $iMIPAttender) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in iMIP transaction -> spoofing attempt?");
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR,
+                "originator is not attendee in iMIP transaction -> spoofing attempt?");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' originator is not attendee in iMIP transaction - originator: ' . print_r($_iMIP->originator, true));
             $result = FALSE;
         }
         
@@ -502,6 +511,7 @@ class Calendar_Frontend_iMIP
      *       @todo check silence for internal replies
      *       
      * @param  Calendar_Model_iMIP   $_iMIP
+     * @return boolean
      */
     protected function _processReply(Calendar_Model_iMIP $_iMIP)
     {
@@ -512,6 +522,8 @@ class Calendar_Frontend_iMIP
         
         // NOTE: if current user has no rights to the calendar, status update is not applied
         Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $attendee);
+
+        return true;
     }
     
     /**

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */ 
 
@@ -252,7 +252,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      * - if $date param is omitted, the last 60 days of access log are kept, the rest will be removed
      * 
      * @param Tinebase_DateTime $date
-     * @return integer deleted rows
+     * @return bool
      * 
      * @todo use $this->deleteByFilter($_filter)? might be slow for huge access_logs
      */
@@ -271,7 +271,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $deletedRows . ' rows.');
         
-        return $deletedRows;
+        return true;
     }
 
 

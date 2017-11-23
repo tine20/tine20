@@ -236,4 +236,12 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     {
         return 'INTERVAL ' . $staticPart . ' ' . $timeUnit;
     }
+
+    /**
+     * @return string
+     */
+    public function getRnd()
+    {
+        return 'RAND()';
+    }
 }

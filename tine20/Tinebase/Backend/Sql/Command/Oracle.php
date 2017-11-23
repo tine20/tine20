@@ -287,4 +287,12 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return 'INTERVAL ' . $staticPart . ' ' . $timeUnit;
     }
+
+    /**
+     * @return string
+     */
+    public function getRnd()
+    {
+        throw new Tinebase_Exception_NotImplemented('implement it');
+    }
 }

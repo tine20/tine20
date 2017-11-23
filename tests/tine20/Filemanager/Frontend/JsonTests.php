@@ -106,8 +106,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         if (count($this->_rmDir) > 0) {
             Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
             Tinebase_FileSystem::getInstance()->resetBackends();
+            Tinebase_FileSystem::getInstance()->purgeDeletedNodes();
             foreach ($this->_rmDir as $dir) {
-                $this->_getUit()->deleteNodes($dir);
+                try {
+                    $this->_getUit()->deleteNodes($dir);
+                } catch (Tinebase_Exception_NotFound $tenf) {}
             }
         }
 
@@ -550,6 +553,36 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
+    public function testOverwriteFileNode()
+    {
+        $filepaths = $this->testCreateFileNodes(true);
+        $filepaths = [$filepaths[0]];
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        static::assertTrue(is_int($strLen = file_put_contents($tempPath, 'bla and blub data')));
+
+        $result = $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals('file1', $result[0]['name']);
+        $this->assertEquals($strLen, $result[0]['size']);
+        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
+
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $result[0]['id'],
+            'Sql', false);
+        $this->assertEquals(3, $notes->count());
+        $this->assertEquals(2, ($notes = $notes->filter('note_type_id', 5))->count());
+
+        /** @var Tinebase_Model_Note $updateNote */
+        foreach ($notes as $updateNote) {
+            $this->assertTrue(strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) size ( -> 8) hash ( -> aa01cd6bcf61a542ed9aab6a4f4e375d223fec63)') !== false ||
+                strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) Größe ( -> 8) hash ( -> aa01cd6bcf61a542ed9aab6a4f4e375d223fec63)') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) size (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) Größe (8 -> ' . $strLen . ') hash (aa01cd6bcf61a542ed9aab6a4f4e375d223fec63 -> 9ab49da37adb0db034b98937edfef197a070ebd9)') !== false,
+                $updateNote->note . ' did not match');
+        }
+    }
+
     public function testQuotaFail()
     {
         $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
@@ -590,11 +623,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 static::fail('quota should be exceeded, but createNodes succeeded');
             } catch (Tinebase_Exception_Record_NotAllowed $terna) {}
 
-            // check file is there but empty
-            $node = $this->_getUit()->getNode($result[0]['id']);
+            // check file is there but empty and deleted!
+            $node = Tinebase_Filesystem::getInstance()->get($result[0]['id'], true);
 
-            static::assertTrue(empty($node['revision']) && empty($node['revision_size']) && empty($node['hash']) &&
-                empty($node['size']), print_r($node, true));
+            static::assertTrue(empty($node->revision) && empty($node->revision_size) && empty($node->hash) &&
+                empty($node->size) && $node->is_deleted /*==true*/, print_r($node, true));
 
         } finally {
             Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $orgQuotaConfig;
@@ -640,6 +673,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $oldQuotaConfig = clone $quotaConfig;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
+        $deletePaths =  [];
 
         try {
             $filePaths = $this->testCreateFileNodes(true);
@@ -647,6 +681,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
             $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
             $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
+            $deletePaths[] = dirname($file0Path);
+            $deletePaths[] = Tinebase_Model_Tree_Node_Path::createFromPath($targetPath)->statpath;
 
             $parentFolder = $this->_fsController->stat(dirname($file0Path));
             static::assertEquals(16, $parentFolder->size,
@@ -665,7 +701,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
             $this->_getUit()->moveNodes($file0Path, $targetPath, false);
 
-            $parentFolder = $this->_fsController->stat(dirname($file0Path));
+            $parentFolder = $this->_fsController->get($parentFolder->getId());
             static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
             $secondFolderNode = $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath($targetPath)->statpath);
             static::assertEquals(8, $secondFolderNode->size, 'one file with 8 bytes expected');
@@ -680,6 +716,62 @@ class Filemanager_Frontend_JsonTests extends TestCase
                     $secondFolderJson['effectiveAndLocalQuota']['localFree'],
                 'effectiveAndLocalQuota is not right: ' . print_r($secondFolderJson, true));
 
+            // test quota exceed
+            $targetPath = dirname($filePaths[0]);
+            $targetFile = $targetPath . '/badFile';
+            $parentFolder->quota = 9;
+            $this->_fsController->update($parentFolder);
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = null;
+
+            try {
+                $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
+                static::fail('Quota exceed did not work');
+            } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                static::assertEquals('quota exceeded', $e->getMessage());
+            }
+            // TODO add assertions!
+
+            // otherwise we get issues later during clean up...
+            Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} =
+                false;
+            $this->_fsController = Tinebase_FileSystem::getInstance();
+            $this->_fsController->resetBackends();
+
+            $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE);
+            $tempPath = Tinebase_TempFile::getTempPath();
+            $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+            file_put_contents($tempPath, 'someData');
+            try {
+                $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId],
+                    true);
+                static::fail('Quota exceed did not work');
+            } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                static::assertEquals('quota exceeded', $e->getMessage());
+            }
+            try {
+                $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
+                    Filemanager_Controller_Node::getInstance()->addBasePath($targetFile))->statpath);
+                static::fail('node create -> fail: clean up did not work');
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        } finally {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
+
+            foreach ($deletePaths as $path) {
+                $this->_fsController->rmdir($path, true);
+            }
+        }
+    }
+
+    public function testCreateFileAndQuota()
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $oldQuotaConfig = clone $quotaConfig;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
+        $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
+
+        try {
         } finally {
             Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
         }
@@ -2180,5 +2272,35 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(17, $usageInfo['createdBy'][$userId]['size']);
         $this->assertEquals(17, $usageInfo['createdBy'][$userId]['revision_size']);
         $this->assertEquals($userId, $usageInfo['contacts'][0]['id']);
+    }
+
+    public function testRecreateDeletedFileForReplication()
+    {
+        $result = $this->testCreateFileNodeWithTempfile();
+        $this->_rmDir[] = dirname($result['path']);
+        $this->_getUit()->deleteNodes($result['path']);
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        // now we recreate the file empty (as the JS client does it)
+        $this->_getUit()->createNode($result['path'], Tinebase_Model_Tree_FileObject::TYPE_FILE);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        static::assertEquals(2, $modifications->count(), 'expected 2 modification in the timemachine');
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+
     }
 }

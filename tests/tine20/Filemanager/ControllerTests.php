@@ -156,4 +156,80 @@ class Filemanager_ControllerTests extends TestCase
         $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
     }
+
+    public function testCreateSharedTopLevelFolder()
+    {
+        static::assertTrue(Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS),
+            'admin user does not have manage_shared_folders right');
+
+        $fileManager = Filemanager_Controller_Node::getInstance();
+        $nodes = $fileManager->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(1, $nodes->count());
+
+        $oldUser = Tinebase_Core::getUser();
+        /** @var Tinebase_Model_FullUser $sClever */
+        $sClever = $this->_personas['sclever'];
+        $fileManagerId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
+        /** @var Tinebase_Model_Role $role */
+        foreach (Tinebase_Acl_Roles::getInstance()->getAll() as $role) {
+            $altered = false;
+            $rights = array_filter(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()),
+                function($val) use($fileManagerId, &$altered) {
+                    if ($fileManagerId === $val['application_id'] && $val['right'] ===
+                        Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS) {
+                        $altered = true;
+                        return false;
+                    }
+                    return true;
+                });
+            if ($altered) {
+                Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rights);
+            }
+        }
+
+        try {
+            Tinebase_Acl_Roles::unsetInstance();
+            Tinebase_Core::set(Tinebase_Core::USER, $sClever);
+
+            try {
+                $fileManager->createNodes('/shared/secondTest', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+                static::fail('creating shared folder in top level should require MANAGE_SHARED_FOLDERS right');
+            } catch (Tinebase_Exception_AccessDenied $tead) {}
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+            Tinebase_Acl_Roles::unsetInstance();
+        }
+    }
+
+    public function testSharedFolderACLs()
+    {
+        static::assertTrue(Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS),
+            'admin user does not have manage_shared_folders right');
+
+        $fileManager = Filemanager_Controller_Node::getInstance();
+        $nodes = $fileManager->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(1, $nodes->count());
+
+        $oldUser = Tinebase_Core::getUser();
+        /** @var Filemanager_Model_Node $node */
+        $node = $nodes->getFirstRecord();
+        /** @var Tinebase_Model_FullUser $sClever */
+        $sClever = $this->_personas['sclever'];
+        $node->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [new Tinebase_Model_Grants([
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'        => $sClever->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+        ])]);
+        $fileManager->update($node);
+
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $sClever);
+            try {
+                $fileManager->createNodes('/shared/test/subFolder', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+                static::fail('acl test failed');
+            } catch (Tinebase_Exception_AccessDenied $tead) {}
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+        }
+    }
 }

@@ -155,7 +155,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _releaseDBLocks()
     {
         foreach ($this->_releaseDBLockIds as $lockId) {
-            Tinebase_Lock::releaseDBSessionLock($lockId);
+            Tinebase_Core::releaseMultiServerLock($lockId);
         }
 
         $this->_releaseDBLockIds = array();
@@ -410,7 +410,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         
         return self::$_mailer;
     }
-    
+
+    /**
+     * reset test mailer
+     */
+    public static function resetMailer()
+    {
+        self::$_mailer = null;
+    }
+
     /**
      * flush mailer (send all remaining mails first)
      */

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -20,16 +20,19 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
     /**
      * add update product lifespan task to scheduler
      * 
-     * @param Zend_Scheduler $_scheduler
+     * @param Tinebase_Scheduler $_scheduler
      */
-    public static function addUpdateProductLifespanTask(Zend_Scheduler $_scheduler)
+    public static function addUpdateProductLifespanTask(Tinebase_Scheduler $_scheduler)
     {
-        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY, array(
-            'controller'    => 'Sales_Controller_Product',
-            'action'        => 'updateProductLifespan',
-        ));
-        $_scheduler->addTask('Sales_Controller_Product::updateProductLifespan', $task);
-        $_scheduler->saveTask();
+        if ($_scheduler->hasTask('Sales_Controller_Product::updateProductLifespan')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Sales_Controller_Product::updateProductLifespan', self::TASK_TYPE_HOURLY, [[
+            self::CONTROLLER    => 'Sales_Controller_Product',
+            self::METHOD_NAME   => 'updateProductLifespan',
+        ]]);
+        $_scheduler->create($task);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Sales_Controller_Product::updateProductLifespan in scheduler.');
@@ -38,12 +41,11 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
     /**
      * remove update product lifespan task from scheduler
      *
-     * @param Zend_Scheduler $_scheduler
+     * @param Tinebase_Scheduler $_scheduler
      */
-    public static function removeUpdateProductLifespanTask(Zend_Scheduler $_scheduler)
+    public static function removeUpdateProductLifespanTask(Tinebase_Scheduler $_scheduler)
     {
         $_scheduler->removeTask('Sales_Controller_Product::updateProductLifespan');
-        $_scheduler->saveTask();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task Sales_Controller_Product::updateProductLifespan from scheduler.');

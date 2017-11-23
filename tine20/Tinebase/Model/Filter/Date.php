@@ -262,7 +262,38 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         
         return $value;
     }
-    
+
+    /**
+     * @return Tinebase_DateTime
+     */
+    public function getStartOfPeriod()
+    {
+        $value = $this->_getStartAndEndOfPeriod();
+        return new Tinebase_DateTime($value[0]);
+    }
+
+    /**
+     * @return array
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    protected function _getStartAndEndOfPeriod()
+    {
+        if ($this->_operator !== 'within') {
+            throw new Tinebase_Exception_UnexpectedValue('only within operator supported');
+        }
+        $value = $this->_getDateValues($this->_operator, $this->_value);
+        return $value;
+    }
+
+    /**
+     * @return Tinebase_DateTime
+     */
+    public function getEndOfPeriod()
+    {
+        $value = $this->_getStartAndEndOfPeriod();
+        return new Tinebase_DateTime($value[1]);
+    }
+
     /**
      * get string representation of first and last days of the week defined by date/week number
      * 

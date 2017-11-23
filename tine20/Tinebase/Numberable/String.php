@@ -18,8 +18,8 @@
  */
 class Tinebase_Numberable_String extends Tinebase_Numberable
 {
-    const CONF_ZEROFILL     = 'zerofill';
-    const CONF_PREFIX       = 'prefix';
+    const ZEROFILL     = 'zerofill';
+    const PREFIX       = 'prefix';
 
     protected $_zerofill = 0;
     protected $_prefix = '';
@@ -46,15 +46,15 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
     {
         parent::__construct($_numberableConfiguration, $_dbAdapter, $_options);
 
-        if (isset($_numberableConfiguration[self::CONF_PREFIX])) {
-            $this->_prefix = $_numberableConfiguration[self::CONF_PREFIX];
+        if (isset($_numberableConfiguration[self::PREFIX])) {
+            $this->_prefix = $_numberableConfiguration[self::PREFIX];
         }
 
-        if (isset($_numberableConfiguration[self::CONF_ZEROFILL])) {
-            if (!is_int($_numberableConfiguration[self::CONF_ZEROFILL])) {
-                throw new Tinebase_Exception_UnexpectedValue('found improper "' . self::CONF_ZEROFILL . '" configuration: (not a int) "' . $_numberableConfiguration[self::CONF_ZEROFILL] . '"');
+        if (isset($_numberableConfiguration[self::ZEROFILL])) {
+            if (!is_int($_numberableConfiguration[self::ZEROFILL])) {
+                throw new Tinebase_Exception_UnexpectedValue('found improper "' . self::ZEROFILL . '" configuration: (not a int) "' . $_numberableConfiguration[self::ZEROFILL] . '"');
             }
-            $this->_zerofill = $_numberableConfiguration[self::CONF_ZEROFILL];
+            $this->_zerofill = $_numberableConfiguration[self::ZEROFILL];
         }
     }
 

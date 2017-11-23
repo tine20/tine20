@@ -66,6 +66,20 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_requestContext = null;
 
+    /**
+     * public routes, overload member in concrete class to define public routes for the routing server
+     *
+     * @var array
+     */
+    protected static $_publicRoutes = [];
+
+    /**
+     * auth routes, overload member in concrete class to define auth routes for the routing server
+     *
+     * @var array
+     */
+    protected static $_authRoutes = [];
+
     public function setRequestContext(array $context)
     {
         $this->_requestContext = $context;
@@ -412,5 +426,21 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         );
 
         return $isModel;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPublicRoutes()
+    {
+        return static::$_publicRoutes;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAuthRoutes()
+    {
+        return static::$_authRoutes;
     }
 }

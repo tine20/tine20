@@ -18,11 +18,12 @@
  */
 class Tinebase_Numberable_Abstract
 {
-    const CONF_TABLENAME        = 'tablename';
-    const CONF_NUMCOLUMN        = 'numberablecolumn';
-    const CONF_STEPSIZE         = 'stepsize';
-    const CONF_BUCKETCOLUMN     = 'bucketcolumn';
-    const CONF_BUCKETKEY        = 'bucketkey';
+    const TABLENAME        = 'tablename';
+    const NUMCOLUMN        = 'numberablecolumn';
+    const STEPSIZE         = 'stepsize';
+    const BUCKETCOLUMN     = 'bucketcolumn';
+    const BUCKETKEY        = 'bucketkey';
+    const START            = 'start';
 
     protected $_numberableColumn = NULL;
     protected $_stepSize = 1;

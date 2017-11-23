@@ -21,6 +21,21 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     const PREFIX_GROUPS = 'principals/groups';
     const PREFIX_INTELLIGROUPS = 'principals/intelligroups';
     const SHARED        = 'shared';
+
+    protected static $_showHiddenGroups = false;
+
+    /**
+     * @param null|bool $bool
+     * @return bool
+     */
+    public static function showHiddenGroups($bool = null)
+    {
+        $oldValue = static::$_showHiddenGroups;
+        if (null !== $bool) {
+            static::$_showHiddenGroups = (bool)$bool;
+        }
+        return $oldValue;
+    }
     
     /**
      * (non-PHPdoc)
@@ -403,7 +418,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
             case self::PREFIX_USERS:
                 if ($contactId !== self::SHARED) {
-                    $classCacheId = $principal;
+                    $classCacheId = $principal . '::' . static::$_showHiddenGroups;
                     
                     try {
                         return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __FUNCTION__, $classCacheId);
@@ -431,7 +446,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
 
                     /** @var Tinebase_Model_Group $group */
                     foreach ($groups as $group) {
-                        if ($group->list_id && $group->visibility == Tinebase_Model_Group::VISIBILITY_DISPLAYED) {
+                        if ($group->list_id && (static::$_showHiddenGroups || $group->visibility == Tinebase_Model_Group::VISIBILITY_DISPLAYED)) {
                             $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
                         }
                     }

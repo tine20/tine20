@@ -138,6 +138,8 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
 
     /**
      * updateProductLifespan (switch products active/inactive)
+     *
+     * @return bool
      */
     public function updateProductLifespan()
     {
@@ -153,6 +155,8 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
         if (count($productIdsToChangeToActive) > 0) {
             $this->_backend->updateMultiple($productIdsToChangeToActive, array('is_active' => true));
         }
+
+        return true;
     }
     
     /**

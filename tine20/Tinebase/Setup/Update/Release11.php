@@ -65,6 +65,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_4()
     {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '11.12') === -1) {
+            return;
+        }
         $release9 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release9->update_46();
         $this->setApplicationVersion('Tinebase', '11.5');
@@ -113,8 +116,94 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_8()
     {
+        if (version_compare($this->getApplicationVersion('Tinebase'), '11.12') === -1) {
+            return;
+        }
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_49();
         $this->setApplicationVersion('Tinebase', '11.9');
+    }
+
+    /**
+     * update to 11.10
+     *
+     * reimport all template files
+     */
+    public function update_9()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_50();
+        $this->setApplicationVersion('Tinebase', '11.10');
+    }
+
+    /**
+     * update to 11.11
+     *
+     * remove timemachine_modlog_bkp if it exists
+     */
+    public function update_10()
+    {
+        $this->_backend->dropTable('timemachine_modlog_bkp');
+
+        $this->setApplicationVersion('Tinebase', '11.11');
+    }
+
+    /**
+     * update to 11.11
+     *
+     * remove scheduler table
+     * remove async_job table
+     * recreate scheduler tasks
+     */
+    public function update_11()
+    {
+        $this->_backend->dropTable('async_job', Tinebase_Core::getTinebaseId());
+        $this->_backend->dropTable('scheduler', Tinebase_Core::getTinebaseId());
+        $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
+
+        $scheduler = Tinebase_Core::getScheduler();
+        // TODO create methods for fetching and creating all known application tasks (maybe with existence check)
+        Tinebase_Scheduler_Task::addAlarmTask($scheduler);
+        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addImportTask($scheduler);
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        Tinebase_Scheduler_Task::addReplicationTask($scheduler);
+        Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+        if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+            Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
+            Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.12');
+    }
+
+    /**
+     * update to 11.11
+     *
+     * rerun update 4 + 8 as we don't want them to run before update_11
+     */
+    public function update_12()
+    {
+        $this->update_4();
+        $this->update_8();
+
+        $this->setApplicationVersion('Tinebase', '11.13');
     }
 }

@@ -41,11 +41,11 @@ LIMITATION: You need to store Tine 2.0's accounts and your mail settings in
 CONFIGURATION
 
 Currently there's no possibility to use GUI, therefore you need to configure
-simpleMail backend manually. You may select the pattern “simpleMail” within
-Tine 2.0 Setup (setup.php) but to make it fly you need to add options to the
-configuration key “smtp” which is an javascript object (json) and can be
-accessed by the command line interface (cli) or directly in SQL-DB table
-tine20_config. 
+simpleMail backend manually. You may select the backend option “simpleMail” 
+within Tine 2.0 Setup (setup.php) but to make it fly you need to add further 
+options to the configuration key “smtp” which is an javascript object (json) 
+and can be accessed by the command line interface (cli) or directly in SQL-DB 
+table tine20_config. 
 
 simpleMail settings are stored within the json being themselves such an json
 object:
@@ -68,7 +68,7 @@ To set new SMTP config by cli:
 
 OPTIONS - All available options for JSON
 
-[madatory] base:
+[mandatory] base:
 Search base in LDAP for mail information (default search in subtree) and
 default branch to store new entries (see storage_base)
 
@@ -132,7 +132,7 @@ specific part of json is shown)
 1) Get information readonly from anywhere below a specific part of the
 LDAP-tree (default entries here match the LDAP scheme “simpleMail”):
 
-	    "simplemail":{ 
+            "simplemail":{ 
               "base":"ou=mail,ou=config,dc=example,dc=com",
               "readonly":true 
             }
@@ -140,10 +140,10 @@ LDAP-tree (default entries here match the LDAP scheme “simpleMail”):
   Hint: If you manage mail settings aside Tine 2.0 this is how you get your
         aliases known to Felamimail. 
 
-2) Read entries from subtree and write them below specified place, provide the
-necessary information about your DN structure needed for proper searches and 
-for saving new. Be aware of the mailUserDN attribute which holds the link to 
-user's DN:
+2) Read entries from subtree and write them below specified place; provide the
+necessary information about your DN structure - needed for proper searches and 
+for saving new mail properties. Be aware of the mailUserDN attribute which 
+holds the relation to user's DN:
 
             "simplemail":{ 
               "base":"ou=mail,ou=config,dc=example,dc=com", 
@@ -179,5 +179,4 @@ FURTHER READINGS
 
 - Tine 2.0 cli functions https://wiki.tine20.org/CLI_Functions
 
-
-
+Edited 2017-10-22, small changes and typos. 

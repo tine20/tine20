@@ -85,6 +85,17 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     }
 
     /**
+     * @param Tinebase_Model_FullUser $_user
+     */
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
+    {
+        /* this function is empty on purpose: need to provide valid target for
+         * Tinebase_User_Ldap, line 623. If needed other extensions (backends)
+         * can inherit this target if needed.
+         */
+    }
+
+    /**
      * @param Tinebase_Model_User $_user
      * @param array $_ldapEntry
      */

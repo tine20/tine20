@@ -12,6 +12,9 @@
 /**
  * HTTP interface to Tine
  *
+ * ATTENTION all public methods in this class are reachable without tine authentification
+ * use $this->checkAuth(); if method requires authentification
+ *
  * @package     Tinebase
  * @subpackage  Server
  */
@@ -177,7 +180,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function checkAuth()
     {
         try {
-            Tinebase_Core::getUser();
+            if (!Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+                header('HTTP/1.0 403 Forbidden');
+                exit;
+            }
         } catch (Exception $e) {
             header('HTTP/1.0 403 Forbidden');
             exit;
@@ -802,6 +808,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadRecordAttachment($nodeId, $recordId, $modelName)
     {
+        $this->checkAuth();
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
@@ -825,6 +833,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadTempfile($tmpfileId)
     {
+        $this->checkAuth();
+
         $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($tmpfileId);
 
         // some grids can house tempfiles and filemanager nodes, therefor first try tmpfile and if no tmpfile try filemanager
@@ -836,7 +846,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $filemanagerHttpFrontend->downloadFile($file->path, null);
         }
 
-        $this->_downloadFileNode($tmpFile, $tmpFile->path);
+        $this->_downloadTempFile($tmpFile, $tmpFile->path);
         exit;
     }
 
@@ -844,6 +854,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         $view = new Zend_View();
         $view->setScriptPath('Tinebase/views');
+        $fileMap = $this->getAssetsMap();
+        $view->jsFiles = [$fileMap['Tinebase/js/postal.xwindow.js']['js']];
+
+        if (TINE20_BUILDTYPE != 'RELEASE') {
+            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
+                $view->jsFiles[] = 'webpack-dev-server.js';
+            } else {
+                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
+            }
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' getPostalXWindow');
@@ -867,6 +887,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadPreview($_path, $_appId, $_type, $_num = 0, $_revision = null)
     {
+        $this->checkAuth();
+        
         $_revision = $_revision ?: null;
 
         if ($_path) {
