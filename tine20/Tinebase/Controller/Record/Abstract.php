@@ -1734,22 +1734,34 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->_purgeRecords && !$_record->has('created_by')) {
             throw new Tinebase_Exception_InvalidArgument('record of type ' . get_class($_record) . ' can\'t be undeleted');
         }
-        $this->_checkGrant($_record, self::ACTION_DELETE);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $this->_checkGrant($_record, self::ACTION_DELETE);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Undeleting record ' . $_record->getId() . ' of type ' . $this->_modelName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Undeleting record ' . $_record->getId() . ' of type ' . $this->_modelName);
+            }
 
-        $originalRecord = clone $_record;
+            $originalRecord = $this->get($_record->getId(), null, false, true);
+            $updateRecord = clone $originalRecord;
 
-        $this->_unDeleteLinkedObjects($_record);
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($updateRecord, 'undelete', $updateRecord);
+            $this->_backend->update($updateRecord);
 
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'undelete', $_record);
-        $this->_backend->update($_record);
+            $this->_unDeleteLinkedObjects($_record);
 
-        // TODO Maybe we even should do it before _deleteLinkedObjects above... though decision
-        $this->_writeModLog($originalRecord, $_record);
+            $this->_writeModLog($updateRecord, $originalRecord);
 
-        //$this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+            //$this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
     }
 
     /*********** helper funcs **************/

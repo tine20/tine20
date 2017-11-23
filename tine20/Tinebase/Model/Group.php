@@ -145,4 +145,42 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     {
         static::$_replicable = (bool)$isReplicable;
     }
+
+    /**
+     * undoes the change stored in the diff
+     *
+     * will (re)load and populate members property if required
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function undo(Tinebase_Record_Diff $diff)
+    {
+        $members = null;
+        $oldMembers = null;
+        if (isset($diff->diff['members'])) {
+            $members = $diff->diff['members'];
+            unset($diff->xprops('diff')['members']);
+        }
+        if (isset($diff->oldData['members'])) {
+            $oldMembers = $diff->oldData['members'];
+            unset($diff->xprops('oldData')['members']);
+        }
+
+        parent::undo($diff);
+
+        if (null === $members || null === $oldMembers) {
+            return;
+        }
+
+        $currentMembers = Tinebase_Group::getInstance()->getGroupMembers($this->getId());
+
+        if (!empty($remove = array_diff($members, $oldMembers))) {
+            $currentMembers = array_diff($currentMembers, $remove);
+        }
+        if (!empty($add = array_diff($oldMembers, $members))) {
+            $currentMembers = array_merge($currentMembers, $add);
+        }
+        $this->members = $currentMembers;
+    }
 }
