@@ -158,16 +158,18 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     {
         $members = null;
         $oldMembers = null;
+        // clone diff here to prevent accidental/unintended change
+        $diffWithoutMembers = clone $diff;
         if (isset($diff->diff['members'])) {
             $members = $diff->diff['members'];
-            unset($diff->xprops('diff')['members']);
+            unset($diffWithoutMembers->xprops('diff')['members']);
         }
         if (isset($diff->oldData['members'])) {
             $oldMembers = $diff->oldData['members'];
-            unset($diff->xprops('oldData')['members']);
+            unset($diffWithoutMembers->xprops('oldData')['members']);
         }
 
-        parent::undo($diff);
+        parent::undo($diffWithoutMembers);
 
         if (null === $members || null === $oldMembers) {
             return;
