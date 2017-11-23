@@ -175,12 +175,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
-        Ext.apply(options.params, { paging: {
-            start: options.params.start,
-            limit: options.params.limit,
+        Ext.apply(options.params, {
             sort: (this.sortBy) ? this.sortBy : this.displayField,
             dir: this.sortDir
-        }});
+        });
     },
     
     /**

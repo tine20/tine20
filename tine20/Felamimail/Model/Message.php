@@ -6,7 +6,7 @@
  * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -14,21 +14,22 @@
  * 
  * @package     Felamimail
  * @subpackage  Model
- * @property    string  $folder_id      the folder id
- * @property    string  $subject        the subject of the email
- * @property    string  $from_email     the address of the sender (from)
- * @property    string  $from_name      the name of the sender (from)
- * @property    string  $sender         the sender of the email
- * @property    string  $content_type   the content type of the message
- * @property    string  $body_content_type   the content type of the message body
- * @property    array   $to             the to receipients
- * @property    array   $cc             the cc receipients
- * @property    array   $bcc            the bcc receipients
- * @property    array   $structure      the message structure
- * @property    array   $attachments    the attachments
- * @property    string  $messageuid     the message uid on the imap server
- * @property    array   $preparedParts  prepared parts
- * @property    integer $reading_conf   true if it must send a reading confirmation
+ * @property    string  $folder_id          the folder id
+ * @property    string  $subject            the subject of the email
+ * @property    string  $from_email         the address of the sender (from)
+ * @property    string  $from_name          the name of the sender (from)
+ * @property    string  $sender             the sender of the email
+ * @property    string  $content_type       the content type of the message
+ * @property    string  $body_content_type  the content type of the message body
+ * @property    array   $to                 the to receipients
+ * @property    array   $cc                 the cc receipients
+ * @property    array   $bcc                the bcc receipients
+ * @property    array   $structure          the message structure
+ * @property    array   $attachments        the attachments
+ * @property    string  $messageuid         the message uid on the imap server
+ * @property    array   $preparedParts      prepared parts
+ * @property    integer $reading_conf       true if it must send a reading confirmation
+ * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
@@ -158,6 +159,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'preparedParts'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'reading_conf'          => array(Zend_Filter_Input::ALLOW_EMPTY => true,
                                          Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'massMailingFlag'       => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => 0,
+            array('InArray', array(0, 1)),
+        ),
     );
     
     /**
@@ -746,7 +752,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function getPlainTextBody()
     {
-        $result = self::convertHTMLToPlainTextWithQuotes($this->body);
+        if ($this->content_type === Felamimail_Model_Message::CONTENT_TYPE_PLAIN) {
+            $result = $this->body;
+        } else {
+            $result = self::convertHTMLToPlainTextWithQuotes($this->body);
+        }
         
         return $result;
     }

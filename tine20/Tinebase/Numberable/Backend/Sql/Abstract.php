@@ -26,6 +26,7 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
     protected $_stepSize = 1;
     protected $_bucketColumn = NULL;
     protected $_bucketKey = NULL;
+    protected $_start = 1;
 
     /**
      * the constructor
@@ -48,32 +49,41 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
      */
     public function __construct($_numberableConfiguration, $_dbAdapter = NULL, $_options = array())
     {
-        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_TABLENAME])) {
-            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::CONF_TABLENAME . '" configuration.');
+        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::TABLENAME])) {
+            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::TABLENAME . '" configuration.');
         }
-        $this->_tableName = $_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_TABLENAME];
+        $this->_tableName = $_numberableConfiguration[Tinebase_Numberable_Abstract::TABLENAME];
 
-        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_NUMCOLUMN])) {
-            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::CONF_NUMCOLUMN . '" configuration.');
+        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::NUMCOLUMN])) {
+            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::NUMCOLUMN . '" configuration.');
         }
-        $this->_numberableColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_NUMCOLUMN];
+        $this->_numberableColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::NUMCOLUMN];
 
 
         parent::__construct($_dbAdapter, $_options);
 
-        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_STEPSIZE])) {
-            if (!is_int($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_STEPSIZE])) {
-                throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' found improper "' . Tinebase_Numberable_Abstract::CONF_STEPSIZE . '" configuration: (not a int) "' . $_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_STEPSIZE] . '"');
+        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::STEPSIZE])) {
+            if (!is_int($_numberableConfiguration[Tinebase_Numberable_Abstract::STEPSIZE])) {
+                throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' found improper "' . Tinebase_Numberable_Abstract::STEPSIZE . '" configuration: (not a int) "' . $_numberableConfiguration[Tinebase_Numberable_Abstract::STEPSIZE] . '"');
             }
-            $this->_stepSize = intval($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_STEPSIZE]);
+            $this->_stepSize = $_numberableConfiguration[Tinebase_Numberable_Abstract::STEPSIZE];
         }
 
-        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_BUCKETCOLUMN])) {
-            $this->_bucketColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_BUCKETCOLUMN];
+        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN])) {
+            $this->_bucketColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN];
         }
 
-        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_BUCKETKEY])) {
-            $this->_bucketKey = $_numberableConfiguration[Tinebase_Numberable_Abstract::CONF_BUCKETKEY];
+        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY])) {
+            $this->_bucketKey = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY];
+        }
+
+        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::START])) {
+            if (!is_int($_numberableConfiguration[Tinebase_Numberable_Abstract::START])) {
+                throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' found improper "' . Tinebase_Numberable_Abstract::START . '" configuration: (not a int) "' . $_numberableConfiguration[Tinebase_Numberable_Abstract::START] . '"');
+            }
+            $this->_start = $_numberableConfiguration[Tinebase_Numberable_Abstract::START];
+        } else {
+            $this->_start = $this->_stepSize;
         }
     }
 
@@ -90,7 +100,7 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
         // in case there is no data yet
         if ( $stmt->rowCount() != 1 ) {
             try {
-                $rowCount = $this->_db->insert($this->_tablePrefix . $this->_tableName, array($this->_bucketColumn => $this->_bucketKey, $this->_numberableColumn => 0 + $this->_stepSize));
+                $rowCount = $this->_db->insert($this->_tablePrefix . $this->_tableName, array($this->_bucketColumn => $this->_bucketKey, $this->_numberableColumn => $this->_start));
             } catch (Zend_Db_Statement_Exception $zbse) {
                 $rowCount = 0;
             }

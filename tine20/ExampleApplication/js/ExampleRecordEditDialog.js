@@ -63,10 +63,10 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                         columnWidth: .333
                     },
                     items: [[{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Name'),
-                        name: 'name',
-                        allowBlank: false
+                            columnWidth: 1,
+                            fieldLabel: this.app.i18n._('Name'),
+                            name: 'name',
+                            allowBlank: false
                         }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'ExampleApplication',
                             keyFieldName: 'exampleStatus',
@@ -79,7 +79,14 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                             fieldLabel: this.app.i18n._('Reason'),
                             name: 'reason',
                             columnWidth: 0.5
-                        })]
+                        })],
+                        [{
+                            columnWidth: 1,
+                            fieldLabel: this.app.i18n._('Description'),
+                            name: 'description',
+                            allowBlank: false,
+                            xtype: 'textarea'
+                        }]
                     ] 
                 }, {
                     // tags

@@ -120,7 +120,9 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             $resultNode = $this->_getUit()->getNode($downloadLink, array());
             $this->fail('user should not be able to access download link node');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            $this->assertEquals('No permission to get node', $tead->getMessage());
+            $str = 'No permission to get node';
+            $strLen = strlen($str);
+            $this->assertEquals($str, substr($tead->getMessage(), 0, $strLen));
         }
     }
     

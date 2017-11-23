@@ -124,6 +124,9 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         ),
         'is_deleted'            => array(
             'filter'                => 'Tinebase_Model_Filter_Bool'
+        ),
+        'quota'                 => array(
+            'filter'                => Tinebase_Model_Filter_Int::class
         )
     );
 

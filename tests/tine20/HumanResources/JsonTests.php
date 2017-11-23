@@ -122,10 +122,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'type'          => 'vacation',
             'freedays'      => array(
                 array('date' => $firstDayDate, 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
+                array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
+                array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
+                array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
+                array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
             )
         ));
         

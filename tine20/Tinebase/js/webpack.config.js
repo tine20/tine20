@@ -39,8 +39,10 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
     if (entryFile /* && (baseName == 'Admin')*/) {
         entry[baseName + '/js/' + baseName] = entryFile;
     }
-
 });
+
+// additional 'real' entry points
+entry['Tinebase/js/postal.xwindow.js'] = baseDir + '/Tinebase/js/postal.xwindow.js';
 
 module.exports = {
     entry: entry,
@@ -50,12 +52,13 @@ module.exports = {
         publicPath: '/',
         filename: '[name]-[hash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
-        libraryTarget: "umd",
+        libraryTarget: "umd"
     },
     devServer: {
-        //host: '0.0.0.0',
-        //inline: true,
+        hot: false,
+        inline: false,
         port: 10443,
+        disableHostCheck: true,
         proxy: [
             {
                 context: ['**', '!/webpack-dev-server'],
@@ -71,17 +74,18 @@ module.exports = {
         assetsPluginInstance
     ],
     module: {
-        preLoaders: [
+        rules: [
             // use script loader for old library classes as some of them the need to be included in window context
-            {test: /\.js$/, include: [baseDir + '/library'], loader: "script!uglify!"},
-        ],
-        loaders: [
-            {test: /\.jsb2$/, loader: "./jsb2-loader"},
-            {test: /\.css$/, loader: "style-loader!css-loader"},
-            {test: /\.png/, loader: "url-loader?limit=100000&minetype=image/png"},
-            {test: /\.gif/, loader: "url-loader?limit=100000&minetype=image/gif"},
-            {test: /\.svg/, loader: "url-loader?limit=100000&minetype=image/svg"}
+            {test: /\.js$/, include: [baseDir + '/library'], enforce: "pre", use: [{loader: "script-loader"}]},
+            {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
+            {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
+            {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/png"}}]},
+            {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/gif"}}]},
+            {test: /\.svg/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/svg"}}]}
         ]
     },
-    resolveLoader: {fallback: __dirname + "/node_modules"}
+    resolve: {
+        // add browserify which is used by some libs (e.g. director)
+        mainFields: ["browser", "browserify", "module", "main"]
+    }
 };

@@ -44,13 +44,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         $this->_modelName = 'Sales_Model_Contract';
         // TODO this should be done automatically if model has customfields (hasCustomFields)
         $this->_resolveCustomFields = true;
-    }    
-    
-    /**
-     * 
-     * @var boolean
-     */
-    protected $_handleDependentRecords = TRUE;
+    }
 
     /**
      * holds the callbacks to call after modifications are done
@@ -233,68 +227,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * if dependent records should not be handled, set this to false
-     * 
-     * @param unknown $toggle
-     */
-    public function setHandleDependentRecords($toggle)
-    {
-        $this->_handleDependentRecords = $toggle;
-    }
-
-    public function addAfterModifyCallback($key, $callable)
-    {
-        $this->_afterModifyCallbacks[$key] = $callable;
-    }
-
-    protected function _afterModifyCallbacks()
-    {
-        foreach($this->_afterModifyCallbacks as $callable)
-        {
-            call_user_func($callable[0], $callable[1]);
-        }
-        $this->_afterModifyCallbacks = array();
-    }
-
-    /**
-     * inspect creation of one record (after create)
-     *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
-    {
-        if ($this->_handleDependentRecords) {
-            $config = $_record::getConfiguration()->recordsFields;
-            foreach (array_keys($config) as $property) {
-                $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
-            }
-        }
-
-        $this->_afterModifyCallbacks();
-    }
-    
-    /**
-     * inspect update of one record (before update)
-     *
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
-     * @return  void
-     */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
-    {
-        if ($this->_handleDependentRecords) {
-            $config = $_updatedRecord::getConfiguration()->recordsFields;
-            foreach (array_keys($config) as $p) {
-                $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
-            }
-        }
-
-        $this->_afterModifyCallbacks();
-    }
-    
-    /**
      * merges source contracts into the target contract (relations and products)
      * 
      * @param Sales_Model_Contract $targetContract
@@ -438,21 +370,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                 }
             }
         }
-    }
-    
-    /**
-     * delete linked objects (notes, relations, ...) of record
-     *
-     * @param Tinebase_Record_Interface $_record
-     */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
-    {
-        // use textfilter for contract_id
-        $filter = new Sales_Model_ProductAggregateFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $_record->getId())));
-        Sales_Controller_ProductAggregate::getInstance()->deleteByFilter($filter);
-    
-        parent::_deleteLinkedObjects($_record);
     }
     
     /**

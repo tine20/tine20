@@ -64,7 +64,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @var boolean
      */
     protected $_sendNotifications = TRUE;
-    
+
+    /**
+     * skip scheduling adoptions for exdates/rrule
+     *
+     * @var bool $_skipRecurAdoptions
+     */
+    protected $_skipRecurAdoptions = false;
+
     /**
      * @see Tinebase_Controller_Record_Abstract
      * 
@@ -436,7 +443,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
         }*/
-        
+
         $conflictCriteria = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
             array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
@@ -552,6 +559,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     /**
      * update all future constraints exdates
+     *
+     * @return bool
      */
     public function updateConstraintsExdates()
     {
@@ -578,6 +587,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . " cannot update constraints exdates for event {$constraintsEventId}: " . $e);
             }
         }
+
+        return true;
     }
 
     /**
@@ -932,6 +943,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
                     }
                 }
+
+                $updatedEvent = $this->get($_record->getId());
+                $currentMods = $this->_writeModLog($updatedEvent, $event);
+                $this->_setSystemNotes($updatedEvent, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
 
             if ($_record->isRecurException() && in_array($range, array(Calendar_Model_Event::RANGE_ALL, Calendar_Model_Event::RANGE_THISANDFUTURE))) {
@@ -1891,13 +1906,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if ($this->_skipRecurAdoptions) {
+            return;
+        }
+
         // if dtstart of an event changes, we update the originator_tz, alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::getUserTimezone();
             if (! empty($_record->rrule)) {
-                $diff = $_oldRecord->dtstart->diff($_record->dtstart);
+                $diff = $_oldRecord->dtstart->getClone()->setTimezone($_oldRecord->originator_tz)
+                    ->diff($_record->dtstart->getClone()->setTimezone($_record->originator_tz));
                 $this->_updateRecurIdOfExdates($_record, $diff);
+
+                if ($_record->rrule->until instanceof Tinebase_DateTime) {
+                    $_record->rrule->until->modifyTime($diff);
+                }
             }
         }
         
@@ -2038,17 +2062,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // update exceptions
         $exceptions = $this->getRecurExceptions($_record);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart of a series changed -> adopting '. count($exceptions) . ' recurid(s)');
-        $exdates = array();
+
         foreach ($exceptions as $exception) {
             $exception->recurid = new Tinebase_DateTime(substr($exception->recurid, -19));
-            Calendar_Model_Rrule::addUTCDateDstFix($exception->recurid, $diff, $_record->originator_tz);
-            $exdates[] = $exception->recurid;
-            
+            $exception->recurid->modifyTime($diff);
+
             $exception->setRecurId($_record->getId());
             $this->_backend->update($exception);
         }
-        
-        $_record->exdate = $exdates;
+
+        if (is_array($_record->exdate)) {
+            foreach ($_record->exdate as $exdate) {
+                $exdate->modifyTime($diff);
+            }
+        }
+
+        $missingExdates = array_diff($exceptions->getOriginalDtStart(), (array)$_record->exdate);
+        $_record->exdate = array_merge((array)$_record->exdate, $missingExdates);
     }
     
     /**
@@ -2457,6 +2487,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         try {
             $event = $this->get($_event->getId());
+            $oldEvent = clone $event;
             
             if (! $event->attendee) {
                 throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
@@ -2519,13 +2550,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
             $event->attendee->removeRecord($currentAttender);
             $event->attendee->addRecord($updatedAttender);
-            
+
             $this->_increaseDisplayContainerContentSequence($updatedAttender, $event);
 
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEvent(array(
                 'observable' => $event
             )));
 
+            // touch event to persist data changed by observers
             $this->_touch($event, true);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2537,7 +2569,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications && $_event->mute != 1) {
             $updatedEvent = $this->get($event->getId());
-            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $oldEvent);
         }
         
         return $updatedAttender;
@@ -3108,13 +3140,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         return $updateCount;
     }
 
+    /**
+     * @return bool
+     */
     public function sendTentativeNotifications()
     {
         $eventNotificationController = Calendar_Controller_EventNotifications::getInstance();
         $calConfig = Calendar_Config::getInstance();
         if (true !== $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}
                 ->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED}) {
-            return;
+            return true;
         }
 
         $days = $calConfig->{Calendar_Config::TENTATIVE_NOTIFICATIONS}->{Calendar_Config::TENTATIVE_NOTIFICATIONS_DAYS};
@@ -3137,6 +3172,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($this->search($filter) as $event) {
             $eventNotificationController->doSendNotifications($event, null, 'tentative');
         }
+
+        return true;
     }
 
     /**
@@ -3160,6 +3197,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         return $fixedCalendars;
+    }
+
+    /**
+     * set/get the skipRecurAdoptions state
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function skipRecurAdoptions()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_skipRecurAdoptions', $value);
     }
 
     /**

@@ -671,7 +671,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.showMemberOfType) return;
 
         var _ = window.lodash,
-            schedulingInfo = Ext.copyTo({}, this.record.data, 'id,dtstart,dtend,originator_tz,rrule,rrule_constraints,rrule_until,is_all_day_event,uid'),
+            schedulingInfo = this.record.getSchedulingData(),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
         if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) return;

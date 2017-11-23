@@ -21,11 +21,63 @@
  */
 class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
+    const publicTestRouteOutput = 'publicTestRouteOutput';
+    const authTestRouteOutput = 'authTestRouteOutput';
+
     /**
      * holds the default Model of this application
      * @var string
      */
     protected static $_defaultModel = 'ExampleApplication_Model_ExampleRecord';
+
+    protected static $_publicRoutes = [
+        'ExampleApplication' => [
+            'type'      => 'literal',
+            'options'   => [
+                'route'     => '/ExampleApplication',
+                'defaults'  => [
+                    Tinebase_Server_Routing::PARAM_CLASS  => ExampleApplication_Controller::class,
+                ],
+            ],
+            'may_terminate' => false,
+            'child_routes'  => [
+                'public'        => [
+                    'type'          => 'literal',
+                    'options'       => [
+                        'route'         => '/public',
+                    ],
+                    'may_terminate' => false,
+                    'child_routes'  => [
+                        'testRoute'     => [
+                            'type'          => 'literal',
+                            'options'       => [
+                                'route'         => '/testRoute',
+                                'defaults'  => [
+                                    Tinebase_Server_Routing::PARAM_METHOD => 'publicTestRoute'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    protected static $_authRoutes = [
+        'ExampleApplication' => [
+            'child_routes'  => [
+                'testRoute'     => [
+                    'type'          => 'literal',
+                    'options'       => [
+                        'route'         => '/testRoute',
+                        'defaults'  => [
+                            Tinebase_Server_Routing::PARAM_METHOD => 'authTestRoute'
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ];
     
     /**
      * the constructor
@@ -107,5 +159,15 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
                 }
                 break;
         }
+    }
+
+    public function publicTestRoute()
+    {
+        echo self::publicTestRouteOutput;
+    }
+
+    public function authTestRoute()
+    {
+        echo self::authTestRouteOutput;
     }
 }

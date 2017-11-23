@@ -49,10 +49,11 @@ class Setup_SchemaTool
         if (! $modelNames) {
             $modelNames = array();
 
+            /** @var Tinebase_Record_Abstract $modelName */
             foreach($mappingDriver->getAllClassNames() as $modelName) {
                 $modelConfig = $modelName::getConfiguration();
 
-                if ($modelConfig->getApplName() == $appName) {
+                if ($modelConfig->getAppName() == $appName) {
                     $modelNames[] = $modelName;
                 }
             }

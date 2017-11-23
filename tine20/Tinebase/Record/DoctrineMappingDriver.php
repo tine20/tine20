@@ -59,6 +59,8 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
             throw new MappingException('Class ' . $className . 'has no appropriate ModelConfiguration');
         }
 
+        /** @var Tinebase_Record_Abstract $className */
+        /** @var Tinebase_ModelConfiguration $modelConfig */
         $modelConfig = $className::getConfiguration();
 
         $table = $modelConfig->getTable();
@@ -83,8 +85,9 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         }
 
         $metadata->setPrimaryTable($table);
+        $virtualFields = array_keys($modelConfig->getVirtualFields());
         foreach ($modelConfig->getFields() as $fieldName => $config) {
-            if (in_array($config, $modelConfig->getVirtualFields(), true)) {
+            if (in_array($fieldName, $virtualFields, true)) {
                 continue;
             }
 

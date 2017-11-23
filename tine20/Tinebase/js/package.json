@@ -4,6 +4,7 @@
   "main": "Tinebase.js",
   "dependencies": {
     "director": "^1.2.8",
+    "es6-promise": "^4.1.1",
     "hammerjs": "^2.0.8",
     "html2canvas": "^0.5.0-beta4",
     "jquery": "^2.1.4",
@@ -12,22 +13,21 @@
     "postal": "^2.0.5",
     "postal.federation": "github:tine20/postal.federation",
     "postal.request-response": "github:tine20/postal.request-response",
-    "postal.xwindow": "github:tine20/postal.xwindow"
+    "postal.xwindow": "github:tine20/postal.xwindow",
+    "store2": "^2.5.9"
   },
   "devDependencies": {
-    "assets-webpack-plugin": "github:tine20/assets-webpack-plugin#compiler-filesystem-outputPath",
-    "css-loader": "^0.26.1",
-    "file-loader": "^0.9.0",
-    "script-loader": "^0.7.0",
-    "style-loader": "^0.13.1",
-    "uglify-loader": "^1.3.0",
-    "unminified-webpack-plugin": "^1.2.0",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.13.3",
-    "webpack-dev-server": "^1.16.2",
+    "assets-webpack-plugin": "github:tine20/assets-webpack-plugin#pu/compiler-filesystem-outputPath",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
+    "script-loader": "^0.7.2",
+    "style-loader": "^0.19.0",
+    "uglify-loader": "^2.0.0",
+    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/suffixagainagain",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4",
     "webpack-uglify-js-plugin": "^1.1.9"
   },
-  "optionalDependencies": {
-    "fsevents": "*"
-  }
+  "optionalDependencies": {}
 }

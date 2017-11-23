@@ -1491,6 +1491,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         } elseif (count($pathParts = explode('/', $path)) === 1) {
             $parent_id = md5($pathParts[0]);
+            $accountIds = [];
+            $nodeIds = [];
 
             /** @var Tinebase_Model_EmailUser $emailUser */
             foreach ($imapBackend->getAllEmailUsers($pathParts[0]) as $emailUser) {
@@ -1503,6 +1505,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node->setId($emailUser->emailUserId);
                 $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
                 $result->addRecord($node);
+                list($accountId) = explode('@', $emailUser->emailUsername);
+                $nodeIds[$accountId] = $emailUser->emailUserId;
+                $accountIds[] = $accountId;
+            }
+
+            /** @var Tinebase_Model_User $user */
+            foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
+                if (isset($nodeIds[$user->accountId])) {
+                    $result->getById($nodeIds[$user->accountId])->name = $user->accountDisplayName;
+                }
             }
         }
 

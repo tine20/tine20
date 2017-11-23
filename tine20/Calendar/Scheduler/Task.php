@@ -20,39 +20,56 @@ class Calendar_Scheduler_Task extends Tinebase_Scheduler_Task
     /**
      * add update constraints exdates task to scheduler
      * 
-     * @param Zend_Scheduler $_scheduler
+     * @param Tinebase_Scheduler $_scheduler
      */
-    public static function addUpdateConstraintsExdatesTask(Zend_Scheduler $_scheduler)
+    public static function addUpdateConstraintsExdatesTask(Tinebase_Scheduler $_scheduler)
     {
         if ($_scheduler->hasTask('Calendar_Controller_Event::updateConstraintsExdates')) {
             return;
         }
 
-        $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
-            'controller'    => 'Calendar_Controller_Event',
-            'action'        => 'updateConstraintsExdates',
-        ));
-        $_scheduler->addTask('Calendar_Controller_Event::updateConstraintsExdates', $task);
-        $_scheduler->saveTask();
+        $task = self::_getPreparedTask('Calendar_Controller_Event::updateConstraintsExdates', self::TASK_TYPE_DAILY, [[
+            self::CONTROLLER    => 'Calendar_Controller_Event',
+            self::METHOD_NAME   => 'updateConstraintsExdates',
+        ]]);
+        $_scheduler->create($task);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Calendar_Controller_Event::updateConstraintsExdates in scheduler.');
     }
 
-    public static function addTentativeNotificationTask(Zend_Scheduler $_scheduler)
+    /**
+     * @param Tinebase_Scheduler $_scheduler
+     * @return bool
+     */
+    public static function removeUpdateConstraintsExdatesTask(Tinebase_Scheduler $_scheduler)
+    {
+        return $_scheduler->removeTask('Calendar_Controller_Event::updateConstraintsExdates');
+    }
+
+    public static function addTentativeNotificationTask(Tinebase_Scheduler $_scheduler)
     {
         if ($_scheduler->hasTask('Calendar_Controller_Event::sendTentativeNotifications')) {
             return;
         }
 
-        $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
-            'controller'    => 'Calendar_Controller_Event',
-            'action'        => 'sendTentativeNotifications',
-        ));
-        $_scheduler->addTask('Calendar_Controller_Event::sendTentativeNotifications', $task);
-        $_scheduler->saveTask();
+        $task = self::_getPreparedTask('Calendar_Controller_Event::sendTentativeNotifications', self::TASK_TYPE_DAILY,
+            [[
+                self::CONTROLLER    => 'Calendar_Controller_Event',
+                self::METHOD_NAME   => 'sendTentativeNotifications',
+        ]]);
+        $_scheduler->create($task);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Calendar_Controller_Event::sendTentativeNotifications in scheduler.');
+    }
+
+    /**
+     * @param Tinebase_Scheduler $_scheduler
+     * @return bool
+     */
+    public static function removeTentativeNotificationTask(Tinebase_Scheduler $_scheduler)
+    {
+        return $_scheduler->removeTask('Calendar_Controller_Event::sendTentativeNotifications');
     }
 }

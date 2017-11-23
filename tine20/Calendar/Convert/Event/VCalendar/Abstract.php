@@ -400,6 +400,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         // update a provided record or create a new one
         if ($_record instanceof Calendar_Model_Event) {
             $event = $_record;
+            $existingDtStart = clone $event->dtstart;
         } else {
             $event = new Calendar_Model_Event(null, false);
         }
@@ -422,9 +423,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         } else {
             $this->_convertVevent($baseVevent, $event, $options);
         }
-        
+
+        if (isset($existingDtStart)) {
+            $options['dtStartDiff'] = $event->dtstart->getClone()->setTimezone($event->originator_tz)
+            ->diff($existingDtStart->getClone()->setTimezone($event->originator_tz));
+        }
         $this->_parseEventExceptions($event, $vcalendar, $baseVevent, $options);
-        
+
+        // check for removed exdates ?
+        //   => this is also done by msEventFacade, lets skip it here
+
         $event->isValid(true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -467,7 +475,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         foreach ($vcalendar->VEVENT as $vevent) {
             if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
-                $recurException = $this->_getRecurException($recurExceptions, $vevent);
+                $recurException = $this->_getRecurException($recurExceptions, $vevent, $options);
                 
                 // initialize attendee with attendee from base events for new exceptions
                 // this way we can keep attendee extra values like groupmember type
@@ -508,8 +516,20 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 if (! $recurException->getId()) {
                     $event->exdate->addRecord($recurException);
                 }
+
+                // remove 'processed' so we know which exceptions no longer exist
+                $recurExceptions->removeRecord($recurException);
             }
         }
+
+        // delete exceptions not longer in data
+        foreach($recurExceptions as $noLongerExisting) {
+            $toRemove = $event->exdate->getById($noLongerExisting->getId());
+            if ($toRemove) {
+                $event->exdate->removeRecord($toRemove);
+            }
+        }
+
     }
     
     /**
@@ -590,13 +610,18 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * 
      * @param  Tinebase_Record_RecordSet        $oldExdates
      * @param  \Sabre\VObject\Component\VEvent  $vevent
+     * @param   array                           $options
      * @return Calendar_Model_Event
      */
-    protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates,Sabre\VObject\Component\VEvent $vevent)
+    protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates,Sabre\VObject\Component\VEvent $vevent, $options)
     {
-        // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
         $exDate = $this->_convertToTinebaseDateTime($vevent->{'RECURRENCE-ID'});
+        // dtstart might have been updated
+        if (isset($options['dtStartDiff'])) {
+            $exDate->modifyTime($options['dtStartDiff']);
+        }
         $exDate->setTimezone('UTC');
+
         $exDateString = $exDate->format('Y-m-d H:i:s');
 
         foreach ($oldExdates as $id => $oldExdate) {
@@ -853,10 +878,20 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $rruleString = preg_replace('/;{0,1}COUNT=9999/', '', $rruleString);
                     
                     $event->rrule = $rruleString;
-                    
-                    // process exceptions
+
+                    if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+                        foreach($event->exdate as $exdate) {
+                            if ($exdate->is_deleted) {
+                                $event->exdate->removeRecord($exdate);
+                            }
+                        }
+                    }
+
+                    // NOTE: EXDATE in ical are fallouts only!
                     if (isset($vevent->EXDATE)) {
-                        $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                        $event->exdate = $event->exdate instanceof Tinebase_Record_RecordSet ?
+                            $event->exdate :
+                            new Tinebase_Record_RecordSet('Calendar_Model_Event');
                         
                         foreach ($vevent->EXDATE as $exdate) {
                             foreach ($exdate->getDateTimes() as $exception) {
@@ -871,14 +906,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                     'recurid'    => $recurid,
                                     'is_deleted' => true
                                 ));
-                        
-                                $exdates->addRecord($eventException);
+
+                                $event->exdate->addRecord($eventException);
                             }
                         }
-                    
-                        $event->exdate = $exdates;
                     }
-                    
+
                     break;
                     
                 case 'TRANSP':

@@ -29,12 +29,11 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     border      : true,
     frame       : true,
     canonicalName: 'AlarmGrid',
-    
-    
+
     initComponent: function() {
-        this.title = i18n._('Alarms');
+        this.title = this.title || i18n._('Alarms');
         
-        this.alarmOptions = [
+        this.alarmOptions = this.alarmOptions || [
             ['0',       i18n._('0 minutes before')],
             ['5',       i18n._('5 minutes before')],
             ['15',      i18n._('15 minutes before')],

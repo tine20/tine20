@@ -562,6 +562,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
     const QUOTA_SOFT_QUOTA = 'softQuota';
     const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
+    const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
 
     const TINE20_URL = 'tine20URL';
 
@@ -1735,6 +1736,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => false,
                     'default'               => 'soft quota notification',
                 ),
+                self::QUOTA_SKIP_IMAP_QUOTA => array(
+                    //_('Skip Imap Quota Notfication')
+                    'label'                 => 'Skip Imap Quota Notfication',
+                    //_('NSkip Imap Quota Notfication')
+                    'description'           => 'Skip Imap Quota Notfication',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
+                ),
             ),
             'default'               => array(),
         ),
@@ -1770,10 +1782,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var array
      */
     protected static $_serverPlugins = array(
-        'Tinebase_Server_Plugin_Json'   => 80,
-        'Tinebase_Server_Plugin_WebDAV' => 80,
-        'Tinebase_Server_Plugin_Cli'    => 90,
-        'Tinebase_Server_Plugin_Http'   => 100
+        Tinebase_Server_Plugin_Routing::class   => 15,
+        Tinebase_Server_Plugin_Json::class      => 80,
+        Tinebase_Server_Plugin_WebDAV::class    => 80,
+        Tinebase_Server_Plugin_Cli::class        => 90,
+        Tinebase_Server_Plugin_Http::class      => 100
     );
 
     /**

@@ -10,10 +10,6 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "es6-promise.js",
-          "path": "../library/es6-promise/"
-        },
-        {
           "text": "extFixes.js",
           "path": "js/"
         },
@@ -46,16 +42,8 @@
           "path": "js/Locale/"
         },
         {
-          "text": "store2.js",
-          "path": "../library/Store/"
-        },
-        {
-          "text": "store.bind.js",
-          "path": "../library/Store/"
-        },
-        {
           "text": "store.compat.js",
-          "path": "../library/Store/"
+          "path": "js/ux/util/"
         },
         {
           "text": "addressparser.js",
@@ -1026,6 +1014,14 @@
           "path": "js/"
         },
         {
+          "text": "FileSelectionArea.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "FileSelectionDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }
@@ -1178,6 +1174,10 @@
         },
         {
           "text": "UidTriggerField.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "FileSelectionArea.css",
           "path": "css/widgets/"
         },
         {

@@ -18,6 +18,11 @@
 interface Tinebase_Backend_Sql_Command_Interface
 {
     /**
+     * @return string
+     */
+    public function getRnd();
+
+    /**
      * @param string $field
      * @return string
      */

@@ -109,6 +109,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq" RENAME TO ' . SQL_TABLE_PREFIX . 'timemachine_modlog_seq_bkp');
                 $db->exec('ALTER INDEX "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key" RENAME TO "' . SQL_TABLE_PREFIX . 'timemachine_modlog_unique-fields_key_bkp"');
             }
+            $this->_backend->dropTable('timemachine_modlog', Tinebase_Core::getTinebaseId());
 
             $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
                 <name>timemachine_modlog</name>
@@ -273,6 +274,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     $db->insert(SQL_TABLE_PREFIX . 'timemachine_modlog', $row);
                 }
             }
+
+            $this->_backend->dropTable('timemachine_modlog_bkp');
 
             $this->setTableVersion('timemachine_modlog', '5');
         }
@@ -454,39 +457,40 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_10()
     {
-        $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
-            <name>external_fulltext</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>text_data</name>
-                    <type>text</type>
-                    <length>2147483647</length>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
+        if (! $this->_backend->tableExists('external_fulltext')) {
+            $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
+                <name>external_fulltext</name>
+                <version>1</version>
+                <declaration>
                     <field>
                         <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
-                </index>
-                <index>
-                    <name>text_data</name>
-                    <fulltext>true</fulltext>
                     <field>
                         <name>text_data</name>
+                        <type>text</type>
+                        <length>2147483647</length>
+                        <notnull>true</notnull>
                     </field>
-                </index>
-            </declaration>
-        </table>'), 'Tinebase', 'external_fulltext');
-
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>text_data</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>text_data</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>'), 'Tinebase', 'external_fulltext');
+        }
         $this->setApplicationVersion('Tinebase', '10.11');
     }
 
@@ -497,8 +501,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_11()
     {
-
-        if (!$this->_backend->columnExists('total_size', 'tree_fileobjects')) {
+        if (! $this->_backend->columnExists('revision_size', 'tree_fileobjects')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>revision_size</name>
                     <type>integer</type>
@@ -916,6 +919,12 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 </field>
             </index>
         ');
+
+        try {
+            $this->_backend->dropIndex('tree_fileobjects', 'description');
+        } catch (Exception $e) {
+            // Ignore, if there is no index, we can just go on and create one.
+        }
 
         $this->_backend->addIndex('tree_fileobjects', $declaration);
 
@@ -1806,14 +1815,18 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'tree_node_acl')->query(Zend_Db::FETCH_ASSOC);
         $quotedRecordId = $this->_db->quoteIdentifier('record_id');
         foreach ($result->fetchAll() as $row) {
-            $this->_db->update(SQL_TABLE_PREFIX . 'tree_node_acl',
-                array('id' => Tinebase_Record_Abstract::generateUID()),
-                $quotedId           . ' = ' . $this->_db->quote($row['id'])           . ' AND ' .
-                $quotedRecordId     . ' = ' . $this->_db->quote($row['record_id'])    . ' AND ' .
-                $quotedAccountType  . ' = ' . $this->_db->quote($row['account_type']) . ' AND ' .
-                $quotedAccountId    . ' = ' . $this->_db->quote($row['account_id'])   . ' AND ' .
-                $quotedAccountGrant . ' = ' . $this->_db->quote($row['account_grant'])
-            );
+            try {
+                $this->_db->update(SQL_TABLE_PREFIX . 'tree_node_acl',
+                    array('id' => Tinebase_Record_Abstract::generateUID()),
+                    $quotedId . ' = ' . $this->_db->quote($row['id']) . ' AND ' .
+                    $quotedRecordId . ' = ' . $this->_db->quote($row['record_id']) . ' AND ' .
+                    $quotedAccountType . ' = ' . $this->_db->quote($row['account_type']) . ' AND ' .
+                    $quotedAccountId . ' = ' . $this->_db->quote($row['account_id']) . ' AND ' .
+                    $quotedAccountGrant . ' = ' . $this->_db->quote($row['account_grant'])
+                );
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         }
 
         /** @var Tinebase_Backend_Sql_Command_Interface $command */
@@ -2086,7 +2099,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_43()
     {
-        $this->_backend->dropIndex('groups', 'name');
+        try {
+            $this->_backend->dropIndex('groups', 'name');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         $this->_backend->addIndex('groups', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>name</name>
                     <unique>true</unique>
@@ -2196,7 +2213,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_46()
     {
         $scheduler = Tinebase_Core::getScheduler();
-        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        }
         $this->setApplicationVersion('Tinebase', '10.47');
     }
 
@@ -2255,9 +2274,81 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.51
+     *
+     * reimport all template files
      */
     public function update_50()
+    {
+        if ($this->isReplicationMaster()) {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            $basePath = $fileSystem->getApplicationBasePath(
+                    'Tinebase',
+                    Tinebase_FileSystem::FOLDER_TYPE_SHARED
+                ) . '/export/templates';
+
+            if (!$fileSystem->isDir($basePath)) {
+                $fileSystem->createAclNode($basePath);
+            }
+
+            $path = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR;
+
+            /** @var Tinebase_Model_Application $application */
+            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+                $appPath = $path . $application->name . DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates';
+                if (!is_dir($appPath)) {
+                    continue;
+                }
+
+                $templateAppPath = $basePath . '/' . $application->name;
+                if (!$fileSystem->isDir($templateAppPath)) {
+                    $fileSystem->createAclNode($templateAppPath);
+                }
+
+                foreach (new DirectoryIterator($appPath) as $item) {
+                    if (!$item->isFile()) {
+                        continue;
+                    }
+                    if (false === ($content = file_get_contents($item->getPathname()))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Could not import template: ' . $item->getPathname());
+                        continue;
+                    }
+                    if (false === ($file = $fileSystem->fopen($templateAppPath . '/' . $item->getFileName(), 'w'))) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' could not open ' . $templateAppPath . '/' . $item->getFileName() . ' for writting');
+                        continue;
+                    }
+                    fwrite($file, $content);
+                    if (true !== $fileSystem->fclose($file)) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' write to ' . $templateAppPath . '/' . $item->getFileName() . ' did not succeed');
+                        continue;
+                    }
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.51');
+    }
+
+    /**
+     * update to 10.52
+     *
+     * add filesystem notify quota task to scheduler
+     */
+    public function update_51()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.52');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_52()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

@@ -19,11 +19,12 @@ class AllServerTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 all server tests');
         
-        $suite->addTestSuite('ActiveSync_Server_HttpTests');
-        $suite->addTestSuite('Tinebase_ControllerServerTest');
-        $suite->addTestSuite('Tinebase_Server_WebDAVTests');
-        $suite->addTestSuite('Tinebase_Server_JsonTests');
-        $suite->addTestSuite('Tinebase_Server_HttpTests');
+        $suite->addTestSuite(ActiveSync_Server_HttpTests::class);
+        $suite->addTestSuite(Tinebase_ControllerServerTest::class);
+        $suite->addTestSuite(Tinebase_Server_WebDAVTests::class);
+        $suite->addTestSuite(Tinebase_Server_JsonTests::class);
+        $suite->addTestSuite(Tinebase_Server_HttpTests::class);
+        $suite->addTestSuite(Tinebase_Server_RoutingTests::class);
 
         return $suite;
     }

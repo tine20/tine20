@@ -18,6 +18,13 @@
 class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 {
     /**
+     * List of MassMailingPlugins the current user has access to
+     *
+     * @var array|null
+     */
+    protected $_massMailingPlugins = null;
+
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller_Message_Send
@@ -65,6 +72,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
+        if ($_message->massMailingFlag) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' Sending mass mailing message with subject ' . $_message->subject);
+
+            $this->_sendMassMailing($_message);
+
+            return $_message;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
@@ -97,7 +113,62 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         return $_message;
     }
-    
+
+    /**
+     * iterate over each to, clone message, send the message only to each single to, run each mass mailing plugin the
+     * current user has access on each message before sending it
+     *
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _sendMassMailing(Felamimail_Model_Message $_message)
+    {
+        foreach ($_message->to as $to) {
+            $clonedMessage = clone $_message;
+            $clonedMessage->to = [$to];
+            $clonedMessage->cc = [];
+            $clonedMessage->bcc = [];
+            $clonedMessage->massMailingFlag = false;
+
+            $this->_runMassMailingPlugins($clonedMessage);
+
+            $this->sendMessage($clonedMessage);
+        }
+    }
+
+    /**
+     * run each mass mailing plugin the current user has access to on the message
+     *
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _runMassMailingPlugins(Felamimail_Model_Message $_message)
+    {
+        if (null === $this->_massMailingPlugins) {
+            $this->_initMassMailingPlugins();
+        }
+
+        /** @var Felamimail_Controller_MassMailingPluginInterface $plugin */
+        foreach ($this->_massMailingPlugins as $plugin) {
+            $plugin->prepareMassMailingMessage($_message);
+        }
+    }
+
+    /**
+     * load all application controllers implementing Felamimail_Controller_MassMailingPluginInterface the current user
+     * has access too
+     */
+    protected function _initMassMailingPlugins()
+    {
+        $this->_massMailingPlugins = [];
+
+        foreach (Tinebase_Core::getUser()->getApplications() as $application) {
+            $class = $application->name . '_Controller';
+            if (class_exists($class) && in_array(Felamimail_Controller_MassMailingPluginInterface::class,
+                    class_implements($class)) && method_exists($class, 'getInstance')) {
+                $this->_massMailingPlugins[] = $class::getInstance();
+            }
+        }
+    }
+
     /**
      * places a Felamimail_Model_Message in original_id field of given message (if it had an original_id set)
      * 
@@ -224,7 +295,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && (isset($smtpConfig['hostname']) || array_key_exists('hostname', $smtpConfig))) {
-            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+            $transport = Felamimail_Transport::getNewInstance($smtpConfig['hostname'], $smtpConfig);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 $debugConfig = $smtpConfig;
@@ -324,7 +395,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param array $_additionalHeaders
      * @return void
      */
-    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
+    protected function _saveInSent(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
     {
         try {
             $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);

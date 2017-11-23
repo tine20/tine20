@@ -140,6 +140,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'email_home'            => array('StringTrim', 'StringToLower'),
         'url'                   => array('StringTrim'),
         'url_home'              => array('StringTrim'),
+        'adr_one_lon'           => array(array('Empty', null)),
+        'adr_one_lat'           => array(array('Empty', null)),
+        'adr_two_lon'           => array(array('Empty', null)),
+        'adr_two_lat'           => array(array('Empty', null)),
+        'preferred_address'     => array(array('Empty', 0)),
     );
 
     /**
@@ -293,25 +298,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'n_given',
         'n_family',
     );
-    
-    /**
-    * overwrite constructor to add more filters
-    *
-    * @param mixed $_data
-    * @param bool $_bypassFilters
-    * @param mixed $_convertDates
-    */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        // set geofields to NULL if empty
-        $geoFields = array('adr_one_lon', 'adr_one_lat', 'adr_two_lon', 'adr_two_lat');
-        foreach ($geoFields as $geoField) {
-            $this->_filters[$geoField]        = new Zend_Filter_Empty(NULL);
-        }
-        $this->_filters['preferred_address']        = new Zend_Filter_Empty(0);
-    
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
 
     /**
      * @return array

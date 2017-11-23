@@ -30,167 +30,184 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+        try {$this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         if ($body !== null) {
-            $this->_body = $body; 
-        } else if ($this->_request instanceof \Zend\Http\Request) {
+            $this->_body = $body;
+        } else {if ($this->_request instanceof \Zend\Http\Request) {
             $this->_body = fopen('php://temp', 'r+');
             fwrite($this->_body, $request->getContent());
             rewind($this->_body);
             /*
              * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
              * client sends empty request instead empty xml-sceleton -> inject it here
-             * (improvement: do not rely on user agent because other clients use windows stuff, too)
-             */
-            if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
-                $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
-                $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
+             *(improvement: do not rely on user agent because other clients use windows stuff, too)
+            */
+            if (isset($_SERVER['REQUEST_METHOD']) && ( $_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
+                    $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
+                    $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
                 $broken_user_agent_body.= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
-                $broken_user_agent_body.= '</D:prop></D:propfind>';
-                fwrite($this->_body, $broken_user_agent_body);
-                rewind($this->_body);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
-                    $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
+                    $broken_user_agent_body.= '</D:prop></D:propfind>';
+                    fwrite($this->_body, $broken_user_agent_body);
+                    rewind($this->_body);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)){
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
+                        $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
+
             }
         }
-        
-        try {
+        }
+        }try {
             list($loginName, $password) = $this->_getAuthData($this->_request);
-            
+
         } catch (Tinebase_Exception_NotFound $tenf) {
             header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
-            
+
             return;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)){
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');}
         
         Tinebase_Core::initFramework();
 
-        if (null !== ($denyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) &&
+            if (null !== ($denyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) &&
                 is_array($denyList)) {
-            foreach ($denyList as $deny) {
-                if (preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
-                    header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
-                    return;
+                foreach ($denyList as $deny) {
+                    if (preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
+                        header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
+                        return;
+                    }
                 }
             }
-        }
-        
-        if (Tinebase_Controller::getInstance()->login(
-            $loginName,
-            $password,
-            $this->_request,
-            self::REQUEST_TYPE
-        ) !== true) {
-            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            
-            return;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' requestUri:' . $this->_request->getRequestUri());
-        
-        self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
-        \Sabre\DAV\Server::$exposeVersion = false;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            self::$_server->debugExceptions = true;
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r(self::$_server->httpRequest->getHeaders(), true));
-            $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
-            
-            if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
-                // NOTE inputstream can not be rewinded
-                $debugStream = fopen('php://temp','r+');
-                stream_copy_to_stream($this->_body, $debugStream);
-                rewind($debugStream);
-                $this->_body = $debugStream;
-                
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
-                rewind($this->_body);
-            } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n -- BINARY DATA --");
+
+            if (Tinebase_Controller::getInstance()->login(
+                    $loginName,
+                    $password,
+                    $this->_request,
+                    self::REQUEST_TYPE
+                ) !== true) {
+                header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
+                header('HTTP/1.1 401 Unauthorized');
+
+                return;
             }
-        }
-        
-        self::$_server->httpRequest->setBody($this->_body);
-        
-        // compute base uri
-        self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
-        
-        $tempDir = Tinebase_Core::getTempDir();
-        if (!empty($tempDir)) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Starting to handle WebDAV request (requestUri:' . $this->_request->getRequestUri()
+                    . ' PID: ' . getmypid() . ')'
+                );
+            }
+
+            self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
+            \Sabre\DAV\Server::$exposeVersion = false;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                self::$_server->debugExceptions = true;
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r(self::$_server->httpRequest->getHeaders(),
+                        true));
+                $contentType = self::$_server->httpRequest->getHeader('Content-Type');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
+
+                if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
+                    // NOTE inputstream can not be rewinded
+                    $debugStream = fopen('php://temp', 'r+');
+                    stream_copy_to_stream($this->_body, $debugStream);
+                    rewind($debugStream);
+                    $this->_body = $debugStream;
+
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
+                    rewind($this->_body);
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n -- BINARY DATA --");
+                }
+            }
+
+            self::$_server->httpRequest->setBody($this->_body);
+
+            // compute base uri
+            self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
+
+            $tempDir = Tinebase_Core::getTempDir();
+            if (!empty($tempDir)) {
+                self::$_server->addPlugin(
+                    new \Sabre\DAV\Locks\Plugin(new \Sabre\DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+                );
+            }
+
             self::$_server->addPlugin(
-                new \Sabre\DAV\Locks\Plugin(new \Sabre\DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+                new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
             );
-        }
-        
-        self::$_server->addPlugin(
-            new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
-        );
-        
-        $aclPlugin = new \Sabre\DAVACL\Plugin();
-        $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-        $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS);
-        
-        $aclPlugin->principalSearchPropertySet = array(
-            '{DAV:}displayname'                                                   => 'Display name',
-            '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
-        );
-        
-        self::$_server->addPlugin($aclPlugin);
-        
-        self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
-        self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginDefaultAlarms());
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginManagedAttachments());
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginPrivateEvents());
-        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
-        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
-        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
-        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
-        self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
-            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
-        }
-        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
 
-        $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-        $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false);
+            $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
+            $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
+            $aclPlugin->principalCollectionSet = array(
+                Tinebase_WebDav_PrincipalBackend::PREFIX_USERS,
+                Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
+                Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            );
 
-        if ($logOutput) {
-            ob_start();
+            $aclPlugin->principalSearchPropertySet = array(
+                '{DAV:}displayname' => 'Display name',
+                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
+            );
+
+            self::$_server->addPlugin($aclPlugin);
+
+            self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
+            self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginDefaultAlarms());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginManagedAttachments());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginPrivateEvents());
+            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
+            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
+            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
+            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
+            self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+            if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+                }
+                self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+                }
+            }
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
+
+            $contentType = self::$_server->httpRequest->getHeader('Content-Type');
+            $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && (stripos($contentType,
+                        'text') === 0 || stripos($contentType, '/xml') !== false);
+
+            if ($logOutput) {
+                ob_start();
+            }
+
+            self::$_server->exec();
+
+            if ($logOutput) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
+                ob_end_flush();
+            } else {
+
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV response\n -- BINARY DATA --");
+            }
+
+            Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e, false);
+            @header('HTTP/1.1 500 Internal Server Error');
         }
-        
-        self::$_server->exec();
-        
-        if ($logOutput) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
-            ob_end_flush();
-        } else {
-
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV response\n -- BINARY DATA --");
-        }
-
-        Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
     }
     
    /**

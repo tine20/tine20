@@ -204,6 +204,16 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testTriggerAsyncEvents()
     {
+        $scheduler = Tinebase_Core::getScheduler();
+        $serverTime = null;
+        /** @var Tinebase_Model_SchedulerTask $task */
+        foreach ($scheduler->getAll() as $task) {
+            if ($serverTime === null) {
+                $serverTime = $task->server_time->getClone();
+            }
+            $task->next_run = $task->server_time->getClone()->subDay(100);
+            $scheduler->update($task);
+        }
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
         $this->_usernamesToDelete[] = 'cronuser';
@@ -220,7 +230,12 @@ class Tinebase_Frontend_CliTest extends TestCase
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
-        $this->assertContains('Tine 2.0 scheduler run', $out, $out);
+
+        foreach ($scheduler->getAll() as $task) {
+            static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully');
+            static::assertTrue($task->last_run->isLaterOrEquals($serverTime),
+                'task ' . $task->name . ' did not run successfully');
+        }
     }
 
     /**
@@ -262,10 +277,15 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->monitoringCheckCron();
         $out = ob_get_clean();
         
-        $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
-        if ($lastJob) {
-            $this->assertContains('CRON OK', $out);
-            $this->assertEquals(0, $result);
+        $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
+        if ($lastJob && $lastJob->last_run instanceof Tinebase_DateTime) {
+            if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
+                $this->assertContains('CRON FAIL: NO JOB IN THE LAST HOUR', $out);
+                $this->assertEquals(1, $result);
+            } else {
+                $this->assertContains('CRON OK', $out);
+                $this->assertEquals(0, $result);
+            }
         } else {
             $this->assertEquals("CRON FAIL: NO LAST JOB FOUND\n", $out);
             $this->assertEquals(1, $result);

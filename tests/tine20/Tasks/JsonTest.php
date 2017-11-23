@@ -180,12 +180,9 @@ class Tasks_JsonTest extends TestCase
     protected function _sendAlarm()
     {
         $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->addTask('Tinebase_Alarm', $this->_createTask());
-        try {
-            $scheduler->run();
-        } catch (Tinebase_Exception $te) {
-            // do nothing
-        }
+        /** @var Tinebase_Model_SchedulerTask $task */
+        $task = $scheduler->getBackend()->getByProperty('Tinebase_Alarm', 'name');
+        $task->config->run();
     }
 
     /**

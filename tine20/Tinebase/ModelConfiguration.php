@@ -779,6 +779,7 @@ class Tinebase_ModelConfiguration {
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
         'float'    => 'Tinebase_Model_Filter_Float',
+        'money'    => 'Tinebase_Model_Filter_Float',
         'record'   => 'Tinebase_Model_Filter_ForeignId',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
@@ -802,7 +803,7 @@ class Tinebase_ModelConfiguration {
     );
 
     /**
-     * This maps field types to their default validators, just zendfw validators can be used here.
+     * This maps field types to their default validators, just zend validators can be used here.
      * For using own validators, use _ownValidatorMapping instead. If no validator is given,
      * "array(Zend_Filter_Input::ALLOW_EMPTY => true)" will be used
      *
@@ -1037,7 +1038,7 @@ class Tinebase_ModelConfiguration {
                     // @todo: better handling of virtualfields
                     $this->_defaultData[$fieldKey] = $virtualField['default'];
                 }
-                $this->_virtualFields[] = $virtualField;
+                $this->_virtualFields[$fieldKey] = $virtualField;
                 $fieldDef['modlogOmit'] = true;
 
             } elseif ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
@@ -1251,6 +1252,7 @@ class Tinebase_ModelConfiguration {
         $modelconfig = array();
         if (is_array($models)) {
             foreach ($models as $modelName) {
+                /** @var Tinebase_Record_Abstract $recordClass */
                 $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
                 $modelName = preg_replace('/^.+_Model_/', '', $modelName);
                 $config = $recordClass::getConfiguration();
@@ -1317,7 +1319,7 @@ class Tinebase_ModelConfiguration {
                 break;
             case 'datetime':
                 // add to alarm fields
-                if ((isset($fieldDef['alarm']) || array_key_exists('alarm', $fieldDef))) {
+                if (isset($fieldDef['alarm'])) {
                     $this->_alarmDateTimeField = $fieldKey;
                 }
                 // add to datetime fields
@@ -1366,6 +1368,13 @@ class Tinebase_ModelConfiguration {
                 } catch (Exception $e) {
                     // no customfield filter available (yet?)
                     Tinebase_Exception::log($e);
+                }
+                break;
+            case 'virtual':
+                if (isset($fieldDef['config']) && isset($fieldDef['config']['type']) && 'datetime' ===
+                        $fieldDef['config']['type']) {
+                    // add to datetime fields
+                    $this->_datetimeFields[] = $fieldKey;
                 }
                 break;
             default:

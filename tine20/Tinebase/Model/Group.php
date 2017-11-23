@@ -51,6 +51,28 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'name'          => 'StringTrim',
         'description'   => 'StringTrim',
     );
+
+    protected $_validators = array(
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'container_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'list_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'name'          => array(Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED),
+        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'email'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'visibility'    => array(
+            ['InArray', [self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED]],
+            Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
+        ),
+        'created_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        );
     
    /**
      * key in $_validators/$_properties array for the filed which 
@@ -73,36 +95,6 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     );
 
     protected static $_replicable = true;
-    
-    /**
-     * @see Tinebase_Record_Abstract
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array(
-            'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'container_id'  => array('allowEmpty' => true),
-            'list_id'       => array('allowEmpty' => true),
-            'name'          => array('presence' => 'required'),
-            'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-            'email'         => array('allowEmpty' => true),
-            'visibility'    => array(
-                new Zend_Validate_InArray(array(self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED)),
-                Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
-            ),
-            'created_by'             => array('allowEmpty' => true),
-            'creation_time'          => array('allowEmpty' => true),
-            'last_modified_by'       => array('allowEmpty' => true),
-            'last_modified_time'     => array('allowEmpty' => true),
-            'is_deleted'             => array('allowEmpty' => true),
-            'deleted_time'           => array('allowEmpty' => true),
-            'deleted_by'             => array('allowEmpty' => true),
-            'seq'                    => array('allowEmpty' => true),
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
     
     /**
      * converts a int, string or Tinebase_Model_Group to a groupid
@@ -152,5 +144,45 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     public static function setReplicable($isReplicable)
     {
         static::$_replicable = (bool)$isReplicable;
+    }
+
+    /**
+     * undoes the change stored in the diff
+     *
+     * will (re)load and populate members property if required
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function undo(Tinebase_Record_Diff $diff)
+    {
+        $members = null;
+        $oldMembers = null;
+        // clone diff here to prevent accidental/unintended change
+        $diffWithoutMembers = clone $diff;
+        if (isset($diff->diff['members'])) {
+            $members = $diff->diff['members'];
+            unset($diffWithoutMembers->xprops('diff')['members']);
+        }
+        if (isset($diff->oldData['members'])) {
+            $oldMembers = $diff->oldData['members'];
+            unset($diffWithoutMembers->xprops('oldData')['members']);
+        }
+
+        parent::undo($diffWithoutMembers);
+
+        if (null === $members || null === $oldMembers) {
+            return;
+        }
+
+        $currentMembers = Tinebase_Group::getInstance()->getGroupMembers($this->getId());
+
+        if (!empty($remove = array_diff($members, $oldMembers))) {
+            $currentMembers = array_diff($currentMembers, $remove);
+        }
+        if (!empty($add = array_diff($oldMembers, $members))) {
+            $currentMembers = array_merge($currentMembers, $add);
+        }
+        $this->members = $currentMembers;
     }
 }

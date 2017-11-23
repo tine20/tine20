@@ -445,6 +445,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Tinebase_Model_Preference',
                 'Tinebase_Model_PersistentObserver',
                 'Tinebase_Model_Grants',
+                'Tinebase_Model_SchedulerTask',
             ),
             'Voipmanager' => array(
                 'Voipmanager_Model_Snom_Template',

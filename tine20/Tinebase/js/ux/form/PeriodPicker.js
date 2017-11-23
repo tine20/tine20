@@ -23,9 +23,9 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {String} availableRanges
      * ranges available in range picker
-     * _('Day'), _('Week'), _('Month'), _('Year')
+     * _('Day'), _('Week'), _('Month'), _('Quarter'), _('Year')
      */
-    availableRanges: 'day,week,month',
+    availableRanges: 'day,week,month,quarter,year',
 
     /**
      * @cfg {String} range
@@ -97,7 +97,10 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 dateString = wkStart.getWeekOfYear() + ' ' + this.startDate.format('Y');
                 break;
             case 'month':
-                dateString = Ext.DatePicker.prototype.monthNames[this.startDate.getMonth()] + ' ' + this.startDate.format('Y');
+                dateString = Date.getShortMonthName(this.startDate.getMonth()) + ' ' + this.startDate.format('Y');
+                break;
+            case 'quarter':
+                dateString = Math.ceil(+this.startDate.format('n')/3) + ' ' + this.startDate.format('Y');
                 break;
             case 'year':
                 dateString = this.startDate.format('Y');
@@ -251,10 +254,14 @@ Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range) {
             from = startDate.clearTime(true).getFirstDateOfMonth();
             until = from.getLastDateOfMonth().add(Date.DAY, 1);
             break;
+        case 'quarter':
+            from = startDate.clearTime(true).getFirstDateOfMonth().add(Date.MONTH, -1 * ((+startDate.format('n')-1)%3));
+            until = from.add(Date.MONTH, 2).getLastDateOfMonth().add(Date.DAY, 1);
+            break;
         case 'year':
-            var year = this.startDate.format('y');
-            from = Date.parse(year + '-0-0 00:00:00', 'Y-m-d H:i:s');
-            until = Date.parse(++year + '-0-0 00:00:00', 'Y-m-d H:i:s');
+            var year = startDate.format('Y');
+            from = Date.parseDate(year + '-01-01 00:00:00', 'Y-m-d H:i:s');
+            until = Date.parseDate(++year + '-01-01 00:00:00', 'Y-m-d H:i:s');
             break;
     }
 
@@ -274,6 +281,8 @@ Ext.ux.form.PeriodPicker.getRange = function(period) {
 
     if (ms > msDay * 300) {
         return 'year';
+    } else if (ms > msDay * 80) {
+        return 'quarter';
     } else if (ms > msDay * 20) {
         return 'month';
     } else if (ms > msDay * 5) {

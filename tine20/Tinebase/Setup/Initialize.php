@@ -156,22 +156,27 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     protected function _initializeSchedulerTasks()
     {
         $scheduler = Tinebase_Core::getScheduler();
-        
-        Tinebase_Scheduler_Task::addAlarmTask($scheduler);
-        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addImportTask($scheduler);
-        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
-        Tinebase_Scheduler_Task::addReplicationTask($scheduler);
-        Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
-        Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
-        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
-        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
-        Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        $oldRightValue = $scheduler->doRightChecks(false);
+
+        try {
+            Tinebase_Scheduler_Task::addAlarmTask($scheduler);
+            Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addImportTask($scheduler);
+            Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+            Tinebase_Scheduler_Task::addReplicationTask($scheduler);
+            Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+        } finally {
+            $scheduler->doRightChecks($oldRightValue);
+        }
     }
 }

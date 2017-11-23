@@ -33,6 +33,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             'pidfile'    => '/var/run/tine20/actionQueue.pid',
         ),
         'tine20' => array (
+            'tine20php'       => __DIR__ . '/../../tine20.php',
             'executionMethod' => self::EXECUTION_METHOD_DISPATCH,
             'maxRetry'        => 10,
             'maxChildren'     => 10,
@@ -46,6 +47,28 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      * @var array
      */
     protected $_jobScoreBoard = array();
+
+    /**
+     * php script to execute tine
+     *
+     * @var string
+     */
+    protected $_tineExecutable = null;
+
+    /**
+     * constructor
+     *
+     * @param Zend_Config $config
+     */
+    public function __construct($config = NULL)
+    {
+        if (!is_file(static::$_defaultConfig['tine20']['tine20php'])) {
+            if (is_file('/usr/sbin/tine20-cli')) {
+                static::$_defaultConfig['tine20']['tine20php'] = '/usr/sbin/tine20-cli';
+            }
+        }
+        parent::__construct($config);
+    }
     
     /**
      * infinite loop where daemon manages the execution of the jobs from the job queue
@@ -58,6 +81,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             exit(1);
         }
 
+        $this->_tineExecutable = $this->_getConfig()->tine20->tine20php;
         $maxChildren = $this->_getConfig()->tine20->maxChildren;
         $lastMaxChildren = 0;
 
@@ -230,9 +254,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
         // execute in subprocess
         //if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
-        chdir(__DIR__);
+
             exec('php -d include_path=' . escapeshellarg(get_include_path()) .
-                ' ./../../tine20.php --method Tinebase.executeQueueJob jobId=' .
+                ' ' . $this->_tineExecutable . ' --method Tinebase.executeQueueJob jobId=' .
                 escapeshellarg($jobId), $output, $exitCode);
             if ($exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . join(PHP_EOL, $output));

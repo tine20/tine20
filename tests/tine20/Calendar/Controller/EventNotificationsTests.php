@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -24,13 +24,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @var Calendar_Controller_EventNotifications controller unter test
      */
     protected $_notificationController;
-    
-   /**
-    * email test class
-    *
-    * @var Felamimail_Controller_MessageTest
-    */
-    protected $_emailTestClass;
     
     /**
      * (non-PHPdoc)
@@ -64,10 +57,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function tearDown()
     {
         parent::tearDown();
-        
-        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
-            $this->_emailTestClass->tearDown();
-        }
         
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
     }
@@ -276,6 +265,23 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
         $this->_assertMail('rwright', 'decline');
     }
+
+    /**
+     * testAttenderStatusUpdate
+     *
+     * @see 0013630: no emails are sent on external invitation reply
+     */
+    public function testAttenderStatusUpdate()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('rwright');
+        $persistentEvent = $this->_eventController->create($event);
+        $rwright = $persistentEvent->attendee[0];
+        $rwright->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        self::flushMailer();
+        $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
+        $this->_assertMail('rwright', 'accept');
+    }
     
     /**
      * testOrganizerNotificationSupress
@@ -290,7 +296,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
     }
     
@@ -307,7 +313,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf', 'decline');
     }
@@ -584,20 +590,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testParallelAlarmTrigger()
     {
-        $this->_testNeedsTransaction();
-        
-        try {
-            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
-            $this->_emailTestClass->setup();
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            $this->markTestIncomplete('email not available.');
-        }
-        
-        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        self::flushMailer();
-        $this->_getAlarmMails(TRUE);
-        
         $event = $this->_getEvent();
         $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
         $event->dtend = clone $event->dtstart;
@@ -609,17 +601,21 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             ), TRUE)
         ));
         
-        $persistentEvent = $this->_eventController->create($event);
+        $this->_eventController->create($event);
+        self::flushMailer();
         try {
-            Tinebase_AsyncJobTest::triggerAsyncEvents();
+            $scheduler = Tinebase_Core::getScheduler();
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getBackend()->getByProperty('Tinebase_Alarm', 'name');
+            $task->config->run();
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
-            $this->markTestIncomplete($e->getMessage());
+            static::fail($e->getMessage());
         }
-        
-        $result = $this->_getAlarmMails(TRUE);
-        $this->assertEquals(1, count($result), 'expected exactly 1 alarm mail, got: ' . print_r($result->toArray(), TRUE));
+
+        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $this->_assertMail('sclever', $assertString);
     }
     
     /**
@@ -1131,39 +1127,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $messages = self::getMessages();
         $this->assertEquals(0, count($messages), 'no invitation should be send to sclever');
     }
-    
-    /**
-     * get test alarm emails
-     * 
-     * @param boolean $deleteThem
-     * @return Tinebase_Record_RecordSet
-     */
-    protected function _getAlarmMails($deleteThem = FALSE)
-    {
-        // search and assert alarm mail
-        $folder = $this->_emailTestClass->getFolder('INBOX');
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
-        $i = 0;
-        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
-            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
-            $i++;
-        }
-        $account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array('field' => 'folder_id',  'operator' => 'equals',     'value' => $folder->getId()),
-            array('field' => 'account_id', 'operator' => 'equals',     'value' => $account->getId()),
-            array('field' => 'subject',    'operator' => 'startswith', 'value' => 'Alarm for event "Wakeup" at'),
-        ));
-        
-        $result = Felamimail_Controller_Message::getInstance()->search($filter);
-        
-        if ($deleteThem) {
-            Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, Felamimail_Model_Folder::FOLDER_TRASH);
-        }
-        
-        return $result;
-    }
-    
+
     /**
      * testAdoptAlarmDSTBoundaryAllDayEvent
      * 

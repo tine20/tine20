@@ -204,10 +204,21 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             foreach ($_groupMembers as $accountId) {
                 $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
                 if (in_array($accountId, $userIdsWithExistingAccounts)) {
-                    $this->_db->insert(SQL_TABLE_PREFIX . 'group_members', array(
-                        'group_id'    => $groupId,
-                        'account_id'  => $accountId
-                    ));
+                    try {
+                        $this->_db->insert(SQL_TABLE_PREFIX . 'group_members', array(
+                            'group_id' => $groupId,
+                            'account_id' => $accountId
+                        ));
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        // ignore duplicate exceptions
+                        if (! preg_match('/duplicate/i', $zdse->getMessage())) {
+                            throw $zdse;
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                . ' ' . $zdse->getMessage());
+                        }
+                    }
+
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' User with ID ' . $accountId . ' does not have an account!');
@@ -856,6 +867,46 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
             default:
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $modification
+     * @param bool $dryRun
+     */
+    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $modification, $dryRun)
+    {
+        if (Tinebase_Timemachine_ModificationLog::CREATED === $modification->change_type) {
+            if (!$dryRun) {
+                $this->deleteGroups($modification->record_id);
+            }
+        } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modification->change_type) {
+            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+            $model = $modification->record_type;
+            /** @var Tinebase_Model_Group $record */
+            $record = new $model($diff->oldData, true);
+            if (!$dryRun) {
+                $createdGroup = $this->create($record);
+                if (is_array($record->members) && !empty($record->members)) {
+                    $this->setGroupMembers($createdGroup->getId(), $record->members);
+                }
+            }
+        } else {
+            $record = $this->getGroupById($modification->record_id);
+            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Undoing diff ' . print_r($diff->toArray(), true));
+
+            // this undo will (re)load and populate members property if required
+            $record->undo($diff);
+
+            if (! $dryRun) {
+                $this->updateGroup($record);
+                if (isset($diff->diff['members']) && is_array($diff->diff['members']) && is_array($record->members)) {
+                    $this->setGroupMembers($record->getId(), $record->members);
+                }
+            }
         }
     }
 }

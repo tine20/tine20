@@ -1377,8 +1377,9 @@ class Tinebase_FileSystem implements
                 if ($recursive !== true) {
                     throw new Tinebase_Exception_InvalidArgument('directory not empty');
                 } else {
+                    /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
-                        if ($this->isDir($path . '/' . $child->name)) {
+                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
                             $this->rmdir($path . '/' . $child->name, true, true);
                         } else {
                             $this->unlink($path . '/' . $child->name, true);
@@ -2233,11 +2234,15 @@ class Tinebase_FileSystem implements
     
     /**
      * clears deleted files from filesystem + database
+     *
+     * @return bool
      */
     public function clearDeletedFiles()
     {
         $this->clearDeletedFilesFromFilesystem();
         $this->clearDeletedFilesFromDatabase();
+
+        return true;
     }
 
     /**
@@ -2522,7 +2527,7 @@ class Tinebase_FileSystem implements
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', /** @noinspection PhpUnusedParameterInspection */ $_topLevelAllowed = true)
+    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true)
     {
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
@@ -2530,37 +2535,56 @@ class Tinebase_FileSystem implements
                     if ($_path->isToplevelPath()) {
                         $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
                     } else {
-                        $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                        $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                     }
                 } else {
                     $hasPermission = ($_action === 'get');
                 }
                 break;
             case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
-                if ($_action !== 'get') {
-                    // TODO check if app has MANAGE_SHARED_FOLDERS right?
-                    $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                // if is toplevel path and action is add, allow manage_shared_folders right
+                // if it is toplevel path and action is get allow
+                // else just do normal ACL node check
+                if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
-                        Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                    );
+                        Tinebase_Acl_Rights::ADMIN
+                    ))) {
+                    // admin, go ahead
+                    break;
+                }
+                if ($_path->isToplevelPath()) {
+                    if ('add' === $_action) {
+                        $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                            $_path->application->name,
+                            Tinebase_Core::getUser()->getId(),
+                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                        );
+                    } else {
+                        $hasPermission = 'get' === $_action;
+                    }
                 } else {
-                    $hasPermission = true;
+                    $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                 }
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
                 $hasPermission = ($_action === 'get');
                 break;
             default:
-                $hasPermission = $this->checkACLNode($_path->getNode(), $_action);
+                $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
         }
 
-        if (! $hasPermission) {
+        if (true === $_throw && ! $hasPermission) {
             throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' nodes in path ' . $_path->flatpath);
         }
+
+        return $hasPermission;
     }
 
     /**
+     * DO NOT USE THIS FUNCTION! checkPathACL is what you want to use!
+     * this function may only be used by checkPathACL (or if you are really sure of what you are doing!)
+     *
      * check if user has the permissions for the node
      *
      * does not start a transaction!
@@ -2569,7 +2593,7 @@ class Tinebase_FileSystem implements
      * @param string $_action get|update|...
      * @return boolean
      */
-    public function checkACLNode(Tinebase_Model_Tree_Node $_node, $_action = 'get')
+    protected function _checkACLNode(Tinebase_Model_Tree_Node $_node, $_action = 'get')
     {
         if (Tinebase_Core::getUser()->hasGrant($_node, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
             return true;
@@ -2966,6 +2990,8 @@ class Tinebase_FileSystem implements
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS
      * or folder specific settings
+     *
+     * @return bool
      */
     public function clearFileRevisions()
     {
@@ -3033,10 +3059,14 @@ class Tinebase_FileSystem implements
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' cleared ' . $count . ' file revisions');
+
+        return true;
     }
 
     /**
      * create preview for files without a preview, delete previews for already deleted files
+     *
+     * @return bool
      */
     public function sanitizePreviews()
     {
@@ -3395,6 +3425,9 @@ class Tinebase_FileSystem implements
         return $_alarm;
     }
 
+    /**
+     * @return bool
+     */
     public function notifyQuota()
     {
         $treeNodeBackend = $this->_getTreeNodeBackend();
@@ -3438,6 +3471,7 @@ class Tinebase_FileSystem implements
 
         $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
         $personalNode = null;
+        $notifiedNodes = [];
         if ($totalByUser > 0 && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $personalNode = $this->stat('/Filemanager/folders/personal');
             /** @var Tinebase_Model_Tree_Node $node */
@@ -3452,8 +3486,10 @@ class Tinebase_FileSystem implements
                 }
                 if ($size >= ($totalByUser * 0.99)) {
                     $this->_sendQuotaNotification($node, false);
+                    $notifiedNodes[$node->getId()] = true;
                 } elseif($softQuota > 0 && $size > ($totalByUser * $softQuota / 100)) {
                     $this->_sendQuotaNotification($node);
+                    $notifiedNodes[$node->getId()] = true;
                 }
             }
         }
@@ -3462,6 +3498,9 @@ class Tinebase_FileSystem implements
                     array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
                     array('field' => 'quota', 'operator' => 'greater', 'value' => 0)
                 ), '', array('ignoreAcl' => true))) as $node) {
+            if (isset($notifiedNodes[$node->getId()])) {
+                continue;
+            }
             if ($quotaIncludesRevisions) {
                 $size = $node->revision_size;
             } else {
@@ -3474,15 +3513,26 @@ class Tinebase_FileSystem implements
             }
         }
 
+        if ($quotaConfig->{Tinebase_Config::QUOTA_SKIP_IMAP_QUOTA}) {
+            return true;
+        }
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
-        $imapBackend = Tinebase_EmailUser::getInstance();
+        $imapBackend = null;
+        try {
+            $imapBackend = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return true;
+        }
 
         if (!$imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-            return;
+            return true;
         }
 
         /** @var Tinebase_Model_EmailUser $emailUser */
         foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
+            if ($emailUser->emailMailQuota < 1) {
+                continue;
+            }
             $alert = false;
             $softAlert = false;
             if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
@@ -3509,6 +3559,8 @@ class Tinebase_FileSystem implements
                 }
             }
         }
+
+        return true;
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
@@ -3568,6 +3620,42 @@ class Tinebase_FileSystem implements
             }
         } catch(Exception $e) {
             // LOG
+        }
+    }
+
+    public function purgeDeletedNodes()
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+
+            $treeNodes = $this->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 1]
+            ]));
+
+            $counter = 0;
+            while ($treeNodes->count() > 0 && ++$counter < 1000) {
+                $data = $treeNodes->getClone(true);
+                /** @var Tinebase_Model_Tree_Node $node */
+                foreach ($data as $node) {
+                    if ($treeNodes->find('parent_id', $node->getId()) !== null) {
+                        continue;
+                    }
+                    $treeNodes->removeById($node->getId());
+
+                    $this->_treeNodeBackend->delete($node->getId());
+
+                    if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
+                        $this->_fileObjectBackend->delete($node->object_id);
+                    }
+                }
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
     }
 }

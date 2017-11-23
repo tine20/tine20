@@ -5,10 +5,11 @@
  * @package     Tinebase
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
+
 /**
  * class Tinebase_Log
  * 
@@ -181,9 +182,9 @@ class Tinebase_Log extends Zend_Log
             date_default_timezone_set($this->_tz);
             parent::log($message, $priority, $extras);
             date_default_timezone_set($oldTZ);
-        }
-        else
+        } else {
             parent::log($message, $priority, $extras);
+        }
     }
 
     /**

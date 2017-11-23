@@ -44,6 +44,10 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Options: ' . print_r($decodedOptions, true));
         
         if (! is_array($decodedFilter)) {
+            if ($decodedFilter === null && isset($decodedOptions['recordData']['id'])) {
+                // get contact id from $decodedOptions
+                $decodedFilter = $decodedOptions['recordData']['id'];
+            }
             $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
         }
         

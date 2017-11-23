@@ -46,7 +46,7 @@ Tine.Filemanager.RecursiveFilter = Ext.extend(Ext.Toolbar, {
 
         this.items = [{
             xtype: 'tbtext',
-            text: this.app.i18n._('Search') + ': ',
+            text: this.app.i18n._('Search') + ': '
         }, this.globalBtn, {
             text: this.app.i18n._('This Folder'),
             pressed: true,

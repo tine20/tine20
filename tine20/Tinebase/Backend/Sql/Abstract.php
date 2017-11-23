@@ -389,6 +389,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
 
+        /** @var Tinebase_Record_Abstract $record */
         foreach ($result as $record) {
             if (! empty($this->_foreignTables)) {
                 $this->_explodeForeignValues($record);

@@ -112,10 +112,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $user = $this->testAddEmailAccount();
 
         // update user
-        $user->imapUser->emailMailQuota = 600;
+        $user->imapUser->emailMailQuota = 600 * 1024 * 1024;
 
         $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
-        $this->_assertImapUser(array('emailMailQuota' => '600'));
+        $this->_assertImapUser(array('emailMailQuota' => 600  * 1024 * 1024));
     }
 
     /**

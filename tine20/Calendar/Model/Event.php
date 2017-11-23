@@ -194,6 +194,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_PRIVATE,
         'external_seq'
     );
+
+    /**
+     * list of zend inputfilter
+     *
+     * this filter get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
+    protected $_filters = [
+        'organizer'     => array(array('Empty', null)),
+    ];
     
     /**
      * sets record related properties
@@ -220,21 +231,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_value = (string) $_value;
         }
         parent::__set($_name, $_value);
-    }
-    
-    /**
-     * the constructor
-     * it is needed because we have more validation fields in Calendars
-     * 
-     * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param bool $convertDates sets {@see $this->convertDates}
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_filters['organizer'] = new Zend_Filter_Empty(NULL);
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**
@@ -351,7 +347,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * 
      * @return Tinebase_DateTime
      */
-    public function getOriginalDtStart()
+    public function getOriginalDtStart($dtStartDiff=null)
     {
         $origianlDtStart = $this->dtstart instanceof stdClass ? clone $this->dtstart : $this->dtstart;
         
@@ -367,7 +363,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $origianlDtStart = new Tinebase_DateTime($origianlDtStartString, 'UTC');
             }
         }
-        
+
+        if ($dtStartDiff instanceof DateInterval) {
+            $origianlDtStart->modifyTime($dtStartDiff);
+        }
         return $origianlDtStart;
     }
     

@@ -440,42 +440,4 @@ class Tinebase_User_LdapTest extends TestCase
             $this->assertEquals($status, $syncedUser->accountStatus, print_r($syncedUser->toArray(), true));
         }
     }
-
-    /**
-     * testSyncUsersWithSchedulerTask
-     */
-    public function testSyncUsersWithSchedulerTask()
-    {
-
-        $scheduler = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY, array(
-            'controller'    => 'Tinebase_User',
-            'action'        => 'syncUsers',
-            'params'        => array(
-                'options'       => array(Tinebase_User::SYNC_WITH_CONFIG_OPTIONS => true),
-                'static'        => true
-            )
-        ));
-
-        $result = $scheduler->run();
-        self::assertTrue($result !== false, 'scheduler run failed');
-    }
-
-    /**
-     * testSyncGroupsWithSchedulerTask
-     *
-     * TODO move to group tests
-     */
-    public function testSyncGroupsWithSchedulerTask()
-    {
-        $scheduler = Tinebase_Scheduler_Task::getPreparedTask(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY, array(
-            'controller'    => 'Tinebase_Group',
-            'action'        => 'syncGroups',
-            'params'        => array(
-                'static'        => true
-            )
-        ));
-
-        $result = $scheduler->run();
-        self::assertTrue($result !== false, 'scheduler run failed');
-    }
 }
