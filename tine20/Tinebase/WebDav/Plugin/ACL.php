@@ -23,12 +23,12 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
 
         if (is_null($acl)) return null;
 
-        //try {
+        try {
             $oldValue = Tinebase_WebDav_PrincipalBackend::showHiddenGroups(true);
             $principals = $this->getCurrentUserPrincipals();
-        //} finally {
+        } finally {
             Tinebase_WebDav_PrincipalBackend::showHiddenGroups($oldValue);
-        //}
+        }
 
         $collected = array();
 
