@@ -883,23 +883,27 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modification->change_type) {
             $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
             $model = $modification->record_type;
+            /** @var Tinebase_Model_Group $record */
             $record = new $model($diff->oldData, true);
             if (!$dryRun) {
-                $this->create($record);
+                $createdGroup = $this->create($record);
+                if (is_array($record->members) && !empty($record->members)) {
+                    $this->setGroupMembers($createdGroup->getId(), $record->members);
+                }
             }
         } else {
             $record = $this->getGroupById($modification->record_id);
             $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Undoing diff ' . print_r($diff->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Undoing diff ' . print_r($diff->toArray(), true));
 
-            $groupMemberUpdate = isset($diff->diff['members']) && is_array($diff->diff['members']);
+            // this undo will (re)load and populate members property if required
             $record->undo($diff);
 
             if (! $dryRun) {
                 $this->updateGroup($record);
-                if ($groupMemberUpdate) {
+                if (isset($diff->diff['members']) && is_array($diff->diff['members']) && is_array($record->members)) {
                     $this->setGroupMembers($record->getId(), $record->members);
                 }
             }

@@ -358,7 +358,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
                         break;
                     case 'emailMailQuota':
                     case 'emailSieveQuota':
-                        $data[$keyMapping] = $value > 0 ? $value : null;
+                        $data[$keyMapping] = $value > 0 ? $value * 1024 * 1024 : null;
                         break;
                     case 'emailMailSize':
                         $data[$keyMapping] = $value > 0 ? $value : 0;
@@ -409,7 +409,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
                             $rawData[$property] = !empty($this->_config['gid']) ? $this->_config['gid'] : $value;
                             break;
                         case 'emailMailQuota':
-                            $rawData[$property] = (empty($value)) ? 0 : $value;
+                            $rawData[$property] = (empty($value) || $value < (1024 * 1024)) ? 0 :
+                                (int)($value / (1024 * 1024));
                             break;
                             
                         default:
