@@ -297,9 +297,9 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             $this->_uninstallAllApplications();
         }
 
-        $oldTinebaseId = '41ffda2c5b8b39ee5bb257e04dad4d4d69ae27b8';
+        $oldTinebaseId = '624f5f466ad6306dac31ad81e06cc6ca25090bb3';
         $options = array(
-            'backupDir' => dirname(__DIR__) . '/files/2017-11-23-08-27-25',
+            'backupDir' => dirname(__DIR__) . '/files/2017-11-23-08-47-08',
             'db' => 1,
         );
         $result = $this->_uit->getInstance()->installFromDump($options);
