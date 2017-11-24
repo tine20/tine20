@@ -20,7 +20,7 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationPublicTestRoute()
     {
-        $server = new Tinebase_Server_Routing();
+        $server = new Tinebase_Server_Expressive();
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
             'POST /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
@@ -46,7 +46,7 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationAuthTestRoute()
     {
-        $server = new Tinebase_Server_Routing();
+        $server = new Tinebase_Server_Expressive();
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
             'POST /ExampleApplication/testRoute HTTP/1.1' . "\r\n"

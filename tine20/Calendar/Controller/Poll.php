@@ -509,31 +509,44 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
 
 //        $this->Tinebase_Frontend_Http::_setMainscreenHeaders();
-        echo $view->render('pollClient.php');
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write($view->render('pollClient.php'));
+        return $response;
     }
 
     public function publicApiGetPoll($pollId, $user = null, $authKey = null)
     {
-        $poll = $this->get($pollId);
+        try {
+            $poll = $this->get($pollId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return new \Zend\Diactoros\Response('php://memory', 404);
+        }
 
         // @TODO: check if poll is password protected
         // @TODO: resolve events,attendee etc.
 
-        echo json_encode($poll->toArray());
+        return $poll;
     }
 
     public function publicApiAddAttender($pollId)
     {
-        echo 'OK: ' . $pollId;
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write('OK: ' . $pollId);
+        return $response;
     }
 
     public function publicApiUpdateAttenderStatus($pollId)
     {
-        echo 'OK: ' . $pollId;
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write('OK: ' . $pollId);
+        return $response;
     }
 
     public function publicApiGetAGB()
     {
-        echo Calendar_Config::getInstance()->get(Calendar_Config::POLL_AGB);
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write(Calendar_Config::getInstance()->get(Calendar_Config::POLL_AGB));
+        return $response;
     }
 }

@@ -22,13 +22,12 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
     {
         $agbStr = 'testAGB';
         Calendar_Config::getInstance()->set(Calendar_Config::POLL_AGB, $agbStr);
-        $server = new Tinebase_Server_Routing();
+        $server = new Tinebase_Server_Expressive();
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
-            'POST /Calendar/poll/view/agb HTTP/1.1' . "\r\n"
+            'GET /Calendar/view/pollagb HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
-            . 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryZQRf6nhpOLbSRcoe' . "\r\n"
             . 'Accept: */*' . "\r\n"
             . 'Referer: http://tine20.vagrant/' . "\r\n"
             . 'Accept-Encoding: gzip, deflate' . "\r\n"
@@ -37,7 +36,7 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
         );
 
         ob_start();
-        $server->handle($request);
+        $server->handle($request, '');
         $out = ob_get_clean();
 
         static::assertEquals($agbStr, $out);

@@ -38,105 +38,6 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     protected $_applicationName = 'Calendar';
 
     /**
-     * public routes, overload member in concrete class to define public routes for the routing server
-     *
-     * @var array
-     */
-    protected static $_publicRoutes = [
-        'Calendar' => [
-            'type'      => 'literal',
-            'options'   => [
-                'route'     => '/Calendar',
-            ],
-            'may_terminate' => false,
-            'child_routes'  => [
-                'poll'          => [
-                    'type'          => 'literal',
-                    'options'       => [
-                        'route'         => '/poll',
-                        'defaults'      => [
-                            Tinebase_Server_Routing::PARAM_CLASS    => Calendar_Controller_Poll::class
-                        ],
-                    ],
-                    'may_terminate' => false,
-                    'child_routes'  => [
-                        'regex'         => [
-                            'type'          => 'regex',
-                            'options'       => [
-                                'regex'         => '/(?<pollId>[^/]+)(/(?<user>[^/]+)(/(?<authKey>[^/]+))?)?',
-                                'spec'          => '',
-                            ],
-                            'child_routes'  => [
-                                'GET'           => [
-                                    'type'          => 'method',
-                                    'options'       => [
-                                        'verb'          => 'GET',
-                                        'defaults'      => [
-                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiGetPoll'
-                                        ]
-                                    ]
-                                ],
-                                'POST'          => [
-                                    'type'          => 'method',
-                                    'options'       => [
-                                        'verb'          => 'POST',
-                                        'defaults'      => [
-                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiUpdateAttenderStatus'
-                                        ]
-                                    ]
-                                ],
-                                'PUT'           => [
-                                    'type'          => 'method',
-                                    'options'       => [
-                                        'verb'          => 'PUT',
-                                        'defaults'      => [
-                                            Tinebase_Server_Routing::PARAM_METHOD   => 'publicApiAddAttender'
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ],
-                        'view'          => [
-                            'type'          => 'literal',
-                            'options'       => [
-                                'route'         => '/view',
-                            ],
-                            'child_routes'  => [
-                                'regex'         => [
-                                    'type'          => 'regex',
-                                    'options'       => [
-                                        'regex'         => '/(?<pollId>[^/]+)(/(?<user>[^/]+)(/(?<authKey>[^/]+))?)?',
-                                        'spec'          => '',
-                                        'defaults'      => [
-                                            Tinebase_Server_Routing::PARAM_METHOD => 'publicApiMainScreen'
-                                        ]
-                                    ]
-                                ],
-                                'agb'           => [
-                                    'type'          => 'literal',
-                                    'options'       => [
-                                        'route'         => '/agb',
-                                        'defaults'      => [
-                                            Tinebase_Server_Routing::PARAM_METHOD => 'publicApiGetAGB'
-                                        ]
-                                    ],
-                                ],
-                            ]
-                        ],
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    /**
-     * auth routes, overload member in concrete class to define auth routes for the routing server
-     *
-     * @var array
-     */
-    protected static $_authRoutes = [];
-
-    /**
      * don't clone. Use the singleton.
      *
      */
@@ -561,5 +462,37 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     {
         Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message);
         return;
+    }
+
+    /**
+     * @param \FastRoute\RouteCollector $routeCollector
+     * @return null
+     */
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    {
+        $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/view/pollagb', (new Tinebase_Expressive_RouteHandler(
+                Calendar_Controller_Poll::class, 'publicApiGetAGB', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/view/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                Calendar_Controller_Poll::class, 'publicApiMainScreen', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                Calendar_Controller_Poll::class, 'publicApiGetPoll', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->post('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                Calendar_Controller_Poll::class, 'publicApiUpdateAttenderStatus', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->put('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                Calendar_Controller_Poll::class, 'publicApiAddAttender', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
+        return null;
     }
 }

@@ -39,13 +39,16 @@
         "doctrine/orm": "2.5.*",
         "twig/twig": "~1.0",
         "phpoffice/phpspreadsheet": "dev-master",
-        "zendframework/zend-router": "^2.5",
-        "mtdowling/cron-expression": "^2.0"
+        "mtdowling/cron-expression": "^2.0",
+        "nikic/fast-route": "^1.2",
+        "zendframework/zend-stratigility": "^2.1",
+        "zendframework/zend-diactoros": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
         "phing/phing": "2.14.*",
-        "tedivm/jshrink": "~1.0"
+        "tedivm/jshrink": "~1.0",
+        "zendframework/zend-psr7bridge": "^0.2"
     },
     "autoload": {
         "files": [],
