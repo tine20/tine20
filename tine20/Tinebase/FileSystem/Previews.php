@@ -153,15 +153,24 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviews($_id, $_revision)
     {
-        $fileSystem = Tinebase_FileSystem::getInstance();
-        $node = $fileSystem->get($_id, $_revision);
+        return $this->createPreviewsFromNode(Tinebase_FileSystem::getInstance()->get($_id, $_revision));
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $node
+     * @return bool
+     * @throws Tinebase_Exception
+     */
+    public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
+    {
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
 
         if (true !== $this->isSupportedFileExtension($fileExtension)) {
             return true;
         }
 
-        $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $path = $fileSystem->getRealPathForHash($node->hash);
         $tempPath = Tinebase_TempFile::getTempPath() . '.' . $fileExtension;
         if (false === copy($path, $tempPath)) {
             return false;
