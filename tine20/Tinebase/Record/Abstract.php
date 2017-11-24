@@ -1239,6 +1239,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * set read only fields
+     *
+     * @param array $readOnlyFields
+     */
+    public function setReadOnlyFields($readOnlyFields)
+    {
+        $this->_readOnlyFields = $readOnlyFields;
+    }
+
+    /**
      * sets the non static properties by the created configuration object on instantiation
      */
     protected function _setFromConfigurationObject()
