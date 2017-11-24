@@ -239,6 +239,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $this->_properties[$_name] = (integer) $values[0];
                 }
                 break;
+            case 'count':
+                if ((int) $_value > self::MAX_DAILY_RECUR_COUNT) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . " skipping COUNT=" .  $_value ." clause of rrule -> client meant 'forever'");
+                    break;
+                }
+                // fallthrough
             default:
                 parent::__set($_name, $_value);
                 break;
