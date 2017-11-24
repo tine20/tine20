@@ -32,6 +32,8 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
     
     // private config overrides
     iconCls: 'action_import',
+
+    multiple: false,
     
     /**
      * init this upload button
@@ -45,7 +47,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
         this.scope = this;
         
         this.browsePlugin = new Ext.ux.file.BrowsePlugin({
-            multiple: false
+            multiple: this.multiple
         });
         
         this.plugins = this.plugins || [];

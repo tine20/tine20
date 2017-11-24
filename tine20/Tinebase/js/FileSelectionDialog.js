@@ -148,7 +148,7 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
         if (this.filePicker === null) {
             this.filePicker = new Tine.Filemanager.FilePicker({
                 constraint: 'file',
-                singleSelect: true
+                singleSelect: false
             });
 
             this.filePicker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
