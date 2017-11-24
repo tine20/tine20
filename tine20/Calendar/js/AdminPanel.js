@@ -42,7 +42,7 @@ Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
         this.items = [
-            new Tine.Calendar.ResourcesGridPanel({
+            new Tine.Calendar.ResourceGridPanel({
                 title: this.app.i18n._('Manage Resources'),
                 disabled: !Tine.Tinebase.common.hasRight('manage_resources', 'Calendar')
             }),

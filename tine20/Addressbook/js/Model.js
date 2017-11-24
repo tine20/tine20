@@ -10,8 +10,6 @@
  
 Ext.ns('Tine.Addressbook.Model');
 
-require('../../Calendar/js/Model');
-
 // TODO: move this into model definition and replace uscases (?) with getter fn
 Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id', omitDuplicateResolving: true},
@@ -143,11 +141,6 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
         return result;
     }
 });
-
-/**
- * Make resource model available in adb
- */
-Tine.Addressbook.Model.Resource = Tine.Calendar.Model.Resource;
 
 /**
  * get filtermodel of contact model
@@ -402,3 +395,19 @@ Tine.Addressbook.Model.Industry.getFilterModel = function() {
         {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };
+
+/**
+ * Structure (fake) model
+ */
+Tine.Addressbook.Model.Structure = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'}
+], {
+    appName: 'Addressbook',
+    modelName: 'Structure',
+    titleProperty: 'name',
+    // ngettext('Structure', 'Structures', n); gettext('Structures');
+    recordName: 'Structure',
+    recordsName: 'Structures'
+});

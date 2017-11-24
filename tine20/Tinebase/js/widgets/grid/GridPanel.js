@@ -654,6 +654,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initLayout: function() {
         this.items = [{
+            ref: 'centerPanel',
             region: 'center',
             xtype: 'panel',
             layout: 'fit',
@@ -670,6 +671,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
 
             this.items.push({
+                ref: 'southPanel',
                 region: 'south',
                 border: false,
                 collapsible: true,
@@ -702,6 +704,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         ct.resumeEvents();
                     }
                 }
+            });
+        }
+
+        if (this.ownActionToolbar) {
+            this.items.push({
+                region: 'north',
+                height: 55,
+                border: false,
+                items: this.actionToolbar
             });
         }
 

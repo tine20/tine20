@@ -69,11 +69,8 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     registerCoreData: function() {
-        Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourcesGridPanel, {
-            // prevent adding of another toolbar above grid
-            initLayout: function () {
-                this.supr().initLayout.call(this);
-            }
+        Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourceGridPanel, {
+            ownActionToolbar: false,
         });
     },
 
@@ -161,7 +158,7 @@ Tine.Calendar.MainScreen = function(config) {
 };
 
 Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
-    
+
     /**
      * Get content panel of calendar application
      * 

@@ -126,16 +126,18 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                         : ct.modelName
                 ); 
             
-            var modelApp = ct.appName ? Tine.Tinebase.appMgr.get(ct.appName) : this.app;
+            var modelApp = ct.app ? ct.app : (ct.appName ? Tine.Tinebase.appMgr.get(ct.appName) : this.app);
             
             var recordClass = Tine[modelApp.appName].Model[modelName];
-            
-            if (! recordClass) {
+
+            if (! recordClass && !ct.text) {
                 // module is disabled (feature switch) or otherwise non-functional
                 return;
             }
+
+            var contentType = ct.contentType ? ct.contentType : recordClass.getMeta('modelName');
             
-            var group = recordClass.getMeta('group');
+            var group = recordClass ? recordClass.getMeta('group') : false;
             
             if (group) {
                 if(! groupNodes[group]) {
@@ -156,28 +158,28 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             // check requiredRight if any
             // add check for model name also
             if (
-                ct.requiredRight && 
+                ct.requiredRight && recordClass &&
                 ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()) &&
                 ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase()) &&
                 ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase() + 's')
             ) return true;
-            
+
             var c = {
-                id : 'treenode-' + recordClass.getMeta('modelName'),
-                contentType: recordClass.getMeta('modelName'),
-                iconCls: modelApp.appName + modelName,
-                text: recordClass.getModuleName(),
+                id : 'treenode-' + contentType,
+                contentType: contentType,
+                iconCls: ct.iconCls ? ct.iconCls : modelApp.appName + modelName,
+                text: ct.text ? ct.text : recordClass.getModuleName(),
                 leaf : true
             };
             
-            if (ct.genericCtxActions) {
+            if (ct.genericCtxActions && recordClass) {
                 c.container = modelApp.getRegistry().get('default' + recordClass.getMeta('modelName') + 'Container');
             }
             
             var child = new Ext.tree.TreeNode(c);
             
             child.on('click', function() {
-                this.app.getMainScreen().setActiveContentType(modelName);
+                this.app.getMainScreen().setActiveContentType(contentType);
             }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)

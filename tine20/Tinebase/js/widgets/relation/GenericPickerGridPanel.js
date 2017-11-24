@@ -298,16 +298,16 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * calls the editdialog for the model
      */
     onEditInNewWindow: function() {
-        var selected = this.getSelectionModel().getSelected(),
-            app = selected.get('related_model').split('_Model_')[0],
-            model = selected.get('related_model').split('_Model_')[1],
-            ms = Tine.Tinebase.appMgr.get(app).getMainScreen(),
+        var _ = window.lodash,
+            selected = this.getSelectionModel().getSelected(),
+            modelName = selected.get('related_model'),
+            recordClass = Tine.Tinebase.data.RecordMgr.get(modelName),
             recordData = selected.get('related_record'),
-            record = new Tine[app].Model[model](recordData),
-            cp = ms.getCenterPanel(model);
-        
-        if (Ext.isFunction(cp.onEditInNewWindow)) {
-            cp.onEditInNewWindow({actionType: 'edit', mode: 'remote'}, record);
+            record = new recordClass(recordData, recordData.id),
+            openMethod = _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow');
+
+        if (openMethod) {
+            openMethod({record: record});
         } else {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,

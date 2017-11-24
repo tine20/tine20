@@ -237,7 +237,15 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     getActiveContentType: function() {
         return (this.activeContentType) ? this.activeContentType : '';
     },
-     
+
+    getContentTypeDefinition(contentType) {
+        var _ = window.lodash;
+
+        return _.find(this.contentTypes, {contentType: contentType}) ||
+            _.find(this.contentTypes, {model: contentType}) ||
+            _.find(this.contentTypes, {modelName: contentType});
+    },
+
     /**
      * get center panel for given contentType
      * 
@@ -246,21 +254,25 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
-        
-        if (! this[contentType + this.centerPanelClassNameSuffix]) {
+
+        var def = this.getContentTypeDefinition(contentType),
+            suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
+
+        if (! this[contentType + suffix]) {
             try {
-                this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
-                    app: this.app,
-                    plugins: [this.getWestPanel().getFilterPlugin(contentType)]
-                });
+                this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
+                    new Tine[this.app.appName][contentType + suffix]({
+                        app: this.app,
+                        plugins: [this.getWestPanel().getFilterPlugin(contentType)]
+                    });
             } catch (e) {
-                Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + this.centerPanelClassNameSuffix + '"');
+                Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
                 Tine.log.error(e.stack ? e.stack : e);
-                this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({html: 'ERROR'});
+                this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
             }
         }
         
-        return this[contentType + this.centerPanelClassNameSuffix];
+        return this[contentType + suffix];
     },
 
     /**
@@ -274,7 +286,10 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         
         if (! this[contentType + 'ActionToolbar']) {
             try {
-                this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
+                var cp = this.getCenterPanel(contentType);
+                if (Ext.isFunction(cp.getActionToolbar)) {
+                    this[contentType + 'ActionToolbar'] = cp.getActionToolbar();
+                }
             } catch (e) {
                 Tine.log.error('Could not create northPanel');
                 Tine.log.error(e.stack ? e.stack : e);
@@ -323,13 +338,17 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      * 
      * @return {Ext.Panel}
      */
-    getWestPanel: function() {
-        var contentType = this.getActiveContentType(),
-            wpName = contentType + 'WestPanel';
+    getWestPanel: function(contentType) {
+        contentType = contentType || this.getActiveContentType();
+
+        var _ = window.lodash,
+            def = this.getContentTypeDefinition(contentType),
+            app = _.get(def, 'app', this.app),
+            wpName = _.upperFirst(contentType + 'WestPanel');
             
         if (! this[wpName]) {
             var wpconfig = {
-                    app: this.app, 
+                    app: app,
                     contentTypes: this.contentTypes,
                     contentType: contentType,
                     listeners: {
@@ -354,8 +373,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     }
                 };
             try {
-                if (Tine[this.app.name].hasOwnProperty(wpName)) {
-                    this[wpName] = new Tine[this.app.appName][wpName](wpconfig);
+                if (Tine[app.name].hasOwnProperty(wpName)) {
+                    this[wpName] = new Tine[app.appName][wpName](wpconfig);
                 } else {
                     this[wpName] = new Tine.widgets.mainscreen.WestPanel(wpconfig);
                 }
@@ -365,7 +384,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 this[wpName] = new Ext.Panel({html: 'ERROR'});
             }
         }
-
 
         return this[wpName];
     },
@@ -480,7 +498,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      * @param {Bool} keep keep panel
      */
     setActiveToolbar: function(panel, keep) {
-        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.northCardPanel, panel, keep);
+        if (panel) {
+            if (! this.northCardPanel.isVisible()) {
+                this.northCardPanel.show();
+                this.northCardPanel.ownerCt.doLayout();
+                panel.show(); // Nasty resize prob!
+            }
+
+            Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.northCardPanel, panel, keep);
+        } else {
+            this.northCardPanel.hide();
+            this.northCardPanel.ownerCt.doLayout();
+        }
     },
 
     /**

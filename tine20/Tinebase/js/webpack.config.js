@@ -61,7 +61,7 @@ module.exports = {
         disableHostCheck: true,
         proxy: [
             {
-                context: ['**', '!/webpack-dev-server'],
+                context: ['**', '!/webpack-dev-server*/**'],
                 target: 'http://localhost/',
                 secure: false
             }
@@ -85,6 +85,8 @@ module.exports = {
         ]
     },
     resolve: {
+        modules: [path.resolve(__dirname , 'node_modules')],
+
         // add browserify which is used by some libs (e.g. director)
         mainFields: ["browser", "browserify", "module", "main"]
     }
