@@ -3117,12 +3117,12 @@ class Tinebase_FileSystem implements
                     $actualNode = $node;
                 }
 
-                if ($previewController->hasPreviews($actualNode->hash)) {
+                if ($previewController->hasPreviews($actualNode)) {
                     $validHashes[$actualNode->hash] = true;
                     continue;
                 }
 
-                $previewController->createPreviews($actualNode->getId(), $actualNode->revision);
+                $previewController->createPreviewsFromNode($actualNode);
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
