@@ -39,27 +39,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
      */
     startDate: null,
 
-    defaultAutoCreate: {
-        tag: 'table',
-        cls: 'ux-pp-field',
-        cn: [{
-            tag: 'tr',
-            cn: [{
-                tag: 'td',
-                cls: 'ux-pp-range'
-            }, {
-                tag: 'td',
-                cls: 'ux-pp-prev'
-            }, {
-                tag: 'td',
-                cls: 'ux-pp-period'
-            }, {
-                tag: 'td',
-                cls: 'ux-pp-next'
-            }]
-        }]
-    },
-
     initComponent: function() {
         Ext.ux.form.PeriodPicker.superclass.initComponent.call(this);
 
@@ -79,6 +58,9 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
      * @param {Object} value {from: Date, until: Date}
      */
     setValue: function(value) {
+        value.from = Ext.isDate(value.from) ? value.from : new Date(value.from);
+        value.until = Ext.isDate(value.until) ? value.until : new Date(value.until);
+
         this.range = Ext.ux.form.PeriodPicker.getRange(value);
         this.value = Ext.ux.form.PeriodPicker.getPeriod(value.from, this.range);
         this.startDate = this.value.from;
@@ -94,23 +76,25 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
                 var wkStart = this.startDate.add(Date.DAY, this.startDate.getDay() < 1 ? 1 : 0);
 
-                dateString = wkStart.getWeekOfYear() + ' ' + this.startDate.format('Y');
+                dateString = wkStart.getWeekOfYear() + ' - ' + this.startDate.format('Y');
                 break;
             case 'month':
                 dateString = Date.getShortMonthName(this.startDate.getMonth()) + ' ' + this.startDate.format('Y');
                 break;
             case 'quarter':
-                dateString = Math.ceil(+this.startDate.format('n')/3) + ' ' + this.startDate.format('Y');
+                dateString = Math.ceil(+this.startDate.format('n')/3) + ' - ' + this.startDate.format('Y');
                 break;
             case 'year':
                 dateString = this.startDate.format('Y');
                 break;
         }
-        this.setPeriodText(dateString);
+        this.setPeriodText(dateString, new Date().between(this.value.from, this.value.until));
 
-        if (JSON.stringify(this.value) != JSON.stringify(this.startValue)){
+        if (JSON.stringify(this.value) != JSON.stringify(this.startValue)) {
             this.fireEvent('change', this, this.value, this.startValue);
         }
+
+        this.startValue = this.value;
     },
 
     reset : function() {
@@ -124,7 +108,8 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         this.setValue(value);
     },
 
-    setPeriodText: function(text) {
+    setPeriodText: function(text, isThis) {
+        this.el[(isThis ? 'add' : 'remove') + 'Class']('ux-pp-this');
         this.el.child('.ux-pp-period').update(Ext.util.Format.htmlEncode(text));
     },
 
@@ -135,11 +120,19 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
     // private
     onClick: function(e) {
-        var prev = e.getTarget('.ux-pp-prev'),
+        var mode = e.getTarget('.ux-pp-mode'),
+            prev = e.getTarget('.ux-pp-prev'),
             next = e.getTarget('.ux-pp-next'),
             period = e.getTarget('.ux-pp-period');
 
-        if (next) {
+        if (mode) {
+            var newMode = this.mode != 'absolute' ? 'absolute' : 'relative';
+            mode.removeClass('ux-pp-mode-' + this.mode);
+            mode.addClass('ux-pp-mode-' + newMode);
+            this.mode = newMode;
+
+            // set period!
+        } else if (next) {
             this.setStartDate(this.value.until.add(Date.DAY, 1));
         } else if (prev) {
             this.setStartDate(this.value.from.add(Date.DAY, -1));
@@ -150,7 +143,6 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
     // private
     onRender : function(ct, position){
-        this.doc = Ext.isIE ? Ext.getBody() : Ext.getDoc();
         Ext.ux.form.PeriodPicker.superclass.onRender.call(this, ct, position);
 
         var rangeCombo = this.getRangeCombo();
@@ -159,6 +151,36 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         this.setValue(this.value);
         this.mon(this.getEl(), 'click', this.onClick, this);
+    },
+
+    // private
+    getAutoCreate: function() {
+        this.autoCreate = {
+            tag: 'div',
+                cls: 'ux-pp-field',
+                cn: [{
+                    tag: 'div',
+                    cls: 'ux-pp-range',
+                }, {
+                    tag: 'div',
+                    cls: 'ux-pp-controls',
+                    cn: [/*{
+                        tag: 'div',
+                        cls: 'ux-pp-mode ux-pp-mode-' + this.mode
+                    },*/ {
+                        tag: 'div',
+                        cls: 'ux-pp-prev'
+                    }, {
+                        tag: 'div',
+                        cls: 'ux-pp-period'
+                    }, {
+                        tag: 'div',
+                        cls: 'ux-pp-next'
+                    }]
+                }]
+        };
+
+        return Ext.ux.form.PeriodPicker.superclass.getAutoCreate.apply(this, arguments);
     },
 
     // private
