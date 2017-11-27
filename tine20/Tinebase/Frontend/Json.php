@@ -1564,4 +1564,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'success' => $result
         );
     }
+
+    public function searchPaths($filter = null, $pagination = null)
+    {
+        return $this->_search($filter, $pagination, Tinebase_Record_Path::getInstance(),
+            Tinebase_Model_PathFilter::class);
+    }
 }

@@ -812,4 +812,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 </options>'
         ));
     }
+
+    public function testSearchPaths()
+    {
+        $result = $this->_instance->searchPaths([
+            ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id]
+        ]);
+
+        static::assertEquals(3, count($result));
+        static::assertGreaterThan(0, count($result['results']));
+    }
 }
