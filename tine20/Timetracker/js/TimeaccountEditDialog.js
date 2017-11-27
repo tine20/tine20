@@ -53,7 +53,10 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * containerProperty (all contracts in one container) exists, so overwrite creating selector here
      */
     initContainerSelector: Ext.emptyFn,
-    
+
+    /**
+     * TODO generalize this
+     */
     onRecordLoad: function() {
         // make sure grants grid is initialized
         this.getGrantsGrid();
@@ -66,7 +69,10 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(this.app.i18n._('Add New Timeaccount'));
         }
     },
-    
+
+    /**
+     * TODO generalize this
+     */
     onRecordUpdate: function() {
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordUpdate.call(this);
         this.record.set('grants', '');

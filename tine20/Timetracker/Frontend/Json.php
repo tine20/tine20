@@ -87,33 +87,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 $recordArray = parent::_recordToJson($_record);
                 break;
-
-            case 'Timetracker_Model_Timeaccount':
-
+            default:
                 $recordArray = parent::_recordToJson($_record);
-
-                // When editing a single TA we send _ALL_ grants to the client
-                $recordArray['grants'] = Timetracker_Controller_Timeaccount::getInstance()->getRecordGrants($_record)->toArray();
-                foreach($recordArray['grants'] as &$value) {
-                    switch($value['account_type']) {
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                            $value['account_name'] = Tinebase_User::getInstance()->getUserById($value['account_id'])->toArray();
-                            break;
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                            $value['account_name'] = Tinebase_Group::getInstance()->getGroupById($value['account_id'])->toArray();
-                            break;
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                            $value['account_name'] = array('accountDisplayName' => 'Anyone');
-                            break;
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
-                            $value['account_name'] = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id'])->toArray();
-                            break;
-                        default:
-                            throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
-                            break;
-                    }
-                }
-                break;
         }
 
         return $recordArray;
