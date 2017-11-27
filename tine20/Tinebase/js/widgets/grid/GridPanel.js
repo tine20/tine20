@@ -707,6 +707,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     },
 
+    gridPrintRenderer: function() {
+        Ext.ux.Printer.print(this.getGrid());
+    },
+    
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
@@ -760,9 +764,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'readGrant',
             text: i18n._('Print Page'),
             disabled: false,
-            handler: function() {
-                Ext.ux.Printer.print(this.getGrid());
-            },
+            handler: this.gridPrintRenderer,
             iconCls: 'action_print',
             scope: this,
             allowMultiple: true
