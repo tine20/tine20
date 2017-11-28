@@ -113,6 +113,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $groups = $listController->getMemberships($_id);
             $contact->groups = $listController->getMultiple($groups);
         }
+        
+        Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
 
         return $contact;
     }
