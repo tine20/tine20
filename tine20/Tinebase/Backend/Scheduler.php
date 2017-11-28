@@ -51,9 +51,20 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
      */
     public function getDueTask()
     {
+        // the "random" order is here so permanently failing tasks can not block the other tasks from being executed
+        $orders = [
+            'next_run ' . Zend_Db_Select::SQL_ASC,
+            'next_run ' . Zend_Db_Select::SQL_DESC,
+            'id ' . Zend_Db_Select::SQL_ASC,
+            'id ' . Zend_Db_Select::SQL_DESC,
+            'name ' . Zend_Db_Select::SQL_ASC,
+            'name ' . Zend_Db_Select::SQL_DESC,
+            'failure_count ' . Zend_Db_Select::SQL_ASC,
+            'failure_count ' . Zend_Db_Select::SQL_DESC,
+        ];
         $select = $this->_getSelect()->where($this->_db->quoteIdentifier('next_run') . ' <= NOW() AND ' .
-            $this->_db->quoteIdentifier('lock_id') . ' IS NULL')->forUpdate(true)->order(new Zend_Db_Expr(
-                $this->_dbCommand->getRnd()))->limit(1);
+            $this->_db->quoteIdentifier('lock_id') . ' IS NULL')->forUpdate(true)
+            ->order($orders[rand(0, count($orders) - 1)])->limit(1);
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
