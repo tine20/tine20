@@ -23,7 +23,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $server = new Tinebase_Server_Expressive();
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
-            'POST /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
+            'GET /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
             . 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryZQRf6nhpOLbSRcoe' . "\r\n"
@@ -35,7 +35,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         );
 
         ob_start();
-        $server->handle($request);
+        $server->handle($request, '');
         $out = ob_get_clean();
 
         static::assertEquals(ExampleApplication_Controller::publicTestRouteOutput, $out);
@@ -49,7 +49,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $server = new Tinebase_Server_Expressive();
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
-            'POST /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
+            'GET /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
             . 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryZQRf6nhpOLbSRcoe' . "\r\n"
@@ -61,7 +61,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         );
 
         ob_start();
-        $server->handle($request);
+        $server->handle($request, '');
         $out = ob_get_clean();
 
         static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $out);
