@@ -3107,6 +3107,10 @@ class Tinebase_FileSystem implements
                     $actualNode = $node;
                 }
 
+                if (empty($actualNode->hash)) {
+                    continue;
+                }
+
                 if ($previewController->hasPreviews($actualNode)) {
                     $validHashes[$actualNode->hash] = true;
                     continue;
