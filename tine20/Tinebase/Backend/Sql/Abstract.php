@@ -1336,7 +1336,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * Deletes entries
       * 
       * @param string|integer|Tinebase_Record_Interface|array $_id
-      * @return void
       * @return int The number of affected rows.
       */
     public function delete($_id)
