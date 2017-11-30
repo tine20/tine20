@@ -815,9 +815,18 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testSearchPaths()
     {
-        $result = $this->_instance->searchPaths([
-            ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id]
-        ]);
+        $result = null;
+        try {
+            $result = $this->_instance->searchPaths([
+                ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id]
+            ]);
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            static::assertFalse(Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH),
+                'paths are active, yet an exception was thrown');
+        }
+
+        static::assertTrue(Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH),
+            'paths are not active, but no exception was thrown');
 
         static::assertEquals(3, count($result));
         static::assertGreaterThan(0, count($result['results']));

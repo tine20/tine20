@@ -1567,6 +1567,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function searchPaths($filter = null, $pagination = null)
     {
+        if (!Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            throw new Tinebase_Exception_SystemGeneric('paths are not activated in this installation');
+        }
         return $this->_search($filter, $pagination, Tinebase_Record_Path::getInstance(),
             Tinebase_Model_PathFilter::class);
     }
