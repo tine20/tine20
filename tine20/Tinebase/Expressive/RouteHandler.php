@@ -28,6 +28,12 @@ class Tinebase_Expressive_RouteHandler
     const METHOD = 'method';
 
     /**
+     * pipeInject data should be an array of arrays containing the PIPE_INJECT_* data
+     */
+    const PIPE_INJECT = 'pipeInject';
+    const PIPE_INJECT_CLASS = 'pIClass';
+
+    /**
      * @var array
      */
     protected $_vars = null;
@@ -39,6 +45,7 @@ class Tinebase_Expressive_RouteHandler
     protected $_methodParams = [];
     protected $_isStatic = false;
     protected $_hasGetInstance = true;
+    protected $_pipeInjectData = [];
 
     /**
      * Tinebase_Expressive_RouteHandler constructor.
@@ -51,6 +58,9 @@ class Tinebase_Expressive_RouteHandler
         if (isset($_options[self::IS_PUBLIC])) {
             $this->_isPublic = (bool) $_options[self::IS_PUBLIC];
         }
+        if (isset($_options[self::PIPE_INJECT])) {
+            $this->_pipeInjectData = $_options[self::PIPE_INJECT];
+        }
 
         $this->_class = $class;
         $this->_method = $method;
@@ -60,13 +70,25 @@ class Tinebase_Expressive_RouteHandler
         $this->_hasGetInstance = method_exists($class, 'getInstance');
     }
 
+    /**
+     * the goal is to keep this array slim, it will be stored by var_export in the FastRoute cache
+     *
+     * @return array
+     */
     public function toArray()
     {
-        return [
+        $result = [
             self::CLASS_NAME        => $this->_class,
             self::METHOD            => $this->_method,
-            self::IS_PUBLIC         => $this->_isPublic,
         ];
+        if (false !== $this->_isPublic) {
+            $result[self::IS_PUBLIC] = $this->_isPublic;
+        }
+        if (!empty($this->_pipeInjectData)) {
+            $result[self::PIPE_INJECT] = $this->_pipeInjectData;
+        }
+
+        return $result;
     }
 
     /**
@@ -89,6 +111,22 @@ class Tinebase_Expressive_RouteHandler
     }
 
     /**
+     * @return bool
+     */
+    public function hasPipeInject()
+    {
+        return !empty($this->_pipeInjectData);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPipeInject()
+    {
+        return $this->_pipeInjectData;
+    }
+
+    /**
      * @param array $array
      */
     public function setVars(array $array)
@@ -105,14 +143,7 @@ class Tinebase_Expressive_RouteHandler
     }
 
     /**
-     * @return array
-     *
-    public function getVars()
-    {
-        return $this->_vars;
-    }*/
-
-    /**
+     * TODO think about return type? should it be Tinebase_Record_Abstract|Tinebase_Record_RecordSet
      * @return mixed
      * @throws Tinebase_Exception_InvalidArgument
      */

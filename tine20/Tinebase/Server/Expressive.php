@@ -10,6 +10,7 @@
  */
 
 use \Zend\Diactoros\Response;
+use \Zend\Diactoros\Response\EmitterInterface;
 use \Zend\Diactoros\Response\SapiEmitter;
 use \Zend\Diactoros\ServerRequestFactory;
 use \Zend\Stratigility\MiddlewarePipe;
@@ -23,8 +24,6 @@ use \Zend\Stratigility\MiddlewarePipe;
 class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
     const QUERY_PARAM_DO_EXPRESSIVE = 'doRouting';
-    const PARAM_CLASS = '__class';
-    const PARAM_METHOD = '__method';
 
     /**
      * the request
@@ -47,22 +46,50 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     protected $_supportsSessions = true;
 
     /**
+     * @var EmitterInterface
+     */
+    protected $_emitter = null;
+
+    /**
+     * @var bool
+     */
+    protected $_requestFromGlobals = true;
+
+    /**
+     * Tinebase_Server_Expressive constructor.
+     *
+     * @param EmitterInterface|null $emitter
+     * @param bool $requestFromGlobals
+     */
+    public function __construct(EmitterInterface $emitter = null, $requestFromGlobals = true)
+    {
+        $this->_emitter = $emitter;
+        $this->_requestFromGlobals = $requestFromGlobals;
+        parent::__construct();
+    }
+
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      * @param  \Zend\Http\Request  $request
      * @param  resource|string     $body
+     * @throws Tinebase_Exception_NotImplemented
      * @return boolean
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        // TODO replace the unittest switch on the $body === null condition ... also make emitter configurable
-        // TODO for unittesting a test emitter should be injected
-        if (null === $body) {
+        if (true === $this->_requestFromGlobals) {
             $this->_request = ServerRequestFactory::fromGlobals();
         } else {
-            // unit testing only!
-            // TODO maybe assert development mode here!
-            $request->setContent($body);
+            // ATTENTION, unittesting only, \Zend\Psr7Bridge is a dev requirement in composer!
+            if (TINE20_BUILDTYPE !== 'DEVELOPMENT') {
+                throw new Tinebase_Exception_NotImplemented('this is a test path, not for production use');
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                . __LINE__ . ' using Psr7Bridge to forge request from old Zend\Http\Request provided');
+            if (null !== $body) {
+                $request->setContent($body);
+            }
             $this->_request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($request);
         }
 
@@ -100,12 +127,12 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 throw new Tinebase_Exception('reached end of pipe stack, should never happen');
             });
 
-            if (null === $body) {
+            if (null === $this->_emitter) {
                 $emitter = new SapiEmitter();
                 $emitter->emit($response);
             } else {
-                // unittesting
-                echo $response->getBody();
+                // unittesting mostly
+                $this->_emitter->emit($response);
             }
 
         } catch (Exception $exception) {
@@ -125,5 +152,28 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     public function getRequestMethod()
     {
         return null;
+    }
+
+    /**
+     * @param null|bool $bool
+     * @return bool
+     */
+    public function doRequestFromGlobals($bool = null)
+    {
+        $oldValue = $this->_requestFromGlobals;
+        if (null !== $bool) {
+            $this->_requestFromGlobals = (bool) $bool;
+        }
+        return $oldValue;
+    }
+    /**
+     * @param EmitterInterface|null $emitter
+     * @return null|EmitterInterface
+     */
+    public function setEmitter(EmitterInterface $emitter = null)
+    {
+        $oldEmitter = $this->_emitter;
+        $this->_emitter = $emitter;
+        return $oldEmitter;
     }
 }

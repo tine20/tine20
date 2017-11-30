@@ -29,22 +29,34 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
      * @param \Interop\Http\Server\RequestHandlerInterface $delegate
      * @throws Tinebase_Exception_UnexpectedValue
      * @return \Psr\Http\Message\ResponseInterface
-     *
-     * TODO add more logging!
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
     {
-        $response = $delegate->process($request);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
+        $response = $delegate->handle($request);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' inspecting response...');
 
         if ($response instanceof Tinebase_Expressive_Response) {
-            // make body rewindable, writable, in doubt just create a new response or use withBody()
-            $response->getBody()->rewind();
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' found ' . Tinebase_Expressive_Response::class);
+
+            if (0 !== $response->getBody()->tell()) {
+                throw new Tinebase_Exception_UnexpectedValue('response stream not at possition 0');
+            }
+
+            // TODO implement stuff here ... really? Why here? Can't we do that in a data resolve middleware?
+            // TODO maybe this nice slim toArray() is all we want to do here, don't take to much responsibility at once
+            // TODO finish the envelop format
             $response->getBody()->write(json_encode([
                 'results' => null === $response->resultObject ? [] : $response->resultObject->toArray(),
                 //'resultsCount' => $response->resultCount !== null..
                 'status' => $response->getStatusCode()
             ]));
-        } // else {
+        } // else { TODO do something or remove this
         // maybe react to status !== 200
         // if client wants json envelop
         // if response->getStatusCode() !== 200

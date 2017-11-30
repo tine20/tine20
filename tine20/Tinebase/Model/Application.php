@@ -78,7 +78,10 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                 'label'             => 'Status', //_('Status')
                 'type'              => 'string',
                 'queryFilter'       => TRUE,
-                'validators'        => array(array('InArray', array('enabled', 'disabled'))),
+                'validators'        => [['InArray', [
+                    Tinebase_Application::ENABLED,
+                    Tinebase_Application::DISABLED
+                ]]],
             ),
             'order'             => array(
                 'label'             => 'Order', //_('Order')

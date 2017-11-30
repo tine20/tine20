@@ -689,7 +689,20 @@ class Tinebase_Core
         if (isset($config->logger) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
             .' Logger settings: ' . print_r($config->logger->toArray(), TRUE));
     }
-    
+
+    /**
+     * @param null|Tinebase_Config $config
+     * @return string
+     */
+    public static function getCacheDir($config = null)
+    {
+        if (null === $config) {
+            $config = self::getConfig();
+        }
+
+        return $config->caching && $config->caching->path ? $config->caching->path : self::getTempDir();
+    }
+
     /**
      * setup the cache and add it to zend registry
      *
@@ -745,7 +758,7 @@ class Tinebase_Core
                 switch ($backendType) {
                     case 'File':
                         $backendOptions = array(
-                            'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
+                            'cache_dir'              => self::getCacheDir($config),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
                             'logging'                => $logging,
                             'logger'                 => $logger,

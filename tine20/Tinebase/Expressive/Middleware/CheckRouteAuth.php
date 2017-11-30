@@ -30,22 +30,32 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
      * @param \Interop\Http\Server\RequestHandlerInterface $delegate
      *
      * @return \Psr\Http\Message\ResponseInterface
-     *
-     * TODO add logging
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {
             throw new Tinebase_Exception_UnexpectedValue('no matched route found');
         }
 
         if (! $routeHandler->isPublic()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' in an auth route');
+
             if (null === ($user = Tinebase_Core::getUser())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' returning with HTTP 401 unauthorized');
+
                 // unauthorized
                 return new Response('php://memory', 401);
             }
             if (! $user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights_Abstract::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' returning with HTTP 403 forbidden');
+
                 // forbidden
                 return new Response('php://memory', 403);
             }
@@ -54,8 +64,11 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             // if ( $routeHandler->requiresRights() ) {
             // foreach ($routeHandler->getRequiredRights() as $right) {
             // if (! $user->hasRight($routeHandler->getApplicationName(), $right)) {
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' in a public route');
         }
 
-        return $delegate->process($request);
+        return $delegate->handle($request);
     }
 }

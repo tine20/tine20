@@ -17,12 +17,15 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
 {
     /**
      * @group ServerTests
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function testExampleApplicationPublicTestRoute()
     {
         $agbStr = 'testAGB';
         Calendar_Config::getInstance()->set(Calendar_Config::POLL_AGB, $agbStr);
-        $server = new Tinebase_Server_Expressive();
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter, false);
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
             'GET /Calendar/view/pollagb HTTP/1.1' . "\r\n"
@@ -35,10 +38,9 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
             . "\r\n"
         );
 
-        ob_start();
         $server->handle($request, '');
-        $out = ob_get_clean();
 
-        static::assertEquals($agbStr, $out);
+        $emitter->response->getBody()->rewind();
+        static::assertEquals($agbStr, $emitter->response->getBody()->getContents());
     }
 }

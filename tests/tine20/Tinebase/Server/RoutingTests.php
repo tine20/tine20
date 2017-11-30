@@ -12,15 +12,26 @@
  * Test class for Tinebase_Server_Routing
  *
  * @package     Tinebase
+ *
+ * TODO rename all this stuff once we decided on a name!
+ *
+ * TODO routing Routing Expressive expressive in case we search for it, remove this comment after renaming stuff
  */
 class Tinebase_Server_RoutingTests extends TestCase
 {
     /**
      * @group ServerTests
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function testExampleApplicationPublicTestRoute()
     {
-        $server = new Tinebase_Server_Expressive();
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Application::getInstance()
+            ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter, false);
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
             'GET /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
@@ -34,19 +45,26 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         );
 
-        ob_start();
         $server->handle($request, '');
-        $out = ob_get_clean();
 
-        static::assertEquals(ExampleApplication_Controller::publicTestRouteOutput, $out);
+        $emitter->response->getBody()->rewind();
+        static::assertEquals(ExampleApplication_Controller::publicTestRouteOutput, $emitter->response->getBody()
+            ->getContents());
     }
 
     /**
      * @group ServerTests
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function testExampleApplicationAuthTestRoute()
     {
-        $server = new Tinebase_Server_Expressive();
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Application::getInstance()
+            ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter, false);
 
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
             'GET /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
@@ -60,10 +78,10 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         );
 
-        ob_start();
         $server->handle($request, '');
-        $out = ob_get_clean();
 
-        static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $out);
+        $emitter->response->getBody()->rewind();
+        static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $emitter->response->getBody()
+            ->getContents());
     }
 }

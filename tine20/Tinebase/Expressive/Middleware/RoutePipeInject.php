@@ -12,7 +12,6 @@
 use \Interop\Http\Server\RequestHandlerInterface;
 use \Interop\Http\Server\MiddlewareInterface;
 use \Psr\Http\Message\ServerRequestInterface;
-//use \Zend\Diactoros\Response;
 
 /**
  * expressive route pipe injection middleware, reads matched route for additional middleware to pipe
@@ -28,28 +27,44 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Interop\Http\Server\RequestHandlerInterface $delegate
-     *
+     * @throws Tinebase_Exception_UnexpectedValue
      * @return \Psr\Http\Message\ResponseInterface
-     *
-     * TODO add logging
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {
             throw new Tinebase_Exception_UnexpectedValue('no matched route found');
         }
 
-        // TODO add if and only do it if routeHandler really has dynamic middleware
+        if ($routeHandler->hasPipeInject()) {
+            $pipeInjectData = $routeHandler->getPipeInject();
 
-        $responsePrototype = new \Zend\Diactoros\Response();
-        $middleWarePipe = new \Zend\Stratigility\MiddlewarePipe();
-        $middleWarePipe->setResponsePrototype($responsePrototype);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' injecting: ' . print_r($pipeInjectData, true));
 
-        // add dynamic middleware here
+            $responsePrototype = new \Zend\Diactoros\Response();
+            $middleWarePipe = new \Zend\Stratigility\MiddlewarePipe();
+            $middleWarePipe->setResponsePrototype($responsePrototype);
 
-        return $middleWarePipe($request, $responsePrototype, function($request) use ($delegate) {
-            return $delegate->process($request);
-        });
+            // add dynamic middleware here
+            foreach ($pipeInjectData as $pIData) {
+                if (isset($pIData[Tinebase_Expressive_RouteHandler::PIPE_INJECT_CLASS])) {
+                    $middleWarePipe->pipe(new $pIData[Tinebase_Expressive_RouteHandler::PIPE_INJECT_CLASS]);
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue('pipe inject data corrupt');
+                }
+            }
+
+            return $middleWarePipe($request, $responsePrototype, function($request) use ($delegate) {
+                return $delegate->handle($request);
+            });
+        } else {
+            return $delegate->handle($request);
+        }
+
     }
 }

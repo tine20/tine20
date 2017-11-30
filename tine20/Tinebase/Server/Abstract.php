@@ -28,7 +28,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     /**
      * the request body
      * 
-     * @var stream|string
+     * @var resource|string
      */
     protected $_body;
     
@@ -46,9 +46,6 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
      */
     protected static $_modelConfigMethods = array();
 
-    /**
-     * 
-     */
     public function __construct()
     {
         if ($this->_supportsSessions) {

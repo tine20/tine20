@@ -29,11 +29,14 @@ class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Interop\Http\Server\RequestHandlerInterface $delegate
-     *
+     * @throws Tinebase_Exception_UnexpectedValue
      * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {
             throw new Tinebase_Exception_UnexpectedValue('no matched route found');
@@ -45,9 +48,15 @@ class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
             throw new Tinebase_Exception_UnexpectedValue('route dispatching did not return an object');
         }
         if ($result instanceof ResponseInterface) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' dispatcher result is a ResponseInterface');
+
             return $result;
         }
         if ($result instanceof Tinebase_Record_Abstract || $result instanceof  Tinebase_Record_RecordSet) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' dispatcher result is a Tinebase_Record_*');
+
             $response = new Tinebase_Expressive_Response();
             $response->resultObject = $result;
             return $response;

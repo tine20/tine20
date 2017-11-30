@@ -18,6 +18,8 @@ use \Zend\Diactoros\Response;
  * FastRoute middleware, continues if a route matched, puts the matched Tinebase_Expressive_RouteHandler in the request
  * returns a Response 404/405 if no route matched
  *
+ * matching is only done on the path, not on the query parameters
+ *
  * @package     Tinebase
  * @subpackage  Expressive
  */
@@ -31,27 +33,40 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      * @param \Interop\Http\Server\RequestHandlerInterface $delegate
      * @throws Tinebase_Exception_UnexpectedValue
      * @return \Psr\Http\Message\ResponseInterface
-     *
-     * TODO add more logging!
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
         $dispatcher = $this->_getDispatcher();
 
-        // TODO allow routing on query parameters too? This is only routing on the path!
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
+            . $request->getUri()->getPath());
+
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' returning 404 not found');
+
                 // 404 not found
                 return new Response('php://memory', 404);
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' returning 405 method not allowed');
+
                 //$allowedMethods = $routeInfo[1];
                 // 405 method not allowed
                 return new Response('php://memory', 405);
             case FastRoute\Dispatcher::FOUND:
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    . __LINE__ . ' FastRoute dispatching result: ' . print_r($routeInfo, true));
+
                 $handler = Tinebase_Expressive_RouteHandler::fromArray($routeInfo[1]);
                 $handler->setVars($routeInfo[2]);
-                return $delegate->process($request->withAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, $handler));
+                return $delegate->handle($request->withAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, $handler));
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('fast route dispatcher returned unexpected route info');
@@ -66,9 +81,8 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      */
     protected function _getDispatcher()
     {
-        $enabledApplications = Tinebase_Application::getInstance()->getApplications();
-        // example app wird in den tests enabled
-            //TODO what about this? why is example app not enabled? ->filter('status', Tinebase_Application::ENABLED);
+        $enabledApplications = Tinebase_Application::getInstance()->getApplications()
+            ->filter('status', Tinebase_Application::ENABLED);
         $apps = array_combine(
             $enabledApplications->id,
             $enabledApplications->version
@@ -76,8 +90,8 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         ksort($apps);
         $appsHash = Tinebase_Helper::arrayHash($apps, true);
 
-        // TODO think about the caching, do caching in tempDir? Or Cache Dir? Implement Redis Plugin?
         // TODO add base path in case tine20 was not installed in /
+        // TODO if we do that, the base path needs to be in the cache key $appsHash too!
         return \FastRoute\cachedDispatcher(function (\FastRoute\RouteCollector $r) use ($enabledApplications) {
             /** @var Tinebase_Model_Application $application */
             foreach ($enabledApplications as $application) {
@@ -88,10 +102,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
                 }
             }
         }, [
-            // TODO implement getCacheDir (falls back to getTempDir)
-            'cacheFile' => Tinebase_Core::getTempDir() . '/route.cache.'
+            'cacheFile' => Tinebase_Core::getCacheDir() . '/route.cache.'
                 . $appsHash,
-            // TODO add development mode check! 'cacheDisabled' => ,
+            'cacheDisabled' => TINE20_BUILDTYPE === 'DEVELOPMENT',
         ]);
     }
 }
