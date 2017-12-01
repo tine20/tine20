@@ -433,7 +433,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             border: false,
             plain:true,
             activeTab: 0,
-            border: false,
             defaults: {
                 hideMode: 'offsets'
             },
