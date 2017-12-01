@@ -926,9 +926,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }, this);
         }
-
-        this.checkStates.defer(100, this);
-
+        
+        (function() {
+            this.checkStates();
+            this.record.commit();
+        }).defer(100, this);
+        
         if (this.loadMask && !this.saving) {
             this.loadMask.hide();
         }
@@ -943,6 +946,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // merge changes from form into record
         form.updateRecord(this.record);
 
+        this.actionUpdater.updateActions([this.record]);
+        
         //TODO Use Promises instead of Tickets if async is needed
         this.fireEvent('recordUpdate', this, this.record);
     },
