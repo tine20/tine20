@@ -127,6 +127,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             }
             
             //bubble state events
+            // fire selectionchange event of all items as westPanel events
             item.enableBubble(['collapse', 'expand', 'selectionchange']);
         }, this);
     },
@@ -206,6 +207,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app, contentType: contentType});
             }
             this[panelName].on('click', function (node, event) {
+                // no scope here -> this means containerTree
                 if(node != this.lastClickedNode) {
                     this.lastClickedNode = node;
                     this.fireEvent('selectionchange');
@@ -253,6 +255,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     listeners: {
                         scope: this,
                         click: function (node, event) {
+                            // this is westPanel
+                            // fire westpanel event on favorite change
                             if(node != this.lastClickedNode) {
                                 this.lastClickedNode = node;
                                 this.fireEvent('selectionchange');

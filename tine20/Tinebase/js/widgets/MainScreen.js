@@ -315,10 +315,11 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 });
                 var me = this;
                 this.moduleTreePanel.on('click', function (node, event) {
+                    // NOTE: 'this' is moduleTreePanel here (no scope provided)
                     if(node != this.lastClickedNode) {
                         this.lastClickedNode = node;
                         this.fireEvent('selectionchange');
-                    } else if (me.getWestPanel().getFavoritesPanel()) {
+                    } else if (me.getWestPanel().hasFavoritesPanel) {
                         // select default favorite
                         // NOTE: a lot of models don't have a default favorite defined...
                         me.getWestPanel().getFavoritesPanel().selectDefault();
@@ -353,6 +354,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                     contentType: contentType,
                     listeners: {
                         scope: this,
+                        // clear gird selection on favorite change, module change, container change?
                         selectionchange: function() {
                             var cp = this.getCenterPanel();
                             if(cp) {

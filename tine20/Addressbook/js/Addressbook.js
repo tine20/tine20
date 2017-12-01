@@ -170,7 +170,8 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
                 text: cal.i18n._('Resources'),
                 iconCls: 'CalendarResource',
                 xtype: 'calendar.resourcegridpanel',
-                ownActionToolbar: false
+                ownActionToolbar: false,
+                singularContainerMode: true
             });
         }
 
