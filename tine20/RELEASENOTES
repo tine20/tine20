@@ -20,6 +20,10 @@ Almost all records now have modification logs with the ability to undo changes a
 
 Use a system-link to quickly access files, folders and applications within Tine 2.0
 
+To make system links work in Calendar alarm mails, you have to set the tine20URL config setting (config.inc.php example):
+
+    'tine20URL' => 'https://my.tine20.tld',
+
 * Tablet-Usability
 
 We greatly improved the usability of Tine 2.0 with a touchscreen
