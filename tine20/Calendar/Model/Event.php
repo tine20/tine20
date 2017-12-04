@@ -43,6 +43,7 @@
  * @property string                         summary
  * @property string                         recurid
  * @property array                          exdate
+ * @property string                         poll_id
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -446,7 +447,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function hasGrant($_grant)
     {
-        $hasGrant = (isset($this->_properties[$_grant]) || array_key_exists($_grant, $this->_properties)) && (bool)$this->{$_grant};
+        $hasGrant = isset($this->_properties[$_grant]) && (bool)$this->{$_grant};
         
         if ($this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
             $hasGrant &= (

@@ -55,13 +55,13 @@ class Setup_Frontend_Cli
                 $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
-                $setupUser = 'setupuser';
+                $setupUser = Tinebase_User::SYSTEM_USER_SETUP;
             }
             if ($setupUser && ! Setup_Core::getUser() instanceof Tinebase_Model_User) {
                 Setup_Core::set(Tinebase_Core::USER, $setupUser);
             }
         } else {
-            Setup_Core::set(Setup_Core::USER, 'setupuser');
+            Setup_Core::set(Setup_Core::USER, Tinebase_User::SYSTEM_USER_SETUP);
         }
 
         $result = 0;

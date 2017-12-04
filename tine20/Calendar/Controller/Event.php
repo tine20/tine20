@@ -127,10 +127,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Calendar_Controller_Event();
         }
         return self::$_instance;
+    }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
     }
 
     /**
@@ -604,7 +609,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        if (! $_onlyIds) {
+        if (! $_onlyIds && $this->_doContainerACLChecks) {
             $this->_freeBusyCleanup($events, $_action);
         }
         
@@ -636,6 +641,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _freeBusyCleanup(Tinebase_Record_RecordSet $_events, $_action)
     {
+        /** @var Calendar_Model_Event $event */
         foreach ($_events as $event) {
             $doFreeBusyCleanup = $event->doFreeBusyCleanup();
             if ($doFreeBusyCleanup && $_action !== 'get') {

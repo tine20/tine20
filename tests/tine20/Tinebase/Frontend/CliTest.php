@@ -216,7 +216,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         }
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
-        $this->_usernamesToDelete[] = 'cronuser';
+        $this->_usernamesToDelete[] = Tinebase_User::SYSTEM_USER_CRON;
         $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents::' . Tinebase_Core::getTinebaseId();
 
         ob_start();
@@ -226,7 +226,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
-        $this->assertEquals('cronuser', $cronuser->accountLoginName);
+        $this->assertEquals(Tinebase_User::SYSTEM_USER_CRON, $cronuser->accountLoginName);
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);

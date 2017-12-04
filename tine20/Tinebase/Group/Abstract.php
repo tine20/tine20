@@ -158,6 +158,16 @@ abstract class Tinebase_Group_Abstract
     {
         return $this->_getDefaultGroup('Replicators');
     }
+
+    /**
+     * get default replication group
+     *
+     * @return Tinebase_Model_Group
+     */
+    public function getDefaultAnonymousGroup()
+    {
+        return $this->_getDefaultGroup('Anonymous');
+    }
     
     /**
      * Get multiple groups
@@ -183,11 +193,12 @@ abstract class Tinebase_Group_Abstract
      * get default group for users/admins
      * 
      * @param string $_name group name (Users|Administrators)
-     * @return unknown_type
+     * @return Tinebase_Model_Group
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getDefaultGroup($_name = 'Users')
     {
-        if (! in_array($_name, array('Users', 'Administrators', 'Replicators'))) {
+        if (! in_array($_name, array('Users', 'Administrators', 'Replicators', 'Anonymous'))) {
             throw new Tinebase_Exception_InvalidArgument('Wrong group name: ' . $_name);
         }
 
@@ -195,6 +206,8 @@ abstract class Tinebase_Group_Abstract
             $configKey = Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY;
         } elseif ('Administrators' === $_name) {
             $configKey = Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
+        } elseif ('Anonymous' === $_name) {
+            $configKey = Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY;
         } else {
             $configKey = Tinebase_User::DEFAULT_REPLICATION_GROUP_NAME_KEY;
         }
