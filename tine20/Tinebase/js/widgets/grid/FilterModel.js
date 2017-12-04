@@ -599,7 +599,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                         range: range,
                         width: me.filterValueWidth - 18,
                         cls: 'x-pp-combo',
-                        'renderTo': this.wrap,
+                        'renderTo': this.wrap
                     });
                     this.pp.on('change', me.onFiltertrigger, me , {buffer: 250});
                 }
