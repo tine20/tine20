@@ -170,7 +170,9 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
     getCenterPanel: function() {
         if (! this.contentPanel) {
             this.contentPanel = new Tine.Calendar.MainScreenCenterPanel({
-                detailsPanel: new Tine.Calendar.EventDetailsPanel()
+                detailsPanel: new Tine.Calendar.EventDetailsPanel({
+                    recordClass: Tine.Calendar.Model.Event
+                })
             });
         }
         

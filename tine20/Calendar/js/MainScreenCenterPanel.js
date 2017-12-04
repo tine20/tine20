@@ -452,7 +452,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 items: this.detailsPanel
                 
             });
-            //this.detailsPanel.doBind(this.activeView);
         }
         
         // add filter toolbar
