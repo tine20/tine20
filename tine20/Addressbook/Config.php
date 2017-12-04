@@ -155,8 +155,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         self::CONTACT_HIDDEN_CRITERIA => array(
             //_('Contact Hidden Criteria')
             'label'                 => 'Contact Hidden Criteria',
-            //_('The contact is hidden if it is ... (one of: disabled, expired or never')
-            'description'           => 'The contact is hidden if it is ... (one of: disabled, expired or never',
+            //_('The contact is hidden if it is ... (one of: disabled, expired or never)')
+            'description'           => 'The contact is hidden if it is ... (one of: disabled, expired or never)',
             'type'                  => 'string',
             'clientRegistryInclude' => false,
             'default'               => 'disabled'
