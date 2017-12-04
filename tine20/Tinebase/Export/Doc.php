@@ -356,7 +356,13 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting sub tempalte: ' . $_name);
 
-        $recordSet = $this->_currentRecord->{$_name};
+        if (strpos($_name, '#') !== false) {
+            list($property) = explode('#', $_name);
+        } else {
+            $property = $_name;
+        }
+
+        $recordSet = $this->_currentRecord->{$property};
         if (is_array($recordSet)) {
             if (count($recordSet) === 0) {
                 return;
@@ -718,7 +724,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     throw new Tinebase_Exception('find&replace block failed after subgroup was found: ' . $foundGroup);
                 }
             } elseif (null !== $foundRecord) {
-                if (null === ($recordProcessor = $this->_findAndReplaceSubRecord($_templateProcessor))) {
+                if (null === ($recordProcessor = $this->_findAndReplaceSubRecord($_templateProcessor, $foundRecord))) {
                     throw new Tinebase_Exception('subrecord block failed: ' . $foundRecord);
                 }
                 list(,$propertyName) = explode('_', $foundRecord);
@@ -740,20 +746,22 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     /**
      * @param Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor
+     * @param string $_name
      * @return null|Tinebase_Export_Richtext_TemplateProcessor
      * @throws Tinebase_Exception
      */
-    protected function _findAndReplaceSubRecord(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor)
+    protected function _findAndReplaceSubRecord(Tinebase_Export_Richtext_TemplateProcessor $_templateProcessor, $_name = null)
     {
-        $foundRecord = null;
-        foreach ($_templateProcessor->getVariables() as $var) {
-            if (null === $foundRecord && strpos($var, 'SUBRECORD') === 0) {
-                $foundRecord = $var;
-                break;
+        if (null === ($foundRecord = $_name)) {
+            foreach ($_templateProcessor->getVariables() as $var) {
+                if (null === $foundRecord && strpos($var, 'SUBRECORD') === 0) {
+                    $foundRecord = $var;
+                    break;
+                }
             }
-        }
-        if (null === $foundRecord) {
-            return null;
+            if (null === $foundRecord) {
+                return null;
+            }
         }
 
         if (null !== ($recordBlock = $_templateProcessor->findBlock($foundRecord, '${R' . $foundRecord . '}'))) {
