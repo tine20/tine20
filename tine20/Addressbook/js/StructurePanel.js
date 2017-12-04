@@ -39,20 +39,36 @@ Tine.Addressbook.StructurePanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             layout: 'card',
             activeItem: 0,
             border: false,
-            items: [{
+            items: [new Ext.ux.display.DisplayPanel ({
                 id: 'none',
                 border: false,
-                layout: 'fit',
-                padding: 5,
+                layout: 'hbox',
+                defaults:{margins:'0 5 0 0'},
+                layoutConfig: {
+                    padding:'5',
+                    align:'stretch'
+                },
                 items: [{
                     cls : 'x-ux-display',
                     layout: 'ux.display',
+                    flex: 1,
                     layoutConfig: {
                         background: 'solid',
                         declaration: this.app.i18n._('Select record to see its details')
                     }
+                }, {
+                    flex: 1,
+                    border: false,
+                    layout: 'ux.display',
+                    layoutConfig: {
+                        background: 'border'
+                    },
+                    html: [
+                        '<p>', this.app.i18n._('This module visualises hierarchically depended relations between records of different types.'), '</p>',
+                        '<p>', this.app.i18n._('Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types.'), '</p>'
+                    ].join('')
                 }]
-            }],
+            })],
             doBind: function() {}
         });
         Tine.Addressbook.StructurePanel.superclass.initComponent.call(this);
