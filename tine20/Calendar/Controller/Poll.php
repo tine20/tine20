@@ -446,8 +446,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // nothing to do for us
             return;
         }
-
-        if (!preg_match('#/Calendar/view/poll/([^/]+)/#', $_message->body, $matches)) {
+        if (!preg_match('#/Calendar/view/poll/([^/]+)#', $_message->body, $matches)) {
             throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
         }
         $pollId = $matches[1];
