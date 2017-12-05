@@ -7,6 +7,7 @@
  */
 
 import Vue from 'vue'
+import Tine20 from './plugin/tine20-rpc'
 import App from './App.vue'
 
 // FUCK - why isn't the bootstrap css loaded by the components itself???
@@ -22,7 +23,25 @@ Vue.config.productionTip = false
 
 let translations = {
   'de_DE': {
-    'Loading Poll...': 'Umfrage wird geladen...'
+    'Loading Poll...': 'Umfrage wird geladen...',
+    'Please wait...': 'Bitte warten...',
+    'ACCEPTED': 'Zugesagt',
+    'DECLINED': 'Abgesagt',
+    'NEEDS-ACTION': 'Keine Antwort',
+    'TENTATIVE': 'Vorläufig',
+    'I am not': 'Ich bin nicht',
+    'By using this service you agree to our': 'Indem Sie diesen Service verwenden, akzeptieren Sie unsere',
+    'terms and conditions': 'AGB',
+    'Welcome,': 'Herzlich Willkommen,',
+    'Wrong password!': 'Falsches Passwort!',
+    'Password': 'Passwort',
+    'Submit': 'Absenden',
+    'Name': 'Name',
+    'Email address': 'Emailadresse',
+    'User name': 'Benutzername',
+    'Plase log in': 'Bitte melden Sie sich an',
+    'Could not log in!': 'Anmeldung fehlgeschlagen!',
+    'First name, ĺast name': 'Vorname Name'
   }
 }
 Vue.use(GetTextPlugin, {
@@ -39,6 +58,8 @@ Vue.use(GetTextPlugin, {
   },
   translations: translations
 })
+
+Vue.use(Tine20, {})
 
 /* eslint-disable no-new */
 new Vue(App).$mount('#app')
