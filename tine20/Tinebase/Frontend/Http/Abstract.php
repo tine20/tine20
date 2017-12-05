@@ -86,7 +86,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $filename = $export->getDownloadFilename($_filter->getApplicationName(), $format);
         header("Pragma: public");
         header("Cache-Control: max-age=0");
-        header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
+        header('Content-Disposition: attachment; filename=' . $filename);
         header("Content-Description: $format File");
         header("Content-type: $contentType");
         
