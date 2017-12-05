@@ -321,4 +321,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $_validators
      */
     public function setValidators(array $_validators);
+
+    /**
+     * @return bool
+     */
+    public static function generatesPaths();
 }
