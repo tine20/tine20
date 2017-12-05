@@ -813,16 +813,21 @@ class Tinebase_Frontend_JsonTest extends TestCase
         ));
     }
 
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function testSearchPaths()
     {
         $result = null;
         try {
             $result = $this->_instance->searchPaths([
-                ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id]
+                ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id],
+                ['field' => 'shadow_path', 'operator' => 'contains', 'value' => ''],
             ]);
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             static::assertFalse(Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH),
                 'paths are active, yet an exception was thrown');
+            return;
         }
 
         static::assertTrue(Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH),
@@ -830,5 +835,26 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         static::assertEquals(3, count($result));
         static::assertGreaterThan(0, count($result['results']));
+
+        try {
+            $result = $this->_instance->searchPaths([
+                ['field' => 'shadow_path', 'operator' => 'contains', 'value' => ''],
+            ]);
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            static::fail('first time no exception was thrown, but second time one was thrown');
+        }
+        static::assertEquals(3, count($result));
+        static::assertGreaterThan(0, count($result['results']));
+
+        try {
+            $result = $this->_instance->searchPaths([
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'Clever'],
+            ]);
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            static::fail('first time no exception was thrown, but third time one was thrown');
+        }
+        static::assertEquals(3, count($result));
+        static::assertGreaterThan(0, count($result['results']));
+        static::assertEquals('query', $result['filter'][0]['field']);
     }
 }
