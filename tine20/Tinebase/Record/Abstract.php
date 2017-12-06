@@ -1585,12 +1585,4 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $this->_validators = $_validators;
     }
-
-    /**
-     * @return bool
-     */
-    public static function generatesPaths()
-    {
-        return false;
-    }
 }

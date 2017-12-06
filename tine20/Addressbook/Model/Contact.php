@@ -583,12 +583,4 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 
         return $result;
     }
-
-    /**
-     * @return bool
-     */
-    public static function generatesPaths()
-    {
-        return true;
-    }
 }

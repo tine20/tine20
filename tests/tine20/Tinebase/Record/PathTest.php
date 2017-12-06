@@ -26,12 +26,6 @@ class Tinebase_Record_PathTest extends TestCase
      */
     protected $_uit;
 
-    /**
-     * @throws Exception
-     * @throws Setup_Exception
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     */
     protected function setUp()
     {
         if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
@@ -57,74 +51,7 @@ class Tinebase_Record_PathTest extends TestCase
     }
 
     /**
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Exception
-     */
-    public function testBuildPathFromNonPathGeneratingRecord()
-    {
-        static::assertTrue(Addressbook_Model_Contact::generatesPaths(), Addressbook_Model_Contact::class
-            . ' does not generate paths, test needs to be rewriten');
-        static::assertFalse(Calendar_Model_Resource::generatesPaths(), Calendar_Model_Resource::class
-            . ' does generate paths, test needs to be rewriten');
-
-        $adbController= Addressbook_Controller_Contact::getInstance();
-        $contact = $adbController->create(new Addressbook_Model_Contact(['n_family' => 'tester']));
-
-        $resourceController = Calendar_Controller_Resource::getInstance();
-        $resource = $resourceController->create(new Calendar_Model_Resource([
-            'name'                 => 'Meeting Room',
-            'description'          => 'Our main meeting room',
-            'email'                => 'room@example.com',
-            'is_location'          => true,
-            'relations'            => [
-                [
-                    'related_model'     => Addressbook_Model_Contact::class,
-                    'related_id'        => $contact->getId(),
-                    'related_degree'    => Tinebase_Model_Relation::DEGREE_CHILD,
-                    'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'type'              => 't'
-                ]
-            ]
-        ]));
-
-        $result = $this->_uit->getPathsForRecord($resource);
-        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $resourcePath = $result->getFirstRecord();
-        $this->assertEquals('/Meeting Room{t}/tester', $resourcePath->path);
-
-        $resource->name = 'meeting';
-        $resourceController->update($resource);
-
-        $result = $this->_uit->getPathsForRecord($resource);
-        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $resourcePath = $result->getFirstRecord();
-        $this->assertEquals('/meeting{t}/tester', $resourcePath->path);
-
-        $resource->relations->getFirstRecord()->related_degree = Tinebase_Model_Relation::DEGREE_SIBLING;
-        $resource->relations = $resource->relations->toArray();
-        $resource = $resourceController->update($resource);
-
-        $result = $this->_uit->getPathsForRecord($resource);
-        $this->assertEquals(0, count($result), 'should find 0 path for record. paths:' . print_r($result->toArray(), true));
-
-        $resource->relations->getFirstRecord()->related_degree = Tinebase_Model_Relation::DEGREE_CHILD;
-        $resource->relations = $resource->relations->toArray();
-        $resourceController->update($resource);
-
-        $result = $this->_uit->getPathsForRecord($contact);
-        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $contactPath = $result->getFirstRecord();
-        $this->assertEquals('/meeting{t}/tester', $contactPath->path);
-
-        $resourceController->delete($resource);
-
-        $result = $this->_uit->getPathsForRecord($contact);
-        $this->assertEquals(0, count($result), 'should find 0 path for record. paths:' . print_r($result->toArray(), true));
-    }
-    /**
      * testBuildRelationPathForRecord
-     *
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testBuildRelationPathForRecord()
     {
@@ -152,10 +79,6 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals($fatherPath->getId(), $testerPath->getId(), 'father and tester path are not the same one! ' . print_r($fatherPath, true) . PHP_EOL . print_r($testerPath, true));
     }
 
-    /**
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_AccessDenied
-     */
     protected function _createFatherMotherChild()
     {
         // create some parent / child relations for record
@@ -175,7 +98,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _getFatherWithGrandfather()
     {
@@ -192,7 +114,7 @@ class Tinebase_Record_PathTest extends TestCase
     }
 
     /**
-     * @param Tinebase_Record_Interface $record
+     * @param $record
      * @return array
      */
     protected function _getParentRelationArray($record)
@@ -212,7 +134,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * testBuildGroupMemberPathForContact
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testBuildGroupMemberPathForContact()
     {
@@ -259,7 +180,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * testRebuildPathForRecords
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testTriggerRebuildPathForRecords()
     {
@@ -298,7 +218,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * testTriggerRebuildIfFatherChanged
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testTriggerRebuildIfFatherChanged()
     {
@@ -327,7 +246,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * testTriggerRebuildIfFatherRemovedChild
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testTriggerRebuildIfFatherRemovedChild()
     {
@@ -361,7 +279,6 @@ class Tinebase_Record_PathTest extends TestCase
 
     /**
      * testPathFilter
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testPathFilter()
     {
@@ -382,10 +299,6 @@ class Tinebase_Record_PathTest extends TestCase
         }
     }
 
-    /**
-     * @param string $value
-     * @return array
-     */
     protected function _getPathFilterArray($value)
     {
         return array(
@@ -399,9 +312,6 @@ class Tinebase_Record_PathTest extends TestCase
         );
     }
 
-    /**
-     * @throws Tinebase_Exception_AccessDenied
-     */
     public function testPathResolvingForContacts()
     {
         $this->testBuildGroupMemberPathForContact();
@@ -419,9 +329,6 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertContains('/my test group', $firstRecord['paths'][0]['path'], 'could not find my test group in paths of record' . print_r($firstRecord, true));
     }
 
-    /**
-     * @throws Tinebase_Exception_AccessDenied
-     */
     public function testPathWithDifferentTypeRelations()
     {
         $contact = $this->_createFatherMotherChild();

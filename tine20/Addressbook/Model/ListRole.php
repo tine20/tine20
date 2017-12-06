@@ -70,12 +70,4 @@ class Addressbook_Model_ListRole extends Tinebase_Record_Simple
     {
         static::$_parent = $_record;
     }
-
-    /**
-     * @return bool
-     */
-    public static function generatesPaths()
-    {
-        return true;
-    }
 }

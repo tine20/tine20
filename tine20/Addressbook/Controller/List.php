@@ -32,6 +32,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $this->_resolveCustomFields = true;
         $this->_backend = new Addressbook_Backend_List();
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->_useRecordPaths = true;
+        }
         $this->_modelName = 'Addressbook_Model_List';
         $this->_applicationName = 'Addressbook';
     }

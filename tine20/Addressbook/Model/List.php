@@ -260,11 +260,4 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
         return $result;
     }
-    /**
-     * @return bool
-     */
-    public static function generatesPaths()
-    {
-        return true;
-    }
 }
