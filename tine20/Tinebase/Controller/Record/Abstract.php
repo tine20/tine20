@@ -178,18 +178,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
-     * support record paths
-     *
-     * @var bool
-     */
-    protected $_useRecordPaths = false;
-
-    /**
      * don't get in an endless recursion in get related data
      *
      * @var array
      */
     protected $_getRelatedDataRecursion = [];
+
+    /**
+     * cache if path feature is enabled or not
+     *
+     * @var bool
+     */
+    protected $_recordPathFeatureEnabled = null;
 
     /**
      * constants for actions
@@ -1150,16 +1150,20 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record, $_currentRecord);
         $modLog->setRecordMetaData($_record, self::ACTION_UPDATE, $_currentRecord);
     }
-    
+
     /**
      * set relations / tags / alarms
-     * 
-     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
-     * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord the just updated record
+     * @param   Tinebase_Record_Interface $record the update record
+     * @param   Tinebase_Record_Interface $currentRecord the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
      * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
@@ -1213,11 +1217,66 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         // rebuild paths
-        if (true === $this->_useRecordPaths) {
+        if ($this->_isRecordPathFeatureEnabled() && ($updatedRecord::generatesPaths() ||
+                ($record->has('relations') &&
+                    $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
             Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
         }
 
         return $updatedRecord;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $newRecord
+     * @param Tinebase_Record_Interface|null $currentRecord
+     * @return bool
+     */
+    protected function _checkRelationsForPathGeneratingModels(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
+    {
+        if (is_array($newRecord->relations)) {
+            foreach ($newRecord->relations as $relation) {
+                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation['related_degree'] &&
+                        Tinebase_Model_Relation::DEGREE_PARENT !== $relation['related_degree']) {
+                    continue;
+                }
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $relation['related_model'];
+                if ($model::generatesPaths()) {
+                    return true;
+                }
+            }
+        }
+
+        if (null !== $currentRecord && is_object($currentRecord->relations)) {
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($currentRecord->relations as $relation) {
+                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation->related_degree &&
+                    Tinebase_Model_Relation::DEGREE_PARENT !== $relation->related_degree) {
+                    continue;
+                }
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $relation->related_model;
+                if ($model::generatesPaths()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _isRecordPathFeatureEnabled()
+    {
+        if (null === $this->_recordPathFeatureEnabled) {
+            $this->_recordPathFeatureEnabled = Tinebase_Config::getInstance()
+                ->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH);
+        }
+        return $this->_recordPathFeatureEnabled;
     }
 
     /**
@@ -1598,7 +1657,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_deleteRecord($record);
             }
 
-            if (true === $this->_useRecordPaths) {
+            if (true === $this->_isRecordPathFeatureEnabled()) {
                 $pathController = Tinebase_Record_Path::getInstance();
                 $shadowPathParts = array();
                 /** @var Tinebase_Record_Interface $record */

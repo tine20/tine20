@@ -1888,8 +1888,8 @@ class Tinebase_Core
     {
         if (!isset(static::$_delegatorCache[$configKey])) {
             $config = Tinebase_Config_Abstract::factory($applicationName);
-            $delegate = $config->get($configKey);
-            if (null === $delegate || ! class_exists($delegate) || ! in_array($interfaceName, class_implements($delegate))) {
+            if (null === $config || null === ($delegate = $config->get($configKey)) || ! class_exists($delegate)
+                    || ! in_array($interfaceName, class_implements($delegate))) {
                 $delegate = false;
             } else {
                 $delegate = new $delegate();
