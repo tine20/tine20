@@ -81,7 +81,39 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     routes: {
-        'showEvent/(.*)': 'showEvent'
+        'showEvent/(.*)': 'showEvent',
+        'pollFBView/(.*)/(.*)/(.*)': 'pollFBView' // hack: as we have no local storage window manager yet
+
+    },
+
+    /**
+     *
+     * @param attendee
+     * @param date
+     *
+     * example
+     * http://tine20.example.com:10443/#/Calendar/pollFBView/user/89192f9d3ce44ed3681a1b73d5ca491e766c4d62/2017-12-08
+     */
+    pollFBView: function(user_type, user_id, date) {
+        var cp = this.getMainScreen().getCenterPanel(),
+            activePanel = cp.getCalendarPanel(cp.activeView),
+            activeView = activePanel.getView(),
+            store = activeView.store;
+
+        cp.initialLoadAfterRender = false;
+
+        Tine.Tinebase.MainScreenPanel.show(this);
+
+        // mhh - if the user already declined we can't see the event
+        activeView.updatePeriod({from: new Date(date)});
+        cp.filterToolbar.setValue([
+            {field: 'attender', operator: 'in', value: [{user_type: user_type, user_id: user_id}]},
+            {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
+        ]);
+
+        cp.refresh();
+        cp.toggleFullScreen.handler.apply(cp);
+        cp.toggleFullScreen.hide();
     },
 
     /**

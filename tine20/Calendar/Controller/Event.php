@@ -2538,7 +2538,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
+                    . " update attender status to {$_attender->status} for {$currentAttender->user_type}-{$currentAttender->user_id}");
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' set alarm_ack_time / alarm_snooze_time: ' . $updatedAttender->alarm_ack_time . ' / ' . $updatedAttender->alarm_snooze_time);
             }

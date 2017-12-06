@@ -203,7 +203,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
-    const POLL_AGB = 'pollAGB';
+    const POLL_GTC = 'pollGTC';
 
     /**
      * (non-PHPdoc)
@@ -519,11 +519,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => false
         ),
-        self::POLL_AGB => array(
-            //_('AGBs for polls')
-            'label'                 => 'AGBs for polls',
-            //_('AGBs for polls')
-            'description'           => 'AGBs for polls',
+        self::POLL_GTC => array(
+            //_('GTCs for polls')
+            'label'                 => 'GTCs for polls',
+            //_('GTCs for polls')
+            'description'           => 'GTCs for polls',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,

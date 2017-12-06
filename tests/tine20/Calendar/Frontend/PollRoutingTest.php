@@ -25,8 +25,13 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
             static::markTestSkipped('test only works in development mode, fix it when PSR container is used properly');
         }
 
+        $enabledFeatures = Calendar_Config::getInstance()->get(Calendar_Config::ENABLED_FEATURES);
+        $enabledFeatures[Calendar_Config::FEATURE_POLLS] = true;
+
+        Calendar_Config::getInstance()->set(Calendar_Config::ENABLED_FEATURES, $enabledFeatures);
+
         $agbStr = 'testAGB';
-        Calendar_Config::getInstance()->set(Calendar_Config::POLL_AGB, $agbStr);
+        Calendar_Config::getInstance()->set(Calendar_Config::POLL_GTC, $agbStr);
 
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter, false);

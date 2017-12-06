@@ -43,7 +43,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $event['poll_id'] = [
             'id' => '72315e2c9f337af7d7774a5389e453784ca168d5',
             'name' => 'test poll',
-            'locked' => true,
+            'locked' => false,
             'password' => 'testpwd',
             'alternative_dates' => [
                 [
@@ -71,7 +71,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $persistentEvent['poll_id'] = [
             'id' => Tinebase_Record_Abstract::generateUID(),
             'name' => 'test poll',
-            'locked' => true,
+            'locked' => false,
             'password' => 'testpwd',
             'alternative_dates' => [
                 [
@@ -143,6 +143,27 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
                 'until' => $persistentEvent['dtend'],
             ]]
         ], []);
+
+        $this->assertTrue(is_array($searchResult['results'][0]['poll_id']));
+    }
+
+    public function testResolvePollOtherUser()
+    {
+        $persistentEvent = $this->testCreatePoll();
+
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+
+        $origUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+
+        $searchResult = $this->_uit->searchEvents([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent['id']],
+            ['field' => 'period', 'operator' => 'within', 'value' => [
+                'from' => $persistentEvent['dtstart'],
+                'until' => $persistentEvent['dtend'],
+            ]]
+        ], []);
+        Tinebase_Core::set(Tinebase_Core::USER, $origUser);
 
         $this->assertTrue(is_array($searchResult['results'][0]['poll_id']));
     }

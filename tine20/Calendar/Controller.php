@@ -470,28 +470,30 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
     {
-        $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/view/pollagb', (new Tinebase_Expressive_RouteHandler(
-                Calendar_Controller_Poll::class, 'publicApiGetAGB', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-            $routeCollector->get('/view/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
-                Calendar_Controller_Poll::class, 'publicApiMainScreen', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-            $routeCollector->get('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
-                Calendar_Controller_Poll::class, 'publicApiGetPoll', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-            $routeCollector->post('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
-                Calendar_Controller_Poll::class, 'publicApiUpdateAttenderStatus', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-            $routeCollector->put('/poll/{pollId}[/{user}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
-                Calendar_Controller_Poll::class, 'publicApiAddAttender', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-        });
+        if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
+            $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+                $routeCollector->get('/view/pollagb', (new Tinebase_Expressive_RouteHandler(
+                    Calendar_Controller_Poll::class, 'publicApiGetAGB', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+                $routeCollector->get('/view/poll/{pollId}[/{userKey}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                    Calendar_Controller_Poll::class, 'publicApiMainScreen', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+                $routeCollector->get('/poll/{pollId}[/{userKey}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
+                    Calendar_Controller_Poll::class, 'publicApiGetPoll', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+                $routeCollector->post('/poll/{pollId}', (new Tinebase_Expressive_RouteHandler(
+                    Calendar_Controller_Poll::class, 'publicApiUpdateAttendeeStatus', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+                $routeCollector->put('/poll/{pollId}', (new Tinebase_Expressive_RouteHandler(
+                    Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+            });
+        }
 
         return null;
     }

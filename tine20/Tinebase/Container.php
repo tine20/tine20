@@ -392,7 +392,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                         . __LINE__ . ' Using application name is deprecated. Please use the classname of the model or the class itself.');
                     $ret['appName'] = $_recordClass;
-                    if(! $ret['recordClass'] = Tinebase_Core::getApplicationInstance($_recordClass)->getDefaultModel()) {
+                    if(! $ret['recordClass'] = Tinebase_Core::getApplicationInstance($_recordClass, '', true)->getDefaultModel()) {
                         throw new Tinebase_Exception_NotFound('A default model could not be found for application ' . $_recordClass);
                     }
                     break;
@@ -681,7 +681,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // if no containers where found, maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
         if (empty($containersData) && $accountId === $ownerId) {
-            $application = Tinebase_Core::getApplicationInstance($meta['appName']);
+            $application = Tinebase_Core::getApplicationInstance($meta['appName'], '', true);
 
             if ($application instanceof Tinebase_Application_Container_Interface && method_exists($application, 'createPersonalFolder')) {
                 return $application->createPersonalFolder($accountId);
