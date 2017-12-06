@@ -54,11 +54,12 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
     {
 //        if ($_filter && $_filter->getFilter('path', /* $_getAll = */ false, /* $_recursive = */ true) !== null &&
 //                true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
             $pathController = Tinebase_Record_Path::getInstance();
             foreach ($_records as $record) {
                 $record->paths = $pathController->getPathsForRecord($record);
                 $pathController->cutTailAfterRecord($record, $record->paths);
             }
-//        }
+        }
     }
 }
