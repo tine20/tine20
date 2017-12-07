@@ -65,6 +65,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     autoScroll: true,
     layout: 'fit',
     canonicalName: 'AttachmentsGrid',
+    registerEditDialogEvents: true,
 
     /**
      * initializes the component
@@ -76,9 +77,11 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         this.i18nFileString = i18n._('Attachment');
         
         Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
-        
-        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
-        this.editDialog.on('load', this.onLoadRecord, this);
+
+        if (this.registerEditDialogEvents) {
+            this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+            this.editDialog.on('load', this.onLoadRecord, this);
+        }
 
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
         
@@ -238,7 +241,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             this.store.on('add', this.updateTitle, this);
             this.store.on('remove', this.updateTitle, this);
         }
-        interceptor();
+        if (Ext.isFunction(interceptor)) {
+            interceptor();
+        }
 
         this.setReadOnly(! hasRequiredGrant);
     },
