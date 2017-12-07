@@ -464,6 +464,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     protected function _createDocument()
     {
         \PhpOffice\PhpWord\Settings::setTempDir(Tinebase_Core::getTempDir());
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
 
         $templateFile = $this->_getTemplateFilename();
         $this->_docObject = new \PhpOffice\PhpWord\PhpWord();
@@ -482,6 +483,16 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         if (true === $this->_skip) {
             return;
+        }
+
+        $_value = (string)$_value;
+        if (strlen($_value) > 0) {
+            $_value = str_replace("\r", '', $_value);
+            $_value = explode("\n", $_value);
+            array_walk($_value, function(&$val) {
+                $val = htmlspecialchars($val);
+            });
+            $_value = join('</w:t><w:br/><w:t>', $_value);
         }
 
         $this->_currentProcessor->setValue($_key, $_value);
