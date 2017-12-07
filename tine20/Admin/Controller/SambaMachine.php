@@ -274,4 +274,16 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
         
         return $this->_backend->delete($_ids);
     }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
 }

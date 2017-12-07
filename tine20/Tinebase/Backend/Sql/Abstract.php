@@ -1860,4 +1860,28 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
 
         return $deletedRows;
     }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        $select = $this->getAdapter()->select();
+        $select->from([$this->_tableName => $this->_tablePrefix . $this->_tableName],
+            [$this->_tableName . '.' . $this->_identifier]);
+
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+        }
+
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier)
+            . ' IN (?)', $_ids));
+
+        return $select->query()->fetchAll(Zend_Db::FETCH_COLUMN);
+    }
 }

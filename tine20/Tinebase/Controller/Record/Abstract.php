@@ -2730,4 +2730,16 @@ HumanResources_CliTests.testSetContractsEndDate */
         }
         return $oldValue;
     }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        return $this->_backend->has($_ids, $_getDeleted);
+    }
 }

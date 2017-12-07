@@ -1025,4 +1025,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $currBaseEvent = $this->_eventController->get($_baseEvent, null, false);
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
     }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
 }
