@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('lodash');
 var path = require('path');
 var webpack = require('webpack');
-var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     path: 'Tinebase/js',
@@ -59,23 +59,7 @@ module.exports = {
         chunkFilename: "[name]-[chunkhash]-FAT.js",
         libraryTarget: "umd"
     },
-    devServer: {
-        hot: false,
-        inline: false,
-        port: 10443,
-        disableHostCheck: true,
-        proxy: [
-            {
-                context: ['**', '!/webpack-dev-server*/**'],
-                target: 'http://localhost/',
-                secure: false
-            }
-        ],
-    },
     plugins: [
-        new UnminifiedWebpackPlugin({
-            postfix : 'debug'
-        }),
         assetsPluginInstance
     ],
     module: {
