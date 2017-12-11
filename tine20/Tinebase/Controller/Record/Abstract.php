@@ -2392,12 +2392,6 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
 
-            $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
-            
-            // legacy end
-            $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
-            $oldRecords = $controller->search($oldFilter);
-
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_record->{$_property} as $record) {
                 
@@ -2437,8 +2431,9 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
+        $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
+
         try {
             $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
@@ -2496,18 +2491,15 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
         }
 
-
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
         $controller = $ccn::getInstance();
         $filterClassName = $_fieldConfig['filterClassName'];
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . $_property);
+        $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
         //try {
           //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 

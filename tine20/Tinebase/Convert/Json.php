@@ -369,8 +369,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $filterArray = $config['addFilters'];
             }
 
-            /** @var Tinebase_Model_Filter_FilterGroup $filter */
-            $filter = new $filterName($filterArray);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
             $paging = NULL;
