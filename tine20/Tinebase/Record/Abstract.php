@@ -1312,7 +1312,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $keys = array();
         
         foreach (self::getConfiguration()->getFields() as $key => $fieldDef) {
-            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'text') {
+            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'stringAutocomplete' || $fieldDef['type'] == 'text') {
                 $keys[] = $key;
             }
         }

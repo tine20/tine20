@@ -1450,8 +1450,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $recordClassName = $appName . '_Model_' . $modelName;
         $controller      = Tinebase_Core::getApplicationInstance($appName, $modelName);
-        $filterClassName = $recordClassName . 'Filter';
-        
+
         if (! class_exists($recordClassName)) {
             throw new Tinebase_Exception_InvalidArgument('A record class for the given appName and modelName does not exist!');
         }
