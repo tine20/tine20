@@ -21,6 +21,10 @@ class Calendar_Frontend_PollRoutingTest extends TestCase
      */
     public function testExampleApplicationPublicTestRoute()
     {
+        if (TINE20_BUILDTYPE !== 'DEVELOPMENT') {
+            static::markTestSkipped('test only works in development mode, fix it when PSR container is used properly');
+        }
+
         $agbStr = 'testAGB';
         Calendar_Config::getInstance()->set(Calendar_Config::POLL_AGB, $agbStr);
 
