@@ -281,6 +281,6 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      */
     public function has(array $_ids, $_getDeleted = false)
     {
-        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+        return $this->_configBackend->has($_ids, $_getDeleted);
     }
 }
