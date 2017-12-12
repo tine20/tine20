@@ -346,6 +346,7 @@
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
+                <include name="*/*/*/*/*-FAT*" />
                 <include name="*/js/*-lang-*" />
                 <include name="vendor/*/*/lib/*/*/*-FAT*" />
                 <include name="vendor/*/*/lib/*/js/*-lang-*" />
