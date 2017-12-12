@@ -222,12 +222,35 @@ class Filemanager_ControllerTests extends TestCase
         ])]);
         $fileManager->update($node);
 
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_given' => 'test',
+            'container_id' => Admin_Controller_User::getInstance()->getDefaultInternalAddressbook(),
+            'relations' => [[
+                'related_model'         => Filemanager_Model_Node::class,
+                'related_backend'       => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_degree'        => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_id'            => $node->getId(),
+                'type'                  => 't'
+            ]]
+        ]));
+
+        static::assertEquals(1, $contact->relations->count());
+        static::assertEquals($node->getId(), $contact->relations->getFirstRecord()->related_id);
+
         try {
             Tinebase_Core::set(Tinebase_Core::USER, $sClever);
             try {
                 $fileManager->createNodes('/shared/test/subFolder', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
                 static::fail('acl test failed');
             } catch (Tinebase_Exception_AccessDenied $tead) {}
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+        }
+
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['jmcblack']);
+            $jmcbContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+            static::assertEquals(0, $jmcbContact->relations->count());
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
