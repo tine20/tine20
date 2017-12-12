@@ -22,7 +22,7 @@
         "url": "http://git.syncroton.org/Syncroton"
     }, {
         "type": "git",
-        "url": "https://github.com/paulmhh/PHPWord"
+        "url": "https://github.com/tine20/PHPWord"
     }],
     "require": {
         "php": "^5.6 | ^7.0",
