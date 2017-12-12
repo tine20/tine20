@@ -613,6 +613,35 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
+        $result = $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
         return $result;
+    }
+
+    /**
+     * adds account_grants if configured in model
+     *
+     * @param array $resultSet
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     * @return array
+     */
+    protected function _convertRightToAccountGrants($resultSet, $modelConfiguration = NULL, $multiple = false)
+    {
+        if (! $modelConfiguration || ! $modelConfiguration->convertRightToGrants) {
+            return $resultSet;
+        }
+
+        $userGrants = Tinebase_Core::getUser()->hasRight(
+            $modelConfiguration->appName,
+            $modelConfiguration->convertRightToGrants['right']
+        ) ? $modelConfiguration->convertRightToGrants['providesGrants'] : array();
+
+        // TODO can't we do this in a more elegant way?? maybe use array_walk?
+        $tmp = ($multiple) ? $resultSet : array($resultSet);
+        foreach ($tmp as &$record) {
+            $record['account_grants'] = $userGrants;
+        }
+
+        return ($multiple) ? $tmp : $tmp[0];
     }
 }

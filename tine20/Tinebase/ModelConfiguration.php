@@ -486,6 +486,22 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_resolveVFGlobally = FALSE;
+
+    /**
+     * if this is an array, rights are converted to grants. config example:
+     *
+     *       'convertRightToGrants' => [
+     *          'right' => KeyManager_Acl_Rights::MANAGE_KEYS,
+     *          'providesGrants' => [
+     *              Tinebase_Model_Grants::GRANT_ADD => true,
+     *              Tinebase_Model_Grants::GRANT_EDIT => true,
+     *              Tinebase_Model_Grants::GRANT_DELETE => true,
+     *          ]
+     *       ],
+     *
+     * @var boolean|array
+     */
+    protected $_convertRightToGrants = false;
     
     /**
      * holds all field definitions of type records
@@ -890,7 +906,7 @@ class Tinebase_ModelConfiguration {
         $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
         $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
 
-        // some cruid validating
+        // some crude validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
