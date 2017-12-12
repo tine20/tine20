@@ -223,16 +223,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function getMultiple($_ids)
     {
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids)) as $node) {
-            try {
-                if (! $this->_checkACLContainer($this->_backend->getNodeContainer($node), 'get')) {
-                    $results->removeRecord($node);
-                }
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
+                $this->_backend->getPathOfNode($node->getId(), true));
+            if (! $this->_backend->checkPathACL($path, 'get', true, false)) {
                 $results->removeRecord($node);
             }
         }
         $this->resolveMultipleTreeNodesPath($results);
-        
         return $results;
     }
     
