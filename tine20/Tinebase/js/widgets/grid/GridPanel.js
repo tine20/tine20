@@ -1437,6 +1437,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             border: false,
             store: this.store,
             sm: this.selectionModel,
+            parentScope: this,
             view: this.createView()
         }));
 
