@@ -158,7 +158,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
             foreach($this->_cloneRow as $newRow) {
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
-                $cell->setValue($newRow['value'] . '#' . $this->_rowCount);
+                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
                 $cell->setXfIndex($newRow['XFIndex']);
             }
 
