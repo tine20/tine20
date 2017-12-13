@@ -691,6 +691,8 @@ class Tinebase_Application
                 /** @var Tinebase_Model_Application $record */
                 $record = new $model($diff->diff);
 
+                // close transaction open in \Tinebase_Timemachine_ModificationLog::applyReplicationModLogs
+                Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::getInstance()->installApplications([$record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
