@@ -20,20 +20,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s osobni projekti"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projekti"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Upravljaj dijeljenim projektnim favoritima"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr ""
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Kreiranje novog dijeljenog projekta favorita"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Oznake"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Broj"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Naslov"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -55,21 +66,9 @@ msgstr "Liste projekta"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Naslov"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Broj"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Opis"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -87,17 +86,9 @@ msgstr "Vrijeme kreiranja"
 msgid "Created By"
 msgstr "Kreirao"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Sudionik"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Uloga"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Unesi opis"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -115,6 +106,10 @@ msgstr "Odaberite uloge sudionika"
 msgid "Select Project"
 msgstr "Odaberite projekt"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Uloga"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Odaberite ulogu"
@@ -124,17 +119,9 @@ msgstr "Odaberite ulogu"
 msgid "Adding {0} Participants to project"
 msgstr "Dodavanje {0} sudionika projekta"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projekti"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Oznake"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Unesi opis"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -193,6 +180,11 @@ msgstr "Suradnik"
 msgid "Responsible"
 msgstr "Zadužen"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s osobni projekti"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Moji otvoreni projekti"
@@ -212,3 +204,11 @@ msgstr "Moji projekti na čekanju"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Moji projekti na čekanju"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Upravljaj dijeljenim projektnim favoritima"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Kreiranje novog dijeljenog projekta favorita"

@@ -1,12 +1,13 @@
 # 
 # Translators:
 # DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
+# fgsl <flavio.lisboa@serpro.gov.br>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 13:05+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2017-11-29 13:08+0000\n"
+"Last-Translator: fgsl <flavio.lisboa@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,20 +18,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's Projetos pessoais"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projetos"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Gerenciar favoritos em projetos compartilhados"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Buscar FAQ"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Criar um novo favorito no projeto"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Etiquetas"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Número"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Título"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Situação"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projeto"
@@ -50,21 +62,9 @@ msgstr "Listas de Projetos"
 msgid "Quick Search"
 msgstr "Busca Rápida"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Título"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Número"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Descrição"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Situação"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -82,17 +82,9 @@ msgstr "Data de Criação"
 msgid "Created By"
 msgstr "Criado por"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Participante"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Perfil"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Digitar a Descrição"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -110,6 +102,10 @@ msgstr "Selecione o perfil do participante"
 msgid "Select Project"
 msgstr "Selecione o Projeto"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Perfil"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Selecione o Perfil"
@@ -119,17 +115,9 @@ msgstr "Selecione o Perfil"
 msgid "Adding {0} Participants to project"
 msgstr "Adicionando {0} Participantes ao projeto"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projetos"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Identificação"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Digitar a Descrição"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -141,7 +129,7 @@ msgstr "Valor Padrão"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Projects startup"
-msgstr "Valor padrão que serão exibido no início do Projeto"
+msgstr "O favorito padrão que será carregado na inicialização dos Projetos"
 
 #: Config.php:38
 msgid "Project Status Available"
@@ -171,14 +159,14 @@ msgstr "Processando"
 
 #: Config.php:56
 msgid "Project Attendee Role Available"
-msgstr "Perfil Disponível para Participante do Projeto"
+msgstr "Perfil de Participante de Projeto Disponível"
 
 #: Config.php:58
 msgid ""
 "Possible Project attendee roles. Please note that additional project "
 "attendee roles might impact other Projects systems on export or "
 "syncronisation."
-msgstr "Perfis possíveis para participantes de projetos. Favor observar que um perfil adicional de um participante do projeto pode afetar sistemas de outros Projetos durante a exportação ou sincronização."
+msgstr "Perfis de participantes de projetos possíveis. Favor observar que um perfil adicional de um participante do projeto pode afetar sistemas de outros Projetos durante a exportação ou sincronização."
 
 #: Config.php:65
 msgid "Coworker"
@@ -187,6 +175,11 @@ msgstr "Colega de trabalho"
 #: Config.php:66
 msgid "Responsible"
 msgstr "Responsável"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's Projetos pessoais"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -202,8 +195,16 @@ msgstr "Todos os projetos abertos pelos quais sou responsável"
 
 #: Setup/Initialize.php:77
 msgid "My waiting projects"
-msgstr "Meus projetos em exigência"
+msgstr "Meus projetos em espera"
 
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Meus projetos que estão retidos"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Gerenciar favoritos em projetos compartilhados"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Criar novos favoritos em projetos compartilhados"

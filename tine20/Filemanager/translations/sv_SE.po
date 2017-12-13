@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:23+0000\n"
+"PO-Revision-Date: 2017-09-28 09:49+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/tine20/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -18,218 +18,59 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:104
-#, python-format
-msgid "%s's personal files"
-msgstr "%s's personliga filer"
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
+#: js/UsagePanel.js:29
+msgid "Usage"
 msgstr ""
 
-#: Exception/DestinationIsSameNode.php:31
+#: js/UsagePanel.js:39 js/NodeGridPanel.js:240 js/FilePicker.js:282
+msgid "Size"
+msgstr "Storlek"
+
+#: js/UsagePanel.js:45
+msgid "This folder has own quota"
+msgstr ""
+
+#: js/UsagePanel.js:50
+msgid "Quota"
+msgstr ""
+
+#: js/UsagePanel.js:51
+msgid "no quota set"
+msgstr ""
+
+#: js/UsagePanel.js:56
+msgid "Current Usage"
+msgstr ""
+
+#: js/UsagePanel.js:64
 msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
+"The Quota applies recursively for files and subfolders. Please note, the "
+"Effective Quota differs wehn a parent folder has set a lower quota."
 msgstr ""
 
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
+#: js/UsagePanel.js:84 js/NodeGridPanel.js:295
+msgid "Revision Size"
 msgstr ""
 
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
+#: js/UsagePanel.js:91
+msgid "File Type"
 msgstr ""
 
-#: Acl/Rights.php:104
-msgid "manage shared folders"
-msgstr "hantera delade mappar"
-
-#: Acl/Rights.php:105
-msgid "Create new shared folders"
-msgstr "Skapa nya delade mappar"
-
-#: Acl/Rights.php:108
-msgid "Manage anonymous download links"
+#: js/UsagePanel.js:95
+msgid "Usage by File Type"
 msgstr ""
 
-#: Acl/Rights.php:109
-msgid "Allow to see, add and delete download links of files and folders"
+#: js/UsagePanel.js:103
+msgid "User"
 msgstr ""
 
-#: js/NodeEditDialog.js:50 js/Filemanager.js:32 js/NodeGridPanel.js:339
-msgid "Save locally"
-msgstr "Spara lokalt"
-
-#: js/NodeEditDialog.js:66
-msgid "Edit folder"
+#: js/UsagePanel.js:107
+msgid "Usage by User"
 msgstr ""
 
-#: js/NodeEditDialog.js:66
-msgid "edit file"
+#: js/UsagePanel.js:161
+msgid "unknown"
 msgstr ""
-
-#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] "Mapp"
-
-#: js/NodeEditDialog.js:68 js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "Fil"
-msgstr[1] "Filer"
-
-#: js/NodeEditDialog.js:114
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
-msgid "Name"
-msgstr "Namn"
-
-#: js/NodeEditDialog.js:154 js/Model.js:527
-msgid "Type"
-msgstr "Typ"
-
-#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:246
-#: js/NodeGridPanel.js:182
-msgid "Created By"
-msgstr "Skapad Av "
-
-#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:254 js/Model.js:529
-#: js/NodeGridPanel.js:174
-msgid "Creation Time"
-msgstr "Skapad"
-
-#: js/NodeEditDialog.js:174
-msgid "Modified By"
-msgstr "Ändrad av"
-
-#: js/NodeEditDialog.js:177
-msgid "Last Modified"
-msgstr "Senast ändrad"
-
-#: js/NodeEditDialog.js:200
-msgid "Description"
-msgstr "Beskrivning"
-
-#: js/NodeEditDialog.js:214
-msgid "Enter description"
-msgstr "Fyll i beskrivning"
-
-#: js/NodeTreePanel.js:712 js/NodeTreePanel.js:822 js/NodeGridPanel.js:696
-#: js/NodeGridPanel.js:847
-msgid "Upload Failed"
-msgstr "Uppladdning Misslyckades"
-
-#: js/NodeTreePanel.js:713 js/NodeGridPanel.js:697
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator."
-msgstr ""
-
-#: js/NodeTreePanel.js:823 js/NodeGridPanel.js:848
-msgid "Putting files in this folder is not allowed!"
-msgstr "Skapa filer i denna mappen är inte tillåtet!"
-
-#: js/DownloadLinkGridPanel.js:63
-msgid "Create Public Link"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:71
-msgid "Remove record"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:135
-msgid "Creating new Download Link..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:173
-msgid "Deleting Download Links..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:173
-msgid "Deleting Download Link..."
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:230
-msgid "Url"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:262
-msgid "Expiration Time"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:271
-msgid "Access Count"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:278 js/NodeGridPanel.js:189
-msgid "Last Modified Time"
-msgstr "Senast Ändrad"
-
-#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:196
-msgid "Last Modified By"
-msgstr "Senast Ändrad Av"
-
-#: js/GridContextMenu.js:34
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "Var god ange det nya namnet för {0}:"
-
-#: js/GridContextMenu.js:40
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Ej omdöpt {0}"
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:548
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Du måste ange ett {0} namn!"
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:589
-msgid "Do you really want to delete the following files?"
-msgstr "Vill du verkligen radera följande filer?"
-
-#: js/Filemanager.js:24
-msgid "Filemanager"
-msgstr "Filhanterare"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "väg"
-
-#: js/Model.js:279 js/Model.js:295
-#, python-brace-format
-msgid "Copying data .. {0}"
-msgstr "Kopierar data .. {0} "
-
-#: js/Model.js:282 js/Model.js:297
-#, python-brace-format
-msgid "Moving data .. {0}"
-msgstr "Flyttar data .. {0}"
-
-#: js/Model.js:301
-msgid "Please wait"
-msgstr "Vänlig vänta"
-
-#: js/Model.js:526
-msgid "Quick Search"
-msgstr ""
-
-#: js/Model.js:528 js/NodeGridPanel.js:142
-msgid "Contenttype"
-msgstr "Innehållstyp"
-
-#: js/Model.js:553
-msgid "Download Link"
-msgid_plural "Download Links"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/ExceptionHandler.js:32
 msgid "Service Unavailable"
@@ -258,93 +99,422 @@ msgstr "Det gick inte att skapa en ny mapp"
 msgid "Item with this name already exists!"
 msgstr "Ett objekt med detta namnet existerar redan!"
 
+#: js/Filemanager.js:24
+msgid "Filemanager"
+msgstr "Filhanterare"
+
+#: js/Filemanager.js:74 js/nodeActions.js:284 js/NodeEditDialog.js:51
+msgid "Save locally"
+msgstr "Spara lokalt"
+
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
 msgstr ""
 
-#: js/NodeGridPanel.js:120
+#: js/DownloadLinkGridPanel.js:68
+msgid "Create Public Link"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:76
+msgid "Remove record"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:144
+msgid "Creating new Download Link..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:182
+msgid "Deleting Download Links..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:182
+msgid "Deleting Download Link..."
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:239 js/FilePublishedDialog.js:58
+msgid "Url"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:270
+#: js/NodeEditDialog.js:189
+msgid "Created By"
+msgstr "Skapad Av "
+
+#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:263 js/Model.js:604
+#: js/NodeEditDialog.js:192
+msgid "Creation Time"
+msgstr "Skapad"
+
+#: js/DownloadLinkGridPanel.js:271
+msgid "Expiration Time"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:280
+msgid "Access Count"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:277
+msgid "Last Modified Time"
+msgstr "Senast Ändrad"
+
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:284
+msgid "Last Modified By"
+msgstr "Senast Ändrad Av"
+
+#: js/NodeGridPanel.js:225
 msgid "Tags"
 msgstr "Taggar"
 
-#: js/NodeGridPanel.js:135
-msgid "Size"
-msgstr "Storlek"
+#: js/NodeGridPanel.js:233 js/NotificationGridPanel.js:96
+#: js/NodeEditDialog.js:150 js/FilePicker.js:275
+msgid "Name"
+msgstr "Namn"
 
-#: js/NodeGridPanel.js:159
-msgid "Revision"
-msgstr "Revision"
+#: js/NodeGridPanel.js:247 js/Model.js:603 js/FilePicker.js:289
+msgid "Contenttype"
+msgstr "Innehållstyp"
 
-#: js/NodeGridPanel.js:244
-#, python-brace-format
-msgid "The max. Upload Filesize is {0} MB"
-msgstr "Max storlek för filuppladning är {0} MB"
+#: js/NodeGridPanel.js:255 js/Model.js:26 js/NodeEditDialog.js:70
+#: js/FilePicker.js:297
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] "Mapp"
 
-#: js/NodeGridPanel.js:282
+#: js/NodeGridPanel.js:296
+msgid "Total size of all available revisions"
+msgstr ""
+
+#: js/NodeGridPanel.js:308 js/Model.js:610 js/NodeEditDialog.js:170
+msgid "Indexed"
+msgstr ""
+
+#: js/NodeGridPanel.js:309
+msgid "File contents is part of the search index"
+msgstr ""
+
+#: js/NodeGridPanel.js:421
 msgid "Upload"
 msgstr "Ladda upp"
 
-#: js/NodeGridPanel.js:306
-msgid "Edit Properties"
-msgstr "Ändra egenskaper"
-
-#: js/NodeGridPanel.js:317
-msgid "Create Folder"
-msgstr "Skapa Mapp"
-
-#: js/NodeGridPanel.js:328
+#: js/NodeGridPanel.js:478
 msgid "Folder Up"
 msgstr "Mapp Upp"
 
-#: js/NodeGridPanel.js:349 js/NodeGridPanel.js:350 js/NodeGridPanel.js:352
-msgid "Delete"
-msgstr "Radera"
+#: js/NodeGridPanel.js:780 js/NodeTreePanel.js:517
+msgid "Upload Failed"
+msgstr "Uppladdning Misslyckades"
 
-#: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
-msgid "Publish"
+#: js/NodeGridPanel.js:781 js/NodeTreePanel.js:518
+msgid "Putting files in this folder is not allowed!"
+msgstr "Skapa filer i denna mappen är inte tillåtet!"
+
+#: js/RecursiveFilter.js:38
+msgid "Whole Filemanager"
 msgstr ""
 
-#: js/NodeGridPanel.js:422
-msgid "Folder has been published successfully"
+#: js/RecursiveFilter.js:49
+msgid "Search"
 msgstr ""
 
-#: js/NodeGridPanel.js:422
-msgid "File has been published successfully"
+#: js/RecursiveFilter.js:51
+msgid "This Folder"
 msgstr ""
 
-#: js/NodeGridPanel.js:423
-#, python-brace-format
-msgid "Url: {0}"
-msgstr ""
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "väg"
 
-#: js/NodeGridPanel.js:423
-#, python-brace-format
-msgid "Valid Until: {1}"
-msgstr ""
+#: js/nodeActions.js:39
+msgid "Create Folder"
+msgstr "Skapa Mapp"
 
-#: js/NodeGridPanel.js:544
+#: js/nodeActions.js:48
 msgid "New Folder"
 msgstr "Ny Mapp"
 
-#: js/NodeGridPanel.js:544
+#: js/nodeActions.js:48
 msgid "Please enter the name of the new folder:"
 msgstr "Var god ange namnet på den nya mappen:"
 
-#: js/NodeGridPanel.js:548
+#: js/nodeActions.js:51
 #, python-brace-format
 msgid "No {0} added"
 msgstr "Ingen {0} tillagd"
 
-#: Controller/Node.php:319
-msgid "My folders"
-msgstr "Mina mappar"
+#: js/nodeActions.js:51 js/nodeActions.js:138
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Du måste ange ett {0} namn!"
 
-#: Controller/Node.php:326
-msgid "Shared folders"
-msgstr "Delade mappar"
+#: js/nodeActions.js:84
+msgid "Edit Properties"
+msgstr "Ändra egenskaper"
 
-#: Controller/Node.php:333
-msgid "Other users folders"
-msgstr "Andra användares mappar"
+#: js/nodeActions.js:117
+msgid "Rename"
+msgstr ""
+
+#: js/nodeActions.js:131
+#, python-brace-format
+msgid "Rename {0}"
+msgstr ""
+
+#: js/nodeActions.js:132
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "Var god ange det nya namnet för {0}:"
+
+#: js/nodeActions.js:138
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Ej omdöpt {0}"
+
+#: js/nodeActions.js:162 js/nodeActions.js:173
+msgid "System Link"
+msgstr ""
+
+#: js/nodeActions.js:176
+msgid "Use this link to share the entry with other system users"
+msgstr ""
+
+#: js/nodeActions.js:193
+msgid "Delete"
+msgstr "Radera"
+
+#: js/nodeActions.js:216
+msgid "Do you really want to delete the following files?"
+msgstr "Vill du verkligen radera följande filer?"
+
+#: js/nodeActions.js:251
+msgid "Move"
+msgstr ""
+
+#: js/nodeActions.js:262
+msgid "Move Items"
+msgstr ""
+
+#: js/nodeActions.js:308
+msgid "Preview"
+msgstr ""
+
+#: js/nodeActions.js:334 js/GrantsPanel.js:57
+msgid "Publish"
+msgstr ""
+
+#: js/nodeActions.js:365
+msgid "Folder has been published successfully"
+msgstr ""
+
+#: js/nodeActions.js:365
+msgid "File has been published successfully"
+msgstr ""
+
+#: js/nodeActions.js:22
+msgid "Reload),"
+msgstr ""
+
+#: js/NotificationGridPanel.js:37
+msgid "Notification"
+msgstr ""
+
+#: js/NotificationGridPanel.js:38
+msgid "Notification active"
+msgstr ""
+
+#: js/NotificationGridPanel.js:49
+msgid "Summary"
+msgstr ""
+
+#: js/NotificationGridPanel.js:52
+msgid "Day"
+msgstr ""
+
+#: js/NotificationGridPanel.js:56
+msgid "Days"
+msgstr ""
+
+#: js/NotificationGridPanel.js:132
+msgid "No permission"
+msgstr ""
+
+#: js/NotificationGridPanel.js:143
+msgid "all"
+msgstr ""
+
+#: js/NotificationGridPanel.js:162
+msgid "Search for users ..."
+msgstr ""
+
+#: js/NotificationGridPanel.js:195
+msgid "Search for groups ..."
+msgstr ""
+
+#: js/SearchCombo.js:62
+msgid "Select a file"
+msgstr ""
+
+#: js/FilePublishedDialog.js:66 js/FilePublishedDialog.js:109
+msgid "Password"
+msgstr ""
+
+#: js/FilePublishedDialog.js:74
+msgid "Valid until"
+msgstr ""
+
+#: js/FilePublishedDialog.js:92
+msgid "Send as e-mail"
+msgstr ""
+
+#: js/FilePublishedDialog.js:106 js/GrantsPanel.js:55
+msgid "Download"
+msgstr ""
+
+#: js/RevisionPanel.js:34 js/Model.js:93
+msgid "Revision"
+msgstr "Revision"
+
+#: js/RevisionPanel.js:49
+msgid "This folder has own revision settings"
+msgstr ""
+
+#: js/RevisionPanel.js:60
+msgid "Revision active"
+msgstr ""
+
+#: js/RevisionPanel.js:72
+msgid "Limit revision amount to"
+msgstr ""
+
+#: js/RevisionPanel.js:88
+msgid "Hold-back in months"
+msgstr ""
+
+#: js/Model.js:23 js/NodeEditDialog.js:70
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Fil"
+msgstr[1] "Filer"
+
+#: js/Model.js:249 js/Model.js:264
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr "Kopierar data .. {0} "
+
+#: js/Model.js:252 js/Model.js:266
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr "Flyttar data .. {0}"
+
+#: js/Model.js:270
+msgid "Please wait"
+msgstr "Vänlig vänta"
+
+#: js/Model.js:601
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:602 js/NodeEditDialog.js:158
+msgid "Type"
+msgstr "Typ"
+
+#: js/Model.js:605 js/NodeEditDialog.js:225
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/Model.js:609
+msgid "File Contents"
+msgstr ""
+
+#: js/Model.js:632
+msgid "Download Link"
+msgid_plural "Download Links"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GrantsPanel.js:33
+msgid "Grants"
+msgstr ""
+
+#: js/GrantsPanel.js:40
+msgid "This folder has own grants"
+msgstr ""
+
+#: js/GrantsPanel.js:44
+msgid ""
+"Grants of a folder also apply recursively for all of its sub folders as long"
+" they don't have own grants itself."
+msgstr ""
+
+#: js/GrantsPanel.js:49
+msgid "This folder is pin protected"
+msgstr ""
+
+#: js/GrantsPanel.js:52
+msgid ""
+"If pin protection is enabled, users have to authenticate with their pin "
+"before they can access the folder contents."
+msgstr ""
+
+#: js/GrantsPanel.js:56
+msgid "The grant to download files"
+msgstr ""
+
+#: js/GrantsPanel.js:58
+msgid "The grant to create anonymous download links for files"
+msgstr ""
+
+#: js/NotificationPanel.js:25
+msgid "Notifications"
+msgstr ""
+
+#: js/NotificationPanel.js:45
+msgid "This folder has own notification settings"
+msgstr ""
+
+#: js/NodeEditDialog.js:68
+msgid "Edit folder"
+msgstr ""
+
+#: js/NodeEditDialog.js:68
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:112
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:170
+msgid "Not yet indexed"
+msgstr ""
+
+#: js/NodeEditDialog.js:201
+msgid "Modified By"
+msgstr "Ändrad av"
+
+#: js/NodeEditDialog.js:204
+msgid "Last Modified"
+msgstr "Senast ändrad"
+
+#: js/NodeEditDialog.js:239
+msgid "Enter description"
+msgstr "Fyll i beskrivning"
+
+#: js/DocumentPreview.js:59
+msgid "Close"
+msgstr ""
+
+#: js/DocumentPreview.js:119
+msgid "No preview available."
+msgstr ""
+
+#: Preference.php:61
+msgid "Row double click default"
+msgstr ""
+
+#: Preference.php:62
+msgid "Defines which action should be executed on double click by default?"
+msgstr ""
 
 #: Config.php:26
 msgid "Public Download URL"
@@ -352,6 +522,86 @@ msgstr ""
 
 #: Config.php:28
 msgid ""
-"Possible status. Please note that additional status might impact other "
-"Filemanager systems on export or syncronisation."
+"Serve anonymous downloads from a differnt URL. Make sure to setup propper "
+"rewrite rules."
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
+
+#: Controller/Node.php:470
+msgid "My folders"
+msgstr "Mina mappar"
+
+#: Controller/Node.php:477
+msgid "Shared folders"
+msgstr "Delade mappar"
+
+#: Controller/Node.php:484
+msgid "Other users folders"
+msgstr "Andra användares mappar"
+
+#: Controller/Node.php:1420
+msgid "Received"
+msgstr ""
+
+#: Controller/Node.php:1421
+msgid "To"
+msgstr ""
+
+#: Controller/Node.php:1422
+msgid "Cc"
+msgstr ""
+
+#: Controller/Node.php:1423
+msgid "Bcc"
+msgstr ""
+
+#: Controller/Node.php:1424
+msgid "From (E-Mail)"
+msgstr ""
+
+#: Controller/Node.php:1425
+msgid "From (Name)"
+msgstr ""
+
+#: Controller/Node.php:1426
+msgid "Body"
+msgstr ""
+
+#: Controller/Node.php:1427
+msgid "Attachments"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr "hantera delade mappar"
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr "Skapa nya delade mappar"
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# fgsl <flavio.lisboa@serpro.gov.br>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 13:05+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2017-11-29 13:01+0000\n"
+"Last-Translator: fgsl <flavio.lisboa@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,45 +17,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Adicionar novo usuário"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Prenome"
 
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Adicionar novo usuário como membro para o curso"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Sobrenome"
 
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Adicionar usuário existente"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Adicionar novo membro ao curso"
 
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Adicionar usuário existente como membro para o curso"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Erros"
 
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Nome"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Tipo"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Falhou"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Ocorreu algum erro enquanto tentava atualizar os cursos."
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Favor corrigir os erros anotados."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -102,6 +83,22 @@ msgstr "desconhecido"
 msgid "Reset Password"
 msgstr "Restabelecer a senha"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Nome"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Tipo"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Falhou"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Ocorreu algum erro enquanto tentava atualizar os cursos."
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -118,46 +115,14 @@ msgid_plural "Course Types"
 msgstr[0] "Tipo de Curso"
 msgstr[1] "Tipos de Curso"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Prenome"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Sobrenome"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Adicionar novo membro ao curso"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Erros"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Favor fixar os erros anotados."
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Professor"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Conta de Professor"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Meu curso"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Todos os cursos"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr "O favorito padrão que foi carregado na inicialização das Classes"
+msgstr "O favorito padrão que foi carregado na inicialização das Turmas"
 
 #: Config.php:105
 msgid "Internet access options."
@@ -197,21 +162,21 @@ msgstr "Prefixo do nome de entrada de estudantes"
 
 #: Config.php:158
 msgid "Students password suffix"
-msgstr ""
+msgstr "Sufixo de senha de estudantes"
 
 #: Config.php:165
 msgid "Teacher password"
-msgstr ""
+msgstr "Senha do professor"
 
 #: Config.php:174
 msgid "Student username schema"
-msgstr ""
+msgstr "Esquema de nome de usuário do estudante"
 
 #: Config.php:176
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr ""
+msgstr "Esquema do nome de usuário do estudante (0 = somente último nome (10 caracteres), 1 = último nome + 2 caracteres do primeiro nome"
 
 #: Config.php:183 Config.php:185
 msgid "Samba user settings"
@@ -219,11 +184,23 @@ msgstr "Configuração de usuário para o Samba"
 
 #: Config.php:194
 msgid "Default department"
-msgstr ""
+msgstr "Departamento padrão"
 
 #: Config.php:196
 msgid "The default department for new Courses"
-msgstr ""
+msgstr "O departamento padrão para novos Cursos"
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Professor"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Conta de Professor"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Meu curso"
 
 #: Setup/setup.xml:4
 msgid "Courses"
@@ -231,8 +208,32 @@ msgstr "Cursos"
 
 #: Setup/Initialize.php:57
 msgid "School"
-msgstr ""
+msgstr "Escola"
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
-msgstr ""
+msgstr "Escola padrão para realização de Cursos"
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Adicionar novo usuário"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Adicionar novo usuário como membro para o curso"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Adicionar usuário existente"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Adicionar usuário existente como membro para o curso"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr "Gerenciar cursos compartilhados favoritos"
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr "Criar ou atualiza cursos compartilhados favoritos"

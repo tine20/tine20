@@ -17,45 +17,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Dodaj nowego użytkownika"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Imię"
 
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Dodaj nowego użytkownika jako uczestnika kursu"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Nazwisko"
 
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Dodaj istniejącego użytkownika"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Dodaj nowego uczestnika do kursu"
 
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Dodaj istniejącego użytkownika jako uczestnika kursu"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Błędy"
 
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Nazwa"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Typ"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Błąd"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić zgłoszone błędy"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -105,6 +85,22 @@ msgstr "nieznany"
 msgid "Reset Password"
 msgstr "Zresetuj hasło"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Nazwa"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Typ"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Błąd"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -125,40 +121,8 @@ msgstr[1] "rodzaje kursu"
 msgstr[2] "rodzaje kursu"
 msgstr[3] "rodzaje kursu"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Imię"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Dodaj nowego uczestnika do kursu"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Błędy"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Proszę poprawić zgłoszone błędy"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Nauczyciel"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Konto nauczyciela"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Moje lekcje"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Wszystkie kursy"
 
@@ -232,6 +196,18 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Nauczyciel"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Konto nauczyciela"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Moje lekcje"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kursy"
@@ -242,4 +218,28 @@ msgstr ""
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Dodaj nowego użytkownika"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Dodaj nowego użytkownika jako uczestnika kursu"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Dodaj istniejącego użytkownika"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Dodaj istniejącego użytkownika jako uczestnika kursu"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
 msgstr ""

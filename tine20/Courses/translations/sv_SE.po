@@ -19,45 +19,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Lägg till ny användare"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Förnamn"
 
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Lägg till ny användare som medlem i en kurs"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Efternamn"
 
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Lägg till befintlig användare"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Lägg till ny medlem till kurs"
 
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Lägg till befintlig användare som medlem i en kurs"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fel"
 
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Namn"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Typ"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Misslyckades"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Fel uppstod vid försök att uppdatera kurserna"
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Vänligen åtgärda de fel som noterats."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -105,6 +85,22 @@ msgstr "Okänd"
 msgid "Reset Password"
 msgstr "Återställ lösenord"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Namn"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Typ"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Misslyckades"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Fel uppstod vid försök att uppdatera kurserna"
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -121,40 +117,8 @@ msgid_plural "Course Types"
 msgstr[0] "Kurs Typ"
 msgstr[1] "Kurs Typer"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Förnamn"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Efternamn"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Lägg till ny medlem till kurs"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fel"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Vänligen åtgärda de fel som noterats."
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Lärare"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Lärar Konto"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Min kurs"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Alla Kurser"
 
@@ -228,6 +192,18 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Lärare"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Lärar Konto"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Min kurs"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kurser"
@@ -238,4 +214,28 @@ msgstr ""
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Lägg till ny användare"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Lägg till ny användare som medlem i en kurs"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Lägg till befintlig användare"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Lägg till befintlig användare som medlem i en kurs"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
 msgstr ""

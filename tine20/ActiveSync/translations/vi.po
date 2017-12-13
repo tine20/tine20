@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-23 18:43+0000\n"
+"PO-Revision-Date: 2017-09-28 09:48+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -16,116 +16,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Acl/Rights.php:104
-msgid "Manage ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:105
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-#: js/AdminPanel.js:45
-msgid "Sync Devices"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:68
-msgid "ID"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:69 js/SyncDevicesGridPanel.js:98
-#: js/EditDialog.js:72
-msgid "Device ID"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:70 js/EditDialog.js:79
-msgid "Devicetype"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:86
-msgid "Owner"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:98
-msgid "Policy"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:104
-msgid "AS Version"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:110
-msgid "Useragent"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:116
-msgid "Model"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:122
-msgid "IMEI"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:128
-msgid "Friendly Name"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:134
-msgid "OS"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:140
-msgid "OS Language"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:146
-msgid "Phonenumber"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:81
-msgid "Ping Lifetime"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:82
-msgid "Ping Folder"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:83
-msgid "Remote Wipe"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:84
-msgid "Calendarfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:85
-msgid "Contactsfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:86
-msgid "Emailfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:87
-msgid "Tasksfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:88
-msgid "Last Ping"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:97
-msgid "Quicksearch"
-msgstr ""
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "one:Thiết bị\nother:Thiết bị"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Thiết bị"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -161,10 +51,126 @@ msgstr "đã khởi tạo"
 msgid "Set Sync Filter"
 msgstr "Đặt bộ lọc đồng bộ"
 
+#: js/AdminPanel.js:45
+msgid "Sync Devices"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:69
+msgid "ID"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:153
+#: js/EditDialog.js:72
+msgid "Device ID"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:79
+msgid "Devicetype"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:86
+msgid "Owner"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+msgid "Policy"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
+msgid "AS Version"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
+msgid "Useragent"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+msgid "Model"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+msgid "IMEI"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+msgid "Friendly Name"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:134
+msgid "OS"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+msgid "OS Language"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:81 js/EditDialog.js:146
+msgid "Phonenumber"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:82
+msgid "Ping Lifetime"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:83
+msgid "Ping Folder"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:84
+msgid "Remote Wipe"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:85
+msgid "Calendarfilter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:86
+msgid "Contactsfilter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:87
+msgid "Emailfilter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:88
+msgid "Tasksfilter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:89
+msgid "Last Ping"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:100
+msgid "Remote Reset Device"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:115
+msgid "Please Confirm"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:116
+msgid ""
+"Do you really want to wipe the selected devices? All personal data will be "
+"removed and the device is reset to factory settings!"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:152
+msgid "Quicksearch"
+msgstr ""
+
 #: js/SyncDevices.js:70
 msgid "SyncDevice"
 msgid_plural "SyncDevices"
 msgstr[0] ""
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "one:Thiết bị\nother:Thiết bị"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Thiết bị"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -222,10 +228,26 @@ msgstr ""
 msgid "For how long in the past the events should be synchronized."
 msgstr ""
 
-#: Setup/setup.xml:546 Setup/Update/Release6.php:290
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
 msgid "Default Policy"
 msgstr "Chính sách mặc định"
 
-#: Setup/setup.xml:551 Setup/Update/Release6.php:295
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"
+
+#: Acl/Rights.php:110
+msgid "Manage ActiveSync devices"
+msgstr ""
+
+#: Acl/Rights.php:111
+msgid "See, edit and delete ActiveSync devices"
+msgstr ""
+
+#: Acl/Rights.php:114
+msgid "Reset ActiveSync devices"
+msgstr ""
+
+#: Acl/Rights.php:115
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
+msgstr ""

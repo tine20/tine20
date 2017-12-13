@@ -18,6 +18,133 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Informations"
+
+#: js/FaqGridDetailsPanel.js:151 js/FaqGridPanel.js:98 js/FaqEditDialog.js:99
+msgid "Question"
+msgstr "Question"
+
+#: js/FaqGridDetailsPanel.js:157 js/FaqGridPanel.js:105 js/SimpleFAQ.js:46
+#: js/FaqEditDialog.js:106
+msgid "Answer"
+msgstr "Réponse"
+
+#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:79
+msgid "Tags"
+msgstr "Marqueurs"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Date de création"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Créé par"
+
+#: js/FaqGridDetailsPanel.js:199 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Statut de la FAQ"
+msgstr[1] "Statuts des FAQs"
+
+#: js/FaqGridDetailsPanel.js:204 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Type de FAQ"
+msgstr[1] "Types de FAQ"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Aucune réponse"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Défauts"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Ajouter un nouveau type de FAQ"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "numéro de la FAQ"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
+msgid "Status"
+msgstr "Statut"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
+msgid "Type"
+msgstr "Type"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "Chercher dans la FAQ"
+
+#: js/Model.js:35 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "Liste de FAQ"
+msgstr[1] "Listes de FAQ"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "Listes des FAQ"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr "Recherche rapide"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Ajouter un nouveau statut de FAQ"
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr "Trouver une question"
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr "Chercher une question"
+
+#: js/FaqEditDialog.js:100
+msgid "Enter a question..."
+msgstr "Inscrire une question"
+
+#: js/FaqEditDialog.js:107
+msgid "Enter a answer..."
+msgstr "Inscrire une réponse"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Toutes mes FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Favori par défaut"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "La vue qui est affichée au démarrage de l'application FAQ"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "FAQ par défaut"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "La FAQ où seront créées les nouvelles questions"
+
 #: Controller.php:119
 #, python-format
 msgid "%s's personal FAQs"
@@ -42,133 +169,6 @@ msgstr "Interne"
 #: Controller.php:165
 msgid "Public"
 msgstr "Public"
-
-#: js/SimpleFAQ.js:19 js/Model.js:35
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr "Trouver une question"
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr "Chercher une question"
-
-#: js/SimpleFAQ.js:46 js/FaqGridPanel.js:105 js/FaqEditDialog.js:106
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Réponse"
-
-#: js/FaqType.js:26 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Type de FAQ"
-msgstr[1] "Types de FAQ"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Ajouter un nouveau type de FAQ"
-
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatus.js:26
-#: js/FaqStatusFilterModel.js:27 js/FaqGridDetailsPanel.js:199
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "Statut de la FAQ"
-msgstr[1] "Statuts des FAQs"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Défauts"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Ajouter un nouveau statut de FAQ"
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "numéro de la FAQ"
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Marqueurs"
-
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
-msgid "Status"
-msgstr "Statut"
-
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
-msgid "Type"
-msgstr "Type"
-
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:99 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Question"
-
-#: js/Model.js:39
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "Liste de FAQ"
-msgstr[1] "Listes de FAQ"
-
-#: js/Model.js:39
-msgid "FAQ Lists"
-msgstr "Listes des FAQ"
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr "Recherche rapide"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr "Chercher dans la FAQ"
-
-#: js/FaqEditDialog.js:100
-msgid "Enter a question..."
-msgstr "Inscrire une question"
-
-#: js/FaqEditDialog.js:107
-msgid "Enter a answer..."
-msgstr "Inscrire une réponse"
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "Informations"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Date de création"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Créé par"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Aucune réponse"
-
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "Toutes mes FAQs"
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr "Favori par défaut"
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "La vue qui est affichée au démarrage de l'application FAQ"
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr "FAQ par défaut"
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr "La FAQ où seront créées les nouvelles questions"
 
 #: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"

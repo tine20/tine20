@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-23 18:43+0000\n"
+"PO-Revision-Date: 2017-09-28 09:49+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -16,78 +16,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Model/Call.php:43
-msgid "Call"
-msgstr "Gọi"
-
-#: Model/Call.php:44
-msgid "Calls"
-msgstr "Các cuộc gọi"
-
-#: Model/Call.php:60 js/DialerPanel.js:76
-msgid "Line"
-msgstr "Đường dây"
-
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr "Mã người gọi"
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr "Bắt đầu"
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr "Đã kết nối"
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr "Đã ngắt kết nối"
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr "Thời lượng"
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr "Đang reo"
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr "Trực tiếp"
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr "Nguồn"
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr "Đích đến"
-
-#: Model/Call.php:128
-msgid "Contact"
-msgstr ""
-
-#: Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr ""
-
-#: Model/MyPhone.php:33 js/CallGridPanel.js:167
-msgid "Phones"
-msgstr "Điện thoại"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Thiết lập"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Đường dây"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Mô tả"
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -101,23 +29,23 @@ msgstr "Cuộc gọi đi"
 msgid "unknown number"
 msgstr "không rõ số"
 
-#: js/AddressbookGridPanelHook.js:35
+#: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
 msgstr "Liên lạc điện thoại"
 
-#: js/AddressbookGridPanelHook.js:191
+#: js/AddressbookGridPanelHook.js:196
 msgid "Work"
 msgstr "Cơ quan"
 
-#: js/AddressbookGridPanelHook.js:200
+#: js/AddressbookGridPanelHook.js:205
 msgid "Home"
 msgstr "Nhà riêng"
 
-#: js/AddressbookGridPanelHook.js:209
+#: js/AddressbookGridPanelHook.js:214
 msgid "Cell"
 msgstr "Di động"
 
-#: js/AddressbookGridPanelHook.js:218
+#: js/AddressbookGridPanelHook.js:223
 msgid "Cell private"
 msgstr "Di động riêng"
 
@@ -133,6 +61,10 @@ msgstr "Quay số"
 msgid "Initiate a new outgoing call"
 msgstr "Bắt đầu 1 cuộc gọi đi mới"
 
+#: js/CallGridPanel.js:167 Model/MyPhone.php:33
+msgid "Phones"
+msgstr "Điện thoại"
+
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
 msgstr "Chưa chọn điện thoại"
@@ -140,6 +72,14 @@ msgstr "Chưa chọn điện thoại"
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
 msgstr "Xin chọn điện thoại bạn muốn trong cây danh mục"
+
+#: js/DialerPanel.js:53 Model/MyPhone.php:32
+msgid "Phone"
+msgstr ""
+
+#: js/DialerPanel.js:76 Model/Call.php:60
+msgid "Line"
+msgstr "Đường dây"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -186,33 +126,89 @@ msgstr ""
 msgid "own telephone number to prefix to internal calls"
 msgstr ""
 
-#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Thiết lập"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Đường dây"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Mô tả"
+
+#: Model/Call.php:43
+msgid "Call"
+msgstr "Gọi"
+
+#: Model/Call.php:44
+msgid "Calls"
+msgstr "Các cuộc gọi"
+
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "Mã người gọi"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "Bắt đầu"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "Đã kết nối"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "Đã ngắt kết nối"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "Thời lượng"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "Đang reo"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "Trực tiếp"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "Nguồn"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "Đích đến"
+
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
 msgid "Calls this week"
 msgstr "Cuộc gọi trong tuần"
+
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Cuộc gọi tuần trước"
+
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Cuộc gọi tháng này"
+
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Cuộc gọi tháng trước"
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
 msgstr "Cuộc gọi đi và đến trong tuần"
 
-#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
-msgid "Calls last week"
-msgstr "Cuộc gọi tuần trước"
-
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
 msgstr "Cuộc gọi đi và đến tuần trước"
 
-#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
-msgid "Calls this month"
-msgstr "Cuộc gọi tháng này"
-
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
 msgstr "Cuộc gọi đi và đến tháng này"
-
-#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
-msgid "Calls last month"
-msgstr "Cuộc gọi tháng trước"
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"

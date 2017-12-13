@@ -19,45 +19,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Voeg nieuwe gebruiker toe"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Voornaam"
 
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Voeg gebruiker al lid van de cursus toe"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Achternaam"
 
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Voeg bestaande gebruiker toe"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Voeg nieuw lid toe aan cursus"
 
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Voeg bestaande gebruiker toe als lid van de cursus"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fouten"
 
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr "Beheer gedeelde favoriete cursussen"
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr "Maak of update favoriete gedeelde cursussen"
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Naam"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "soort"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Mislukt"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Verhelp de genoemde fouten."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -105,6 +85,22 @@ msgstr "Onbekend"
 msgid "Reset Password"
 msgstr "Reset wachtwoord"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Naam"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "soort"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Mislukt"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -121,40 +117,8 @@ msgid_plural "Course Types"
 msgstr[0] "Cursus soort"
 msgstr[1] "Cursus soorten"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Voornaam"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Achternaam"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Voeg nieuw lid toe aan cursus"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fouten"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Verhelp de genoemde fouten."
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Docent"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Docent account"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Mijn cursus"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Alle cursussen"
 
@@ -228,6 +192,18 @@ msgstr "Standaard afdeling"
 msgid "The default department for new Courses"
 msgstr "De standaard afdeling voor nieuwe cursussen"
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Docent"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Docent account"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Mijn cursus"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Cursussen"
@@ -239,3 +215,27 @@ msgstr "School"
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr "Standaard school voor Cursussen applicatie "
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Voeg nieuwe gebruiker toe"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Voeg gebruiker al lid van de cursus toe"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Voeg bestaande gebruiker toe"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Voeg bestaande gebruiker toe als lid van de cursus"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr "Beheer gedeelde favoriete cursussen"
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr "Maak of update favoriete gedeelde cursussen"

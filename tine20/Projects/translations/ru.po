@@ -19,20 +19,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Персональные проекты %s"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Проекты"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Управление общими избранными проектами"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Найти FAQ"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Создание новых общих избранных проектов"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Теги"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Номер"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Статус"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Проект"
@@ -56,21 +67,9 @@ msgstr "Списки проектов"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Номер"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Описание"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Статус"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -88,17 +87,9 @@ msgstr "Время создания"
 msgid "Created By"
 msgstr "Создано"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Участник"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Роль"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Введите описание"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -116,6 +107,10 @@ msgstr "Пожалуйста, выберите роль участника"
 msgid "Select Project"
 msgstr "Выберите проект"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Роль"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Выберите роль"
@@ -125,17 +120,9 @@ msgstr "Выберите роль"
 msgid "Adding {0} Participants to project"
 msgstr "Добавлено {0} участников в проект"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Проекты"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Найти FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Теги"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Введите описание"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -194,6 +181,11 @@ msgstr "Коллега"
 msgid "Responsible"
 msgstr "Ответственный"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Персональные проекты %s"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Все мои открытые проекты"
@@ -213,3 +205,11 @@ msgstr "Мои ожидающие проекты"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Мои приостановленные проекты"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Управление общими избранными проектами"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Создание новых общих избранных проектов"
