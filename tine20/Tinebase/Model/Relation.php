@@ -78,6 +78,10 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'own_model'              => array('presence' => 'required', 'allowEmpty' => false),
         'own_backend'            => array('presence' => 'required', 'allowEmpty' => false),
         'own_id'                 => array('presence' => 'required', 'allowEmpty' => true),
+        // NOTE: we use tree structure terms here, but relations do not represent a real tree
+        // if this is set to PARENT, "own" record is child of "related" record
+        // if this is set to CHILD, "own" record is parent of "related" record
+        // if this is set to SIBLINGS, there is no parent/child relation
         'related_degree'         => array('presence' => 'required', 'allowEmpty' => false, array('InArray', array(
             self::DEGREE_PARENT,
             self::DEGREE_CHILD,

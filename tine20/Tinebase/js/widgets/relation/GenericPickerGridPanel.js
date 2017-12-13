@@ -299,11 +299,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     onEditInNewWindow: function() {
         var _ = window.lodash,
-            selected = this.getSelectionModel().getSelected(),
-            modelName = selected.get('related_model'),
-            recordClass = Tine.Tinebase.data.RecordMgr.get(modelName),
-            recordData = selected.get('related_record'),
-            record = new recordClass(recordData, recordData.id),
+            record = this.getRelatedRecord(this.getSelectionModel().getSelected()),
             openMethod = _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow');
 
         if (openMethod) {
@@ -317,7 +313,21 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             });
         }
     },
-    
+
+    /**
+     * create record from recordData
+     *
+     * @param relationRecord
+     * @returns {null|Tine.Tinebase.data.Record}
+     */
+    getRelatedRecord: function(relationRecord) {
+        var modelName = relationRecord.get('related_model'),
+            recordClass = Tine.Tinebase.data.RecordMgr.get(modelName),
+            recordData = relationRecord.get('related_record');
+
+        return Ext.isString(recordData) ? null : Tine.Tinebase.data.Record.setFromJson(recordData, recordClass);
+    },
+
     /**
      * is called before context menu is shown
      * adds additional menu items from Tine.widgets.relation.MenuItemManager
@@ -643,14 +653,30 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {String} value
      * @return {String}
      */
-    degreeRenderer: function(value) {
-        if(!this.degreeDataObject) {
+    degreeRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
+        if (! this.degreeDataObject) {
             this.degreeDataObject = {};
             Ext.each(this.degreeData, function(dd) {
                 this.degreeDataObject[dd[0]] = dd[1];
             }, this);
         }
-        return this.degreeDataObject[value] ? i18n._(this.degreeDataObject[value]) : '';
+
+        var html = this.degreeDataObject[value] ? i18n._(this.degreeDataObject[value]) : '',
+            qtip = null;
+
+        if (value != 'sibling') {
+            var relatedRecord = this.getRelatedRecord(record),
+                ownTitle = this.record.getTitle(),
+                relatedTitle = relatedRecord ? relatedRecord.getTitle() : '',
+                path = value == 'parent' ? (relatedTitle + '/' + ownTitle) : (relatedTitle + '/' + ownTitle);
+
+            qtip = Tine.widgets.path.pathRenderer(path);
+            // TODO make css work
+            html = '<div ext:qtip="' + Ext.util.Format.htmlEncode(qtip) + '">' +
+                '<span class="x-tine-relation-degree-value">' + html + '</span></div>';
+        }
+
+        return html;
     },
 
     /**
