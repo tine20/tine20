@@ -8,6 +8,9 @@
 
 Ext.ns('Tine.Calendar');
 
+require('../css/monthviewpanel.css');
+require('./Printer/MonthView');
+
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.MonthView

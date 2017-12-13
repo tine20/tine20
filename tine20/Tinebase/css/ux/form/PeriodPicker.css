@@ -1,32 +1,86 @@
 .ux-pp-field {
-    widht: 100%;
+    width: 100%;
+}
+
+.ux-pp-field {
+    float: left;
 }
 
 .ux-pp-range {
+    float: left;
     width: 40%;
 }
 
-.ux-pp-period {
+.ux-pp-controls {
+    float: left;
     width: 60%;
+    position: relative;
+}
+
+.ux-pp-period {
+    width: 100%;
+    padding-top: 2px;
+    box-sizing: border-box;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
     text-align: center;
     cursor: pointer;
 }
 
 .ux-pp-prev {
-    background-position: 0 -105px;
+    background-image: url(../../../../themes/tine20/resources/images/tine20/grid/page-prev-disabled.gif);
+    left: 0px;
+}
+
+.ux-pp-prev:hover {
+    background-image: url(../../../../themes/tine20/resources/images/tine20/grid/page-prev.gif);
 }
 
 .ux-pp-next {
-    background-position: 0 -120px;
+    background-image: url(../../../../themes/tine20/resources/images/tine20/grid/page-next-disabled.gif);
+    right: 0px;
+    top: 0px;
 }
 
-.ux-pp-prev, .ux-pp-next {
-    background-image: url(../../../../themes/tine20/resources/images/tine20/panel/tool-sprites.gif);
+.ux-pp-next:hover {
+    background-image: url(../../../../themes/tine20/resources/images/tine20/grid/page-next.gif);
+}
+
+.ux-pp-prev, .ux-pp-next, .ux-pp-mode {
     overflow: hidden;
     width: 15px;
     height: 15px;
     cursor: pointer;
-    display: block;
+    position: absolute;
     margin: 2px;
     opacity: 0.6;
+}
+
+.ux-pp-mode {
+    background-image: url(../../../../themes/tine20/resources/images/tine20/panel/tool-sprites.gif);
+    left: 17px;
+}
+.ux-pp-mode-absolute {
+    background-position: 15px -135px;
+}
+
+.ux-pp-mode-relative {
+    background-position: 0px -135px;
+}
+
+.x-pp-combo {
+    position: absolute;
+    top: 0;
+}
+
+.x-pp-combo .ux-pp-prev, .x-pp-combo .ux-pp-next {
+    margin-top: 1px;
+}
+
+.x-pp-combo .ux-pp-period {
+    margin-top: 1px;
+}
+
+.ux-pp-this .ux-pp-period {
+    font-weight: bold;
 }

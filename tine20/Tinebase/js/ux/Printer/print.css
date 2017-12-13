@@ -24,6 +24,10 @@ table td {
 
 @media print {
   thead {display: table-header-group;}
+
+  .clear {
+    clear: both;
+  }
 }
 
 #csscheck {
@@ -34,4 +38,14 @@ div.page
 {
   page-break-after: always;
   page-break-inside: avoid;
+}
+
+.gridpanelrenderer_header_title {
+  float: left;
+  font-size: 30px;
+  width: 50%;
+}
+
+.gridpanelrenderer_header_logo {
+  float: right;
 }

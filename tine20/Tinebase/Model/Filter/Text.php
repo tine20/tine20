@@ -145,7 +145,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         
         // check if group by is operator and return if this is the case
         if ($this->_operator == 'group') {
-            $_select->group($this->_field);
+            $_select->group(isset($this->_options['field']) ? $this->_options['field'] : $this->_field);
         }
         
         if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {

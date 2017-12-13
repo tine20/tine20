@@ -328,4 +328,22 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
 
         Tinebase_Container::getInstance()->setGrants($_record->container_id, $_grants, TRUE, FALSE);
     }
+
+
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        if ($this->_getContainerName($currentRecord) !== $this->_getContainerName($updatedRecord)) {
+            $container = Tinebase_Container::getInstance()->getContainerById($updatedRecord->container_id);
+            $container->name = $this->_getContainerName($updatedRecord);
+            Tinebase_Container::getInstance()->update($container);
+        }
+    }
 }

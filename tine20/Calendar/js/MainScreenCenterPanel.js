@@ -452,7 +452,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 items: this.detailsPanel
                 
             });
-            //this.detailsPanel.doBind(this.activeView);
         }
         
         // add filter toolbar
@@ -891,7 +890,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
-                if (createdEvent.isRecurBase()) {
+                if (createdEvent.isRecurBase() || createdEvent.hasPoll()) {
                     store.load({refresh: true});
                 } else {
                     // store may be lost on conflict or else

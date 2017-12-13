@@ -84,7 +84,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
                 Tinebase_Model_Filter_FilterGroup::CONDITION_OR : Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
 
             foreach ($values as $value) {
-                $filter = new Tinebase_Model_Filter_Text($this->_field, $this->_operator, $value, isset($this->_options['tablename']) ? array('tablename' => $this->_options['tablename']) : array());
+                $filter = new Tinebase_Model_Filter_Text($this->_field, $this->_operator, $value, is_array($this->_options) ? $this->_options : []);
                 $filterGroup->addFilter($filter);
             }
 

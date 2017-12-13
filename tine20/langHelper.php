@@ -788,7 +788,7 @@ function getPluralForm($_languageName)
                 break;
         
         default :
-            die ("Error: Plural form of $_languageName is not defined! \n");
+            echo "Error: Plural form of $_languageName is not defined! \n";
             
     }
     return $pluralForm;

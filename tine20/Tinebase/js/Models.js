@@ -548,3 +548,23 @@ Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
     idProperty: 'id',
     titleProperty: 'value'
 });
+
+Tine.Tinebase.Model.Path = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'path' },
+    { name: 'shadow_path' },
+    { name: 'creation_time' }
+], {
+    appName: 'Tinebase',
+    modelName: 'Path',
+    idProperty: 'id',
+    titleProperty: 'path',
+    // defaultFilter: 'path'
+});
+
+Tine.Tinebase.Model.Path.getFilterModel = function() {
+    return [
+        {label: i18n._('Query'),         field: 'query',       operators: ['contains']},
+        {label: i18n._('Path'),          field: 'path',       operators: ['contains']}
+    ];
+};

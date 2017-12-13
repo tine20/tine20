@@ -685,18 +685,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         $fullName = isset($calAddress['CN']) ? $calAddress['CN']->getValue() : $email;
         
-        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $fullName, $matches)) {
-            $firstName = $matches['firstName'];
-            $lastName  = $matches['lastNameName'];
-        } else {
-            $firstName = null;
-            $lastName  = $fullName;
-        }
+        $parsedName = Addressbook_Model_Contact::splitName($fullName);
 
         $attendee = array(
             'userType'  => $type,
-            'firstName' => $firstName,
-            'lastName'  => $lastName,
+            'firstName' => $parsedName['n_given'],
+            'lastName'  => $parsedName['n_family'],
             'partStat'  => $status,
             'role'      => $role,
             'email'     => $email

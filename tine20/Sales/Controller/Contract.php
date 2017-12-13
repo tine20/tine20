@@ -225,7 +225,49 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         
         return $nextBill;
     }
-    
+
+    public function addAfterModifyCallback($key, $callable)
+    {
+        $this->_afterModifyCallbacks[$key] = $callable;
+    }
+
+    protected function _afterModifyCallbacks()
+    {
+        foreach($this->_afterModifyCallbacks as $callable)
+        {
+            call_user_func($callable[0], $callable[1]);
+        }
+        $this->_afterModifyCallbacks = array();
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        $this->_afterModifyCallbacks();
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
+    {
+        parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
+
+        $this->_afterModifyCallbacks();
+    }
+
     /**
      * merges source contracts into the target contract (relations and products)
      * 

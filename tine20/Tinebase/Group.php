@@ -41,6 +41,13 @@ class Tinebase_Group
      * @var string
      */
     const DEFAULT_USER_GROUP = 'Users';
+
+    /**
+     * default anonymous group name
+     *
+     * @var string
+     */
+    const DEFAULT_ANONYMOUS_GROUP = 'Anonymous';
     
     /**
      * the constructor
@@ -323,6 +330,8 @@ class Tinebase_Group
      * create initial groups
      * 
      * Method is called during Setup Initialization
+     *
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function createInitialGroups()
     {
@@ -345,6 +354,18 @@ class Tinebase_Group
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
+
+        $defaultAnonymousGroupName =
+            Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+            : self::DEFAULT_ANONYMOUS_GROUP;
+        $anonymousGroup = new Tinebase_Model_Group(array(
+            'name'          => $defaultAnonymousGroupName,
+            'description'   => 'Group of anonymous user accounts',
+            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
+        ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
+        Tinebase_Group::getInstance()->addGroup($anonymousGroup);
     }
 
     public static function unsetInstance()

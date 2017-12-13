@@ -157,6 +157,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             subjectFn: function(record) {
                 return record ? record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(record.get('dtstart')) : '';
             },
+            bodyFn: function(record) {
+                if (record.hasPoll()) {
+                    // TODO translate?
+                    //return String.format(this.i18n._('Poll URL: {0}'), record.getPollUrl());
+                    return String.format('Poll URL: {0}', record.getPollUrl());
+                } else {
+                    return '';
+                }
+            },
+            massMailingFlagFn: function(record) {
+                return record.hasPoll();
+            },
             addMailFromRecord: function(mailAddresses, record) {
                 Ext.each(record.get('attendee'), function(attender) {
                     Tine.log.debug('Tine.Felamimail.Application::initGridPanelHooks/addMailFromRecord() - Calendar attender:');

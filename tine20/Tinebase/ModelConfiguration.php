@@ -865,6 +865,8 @@ class Tinebase_ModelConfiguration {
      */
     protected $_export = NULL;
 
+    protected $_recursiveResolvingFields = [];
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -953,7 +955,8 @@ class Tinebase_ModelConfiguration {
         if ($this->_hasAttachments) {
             $this->_fields['attachments'] = array(
                 'label' => NULL,
-                'type'  => 'attachments'
+                'type'  => 'attachments',
+                'recursiveResolving' => true,
             );
         }
 
@@ -1119,6 +1122,10 @@ class Tinebase_ModelConfiguration {
                 }
             } elseif(isset($this->_converterDefaultMapping[$fieldDef['type']])) {
                 $this->_converters[$fieldKey] = $this->_converterDefaultMapping[$fieldDef['type']];
+            }
+
+            if (isset($fieldDef['recursiveResolving'])) {
+                $this->_recursiveResolvingFields[] = $fieldKey;
             }
             
             $this->_populateProperties($fieldKey, $fieldDef);

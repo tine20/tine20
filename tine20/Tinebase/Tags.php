@@ -434,7 +434,8 @@ class Tinebase_Tags
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
         }
 
-        $currentAccountId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'setupuser';
+        $currentAccountId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() :
+            Tinebase_User::SYSTEM_USER_SETUP;
         
         if (! $ignoreAcl) {
             $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);

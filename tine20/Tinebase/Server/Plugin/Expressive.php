@@ -10,12 +10,12 @@
  */
 
 /**
- * server plugin to dispatch Routing requests
+ * server plugin to dispatch Expressive requests
  *
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Plugin_Routing implements Tinebase_Server_Plugin_Interface
+class Tinebase_Server_Plugin_Expressive implements Tinebase_Server_Plugin_Interface
 {
     /**
      * (non-PHPdoc)
@@ -26,8 +26,8 @@ class Tinebase_Server_Plugin_Routing implements Tinebase_Server_Plugin_Interface
     public static function getServer(\Zend\Http\Request $request)
     {
         /**************************** JSON API *****************************/
-        if (null !== $request->getQuery(Tinebase_Server_Routing::QUERY_PARAM_DO_ROUTING)) {
-            return new Tinebase_Server_Routing();
+        if (null !== $request->getQuery(Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE)) {
+            return new Tinebase_Server_Expressive();
         }
         return null;
     }

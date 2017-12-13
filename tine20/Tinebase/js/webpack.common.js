@@ -1,7 +1,8 @@
 var fs = require('fs');
+var _ = require('lodash');
 var path = require('path');
 var webpack = require('webpack');
-var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     path: 'Tinebase/js',
@@ -24,6 +25,10 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
         var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
         entryFile = baseDir + '/' + baseName + '/js/' + (pkgDef.main ? pkgDef.main : 'index.js');
 
+        _.each(_.get(pkgDef, 'tine20.entryPoints', []), function(entryPoint) {
+            entry[baseName + '/js/' + entryPoint] = baseDir + '/' + baseName + '/js/' + entryPoint;
+        });
+
     } catch (e) {
         // fallback to legacy jsb2 file
         var jsb2File = baseDir + '/' + baseName + '/' + baseName + '.jsb2';
@@ -36,7 +41,7 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
         }
     }
 
-    if (entryFile /* && (baseName == 'Admin')*/) {
+    if (entryFile /* && (baseName == 'Calendar') */) {
         entry[baseName + '/js/' + baseName] = entryFile;
     }
 });
@@ -54,38 +59,64 @@ module.exports = {
         chunkFilename: "[name]-[chunkhash]-FAT.js",
         libraryTarget: "umd"
     },
-    devServer: {
-        hot: false,
-        inline: false,
-        port: 10443,
-        disableHostCheck: true,
-        proxy: [
-            {
-                context: ['**', '!/webpack-dev-server'],
-                target: 'http://localhost/',
-                secure: false
-            }
-        ],
-    },
     plugins: [
-        new UnminifiedWebpackPlugin({
-            postfix : 'debug'
-        }),
         assetsPluginInstance
     ],
     module: {
         rules: [
+            {
+                test: /\.(es6\.js|vue)$/,
+                loader: 'eslint-loader',
+                enforce: "pre",
+                exclude: /node_modules/,
+                options: {
+                    formatter: require('eslint-friendly-formatter')
+                }
+            },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
+                test: /\.es6\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                // include: /\/(src|test)\//,
+                options: {
+                    presets: [
+                        ["@babel/env"]
+                    ]
+                }
+            },
+            {
+                test: /\.js$/,
+                include: [
+                    require.resolve("bootstrap-vue"), // white-list bootstrap-vue
+                ],
+                loader: "babel-loader"
+            },
+
             // use script loader for old library classes as some of them the need to be included in window context
             {test: /\.js$/, include: [baseDir + '/library'], enforce: "pre", use: [{loader: "script-loader"}]},
             {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
             {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/png"}}]},
             {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/gif"}}]},
-            {test: /\.svg/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/svg"}}]}
+            {test: /\.svg/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/svg"}}]},
+            {
+                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                use: [{loader: "url-loader", options: {limit: 100000}}]},
         ]
     },
+    resolveLoader: {
+        modules: [path.resolve(__dirname, "node_modules")]
+    },
     resolve: {
+        modules: [path.resolve(__dirname , 'node_modules')],
+
         // add browserify which is used by some libs (e.g. director)
-        mainFields: ["browser", "browserify", "module", "main"]
+        mainFields: ["browser", "browserify", "module", "main"],
+        // we need an absolut path here so that apps can resolve modules too
+        modules: [path.resolve(__dirname, "node_modules")],
     }
 };

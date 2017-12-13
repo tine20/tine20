@@ -10,21 +10,20 @@
 class LogListener implements PHPUnit_Framework_TestListener
 {
     /**
-     * start test listener: print test name to logfile
-     * 
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestListener::startTest()
+     * A test started.
+     *
+     * @param PHPUnit_Framework_Test $test
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' [PHPUnit] Starting test: ' . $test->getName());
     }
-    
+
     /**
-     * start test suite listener: print suite name to logfile
-     * 
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestListener::startTestSuite()
+     * A test suite started.
+     *
+     * @param PHPUnit_Framework_TestSuite $suite
+     * @since  Method available since Release 2.2.0
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
@@ -32,21 +31,21 @@ class LogListener implements PHPUnit_Framework_TestListener
     }
 
     /**
-     * end test
-     * 
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestListener::endTest()
+     * A test ended.
+     *
+     * @param PHPUnit_Framework_Test $test
+     * @param float                  $time
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' [PHPUnit] End test: ' . $test->getName() . ' / Time: ' . $time);
     }
- 
+
     /**
-     * end suite
-     * 
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestListener::endTestSuite()
+     * A test suite ended.
+     *
+     * @param PHPUnit_Framework_TestSuite $suite
+     * @since  Method available since Release 2.2.0
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
@@ -69,6 +68,19 @@ class LogListener implements PHPUnit_Framework_TestListener
     }
  
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        // not used
+    }
+
+    /**
+     * Risky test.
+     *
+     * @param PHPUnit_Framework_Test $test
+     * @param Exception $e
+     * @param float $time
+     * @since  Method available since Release 4.0.0
+     */
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         // not used
     }

@@ -8,6 +8,8 @@
 
 Ext.ns('Tine.Calendar');
 
+require('../css/timelinepanel.css');
+
 /**
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.TimelineView

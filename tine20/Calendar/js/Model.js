@@ -176,6 +176,16 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         return ! +_.get(this, 'data.poll_id.closed', true);
     },
 
+    getPollUrl: function(pollId) {
+        if (! pollId) {
+            pollId = this.get('poll_id');
+            if (pollId.id) {
+                pollId = pollId.id;
+            }
+        }
+        return Tine.Tinebase.common.getUrl() + 'Calendar/view/poll/' + pollId ;
+    },
+
     getTitle: function() {
         return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
     }
@@ -906,7 +916,7 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
             fbEvents = _.compact([].concat(this.freeBusyEventsProvider())),
             records = [],
             fbInfos = _.map(fbEvents, function(fbEvent) {
-                return new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo[fbEvent.get('id')]);
+                return new Tine.Calendar.FreeBusyInfo(resultData.freeBusyInfo[fbEvent.id]);
             });
 
         _.each(['user', 'group', 'resource'], function(type) {

@@ -420,17 +420,15 @@ Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);
  * @returns {Tine.Tinebase.data.Record}
  */
 Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
-    if (! Ext.isString(json)) {
-        throw new Ext.Error('not a string');
-    }
-
     var jsonReader = new Ext.data.JsonReader({
         id: recordClass.idProperty,
         root: 'results',
         totalProperty: 'totalcount'
     }, recordClass);
 
-    var recordData = Ext.util.JSON.decode('{"results": [' + json + ']}'),
+    var recordData = {results: [
+            Ext.isString(json) ? Ext.decode(json) : json
+        ]},
         data = jsonReader.readRecords(recordData),
         record = data.records[0],
         recordId = record.get(record.idProperty);

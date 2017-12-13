@@ -1450,8 +1450,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $recordClassName = $appName . '_Model_' . $modelName;
         $controller      = Tinebase_Core::getApplicationInstance($appName, $modelName);
-        $filterClassName = $recordClassName . 'Filter';
-        
+
         if (! class_exists($recordClassName)) {
             throw new Tinebase_Exception_InvalidArgument('A record class for the given appName and modelName does not exist!');
         }
@@ -1550,6 +1549,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * @param string $lastPresence
+     * @return array
+     * @throws Exception
+     * @throws Zend_Session_Exception
      */
     public function reportPresence($lastPresence)
     {
@@ -1563,5 +1565,34 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array(
             'success' => $result
         );
+    }
+
+    /**
+     * @param string $filter
+     * @param string $pagination
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function searchPaths($filter = null, $pagination = null)
+    {
+        if (!Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            throw new Tinebase_Exception_SystemGeneric('paths are not activated in this installation');
+        }
+        if (null !== $filter) {
+            $tmpFilter = $this->_decodeFilter($filter, Tinebase_Model_PathFilter::class);
+            foreach (['path', 'query', 'shadow_path'] as $field) {
+                /** @var Tinebase_Model_Filter_Abstract $f */
+                foreach ($tmpFilter->getFilter($field, true, true) as $f) {
+                    if (empty($f->getValue())) {
+                        $tmpFilter->removeFilter($f);
+                    }
+                }
+            }
+
+            $filter = $tmpFilter->toArray();
+        }
+        return $this->_search($filter, $pagination, Tinebase_Record_Path::getInstance(),
+            Tinebase_Model_PathFilter::class);
     }
 }

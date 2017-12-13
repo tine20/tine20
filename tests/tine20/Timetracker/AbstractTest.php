@@ -154,7 +154,7 @@ abstract class Timetracker_AbstractTest extends TestCase
             $data['timeaccount_id'] = $timeaccount->getId();
         }
 
-        if($data['start_date'] === NULL) {
+        if ($data['start_date'] === NULL) {
             $data['start_date'] = Tinebase_DateTime::now()->toString('Y-m-d');
         }
 

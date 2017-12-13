@@ -34,9 +34,6 @@ class Addressbook_Controller_ListRole extends Tinebase_Controller_Record_Abstrac
             'modlogActive'  => true
         ));
         $this->_purgeRecords = FALSE;
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $this->_useRecordPaths = true;
-        }
     }
     
     /**

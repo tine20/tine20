@@ -41,6 +41,12 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     recordClass: null,
 
     /**
+     * @cfg {Bool} listenMessageBus
+     * listen to messagebus for record changes
+     */
+    listenMessageBus: true,
+
+    /**
      * @property grid
      * @type Tine.widgets.grid.GridPanel
      */
@@ -69,7 +75,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * @type Ext.Panel
      */
     multiRecordsPanel: null,
-            
+
     /**
      * @private
      */
@@ -148,10 +154,34 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                 layout: 'fit'
             });
         }, this);
-        
+
+        if (this.listenMessageBus && this.recordClass) {
+            this.initMessageBus();
+        }
+
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
     },
-    
+
+    initMessageBus: function() {
+        postal.subscribe({
+            channel: "recordchange",
+            topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
+            callback: this.onRecordChanges.createDelegate(this)
+        });
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onRecordChanges: function(data, e) {
+        var _ = window.lodash;
+
+        if (this.singleRecordPanel.isVisible() && this.record.id == data.id) {
+            this.record = Tine.Tinebase.data.Record.setFromJson(data, this.recordClass);
+            this.updateDetails(this.record, this.getSingleRecordPanel().body);
+        }
+    },
+
     /**
      * update template
      * 

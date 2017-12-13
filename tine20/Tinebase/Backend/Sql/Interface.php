@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -69,4 +69,15 @@ interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
      * @return array (key = id, value = property value)
      */
     public function getPropertyByIds($ids, $property);
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     *
+     * TODO maybe move to abstract interface?
+     */
+    public function has(array $_ids, $_getDeleted = false);
 }

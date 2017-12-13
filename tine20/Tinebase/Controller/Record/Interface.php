@@ -85,5 +85,13 @@ interface Tinebase_Controller_Record_Interface
      * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids);
-    
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false);
 }

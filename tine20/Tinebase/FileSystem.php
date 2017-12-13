@@ -3117,12 +3117,16 @@ class Tinebase_FileSystem implements
                     $actualNode = $node;
                 }
 
-                if ($previewController->hasPreviews($actualNode->hash)) {
+                if (empty($actualNode->hash)) {
+                    continue;
+                }
+
+                if ($previewController->hasPreviews($actualNode)) {
                     $validHashes[$actualNode->hash] = true;
                     continue;
                 }
 
-                $previewController->createPreviews($actualNode->getId(), $actualNode->revision);
+                $previewController->createPreviewsFromNode($actualNode);
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
@@ -3657,5 +3661,17 @@ class Tinebase_FileSystem implements
                 Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
+    }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        return $this->_getTreeNodeBackend()->has($_ids, $_getDeleted);
     }
 }

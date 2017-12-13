@@ -9,18 +9,16 @@
 Ext.ns('Tine.Timetracker');
 
 /**
- * CoreData west panel
+ * Timetracker TimesheetWestPanel west panel
  * 
  * @namespace   Tine.Timetracker
  * @class       Tine.Timetracker.TimesheetWestPanel
  * @extends     Tine.widgets.mainscreen.TimesheetWestPanel
  * 
  * @author      Michael Spahn <M.Spahn@bitExpert.de>
- * 
- * @constructor
- * @xtype       tine.timetracker.TimesheetWestPanel
  */
 Tine.Timetracker.TimesheetWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
+
     getAdditionalItems: function() {
         var items = [];
 

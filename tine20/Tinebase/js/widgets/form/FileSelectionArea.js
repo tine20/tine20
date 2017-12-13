@@ -21,6 +21,8 @@ Ext.ns('Tine.widgets.form');
 Tine.widgets.form.FileSelectionArea = Ext.extend(Tine.widgets.form.FileUploadButton, {
     cls: 'tw-FileSelectionArea',
 
+    multiple: true,
+
     /**
      * init this upload button
      */

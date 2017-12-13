@@ -76,3 +76,8 @@
     vertical-align: top;
     padding-top: 4px;
 }
+
+.AddressbookStructure {
+    background-image:url(../../images/oxygen/16x16/actions/view-list-icons.png) !important;
+    background-repeat: no-repeat;
+}

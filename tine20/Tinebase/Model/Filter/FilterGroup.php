@@ -716,6 +716,13 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if ($idx !== FALSE) {
                 unset($this->_filterObjects[$idx]);
             }
+            if ($_recursive) {
+                foreach ($this->_filterObjects as $object) {
+                    if ($object instanceof Tinebase_Model_Filter_FilterGroup) {
+                        $object->removeFilter($_field, $_recursive);
+                    }
+                }
+            }
         } else {
             $this->_removeFilter($_field, $_recursive);
         }
@@ -723,10 +730,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     
     /**
      * remove id of filter object
-     * 
-     * @param boolean $_recursive
      */
-    public function removeId($_recursive = TRUE)
+    public function removeId()
     {
         $this->_id = NULL;
         foreach ($this->_filterObjects as $filter) {

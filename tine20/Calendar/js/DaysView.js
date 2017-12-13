@@ -8,6 +8,9 @@
 
 Ext.ns('Tine.Calendar');
 
+require('../css/daysviewpanel.css');
+require('./Printer/DaysView');
+
 /**
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.DaysView

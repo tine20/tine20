@@ -1239,6 +1239,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * set read only fields
+     *
+     * @param array $readOnlyFields
+     */
+    public function setReadOnlyFields($readOnlyFields)
+    {
+        $this->_readOnlyFields = $readOnlyFields;
+    }
+
+    /**
      * sets the non static properties by the created configuration object on instantiation
      */
     protected function _setFromConfigurationObject()
@@ -1302,7 +1312,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $keys = array();
         
         foreach (self::getConfiguration()->getFields() as $key => $fieldDef) {
-            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'text') {
+            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'stringAutocomplete' || $fieldDef['type'] == 'text') {
                 $keys[] = $key;
             }
         }
@@ -1574,5 +1584,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function setValidators(array $_validators)
     {
         $this->_validators = $_validators;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function generatesPaths()
+    {
+        return false;
     }
 }

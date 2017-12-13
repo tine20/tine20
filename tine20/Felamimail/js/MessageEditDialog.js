@@ -961,6 +961,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('note') && this.record.get('note') == '1') {
             this.button_saveEmailNote.toggle();
         }
+
+        if (this.record.get('massMailingFlag')) {
+            this.infoText.show();
+        }
         
         this.onAfterRecordLoad();
     },
@@ -1206,8 +1210,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this
                 },
                 items: [
-                    this.accountCombo, 
-                    this.recipientGrid, 
+                    // mass mailing info text
+                    {
+                        html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
+                        hidden: true,
+                        ref: '../../infoText',
+                        padding: '2px'
+                    },
+                    this.accountCombo,
+                    this.recipientGrid,
                 {
                     xtype:'textfield',
                     plugins: [ Ext.ux.FieldLabeler ],

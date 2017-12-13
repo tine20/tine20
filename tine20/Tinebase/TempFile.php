@@ -6,7 +6,7 @@
  * @subpackage  File
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -178,7 +178,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @param string $_path
      * @param string $_name
      * @param string $_type
-     * @param double $_size
+     * @param integer $_size
      * @param integer $_error
      * @return Tinebase_Model_TempFile
      */
@@ -273,7 +273,17 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         $result = $this->delete($tempfiles->getArrayOfIds());
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed ' . $result . ' files.');
+            . ' Removed ' . $result . ' temp files from database and filesystem.');
+
+        $result = 0;
+        foreach (new DirectoryIterator(Tinebase_Core::getTempDir()) as $directoryIterator) {
+            if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+                unlink($directoryIterator->getPathname());
+                ++$result;
+            }
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $result . ' temp files from filesystem only.');
 
         return true;
     }

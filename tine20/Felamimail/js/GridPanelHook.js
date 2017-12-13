@@ -152,10 +152,17 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     relationType: null,
     addMailFromRecord: null,
     mailAddresses: null,
+
+    // TODO move to a messageData object
     subject: null,
+    body: null,
+    massMailingFlag: false,
+
     subjectField: null,
     subjectFn: null,
-    
+    bodyFn: null,
+    massMailingFlagFn: null,
+
     /**
      * get addressbook contact grid panel
      */
@@ -241,26 +248,18 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 mailAddresses = this.mailAddresses;
         }
 
-        if( to == "CC")
-        {
-            var record = new Tine.Felamimail.Model.Message({
-                subject: (this.subject) ? this.subject : '',
-                cc: mailAddresses
-            }, 0);
-        }
-        else if( to == "BCC")
-        {
-            var record = new Tine.Felamimail.Model.Message({
-                subject: (this.subject) ? this.subject : '',
-                bcc: mailAddresses
-            }, 0);
-        }
-        else
-        {
-            var record = new Tine.Felamimail.Model.Message({
-                subject: (this.subject) ? this.subject : '',
-                to: mailAddresses
-            }, 0);
+        var record = new Tine.Felamimail.Model.Message({
+            subject: (this.subject) ? this.subject : '',
+            body: this.body,
+            massMailingFlag: this.massMailingFlag
+        }, 0);
+
+        if (to == "CC") {
+            record.set('cc', mailAddresses);
+        } else if (to == "BCC") {
+            record.set('bcc', mailAddresses);
+        } else {
+            record.set('to', mailAddresses);
         }
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
             selectionFilter: sm && sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
@@ -326,10 +325,17 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     updateAction: function(action, grants, records) {
         this.mailAddresses = [];
         action.setDisabled(this.getMailAddresses(records).length == 0);
+
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
         } else if (Ext.isFunction(this.subjectFn)) {
             this.subject = this.subjectFn(records[0]);
+        }
+        if (Ext.isFunction(this.bodyFn)) {
+            this.body = this.bodyFn(records[0]);
+        }
+        if (Ext.isFunction(this.massMailingFlagFn)) {
+            this.massMailingFlag = this.massMailingFlagFn(records[0]);
         }
     }
 });

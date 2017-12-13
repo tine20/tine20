@@ -1246,8 +1246,19 @@ class Admin_JsonTest extends TestCase
         $this->_json->saveConfig($attendeeRoles);
 
         $updatedAttendeeRoles = $this->testSearchConfigs();
-
         $this->assertEquals($attendeeRoles['value'], $updatedAttendeeRoles['value']);
+
+        $keyFieldConfig = json_decode($attendeeRoles['value'], true);
+        $keyFieldConfig['records'][] = array(
+            'id'    => 'COCHAIR',
+            'value' => 'Co-Chair'
+        );
+        $updatedAttendeeRoles['value'] = json_encode($keyFieldConfig);
+        $this->_json->saveConfig($updatedAttendeeRoles);
+
+        $reUpdatedAttendeeRoles = $this->testSearchConfigs();
+        $this->assertEquals($updatedAttendeeRoles['value'], $reUpdatedAttendeeRoles['value']);
+
         return $updatedAttendeeRoles;
     }
 

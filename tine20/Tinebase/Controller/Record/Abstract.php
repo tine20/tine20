@@ -178,18 +178,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
-     * support record paths
-     *
-     * @var bool
-     */
-    protected $_useRecordPaths = false;
-
-    /**
      * don't get in an endless recursion in get related data
      *
      * @var array
      */
     protected $_getRelatedDataRecursion = [];
+
+    /**
+     * cache if path feature is enabled or not
+     *
+     * @var bool
+     */
+    protected $_recordPathFeatureEnabled = null;
 
     /**
      * constants for actions
@@ -1150,16 +1150,20 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record, $_currentRecord);
         $modLog->setRecordMetaData($_record, self::ACTION_UPDATE, $_currentRecord);
     }
-    
+
     /**
      * set relations / tags / alarms
-     * 
-     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
-     * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord the just updated record
+     * @param   Tinebase_Record_Interface $record the update record
+     * @param   Tinebase_Record_Interface $currentRecord the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
      * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
@@ -1213,11 +1217,66 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         // rebuild paths
-        if (true === $this->_useRecordPaths) {
+        if ($this->_isRecordPathFeatureEnabled() && ($updatedRecord::generatesPaths() ||
+                ($record->has('relations') &&
+                    $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
             Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
         }
 
         return $updatedRecord;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $newRecord
+     * @param Tinebase_Record_Interface|null $currentRecord
+     * @return bool
+     */
+    protected function _checkRelationsForPathGeneratingModels(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
+    {
+        if (is_array($newRecord->relations)) {
+            foreach ($newRecord->relations as $relation) {
+                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation['related_degree'] &&
+                        Tinebase_Model_Relation::DEGREE_PARENT !== $relation['related_degree']) {
+                    continue;
+                }
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $relation['related_model'];
+                if ($model::generatesPaths()) {
+                    return true;
+                }
+            }
+        }
+
+        if (null !== $currentRecord && is_object($currentRecord->relations)) {
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($currentRecord->relations as $relation) {
+                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation->related_degree &&
+                    Tinebase_Model_Relation::DEGREE_PARENT !== $relation->related_degree) {
+                    continue;
+                }
+                /** @var Tinebase_Record_Abstract $model */
+                $model = $relation->related_model;
+                if ($model::generatesPaths()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _isRecordPathFeatureEnabled()
+    {
+        if (null === $this->_recordPathFeatureEnabled) {
+            $this->_recordPathFeatureEnabled = Tinebase_Config::getInstance()
+                ->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH);
+        }
+        return $this->_recordPathFeatureEnabled;
     }
 
     /**
@@ -1598,7 +1657,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_deleteRecord($record);
             }
 
-            if (true === $this->_useRecordPaths) {
+            if (true === $this->_isRecordPathFeatureEnabled()) {
                 $pathController = Tinebase_Record_Path::getInstance();
                 $shadowPathParts = array();
                 /** @var Tinebase_Record_Interface $record */
@@ -2333,12 +2392,6 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
 
-            $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
-            
-            // legacy end
-            $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
-            $oldRecords = $controller->search($oldFilter);
-
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_record->{$_property} as $record) {
                 
@@ -2378,8 +2431,9 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
+        $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
+
         try {
             $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
@@ -2437,18 +2491,15 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
         }
 
-
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
         $controller = $ccn::getInstance();
         $filterClassName = $_fieldConfig['filterClassName'];
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . $_property);
+        $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
         //try {
           //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
@@ -2678,5 +2729,17 @@ HumanResources_CliTests.testSetContractsEndDate */
             $this->_handleDependentRecords = (bool)$bool;
         }
         return $oldValue;
+    }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        return $this->_backend->has($_ids, $_getDeleted);
     }
 }
