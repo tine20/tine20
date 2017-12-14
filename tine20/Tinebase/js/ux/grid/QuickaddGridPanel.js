@@ -65,6 +65,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     adding: false,
     
+    parentScope: null,
+    
     /**
      * @private
      */
