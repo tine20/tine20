@@ -126,7 +126,13 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         if (! is_array($this->_foreignIds)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign filter values: ' 
                 . print_r($this->_filterGroup->toArray(), TRUE));
-            $this->_foreignIds = $this->_getController()->search($this->_filterGroup, NULL, FALSE, TRUE);
+            try {
+                $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
+            } catch(Tinebase_Exception_AccessDenied $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' no access to related app ');
+                $this->_foreignIds = [];
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign ids: ' 

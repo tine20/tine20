@@ -17,45 +17,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Thêm người dùng mới"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Họ và đệm"
 
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Thêm người dùng mới như là thành viên của 1 khóa học"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Thêm người dùng đã tồn tại"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Thêm người dùng đã tồn tại là thành viên của khóa học"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
 msgstr "Tên"
 
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Loại"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Thêm mới thành viên cho khóa học"
 
-#: js/CourseGridPanel.js:95
-msgid "Failed"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
 msgstr "Lỗi"
 
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Có lỗi xảy ra khi cập nhật khóa học"
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa lỗi đã được ghi chú"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -102,6 +82,22 @@ msgstr "không rõ"
 msgid "Reset Password"
 msgstr "Khởi tạo mật khẩu"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Tên"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Loại"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Lỗi"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Có lỗi xảy ra khi cập nhật khóa học"
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -116,40 +112,8 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "one:Loại khóa học\nothers:Loại khóa học"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Họ và đệm"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Tên"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Thêm mới thành viên cho khóa học"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Lỗi"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa lỗi đã được ghi chú"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Giáo viên"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Tài khoản giáo viên"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Khóa học của tôi"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Tất cả khóa học"
 
@@ -223,6 +187,18 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Giáo viên"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Tài khoản giáo viên"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Khóa học của tôi"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Khóa học"
@@ -233,4 +209,28 @@ msgstr ""
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Thêm người dùng mới"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Thêm người dùng mới như là thành viên của 1 khóa học"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Thêm người dùng đã tồn tại"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Thêm người dùng đã tồn tại là thành viên của khóa học"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
 msgstr ""

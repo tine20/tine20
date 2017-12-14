@@ -442,12 +442,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
         }
         $emailTo = $_message->to[0];
-        if (strpos($_message->body, '/Calendar/poll/view/') === false) {
+        if (strpos($_message->body, '/Calendar/view/poll/') === false) {
             // nothing to do for us
             return;
         }
-
-        if (!preg_match('#/Calendar/poll/view/([^/]+)/#', $_message->body, $matches)) {
+        if (!preg_match('#/Calendar/view/poll/([^/]+)#', $_message->body, $matches)) {
             throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
         }
         $pollId = $matches[1];
@@ -487,7 +486,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         return;
     }
 
-    public function publicApiMainScreen($pollId, $user = null, $authKey = null)
+    public function publicApiMainScreen($pollId, $userKey = null, $authKey = null)
     {
         $view = new Zend_View();
         $view->setScriptPath('Calendar/views');
@@ -509,31 +508,354 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
 
 //        $this->Tinebase_Frontend_Http::_setMainscreenHeaders();
-        echo $view->render('pollClient.php');
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write($view->render('pollClient.php'));
+        return $response;
     }
 
-    public function publicApiGetPoll($pollId, $user = null, $authKey = null)
+    public function assertPublicUsage()
     {
-        $poll = $this->get($pollId);
+        $currentUser = Tinebase_Core::getUser();
+        if (! $currentUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+                ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+        }
 
-        // @TODO: check if poll is password protected
-        // @TODO: resolve events,attendee etc.
+        $oldvalues = [
+            'containerACLChecks'    => $this->doContainerACLChecks(false),
+            'rightChecks'           => $this->doRightChecks(false),
+            'cceContainerACLChecks' => Calendar_Controller_Event::getInstance()->doContainerACLChecks(false),
+            'cceRightChecks'        => Calendar_Controller_Event::getInstance()->doRightChecks(false),
+            'cceSendNotifications'        => Calendar_Controller_Event::getInstance()->sendNotifications(false),
+//            'accContainerACLChecks'  => Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false),
+//            'accRightChecks'         => Addressbook_Controller_Contact::getInstance()->doRightChecks(false),
+            'currentUser'           => $currentUser,
+        ];
 
-        echo json_encode($poll->toArray());
+
+        return function() use ($oldvalues) {
+            $this->doContainerACLChecks($oldvalues['containerACLChecks']);
+            $this->doRightChecks($oldvalues['rightChecks']);
+            Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldvalues['cceContainerACLChecks']);
+            Calendar_Controller_Event::getInstance()->doRightChecks($oldvalues['cceRightChecks']);
+            Calendar_Controller_Event::getInstance()->sendNotifications($oldvalues['cceSendNotifications']);
+//            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldvalues['accContainerACLChecks']);
+//            Addressbook_Controller_Contact::getInstance()->doRightChecks($oldvalues['accRightChecks']);
+            if ($oldvalues['currentUser']) {
+                Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
+            }
+        };
     }
 
-    public function publicApiAddAttender($pollId)
+    protected function _checkAuth($poll)
     {
-        echo 'OK: ' . $pollId;
+        $authorization = Tinebase_Core::get(Tinebase_Core::REQUEST)->getHeaders()->get('Authorization');
+
+        $authPassword = null;
+        if ($authorization) {
+            $authString = base64_decode(explode(' ', $authorization->getFieldValue())[1]);
+            $authPassword = explode(':', $authString)[1];
+        }
+
+        if ($poll->password && $authPassword !== $poll->password) {
+            throw new Tinebase_Exception_Record_NotAllowed();
+        }
     }
 
-    public function publicApiUpdateAttenderStatus($pollId)
+    public function publicApiGetPoll($pollId, $userKey = null, $authKey = null)
     {
-        echo 'OK: ' . $pollId;
+        $assertAclUsage = $this->assertPublicUsage();
+        $anonymousAccess = Tinebase_Core::getUser()->accountLoginName == 'anonymoususer';
+
+        try {
+            $poll = $this->get($pollId);
+            $this->_checkAuth($poll);
+
+            $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
+
+            // check authkey
+            // NOTE: maybe we have different authkeys for some reason, so lets check that at least one matches
+            if ($anonymousAccess && $userKey) {
+                $user = Calendar_Model_Attender::fromKey($userKey);
+                $authKeys = [];
+                foreach($alternative_dates as $date) {
+                    $authKeys[$date->id] = Calendar_Model_Attender::getAttendee($date->attendee, $user)->status_authkey;
+                }
+                if (! in_array($authKey, $authKeys)) {
+                    throw new Tinebase_Exception_Record_NotAllowed('authkey mismatch');
+                }
+
+            }
+
+            // fill cache, cleanup status_authkeys
+            Calendar_Model_Attender::resolveAttendee($alternative_dates->attendee, true, $alternative_dates);
+            foreach($alternative_dates as $date) {
+                $currentUserAttendee = $anonymousAccess && !$userKey ? null :
+                    Calendar_Model_Attender::getAttendee($date->attendee, Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->contact_id)));
+
+                foreach($date->attendee as $attendee) {
+                    // flatten
+                    $attendee['user_id'] = $attendee['user_id'] instanceof Tinebase_Record_Abstract ? $attendee['user_id']->getId() : $attendee['user_id'];
+
+                    // manage authkeys
+                    if ($anonymousAccess) {
+                        // for anonymous remove all authkeys but own
+                        $attendee->status_authkey = $userKey == $attendee->getKey() ? $authKeys[$date->id] : null;
+                    } else {
+                        // if user is no attendee yet remove all authkeys
+                        if (! $currentUserAttendee) {
+                            $attendee->status_authkey = null;
+                        }
+                    }
+                }
+            }
+
+            $alternative_dates->sort('dtstart');
+            $event = $alternative_dates[0];
+            $timezone = new DateTimeZone($event->originator_tz);
+            $dateformat = Tinebase_Record_Abstract::ISO8601LONG;
+            $event->setTimezone($timezone);
+            $poll->setTimezone($timezone);
+            $alternative_dates->setTimezone($timezone);
+
+            // NOTE: this is a public API so we reduce data to a minimum
+            $dates = [];
+            foreach ($alternative_dates as $date) {
+                $dates[] = [
+                    'id' => $date->id,
+                    'dtstart' => $date->dtstart->format($dateformat),
+                    'dtend' => $date->dtend->format($dateformat),
+                ];
+            }
+
+            $attendee_status= [];
+            foreach ($event->attendee as $attendee){
+                $status = [];
+                foreach ($alternative_dates as $date) {
+                    $date_attendee = Calendar_Model_Attender::getAttendee($date->attendee, $attendee);
+                    $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
+                        'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
+                    ])), [
+                        'info_url'  => $anonymousAccess? '' : ("/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/" . $date->dtstart->format('Y-m-d')),
+                    ]);
+                }
+                $attendee_status[] = [
+                    'key'       => $attendee['user_type'] . '-' . $attendee['user_id'],
+                    'user_id'   => $attendee['user_id'],
+                    'user_type' => $attendee['user_type'],
+                    'name'      => $attendee->getName(),
+                    'status'    => $status,
+                ];
+            }
+
+            usort($attendee_status, function($a, $b) {
+                return strcmp($a['name'], $b['name']);
+            });
+
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write(json_encode(array_merge($poll->toArray(), [
+                'event_summary'     => $event->summary,
+                'event_organizer'   => $event->resolveOrganizer()->n_fn,
+                'alternative_dates' => $dates,
+                'attendee_status'   => $attendee_status,
+                'config' => [
+                    'has_gtc' => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC),
+                    'status_available'  => Calendar_Config::getInstance()->get(Calendar_Config::ATTENDEE_STATUS)->toArray(),
+                    'is_anonymous'      => Tinebase_Core::getUser()->accountLoginName == 'anonymoususer',
+                    'current_contact'   => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray(),
+                    'jsonKey'           => Tinebase_Core::get('jsonKey'),
+                    'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
+                    'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),
+                    'brandingFavicon'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON),
+                    'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+                ]
+            ])));
+
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+    }
+
+    public function publicApiAddAttendee($pollId)
+    {
+        // @TODO do we need rate limiting here? -> yes!
+        $assertAclUsage = $this->assertPublicUsage();
+        $anonymousAccess = Tinebase_Core::getUser()->accountLoginName == 'anonymoususer';
+
+        try {
+            $poll = $this->get($pollId);
+            $this->_checkAuth($poll);
+
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+
+            // prohibit add for locked polls
+            if ($poll->locked) {
+                throw new Tinebase_Exception_Record_NotAllowed('poll is locked');
+            }
+
+            // prohibit add for closed polls
+            if ($poll->closed) {
+                throw new Tinebase_Exception_Record_NotAllowed('poll is closed');
+            }
+
+            // check if user has an account
+            if ($anonymousAccess) {
+                try {
+                    $existingUser = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress',
+                        $request['email']);
+                    throw new Tinebase_Exception_Record_NotAllowed('user has account, please log in');
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                }
+            }
+
+
+            // check if user has a contact
+            // -- where is it added? anonymous user personal addressbook???
+            $translation = Tinebase_Translation::getTranslation('Calendar');
+            $contact = Calendar_Model_Attender::resolveEmailToContact($request, true, array_merge([
+                'note' => $translation->_('This contact has been automatically added by the system as a poll attendee')
+            ], Addressbook_Model_Contact::splitName($request['name'])));
+            $user = new Calendar_Model_Attender([
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => $contact->getId(),
+            ]);
+
+            $returnAttendees = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class);
+            foreach($request['status'] as $idx => $date) {
+                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
+                $attendee = clone $user;
+                $attendee->status = $date['status'];
+
+                // NOTE: as poll is not resolved here, poll inspection does not copy attendee to alternatives
+                if ($existingAttendee = Calendar_Model_Attender::getAttendee($event->attendee, $user)) {
+                    if (false /* some switch as the bellow effectively circumvents authkey */) {
+                        throw new Tinebase_Exception_Record_NotAllowed('user is attendee, please use personal link');
+                    }
+                    $existingAttendee->status = $date['status'];
+                    $returnAttendee = Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $existingAttendee, $existingAttendee->status_authkey);
+                } else {
+                    $event->attendee->addRecord($attendee);
+                    $event = Calendar_Controller_Event::getInstance()->update($event);
+                    $returnAttendee = Calendar_Model_Attender::getAttendee($event->attendee, $user);
+                }
+                $returnAttendees->addRecord($returnAttendee);
+            }
+
+            // @TODO: queue some sort of notification
+            // - added user gets personal link
+            // - organizer?
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write(json_encode($returnAttendees->toArray()));
+
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+    }
+
+    public function publicApiUpdateAttendeeStatus($pollId)
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+        try {
+            $poll = $this->get($pollId);
+            $this->_checkAuth($poll);
+
+            // prohibit add for closed polls
+            if ($poll->closed) {
+                throw new Tinebase_Exception_Record_NotAllowed('poll is closed');
+            }
+
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+
+            foreach($request['status'] as $date) {
+                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
+                $attendee = new Calendar_Model_Attender($date);
+
+                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attendee, $attendee->status_authkey);
+            }
+
+            // @TODO: queue some sort of notification?
+
+            $response = new \Zend\Diactoros\Response();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+    }
+
+    // not ready - not yet used
+    public function publicApiRequestPersonalLink($pollId)
+    {
+        // @TODO add rate limiting
+
+        // allow for accounts and externals
+        // they need to be part of the poll
+        $assertAclUsage = $this->assertPublicUsage();
+        try {
+            $poll = $this->get($pollId);
+            $this->_checkAuth($poll);
+
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+
+            $contact = Calendar_Model_Attender::resolveEmailToContact($request, false);
+            if (! $contact) {
+                throw new Tinebase_Exception_NotFound();
+            }
+
+            $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
+            $currentAttendee = Calendar_Model_Attender::getAttendee($alternative_dates->getFirstRecord()->attendee, new Calendar_Model_Attender([
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => $contact->getId(),
+            ]));
+
+            if (! $currentAttendee) {
+                throw new Tinebase_Exception_NotFound();
+            }
+
+            // what to send now? - we don't have a generic poll notification yet
+
+//            Calendar_Controller_EventNotifications::getInstance()->sendNotificationToAttender($currentAttendee)
+
+            $response = new \Zend\Diactoros\Response();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return new \Zend\Diactoros\Response('php://memory', 404);
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            return new \Zend\Diactoros\Response('php://memory', 401);
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+
     }
 
     public function publicApiGetAGB()
     {
-        echo Calendar_Config::getInstance()->get(Calendar_Config::POLL_AGB);
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write(Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC));
+        return $response;
     }
 }

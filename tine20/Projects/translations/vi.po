@@ -17,20 +17,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Dự án cá nhân của %s"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Dự án"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Quản lý lối tắt dự án dùng chung"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Tìm FAQ"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Tạo lối tắt dự án dùng chung"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Thẻ"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Số"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "one: Dự án\nother: Dự án"
@@ -48,21 +59,9 @@ msgstr "Danh sách dự án"
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Tiêu đề"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Số"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Mô tả"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Trạng thái"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -80,17 +79,9 @@ msgstr "Thời gian tạo"
 msgid "Created By"
 msgstr "Tạo bởi"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Người tham gia"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Vai trò"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Nhập mô tả"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -108,6 +99,10 @@ msgstr "Chọn vai trò người tham gia"
 msgid "Select Project"
 msgstr "Chọn dự án"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Vai trò"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Chọn vai trò"
@@ -117,17 +112,9 @@ msgstr "Chọn vai trò"
 msgid "Adding {0} Participants to project"
 msgstr "Thêm {0} người tham gia vào dự án"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Dự án"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Tìm FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Thẻ"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Nhập mô tả"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -186,6 +173,11 @@ msgstr "Đồng nghiệp"
 msgid "Responsible"
 msgstr "Trách nhiệm"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Dự án cá nhân của %s"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Mọi dự án đang mở của tôi"
@@ -205,3 +197,11 @@ msgstr "Dự án đang chờ tôi"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Dự án tôi đang giữ"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Quản lý lối tắt dự án dùng chung"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Tạo lối tắt dự án dùng chung"

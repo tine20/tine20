@@ -304,8 +304,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     
     /**
      * app defaults
-     * 
-     * @deprecated move to app and split
+     *
      * @var string
      */
     const APPDEFAULTS = 'appdefaults';
@@ -1782,7 +1781,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var array
      */
     protected static $_serverPlugins = array(
-        Tinebase_Server_Plugin_Routing::class   => 15,
+        Tinebase_Server_Plugin_Expressive::class   => 15,
         Tinebase_Server_Plugin_Json::class      => 80,
         Tinebase_Server_Plugin_WebDAV::class    => 80,
         Tinebase_Server_Plugin_Cli::class        => 90,

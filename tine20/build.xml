@@ -272,10 +272,10 @@
 
         <!-- do webpack build -->
         <if>
-            <available file="${project.basedir}/${name}/js/webpack.config.js"/>
+            <available file="${project.basedir}/${name}/js/webpack.prod.js"/>
             <then>
                 <echo message="Starting webpack build..." />
-                <exec command="./node_modules/webpack/bin/webpack.js --progress -p --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <exec command="./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
             </then>
         </if>
 
@@ -346,6 +346,7 @@
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
+                <include name="*/*/*/*/*-FAT*" />
                 <include name="*/js/*-lang-*" />
                 <include name="vendor/*/*/lib/*/*/*-FAT*" />
                 <include name="vendor/*/*/lib/*/js/*-lang-*" />

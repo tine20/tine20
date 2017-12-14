@@ -196,6 +196,27 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
+     * try to get a Timeaccount with a within date filter
+     *
+     * @see 0013648: use new periodPicker for date filters
+     */
+    public function testSearchTimesheetsWithWithinFilter()
+    {
+        $timeaccount = $this->_getTimesheet();
+        $this->_json->saveTimesheet($timeaccount->toArray());
+
+        $now = Tinebase_DateTime::now();
+        $filter = array(
+            array('field' => 'start_date', 'operator' => 'within', 'value' => array(
+                'from' => $now->setTime(0,0,0)->toString(),
+                'until' => $now->addDay(1)->toString(),
+            )),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
+    /**
      * try to add a Timeaccount with grants
      */
     public function testAddTimeaccountWithGrants()

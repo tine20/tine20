@@ -217,7 +217,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('phpunit-users', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY));
 
         // setupuser and replication user should be disabled
-        foreach (array('setupuser', 'replicationuser') as $username) {
+        foreach (array(Tinebase_User::SYSTEM_USER_SETUP, Tinebase_User::SYSTEM_USER_REPLICATION) as $username) {
             $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($username);
             self::assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $systemUser->accountStatus,
                 $username . ' should be disabled');

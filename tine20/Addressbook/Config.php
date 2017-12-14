@@ -80,6 +80,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_RESOURCES = 'featureResources';
 
     /**
+     * FEATURE_STRUCTUREPANEL
+     *
+     * @var string
+     */
+    const FEATURE_STRUCTUREPANEL = 'featureStructurePanel';
+
+    /**
      * config for the syncBackends
      *
      * @var string
@@ -113,12 +120,17 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 self::FEATURE_RESOURCES => array(
                     'label' => 'Manage resources in Addressbook', // _('Manage resources in Addressbook')
                     'description' => 'Show the resources grid also inside the Addressbook' // _('Show the resources grid also inside the Addressbook')
-                )
+                ),
+                self::FEATURE_STRUCTUREPANEL => array(
+                    'label' => 'Show Structure Panel in Addressbook', // _('Show Structure Panel in Addressbook')
+                    'description' => 'Visualize relations of records' // _('Visualize relations of records')
+                ),
             ),
             'default' => array(
                 self::FEATURE_LIST_VIEW => false,
                 self::FEATURE_INDUSTRY => true,
-                self::FEATURE_RESOURCES => false
+                self::FEATURE_RESOURCES => false,
+                self::FEATURE_STRUCTUREPANEL => false,
             ),
         ),
         self::CONTACT_DUP_FIELDS => array(
@@ -143,8 +155,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         self::CONTACT_HIDDEN_CRITERIA => array(
             //_('Contact Hidden Criteria')
             'label'                 => 'Contact Hidden Criteria',
-            //_('The contact is hidden if it is ... (one of: disabled, expired or never')
-            'description'           => 'The contact is hidden if it is ... (one of: disabled, expired or never',
+            //_('The contact is hidden if it is ... (one of: disabled, expired or never)')
+            'description'           => 'The contact is hidden if it is ... (one of: disabled, expired or never)',
             'type'                  => 'string',
             'clientRegistryInclude' => false,
             'default'               => 'disabled'

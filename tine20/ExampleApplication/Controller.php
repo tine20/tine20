@@ -29,55 +29,6 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
      * @var string
      */
     protected static $_defaultModel = 'ExampleApplication_Model_ExampleRecord';
-
-    protected static $_publicRoutes = [
-        'ExampleApplication' => [
-            'type'      => 'literal',
-            'options'   => [
-                'route'     => '/ExampleApplication',
-                'defaults'  => [
-                    Tinebase_Server_Routing::PARAM_CLASS  => ExampleApplication_Controller::class,
-                ],
-            ],
-            'may_terminate' => false,
-            'child_routes'  => [
-                'public'        => [
-                    'type'          => 'literal',
-                    'options'       => [
-                        'route'         => '/public',
-                    ],
-                    'may_terminate' => false,
-                    'child_routes'  => [
-                        'testRoute'     => [
-                            'type'          => 'literal',
-                            'options'       => [
-                                'route'         => '/testRoute',
-                                'defaults'  => [
-                                    Tinebase_Server_Routing::PARAM_METHOD => 'publicTestRoute'
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    protected static $_authRoutes = [
-        'ExampleApplication' => [
-            'child_routes'  => [
-                'testRoute'     => [
-                    'type'          => 'literal',
-                    'options'       => [
-                        'route'         => '/testRoute',
-                        'defaults'  => [
-                            Tinebase_Server_Routing::PARAM_METHOD => 'authTestRoute'
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ];
     
     /**
      * the constructor
@@ -161,13 +112,51 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
         }
     }
 
-    public function publicTestRoute()
+    /**
+     * @param string $parameter
+     * @return \Zend\Diactoros\Response
+     */
+    public function publicTestRoute($parameter = 'a')
     {
-        echo self::publicTestRouteOutput;
+        $response = new \Zend\Diactoros\Response();
+        $body = $response->getBody();
+
+        if ($parameter !== 'a')
+            $body->write($parameter);
+
+        $body->write(self::publicTestRouteOutput);
+
+        return $response;
     }
 
+    /**
+     * @return \Zend\Diactoros\Response
+     */
     public function authTestRoute()
     {
-        echo self::authTestRouteOutput;
+        $response = new \Zend\Diactoros\Response();
+        $body = $response->getBody();
+
+        $body->write(self::authTestRouteOutput);
+
+        return $response;
+    }
+
+    /**
+     * @param \FastRoute\RouteCollector $routeCollector
+     * @return null
+     */
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    {
+        $routeCollector->addGroup('/ExampleApplication', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/public/testRoute', (new Tinebase_Expressive_RouteHandler(
+                ExampleApplication_Controller::class, 'publicTestRoute', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                ]))->toArray());
+            $routeCollector->get('/testRoute', (new Tinebase_Expressive_RouteHandler(
+                ExampleApplication_Controller::class, 'authTestRoute'))->toArray());
+        });
+
+        return null;
     }
 }

@@ -454,7 +454,7 @@ class Setup_Update_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
 
-            $setupUser = Tinebase_User::createSystemUser('setupuser');
+            $setupUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_SETUP);
             if ($setupUser) {
                 Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
                 Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());

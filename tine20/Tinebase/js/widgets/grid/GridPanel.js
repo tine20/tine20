@@ -654,6 +654,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initLayout: function() {
         this.items = [{
+            ref: 'centerPanel',
             region: 'center',
             xtype: 'panel',
             layout: 'fit',
@@ -670,6 +671,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
 
             this.items.push({
+                ref: 'southPanel',
                 region: 'south',
                 border: false,
                 collapsible: true,
@@ -705,8 +707,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
 
+        if (this.ownActionToolbar) {
+            this.items.push({
+                region: 'north',
+                height: 55,
+                border: false,
+                items: this.actionToolbar
+            });
+        }
+
     },
 
+    gridPrintRenderer: function() {
+        Ext.ux.Printer.print(this.getGrid());
+    },
+    
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
@@ -760,9 +775,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'readGrant',
             text: i18n._('Print Page'),
             disabled: false,
-            handler: function() {
-                Ext.ux.Printer.print(this.getGrid());
-            },
+            handler: this.gridPrintRenderer,
             iconCls: 'action_print',
             scope: this,
             allowMultiple: true
@@ -1399,7 +1412,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         // which grid to use?
-        var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : (this.gridConfig.gridType || Ext.grid.GridPanel);
+        // TODO find a better way to configure quickadd grid
+        var Grid = null;
+        if (this.gridConfig.quickaddMandatory) {
+            Grid = Ext.ux.grid.QuickaddGridPanel;
+            this.gridConfig.validate = true;
+        } else {
+            Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
+        }
 
         this.gridConfig.store = this.store;
 
@@ -1417,6 +1437,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             border: false,
             store: this.store,
             sm: this.selectionModel,
+            parentScope: this,
             view: this.createView()
         }));
 

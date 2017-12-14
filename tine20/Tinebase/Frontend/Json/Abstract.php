@@ -266,8 +266,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         // if there are dependent records, set the timezone of them and add them to a recordSet
         $this->_dependentRecordsFromJson($record);
-        
-        $method = (empty($record->$_identifier)) ? 'create' : 'update';
+
+        // ATTENTION for identifier != 'id' I guess the sql backend doesnt know about that... has() will not work
+        // will lead to duplicate key exception, so not sooo bad, should be easily found by unittesting or testing
+        // or so, or customers
+        $method = empty($record->$_identifier) || empty($_controller->has([$record->$_identifier], true)) ? 'create' :
+            'update';
         $args = array_merge(array($record), $_additionalArguments);
         $savedRecord = call_user_func_array(array($_controller, $method), $args);
 

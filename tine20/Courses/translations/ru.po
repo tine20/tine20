@@ -19,45 +19,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Добавить нового пользователя"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Добавить нового пользователя как участника курса"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Добавить существующего пользователя"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Добавить существующего пользователя как участника курса"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr "Управление избранными в общих курсах"
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr "Создание или обновление избранных в общих курсах"
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
 msgstr "Имя"
 
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Тип"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Фамилия"
 
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Сбой"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Добавить нового участника курса"
 
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Произошла ошибка при попытке обновить курсы."
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Ошибка"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, исправьте ошибки"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -107,6 +87,22 @@ msgstr "неизвестный"
 msgid "Reset Password"
 msgstr "Сброс пароля"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Имя"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Тип"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Сбой"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Произошла ошибка при попытке обновить курсы."
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -127,40 +123,8 @@ msgstr[1] "Типа курсов"
 msgstr[2] "Типов курсов"
 msgstr[3] "Типов курсов"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Имя"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Фамилия"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Добавить нового участника курса"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Ошибка"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, исправьте ошибки"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Преподаватель"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Учётная запись преподавателя"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Мои курсы"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Все курсы"
 
@@ -234,6 +198,18 @@ msgstr "Отдел по-умолчанию"
 msgid "The default department for new Courses"
 msgstr "Отдел по-умолчанию для новых курсов"
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Преподаватель"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Учётная запись преподавателя"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Мои курсы"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Курсы"
@@ -245,3 +221,27 @@ msgstr "Школа"
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr "Школа по-умолчанию для приложения Курсы"
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Добавить нового пользователя"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Добавить нового пользователя как участника курса"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Добавить существующего пользователя"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Добавить существующего пользователя как участника курса"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr "Управление избранными в общих курсах"
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr "Создание или обновление избранных в общих курсах"

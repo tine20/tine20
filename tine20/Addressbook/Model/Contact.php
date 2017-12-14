@@ -583,4 +583,34 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 
         return $result;
     }
+
+    /**
+     * @return bool
+     */
+    public static function generatesPaths()
+    {
+        return true;
+    }
+
+    /**
+     * moved here from vevent converter -> @TODO improve me
+     *
+     * @param $fullName
+     * @return array
+     */
+    public static function splitName($fullName)
+    {
+        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $fullName, $matches)) {
+            $firstName = $matches['firstName'];
+            $lastName  = $matches['lastNameName'];
+        } else {
+            $firstName = null;
+            $lastName  = $fullName;
+        }
+
+        return [
+            'n_given' => $firstName,
+            'n_family' => $lastName
+        ];
+    }
 }

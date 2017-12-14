@@ -8,6 +8,9 @@
 
 Ext.ns('Tine.Calendar');
 
+require('../css/yearviewpanel.css');
+require('./Printer/YearView');
+
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.YearView

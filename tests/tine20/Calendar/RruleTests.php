@@ -886,6 +886,22 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('2012-03-13 11:00:00', $event->rrule_until->toString(Tinebase_Record_Abstract::ISO8601LONG));
     }
+
+    public function testWeeklyWithHighCount()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly end by count',
+            'dtstart'       => '2012-01-10 10:00:00',
+            'dtend'         => '2012-01-10 11:00:00',
+            'rrule'         => 'FREQ=WEEKLY;BYDAY=TU;INTERVAL=1;COUNT=999',
+            'originator_tz' => 'Europe/Berlin',
+        ));
+
+        $event->setRruleUntil();
+
+        $this->assertEquals(NULL, $event->rrule_until);
+    }
     
     
     /************************** date helper tests ***************************/

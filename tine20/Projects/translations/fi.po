@@ -20,20 +20,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's hemkilökohtaisesta projektista"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projektit"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Hallinnoi projektin jaettuja suosikkeja"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr ""
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Luo projektille uusi jaettu suosikki"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Tagit"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Numero"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Tila"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekti"
@@ -53,21 +64,9 @@ msgstr "Projekti lista"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Otsikko"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Numero"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Kuvaus"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Tila"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -85,17 +84,9 @@ msgstr "Luontiaika"
 msgid "Created By"
 msgstr "Luonut"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Osallistuja"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Rooli"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Lisää kuvaus"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -113,6 +104,10 @@ msgstr "Valitse osallistujan rooli"
 msgid "Select Project"
 msgstr "Valitse projekti"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Rooli"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Valitse rooli"
@@ -122,17 +117,9 @@ msgstr "Valitse rooli"
 msgid "Adding {0} Participants to project"
 msgstr "Lisätty {0} osallistujaa projektiin"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projektit"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Tagit"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Lisää kuvaus"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -191,6 +178,11 @@ msgstr "Aliurakoitsija"
 msgid "Responsible"
 msgstr "Vastuuhenkilö"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's hemkilökohtaisesta projektista"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Kaikki avoimet projektini"
@@ -210,3 +202,11 @@ msgstr "Odottavat projektit"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Odottamassa olevat projektini"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Hallinnoi projektin jaettuja suosikkeja"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Luo projektille uusi jaettu suosikki"

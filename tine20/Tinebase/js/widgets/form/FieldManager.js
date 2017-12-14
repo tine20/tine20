@@ -170,6 +170,10 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'textarea';
                     field.height = 70; // 5 lines
                     break;
+                case 'stringAutocomplete':
+                    field.xtype = 'tine.widget.field.AutoCompleteField';
+                    field.recordClass = recordClass;
+                    break;
                 case 'numberableStr':
                 case 'numberableInt':
                     field.xtype = 'textfield';

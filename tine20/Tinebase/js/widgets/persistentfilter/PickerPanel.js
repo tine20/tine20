@@ -65,12 +65,13 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
 
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
 
-        var state = Ext.state.Manager.get(this.stateId, {}),
-            filterModelName = this.filterModel || (this.app.appName + '_Model_' + this.contentType + 'Filter'),
-            modelName = String(filterModelName).replace(/Filter$/, '');
+        var appName = this.recordClass ? this.recordClass.getMeta('appName') : this.app.appName,
+            modelName = this.recordClass ? this.recordClass.getMeta('modelName') : window.lodash.upperFirst(this.contentType),
+            filterModelName = this.filterModel || (appName + '_Model_' + modelName + 'Filter'),
+            state = Ext.state.Manager.get(this.stateId, {});
 
         if (! this.recordClass) {
-            this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelName);
+            this.recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName);
         }
 
         this.recordCollection = this.store.queryBy(function(record, id) {

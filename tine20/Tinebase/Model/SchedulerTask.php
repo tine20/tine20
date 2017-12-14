@@ -137,4 +137,12 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
             ]
         ]
     ];
+
+    /**
+     * @return bool
+     */
+    public function run()
+    {
+        return $this->config->run();
+    }
 }

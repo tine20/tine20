@@ -95,3 +95,8 @@
 .x-ux-displayfield-text {
     background-image: none;
 }
+
+.x-ux-display p {
+    padding: 2px;
+    color: #505050;
+}

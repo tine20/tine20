@@ -110,9 +110,24 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     protected function _getDateValues($_operator, $_value)
     {
         if ($_operator === 'within') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . $_value);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
-            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . print_r($_value, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
+
+            if (is_array($_value)) {
+                if (isset($_value['from']) && isset($_value['until'])) {
+                    return [
+                        $_value['from'] instanceof Tinebase_DateTime
+                            ? $_value['from']->toString('Y-m-t') : substr($_value['from'], 0, 10),
+                        $_value['until'] instanceof Tinebase_DateTime
+                            ? $_value['until']->toString('Y-m-t') : substr($_value['until'], 0, 10),
+                    ];
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue('did expect from and until in value');
+                }
+            }
+
             $date = $this->_getDate(NULL, TRUE);
             
             // special values like this week, ...

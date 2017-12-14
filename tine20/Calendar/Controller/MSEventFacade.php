@@ -94,6 +94,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         return self::$_instance;
     }
+
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
+    }
     
     /**
      * get user contact id
@@ -103,15 +108,19 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public static function getCurrentUserContactId()
     {
-        if (empty(Tinebase_Core::getUser()->contact_id)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Creating user contact for ' . Tinebase_Core::getUser()->accountDisplayName . ' on the fly ...');
-            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact(Tinebase_Core::getUser());
-            Tinebase_Core::getUser()->contact_id = $contact->getId();
-            Tinebase_User::getInstance()->updateUserInSqlBackend(Tinebase_Core::getUser());
+        $currentUser = Tinebase_Core::getUser();
+
+        if (empty($currentUser->contact_id)) {
+            if ($currentUser instanceof Tinebase_Model_FullUser) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Creating user contact for ' . $currentUser->accountDisplayName . ' on the fly ...');
+                $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($currentUser);
+                $currentUser->contact_id = $contact->getId();
+                Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+            }
         }
-        
-        return Tinebase_Core::getUser()->contact_id;
+
+        return $currentUser->contact_id;
     }
     
     /**
@@ -1019,5 +1028,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // NOTE: we always refetch the base event as it might be touched in the meantime
         $currBaseEvent = $this->_eventController->get($_baseEvent, null, false);
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
+    }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 }

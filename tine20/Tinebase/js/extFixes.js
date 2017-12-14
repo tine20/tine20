@@ -861,3 +861,19 @@ Ext.override(Ext.tree.TreePanel, {
         }
     }
 });
+
+Ext.override(Ext.Component, {
+    /**
+     * is this component rendered?
+     * @return {Promise}
+     */
+    afterIsRendered : function(){
+        var me = this;
+        if (this.rendered) {
+            return Promise.resolve(me);
+        }
+        return new Promise(function(resolve) {
+            me.on('render', resolve);
+        });
+    }
+});

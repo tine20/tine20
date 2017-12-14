@@ -31,11 +31,43 @@ class Tinebase_Model_PathFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var array filter model fieldName => definition
      */
-    protected $_filterModel = array(
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        //'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('path'))),
-        //ATTENTION query does its own split! we do not want that split
-        'path'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
-        'shadow_path'    => array('filter' => 'Tinebase_Model_Filter_StrictFullText'),
-    );
+    protected $_filterModel = [
+        'id'             => ['filter' => 'Tinebase_Model_Filter_Id'],
+        //ATTENTION the query filter does its own split! we do not want that split, so we use query as alias on path!
+        'query'          => ['filter' => 'Tinebase_Model_Filter_FullText', 'options' => ['field' =>'path']],
+        'path'           => ['filter' => 'Tinebase_Model_Filter_FullText'],
+        'shadow_path'    => ['filter' => 'Tinebase_Model_Filter_StrictFullText'],
+    ];
+
+    /**
+     * creates a new filter based on the definition of this filtergroup
+     *
+     * @param  string|array $_fieldOrData
+     * @param  string $_operator
+     * @param  mixed  $_value
+     * @return Tinebase_Model_Filter_Abstract|Tinebase_Model_Filter_FilterGroup
+     *
+     * @todo remove legacy code + obsolete params sometimes
+     */
+    public function createFilter($_fieldOrData, $_operator = NULL, $_value = NULL)
+    {
+        if (is_array($_fieldOrData)) {
+            $data = $_fieldOrData;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                    . ' Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
+            }
+
+            $data = array(
+                'field' => $_fieldOrData,
+                'operator' => $_operator,
+                'value' => $_value,
+            );
+        }
+
+        if (isset($data['field']))
+
+        return parent::createFilter($data);
+    }
 }

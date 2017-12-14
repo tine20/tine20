@@ -12,13 +12,13 @@ Ext.ns('Tine.Calendar');
 
 /**
  * @namespace Tine.Calendar
- * @class     Tine.Calendar.ResourcesGridPanel
+ * @class     Tine.Calendar.ResourceGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Resources Grid Panel <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // model generics
     recordClass: Tine.Calendar.Model.Resource,
     
@@ -31,7 +31,9 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     newRecordIcon: 'cal-resource',
     
     initFilterPanel: Ext.emptyFn,
-    
+
+    ownActionToolbar: true,
+
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
@@ -81,24 +83,13 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._('Location'),
             width: 150,
             dataIndex: 'relations',
-            renderer: Tine.Calendar.ResourcesGridPanel.locationRenderer,
+            renderer: Tine.Calendar.ResourceGridPanel.locationRenderer,
             sortable: false
         }];
 
-        Tine.Calendar.ResourcesGridPanel.superclass.initComponent.call(this);
+        Tine.Calendar.ResourceGridPanel.superclass.initComponent.call(this);
     },
-    
-    initLayout: function() {
-        this.supr().initLayout.call(this);
-        
-        this.items.push({
-            region : 'north',
-            height : 55,
-            border : false,
-            items  : this.actionToolbar
-        });
-    },
-    
+
     /**
      * preform the initial load of grid data
      */
@@ -109,6 +100,8 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     }
 });
 
+Ext.reg('calendar.resourcegridpanel', Tine.Calendar.ResourceGridPanel);
+
 /**
  * render location relation
  *
@@ -117,7 +110,7 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
  * @param record
  * @returns {*|String}
  */
-Tine.Calendar.ResourcesGridPanel.locationRenderer = function(data, cell, record) {
+Tine.Calendar.ResourceGridPanel.locationRenderer = function(data, cell, record) {
     if (Ext.isArray(data) && data.length > 0) {
         var index = 0;
 

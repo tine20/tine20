@@ -66,19 +66,6 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_requestContext = null;
 
-    /**
-     * public routes, overload member in concrete class to define public routes for the routing server
-     *
-     * @var array
-     */
-    protected static $_publicRoutes = [];
-
-    /**
-     * auth routes, overload member in concrete class to define auth routes for the routing server
-     *
-     * @var array
-     */
-    protected static $_authRoutes = [];
 
     public function setRequestContext(array $context)
     {
@@ -254,6 +241,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      *
      * @param Tinebase_Model_User|string $_accountId the account object
      * @param string $model
+     * @param string $containerModel
      */
     public function deletePersonalFolder($_accountId, $model = '', $containerModel = 'Tinebase_Model_Container')
     {
@@ -429,18 +417,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     }
 
     /**
-     * @return array
+     * @param \FastRoute\RouteCollector $r
+     * @return null
      */
-    public static function getPublicRoutes()
+    public static function addFastRoutes(/** @noinspection PhpUnusedParameterInspection */\FastRoute\RouteCollector $r)
     {
-        return static::$_publicRoutes;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getAuthRoutes()
-    {
-        return static::$_authRoutes;
+        return null;
     }
 }

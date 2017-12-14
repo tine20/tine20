@@ -72,8 +72,8 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
         $writer->shutdown();
         unlink($logfile);
 
-        if (strpos($loggerFile, 'setupuser') !== false) {
-            $username = 'setupuser';
+        if (strpos($loggerFile, Tinebase_User::SYSTEM_USER_SETUP) !== false) {
+            $username = Tinebase_User::SYSTEM_USER_SETUP;
         } else {
             $username = Tinebase_Core::getUser()->accountLoginName;
         }

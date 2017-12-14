@@ -59,27 +59,39 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      *
      * @param string $_operator
      * @param string $_value
-     * @param string $_dateFormat
      * @return array|string date value
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _getDateValues($_operator, $_value)
     {
         if ($_operator === 'within') {
-            // get beginning / end date and add 00:00:00 / 23:59:59
-            date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
-            $value = parent::_getDateValues(
-                $_operator, 
-                $_value
-            );
-            $value[0] .= ' 00:00:00';
-            $value[1] .= ' 23:59:59';
-            date_default_timezone_set('UTC');
-            
+            if (! is_array($_value)) {
+                // get beginning / end date and add 00:00:00 / 23:59:59
+                date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && !empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
+                $value = parent::_getDateValues(
+                    $_operator,
+                    $_value
+                );
+                $value[0] .= ' 00:00:00';
+                $value[1] .= ' 23:59:59';
+                date_default_timezone_set('UTC');
+
+            } else {
+                if (isset($_value['from']) && isset($_value['until'])) {
+                    $value[0] = $_value['from'] instanceof Tinebase_DateTime
+                        ? $_value['from']->toString() : $_value['from'];
+                    $value[1] = $_value['until'] instanceof Tinebase_DateTime
+                        ? $_value['until']->toString() : $_value['until'];
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue('did expect from and until in value');
+                }
+            }
+
             // convert to utc
             $value[0] = $this->_convertStringToUTC($value[0]);
             $value[1] = $this->_convertStringToUTC($value[1]);
-            
-        } else  {
+
+        } else {
             $value = ($_value instanceof DateTime) ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_value;
         }
         

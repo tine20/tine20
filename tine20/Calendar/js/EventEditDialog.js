@@ -10,6 +10,7 @@
  
 Ext.ns('Tine.Calendar');
 
+require('./Printer/EventRecord');
 require('./FreeTimeSearchDialog');
 require('./PollPanel');
 
@@ -240,9 +241,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             this.attendeeGridPanel,
                             this.rrulePanel,
-                            this.alarmPanel,
-                            // this.pollPanel
-                        ]
+                            this.alarmPanel
+                        ].concat(Tine.Tinebase.appMgr.get('Calendar').featureEnabled('featurePolls') ? this.pollPanel : [])
                     }]
                 }, {
                     // activities and tags
@@ -391,9 +391,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
 
-        // this.pollPanel = new Tine.Calendar.PollPanel({
-        //     editDialog : this
-        // });
+        this.pollPanel = new Tine.Calendar.PollPanel({
+            editDialog : this
+        });
         this.rrulePanel = new Tine.Calendar.RrulePanel({
             eventEditDialog : this
         });

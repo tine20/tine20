@@ -153,23 +153,42 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviews($_id, $_revision)
     {
-        $fileSystem = Tinebase_FileSystem::getInstance();
-        $node = $fileSystem->get($_id, $_revision);
+        return $this->createPreviewsFromNode(Tinebase_FileSystem::getInstance()->get($_id, $_revision));
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $node
+     * @return bool
+     * @throws Tinebase_Exception
+     */
+    public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
+    {
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
 
         if (true !== $this->isSupportedFileExtension($fileExtension)) {
             return true;
         }
 
-        $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $path = $fileSystem->getRealPathForHash($node->hash);
         $tempPath = Tinebase_TempFile::getTempPath() . '.' . $fileExtension;
+        if (!is_file($path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' file ' . $node->getId() . ' ' . $node->name . ' is not present in filesystem: ' . $path);
+            return false;
+        }
         if (false === copy($path, $tempPath)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' could not copy file ' . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: '
+                . $tempPath);
             return false;
         }
 
         $config = $this->_getConfig();
 
         if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
             return false;
         }
 

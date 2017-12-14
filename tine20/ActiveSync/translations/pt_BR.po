@@ -1,12 +1,13 @@
 # 
 # Translators:
+# fgsl <flavio.lisboa@serpro.gov.br>, 2017
 # Miguel Mucio Santos Moreira <miglinux@yahoo.com.br>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 13:05+0000\n"
-"Last-Translator: Miguel Mucio Santos Moreira <miglinux@yahoo.com.br>\n"
+"PO-Revision-Date: 2017-11-29 12:50+0000\n"
+"Last-Translator: fgsl <flavio.lisboa@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,117 +17,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Acl/Rights.php:104
-msgid "Manage ActiveSync devices"
-msgstr "Gerenciamento de dispositivos de Sincronização Ativa"
-
-#: Acl/Rights.php:105
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-#: js/AdminPanel.js:45
-msgid "Sync Devices"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:68
-msgid "ID"
-msgstr "ID"
-
-#: js/SyncDevicesGridPanel.js:69 js/SyncDevicesGridPanel.js:98
-#: js/EditDialog.js:72
-msgid "Device ID"
-msgstr "ID do dispositivo"
-
-#: js/SyncDevicesGridPanel.js:70 js/EditDialog.js:79
-msgid "Devicetype"
-msgstr "Tipo do dispositivo"
-
-#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:86
-msgid "Owner"
-msgstr "Proprietário"
-
-#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:98
-msgid "Policy"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:104
-msgid "AS Version"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:110
-msgid "Useragent"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:116
-msgid "Model"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:122
-msgid "IMEI"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:128
-msgid "Friendly Name"
-msgstr "Nome amigável"
-
-#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:134
-msgid "OS"
-msgstr "Sistema Operacional"
-
-#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:140
-msgid "OS Language"
-msgstr "Linguagem do Sistema Operacional"
-
-#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:146
-msgid "Phonenumber"
-msgstr "Telefone"
-
-#: js/SyncDevicesGridPanel.js:81
-msgid "Ping Lifetime"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:82
-msgid "Ping Folder"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:83
-msgid "Remote Wipe"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:84
-msgid "Calendarfilter"
-msgstr "Filtro de calendário"
-
-#: js/SyncDevicesGridPanel.js:85
-msgid "Contactsfilter"
-msgstr "Filtro de contatos"
-
-#: js/SyncDevicesGridPanel.js:86
-msgid "Emailfilter"
-msgstr "Filtro de Email"
-
-#: js/SyncDevicesGridPanel.js:87
-msgid "Tasksfilter"
-msgstr "Filtro de Tarefas"
-
-#: js/SyncDevicesGridPanel.js:88
-msgid "Last Ping"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:97
-msgid "Quicksearch"
-msgstr "Pesquisa Rápida"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Dispositivo"
-msgstr[1] "Dispositivos"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Dispositivos"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -138,7 +28,7 @@ msgstr "Selecione o Dispositivo"
 
 #: js/Application.js:57
 msgid "No ActiveSync Device registered"
-msgstr "Nenhum dispositivos de sincronização ativo registrado"
+msgstr "Nenhum dispositivo de sincronização ativa registrado"
 
 #: js/Application.js:65
 #, python-brace-format
@@ -147,7 +37,7 @@ msgstr "Atribuir como {0} Filtro"
 
 #: js/Application.js:90
 msgid "Resetted Sync Filter"
-msgstr "Filtro de Sincronização Restabelecido"
+msgstr "Filtro de Sincronização Reestabelecido"
 
 #: js/Application.js:91 js/Application.js:103
 #, python-brace-format
@@ -156,17 +46,134 @@ msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
 
 #: js/Application.js:94
 msgid "resetted"
-msgstr "Restabelecido"
+msgstr "Reestabelecido"
 
 #: js/Application.js:102
 msgid "Set Sync Filter"
-msgstr "Atribuir Filtro Sincronizado"
+msgstr "Atribuir Filtro de Sincronização"
+
+#: js/AdminPanel.js:45
+msgid "Sync Devices"
+msgstr "Dispositivos de Sincronização"
+
+#: js/SyncDevicesGridPanel.js:69
+msgid "ID"
+msgstr "ID"
+
+#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:153
+#: js/EditDialog.js:72
+msgid "Device ID"
+msgstr "ID do dispositivo"
+
+#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:79
+msgid "Devicetype"
+msgstr "Tipo de dispositivo"
+
+#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:86
+msgid "Owner"
+msgstr "Proprietário"
+
+#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+msgid "Policy"
+msgstr "Política"
+
+#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
+msgid "AS Version"
+msgstr "Versão de ActiveSync"
+
+#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
+msgid "Useragent"
+msgstr "UserAgent"
+
+#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+msgid "Model"
+msgstr "Modelo"
+
+#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+msgid "IMEI"
+msgstr "IMEI"
+
+#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+msgid "Friendly Name"
+msgstr "Nome amigável"
+
+#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:134
+msgid "OS"
+msgstr "Sistema Operacional"
+
+#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+msgid "OS Language"
+msgstr "Linguagem do Sistema Operacional"
+
+#: js/SyncDevicesGridPanel.js:81 js/EditDialog.js:146
+msgid "Phonenumber"
+msgstr "Número de Telefone"
+
+#: js/SyncDevicesGridPanel.js:82
+msgid "Ping Lifetime"
+msgstr "Duração do Ping"
+
+#: js/SyncDevicesGridPanel.js:83
+msgid "Ping Folder"
+msgstr "Pasta do Ping"
+
+#: js/SyncDevicesGridPanel.js:84
+msgid "Remote Wipe"
+msgstr "Limpeza remota"
+
+#: js/SyncDevicesGridPanel.js:85
+msgid "Calendarfilter"
+msgstr "Filtro de calendário"
+
+#: js/SyncDevicesGridPanel.js:86
+msgid "Contactsfilter"
+msgstr "Filtro de contatos"
+
+#: js/SyncDevicesGridPanel.js:87
+msgid "Emailfilter"
+msgstr "Filtro de E-mail"
+
+#: js/SyncDevicesGridPanel.js:88
+msgid "Tasksfilter"
+msgstr "Filtro de Tarefas"
+
+#: js/SyncDevicesGridPanel.js:89
+msgid "Last Ping"
+msgstr "Último Ping"
+
+#: js/SyncDevicesGridPanel.js:100
+msgid "Remote Reset Device"
+msgstr "Reinicialização Remota de Dispositivo"
+
+#: js/SyncDevicesGridPanel.js:115
+msgid "Please Confirm"
+msgstr "Por favor, confirme"
+
+#: js/SyncDevicesGridPanel.js:116
+msgid ""
+"Do you really want to wipe the selected devices? All personal data will be "
+"removed and the device is reset to factory settings!"
+msgstr "Você realmente quer limpar os dispositivos selecionados? Todos os dados pessoais serão removidos e o dispositivo será reinicializado para as configurações de fábrica."
+
+#: js/SyncDevicesGridPanel.js:152
+msgid "Quicksearch"
+msgstr "Pesquisa Rápida"
 
 #: js/SyncDevices.js:70
 msgid "SyncDevice"
 msgid_plural "SyncDevices"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dispositivos de Sincronização"
+msgstr[1] "Dispositivos de Sincronização"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Dispositivo"
+msgstr[1] "Dispositivos"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Dispositivos"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -182,7 +189,7 @@ msgstr "Calendário Padrão"
 
 #: Preference.php:80
 msgid "The default calendar to create new events in."
-msgstr "O calendário padrão para criaro novos eventos em."
+msgstr "O calendário padrão para criar novos eventos em."
 
 #: Preference.php:83
 msgid "Default Task List"
@@ -206,28 +213,44 @@ msgstr "Desabilitar log de acesso"
 
 #: Config.php:65
 msgid "Disable ActiveSync Access Log creation."
-msgstr ""
+msgstr "Desabilitar criação de Log de Acesso de Sincronização Ativa"
 
 #: Config.php:74
 msgid "Filter timeslot for emails"
-msgstr ""
+msgstr "Filtro de intervalo de tempo para e-mails"
 
 #: Config.php:76
 msgid "For how long in the past the emails should be synchronized."
-msgstr ""
+msgstr "Por quanto tempo no passado os eventos devem ser sincronizados"
 
 #: Config.php:97
 msgid "Filter timeslot for events"
-msgstr ""
+msgstr "Filtra intervalo de tempo para eventos"
 
 #: Config.php:99
 msgid "For how long in the past the events should be synchronized."
 msgstr "Por quanto tempo no passado os eventos devem ser sincronizados."
 
-#: Setup/setup.xml:546 Setup/Update/Release6.php:290
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
 msgid "Default Policy"
 msgstr "Política Padrão"
 
-#: Setup/setup.xml:551 Setup/Update/Release6.php:295
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Política Padrão instalada durante a configuração"
+
+#: Acl/Rights.php:110
+msgid "Manage ActiveSync devices"
+msgstr "Gerenciamento de dispositivos de Sincronização Ativa"
+
+#: Acl/Rights.php:111
+msgid "See, edit and delete ActiveSync devices"
+msgstr "Ver, editar e apagar dispositivos de Sincronização Ativa"
+
+#: Acl/Rights.php:114
+msgid "Reset ActiveSync devices"
+msgstr "Reinicializar dispositivos de Sincronização Ativa"
+
+#: Acl/Rights.php:115
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
+msgstr "Reinicializar remotamente dispositivos para o estado de fábrica, apagando todos os dados"

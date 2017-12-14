@@ -23,13 +23,13 @@ class Tinebase_Server_Plugin_RoutingTests extends TestCase
     public function testServer()
     {
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
-            "POST /index.php?" . Tinebase_Server_Routing::QUERY_PARAM_DO_ROUTING . "=1 HTTP/1.1\r\n".
+            "POST /index.php?" . Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE . "=1 HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7"
         );
 
-        $server = Tinebase_Server_Plugin_Routing::getServer($request);
+        $server = Tinebase_Server_Plugin_Expressive::getServer($request);
 
-        $this->assertInstanceOf(Tinebase_Server_Routing::class, $server);
+        $this->assertInstanceOf(Tinebase_Server_Expressive::class, $server);
     }
 }

@@ -8,6 +8,8 @@
 
 Ext.ns('Tine.Addressbook');
 
+require('./StructurePanel');
+
 /**
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.Application
@@ -140,18 +142,39 @@ Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     ],
 
     initComponent: function() {
+        var app = Tine.Tinebase.appMgr.get('Addressbook');
+
+        if (app.featureEnabled('featureListView')) {
+            this.contentTypes.push({model: 'List', requiredRight: null, singularContainerMode: false});
+        }
+
+        if (app.featureEnabled('featureStructurePanel')) {
+            this.contentTypes.push({
+                contentType: 'structure',
+                app: app,
+                text: app.i18n._('Structure'), // _('Structure')
+                iconCls: 'AddressbookStructure',
+                xtype: 'addressbook.structurepanel'
+            });
+        }
+
         // only show if calendar is available and user has manage_resources right
-        if (   Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureResources')
+        if (app.featureEnabled('featureResources')
             && Tine.Tinebase.common.hasRight('run', 'Calendar')
             && Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')
         ) {
-           this.contentTypes.push({model: 'Resource', requiredRight: null, singularContainerMode: true});
+            var cal = Tine.Tinebase.appMgr.get('Calendar');
+            this.contentTypes.push({
+                contentType: 'resource',
+                app: cal,
+                text: cal.i18n._('Resources'),
+                iconCls: 'CalendarResource',
+                xtype: 'calendar.resourcegridpanel',
+                ownActionToolbar: false,
+                singularContainerMode: true
+            });
         }
 
-        if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureListView')) {
-            this.contentTypes.push({model: 'List', requiredRight: null, singularContainerMode: false});
-        }
-        
         Tine.Addressbook.MainScreen.superclass.initComponent.call(this);
     }
 });

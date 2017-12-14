@@ -160,7 +160,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     public function testLoadConfig()
     {
         // register user first
-        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        Setup_Core::set(Setup_Core::USER, Tinebase_User::SYSTEM_USER_SETUP);
         
         $result = $this->_json->loadConfig();
         

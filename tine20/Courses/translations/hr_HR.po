@@ -18,45 +18,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Dodaj novog korisnika"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Dodaj novog korisnika kao člana tečaja"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Dodaj postojećeg korisnika"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Dodaj postojećeg korisnika kao člana tečaja"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
 msgstr "Ime"
 
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Vrsta"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Prezime"
 
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Neuspjelo"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Dodaj novog člana tečaja"
 
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Pojavila se pogreška pri pokušaju ažuriranja tečajeva."
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Greške"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Molimo popraviti uočene pogreške."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -105,6 +85,22 @@ msgstr "nepoznat"
 msgid "Reset Password"
 msgstr "Resetirati lozinku"
 
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Ime"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Vrsta"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Neuspjelo"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Pojavila se pogreška pri pokušaju ažuriranja tečajeva."
+
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
@@ -123,40 +119,8 @@ msgstr[0] "Vrsta tečaja"
 msgstr[1] "Vrste tečajeva"
 msgstr[2] "Vrste tečajeva"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Ime"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Prezime"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Dodaj novog člana tečaja"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Greške"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Molimo popraviti uočene pogreške."
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Učitelj"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Račun učitelja"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Moji tečajevi"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
+#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
 msgid "All courses"
 msgstr "Svi tečajevi"
 
@@ -230,6 +194,18 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Učitelj"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Račun učitelja"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Moji tečajevi"
+
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Tečajevi"
@@ -240,4 +216,28 @@ msgstr ""
 
 #: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Dodaj novog korisnika"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Dodaj novog korisnika kao člana tečaja"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Dodaj postojećeg korisnika"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Dodaj postojećeg korisnika kao člana tečaja"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
 msgstr ""

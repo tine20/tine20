@@ -43,7 +43,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $event['poll_id'] = [
             'id' => '72315e2c9f337af7d7774a5389e453784ca168d5',
             'name' => 'test poll',
-            'locked' => true,
+            'locked' => false,
             'password' => 'testpwd',
             'alternative_dates' => [
                 [
@@ -71,7 +71,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $persistentEvent['poll_id'] = [
             'id' => Tinebase_Record_Abstract::generateUID(),
             'name' => 'test poll',
-            'locked' => true,
+            'locked' => false,
             'password' => 'testpwd',
             'alternative_dates' => [
                 [
@@ -143,6 +143,27 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
                 'until' => $persistentEvent['dtend'],
             ]]
         ], []);
+
+        $this->assertTrue(is_array($searchResult['results'][0]['poll_id']));
+    }
+
+    public function testResolvePollOtherUser()
+    {
+        $persistentEvent = $this->testCreatePoll();
+
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+
+        $origUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+
+        $searchResult = $this->_uit->searchEvents([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent['id']],
+            ['field' => 'period', 'operator' => 'within', 'value' => [
+                'from' => $persistentEvent['dtstart'],
+                'until' => $persistentEvent['dtend'],
+            ]]
+        ], []);
+        Tinebase_Core::set(Tinebase_Core::USER, $origUser);
 
         $this->assertTrue(is_array($searchResult['results'][0]['poll_id']));
     }
@@ -474,4 +495,47 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $this->assertCount(0, self::getMessages());
     }
 
+    /**
+     * the public poll api uses the event / poll Controller without a user set.
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testAnonymousUsage()
+    {
+        $data = $this->testCreatePoll();
+
+        $pollController = Calendar_Controller_Poll::getInstance();
+        $oldUser = Tinebase_Core::getUser();
+        $oldContainerACLChecks = $pollController->doContainerACLChecks();
+        Calendar_Controller_Event::unsetInstance();
+        $calendarController = Calendar_Controller_Event::getInstance();
+        $oldCalContainerACLChecks = $calendarController->doContainerACLChecks();
+
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+                ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+            $pollController->doContainerACLChecks(false);
+            $calendarController->doContainerACLChecks(false);
+
+            $poll = $pollController->get($data['poll_id']['id']);
+            static::assertEquals($poll->getId(), $data['poll_id']['id']);
+
+            $events = $pollController->getPollEvents($data['poll_id']['id']);
+            static::assertGreaterThan(0, $events->count());
+            /** @var Calendar_Model_Event $event */
+            foreach ($events as $event) {
+                static::assertEquals($data['poll_id']['id'], $event->poll_id);
+            }
+
+            $event = Calendar_Controller_Event::getInstance()->get($events->getFirstRecord()->getId());
+            static::assertEquals($events->getFirstRecord()->getId(), $event->getId());
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+            $pollController->doContainerACLChecks($oldContainerACLChecks);
+            $calendarController->doContainerACLChecks($oldCalContainerACLChecks);
+            Calendar_Controller_Event::unsetInstance();
+            Calendar_Controller_MSEventFacade::unsetInstance();
+        }
+    }
 }

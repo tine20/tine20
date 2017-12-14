@@ -530,7 +530,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * we place a picker and a combo in the dom element and hide the one we don't need yet
      */
     dateValueRenderer: function(filter, el) {
-        var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
+        var me = this,
+            operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
         
         var valueType = 'datePicker';
         switch (operator) {
@@ -549,12 +550,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         } else if (this.defaultValue && this.defaultValue.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = this.defaultValue.toString();
         }
-        
+        comboOps.unshift(['period',        i18n._('Period ...')]);
+
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
             width: this.filterValueWidth,
-            value: comboValue,
             renderTo: el,
             mode: 'local',
             lazyInit: false,
@@ -569,10 +570,65 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                          this.onFiltertrigger();
                      }
                 },
-                'select': this.onFiltertrigger,
+                'select': function(c) {
+                    if (c.getValue() != 'period') {
+                        this.onFiltertrigger();
+                    }
+                },
                 scope: this
             }
         });
+        filter.withinCombo.origSetValue = filter.withinCombo.setValue;
+        filter.withinCombo.origGetValue = filter.withinCombo.getValue;
+        filter.withinCombo.origOnSelect = filter.withinCombo.onSelect;
+        filter.withinCombo.setValue = function(value) {
+            // try to convert some values when initialising
+            var range = this.range || Ext.ux.form.PeriodPicker.prototype.range;
+            if (! this.manualSelect && value != 'period') {
+                range = window.lodash.get(String(value).match(/(day|week|month|quater|year)This$/), 1);
+                if (range) {
+                    value = 'period';
+                }
+            }
+
+            if (value == 'period' || value.from) {
+                this.setRawValue('');
+
+                if (! this.pp) {
+                    this.pp = new Ext.ux.form.PeriodPicker({
+                        range: range,
+                        width: me.filterValueWidth - 18,
+                        cls: 'x-pp-combo',
+                        'renderTo': this.wrap
+                    });
+                    this.pp.on('change', me.onFiltertrigger, me , {buffer: 250});
+                }
+                this.pp.show();
+                if (value.from) {
+                    this.pp.setValue(value);
+                }
+            } else {
+                if (this.pp) {
+                    this.pp.hide();
+                }
+                return this.origSetValue(value);
+            }
+        };
+
+        filter.withinCombo.getValue = function(value) {
+            if (this.pp && this.pp.isVisible()) {
+                return this.pp.getValue();
+            } else {
+                return this.origGetValue()
+            }
+        };
+
+        filter.withinCombo.onSelect = function() {
+            this.manualSelect = true;
+            return this.origOnSelect.apply(this, arguments);
+        };
+
+        filter.withinCombo.setValue(comboValue);
 
         var pickerValue = '';
         if (Ext.isDate(filter.data.value)) {

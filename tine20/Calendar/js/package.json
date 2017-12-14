@@ -1,0 +1,21 @@
+{
+  "name": "calendar",
+  "version": "0.0.1",
+  "description": "Tine 2.0 Calendar",
+  "main": "Calendar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "calendar",
+    "scheduling",
+    "extension"
+  ],
+  "author": "Cornelius Weiß",
+  "license": "AGPL-3.0",
+  "tine20": {
+    "entryPoints": [
+      "pollClient/src/index.es6.js"
+    ]
+  }
+}

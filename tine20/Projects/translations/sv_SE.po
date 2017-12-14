@@ -21,20 +21,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's egna projekt"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projekt"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
 msgstr ""
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr ""
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Taggar"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Nummer"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Titel"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -54,21 +65,9 @@ msgstr "Projektlistor"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Titel"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Nummer"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Beskrivning"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -86,17 +85,9 @@ msgstr "Skapelsetid"
 msgid "Created By"
 msgstr "Skapad av"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Deltagare"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Roll"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Ange beskrivning"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -114,6 +105,10 @@ msgstr "Vänligen välj deltagarens roll"
 msgid "Select Project"
 msgstr "Välj projekt"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Roll"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Välj roll"
@@ -123,17 +118,9 @@ msgstr "Välj roll"
 msgid "Adding {0} Participants to project"
 msgstr "Lägger till {0} deltagare till projektet"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projekt"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Taggar"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Ange beskrivning"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -192,6 +179,11 @@ msgstr "Medarbetare"
 msgid "Responsible"
 msgstr "Ansvarig"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's egna projekt"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Alla mina öppna projekt"
@@ -211,3 +203,11 @@ msgstr "Mina väntande projekt"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Mina projekt som är pågående"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr ""
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr ""

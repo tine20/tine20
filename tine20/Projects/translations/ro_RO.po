@@ -18,20 +18,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Proiecte"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
 msgstr ""
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr ""
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Taguri"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr ""
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "Număr"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "Titlu"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Proiect"
@@ -53,21 +64,9 @@ msgstr "Liste Proiect"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Titlu"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Număr"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Descriere"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -85,17 +84,9 @@ msgstr "Data creare"
 msgid "Created By"
 msgstr "Creat de"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr ""
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Rol"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "Introducere Descriere"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -113,6 +104,10 @@ msgstr ""
 msgid "Select Project"
 msgstr "Selectează Proiect"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Rol"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Selectează Rol"
@@ -122,17 +117,9 @@ msgstr "Selectează Rol"
 msgid "Adding {0} Participants to project"
 msgstr ""
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Proiecte"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Taguri"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "Introducere Descriere"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -191,6 +178,11 @@ msgstr ""
 msgid "Responsible"
 msgstr "Responsabil"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr ""
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr ""
@@ -209,4 +201,12 @@ msgstr ""
 
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr ""
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
 msgstr ""

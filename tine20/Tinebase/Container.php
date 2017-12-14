@@ -311,16 +311,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $this->_writeModLog($_newRecord, null);
     }
-    
+
     /**
      * add grants to container
      *
-     * @todo    check that grant is not already given to container/type/account combination
      * @param   int|Tinebase_Model_Container $_containerId
+     * @param $_accountType
      * @param   int $_accountId
      * @param   array $_grants list of grants to add
+     * @param bool $_ignoreAcl
      * @return  boolean
-     * @throws  Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function addGrants($_containerId, $_accountType, $_accountId, array $_grants, $_ignoreAcl = FALSE)
     {
@@ -350,7 +353,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $containerGrants = $this->getGrantsOfContainer($containerId, TRUE);
         $containerGrants->addIndices(array('account_type', 'account_id'));
-        $existingGrants = $containerGrants->filter('account_type', $_accountType)->filter('account_id', $_accountId)->getFirstRecord();
+        $existingGrants = $containerGrants->filter('account_type', $_accountType);
+        
+        if ($_accountType !== Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) {
+            $existingGrants = $existingGrants->filter('account_id', $_accountId)->getFirstRecord();
+        }
         
         foreach($_grants as $grant) {
             if ($existingGrants === NULL || ! $existingGrants->{$grant}) {
@@ -392,7 +399,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                         . __LINE__ . ' Using application name is deprecated. Please use the classname of the model or the class itself.');
                     $ret['appName'] = $_recordClass;
-                    if(! $ret['recordClass'] = Tinebase_Core::getApplicationInstance($_recordClass)->getDefaultModel()) {
+                    if(! $ret['recordClass'] = Tinebase_Core::getApplicationInstance($_recordClass, '', true)->getDefaultModel()) {
                         throw new Tinebase_Exception_NotFound('A default model could not be found for application ' . $_recordClass);
                     }
                     break;
@@ -681,7 +688,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // if no containers where found, maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
         if (empty($containersData) && $accountId === $ownerId) {
-            $application = Tinebase_Core::getApplicationInstance($meta['appName']);
+            $application = Tinebase_Core::getApplicationInstance($meta['appName'], '', true);
 
             if ($application instanceof Tinebase_Application_Container_Interface && method_exists($application, 'createPersonalFolder')) {
                 return $application->createPersonalFolder($accountId);

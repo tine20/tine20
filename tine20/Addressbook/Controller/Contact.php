@@ -57,9 +57,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $this->_useRecordPaths = true;
-        }
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -113,6 +110,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $groups = $listController->getMemberships($_id);
             $contact->groups = $listController->getMultiple($groups);
         }
+        
+        Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
 
         return $contact;
     }

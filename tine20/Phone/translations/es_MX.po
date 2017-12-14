@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:16+0000\n"
+"PO-Revision-Date: 2017-09-28 09:49+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/tine20/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -16,78 +16,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Model/Call.php:43
-msgid "Call"
-msgstr ""
-
-#: Model/Call.php:44
-msgid "Calls"
-msgstr ""
-
-#: Model/Call.php:60 js/DialerPanel.js:76
-msgid "Line"
-msgstr "Línea"
-
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr "Identificador de Llamada"
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr "Comenzar"
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr "Conectado"
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr "Desconectado"
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr "Duración"
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr "Timbrando"
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr "Orientación"
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr "Origen"
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr "Destino"
-
-#: Model/Call.php:128
-msgid "Contact"
-msgstr ""
-
-#: Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr ""
-
-#: Model/MyPhone.php:33 js/CallGridPanel.js:167
-msgid "Phones"
-msgstr "Teléfonos"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr ""
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr ""
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr ""
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -101,23 +29,23 @@ msgstr "Llamada de salida"
 msgid "unknown number"
 msgstr "número desconocido"
 
-#: js/AddressbookGridPanelHook.js:35
+#: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
 msgstr "Llamar a contacto"
 
-#: js/AddressbookGridPanelHook.js:191
+#: js/AddressbookGridPanelHook.js:196
 msgid "Work"
 msgstr "Trabajo"
 
-#: js/AddressbookGridPanelHook.js:200
+#: js/AddressbookGridPanelHook.js:205
 msgid "Home"
 msgstr "Casa"
 
-#: js/AddressbookGridPanelHook.js:209
+#: js/AddressbookGridPanelHook.js:214
 msgid "Cell"
 msgstr "Celular"
 
-#: js/AddressbookGridPanelHook.js:218
+#: js/AddressbookGridPanelHook.js:223
 msgid "Cell private"
 msgstr "Celular Privado"
 
@@ -133,6 +61,10 @@ msgstr "Marcar número"
 msgid "Initiate a new outgoing call"
 msgstr "Comenzar una nueva llamada de salida"
 
+#: js/CallGridPanel.js:167 Model/MyPhone.php:33
+msgid "Phones"
+msgstr "Teléfonos"
+
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
 msgstr ""
@@ -140,6 +72,14 @@ msgstr ""
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
 msgstr ""
+
+#: js/DialerPanel.js:53 Model/MyPhone.php:32
+msgid "Phone"
+msgstr ""
+
+#: js/DialerPanel.js:76 Model/Call.php:60
+msgid "Line"
+msgstr "Línea"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -186,32 +126,88 @@ msgstr ""
 msgid "own telephone number to prefix to internal calls"
 msgstr ""
 
-#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr ""
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr ""
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr ""
+
+#: Model/Call.php:43
+msgid "Call"
+msgstr ""
+
+#: Model/Call.php:44
+msgid "Calls"
+msgstr ""
+
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "Identificador de Llamada"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "Comenzar"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "Conectado"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "Desconectado"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "Duración"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "Timbrando"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "Orientación"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "Origen"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "Destino"
+
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
 msgid "Calls this week"
+msgstr ""
+
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr ""
+
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr ""
+
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
 msgstr ""
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
 msgstr ""
 
-#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
-msgid "Calls last week"
-msgstr ""
-
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
 msgstr ""
 
-#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
-msgid "Calls this month"
-msgstr ""
-
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
-msgstr ""
-
-#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
-msgid "Calls last month"
 msgstr ""
 
 #: Setup/Initialize.php:64

@@ -18,20 +18,31 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "จำนวน %s ของโครงการส่วนบุคคล"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "โครงการ"
 
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "จัดการ โคงการร่วมที่ใช้บ่อย"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "ค้นหาคำถามที่ถามบ่อย"
 
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "ป้ายกำกับ"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
+msgid "Number"
+msgstr "ลำดับ"
+
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "โครงการ"
@@ -49,21 +60,9 @@ msgstr "รายชื่อโครงการ"
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "ลำดับ"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:177
+#: js/Model.js:76 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "การอธิบาย"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "สถานะ"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -81,17 +80,9 @@ msgstr "เวลาที่สร้างขึ้น"
 msgid "Created By"
 msgstr "สร้าง โดย"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "ผู้เข้าร่วม"
-
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "หน้าที่"
-
-#: js/ProjectEditDialog.js:191
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
@@ -109,6 +100,10 @@ msgstr "กรุณาเลือกหน้าที่ของผู้เ
 msgid "Select Project"
 msgstr "เลือกโครงการ"
 
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "หน้าที่"
+
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "เลือก หน้าที่"
@@ -118,17 +113,9 @@ msgstr "เลือก หน้าที่"
 msgid "Adding {0} Participants to project"
 msgstr "กำลังเพิ่มผู้เข้าร่วม {0} คน ในโครงการ"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "โครงการ"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "ค้นหาคำถามที่ถามบ่อย"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "ป้ายกำกับ"
+#: js/ProjectEditDialog.js:192
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -187,6 +174,11 @@ msgstr "ผู้ร่วมงาน"
 msgid "Responsible"
 msgstr "รับผิดชอบ"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "จำนวน %s ของโครงการส่วนบุคคล"
+
 #: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "โครงการที่ยังว่างอยู่ของฉันทั้งหมด"
@@ -206,3 +198,11 @@ msgstr "โครงการของฉันที่กำลังรอ"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "โครงการของฉันที่กำลังดำเนินการอยู่"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "จัดการ โคงการร่วมที่ใช้บ่อย"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"

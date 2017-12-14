@@ -596,18 +596,12 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         }
                         
                         // AttendeeStatus send only on repsonse
-                        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $attendee->name, $matches)) {
-                            $firstName = $matches['firstName'];
-                            $lastName  = $matches['lastNameName'];
-                        } else {
-                            $firstName = null;
-                            $lastName  = $attendee->name;
-                        }
-                        
+                        $parsedName = Addressbook_Model_Contact::splitName($attendee->name);
+
                         $newAttendees[] = array(
                             'userType'  => Calendar_Model_Attender::USERTYPE_USER,
-                            'firstName' => $firstName,
-                            'lastName'  => $lastName,
+                            'firstName' => $parsedName['n_given'],
+                            'lastName'  => $parsedName['n_family'],
                             #'partStat'  => $status,
                             'role'      => $role,
                             'email'     => $attendee->email

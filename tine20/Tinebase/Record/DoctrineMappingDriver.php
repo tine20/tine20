@@ -25,6 +25,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      */
     protected static $_typeMap = array(
         'string'        => 'string',
+        'stringAutocomplete' => 'string',
         'text'          => 'text',
         'fulltext'      => 'text',
         'datetime'      => 'datetime',

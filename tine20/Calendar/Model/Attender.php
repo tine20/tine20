@@ -548,7 +548,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     * 
     * @todo filter by fn if multiple matches
     */
-    public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE)
+    public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE, $defaultData = [])
     {
         if (! isset($_attenderData['email']) || empty($_attenderData['email'])) {
             throw new Tinebase_Exception_InvalidArgument('email address is needed to resolve contact');
@@ -579,13 +579,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $i18nNote .= "\n";
                 $i18nNote .= $translation->_('The email address has been shortened:') . ' ' . $_attenderData['email'] . ' -> ' . $email;
             }
-            $contactData = array(
+            $contactData = array_merge([
                 'note'        => $i18nNote,
                 'email'       => $email,
                 'n_family'    => (isset($_attenderData['lastName']) && ! empty($_attenderData['lastName'])) ? $_attenderData['lastName'] : $email,
                 'n_given'     => (isset($_attenderData['firstName'])) ? $_attenderData['firstName'] : '',
-            );
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            ], $defaultData);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Ádd new contact " . print_r($contactData, true));
             $contact = new Addressbook_Model_Contact($contactData);
             $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
@@ -1138,6 +1139,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $isOrganizerCondition = $_event ? $_event->isOrganizer($_attendee) : TRUE;
         $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
         return ($isAttendeeCondition || $isOrganizerCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
+    }
+
+    public function getKey()
+    {
+        return $this->user_type . '-' . ($this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id);
+    }
+
+    public static function fromKey($key)
+    {
+        return new Calendar_Model_Attender([
+            'user_type' => preg_replace('/-.*$/', '', $key),
+            'user_id' => preg_replace('/^[a-z]+-/', '', $key),
+        ]);
     }
 
     /**

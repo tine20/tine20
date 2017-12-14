@@ -52,6 +52,18 @@ class Tinebase_User implements Tinebase_Controller_Interface
     const DEFAULT_ADMIN_GROUP_NAME_KEY = 'defaultAdminGroupName';
 
     /**
+     * Key under which the default anonymous group name setting will be stored/retrieved
+     *
+     */
+    const DEFAULT_ANONYMOUS_GROUP_NAME_KEY = 'defaultAnonymousGroupName';
+
+    const SYSTEM_USER_CRON = 'cronuser';
+    const SYSTEM_USER_REPLICATION = 'replicationuser';
+    const SYSTEM_USER_ANONYMOUS = 'anonymoususer';
+    const SYSTEM_USER_CALENDARSCHEDULING = 'calendarscheduling';
+    const SYSTEM_USER_SETUP = 'setupuser';
+
+    /**
      * Do the user sync with the options as configured in the config.
      * see Tinebase_Config:: TODO put key here
      * for details and default behavior
@@ -835,7 +847,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function getSystemUsernames()
     {
-        return array('cronuser', 'calendarscheduling', 'setupuser', 'replicationuser');
+        return [self::SYSTEM_USER_CRON, self::SYSTEM_USER_CALENDARSCHEDULING, self::SYSTEM_USER_SETUP,
+            self::SYSTEM_USER_REPLICATION, self::SYSTEM_USER_ANONYMOUS];
     }
 
     /**
@@ -908,7 +921,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         // create the replication user
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
 
-        $replicationUser = static::createSystemUser('replicationuser', Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+        $replicationUser = static::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+            Tinebase_Group::getInstance()->getDefaultReplicationGroup());
         if (null !== $replicationUser) {
             $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
             if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
@@ -917,6 +931,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
             Tinebase_User::getInstance()->setPassword($replicationUser, $password);
         }
 
+        // create the anonymous user
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new anonymous user.');
+
+        static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS,
+            Tinebase_Group::getInstance()->getDefaultAnonymousGroup());
 
         Tinebase_User::getInstance()->registerPlugin($addressBookController);
 

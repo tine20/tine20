@@ -17,6 +17,8 @@
  */
 class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {
+    protected $_recursiveResolvingProtection = [];
+
     /**
      * converts external format to Tinebase_Record_Abstract
      *
@@ -322,6 +324,54 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
         }
     }
+
+    protected function _resolveRecursive(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
+    {
+        if (! $modelConfiguration || (! $_records->count())) {
+            return;
+        }
+
+        if (! ($resolveFields = $modelConfiguration->recursiveResolvingFields)) {
+            return;
+        }
+
+        $first = true;
+        $recursions = [];
+        foreach ($resolveFields as $property) {
+            foreach ($_records->{$property} as $idx => $records) {
+                // recursion protection
+                $id = $_records->getByIndex($idx)->getId();
+                if (isset($recursions[$id]) || ($first && isset($this->_recursiveResolvingProtection[$id]))) {
+                    $recursions[$id] = true;
+                    continue;
+                }
+                $this->_recursiveResolvingProtection[$id] = true;
+
+                if ($records instanceof Tinebase_Record_RecordSet && $records->count() > 0) {
+                    /** @var Tinebase_Record_Abstract $model */
+                    $model = $records->getRecordClassName();
+                    $mc = $model::getConfiguration();
+                    Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $mc);
+
+                    self::resolveAttachmentImage($records);
+
+                    self::resolveMultipleIdFields($records);
+
+                    // use modern record resolving, if the model was configured using Tinebase_ModelConfiguration
+                    // at first, resolve all single record fields
+                    if ($mc) {
+                        $this->_resolveSingleRecordFields($records, $mc);
+
+                        // resolve all multiple records fields
+                        $this->_resolveMultipleRecordFields($records, $mc, $multiple);
+
+                        $this->_resolveRecursive($records, $mc, $multiple);
+                    }
+                }
+            }
+            $first = false;
+        }
+    }
     
     /**
      * resolve multiple record fields (Tinebase_ModelConfiguration._recordsFields)
@@ -369,8 +419,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $filterArray = $config['addFilters'];
             }
 
-            /** @var Tinebase_Model_Filter_FilterGroup $filter */
-            $filter = new $filterName($filterArray);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
             $paging = NULL;
@@ -521,6 +570,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
             // resolve all multiple records fields
             $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
+
+            $this->_recursiveResolvingProtection = [];
+            $this->_resolveRecursive($records, $modelConfiguration, $multiple);
         }
     }
 

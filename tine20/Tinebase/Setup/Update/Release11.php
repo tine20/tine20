@@ -149,11 +149,12 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.11
+     * update to 11.12
      *
      * remove scheduler table
      * remove async_job table
      * recreate scheduler tasks
+     * @throws Setup_Exception_NotFound
      */
     public function update_11()
     {
@@ -195,7 +196,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.11
+     * update to 11.13
      *
      * rerun update 4 + 8 as we don't want them to run before update_11
      */
@@ -205,5 +206,32 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->update_8();
 
         $this->setApplicationVersion('Tinebase', '11.13');
+    }
+
+    /**
+     * update to 11.14
+     *
+     * add anonymous group and user
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function update_13()
+    {
+        $defaultAnonymousGroupName =
+            Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+                : Tinebase_Group::DEFAULT_ANONYMOUS_GROUP;
+        $anonymousGroup = new Tinebase_Model_Group(array(
+            'name'          => $defaultAnonymousGroupName,
+            'description'   => 'Group of anonymous user accounts',
+            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
+        ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
+        /** @var Tinebase_Model_Group $group */
+        /** @noinspection PhpUndefinedMethodInspection */
+        $group = Tinebase_Group::getInstance()->addGroupInSqlBackend($anonymousGroup);
+
+        Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS, $group);
+
+        $this->setApplicationVersion('Tinebase', '11.14');
     }
 }

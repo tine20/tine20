@@ -79,12 +79,16 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             new Tinebase_Record_RecordSet(Calendar_Model_Event::class, array($_events));
 
         $pollIds = array_unique($events->poll_id);
+
+        // read access to event means access to poll
+        $protectedUsage = Calendar_Controller_Poll::getInstance()->assertPublicUsage();
         $polls = Calendar_Controller_Poll::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Poll::class,[
                 ['field' => 'id', 'operator' => 'in', 'value' => $pollIds],
                 ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
             ])
         );
+        $protectedUsage();
 
         foreach ($events as $event) {
             if ($event->poll_id) {

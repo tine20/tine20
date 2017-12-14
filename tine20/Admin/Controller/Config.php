@@ -271,4 +271,16 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
+
+    /**
+     * checks if a records with identifiers $_ids exists, returns array of identifiers found
+     *
+     * @param array $_ids
+     * @param bool $_getDeleted
+     * @return array
+     */
+    public function has(array $_ids, $_getDeleted = false)
+    {
+        return $this->_configBackend->has($_ids, $_getDeleted);
+    }
 }
