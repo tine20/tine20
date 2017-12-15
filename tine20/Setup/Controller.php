@@ -95,6 +95,11 @@ class Setup_Controller
         return self::$_instance;
     }
 
+    public static function unsetInstance()
+    {
+        self::$_instance = null;
+    }
+
     /**
      * the constructor
      *
@@ -1546,12 +1551,15 @@ class Setup_Controller
         
         // get xml and sort apps first
         $applications = array();
-        foreach ($_applications as $applicationName) {
+        foreach ($_applications as $appId => $applicationName) {
             if ($this->isInstalled($applicationName)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
+                if (strlen($appId) === 40) {
+                    $applications[$applicationName]->id = $appId;
+                }
             }
         }
         $applications = $this->_sortInstallableApplications($applications);
@@ -1788,12 +1796,16 @@ class Setup_Controller
                 }
             }
 
-            $application = new Tinebase_Model_Application(array(
+            $appData = [
                 'name'      => (string)$_xml->name,
                 'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
                 'order'     => $_xml->order ? (string)$_xml->order : 99,
                 'version'   => (string)$_xml->version
-            ));
+            ];
+            if ($_xml->id && strlen($_xml->id) === 40) {
+                $appData['id'] = (string)$_xml->id;
+            }
+            $application = new Tinebase_Model_Application($appData);
 
             $application = Tinebase_Application::getInstance()->addApplication($application);
             
