@@ -10,6 +10,8 @@
  * 
  */
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
  * controller abstract for applications
  *
@@ -423,5 +425,10 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     public static function addFastRoutes(/** @noinspection PhpUnusedParameterInspection */\FastRoute\RouteCollector $r)
     {
         return null;
+    }
+
+    public static function registerContainer(ContainerBuilder $builder)
+    {
+
     }
 }

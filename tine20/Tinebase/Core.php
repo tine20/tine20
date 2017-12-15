@@ -5,10 +5,14 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * dispatcher and initialisation class (functions are static)
@@ -180,6 +184,11 @@ class Tinebase_Core
      * @var string
      */
     const SERVER_CLASS_NAME = 'serverclassname';
+
+    /**
+     * constant for containe registry
+     */
+    const CONTAINER = 'container';
 
     /**
      * Application Instance Cache
@@ -437,12 +446,12 @@ class Tinebase_Core
         Tinebase_Core::setupTempDir();
         
         Tinebase_Core::setupStreamWrapper();
+
+        Tinebase_Core::setupBuildConstants();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
-
-        Tinebase_Core::setupBuildConstants();
         
         // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
@@ -459,8 +468,76 @@ class Tinebase_Core
                 header('X-TransactionID: ' . substr($_SERVER['HTTP_X_TRANSACTIONID'], 1, -1) . ';' . $_SERVER['SERVER_NAME'] . ';16.4.5009.816;' . date('Y-m-d H:i:s') . ' UTC;265.1558 ms');
             }
         }
+
+        Tinebase_Core::setupContainer();
     }
-    
+
+    protected static function setupContainer()
+    {
+        if (self::isRegistered(self::CONTAINER)) {
+            return;
+        }
+
+        $cacheFile = self::getCacheDir() . '/cachedTine20Container.php';
+
+        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile )) {
+            require_once $cacheFile;
+            /** @noinspection PhpUndefinedClassInspection */
+            $container = new Tine20Container();
+        } else {
+            $container = self::getPreCompiledContainer();
+            $container->compile();
+
+            $dumper = new PhpDumper($container);
+            file_put_contents(
+                $cacheFile,
+                $dumper->dump(array('class' => 'Tine20Container'))
+            );
+        }
+
+        self::setContainer($container);
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    public static function getPreCompiledContainer()
+    {
+        $container = new ContainerBuilder();
+
+        $container->register(RequestInterface::class)
+            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals')->setSynthetic(true);
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications()
+                     ->filter('status', Tinebase_Application::ENABLED) as $application) {
+            /** @var Tinebase_Controller_Abstract $className */
+            $className = $application->name . '_Controller';
+            if (class_exists($className)) {
+                $className::registerContainer($container);
+            }
+        }
+
+        return $container;
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface $container
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function setContainer(\Psr\Container\ContainerInterface $container)
+    {
+        self::set(self::CONTAINER, $container);
+    }
+
+    /**
+     * @return \Psr\Container\ContainerInterface
+     */
+    public static function getContainer()
+    {
+        return self::get(self::CONTAINER);
+    }
+
     /**
      * start core session
      *
