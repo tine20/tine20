@@ -1073,7 +1073,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         if (Ext.isDefined(isValid) && ! Ext.isFunction(isValid.then)) {
             // convert legacy isValid into promise
-            isValid = new Promise(function (fulfill, reject) {;
+            isValid = new Promise(function (fulfill, reject) {
                 return vBool ? fulfill(true) : reject(me.getValidationErrorMessage());
             });
         }
