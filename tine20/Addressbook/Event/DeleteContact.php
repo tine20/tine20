@@ -9,16 +9,16 @@
  */
 
 /**
- * event class for changed list
+ * event class for deleted contact
  *
  * @package     Addressbook
  */
-class Addressbook_Event_DeleteList extends Tinebase_Event_Abstract
+class Addressbook_Event_DeleteContact extends Tinebase_Event_Observer_Abstract
 {
     /**
      * the list object
      *
-     * @var Addressbook_Model_List
+     * @var Addressbook_Model_Contact
      */
-    public $list;
+    public $observable;
 }

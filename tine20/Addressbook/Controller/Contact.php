@@ -541,6 +541,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_DeleteContact(array(
+            'observable' => $_record
+        )));
     }
 
     /**
