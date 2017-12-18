@@ -117,8 +117,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
         
         this.initStore();
-        this.initActionsAndToolbars();
         this.initGrid();
+        this.initActionsAndToolbars();
+
 
         this.on('afterrender', this.onAfterRender, this);
 
@@ -189,9 +190,23 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             disabled: true,
             scope: this,
             handler: this.onRemove,
-            iconCls: 'action_deleteContact'
+            iconCls: 'action_deleteContact',
+            actionUpdater: this.actionRemoveUpdater
         });
-        
+
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: this.recordClass,
+            evalGrants: this.evalGrants
+        });
+        this.actionUpdater.addActions([
+            this.actionRemove
+        ]);
+
+        this.selModel.on('selectionchange', function(sm) {
+            this.actionUpdater.updateActions(sm);
+        }, this);
+
         var contextItems = [this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
