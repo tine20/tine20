@@ -728,11 +728,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initActions: function() {
-        this.newRecordIcon =  this.newRecordIcon!== null ? this.newRecordIcon : this.app.appName + 'IconCls';
-        if (! Ext.util.CSS.getRule('.' + this.newRecordIcon)) {
-            this.newRecordIcon = 'ApplicationIconCls';
+        if (! this.newRecordIcon) {
+            Ext.each((this.recordClass ? [this.recordClass.getMeta('appName') + this.recordClass.getMeta('modelName')] : []).concat([
+                this.app.appName + 'IconCls',
+                'ApplicationIconCls'
+            ]), function(cls) {
+                if (Ext.util.CSS.getRule('.' + cls)) {
+                    this.newRecordIcon = cls;
+                    return false;
+                }
+            }, this);
         }
-        
+
         var services = Tine.Tinebase.registry.get('serviceMap').services;
         
         this.action_editInNewWindow = new Ext.Action({
