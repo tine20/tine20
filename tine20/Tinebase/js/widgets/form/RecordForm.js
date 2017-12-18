@@ -45,7 +45,7 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
             var fieldDefinition = modelConfig.fields[fieldName];
             // exclude: genericFields, idProperty, wellKnown(description, tags, customfields, relations, attachments, notes)
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
-                var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName);
+                var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
                 if (field) {
                     // apply basic layout
                     field.columnWidth = 1;
