@@ -582,7 +582,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      *
      * @param   string  $_accountId
      * @param   string  $_accountClass  type of model to return
-     * @return  Tinebase_Model_User user
+     * @return  Tinebase_Model_User|Tinebase_Model_FullUser user
      */
     public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
