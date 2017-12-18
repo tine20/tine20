@@ -163,6 +163,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         // focus+select new record
         this.store.on('add', this.focusAndSelect, this);
+        this.store.on('beforeload', this.showLoadMask, this);
+        this.store.on('load', this.hideLoadMask, this);
     },
 
     focusAndSelect: function(store, records, index) {
@@ -427,6 +429,22 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     break;
             }
         }
+    },
+
+    showLoadMask: function() {
+        var me = this;
+        return me.afterIsRendered()
+            .then(function() {
+                if (! me.loadMask) {
+                    me.loadMask = new Ext.LoadMask(me.getEl(), {msg: String.format(i18n._('Loading {0} ...'), me.recordClass.getRecordsName())});
+                }
+                me.loadMask.show.defer(100, me.loadMask);
+            });
+    },
+
+    hideLoadMask: function() {
+        this.loadMask.hide.defer(100, this.loadMask);
+        return Promise.resolve();
     }
 });
 
