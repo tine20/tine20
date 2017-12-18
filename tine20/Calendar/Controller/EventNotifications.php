@@ -274,7 +274,6 @@
     {
         try {
             $organizer = $_event->resolveOrganizer();
-            $organizerAccountId = $organizer->account_id;
             $attendee = $_attender->getResolvedUser();
 
             if ($attendee instanceof Addressbook_Model_List) {
@@ -284,34 +283,8 @@
                 return;
             }
 
+            list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) = self::getNotificationPreferences($_attender, $_event);
             $attendeeAccountId = $_attender->getUserAccountId();
-            
-            $prefUserId = $attendeeAccountId ? $attendeeAccountId :
-                          ($organizerAccountId ? $organizerAccountId : 
-                          ($_event->created_by));
-            
-            try {
-                $prefUser = Tinebase_User::getInstance()->getFullUserById($prefUserId);
-            } catch (Exception $e) {
-                $prefUser = Tinebase_Core::getUser();
-                $prefUserId = $prefUser->getId();
-            }
-            
-            // get prefered language, timezone and notification level
-            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUserId));
-            $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUserId);
-            $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
-            $sendLevel        = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUserId);
-            $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
-            $sendAlarms = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_ALARM_NOTIFICATIONS, $prefUserId);
-
-            // external (non account) notification
-            if (! $attendeeAccountId) {
-                // external organizer needs status updates
-                $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferredEmailAddress() ? 40 : 30;
-                $sendOnOwnActions = false;
-                $sendAlarms = false;
-            }
 
             $recipients = array($attendee);
 
@@ -381,6 +354,43 @@
             }
             return;
         }
+    }
+
+    public static function getNotificationPreferences(Calendar_Model_Attender $attendee, Calendar_Model_Event $event)
+    {
+        $organizer = $event->resolveOrganizer();
+        $organizerAccountId = $organizer->account_id;
+        $attendeeAccountId = $attendee->getUserAccountId();
+
+        $prefUserId = $attendeeAccountId ? $attendeeAccountId :
+            ($organizerAccountId ? $organizerAccountId :
+                ($event->created_by));
+
+        try {
+            $prefUser = Tinebase_User::getInstance()->getFullUserById($prefUserId);
+        } catch (Exception $e) {
+            $prefUser = Tinebase_Core::getUser();
+            $prefUserId = $prefUser->getId();
+        }
+
+        // get prefered language, timezone and notification level
+
+        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUserId));
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUserId);
+        $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
+        $sendLevel        = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUserId);
+        $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
+        $sendAlarms = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_ALARM_NOTIFICATIONS, $prefUserId);
+
+        // external (non account) notification
+        if (! $attendeeAccountId) {
+            // external organizer needs status updates
+            $sendLevel = is_object($organizer) && $attendee->getEmail() == $organizer->getPreferredEmailAddress() ? 40 : 30;
+            $sendOnOwnActions = false;
+            $sendAlarms = false;
+        }
+
+        return [$prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms];
     }
 
      /**

@@ -120,8 +120,8 @@ class Calendar_Model_Poll extends Tinebase_Record_Abstract
     {
         $publicUrl = Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $this->getId();
 
-        return $publicUrl . $attendee ? (
+        return $publicUrl . ($attendee ? (
             '/' . $attendee->getUserId() . '/' . $attendee->status_authkey
-        ) : '';
+        ) : '');
     }
 }

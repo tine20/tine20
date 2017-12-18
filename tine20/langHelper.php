@@ -265,7 +265,7 @@ function generatePOTFiles($_verbose)
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
         
         `cd "$appPath" 
-        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | grep -v node_modules | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -iname "*.twig" | grep -v node_modules | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
         
     }
 }

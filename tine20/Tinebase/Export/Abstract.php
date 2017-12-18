@@ -570,51 +570,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
 
-        $tineTwigLoader = new Twig_Loader_Chain(array(
-            new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
-                array($this, '_getTwigSource'))));
+        $options = [
+            // in order to cache the templates, we need to cache $this->_twigMapping too!
+            Tinebase_Twig::TWIG_CACHE       => false,
+            Tinebase_Twig::TWIG_AUTOESCAPE  => 'json',
+            Tinebase_Twig::TWIG_LOADER      => new Twig_Loader_Chain(array(
+                new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
+                    array($this, '_getTwigSource'))))
+        ];
 
-        // TODO turn on caching
-        // in order to cache the templates, we need to cache $this->_twigMapping too!
-        /*
-        $cacheDir = rtrim(Tinebase_Core::getTempDir(), '/') . '/tine20Twig';
-        if (!is_dir($cacheDir)) {
-            mkdir($cacheDir, 0777, true);
-        }*/
+        $twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
 
-        $this->_twigEnvironment = new Twig_Environment($tineTwigLoader, array(
-            'autoescape' => 'json',
-            'cache' => false, //$cacheDir
-        ));
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @noinspection PhpUnusedParameterInspection */
-        $this->_twigEnvironment->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
-            return json_encode($string);
-        });
-
-        $this->_addTwigFunctions();
-
-        $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
-    }
-
-    /**
-     * adds twig function to the twig environment to be used in the templates
-     */
-    protected function _addTwigFunctions()
-    {
-        $locale = $this->_locale;
-        $translate = $this->_translate;
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
-            function ($str) use($locale, $translate) {
-                return $translate->_($str, $locale);
-            }));
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
-            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
-        }));
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
-            // TODO implement this!
-            return $model;
-        }));
+        $this->_twigTemplate = $twig->load($this->_templateFileName);
     }
 
     /**
