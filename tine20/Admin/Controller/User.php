@@ -141,6 +141,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     public function setAccountStatus($_accountId, $_status)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+
         $user = $this->get($_accountId);
         if ($user->accountStatus !== $_status) {
             $user->accountStatus = $_status;
