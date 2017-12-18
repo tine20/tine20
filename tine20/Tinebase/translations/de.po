@@ -1723,8 +1723,8 @@ msgid "Reload config"
 msgstr "Konfiguration neu laden"
 
 #: js/widgets/form/RecordPickerComboBox.js:119
-msgid "Search for record ..."
-msgstr "Suche nach Einträgen ..."
+msgid "Search for {0} ..."
+msgstr "Suche nach {0} ..."
 
 #: js/widgets/form/RecordPickerComboBox.js:121
 #: js/widgets/form/RecordPickerManager.js:48
