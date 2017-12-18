@@ -313,7 +313,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     // TODO use translated records name here
                     //header: String.format(i18n._('Selected {0}'),
                     //    this.recordClass.getMeta('recordsName')),
-                    header: i18n._('Records'),
+                    header: this.recordClass.getRecordsName(),
                     dataIndex: this.labelField
                 };
                 if (this.labelRenderer != Ext.emptyFn) {
