@@ -520,6 +520,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
         }
 
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_BeforeDeleteContact(array(
+            'observable' => $_record
+        )));
+
         $recordBackendIds = $_record->syncBackendIds;
 
         parent::_deleteRecord($_record);
@@ -541,10 +545,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
-
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_DeleteContact(array(
-            'observable' => $_record
-        )));
     }
 
     /**

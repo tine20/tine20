@@ -1113,7 +1113,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Deleting user' . $user->accountLoginName);
+            . ' Deleting user ' . $user->accountLoginName);
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 

@@ -9,11 +9,11 @@
  */
 
 /**
- * event class for deleted contact
+ * event class for deleted contact - fired before deletion in \Addressbook_Controller_Contact::_deleteRecord
  *
  * @package     Addressbook
  */
-class Addressbook_Event_DeleteContact extends Tinebase_Event_Observer_Abstract
+class Addressbook_Event_BeforeDeleteContact extends Tinebase_Event_Observer_Abstract
 {
     /**
      * the list object

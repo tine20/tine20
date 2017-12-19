@@ -422,7 +422,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $oldUser = $this->get($accountId);
-            
+
+            $eventBefore = new Admin_Event_BeforeDeleteAccount();
+            $eventBefore->account = $oldUser;
+            Tinebase_Event::fireEvent($eventBefore);
+
             $memberships = $groupsController->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             
