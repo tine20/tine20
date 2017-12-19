@@ -780,9 +780,6 @@ class Tinebase_ModelConfiguration {
     /**
      * This defines the filters use for all known types
      * @var array
-     *
-     * NOTE: "records" type has no automatic filter definition/mapping!
-     * TODO generalize this for "records" type (see Sales_Model_Filter_ContractProductAggregateFilter)
      */
     protected $_filterModelMapping = array(
         'date'     => 'Tinebase_Model_Filter_Date',
@@ -797,6 +794,7 @@ class Tinebase_ModelConfiguration {
         'float'    => 'Tinebase_Model_Filter_Float',
         'money'    => 'Tinebase_Model_Filter_Float',
         'record'   => 'Tinebase_Model_Filter_ForeignId',
+        'records'  => 'Tinebase_Model_Filter_ForeignRecords',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
         'keyfield'  => 'Tinebase_Model_Filter_Text',
