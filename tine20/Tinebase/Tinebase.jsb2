@@ -154,6 +154,10 @@
           "path": "js/ux/"
         },
         {
+          "text": "ColumnManager.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "CheckColumn.js",
           "path": "js/ux/grid/"
         },

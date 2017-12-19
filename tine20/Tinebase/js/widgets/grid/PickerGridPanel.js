@@ -306,6 +306,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @return {}
      */
     getColumnModel: function() {
+        var _ = window.lodash,
+            me = this;
+
         if (! this.colModel) {
             if (!this.columns) {
                 var labelColumn = {
@@ -320,6 +323,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     labelColumn.renderer = this.labelRenderer;
                 }
                 this.columns = [labelColumn];
+            } else {
+                // convert string cols
+                _.each(me.columns, function(col, idx) {
+                    if (_.isString(col)) {
+                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        if (config) {
+                            me.columns[idx] = config;
+                        }
+                    }
+                });
+                _.remove(me.columns, _.isString)
             }
 
             this.colModel = new Ext.grid.ColumnModel({
