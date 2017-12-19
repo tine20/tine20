@@ -443,7 +443,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     hideLoadMask: function() {
-        this.loadMask.hide.defer(100, this.loadMask);
+        if (this.loadMask) {
+            this.loadMask.hide.defer(100, this.loadMask);
+        }
         return Promise.resolve();
     }
 });
