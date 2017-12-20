@@ -1,10 +1,10 @@
 .CrmIconCls, .CrmLead {
     background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
 }
-.x-btn-medium .CrmIconCls {
+.x-btn-medium .CrmIconCls, .x-btn-medium .CrmLead {
     background-image:url(../../images/oxygen/22x22/actions/datashowchart.png) !important;
 }
-.x-btn-large .CrmIconCls {
+.x-btn-large .CrmIconCls, .x-btn-large .CrmLead {
     background-image:url(../../images/oxygen/32x32/actions/datashowchart.png) !important;
 }
 
