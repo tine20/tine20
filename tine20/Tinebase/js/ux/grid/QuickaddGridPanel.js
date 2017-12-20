@@ -118,6 +118,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         };
 
         this.on('beforeedit', this.onBeforeEdit, this);
+        this.on('validateedit', this.onValidateEdit, this);
     },
     
     /**
@@ -131,7 +132,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 column.quickaddField.on(this.quickaddHandlers);
             }
         },this);
-        
+
+
         this.colModel.on('configchange', this.syncFields, this);
         //this.colModel.on('widthchange', this.syncFields, this);
         this.colModel.on('hiddenchange', this.syncFields, this);
@@ -144,7 +146,24 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.colModel.getColumnById(this.quickaddMandatory).quickaddField.on('focus', this.onMandatoryFocus, this);
     },
-    
+
+    onValidateEdit: function(o) {
+        var _ = window.lodash,
+            me = this,
+            fieldDef = _.isFunction(_.get(me, 'recordClass.getField')) ?
+                _.get(me.recordClass.getField(o.field), 'fieldDefinition') : null;
+
+
+        if (_.get(fieldDef, 'type') == 'record') {
+            var col = _.find(me.getCols(), {dataIndex: o.field}),
+                recordData = _.get(col, 'editor.field.selectedRecord.data');
+
+            // o.record.setValue(o.field, recordData);
+
+            o.value = recordData ? recordData : o.value;
+        }
+    },
+
     /**
      * @private
      */
@@ -163,7 +182,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var data = {};
             Ext.each(this.getCols(true), function(item){
                 if(item.quickaddField){
-                    data[item.id] = item.quickaddField.getValue();
+                    data[item.id] = item.quickaddField.selectedRecord ?
+                        item.quickaddField.selectedRecord.data :
+                        item.quickaddField.getValue();
                     item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
                 }
             }, this);

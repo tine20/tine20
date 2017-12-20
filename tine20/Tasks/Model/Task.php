@@ -262,7 +262,9 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['organizer']) && is_array($_data['organizer'])) {
-            $_data['organizer'] = $_data['organizer']['accountId'];
+            $_data['organizer'] = isset($_data['organizer']['account_id']) ?
+                $_data['organizer']['account_id'] :
+                $_data['organizer']['accountId'];
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {

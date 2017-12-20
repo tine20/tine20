@@ -24,14 +24,16 @@ Ext.ns('Tine.widgets.grid');
  */
 Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
-     * @property recordClass
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
-    dataField: null,
-    
     /**
-     * useBBar 
-     * @config Boolean
+     * @cfg {String} dataField
+     * use this (single) field as data instead of whole record
+     */
+    dataField: null,
+    /**
+     * @cfg {Bool} useBBar
      */
     useBBar: false,
     
@@ -106,7 +108,40 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Ext.grid.ColumnModel}
      */
     getColumnModel: function() {
-        return new Ext.grid.ColumnModel([]);
+        var _ = window.lodash,
+            me = this;
+
+        if (! this.cm) {
+            if (this.columns) {
+                // convert string cols
+                _.each(me.columns, function(col, idx) {
+                    if (_.isString(col)) {
+                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        if (config) {
+                            me.columns[idx] = config;
+                            _.each(['quickaddField', 'editor'], function(prop) {
+                                config[prop] = Ext.ComponentMgr.create(Tine.widgets.form.FieldManager.getByModelConfig(
+                                    me.recordClass.getMeta('appName'),
+                                    me.recordClass.getMeta('modelName'),
+                                    col,
+                                    Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID
+                                ));
+                            });
+                        }
+                    }
+                });
+                _.remove(me.columns, _.isString)
+            }
+
+            this.cm = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: false
+                },
+                columns: this.columns || []
+            });
+        }
+
+        return this.cm;
     },
     
     /**

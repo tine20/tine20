@@ -1410,7 +1410,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             store: this.store,
             sm: this.selectionModel,
             parentScope: this,
-            view: this.createView()
+            view: this.createView(),
+            recordClass: this.recordClass
         }));
 
         // init various grid / sm listeners
