@@ -261,4 +261,85 @@ class Admin_ControllerTest extends TestCase
             }
         }
     }
+
+    public function testRoleUpdateReplication()
+    {
+        $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $exampleApplication = Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication');
+
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($adminRole->getId());
+        foreach ($members as &$member) {
+            $member['id'] = $member['account_id'];
+            $member['type'] = $member['account_type'];
+            unset($member['role_id']);
+            unset($member['account_id']);
+            unset($member['account_type']);
+        }
+        $members[] = [
+            'id'    => $userGroup->getId(),
+            'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
+        ];
+
+        $appRights = new Tinebase_Record_RecordSet(Tinebase_Model_RoleRight::class,
+            Tinebase_Acl_Roles::getInstance()->getRoleRights($adminRole->getId()), true);
+        $exampleRight = $appRights->filter('application_id', $exampleApplication->getId())->filter('right', 'admin')
+            ->getFirstRecord();
+        static::assertNotNull($exampleRight);
+
+        $appRights->removeRecord($exampleRight);
+        $appRights = $appRights->toArray();
+        $appRights[] = [
+            'application_id' => $exampleApplication->getId(),
+            'right'          => 'foo'
+        ];
+
+        // this will add a role member, remove a right, add a right in that order
+        Admin_Controller_Role::getInstance()->update($adminRole, $members, $appRights);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instance_seq);
+        static::assertEquals(3, $modifications->count(), 'modifications count unexpected');
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        // add a role member
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($adminRole->getId());
+        static::assertEquals(1, count($members));
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(
+            new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($adminRole->getId());
+        static::assertEquals(2, count($members));
+
+        // remove a right
+        $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
+            Tinebase_Core::getUser()->getId());
+        static::assertEquals(2, count($rights));
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(
+            new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
+            Tinebase_Core::getUser()->getId());
+        static::assertEquals(1, count($rights));
+
+        // add a right
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(
+            new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
+            Tinebase_Core::getUser()->getId());
+        static::assertEquals(2, count($rights));
+    }
 }

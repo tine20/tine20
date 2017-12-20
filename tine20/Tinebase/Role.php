@@ -59,7 +59,11 @@ class Tinebase_Role extends Tinebase_Acl_Roles
         $return = parent::update($_record, $_duplicateCheck);
 
         if (null !== $members) {
-            $tmpMembers = $members->toArray();
+            if (is_array($members)) {
+                $tmpMembers = $members;
+            } else {
+                $tmpMembers = $members->toArray();
+            }
             foreach($tmpMembers as &$m) {
                 $m['dataId'] = $m['id'];
                 $m['type'] = $m['account_type'];
@@ -68,7 +72,7 @@ class Tinebase_Role extends Tinebase_Acl_Roles
             $this->setRoleMembers($_record->getId(), $tmpMembers, true);
         }
         if (null !== $rights) {
-            $this->setRoleRights($_record->getId(), $rights->toArray());
+            $this->setRoleRights($_record->getId(), is_array($rights) ? $rights : $rights->toArray());
         }
         $this->resetClassCache();
 
