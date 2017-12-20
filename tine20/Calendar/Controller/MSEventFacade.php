@@ -371,12 +371,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $_event->exdate = array_diff($exceptions->getOriginalDtStart(), $migration['toCreate']->getOriginalDtStart($dtStartDiff));
 
         $skipRecurAdoptions = $this->_eventController->skipRecurAdoptions(true);
-        try {
-            $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
-        } finally {
-            $this->_eventController->skipRecurAdoptions($skipRecurAdoptions);
-        }
-        
+        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
+        $this->_eventController->skipRecurAdoptions($skipRecurAdoptions);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Found ' . count($migration['toCreate']) . ' exceptions to create and ' . count($migration['toUpdate']) . ' to update.');
         
