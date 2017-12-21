@@ -91,7 +91,11 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         // add our fields after view is rendered
         this.getView().afterRender = this.getView().afterRender.createSequence(this.renderQuickAddFields, this);
-        
+
+        if (! this.autoExpandColumn && this.quickaddMandatory) {
+            this.autoExpandColumn = this.quickaddMandatory;
+        }
+
         // init handlers
         this.quickaddHandlers = {
             scope: this,
