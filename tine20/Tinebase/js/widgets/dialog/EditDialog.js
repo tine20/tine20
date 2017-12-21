@@ -825,19 +825,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @param record
      */
     doCopyRecordToReturn: function(record) {
-        var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
-        // always omit id + notes + attachments
-        omitFields = omitFields.concat(['id', 'notes', 'attachments', 'relations']);
-
-        var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
-            recordData = Ext.copyTo({}, record.data, fieldsToCopy);
-
-        var resetProperties = {
-            alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
-            relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
-        };
-
-        var setProperties = {alarms: {sent_status: 'pending'}};
+        var _ = window.lodash,
+            titleProperty = this.recordClass.getMeta('titleProperty'),
+            omitFields = _.concat(this.recordClass.getMeta('copyOmitFields') || [],
+                // 2017-12-21 - cweiss - why where relations omitted? if you know please document here!
+                // 2017-12-21 - cweiss - why where attachments omitted? if you know please document here!
+                ['id', 'notes' /*, 'attachments'*/ /*, 'relations'*/]),
+            fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
+            recordData = Ext.copyTo({}, record.data, fieldsToCopy),
+            resetProperties = {
+                alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
+                relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
+            },
+            setProperties = {alarms: {sent_status: 'pending'}};
 
         Ext.iterate(resetProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
@@ -865,7 +865,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
 
-        return new this.recordClass(recordData, 0);
+        recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
+
+        return new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
     },
 
     /**
