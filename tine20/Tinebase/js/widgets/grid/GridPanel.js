@@ -963,6 +963,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         if (this.recordProxy) {
+            if (! this.defaultSortInfo.field && this.recordClass) {
+                var titleProperty = this.recordClass.getMeta('titleProperty'),
+                    defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
+
+                this.defaultSortInfo = {
+                    field: defaultSortField,
+                    order: 'DESC'
+                };
+            }
+
             var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;
             this.store = new storeClass({
                 fields: this.recordClass,
