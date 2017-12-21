@@ -36,8 +36,11 @@ Tine.Tinebase.data.RecordStore = function(c){
     c.modelName = c.recordClass.getMeta('modelName');
 
     if (! c.sortInfo) {
+        var titleProperty = c.recordClass.getMeta('titleProperty'),
+            defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
+
         c.sortInfo = c.defaultSortInfo || {
-            field: c.recordClass.getMeta('titleProperty'),
+            field: defaultSortField,
             order: 'DESC'
         };
     }
