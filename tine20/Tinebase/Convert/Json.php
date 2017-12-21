@@ -325,6 +325,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
     }
 
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @param null $modelConfiguration
+     * @param bool $multiple
+     */
     protected function _resolveRecursive(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || (! $_records->count())) {
@@ -338,7 +343,15 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $first = true;
         $recursions = [];
         foreach ($resolveFields as $property) {
-            foreach ($_records->{$property} as $idx => $records) {
+            foreach ($_records->{$property} as $idx => $recordOrRecords) {
+                // cope with single records
+                if ($recordOrRecords instanceof Tinebase_Record_Abstract) {
+                    $records = new Tinebase_Record_RecordSet(get_class($recordOrRecords));
+                    $records->addRecord($recordOrRecords);
+                } else {
+                    $records = $recordOrRecords;
+                }
+
                 // recursion protection
                 $id = $_records->getByIndex($idx)->getId();
                 if (isset($recursions[$id]) || ($first && isset($this->_recursiveResolvingProtection[$id]))) {
@@ -461,8 +474,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if ($foreignRecords->count() > 0) {
                 /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
-                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
-                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);
+                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
                     $record->{$fieldKey} = $filtered;
                 }
                 
