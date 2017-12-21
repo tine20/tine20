@@ -47,14 +47,17 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @private
      */
     initComponent: function() {
+        this.defaultSortInfo = this.defaultSortInfo || {};
+
         this.initGrid();
         this.initActions();
-        
+
         this.on('rowcontextmenu', this.onRowContextMenu, this);
         if (! this.store) {
             // create basic store
             this.store = new Ext.data.Store({
                 // explicitly create reader
+                sortInfo: this.defaultSortInfo,
                 reader: new Ext.data.ArrayReader({
                         idIndex: 0  // id for each record will be the first element
                     },
