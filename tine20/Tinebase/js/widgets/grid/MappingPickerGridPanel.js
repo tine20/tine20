@@ -141,7 +141,14 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                 return ids.concat([recordId]);
             }, []);
 
+        if (me.editDialog.copyRecord) {
+            _.each(mappingRecordsData, function(mappingRecordData) {
+                mappingRecordData[me.recordClass.getMeta('idProperty')] = Tine.Tinebase.data.Record.generateUID();
+                mappingRecordData[me.referenceField] = me.editDialog.record.id;
+            });
+        }
         me.mappingRecordStore.loadData({results: mappingRecordsData});
+
         me.resolveGroupRecords(recordIds).then(function() {
             me.store.load({
                 params: {
