@@ -154,15 +154,23 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        var initialData = null;
-        if (Ext.isFunction(this.recordClass.getDefaultData)) {
-            initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
-        } else {
-            initialData = recordData;
-        }
-        var newRecord = new this.recordClass(initialData, Ext.id());
+        var _ = window.lodash,
+            defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {},
+            newRecord = new this.recordClass(defaultData, Ext.id());
+
+        _.each(recordData, function(val, key) {
+            if (val) {
+                // we want to see the red dirty triangles
+                Tine.Tinebase.common.assertComparable(val);
+                newRecord.set(key, '');
+            }
+
+            newRecord.set(key, val);
+        });
+
         this.store.insert(0 , [newRecord]);
-        
+
         return true;
     },
     
@@ -263,7 +271,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Array}
      */
     getFromStoreAsArray: function(deleteAutoIds) {
-        var result = [];
+        var result = Tine.Tinebase.common.assertComparable([]);
         this.store.each(function(record) {
             var data = (this.dataField === null) ? record.data : record.get(this.dataField);
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
