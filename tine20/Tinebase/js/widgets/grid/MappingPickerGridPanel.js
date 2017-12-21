@@ -22,6 +22,8 @@ Ext.ns('Tine.widgets.grid');
  * NOTE: Members must be defined as mapped dependent records because the (single) referenceId is stored on the depended
  *       record side - we can't add a field to Contacts AND a Contact might me member of multiple Projects.
  *
+ * NOTE: Group defining records must be defined as separate map as dynamic typed dependencies not possible in modelconfig
+ *
    projectMemberGroupsGrid = Ext.extend(Tine.widgets.grid.MappingPickerGridPanel, {
        field: 'membergroups',
        mappingField: 'groupMemberId'
@@ -31,12 +33,11 @@ Ext.ns('Tine.widgets.grid');
        mappingField: 'memberId',
        groupRecordsGrid: projectMemberGroupsGrid
    });
-
- * you end up with two members grids, one for lists one for contacts
- * OK, this is a bad example as you might expect this in one grid with typed members
- * @TODO: rethink should both grids be part of this picker?
- *        than the group grid could optional be merged as typed records here
  *
+ * @TODO: both grids should be part of this picker widget
+ * @TODO: than the group grid could optional be merged as typed (client only) records here
+ * @TODO: when records via group needs own properties in the mapping (e.g. last action), then the server
+ *        needs to persist the resolved groupmembers and flag them as gropumembers (see calendar attendee)
  */
 Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
