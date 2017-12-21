@@ -28,8 +28,18 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     recordClass: null,
     /**
+     * @cfg {Tine.Tinebase.widgets.Dialog.EditDialog} editDialog
+     */
+    editDialog: null,
+    /**
+     * @cfg {String} parentRecordField
+     */
+    parentRecordField: null,
+
+    /**
      * @cfg {String} dataField
-     * use this (single) field as data instead of whole record
+     * @deprecated
+     * use this (single) field as data instead of whole data object
      */
     dataField: null,
     /**
@@ -47,6 +57,11 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @private
      */
     initComponent: function() {
+        var _ = window.lodash,
+            me = this,
+            parent = me.findParentBy(function(c){return !!c.record})
+                || me.findParentBy(function(c) {return c.editDialog});
+
         this.defaultSortInfo = this.defaultSortInfo || {};
 
         this.initGrid();
@@ -64,6 +79,14 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                     this.recordClass
                 )
             });
+        }
+
+        if (me.parentRecordField && !this.editDialog) {
+            me.editDialog = _.get(parent, 'editDialog');
+        }
+        if (me.editDialog && me.parentRecordField) {
+            me.editDialog.on('load', me.onRecordLoad, me);
+            me.editDialog.on('save', me.onRecordSave, me);
         }
 
         Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
@@ -281,5 +304,50 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         }, this);
 
         return result;
+    },
+
+    onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            me = this,
+            data = _.get(record, 'data.' + me.parentRecordField) || [],
+            idProperty = me.recordClass.getMeta('idProperty'),
+            copyOmitFields = _.filter(me.recordClass.getModelConfiguration().fields, {copyOmit: true});
+
+        /* generic client driven resolve attempt
+        var byType = _.groupBy(me.recordClass.getModelConfiguration().fields, 'type'),
+            recordsByType = _.groupBy(_.get(byType, 'record', []), function(f) {
+                return _.get(f, 'config.appName', '') + '.' + _.get(f, 'config.modelName', '')
+            }),
+            idMap = {};
+
+        _.assign(byType, recordsByType);
+
+        _.each(['user', 'Addressbook.Contact'], function(type) {
+            _.each(byType[type], function(field) {
+                idMap[type] = _.uniq(_.concat(_.get(idMap, type, []), _.compact(_.map(data, field.key))));
+            });
+        });
+
+        // resolve all user and Addressbook.contact -> argh, there is no user API
+        */
+
+        if (me.editDialog.copyRecord) {
+            _.each(data, function(recordData) {
+                recordData[idProperty] = Tine.Tinebase.data.Record.generateUID();
+                _.each(copyOmitFields, function (copyOmitField) {
+                    delete (recordData[copyOmitField.key]);
+                });
+            });
+        }
+        me.setStoreFromArray(data);
+
+    },
+
+    onRecordSave: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            me = this,
+            data = me.getFromStoreAsArray();
+
+        record.set(me.parentRecordField, data);
     }
 });
