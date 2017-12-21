@@ -967,10 +967,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var titleProperty = this.recordClass.getMeta('titleProperty'),
                     defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
 
-                this.defaultSortInfo = {
+                this.defaultSortInfo = this.recordClass.hasField(titleProperty) ? {
                     field: defaultSortField,
                     order: 'DESC'
-                };
+                }: null;
             }
 
             var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;

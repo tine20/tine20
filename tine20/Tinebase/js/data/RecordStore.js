@@ -37,12 +37,13 @@ Tine.Tinebase.data.RecordStore = function(c){
 
     if (! c.sortInfo) {
         var titleProperty = c.recordClass.getMeta('titleProperty'),
-            defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
+            defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty,
+            defaultSortInfo = c.recordClass.hasField(titleProperty) ? {
+                field: defaultSortField,
+                order: 'DESC'
+            } : null;
 
-        c.sortInfo = c.defaultSortInfo || {
-            field: defaultSortField,
-            order: 'DESC'
-        };
+        c.sortInfo = c.defaultSortInfo || defaultSortInfo;
     }
     
     if (typeof(c.reader) == 'undefined') {
