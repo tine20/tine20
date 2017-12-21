@@ -20,6 +20,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
     layout: 'fit',
     windowNamePrefix: 'CalFreeTimeSearchWindow_',
     optionsStateId: 'FreeTimeSearchOptions',
+    canonicalName: ['', 'Calendar', 'FreeTimeSearchDialog'].join(Tine.Tinebase.CanonicalPath.separator),
 
     initComponent: function() {
         var _ = window.lodash;
