@@ -2278,6 +2278,11 @@ class Setup_Controller
      */
     public function backup($options)
     {
+        if (! $this->isInstalled('Tinebase')) {
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tine 2.0 is not installed');
+            return;
+        }
+
         $config = Setup_Core::getConfig();
 
         $backupDir = isset($options['backupDir']) ? $options['backupDir'] : $config->backupDir;
