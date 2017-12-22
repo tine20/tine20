@@ -450,7 +450,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
         }
         $pollId = $matches[1];
-        $replaceUrl = $matches[0];
 
         /** @var Calendar_Model_Poll $poll */
         if (!isset($this->_cachedPolls[$pollId])) {
@@ -473,14 +472,14 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 // TODO what about groups? is it legal to invite groups to polls anyway?
                 foreach (array_filter(array_merge((array)$attender->getEmail(), $attender->getEmailsFromHistory()))
                         as $email) {
-                    $this->_cachedAttenders[$pollId][$email] = $attender->status_authkey;
+                    $this->_cachedAttenders[$pollId][$email] = $attender;
                 }
             }
         }
 
         if (isset($this->_cachedAttenders[$pollId][$emailTo])) {
-            $_message->body = str_replace($replaceUrl, $replaceUrl . $emailTo . '/'
-                . $this->_cachedAttenders[$pollId][$emailTo], $_message->body);
+            $attendee = $this->_cachedAttenders[$pollId][$emailTo];
+            $_message->body = str_replace($poll->getPollLink(), $poll->getPollLink($attendee), $_message->body);
         }
 
         return;

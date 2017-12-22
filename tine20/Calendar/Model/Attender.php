@@ -1141,9 +1141,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         return ($isAttendeeCondition || $isOrganizerCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
     }
 
+    public function getUserId()
+    {
+        return $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
+    }
+
     public function getKey()
     {
-        return $this->user_type . '-' . ($this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id);
+        return $this->user_type . '-' . $this->getUserId();
     }
 
     public static function fromKey($key)
