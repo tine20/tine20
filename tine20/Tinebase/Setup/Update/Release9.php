@@ -392,4 +392,20 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '9.12');
     }
+
+    /**
+     * Update to 9.13
+     * 
+     * make sure setup user is in admin group
+     */
+    public function update_12()
+    {
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $setupUser = $this->_getSetupFromConfigOrCreateOnTheFly();
+        $memberships = Tinebase_Group::getInstance()->getGroupMemberships($setupUser->getId());
+        if (!in_array($adminGroup->getId(), $memberships)) {
+            Tinebase_Group::getInstance()->addGroupMember($adminGroup->getId(), $setupUser->getId());
+        }
+        $this->setApplicationVersion('Tinebase', '9.13');
+    }
 }
