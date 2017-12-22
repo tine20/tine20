@@ -861,14 +861,28 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         try {
             $result = $this->_instance->searchPaths([
-                ['field' => 'query', 'operator' => 'contains', 'value' => ''],
-            ]);
+                [
+                    "condition" => "OR",
+                    "filters" => [
+                        [
+                            "condition" => "AND",
+                            "filters" => [
+                                [
+                                    "field" => "query",
+                                    "operator" => "contains",
+                                    "value" => ""
+                                ]]
+                        ]
+                    ],[
+                        "field" => "query",
+                        "operator" => "contains",
+                        "value" => ""]]]);
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             static::fail('first time no exception was thrown, but forth time one was thrown');
         }
         static::assertEquals(3, count($result));
         static::assertGreaterThan(0, count($result['results']));
         // the empty filter gets removed
-        static::assertTrue(empty($result['filter']));
+        static::assertEquals(1, count($result['filter']));
     }
 }
