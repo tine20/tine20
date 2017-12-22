@@ -276,4 +276,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.15');
     }
+
+    /**
+     * update to 11.16
+     *
+     * make sure setup user has admin rights
+     */
+    public function update_15()
+    {
+        $update = new Tinebase_Setup_Update_Release9($this->_backend);
+        $update->update_14();
+
+        $this->setApplicationVersion('Tinebase', '11.16');
+    }
 }
