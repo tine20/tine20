@@ -162,6 +162,9 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     stateEvents: [],
 
     initComponent: function() {
+        var _ = window.lodash,
+            me = this;
+
         this.app = Tine.Tinebase.appMgr.get('Calendar');
 
         if (! this.app.featureEnabled('featureColorBy')) {
@@ -176,33 +179,17 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
 
         this.text = this.app.i18n._('Colors');
         this.menu = {
-            items: [
-                {
-                    text: this.app.i18n._('Color by Organizer Calendar'),
-                    checked: this.colorStrategy == 'container',
+            items: _.reduce(Tine.Calendar.colorStrategies, function(items, strategy, key) {
+                return items.concat({
+                    text: strategy.getName(),
+                    checked: me.colorStrategy == key,
                     group: 'colorStrategy',
-                    checkHandler: this.changeColorStrategy.createDelegate(this, ['container'])
-                }, {
-                    text: this.app.i18n._('Color by Attendee Calendar'),
-                    checked: this.colorStrategy == 'displayContainer',
-                    group: 'colorStrategy',
-                    checkHandler: this.changeColorStrategy.createDelegate(this, ['displayContainer'])
-                },{
-                    text: this.app.i18n._('Color by Tags'),
-                    checked: this.colorStrategy == 'tag',
-                    group: 'colorStrategy',
-                    checkHandler: this.changeColorStrategy.createDelegate(this, ['tag'])
-                }, {
-                    text: this.app.i18n._('Color by Attendee Role'),
-                    checked: this.colorStrategy == 'requiredAttendee',
-                    group: 'colorStrategy',
-                    checkHandler: this.changeColorStrategy.createDelegate(this, ['requiredAttendee'])
-                }
-            ]
+                    checkHandler: me.changeColorStrategy.createDelegate(me, [key])
+                });
+            }, [])
         };
 
         Tine.Calendar.ColorManager.colorStrategyBtn.superclass.initComponent.apply(this, arguments);
-        // Tine.Calendar.ColorManager.colorStrategyBtn = this;
     },
 
     changeColorStrategy: function(strategy) {
@@ -226,6 +213,9 @@ Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ViewBtnGrp', Tine.Cal
  */
 Tine.Calendar.colorStrategies = {};
 Tine.Calendar.colorStrategies['container'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Organizer Calendar');
+    },
     getColor: function(event, attendeeRecord) {
         var container = null,
             color = null,
@@ -253,6 +243,9 @@ Tine.Calendar.colorStrategies['container'] = {
 };
 
 Tine.Calendar.colorStrategies['displayContainer'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Attendee Calendar');
+    },
     getColor: function(event, attendeeRecord) {
         var container = null,
             color = null;
@@ -269,7 +262,27 @@ Tine.Calendar.colorStrategies['displayContainer'] = {
     }
 };
 
+Tine.Calendar.colorStrategies['tag'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Tags');
+    },
+    getColor: function(event, attendeeRecord) {
+        var color = 'C0C0C0',
+            tags = event.get('tags'),
+            tag = Ext.isArray(tags) ? tags[0] : null;
+
+        if (tag) {
+            color = tag.color;
+        }
+
+        return color;
+    }
+};
+
 Tine.Calendar.colorStrategies['requiredAttendee'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Attendee Role');
+    },
     getColor: function(event, attendeeRecord) {
         var color, role;
 
@@ -279,20 +292,6 @@ Tine.Calendar.colorStrategies['requiredAttendee'] = {
             color = role == 'REQ' ? 'FF0000' : '00FF00'
         } else {
             color = 'C0C0C0' // light gray
-        }
-
-        return color;
-    }
-};
-
-Tine.Calendar.colorStrategies['tag'] = {
-    getColor: function(event, attendeeRecord) {
-        var color = 'C0C0C0',
-            tags = event.get('tags'),
-            tag = Ext.isArray(tags) ? tags[0] : null;
-
-        if (tag) {
-            color = tag.color;
         }
 
         return color;
