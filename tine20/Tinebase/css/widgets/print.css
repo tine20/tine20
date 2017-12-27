@@ -62,8 +62,8 @@ div.page
     text-decoration: underline;
 }
 
-.rp-print-single-block .gridpanelrenderer_header_title,
-.rp-print-single-block .gridpanelrenderer_header_logo {
+.rp-print-single .gridpanelrenderer_header_title,
+.rp-print-single .gridpanelrenderer_header_logo {
     display: none;
 }
 
