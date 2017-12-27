@@ -71,7 +71,7 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             recordClass = recordDef.getRecordClass();
 
         editDialog.on('load', me.onRecordLoad, me);
-        editDialog.on('save', me.onRecordSave, me);
+        editDialog.on('recordUpdate', me.onRecordUpdate, me);
 
         me.editDialog = editDialog;
         me.recordClass = recordClass;
@@ -81,9 +81,9 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             autoLoad: false,
             recordClass: me.recordClass
         });
-        me.store.on('add', me.onRecordSave, me);
-        me.store.on('update', me.onRecordSave, me);
-        me.store.on('remove', me.onRecordSave, me);
+        me.store.on('add', me.onRecordUpdate, me);
+        me.store.on('update', me.onRecordUpdate, me);
+        me.store.on('remove', me.onRecordUpdate, me);
 
         me.referenceField = mappingFieldDef.fieldDefinition.config.refIdField;
 
@@ -201,7 +201,7 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             });
     },
 
-    onRecordSave: function() {
+    onRecordUpdate: function() {
         var _ = window.lodash,
             me = this,
             recordsData = Tine.Tinebase.common.assertComparable([]);

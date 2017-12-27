@@ -86,7 +86,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         }
         if (me.editDialog && me.parentRecordField) {
             me.editDialog.on('load', me.onRecordLoad, me);
-            me.editDialog.on('save', me.onRecordSave, me);
+            me.editDialog.on('recordUpdate', me.onRecordUpdate, me);
         }
 
         Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
@@ -343,7 +343,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
 
     },
 
-    onRecordSave: function(editDialog, record, ticketFn) {
+    onRecordUpdate: function(editDialog, record) {
         var _ = window.lodash,
             me = this,
             data = me.getFromStoreAsArray();
