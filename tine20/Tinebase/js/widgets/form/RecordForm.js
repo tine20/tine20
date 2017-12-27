@@ -41,6 +41,10 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
         fieldsToExclude.push(this.recordClass.getMeta('idProperty'));
 
         this.items = [];
+
+        // sometimes we need the instances from registry (e.g. printing)
+        this.editDialog.recordForm = this;
+
         Ext.each(fieldNames, function(fieldName) {
             var fieldDefinition = modelConfig.fields[fieldName];
             // exclude: genericFields, idProperty, wellKnown(description, tags, customfields, relations, attachments, notes)

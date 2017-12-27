@@ -55,3 +55,15 @@ div.page
 .rp-print-single-image {
     text-align: left;
 }
+
+.gridpanelrenderer_header_gridtitle {
+    font-weight: bold;
+    margin-top: 0.4cm;
+    text-decoration: underline;
+}
+
+.rp-print-single-block .gridpanelrenderer_header_title,
+.rp-print-single-block .gridpanelrenderer_header_logo {
+    display: none;
+}
+

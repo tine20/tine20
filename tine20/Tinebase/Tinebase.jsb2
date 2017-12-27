@@ -406,6 +406,26 @@
           "path": "js/ux/Printer/renderers/"
         },
         {
+          "text": "Field.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "Check.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "Combo.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "Container.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "Panel.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
           "text": "EditDialogRenderer.js",
           "path": "js/ux/Printer/renderers/"
         },
