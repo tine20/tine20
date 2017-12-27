@@ -22,8 +22,13 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
      * Generates the body HTML for the grid
      * @param {Ext.grid.GridPanel} grid The grid to print
      */
-    generateBody: function (grid) {
+    generateBody: function (grid, data) {
         var me = this;
+
+        // when called inside other components the outer generateHTML (outer page renderer) didn't prepare data
+        // this is the case e.g. inside editDialogs - we don't load remote data then
+        data = data || me.extractData(grid, grid.store.data.items);
+
         return new Promise(function (fulfill, reject) {
             var columns = me.getColumns(grid);
 
@@ -38,7 +43,11 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 header_logo: brandingLogoImg
             });
 
-            fulfill(String.format('{0}<table>{1}<tpl for=".">{2}</tpl></table>', header, headings, body));
+            if (grid.title) {
+                header += '<div class="gridpanelrenderer_header_gridtitle">' + grid.title + '</div>';
+            }
+
+            fulfill(new Ext.XTemplate(String.format('{0}<table>{1}<tpl for=".">{2}</tpl></table>', header, headings, body)).apply(data));
         });
     },
 
