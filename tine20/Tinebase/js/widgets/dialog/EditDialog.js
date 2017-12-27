@@ -646,7 +646,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             getExportOptions: this.getExportOptions.createDelegate(this)
         }, Tine.widgets.exportAction.SCOPE_SINGLE);
 
-        // init actions
+        if (this.enablePrinting) {
+            this.action_print = new Ext.Action({
+                requiredGrant: 'readGrant',
+                text: String.format(i18n._('Print {0}'), this.recordClass.getRecordName()),
+                handler: this.onPrint,
+                iconCls: 'action_print',
+                disabled: false,
+                scope: this
+            });
+        }
+
         this.actionUpdater = new Tine.widgets.ActionUpdater({
             recordClass: this.recordClass,
             evalGrants: this.evalGrants
@@ -681,6 +691,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         ];
 
         this.fbar.push(this.action_cancel, this.action_saveAndClose);
+
+        if (this.action_print) {
+            this.actionUpdater.addAction(this.action_print);
+            this.tbarItems = this.tbarItems || [];
+            this.tbarItems.push(this.action_print);
+        }
 
         if (this.action_export) {
             this.actionUpdater.addAction(this.action_export);
@@ -1189,7 +1205,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
     },
-    
+
+    onPrint: function (printMode) {
+        this.onRecordUpdate();
+        var renderer = new (this.printer || Ext.ux.Printer.EditDialogRenderer)();
+        renderer.print(this);
+    },
+
     /**
      * duplicate(s) found exception handler
      * 
