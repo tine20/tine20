@@ -137,7 +137,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         var _ = window.lodash,
             me = this;
 
-        if (! this.cm) {
+        if (! this.colModel) {
             if (this.columns) {
                 // convert string cols
                 _.each(me.columns, function(col, idx) {
@@ -159,7 +159,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 _.remove(me.columns, _.isString)
             }
 
-            this.cm = new Ext.grid.ColumnModel({
+            this.colModel = new Ext.grid.ColumnModel({
                 defaults: {
                     sortable: false
                 },
@@ -167,7 +167,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             });
         }
 
-        return this.cm;
+        return this.colModel;
     },
     
     /**
