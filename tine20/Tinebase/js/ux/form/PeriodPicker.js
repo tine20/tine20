@@ -268,8 +268,10 @@ Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range) {
             until = from.add(Date.DAY, 1);
             break;
         case 'week':
-            from = startDate.clearTime(true).add(Date.DAY, -1 * startDate.getDay())
-                .add(Date.DAY, Ext.DatePicker.prototype.startDay - (startDate.getDay() == 0 ? 7 : 0));
+            from = startDate.clearTime(true).add(Date.DAY, -1 * startDate.getDay());
+            if (Ext.DatePicker.prototype.startDay) {
+                from = from.add(Date.DAY, Ext.DatePicker.prototype.startDay - (startDate.getDay() == 0 ? 7 : 0));
+            }
             until = from.add(Date.DAY, 7);
             break;
         case 'month':
