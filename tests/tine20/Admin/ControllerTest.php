@@ -300,9 +300,20 @@ class Admin_ControllerTest extends TestCase
         // this will add a role member, remove a right, add a right in that order
         Admin_Controller_Role::getInstance()->update($adminRole, $members, $appRights);
 
+        $appRights = new Tinebase_Record_RecordSet(Tinebase_Model_RoleRight::class,
+            Tinebase_Acl_Roles::getInstance()->getRoleRights($adminRole->getId()), true);
+        $exampleRight = $appRights->filter('application_id', $exampleApplication->getId())->filter('right', 'foo')
+            ->getFirstRecord();
+        $appRights->removeRecord($exampleRight);
+        $appRights = $appRights->toArray();
+
+        // this will remove a right
+        Admin_Controller_Role::getInstance()->update($adminRole, $members, $appRights);
+
+
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
             ->getReplicationModificationsByInstanceSeq($instance_seq);
-        static::assertEquals(3, $modifications->count(), 'modifications count unexpected');
+        static::assertEquals(4, $modifications->count(), 'modifications count unexpected');
 
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -341,5 +352,15 @@ class Admin_ControllerTest extends TestCase
         $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
             Tinebase_Core::getUser()->getId());
         static::assertEquals(2, count($rights));
+
+        // remove a right
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(
+            new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
+            Tinebase_Core::getUser()->getId());
+        static::assertEquals(1, count($rights));
     }
 }
