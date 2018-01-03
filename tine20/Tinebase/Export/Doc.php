@@ -823,17 +823,4 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         return $this->_templateVariables;
     }
-
-    /**
-     * adds twig function to the twig environment to be used in the templates
-     */
-    protected function _addTwigFunctions()
-    {
-        parent::_addTwigFunctions();
-
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
-            function ($str) {
-                return (is_scalar($str) && strlen($str) > 0) ? $str . "\x0B" : $str;
-            }));
-    }
 }
