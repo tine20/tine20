@@ -537,6 +537,8 @@ class Tinebase_ApplicationTest extends TestCase
         Setup_Controller::unsetInstance();
         Setup_Controller::getInstance()->uninstallApplications(['ExampleApplication']);
 
+        $this->_testNeedsTransaction();
+
         $appId = Tinebase_Record_Abstract::generateUID();
         Setup_Controller::getInstance()->installApplications([$appId => 'ExampleApplication'],
             [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);

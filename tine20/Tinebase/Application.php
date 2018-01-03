@@ -546,8 +546,10 @@ class Tinebase_Application
                 case 'rootnode':
                     $count = 0;
                     try {
-                        // note: TFS expects name here, not ID
-                        $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                        if (Tinebase_FileSystem::getInstance()->isDir($_application->name)) {
+                            // note: TFS expects name here, not ID
+                            $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                        }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // nothing to do
                         Tinebase_Exception::log($tenf);
