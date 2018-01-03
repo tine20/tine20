@@ -425,7 +425,11 @@ class Tinebase_Helper
             // TODO use "real" tempfile?
             // fetch file and save in tempfile
             $content = self::getFileOrUriContents($filenameOrUrl);
-            $filename = self::writeToTempFile($content);
+            $extension = null;
+            if (preg_match('/\.(\w+)$/', $filenameOrUrl, $matches)) {
+                $extension = $matches[1];
+            }
+            $filename = self::writeToTempFile($content, $extension);
         } else {
             $filename = $filenameOrUrl;
             if (! file_exists($filenameOrUrl)) {
@@ -438,12 +442,16 @@ class Tinebase_Helper
 
     /**
      * @param $content
+     * @param $extension
      * @return null|string filename
      */
-    public static function writeToTempFile($content)
+    public static function writeToTempFile($content, $extension = null)
     {
         $tempPath = Tinebase_TempFile::getTempPath();
-        $file = fopen($tempPath);
+        if ($extension) {
+            $tempPath .= '.' . $extension;
+        }
+        $file = fopen($tempPath, 'w');
         if ($file) {
             fwrite($file, $content);
             return $tempPath;
