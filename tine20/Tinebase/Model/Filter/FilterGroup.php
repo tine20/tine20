@@ -525,6 +525,21 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array(), array('parentFilter' => $self));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
+
+            if (isset($definition['filter'])
+                && $definition['filter'] === Tinebase_Model_Filter_ForeignRecords::class
+            ) {
+                // special handling for foreign records filtering
+                // NOTE: maybe this should be fixed in the client / this is just sanitizing here
+                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND])) {
+                    // add a sub-query filter
+                    $data['value'] = [
+                        ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]
+                    ];
+                    $data['operator'] = self::CONDITION_AND;
+                }
+            }
+
             $filter = new $definition['filter']($data);
         }
         
