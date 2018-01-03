@@ -587,21 +587,30 @@ class Setup_Frontend_Cli
     
     /**
      * set config
+     * USAGE: php setup.php --setconfig -- configkey={{configkey}} configvalue={{configvalue}} [default=1]
+     *  (default=1 removes the config from database to return to the default value)
      *
+     * @param Zend_Console_Getopt $_opts
      * @return array
      */
     protected function _setConfig(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         $errors = array();
+
         if (empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
         }
-        if (! isset($options['configvalue'])) {
+
+        if (isset($options['default']) && $options['default'] == 1) {
+            $configValue = null;
+        } else if (! isset($options['configvalue'])) {
             $errors[] = 'Missing argument: configvalue';
+        } else {
+            $configValue = self::parseConfigValue($options['configvalue']);
         }
+
         $configKey = (string)$options['configkey'];
-        $configValue = self::parseConfigValue($options['configvalue']);
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
 
         if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
