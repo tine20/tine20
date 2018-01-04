@@ -19,7 +19,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
 //  */
 // Tine.Filemanager.nodeActions.Reload = {
 //     app: 'Filemanager',
-//     text: 'Reload', // _('Reload),
+//     text: 'Reload', // _('Reload'),
 //     iconCls: 'x-tbar-loading',
 //     handler: function() {
 //         var record = this.initialConfig.selections[0];
