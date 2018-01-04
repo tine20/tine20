@@ -89,6 +89,15 @@ class Tinebase_Twig
     }
 
     /**
+     * @param Twig_LoaderInterface $loader
+     */
+    public function addLoader(Twig_LoaderInterface $loader)
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->_twigEnvironment->getLoader()->addLoader($loader);
+    }
+
+    /**
      * adds twig function to the twig environment to be used in the templates
      */
     protected function _addTwigFunctions()

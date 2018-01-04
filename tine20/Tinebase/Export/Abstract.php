@@ -162,8 +162,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_hasTemplate = false;
 
-    /** @var Twig_Environment */
-    protected $_twigEnvironment = null;
+    /** @var Tinebase_Twig */
+    protected $_twig = null;
     /**
      * @var Twig_TemplateWrapper|null
      */
@@ -579,9 +579,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     array($this, '_getTwigSource'))))
         ];
 
-        $twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
+        $this->_twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
 
-        $this->_twigTemplate = $twig->load($this->_templateFileName);
+        $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
     }
 
     /**

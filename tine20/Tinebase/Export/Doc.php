@@ -414,12 +414,11 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_docTemplate = $_processor;
 
         if (!isset($this->_subTwigTemplates[$subTempName])) {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $this->_twigEnvironment->getLoader()->addLoader(
+            $this->_twig->addLoader(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName . $subTempName, $this->_getLastModifiedTimeStamp(),
                     array($this, '_getTwigSource')));
 
-            $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName . $subTempName);
+            $this->_twigTemplate = $this->_twig->load($this->_templateFileName . $subTempName);
             $this->_subTwigTemplates[$subTempName] = $this->_twigTemplate;
             $this->_subTwigMappings[$subTempName] = $this->_twigMapping;
         } else {
