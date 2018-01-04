@@ -42,4 +42,20 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 15);
         $this->setApplicationVersion('Calendar', '11.1');
     }
+
+    /**
+     * update to 11.2
+     *
+     * Update export templates
+     *
+     * @return void
+     * @throws \Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function update_1()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Calendar'), $this->isReplicationSlave());
+
+        $this->setApplicationVersion('Calendar', '11.2');
+    }
 }
