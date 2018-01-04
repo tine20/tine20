@@ -235,8 +235,10 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
             $error['msg'] = $exception->getMessage();
             $error['code'] = $exception->getCode();
             $error['trace'] = $exception->getTrace();
+            Tinebase_Exception::log($exception);
         } elseif (!is_null($exception)) {
             $error['msg'] = $exception;
+            Tinebase_Core::getLogger()->err(print_r($error, true));
         }
         
         if (!is_null($code)) {
@@ -255,6 +257,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                 }
             }
         }
+        
         echo "<pre>";
         var_dump($error);
         echo "</pre>";
