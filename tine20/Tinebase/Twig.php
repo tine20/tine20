@@ -109,7 +109,7 @@ class Tinebase_Twig
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
             function ($str) {
-                return (is_scalar($str) && strlen($str) > 0) ? $str . "\x0B" : $str;
+                return (is_scalar($str) && strlen($str) > 0) ? $str . "\n" : $str;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
