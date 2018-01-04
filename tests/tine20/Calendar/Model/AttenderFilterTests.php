@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Model_AttenderFilterTests::main');
-}
-
 /**
  * Test class for Calendar_Model_Attender
  * 
@@ -108,9 +104,4 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
         $this->assertTrue(is_array($generatedFilterArray['value']['user_id']), "value['user_id'] should be an array");
         $this->assertEquals($filterArray['user_id'], $generatedFilterArray['value']['user_id']['id'],  "id missmatch");
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Model_AttenderFilterTests::main') {
-    Calendar_Model_AttenderFilterTests::main();
 }

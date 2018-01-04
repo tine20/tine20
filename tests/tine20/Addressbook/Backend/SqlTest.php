@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Backend_SqlTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
@@ -390,7 +386,3 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($contact->seq + 1, $updatedConcact->seq);
     }
 }        
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_Backend_SqlTest::main') {
-    Addressbook_Backend_SqlTest::main();
-}

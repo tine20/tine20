@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Sales_Backend_NumberTest::main');
-}
-
 /**
  * Test class for Sales_Backend_NumberTest
  */

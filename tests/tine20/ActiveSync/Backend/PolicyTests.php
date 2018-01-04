@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-#if (!defined('PHPUnit_MAIN_METHOD')) {
-#    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Backend_DeviceTests::main');
-#}
-
 /**
  * Test class for ActiveSync_Backend_Policy
  * 

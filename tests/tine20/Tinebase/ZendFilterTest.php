@@ -16,10 +16,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_UserTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -111,8 +107,3 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->objects['filter']->isValid());
     }
 }        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_UserTest::main') {
-    Tinebase_UserTest::main();
-}

@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tasks_Model_TaskFilterTest::main');
-}
-
 /**
  * 
  * @package     Tasks
@@ -113,9 +109,4 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($tasks) > 0);
     }
     
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tasks_Model_TaskFilterTest::main') {
-    Tasks_Model_TaskFilterTests::main();
 }

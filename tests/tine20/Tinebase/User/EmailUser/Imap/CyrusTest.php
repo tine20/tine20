@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_Imap_CyrusTest::main');
-}
-
 /**
  * Test class for Tinebase_EmailUser_Imap_Cyrus
  */
