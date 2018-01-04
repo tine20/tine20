@@ -749,6 +749,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $record = $_records->getFirstRecord();
         // FIXME think what to do
         // TODO fix ALL this!
+        // this is code present in the abstract controller, getRelatedData... why is it here?
 
         // get field types/identifiers from config
         $identifiers = array();
@@ -793,63 +794,53 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
                 $_records->getArrayOfIds());
 
-            $appConfig = Tinebase_Config::factory($this->_applicationName);
-            $modelConfig = $modelName::getConfiguration();
-
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
                 }
+            }
+        }
 
-                if (null === $modelConfig) {
-                    foreach ($this->_keyFields as $name => $keyField) {
-                        /** @var Tinebase_Config_KeyField $keyField */
-                        $keyField = $appConfig->{$keyField};
-                        $record->{$name} = $keyField->getTranslatedValue($record->{$name});
-                    }
+        $appConfig = Tinebase_Config::factory($this->_applicationName);
+        $modelConfig = $modelName::getConfiguration();
 
-                    foreach ($this->_virtualFields as $name => $virtualField) {
-                        $value = null;
-                        if (!empty($record->relations)) {
-                            /** @var Tinebase_Model_Relation $relation */
-                            foreach ($record->relations as $relation) {
-                                if ($relation->related_model === $virtualField['relatedModel'] &&
-                                    $relation->related_degree === $virtualField['relatedDegree'] &&
-                                    $relation->type === $virtualField['type']
-                                ) {
-                                    $value = $relation->related_record;
-                                    break;
-                                }
+        if (null === $modelConfig) {
+            /** @var Tinebase_Record_Abstract $record */
+            foreach ($_records as $idx => $record) {
+                foreach ($this->_keyFields as $name => $keyField) {
+                    /** @var Tinebase_Config_KeyField $keyField */
+                    $keyField = $appConfig->{$keyField};
+                    $record->{$name} = $keyField->getTranslatedValue($record->{$name});
+                }
+
+                foreach ($this->_virtualFields as $name => $virtualField) {
+                    $value = null;
+                    if (!empty($record->relations)) {
+                        /** @var Tinebase_Model_Relation $relation */
+                        foreach ($record->relations as $relation) {
+                            if ($relation->related_model === $virtualField['relatedModel'] &&
+                                $relation->related_degree === $virtualField['relatedDegree'] &&
+                                $relation->type === $virtualField['type']
+                            ) {
+                                $value = $relation->related_record;
+                                break;
                             }
                         }
-                        $record->{$name} = $value;
                     }
+                    $record->{$name} = $value;
+                }
 
-                    foreach ($this->_foreignIdFields as $name => $controller) {
-                        if (!empty($record->{$name})) {
-                            /** @var Tinebase_Controller_Record_Abstract $controller */
-                            $controller = $controller::getInstance();
-                            $record->{$name} = $controller->get($record->{$name});
-                        }
-                    }
-                } else {
-                    foreach ($modelConfig->virtualFields as $field) {
-                        // resolve virtual relation record from relations property
-                        if (isset($field['type']) && $field['type'] === 'relation') {
-                            $fc = $field['config'];
-                            if (!empty($record->relations)) {
-                                foreach ($record->relations as $relation) {
-                                    if ($relation->type === $fc['type'] &&
-                                            $relation->related_model === ($fc['appName'] . '_Model_' . $fc['modelName'])) {
-                                        $record->{$field['key']} = $relation->related_record;
-                                    }
-                                }
-                            }
-                        }
+                foreach ($this->_foreignIdFields as $name => $controller) {
+                    if (!empty($record->{$name})) {
+                        /** @var Tinebase_Controller_Record_Abstract $controller */
+                        $controller = $controller::getInstance();
+                        $record->{$name} = $controller->get($record->{$name});
                     }
                 }
             }
+        } else {
+            Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($_records, $modelConfig);
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
