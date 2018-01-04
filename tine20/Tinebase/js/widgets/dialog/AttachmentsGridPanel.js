@@ -147,7 +147,8 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             handler: this.onDownload,
             iconCls: 'action_download',
             scope: this,
-            disabled:true
+            disabled:true,
+            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
         });
 
         // TODO: does user need rights for Filemanager?
@@ -163,10 +164,11 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     },
 
     onRowDbClick: function () {
-        var _ = window.lodash;
+        var _ = window.lodash,
+            downloadsAllowed = Tine.Tinebase.configManager.get('downloadsAllowed');
 
         // TODO: does user need rights for Filemanager?
-        if (! Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+        if (! Tine.Tinebase.appMgr.isEnabled('Filemanager') && downloadsAllowed) {
             this.onDownload();
             return;
         }
@@ -176,7 +178,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly) {
+        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed && rowRecord.data.type == 'file' && !this.readOnly) {
             this.onDownload();
         } else if (Tine.Tinebase.configManager.get('filesystem').createPreviews && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
             this.action_preview.execute();

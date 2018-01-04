@@ -683,6 +683,12 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.tineInit.initUploadMgr();
 
         Tine.Tinebase.tineInit.initLoginPanel();
+
+        // we don't want iOS/Andorid to place stuff to some other cloud
+        // we might need to add a real config for this
+        // it's not clear how to detect devices w.o. local storage or clients which place
+        // downloads in a cloud :-(
+        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
     },
 
     /**
