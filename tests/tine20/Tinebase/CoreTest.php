@@ -144,4 +144,14 @@ class Tinebase_CoreTest extends TestCase
             Tinebase_Core::set('HOSTNAME', null);
         }
     }
+
+    public function testDIContainer()
+    {
+        $container = Tinebase_Core::getContainer();
+
+        $requestFromContainer1 = $container->get(\Psr\Http\Message\RequestInterface::class);
+        $requestFromContainer2 = $container->get(\Psr\Http\Message\RequestInterface::class);
+
+        static::assertTrue($requestFromContainer1 === $requestFromContainer2, 'container did not return same instance');
+    }
 }

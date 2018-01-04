@@ -506,7 +506,7 @@ class Tinebase_Core
         $container = new ContainerBuilder();
 
         $container->register(RequestInterface::class)
-            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals')->setSynthetic(true);
+            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals');
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications()
