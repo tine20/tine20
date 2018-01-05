@@ -786,6 +786,7 @@ class Tinebase_ModelConfiguration {
         'datetime' => 'Tinebase_Model_Filter_DateTime',
         'time'     => 'Tinebase_Model_Filter_Date',
         'string'   => 'Tinebase_Model_Filter_Text',
+        'stringAutocomplete'   => 'Tinebase_Model_Filter_Text',
         'text'     => 'Tinebase_Model_Filter_Text',
         'fulltext' => 'Tinebase_Model_Filter_FullText',
         'json'     => 'Tinebase_Model_Filter_Text',
