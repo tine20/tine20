@@ -303,7 +303,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             openMethod = _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow');
 
         if (openMethod) {
-            openMethod({record: record});
+            openMethod({
+                record: record,
+                mode: 'remote'
+            });
         } else {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
