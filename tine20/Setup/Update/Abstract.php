@@ -517,36 +517,19 @@ class Setup_Update_Abstract
 
     /**
      * @return bool
+     * @deprecated
      */
     public function isReplicationSlave()
     {
-        if (null !== $this->_isReplicationSlave) {
-            return $this->_isReplicationSlave;
-        }
-        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
-        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
-        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
-        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
-
-        // check if we are a replication slave
-        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
-            $this->_isReplicationMaster = true;
-            return ($this->_isReplicationSlave = false);
-        }
-
-        $this->_isReplicationMaster = false;
-        return ($this->_isReplicationSlave = true);
+        return Tinebase_Core::isReplicationSlave();
     }
 
     /**
      * @return bool
+     * @deprecated
      */
     public function isReplicationMaster()
     {
-        if (null !== $this->_isReplicationMaster) {
-            return $this->_isReplicationMaster;
-        }
-
-        return ($this->_isReplicationMaster = ! $this->isReplicationSlave());
+        return Tinebase_Core::isReplicationMaster();
     }
 }

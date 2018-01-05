@@ -223,6 +223,20 @@ class Tinebase_Core
      */
     protected static $_delegatorCache = array();
 
+    /**
+     * whether this instance is a replication master or not. if no replication configured, its a master
+     *
+     * @var bool
+     */
+    protected static $_isReplicationMaster = null;
+
+    /**
+     * whether this instance is a replication slave or not. if no replication configured, its a master
+     *
+     * @var bool
+     */
+    protected static $_isReplicationSlave = null;
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -2010,5 +2024,40 @@ class Tinebase_Core
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isReplicationSlave()
+    {
+        if (null !== static::$_isReplicationSlave) {
+            return static::$_isReplicationSlave;
+        }
+        $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
+        // check if we are a replication slave
+        if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
+            static::$_isReplicationMaster = true;
+            return (static::$_isReplicationSlave = false);
+        }
+
+        static::$_isReplicationMaster = false;
+        return (static::$_isReplicationSlave = true);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isReplicationMaster()
+    {
+        if (null !== static::$_isReplicationMaster) {
+            return static::$_isReplicationMaster;
+        }
+
+        return ! static::isReplicationSlave();
     }
 }
