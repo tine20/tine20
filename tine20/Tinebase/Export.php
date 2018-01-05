@@ -60,7 +60,7 @@ class Tinebase_Export
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
             
-        } else if ((isset($_options['format']) || array_key_exists('format', $_options)) && ! empty($_options['format'])) {
+        } else if (isset($_options['format']) && ! empty($_options['format'])) {
             $appName = $_filter->getApplicationName();
             $model = $_filter->getModelName();
             $exportClass = self::_getExportClass($appName, $model, $_options['format']);

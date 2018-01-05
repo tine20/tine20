@@ -350,15 +350,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getExportConfig($_additionalOptions = array())
     {
-        if ((isset($_additionalOptions['definitionFilename']) ||
-            array_key_exists('definitionFilename', $_additionalOptions))) {
+        if (isset($_additionalOptions['definitionFilename'])) {
             // get definition from file
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $_additionalOptions['definitionFilename'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             );
-        } elseif ((isset($_additionalOptions['definitionId']) ||
-            array_key_exists('definitionId', $_additionalOptions))) {
+        } elseif (isset($_additionalOptions['definitionId'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
         } else {
             // get preference from db and set export definition name

@@ -113,8 +113,8 @@ class Tinebase_Twig
                 return $translate->_($str, $locale);
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('ngettext',
-            function ($str) use($locale, $translate) {
-                return $translate->plural($str, $locale);
+            function ($singular, $plural, $number) use($locale, $translate) {
+                return $translate->plural($singular, $plural, $number, $locale);
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
             function ($str) {
