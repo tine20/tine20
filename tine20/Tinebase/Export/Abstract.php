@@ -785,10 +785,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
         }
 
-        if ($record->has('relations')) {
-            /** @var Tinebase_Record_Abstract $modelName */
-            $modelName = $_records->getRecordClassName();
+        /** @var Tinebase_Record_Abstract $modelName */
+        $modelName = $_records->getRecordClassName();
 
+        if ($record->has('relations')) {
             $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
                 $_records->getArrayOfIds());
 
