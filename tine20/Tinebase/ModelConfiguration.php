@@ -1589,8 +1589,7 @@ class Tinebase_ModelConfiguration {
                 $filterArray = $config['addFilters'];
             }
 
-            /** @var Tinebase_Model_Filter_FilterGroup $filter */
-            $filter = new $filterName($filterArray);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
 
             $paging = NULL;
