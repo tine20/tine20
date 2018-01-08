@@ -56,10 +56,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
-    {name: 'readGrant'   , type: 'bool'},
-    {name: 'editGrant'   , type: 'bool'},
-    {name: 'deleteGrant' , type: 'bool'},
-    {name: 'editGrant'   , type: 'bool'},
+    {name: 'readGrant'      , type: 'bool'},
+    {name: 'editGrant'      , type: 'bool'},
+    {name: 'deleteGrant'    , type: 'bool'},
+    {name: 'exportGrant'    , type: 'bool'},
+    {name: 'freebusyGrant'  , type: 'bool'},
+    {name: 'privateGrant'   , type: 'bool'},
+    {name: 'syncGrant'      , type: 'bool'},
     // relations
     { name: 'relations',   omitDuplicateResolving: true},
     { name: 'customfields', omitDuplicateResolving: true}
