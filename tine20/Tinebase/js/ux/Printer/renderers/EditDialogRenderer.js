@@ -140,6 +140,10 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 });
             });
         }, Promise.resolve(''));
+    },
+
+    getTitle: function(editDialog) {
+        return editDialog.recordClass.getRecordName() + ': ' + editDialog.record.getTitle();
     }
 
 });
