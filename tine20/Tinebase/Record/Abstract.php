@@ -1292,7 +1292,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return $this->{$c->titleProperty};
         }
     }
-    
+
+    public static function getRecordName($locale = null)
+    {
+        // @TODO implement modelConfig version based on record(s)name
+        $translation = Tinebase_Translation::getTranslation(preg_replace('/_.*/', '', static::class), $locale);
+        return $translation->translate(preg_replace('/.*_/', '', static::class));
+    }
     /**
      * returns the foreignId fields (used in Tinebase_Convert_Json)
      * @return array

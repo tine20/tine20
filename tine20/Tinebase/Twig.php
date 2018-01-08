@@ -124,8 +124,8 @@ class Tinebase_Twig
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
-            // TODO implement this!
-            return $model;
+            if (! class_exists($model)) return $model;
+            return $model::getRecordName();
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('keyField', function ($appName, $keyFieldName, $key, $locale=null) {
             $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
