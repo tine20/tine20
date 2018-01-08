@@ -25,11 +25,9 @@ class Tinebase_Export_DocTest extends TestCase
                 'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
                 'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigFunctions.docx',
                 'recordData'         => [
-                    [
-                        'n_given'       => 'testName',
-                        'n_family'      => 'moreTest',
-                        'bday'          => '2000-01-02'
-                    ]
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
                 ]
             ], Addressbook_Controller_Contact::getInstance());
 

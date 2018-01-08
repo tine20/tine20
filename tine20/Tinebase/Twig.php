@@ -127,5 +127,12 @@ class Tinebase_Twig
             // TODO implement this!
             return $model;
         }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('keyField', function ($appName, $keyFieldName, $key, $locale=null) {
+            $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
+            $keyFieldRecord = $config && $config->records instanceof Tinebase_Record_RecordSet ? $config->records->getById($key) : false;
+
+            $translation = Tinebase_Translation::getTranslation($appName, $locale);
+            return $keyFieldRecord ? $translation->translate($keyFieldRecord->value) : $key;
+        }));
     }
 }
