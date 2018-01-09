@@ -220,8 +220,21 @@ class Tinebase_FileSystem_RecordAttachments
         }
 
         // If there is no tempfile, the attachment was added from the filemanager
+        // well except if it wasn't... so we better check
+        // stupid legacy code fixing the FE path here way in the backend is ... it is what it is
         if ($attachment instanceof Tinebase_Model_Tree_Node && !isset($attachment->tempFile) && isset($attachment->path)) {
-            return $this->addRecordAttachmentFromFilemanager($record, $attachment);
+            $return = true;
+            if (isset($attachment->id)) {
+                try {
+                    $tmpNode = $this->_fsController->get($attachment->id, true);
+                    $tmpPath = $this->_fsController->getPathOfNode($tmpNode, true);
+                    $attachment = $this->_fsController->stat($tmpPath, null, true);
+                    $return = false;
+                } catch (Tinebase_Exception_NotFound $tenf) {}
+            }
+            if ($return) {
+                return $this->addRecordAttachmentFromFilemanager($record, $attachment);
+            }
         }
 
         if ($attachment instanceof Tinebase_Model_Tree_Node && empty($name)) {
@@ -264,8 +277,9 @@ class Tinebase_FileSystem_RecordAttachments
         $attachmentsDir = $this->getRecordAttachmentPath($record, true);
         $attachmentPath = $attachmentsDir . '/' . $attachment->name;
 
-        $nodePath = $this->_fsController->getPathOfNode($attachment, true);
-        if ($attachmentPath === $nodePath) {
+        $nodeController = Filemanager_Controller_Node::getInstance();
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($attachment->path));
+        if ($attachmentPath === $path->statpath) {
             $attachment = $this->_fsController->stat($attachmentPath, null, true);
             if ($attachment->is_deleted) {
                 $this->_fsController->unDeleteFileNode($attachment->getId());
@@ -273,7 +287,7 @@ class Tinebase_FileSystem_RecordAttachments
                 $attachment = $this->_fsController->stat($attachmentPath);
             }
         } else {
-            $attachment = $this->_fsController->copy($nodePath, $attachmentPath);
+            $attachment = $this->_fsController->copy($path->statpath, $attachmentPath);
         }
 
         return $attachment;
