@@ -106,6 +106,21 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     }
 
     /**
+     * temporary hacks to have json converter logic available outside (e.g. modelconfig/exports)
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    public function resolveRecords(Tinebase_Record_RecordSet $records)
+    {
+        $recordClassName = $records->getRecordClassName();
+        $modelConfiguration = $recordClassName::getConfiguration();
+        $this->_resolveBeforeToArray($records, $modelConfiguration, true);
+        $this->_resolveAfterToArray($records, $modelConfiguration, true);
+
+        return $records;
+    }
+
+    /**
      * resolves single record fields (Tinebase_ModelConfiguration._recordsFields)
      * 
      * @param Tinebase_Record_RecordSet $_records the records
@@ -522,7 +537,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 }
                 foreach($tmp as &$rS) {
                     $fc = $field['config'];
-                    if (isset($rS['relations']) && (is_array($rS['relations']))) {
+                    if (isset($rS['relations']) && (is_array($rS['relations']) || $rS['relations'] instanceof Tinebase_Record_RecordSet)) {
                         foreach ($rS['relations'] as $relation) {
                             if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
                                 $rS[$field['key']] = $relation['related_record'];

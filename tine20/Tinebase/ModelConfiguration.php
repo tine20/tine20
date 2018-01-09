@@ -1555,6 +1555,25 @@ class Tinebase_ModelConfiguration {
         return $this->{'_' . $_property};
     }
 
+    public function resolveRecords($records)
+    {
+        // temporary till we fixed resolving
+        $recordClassName = $records->getRecordClassName();
+        $converter = Tinebase_Convert_Factory::factory($recordClassName);
+
+        return $converter->resolveRecords($records);
+    }
+
+    /**
+     * @deprecated do not use - it's a modified copy of Tinebase_Convert_Json::_resolveMultipleRecordFields fix it!
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param $modelConfiguration
+     * @param bool $isSearch
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotDefined
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public static function resolveRecordsPropertiesForRecordSet(Tinebase_Record_RecordSet $_records, $modelConfiguration, $isSearch = false)
     {
         if (0 === $_records->count() || ! ($resolveFields = $modelConfiguration->recordsFields)) {

@@ -838,7 +838,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
         } else {
-            Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($_records, $modelConfig);
+            $modelConfig->resolveRecords($_records);
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
