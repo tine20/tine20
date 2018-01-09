@@ -150,13 +150,22 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         me.mappingRecordStore.loadData({results: mappingRecordsData});
 
         me.resolveGroupRecords(recordIds).then(function() {
-            me.store.load({
-                params: {
-                    filter: [
-                        {field: 'id', operator: 'in', value: recordIds}
-                    ]
-                }
-            });
+            // NOTE: we don't use resolved data yet - data is missing
+            if (false && _.compact(_.map(recordIds, 'id')).length == recordIds.length) {
+                // data is already resolved
+                me.store.loadData({results: recordIds}, false);
+            } else {
+                recordIds = _.reduce(recordIds, function(ids, recordId) {
+                    return ids.concat(_.isString(recordId) ? recordId : recordId.id);
+                }, []);
+                me.store.load({
+                    params: {
+                        filter: [
+                            {field: 'id', operator: 'in', value: recordIds}
+                        ]
+                    }
+                });
+            }
         });
     },
 
@@ -176,7 +185,9 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                     groupRecoredClass = groupFieldDef.getRecordClass(),
                     getGroupRecordMethod = _.get(Tine, groupRecoredClass.getMeta('appName') + '.get' + groupRecoredClass.getMeta('modelName')),
                     getRecordPromises = _.reduce(groupRecordsData, function(promises, groupRecordData) {
-                        return promises.concat(getGroupRecordMethod(groupRecordData[groupMappingField]));
+                        var id = _.get(groupRecordData, groupMappingField + '.id') || _.get(groupRecordData, groupMappingField );
+
+                        return promises.concat(getGroupRecordMethod(id));
                     }, []);
 
                 me.showLoadMask();
