@@ -149,12 +149,17 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         }
         me.mappingRecordStore.loadData({results: mappingRecordsData});
 
+        // fence onRecordUpdate
+        me.store.isLoaded = false;
+
         me.resolveGroupRecords(recordIds).then(function() {
             // NOTE: we don't use resolved data yet - data is missing
             if (false && _.compact(_.map(recordIds, 'id')).length == recordIds.length) {
                 // data is already resolved
                 me.store.loadData({results: recordIds}, false);
+                me.store.isLoaded = true;
             } else {
+                me.store.on('load', function() { me.store.isLoaded = true; }, me, {single: true});
                 recordIds = _.reduce(recordIds, function(ids, recordId) {
                     return ids.concat(_.isString(recordId) ? recordId : recordId.id);
                 }, []);
@@ -231,7 +236,9 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             recordsData.push(mappingRecord);
         });
 
-        me.editDialog.record.set(this.field, recordsData);
+        if (me.store.isLoaded) {
+            me.editDialog.record.set(this.field, recordsData);
+        }
     },
 
     actionRemoveUpdater: function(action, grants, records) {
