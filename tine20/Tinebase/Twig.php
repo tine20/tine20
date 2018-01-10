@@ -106,15 +106,30 @@ class Tinebase_Twig
         $translate = $this->_translate;
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {
-                return $translate->_($str, $locale);
+                $translatedStr = $translate->translate($str, $locale);
+                if ($translatedStr == $str) {
+                    $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $locale)->translate($str, $locale);
+                }
+
+                return $translatedStr;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('_',
             function ($str) use($locale, $translate) {
-                return $translate->_($str, $locale);
+                $translatedStr = $translate->translate($str, $locale);
+                if ($translatedStr == $str) {
+                    $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $locale)->translate($str, $locale);
+                }
+
+                return $translatedStr;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('ngettext',
             function ($singular, $plural, $number) use($locale, $translate) {
-                return $translate->plural($singular, $plural, $number, $locale);
+                $translatedStr =  $translate->plural($singular, $plural, $number, $locale);
+                if (in_array($translatedStr, [$singular, $plural])) {
+                    $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $locale)->plural($singular, $plural, $number, $locale);
+                }
+
+                return $translatedStr;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
             function ($str) {
