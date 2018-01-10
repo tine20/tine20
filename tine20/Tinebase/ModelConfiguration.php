@@ -1526,6 +1526,8 @@ class Tinebase_ModelConfiguration {
 
     /**
      * returns the field configuration of the model
+     *
+     * @return array
      */
     public function getFields()
     {

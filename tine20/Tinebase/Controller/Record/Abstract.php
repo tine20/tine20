@@ -2763,6 +2763,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         // NOTE: you have to activate 'recursiveResolving' for the 'records' field
         // TODO: replace this when we have better resolving in the controllers
         $converter = Tinebase_Convert_Factory::factory($this->_modelName);
+        $converter->setRecursiveResolve(true);
         $recordArray = $converter->fromTine20Model($record);
 
         $result = new Tinebase_Record_RecordSet($foreignModel);

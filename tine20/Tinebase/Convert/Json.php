@@ -17,6 +17,18 @@
  */
 class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {
+    /**
+     * @var bool
+     *
+     * if this is true, type = records fields are always resolved recursively
+     */
+    protected $_recursiveResolve = false;
+
+    /**
+     * control variable for recursive resolving
+     *
+     * @var array
+     */
     protected $_recursiveResolvingProtection = [];
 
     /**
@@ -342,16 +354,26 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
     /**
      * @param Tinebase_Record_RecordSet $_records
-     * @param null $modelConfiguration
+     * @param Tinebase_ModelConfiguration|null $modelConfiguration
      * @param bool $multiple
      */
-    protected function _resolveRecursive(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
-    {
+    protected function _resolveRecursive(
+        Tinebase_Record_RecordSet $_records,
+        Tinebase_ModelConfiguration $modelConfiguration = NULL,
+        $multiple = false
+    ) {
         if (! $modelConfiguration || (! $_records->count())) {
             return;
         }
 
-        if (! ($resolveFields = $modelConfiguration->recursiveResolvingFields)) {
+        if ($this->_recursiveResolve) {
+            $resolveFields = [];
+            foreach ($modelConfiguration->getFields() as $name => $field) {
+                if ($field['type'] === 'records') {
+                    $resolveFields[] = $name;
+                }
+            }
+        } else if (! ($resolveFields = $modelConfiguration->recursiveResolvingFields)) {
             return;
         }
 
@@ -399,6 +421,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             $first = false;
         }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setRecursiveResolve($value)
+    {
+        $this->_recursiveResolve = $value;
     }
     
     /**
