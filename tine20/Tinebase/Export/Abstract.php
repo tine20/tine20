@@ -803,7 +803,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $appConfig = Tinebase_Config::factory($this->_applicationName);
         $modelConfig = $modelName::getConfiguration();
 
-        if (null === $modelConfig) {
+        if (null === $modelConfig && $_records->getRecordClassName() === $this->_modelName) {
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
                 foreach ($this->_keyFields as $name => $keyField) {
@@ -837,7 +837,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 }
             }
-        } else {
+        } else if ($modelConfig) {
             $modelConfig->resolveRecords($_records);
         }
 
