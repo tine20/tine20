@@ -696,6 +696,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // TODO can't we do this in a more elegant way?? maybe use array_walk?
         $tmp = ($multiple) ? $resultSet : array($resultSet);
         foreach ($tmp as &$record) {
+            if ($record instanceof Tinebase_Record_Abstract && ! $record->has('account_grants')) continue;
             $record['account_grants'] = $userGrants;
         }
 
