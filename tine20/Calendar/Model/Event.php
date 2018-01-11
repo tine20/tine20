@@ -733,4 +733,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         return $this->summary . '(' . $this->dtstart . ' - ' . $this->dtend . ')';
     }
+    
+    public function getTitle()
+    {
+        return $this->summary;
+    }
 }
