@@ -1557,6 +1557,12 @@ class Tinebase_ModelConfiguration {
         return $this->{'_' . $_property};
     }
 
+    /**
+     * @param $records
+     * @return mixed
+     *
+     * @deprecated implement functionality in resolve
+     */
     public function resolveRecords($records)
     {
         // temporary till we fixed resolving
@@ -1564,6 +1570,35 @@ class Tinebase_ModelConfiguration {
         $converter = Tinebase_Convert_Factory::factory($recordClassName);
 
         return $converter->resolveRecords($records);
+    }
+
+    /**
+     * this is the new resolve function, param $_what can be something like this:
+     *
+     * ['*'] = everything
+     * ['/'] = two levels (discuss)
+     * ['relations/*']) // relations and one level of relations (related records) (discuss)
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_what
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * @todo finish implementation - currently only supports ['relations/*']
+     */
+    public function resolve(Tinebase_Record_RecordSet $_records, $_what)
+    {
+        if (count($_records) == 0) {
+            return;
+        }
+
+        if ($_what !== ['relations/*']) {
+            throw new Tinebase_Exception_NotImplemented('currently only supports [\'relations/*\']');
+        }
+
+        if ($_records->getFirstRecord()->has('relations')) {
+            $_records->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
+                $_records->getRecordClassName(), 'Sql', $_records->getId()));
+        }
     }
 
     /**

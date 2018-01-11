@@ -224,6 +224,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
     }
 
+    /**
+     * @param $foreignIds
+     * @param $foreignRecordClassName
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _getForeignRecords($foreignIds, $foreignRecordClassName)
     {
         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
