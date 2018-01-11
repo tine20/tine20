@@ -1558,6 +1558,91 @@ class Tinebase_ModelConfiguration {
     }
 
     /**
+     * this is the new resolve function, param $_what can be something like this:
+     *
+     * ['*'] = everything
+     * ['/'] = two levels (discuss)
+     * ['relations'] = relations with related records
+     * ['relations/*'] = relations and one level into related records (discuss)
+     * ['location'] = record field with name 'location' - if that is a virtual field or an id, it is resolved
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_what
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * @todo move it to a "resolver" class?
+     * @todo finish implementation - currently only supports ['relations'] and ['VIRTUALRELATIONPROPERTY']
+     * @todo support resolving path ('FIRSTLEVEL/SECONDLEVEL/THIRD/...')
+     * @todo support '*'
+     */
+    public function resolve(Tinebase_Record_RecordSet $_records, $_what)
+    {
+        if (count($_records) == 0) {
+            return;
+        }
+
+        $fields = $this->getFields();
+        foreach ($_what as $fieldToResolve) {
+            // TODO explode resolving path
+
+            if (! in_array($fieldToResolve, array_keys($fields))) {
+                throw new Tinebase_Exception_NotImplemented(
+                    $fieldToResolve . ' resolving not supported yet or field is no property of model');
+            }
+
+            $fieldConfig = $fields[$fieldToResolve];
+
+            switch ($fieldConfig['type']) {
+                case 'virtual':
+                    $virtualConfig = isset($fieldConfig['config']) ? $fieldConfig['config'] : null;
+                    if (! isset($virtualConfig['type']) || $virtualConfig['type'] !== 'relation') {
+                        throw new Tinebase_Exception_NotImplemented('supports only relation virtual type');
+                    }
+                    $this->_resolveVirtualRelations($_records, $fieldConfig);
+                default:
+                    // do nothing
+            }
+
+            if ($fieldToResolve === 'relations') {
+                $this->_resolveRelations($_records);
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_field
+     */
+    protected function _resolveVirtualRelations(Tinebase_Record_RecordSet $_records, $_field)
+    {
+        // @todo always resolve or just on demand?
+        $this->_resolveRelations($_records);
+
+        foreach ($_records as $record) {
+            $fc = $_field['config']['config'];
+            foreach ($record->relations as $relation) {
+                if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                    $record[$_field['key']] = $relation['related_record'];
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     *
+     * @todo check if already resolved?
+     */
+    protected function _resolveRelations(Tinebase_Record_RecordSet $_records)
+    {
+        if ($_records->getFirstRecord()->has('relations')) {
+            $_records->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
+                $_records->getRecordClassName(), 'Sql', $_records->getId())
+            );
+        }
+    }
+
+    /**
      * @param $records
      * @return mixed
      *
@@ -1570,35 +1655,6 @@ class Tinebase_ModelConfiguration {
         $converter = Tinebase_Convert_Factory::factory($recordClassName);
 
         return $converter->resolveRecords($records);
-    }
-
-    /**
-     * this is the new resolve function, param $_what can be something like this:
-     *
-     * ['*'] = everything
-     * ['/'] = two levels (discuss)
-     * ['relations/*']) // relations and one level of relations (related records) (discuss)
-     *
-     * @param Tinebase_Record_RecordSet $_records
-     * @param array $_what
-     * @throws Tinebase_Exception_NotImplemented
-     *
-     * @todo finish implementation - currently only supports ['relations/*']
-     */
-    public function resolve(Tinebase_Record_RecordSet $_records, $_what)
-    {
-        if (count($_records) == 0) {
-            return;
-        }
-
-        if ($_what !== ['relations/*']) {
-            throw new Tinebase_Exception_NotImplemented('currently only supports [\'relations/*\']');
-        }
-
-        if ($_records->getFirstRecord()->has('relations')) {
-            $_records->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
-                $_records->getRecordClassName(), 'Sql', $_records->getId()));
-        }
     }
 
     /**
