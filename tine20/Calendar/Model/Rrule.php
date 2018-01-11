@@ -885,7 +885,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
         // we only compute until $count == MAX_DAILY_RECUR_COUNT to avoid to get oom
         $count = 0;
-        while (true && $count < self::MAX_DAILY_RECUR_COUNT) {
+        while ($count < self::MAX_DAILY_RECUR_COUNT) {
             $computationStartDate->addDay($_rrule->interval);
 
             $recurEvent = self::cloneEvent($_event);
