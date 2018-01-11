@@ -2767,7 +2767,9 @@ HumanResources_CliTests.testSetContractsEndDate */
         $recordArray = $converter->fromTine20Model($record);
 
         $result = new Tinebase_Record_RecordSet($foreignModel);
-        foreach ($recordArray[$groupField] as $groupArray) {
+        $foreignData = isset($recordArray[$groupField]) && is_array($recordArray[$groupField]) ? $recordArray[$groupField] : array();
+
+        foreach ($foreignData as $groupArray) {
             $record = new $foreignModel(array(), TRUE);
             $record->setFromJsonInUsersTimezone($groupArray[$idProp]);
             $result->addRecord($record);
