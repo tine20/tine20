@@ -38,6 +38,13 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             options.params = options.params || {};
             delete options.params.start;
             delete options.params.limit;
+
+            // @TODO rethink - with local sort we don't need a remote query at all?
+            if (! options.params.sort && !grid.store.remoteSort) {
+                var sortState = grid.store.getSortState();
+                options.params.sort = sortState.field;
+                options.params.dir = sortState.direction;
+            }
         }, me, {'single': true});
         grid.store.on('beforeloadrecords', function(o, options, success, store) {
             var data = me.extractData(grid, o.records);
