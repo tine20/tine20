@@ -122,12 +122,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      *
      * @param Tinebase_Record_RecordSet $records
      */
-    public function resolveRecords(Tinebase_Record_RecordSet $records)
+    public function resolveRecords(Tinebase_Record_RecordSet $records, $multiple = true)
     {
         $recordClassName = $records->getRecordClassName();
         $modelConfiguration = $recordClassName::getConfiguration();
-        $this->_resolveBeforeToArray($records, $modelConfiguration, true);
-        $this->_resolveAfterToArray($records, $modelConfiguration, true);
+        $this->_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+        $this->_resolveAfterToArray($records, $modelConfiguration, $multiple);
 
         return $records;
     }
@@ -701,7 +701,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // TODO can't we do this in a more elegant way?? maybe use array_walk?
         $tmp = ($multiple) ? $resultSet : array($resultSet);
         foreach ($tmp as &$record) {
-            if ($record instanceof Tinebase_Record_Abstract && ! $record->has('account_grants')) continue;
+            if ($record instanceof Tinebase_Record_Abstract || $record instanceof Tinebase_Record_RecordSet) continue;
             $record['account_grants'] = $userGrants;
         }
 
