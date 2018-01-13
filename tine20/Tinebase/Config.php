@@ -1849,16 +1849,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     {
                         // add definition here till we have a better place
                         try {
-                            $configRegistryItem = new Tinebase_Config_Struct(array(
-                                'value' => $config->{$name},
-                                'definition' => new Tinebase_Config_Struct($definition),
-                            ), null, null, array(
-                                'value' => array('type' => $definition['type']),
-                                'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
-                            ));
-                            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                                . ' ' . print_r($configRegistryItem->toArray(), TRUE));
-                            $clientProperties[$application->name][$name] = $configRegistryItem;
+                            $type = isset($definition['type']) ? $definition['type'] : null;
+                            if ($type) {
+                                $configRegistryItem = new Tinebase_Config_Struct(array(
+                                    'value' => $config->{$name},
+                                    'definition' => new Tinebase_Config_Struct($definition),
+                                ), null, null, array(
+                                    'value' => array('type' => $definition['type']),
+                                    'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
+                                ));
+                                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                                    . ' ' . print_r($configRegistryItem->toArray(), TRUE));
+                                $clientProperties[$application->name][$name] = $configRegistryItem;
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                                    . ' Type missing from definition: ' . print_r($definition, TRUE));
+                            }
                         } catch (Exception $e) {
                             Tinebase_Exception::log($e);
                         }
