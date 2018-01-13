@@ -343,7 +343,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getModelConfiguration = function() {
         return p.modelConfiguration;
     };
-    
+
     // sanitize containerProperty label
     var containerProperty = f.getMeta('containerProperty');
     if (containerProperty) {

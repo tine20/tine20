@@ -1621,6 +1621,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (error.code === 901) {
             this.onConflict(error, event, ignoreFn);
         } else {
+            error.component = this;
+            error.proxyEvent = event;
             Tine.Tinebase.ExceptionHandler.handleRequestException(error);
         }
     },
