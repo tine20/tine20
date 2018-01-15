@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -310,8 +310,8 @@ class Tinebase_User_LdapTest extends TestCase
 
         // add user in LDAP
         $user = $this->_backend->addUserToSyncBackend($testRecord);
+        self::assertNotNull($user, 'no user added - might be readonly backend.');
         $this->_usernamesToDelete[] = $user->accountLoginName;
-
 
         Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
             ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = false;
@@ -320,7 +320,6 @@ class Tinebase_User_LdapTest extends TestCase
 
         Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}
             ->{Tinebase_Config::SYNC_USER_CONTACT_DATA} = true;
-
 
         // check if user is synced
         $this->assertEquals(Tinebase_Model_User::VISIBILITY_DISPLAYED, $syncedUser->visibility,
