@@ -173,6 +173,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _createDocument()
     {
+        Tinebase_Export_Spreadsheet_NumberFormat::fillBuildInTypes();
+
         $templateFile = $this->_getTemplateFilename();
 
         if ($templateFile !== NULL) {
