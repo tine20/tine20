@@ -1,0 +1,78 @@
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 14.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:W. Europe Standard Time
+BEGIN:STANDARD
+DTSTART:16011028T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010325T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;CN="Admin Account, Tine 2.0";CUTYPE=INDIVIDUAL;EMAIL="unittest@
+ tine20.org";PARTSTAT=NEEDS-ACTION:mailto:unittest@tine20.org
+ATTENDEE;CN="Clever, Susan";CUTYPE=INDIVIDUAL;EMAIL="sclever@tine20.org"
+ ;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIPANT:mailto:sclever@tine20.org
+ATTENDEE;CN="Paul, Wulf";CUTYPE=INDIVIDUAL;EMAIL="pwulf@tine20.org"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:pwulf@tine20.org
+CLASS:PUBLIC
+CREATED:20170814T113144Z
+DESCRIPTION:Telefonkonferenz\nKonferenz-Einwahlnummer: +49 (0) 221 123
+	\nTeilnehmer-Zugangscode: 123#\n\nGeben Sie nach Aufforderung den zugew
+	iesenen Zugangscode ein und dr��cken Sie dann die Taste #. Sobald die Verb
+	indung zur Live-Telefonkonferenz hergestellt ist\, kann jeder Teilnehmer s
+	prechen. Jeder Teilnehmer hat auch Zugriff auf die unten aufgelisteten Tas
+	tenbefehle.\n\n\n
+DTEND;TZID="W. Europe Standard Time":20170816T120000
+DTSTAMP:20170814T113144Z
+DTSTART;TZID="W. Europe Standard Time":20170816T110000
+LAST-MODIFIED:20170814T113144Z
+LOCATION:Telefonkonferenz
+ORGANIZER;CN="Admin Account, Tine 2.0":mailto:l.kneschke@caldav.org
+PRIORITY:5
+SEQUENCE:4
+SUMMARY;LANGUAGE=de:Metaways Folgetermin 
+TRANSP:OPAQUE
+UID:040000008200E00074C5B7101A82E00800000000B02E5C95A5F1D201000000000000000
+	01000000093544CFB75D75A42B698FD2C940B3285
+X-ALT-DESC;FMTTYPE=text/html:<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//E
+	N">\n<HTML>\n<HEAD>\n<META NAME="Generator" CONTENT="MS Exchange Server ve
+	rsion 14.02.5004.000">\n<TITLE></TITLE>\n</HEAD>\n<BODY>\n<!-- Converted f
+	rom text/rtf format -->\n\n<P DIR=LTR><SPAN LANG="de"><B></B></SPAN><SPAN 
+	LANG="de"><B></B></SPAN><SPAN LANG="de"><B><FONT COLOR="#514F4F" SIZE=2 FA
+	CE="Tahoma">Telefonkonferenz</FONT></B></SPAN><SPAN LANG="de"></SPAN><SPAN
+	 LANG="de"></SPAN><SPAN LANG="de"><BR>\n<FONT COLOR="#514F4F" SIZE=2 FACE=
+	"Tahoma">Konferenz-Einwahlnummer:��+49 (0) 221 123<BR>\nTeilnehmer-Zu
+	gangscode:��123#<BR>\n<BR>\nGeben Sie nach Aufforderung den zugewiesene
+	n Zugangscode ein und dr��cken Sie dann die Taste #. Sobald die Verbindung
+	 zur Live-Telefonkonferenz hergestellt ist\, kann jeder Teilnehmer spreche
+	n. Jeder Teilnehmer hat auch Zugriff auf die unten aufgelisteten Tastenbef
+	ehle.</FONT></SPAN><SPAN LANG="de"></SPAN></P>\n\n<P DIR=LTR><SPAN LANG="d
+	e"></SPAN><SPAN LANG="de"></SPAN></P>\n\n</BODY>\n</HTML>
+X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MS-OLK-APPTLASTSEQUENCE:3
+X-MS-OLK-APPTSEQTIME:20170810T161614Z
+X-MS-OLK-AUTOSTARTCHECK:FALSE
+X-MS-OLK-CONFTYPE:0
+X-MS-OLK-SENDER;CN="Admin Account, Tine 2.0":mailto:l.kneschke@caldav.org
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+
