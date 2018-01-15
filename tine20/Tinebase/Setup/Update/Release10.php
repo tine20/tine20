@@ -2280,7 +2280,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_50()
     {
-        if ($this->isReplicationMaster()) {
+        if (Tinebase_Core::isReplicationMaster()) {
             $fileSystem = Tinebase_FileSystem::getInstance();
             $basePath = $fileSystem->getApplicationBasePath(
                     'Tinebase',

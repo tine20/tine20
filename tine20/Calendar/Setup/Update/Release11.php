@@ -54,7 +54,7 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Calendar'), $this->isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Calendar'), Tinebase_Core::isReplicationSlave());
 
         $this->setApplicationVersion('Calendar', '11.2');
     }

@@ -514,22 +514,4 @@ class Setup_Update_Abstract
 
         return true;
     }
-
-    /**
-     * @return bool
-     * @deprecated
-     */
-    public function isReplicationSlave()
-    {
-        return Tinebase_Core::isReplicationSlave();
-    }
-
-    /**
-     * @return bool
-     * @deprecated
-     */
-    public function isReplicationMaster()
-    {
-        return Tinebase_Core::isReplicationMaster();
-    }
 }
