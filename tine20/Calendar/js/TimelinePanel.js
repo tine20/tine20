@@ -67,6 +67,7 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.dayFormatString = this.app.i18n._hidden(this.dayFormatString);
         this.groupingMetadataCache = {};
+        this.labels = [];
 
         this.items = [{
             ref: 'headerRow',
@@ -184,7 +185,13 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
             label: name,
             iconCls: attendee.getIconCls()
         });
-        this.timelineLabels.add(label);
+
+        this.labels.push(label);
+        this.labels.sort();
+
+        var idx = this.labels.indexOf(label);
+
+        this.timelineLabels.insert(idx, label);
         this.timelineLabels.doLayout();
 
         var view = new Tine.Calendar.TimelineView({
@@ -193,7 +200,7 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
             period: this.period,
             label: label
         });
-        this.timelines.add(view);
+        this.timelines.insert(idx, view);
         this.timelines.doLayout();
         this.relayEvents(view, ['click', 'dblclick', 'contextmenu']);
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
