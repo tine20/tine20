@@ -125,6 +125,17 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
         return date;
     },
+
+    getRawValue: function() {
+        if (! this.dateField) {
+            return this.value;
+        }
+
+        var date = this.dateField.getRawValue();
+        var time = this.timeField.getRawValue();
+
+        return date + ' ' + time;
+    },
     
     markInvalid: function (msg) {
         this.markedInvalid = true;

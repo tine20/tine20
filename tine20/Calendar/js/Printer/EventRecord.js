@@ -16,12 +16,14 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.EditDialogRender
                     '</div>',
                     '<div class="cal-print-single-organizer">',
                         '<span class="cal-print-single-label">', i18n._('Organizer'), '</span>',
-                        '<span class="cal-print-single-value">{[values.organizer.n_fileas]}</span>',
+                        '<span class="cal-print-single-value">{values.organizer}</span>',
                     '</div>',
                     '<div class="cal-print-single-block-heading">', i18n._('Description'), '</div>',
                     '<div class="cal-print-single-block">',
                         '<div class="cal-print-single-description">{description}</div>',
                     '</div>',
+                    // @TODO sort out css
+                    // new Ext.ux.Printer.TagsRenderer().generateBody(component.getForm().findField('tags').tagsPanel),
                     '<div class="cal-print-single-block-heading">', i18n._('Details'), '</div>',
                     '<div class="cal-print-single-block">',
                         '<div class="print-single-details-row">',
@@ -55,9 +57,5 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.EditDialogRender
 
             fulfill(bodyTpl.apply(data));
         });
-    },
-
-    getTitle: function(data) {
-        return data.summary;
     }
 });
