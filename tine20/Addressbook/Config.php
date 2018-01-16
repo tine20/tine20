@@ -127,10 +127,10 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 ),
             ),
             'default' => array(
-                self::FEATURE_LIST_VIEW => false,
+                self::FEATURE_LIST_VIEW => true,
                 self::FEATURE_INDUSTRY => true,
-                self::FEATURE_RESOURCES => false,
-                self::FEATURE_STRUCTUREPANEL => false,
+                self::FEATURE_RESOURCES => true,
+                self::FEATURE_STRUCTUREPANEL => true,
             ),
         ),
         self::CONTACT_DUP_FIELDS => array(
