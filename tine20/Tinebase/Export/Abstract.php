@@ -791,6 +791,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($record->has('relations')) {
             $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
                 $_records->getArrayOfIds());
+            $this->_resolveRelationsType($relations);
 
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
@@ -842,6 +843,64 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
+    }
+
+    protected function _resolveRelationsType(array $relations)
+    {
+        $models = array();
+        foreach($relations as $rels) {
+            $models = array_merge($models, $rels->own_model);
+            $models = array_merge($models, $rels->related_model);
+        }
+        $models = array_unique($models);
+        $relConfig = Tinebase_Relations::getConstraintsConfigs($models);
+        if (empty($relConfig)) {
+            return;
+        }
+
+        foreach ($relations as $rels) {
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($rels as $relation) {
+                $text = null;
+                $relatedApp = null;
+                $revertedText = null;
+                $revertedRelatedApp = null;
+                foreach ($relConfig as $cfg) {
+                    if ($cfg['ownRecordClassName'] === $relation->own_model && $cfg['relatedRecordClassName'] ===
+                            $relation->related_model && isset($cfg['config'])) {
+                        foreach ($cfg['config'] as $cfg1) {
+                            if ($relation->type === $cfg1['type'] && $relation->related_degree === $cfg1['degree']) {
+                                if (isset($cfg['reverted'])) {
+                                    $revertedText = $cfg1['text'];
+                                    $revertedRelatedApp = $cfg['relatedApp'];
+                                } else {
+                                    $relatedApp = $cfg['relatedApp'];
+                                    $text = $cfg1['text'];
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (null === $text && null !== $revertedText) {
+                    $text = $revertedText;
+                    $relatedApp = $revertedRelatedApp;
+                }
+
+                if (null !== $text) {
+                    $translatedStr = $this->_translate->_($text, $this->_locale);
+                    if ($translatedStr === $text) {
+                        $translatedStr = Tinebase_Translation::getTranslation($relatedApp, $this->_locale)
+                            ->translate($text, $this->_locale);
+                        if ($translatedStr === $text) {
+                            $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $this->_locale)
+                                ->translate($text, $this->_locale);
+                        }
+                    }
+                    $relation->type = $translatedStr;
+                }
+            }
+        }
     }
 
     protected function _writeGenericHead()
