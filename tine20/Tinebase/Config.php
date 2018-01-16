@@ -1537,8 +1537,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::DENY_WEBDAV_CLIENT_LIST  => array(
             //_('List of WebDav agent strings that will be denied')
             'label'                 => 'List of WebDav agent strings that will be denied',
-            //_('List of WebDav agent strings that will be denied.')
-            'description'           => 'List of WebDav agent strings that will be denied.',
+            //_('List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]')
+            'description'           => 'List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]',
             'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
