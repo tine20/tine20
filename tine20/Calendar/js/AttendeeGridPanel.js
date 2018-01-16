@@ -87,6 +87,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @property attendeeStore
      */
     attendeeStore: null,
+
+    attendeeTypeCombo: null,
     
     /**
      * grid panel phone hook for calling attendee
@@ -149,6 +151,28 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     initColumns: function() {
+        var attendeeTypes = new Ext.data.ArrayStore({
+            fields: ['name', 'value'],
+            idIndex: 0 // id for each record will be the first element
+        });
+        
+        attendeeTypes.loadData([
+            ['any',      '...'                     ],
+            ['user',     this.app.i18n._('User')   ],
+            ['group',    this.app.i18n._('Group')  ],
+            ['resource', this.app.i18n._('Resource')]
+        ].concat(this.showMemberOfType ? [['memberOf', this.app.i18n._('Member of group')  ]] : []));
+        
+        this.attendeeTypeCombo = new Ext.form.ComboBox({
+            blurOnSelect  : true,
+            expandOnFocus : true,
+            listWidth     : 100,
+            mode          : 'local',
+            valueField: 'name',
+            displayField: 'value',
+            store         : attendeeTypes
+        });
+        
         this.columns = [{
             id: 'role',
             dataIndex: 'role',
@@ -205,18 +229,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Type'),
             tooltip: this.app.i18n._('Click icon to change'),
             renderer: this.renderAttenderType.createDelegate(this),
-            editor: new Ext.form.ComboBox({
-                blurOnSelect  : true,
-                expandOnFocus : true,
-                listWidth     : 100,
-                mode          : 'local',
-                store         : [
-                    ['any',      '...'                     ],
-                    ['user',     this.app.i18n._('User')   ],
-                    ['group',    this.app.i18n._('Group')  ],
-                    ['resource', this.app.i18n._('Resource')]
-                ].concat(this.showMemberOfType ? [['memberOf', this.app.i18n._('Member of group')  ]] : [])
-            })
+            editor: this.attendeeTypeCombo
         }, {
             id: 'user_id',
             dataIndex: 'user_id',
@@ -480,6 +493,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
 
+    onBeforeRemoveAttendee: function() {
+        return true;
+    },
+
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
 
@@ -511,6 +528,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 scope: this,
                 disabled: ! this.record.get('editGrant') || type == 'groupmember',
                 handler: function() {
+                    if(this.onBeforeRemoveAttendee(attender, type) === false) {
+                        return false;
+                    }
+                    
                     this.store.remove(attender);
                     if (type == 'group' && !this.showMemberOfType) {
                         this.resolveListMembers()
