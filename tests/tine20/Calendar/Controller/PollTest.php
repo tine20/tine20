@@ -536,7 +536,8 @@ EOT;
             list ($responseData, $pollData) = $this->testPublicApiAddAttender();
 
             $messages = static::getMessages();
-            static::assertEquals(2, count($messages), 'expected 2 mails send');
+            $expectedMessages = Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS) ? 1 : 2;
+            static::assertEquals($expectedMessages, count($messages), 'expected ' . $expectedMessages . ' mails send');
 
             /** @var Tinebase_Mail $confirmationMessage */
             $confirmationMessage = $messages[1];
@@ -544,7 +545,6 @@ EOT;
             $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
 
             $text = $confirmationMessage->getBodyText()->getContent();
-//            $html = $confirmationMessage->getBodyHtml()->getContent();
 
             $this->assertContains('Thank you for attendening', $text);
 
