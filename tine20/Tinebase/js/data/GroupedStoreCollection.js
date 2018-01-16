@@ -138,7 +138,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             var store = this.get(groupName);
             if (! store) {
                 store = this.createCloneStore();
-                this.add(groupName, store);
+                this.addSorted(groupName, store);
             }
         }, this);
     },
@@ -250,10 +250,22 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         var store = this.get(groupName);
         if (! store && !this.fixedGroups.length) {
             store = this.createCloneStore();
-            this.add(groupName, store);
+            this.addSorted(groupName, store);
         }
 
         return store;
+    },
+
+    addSorted: function(groupName, store) {
+        var idx = this.length;
+
+        if (this.sortFn) {
+            var items = [store].concat(this.items);
+            items.sort(this.sortFn);
+            idx = items.indexOf(store);
+        }
+
+        this.insert(idx, groupName, store);
     },
 
     createCloneStore: function() {
