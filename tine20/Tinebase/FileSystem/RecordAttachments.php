@@ -219,21 +219,24 @@ class Tinebase_FileSystem_RecordAttachments
             $name = $attachment->name;
         }
 
-        // If there is no tempfile, the attachment was added from the filemanager
-        // well except if it wasn't... so we better check
-        // stupid legacy code fixing the FE path here way in the backend is ... it is what it is
-        if ($attachment instanceof Tinebase_Model_Tree_Node && !isset($attachment->tempFile) && isset($attachment->path)) {
-            $return = true;
+        if ($attachment instanceof Tinebase_Model_Tree_Node && !isset($attachment->tempFile)) {
             if (isset($attachment->id)) {
                 try {
                     $tmpNode = $this->_fsController->get($attachment->id, true);
                     $tmpPath = $this->_fsController->getPathOfNode($tmpNode, true);
                     $attachment = $this->_fsController->stat($tmpPath, null, true);
-                    $return = false;
-                } catch (Tinebase_Exception_NotFound $tenf) {}
-            }
-            if ($return) {
-                return $this->addRecordAttachmentFromFilemanager($record, $attachment);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                            __LINE__ . ' could not find attachement record with id: ' . $attachment->id);
+                }
+            } else {
+                // this comes from \Calendar_Frontend_CalDAV_PluginManagedAttachments::httpPOSTHandler
+                // it sends an filenode with only hash and name and a bit set
+                if (empty($attachment->hash)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                            __LINE__ . ' attachment record is missing an id');
+                    return null;
+                }
             }
         }
 
@@ -242,7 +245,7 @@ class Tinebase_FileSystem_RecordAttachments
         }
 
         if (empty($name)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
                 ' Could not evaluate attachment name.');
             return null;
         }
@@ -260,37 +263,6 @@ class Tinebase_FileSystem_RecordAttachments
         
         $node = $this->_fsController->stat($attachmentPath);
         return $node;
-    }
-
-    /**
-     * Add a filemanager attachment to a given record
-     *
-     * @param Tinebase_Record_Abstract $record
-     * @param Tinebase_Model_Tree_Node $attachment
-     * @return null|Tinebase_Model_Tree_Node
-     */
-    public function addRecordAttachmentFromFilemanager(Tinebase_Record_Abstract $record, Tinebase_Model_Tree_Node $attachment) {
-        if (!$attachment->path || !$attachment->name) {
-            return null;
-        }
-
-        $attachmentsDir = $this->getRecordAttachmentPath($record, true);
-        $attachmentPath = $attachmentsDir . '/' . $attachment->name;
-
-        $nodeController = Filemanager_Controller_Node::getInstance();
-        $path = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($attachment->path));
-        if ($attachmentPath === $path->statpath) {
-            $attachment = $this->_fsController->stat($attachmentPath, null, true);
-            if ($attachment->is_deleted) {
-                $this->_fsController->unDeleteFileNode($attachment->getId());
-                $this->_fsController->clearStatCache($attachmentPath);
-                $attachment = $this->_fsController->stat($attachmentPath);
-            }
-        } else {
-            $attachment = $this->_fsController->copy($path->statpath, $attachmentPath);
-        }
-
-        return $attachment;
     }
     
     /**
