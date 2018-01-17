@@ -336,3 +336,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     padding-top: 1px;
     padding-bottom: 0px;
 }
+
+.cal-poll-event {
+    opacity: 0.7;
+}

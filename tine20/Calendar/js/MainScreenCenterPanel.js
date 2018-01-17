@@ -891,7 +891,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this,
             success: function(createdEvent) {
                 if (createdEvent.isRecurBase() || createdEvent.hasPoll()) {
-                    store.load({refresh: true});
+                    if (store) {
+                        store.load({refresh: true});
+                    } else {
+                        this.refresh();
+                    }
                 } else {
                     // store may be lost on conflict or else
                     if (store) {

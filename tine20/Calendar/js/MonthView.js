@@ -505,7 +505,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
                 if (i < endCellNumber) {
                     data.extraCls += ' cal-monthview-alldayevent-cropright';
                 }
-                
+
                 // show icon on startCell and leftCells
                 data.showInfo = i == startCellNumber || i%7 == 0;
                 
@@ -514,8 +514,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
                     var cols = (row == Math.floor(endCellNumber/7) ? endCellNumber%7 : 6) - col +1;
                     data.width = 100 * cols + '%'
                 }
-            } 
-            
+            }
+
+            if (event.hasPoll()) {
+                data.extraCls += ' cal-poll-event';
+            }
+
             var posEl = this.getEventSlice(this.dayCells[i].lastChild, pos);
             var eventEl = tmpl.overwrite(posEl, data, true);
             

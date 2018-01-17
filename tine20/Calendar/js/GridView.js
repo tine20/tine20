@@ -156,7 +156,13 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
      * @return {String}
      */
     getViewRowClass: function(record, index) {
-        return 'cal-status-' + record.get('status');
+        var cls =  'cal-status-' + record.get('status');
+
+        if (record.hasPoll()) {
+            cls = cls + ' cal-poll-event';
+        }
+
+        return cls;
     }
 });
 

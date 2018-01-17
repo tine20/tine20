@@ -497,7 +497,7 @@ msgstr "Importiere Termine"
 #: js/MainScreenCenterPanel.js:389
 #, python-brace-format
 msgid "Paste event \"{0}\""
-msgstr "Event \"{0}\" einfügen"
+msgstr "Termin \"{0}\" einfügen"
 
 #: js/MainScreenCenterPanel.js:750
 msgid "Set my response"
