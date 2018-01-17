@@ -153,6 +153,6 @@ class Setup_SchemaTool
         $comparator = new Comparator();
         $schemaDiff = $comparator->compare($mySm->createSchema(), $otherSm->createSchema());
 
-        return $schemaDiff->toSql($myConn->getDatabasePlatform());
+        return $schemaDiff->toSaveSql($myConn->getDatabasePlatform());
     }
 }
