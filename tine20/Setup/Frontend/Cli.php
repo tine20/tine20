@@ -911,6 +911,20 @@ class Setup_Frontend_Cli
     protected function _compare(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        print_r(Setup_Controller::getInstance()->compareSchema($options));
+        $schemaChanges = Setup_Controller::getInstance()->compareSchema($options);
+        print_r($schemaChanges);
+
+        if (count($schemaChanges) > 0) {
+            echo "Do you want to apply the schema changes? WARNING: this might render your tine20 installation unusable. Always backup your DB before doing this!\n";
+
+            $apply = Tinebase_Server_Cli::promptInput('Do you want to apply the schema changes? (default: "no", "y" or "yes" for apply sql)?');
+            if ($apply === 'y' or $apply === 'yes') {
+                $db = Setup_Core::getDb();
+                foreach ($schemaChanges as $change) {
+                    echo "applying sql: " . $change . "\n";
+                    $db->query($change);
+                }
+            }
+        }
     }
 }
