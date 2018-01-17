@@ -100,13 +100,15 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
      *
      * @param string|array $_fieldOrData
      * @param string $_operator
-     * @param mixed  $_value    
+     * @param mixed  $_value
      * @param array  $_options
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = [])
     {
         // no legacy handling
-        if(!is_array($_fieldOrData) || !isset($_fieldOrData['value']['cfId']) || !array_key_exists('value',
+        if (!is_array($_fieldOrData) || !isset($_fieldOrData['value']['cfId']) || !array_key_exists('value',
                 $_fieldOrData['value'])) {
             throw new Tinebase_Exception_InvalidArgument('$_fieldOrData must be an array see source comment!');
         }
@@ -121,21 +123,34 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         } else {
             $type = $this->_cfRecord->definition['type'];
         }
+switch ($type) {
+            case 'string':
+            case 'text':
+                $filterClass = Tinebase_Model_Filter_Text::class;
+                break;
+            case 'textarea':
+                // TODO is this still needed?
+//        $forceFullText = isset($_fieldOrData['value'][self::OPT_FORCE_FULLTEXT]) ?
+//            (bool)$_fieldOrData['value'][self::OPT_FORCE_FULLTEXT] : false;
+//                if ($forceFullText) {
+//        $filterClass = Tinebase_Model_Filter_FullText::class;
+//                }
 
-        $forceFullText = isset($_fieldOrData['value'][self::OPT_FORCE_FULLTEXT]) ?
-            (bool)$_fieldOrData['value'][self::OPT_FORCE_FULLTEXT] : false;
-        $filterClass = Tinebase_Model_Filter_FullText::class;
-
-        if (!$forceFullText) {
-            if ($type === 'date' || $type === 'datetime') {
+            $filterClass = Tinebase_Model_Filter_FullText::class;
+                break;
+            case 'date' :
+            case 'datetime':
                 $filterClass = Tinebase_Model_Filter_Date::class;
-            } elseif ($type === 'integer') {
+                break;
+            case 'integer':
                 $filterClass = Tinebase_Model_Filter_Int::class;
-            } elseif ($type === 'bool' || $type === 'boolean') {
-                //$filterClass = Tinebase_Model_Filter_Text::class;
+                break;
+            case 'bool':
+            case 'boolean':
                 $filterClass = Tinebase_Model_Filter_Id::class;
                 $_fieldOrData['value']['value'] = $_fieldOrData['value']['value'] ? '1' : '0';
-            } elseif ($type === 'record') {
+                break;
+            case 'record':
                 if (is_array($_fieldOrData['value']['value'])) {
                     $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
                     $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
@@ -145,10 +160,13 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
                 }
-            } elseif ($type === 'records') {
+                break;
+            case 'records':
                 // TODO support recordset
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
-            }
+                break;
+            default:
+                // nothing here - parent is used
         }
 
         if (null !== $filterClass) {
