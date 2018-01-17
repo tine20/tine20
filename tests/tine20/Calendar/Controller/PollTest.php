@@ -539,15 +539,13 @@ EOT;
             $expectedMessages = Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS) ? 1 : 2;
             static::assertEquals($expectedMessages, count($messages), 'expected ' . $expectedMessages . ' mails send');
 
-            /** @var Tinebase_Mail $confirmationMessage */
-            $confirmationMessage = $messages[1];
-
-            $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
-
-            $text = $confirmationMessage->getBodyText()->getContent();
-
-            $this->assertContains('Thank you for attendening', $text);
-
+            if (isset($messages[1])) {
+                /** @var Tinebase_Mail $confirmationMessage */
+                $confirmationMessage = $messages[1];
+                $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
+                $text = $confirmationMessage->getBodyText()->getContent();
+                $this->assertContains('Thank you for attendening', $text);
+            }
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
             Felamimail_Transport::setTestTransport($oldTestTransport);
