@@ -21,7 +21,7 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
-#: Controller.php:450 js/Model.js:982
+#: Controller.php:450 js/Model.js:984
 msgid "Resources"
 msgstr ""
 
@@ -30,8 +30,8 @@ msgid "All my events"
 msgstr ""
 
 #: Preference.php:157 js/ContactEventsGridPanel.js:119
-#: js/EventDetailsPanel.js:179 js/GridView.js:200 js/EventEditDialog.js:134
-#: js/Printer/EventRecord.js:32
+#: js/EventDetailsPanel.js:179 js/GridView.js:206 js/EventEditDialog.js:150
+#: js/Printer/EventRecord.js:34
 msgid "Start Time"
 msgstr ""
 
@@ -39,8 +39,8 @@ msgstr ""
 msgid "Position on the left time axis, day and week view should start with"
 msgstr ""
 
-#: Preference.php:161 js/EventDetailsPanel.js:184 js/GridView.js:206
-#: js/EventEditDialog.js:149 js/Printer/EventRecord.js:36
+#: Preference.php:161 js/EventDetailsPanel.js:184 js/GridView.js:212
+#: js/EventEditDialog.js:165 js/Printer/EventRecord.js:38
 msgid "End Time"
 msgstr ""
 
@@ -188,58 +188,58 @@ msgstr ""
 msgid "On attendee responses too"
 msgstr ""
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:71 js/Model.js:589
+#: js/ContactEventsGridPanel.js:50 js/Model.js:74 js/Model.js:591
 msgid "Events"
 msgstr ""
 
-#: js/ContactEventsGridPanel.js:113 js/GridView.js:234 js/EventEditDialog.js:83
-#: js/Printer/EventRecord.js:14 js/Model.js:367 Model/Event.php:397
+#: js/ContactEventsGridPanel.js:113 js/GridView.js:240 js/EventEditDialog.js:99
+#: js/Printer/EventRecord.js:14 js/Model.js:370 Model/Event.php:397
 msgid "Summary"
 msgstr ""
 
 #: js/ContactEventsGridPanel.js:126 js/AddToEventPanel.js:101
-#: js/EventEditDialog.js:184 js/AttendeeGridPanel.js:246 Model/Event.php:396
+#: js/EventEditDialog.js:200 js/AttendeeGridPanel.js:259 Model/Event.php:396
 msgid "Status"
 msgstr ""
 
-#: js/EventDetailsPanel.js:29 js/AttendeeGridPanel.js:818
-#: js/AttendeeGridPanel.js:842 js/AttendeeGridPanel.js:859
-#: js/AttendeeGridPanel.js:871
+#: js/EventDetailsPanel.js:29 js/AttendeeGridPanel.js:839
+#: js/AttendeeGridPanel.js:863 js/AttendeeGridPanel.js:880
+#: js/AttendeeGridPanel.js:892
 msgid "No Information"
 msgstr ""
 
-#: js/EventDetailsPanel.js:80 js/EventUI.js:181
+#: js/EventDetailsPanel.js:80 js/EventUI.js:185
 msgid "recurring event"
 msgstr ""
 
-#: js/EventDetailsPanel.js:82 js/EventUI.js:186
+#: js/EventDetailsPanel.js:82 js/EventUI.js:190
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:189 js/GridView.js:218 Model/Event.php:390
+#: js/EventDetailsPanel.js:189 js/GridView.js:224 Model/Event.php:390
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:194 js/GridView.js:226 js/EventEditDialog.js:204
+#: js/EventDetailsPanel.js:194 js/GridView.js:232 js/EventEditDialog.js:220
 #: Setup/Update/Release5.php:94 Config.php:289 Config.php:339
 msgid "Tentative"
 msgstr ""
 
-#: js/EventDetailsPanel.js:199 js/GridView.js:242 js/EventEditDialog.js:128
-#: js/Printer/EventRecord.js:28 js/ResourcesGridPanel.js:83 js/Model.js:368
+#: js/EventDetailsPanel.js:199 js/GridView.js:248 js/EventEditDialog.js:144
+#: js/Printer/EventRecord.js:30 js/ResourcesGridPanel.js:83 js/Model.js:371
 #: js/ResourceEditDialog.js:125 Model/Event.php:393
 msgid "Location"
 msgstr ""
 
-#: js/EventDetailsPanel.js:203 js/GridView.js:248 js/EventEditDialog.js:365
-#: js/Printer/EventRecord.js:18 js/Model.js:388 js/PerspectiveCombo.js:127
+#: js/EventDetailsPanel.js:203 js/GridView.js:254 js/EventEditDialog.js:385
+#: js/Printer/EventRecord.js:18 js/Model.js:391 js/PerspectiveCombo.js:127
 #: Config.php:267 Model/Event.php:394
 msgid "Organizer"
 msgstr ""
 
 #: js/EventDetailsPanel.js:221 js/EventContextAttendeesItem.js:112
-#: js/Printer/EventRecord.js:42 js/AttendeeGridPanel.js:106 js/WestPanel.js:93
-#: js/Model.js:585 js/AttendeeFilterModel.js:35 Config.php:266
+#: js/Printer/EventRecord.js:44 js/AttendeeGridPanel.js:108 js/WestPanel.js:93
+#: js/Model.js:587 js/AttendeeFilterModel.js:35 Config.php:266
 msgid "Attendee"
 msgstr ""
 
@@ -255,21 +255,21 @@ msgstr ""
 msgid "Check to filter for this attendee"
 msgstr ""
 
-#: js/GridView.js:185 js/EventEditDialog.js:218
+#: js/GridView.js:191 js/EventEditDialog.js:234
 msgid "Private"
 msgstr ""
 
-#: js/GridView.js:193
+#: js/GridView.js:199
 msgid "Tags"
 msgstr ""
 
-#: js/GridView.js:212 js/EventEditDialog.js:143 js/Printer/Base.js:74
+#: js/GridView.js:218 js/EventEditDialog.js:159 js/Printer/Base.js:74
 #: js/SearchCombo.js:229
 msgid "whole day"
 msgstr ""
 
-#: js/GridView.js:255 js/EventEditDialog.js:262 js/Printer/EventRecord.js:21
-#: js/Model.js:369 js/Model.js:1017 js/ResourceEditDialog.js:140
+#: js/GridView.js:261 js/EventEditDialog.js:278 js/Printer/EventRecord.js:21
+#: js/Model.js:372 js/Model.js:1019 js/ResourceEditDialog.js:140
 #: Model/Event.php:392
 msgid "Description"
 msgstr ""
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Please choose the Event to add the contacts to"
 msgstr ""
 
-#: js/AddToEventPanel.js:91 js/AttendeeGridPanel.js:158
+#: js/AddToEventPanel.js:91 js/AttendeeGridPanel.js:182
 msgid "Role"
 msgstr ""
 
@@ -494,85 +494,85 @@ msgstr ""
 msgid "Do not create this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:928
+#: js/MainScreenCenterPanel.js:932
 msgid "Update this event only"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:931
+#: js/MainScreenCenterPanel.js:935
 msgid "Update this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:932
+#: js/MainScreenCenterPanel.js:936
 msgid "Update whole series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:935
+#: js/MainScreenCenterPanel.js:939
 msgid "Update nothing"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:938
+#: js/MainScreenCenterPanel.js:942
 msgid "Update Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1083
+#: js/MainScreenCenterPanel.js:1087
 msgid "Please Change Selection"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1084
+#: js/MainScreenCenterPanel.js:1088
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1097
+#: js/MainScreenCenterPanel.js:1101
 msgid "Delete Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1101
+#: js/MainScreenCenterPanel.js:1105
 msgid "Delete this event only"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1102
+#: js/MainScreenCenterPanel.js:1106
 msgid "Delete this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1103
+#: js/MainScreenCenterPanel.js:1107
 msgid "Delete whole series"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1104
+#: js/MainScreenCenterPanel.js:1108
 msgid "Delete nothing"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1155
+#: js/MainScreenCenterPanel.js:1159
 #, python-brace-format
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
 
-#: js/MainScreenCenterPanel.js:1457
+#: js/MainScreenCenterPanel.js:1461
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1457
+#: js/MainScreenCenterPanel.js:1461
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1563
+#: js/MainScreenCenterPanel.js:1567
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1565
+#: js/MainScreenCenterPanel.js:1569
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1569
+#: js/MainScreenCenterPanel.js:1573
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1570
+#: js/MainScreenCenterPanel.js:1574
 msgid "Edit Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1571
+#: js/MainScreenCenterPanel.js:1575
 msgid "Cancel this action"
 msgstr ""
 
@@ -710,7 +710,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: js/FreeTimeSearchDialog.js:130 js/EventEditDialog.js:341
+#: js/FreeTimeSearchDialog.js:130 js/EventEditDialog.js:361
 msgid "Free Time Search"
 msgstr ""
 
@@ -739,51 +739,51 @@ msgstr ""
 msgid "Free Time Search Options"
 msgstr ""
 
-#: js/EventEditDialog.js:99
+#: js/EventEditDialog.js:115
 msgid "View"
 msgstr ""
 
-#: js/EventEditDialog.js:115 js/Printer/EventRecord.js:25 js/RrulePanel.js:72
+#: js/EventEditDialog.js:131 js/Printer/EventRecord.js:27 js/RrulePanel.js:72
 msgid "Details"
 msgstr ""
 
-#: js/EventEditDialog.js:166
+#: js/EventEditDialog.js:182
 msgid "Saved in"
 msgstr ""
 
-#: js/EventEditDialog.js:188 js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:204 js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr ""
 
-#: js/EventEditDialog.js:276
+#: js/EventEditDialog.js:292
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:347
+#: js/EventEditDialog.js:367
 msgid "Mute Notification"
 msgstr ""
 
-#: js/EventEditDialog.js:354
+#: js/EventEditDialog.js:374
 msgid "Print Event"
 msgstr ""
 
-#: js/EventEditDialog.js:588
+#: js/EventEditDialog.js:608
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:591
+#: js/EventEditDialog.js:611
 msgid "End date must be after start date"
 msgstr ""
 
-#: js/EventEditDialog.js:597
+#: js/EventEditDialog.js:617
 msgid "End time is not allowed to be after the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:633
+#: js/EventEditDialog.js:653
 msgid "Start date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:640
+#: js/EventEditDialog.js:660
 msgid "Start date is not allowed to be before the configured time."
 msgstr ""
 
@@ -865,7 +865,7 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:550
+#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:571
 msgid "Edit Resource"
 msgstr ""
 
@@ -897,21 +897,21 @@ msgstr ""
 msgid "Yearly"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:225 js/Model.js:1015
+#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:238 js/Model.js:1017
 #: js/ResourceEditDialog.js:91 Model/Poll.php:71
 msgid "Name"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:52 js/Model.js:1016 js/ResourceEditDialog.js:96
+#: js/ResourcesGridPanel.js:52 js/Model.js:1018 js/ResourceEditDialog.js:96
 msgid "Email"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:205 js/Model.js:1020
+#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:229 js/Model.js:1022
 #: js/ResourceEditDialog.js:103
 msgid "Type"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:65 js/Model.js:1018 js/ResourceEditDialog.js:119
+#: js/ResourcesGridPanel.js:65 js/Model.js:1020 js/ResourceEditDialog.js:119
 msgid "Maximum number of attendee"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgstr ""
 msgid "Default Status"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:79 js/Model.js:1034 js/ResourceEditDialog.js:115
+#: js/ResourcesGridPanel.js:79 js/Model.js:1036 js/ResourceEditDialog.js:115
 msgid "Busy Type"
 msgstr ""
 
@@ -936,19 +936,19 @@ msgstr ""
 msgid "{0} more..."
 msgstr ""
 
-#: js/EventUI.js:174
+#: js/EventUI.js:178
 msgid "private classification"
 msgstr ""
 
-#: js/EventUI.js:193
+#: js/EventUI.js:197
 msgid "has alarm"
 msgstr ""
 
-#: js/EventUI.js:200
+#: js/EventUI.js:204
 msgid "has attachments"
 msgstr ""
 
-#: js/EventUI.js:207
+#: js/EventUI.js:211
 msgid "is part of an open poll"
 msgstr ""
 
@@ -961,65 +961,70 @@ msgstr ""
 msgid "Click here to invite another attender..."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:172
-msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:206
-msgid "Click icon to change"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:215
+#: js/AttendeeGridPanel.js:161
 msgid "User"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:216 js/AttendeeGridPanel.js:276
+#: js/AttendeeGridPanel.js:162 js/AttendeeGridPanel.js:289
 #: Model/Attender.php:246
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:217 js/Model.js:982 Config.php:321
+#: js/AttendeeGridPanel.js:163 js/Model.js:984 Config.php:321
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] ""
 
-#: js/AttendeeGridPanel.js:218
+#: js/AttendeeGridPanel.js:164
 msgid "Member of group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:234
+#: js/AttendeeGridPanel.js:196
+msgid "This is the calendar where the attender has saved this event in"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:230
+msgid "Click icon to change"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:247
 msgid "Availability of Attendee"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:271
+#: js/AttendeeGridPanel.js:284
 msgid "Whole Group or each Member of Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:272
+#: js/AttendeeGridPanel.js:285
 msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:277
+#: js/AttendeeGridPanel.js:290
 msgid "Member of Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:379
+#: js/AttendeeGridPanel.js:392
 msgid "Loading Groupmembers..."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:509
+#: js/AttendeeGridPanel.js:526
 msgid "Remove Attender"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:525
+#: js/AttendeeGridPanel.js:546
 msgid "Compose email"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:829
+#: js/AttendeeGridPanel.js:554
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:850
 msgid "(as a group member)"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:920
+#: js/AttendeeGridPanel.js:941
 msgid "External Attendee"
 msgstr ""
 
@@ -1031,7 +1036,7 @@ msgstr ""
 msgid "Searching..."
 msgstr ""
 
-#: js/SearchCombo.js:85 js/Model.js:71 js/Model.js:589
+#: js/SearchCombo.js:85 js/Model.js:74 js/Model.js:591
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
@@ -1064,58 +1069,58 @@ msgstr ""
 msgid "Color by Attendee Role"
 msgstr ""
 
-#: js/Model.js:76 js/Application.js:32 Model/Poll.php:52
+#: js/Model.js:79 js/Application.js:32 Setup/setup.xml:4 Model/Poll.php:52
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] ""
 
-#: js/Model.js:76
+#: js/Model.js:79
 msgid "Calendars"
 msgstr ""
 
-#: js/Model.js:366 js/Model.js:1014
+#: js/Model.js:369 js/Model.js:1016
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:373
+#: js/Model.js:376
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:382
+#: js/Model.js:385
 msgid "Attendee Role"
 msgstr ""
 
-#: js/Model.js:401
+#: js/Model.js:404
 msgid "Unknown date"
 msgstr ""
 
-#: js/Model.js:404
+#: js/Model.js:407
 #, python-brace-format
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/Model.js:426
+#: js/Model.js:429
 msgid "Event (as attendee)"
 msgstr ""
 
-#: js/Model.js:433
+#: js/Model.js:436
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:443
+#: js/Model.js:446
 msgid "Event attendee"
 msgstr ""
 
-#: js/Model.js:585
+#: js/Model.js:587
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""
 
-#: js/Model.js:998
+#: js/Model.js:1000
 msgid "Anyone"
 msgstr ""
 
-#: js/Model.js:1027 js/ResourceEditDialog.js:109
+#: js/Model.js:1029 js/ResourceEditDialog.js:109
 msgid "Default attendee status"
 msgstr ""
 
@@ -1523,7 +1528,7 @@ msgid "Mute Event Notifications for Polls"
 msgstr ""
 
 #: Config.php:514
-msgid "Do not send invitations notifications for alternatie events in an active poll."
+msgid "Do not send invitations notifications for alternative events in an active poll."
 msgstr ""
 
 #: Config.php:523 Config.php:525
@@ -1720,6 +1725,39 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
+#: Export/definitions/cal_resource_doc.xml:5
+#: Export/definitions/cal_default_doc_single.xml:11
+msgid "Word details"
+msgstr ""
+
+#: Export/definitions/cal_resource_xls_overview.xml:5
+msgid "Excel overview"
+msgstr ""
+
+#: Export/definitions/cal_default_ods.xml:9
+msgid "OpenDocument all data"
+msgstr ""
+
+#: Export/definitions/cal_default_ods.xml:11
+msgid "Export event data into ods spreadsheet"
+msgstr ""
+
+#: Export/definitions/cal_default_doc_sheet.xml:10
+msgid "Word event sheet"
+msgstr ""
+
+#: Export/definitions/cal_default_doc_sheet.xml:12
+msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+#: Export/definitions/cal_resource_xls.xml:5
+msgid "Excel all data"
+msgstr ""
+
+#: Import/definitions/cal_import_ical.xml:12
+msgid "Import iCal-files"
+msgstr ""
+
 #: views/eventNotification.php:12
 msgid "Updates"
 msgstr ""
@@ -1766,6 +1804,29 @@ msgstr ""
 
 #: views/eventNotification.php:74
 msgid "Event details"
+msgstr ""
+
+#: views/pollDefiniteEventMail.html.twig:1
+#: views/pollDefiniteEventMail.text.twig:1
+msgid "The poll \"%1$s\" has been closed."
+msgstr ""
+
+#: views/pollDefiniteEventMail.html.twig:2
+#: views/pollDefiniteEventMail.text.twig:2
+msgid "The definite event is scheduled for \"%1$s\""
+msgstr ""
+
+#: views/pollDefiniteEventMail.html.twig:4
+#: views/pollDefiniteEventMail.text.twig:4
+msgid "You can review the poll results here:"
+msgstr ""
+
+#: views/pollConfirmationMail.text.twig:1
+msgid "Thank you for attendening the poll \"%1$s\""
+msgstr ""
+
+#: views/pollConfirmationMail.text.twig:3
+msgid "To review or edit your status please use your personal link:"
 msgstr ""
 
 #: Exception/ExdateContainer.php:26
