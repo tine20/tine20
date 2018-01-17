@@ -556,6 +556,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (String(this.record.id).match(/new-ext-gen/)) {
             this.record.set('id', '');
         }
+
+        this.omitCopyTitle = this.record.hasPoll();
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
     },
 

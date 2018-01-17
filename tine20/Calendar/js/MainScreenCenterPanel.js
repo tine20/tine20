@@ -1282,6 +1282,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 oldRecord.ui.remove();
             }
         } else {
+            this.omitCopyTitle = record.hasPoll();
             record = Tine.Calendar.EventEditDialog.superclass.doCopyRecordToReturn.call(this, record);
 
             record.set('editGrant', true);

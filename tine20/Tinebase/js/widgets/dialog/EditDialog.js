@@ -881,7 +881,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
 
-        recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
+        if (! this.omitCopyTitle) {
+            recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
+        }
 
         return new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
     },

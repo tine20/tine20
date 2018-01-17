@@ -159,7 +159,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             },
             bodyFn: function(record) {
                 if (record && record.hasPoll()) {
-                    return String.format(this.i18n._('Poll URL: {0}'), record.getPollUrl());
+                    return String.format(this.app.i18n._('Poll URL: {0}'), record.getPollUrl());
                 } else {
                     return '';
                 }
