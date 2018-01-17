@@ -2123,6 +2123,7 @@
                     </field>
                 </index>
                 <index>
+                    <!-- TODO rename index to value_fulltext -->
                     <name>value</name>
                     <fulltext>true</fulltext>
                     <field>
