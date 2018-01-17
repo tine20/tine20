@@ -83,6 +83,9 @@ Ext.ux.WindowFactory.prototype = {
             // border width
             c.width = c.width + 16;
 
+            // save normal size
+            c.normSize = { width: c.width, height: c.height };
+
             //limit the window size
             c.height = Math.min(Ext.getBody().getBox().height, c.height);
             c.width = Math.min(Ext.getBody().getBox().width, c.width);
