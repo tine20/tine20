@@ -1535,7 +1535,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 //_('Path to custom favicon.')
                 'description'           => 'Path to custom favicon.',
                 'type'                  => 'string',
-                'default'               => '',
+                'default'               => './images/favicon.ico',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,

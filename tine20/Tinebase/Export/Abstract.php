@@ -1019,27 +1019,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
 
         if (null === $this->_logoPath) {
-            $this->_logoPath = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO};
-
-            if (strpos($this->_logoPath, '://') === false) {
-                if ('.' === $this->_logoPath[0] && '/' === $this->_logoPath[1]) {
-                    $this->_logoPath = mb_substr($this->_logoPath, 1);
-                } elseif ('/' !== $this->_logoPath[0]) {
-                    $this->_logoPath = '/' . $this->_logoPath;
-                }
-
-                $baseDir = dirname(dirname(__DIR__));
-                if (0 === strpos($this->_logoPath, $baseDir)) {
-                    $this->_logoPath = 'file://' . $this->_logoPath;
-                } else {
-                    $this->_logoPath = 'file://' . $baseDir . $this->_logoPath;
-                }
-
-                if (!is_file($this->_logoPath)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not find branding logo. Config: ' . Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO} . ' path: ' . $this->_logoPath);
-                    $this->_logoPath = false;
-                }
-            }
+            $this->_logoPath = Tinebase_Helper::getFilename(Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO}, false);
         }
 
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());

@@ -848,8 +848,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),
-            'brandingFavicon'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON),
+            'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+            'brandingFavicon'   => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON)),
             'brandingTitle'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4'),
         );

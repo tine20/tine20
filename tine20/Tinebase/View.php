@@ -21,7 +21,6 @@ class Tinebase_View
     {
         $extJS     = 'ext-all.css';
         $themePath = 'tine20';
-        $favicon   = 'images/favicon.ico';
         $title     = 'Tine 2.0';
         $appleTouchIcon = 'images/apple-touch-icon.gif';
         
@@ -43,7 +42,7 @@ class Tinebase_View
             }
         }
         //Do we have a branding favicon?
-        $favicon = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON) ? Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON) : $favicon;
+        $favicon = Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON));
         //Do we have a branding title?
         $title = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) ? Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) : $title;
         
