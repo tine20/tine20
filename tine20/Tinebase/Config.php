@@ -239,6 +239,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
 
     /**
+     * uri for sentry service (https://sentry.io)
+     *
+     * @var string
+     */
+    const SENTRY_URI = 'sentryUri';
+
+    /**
      * configure hook class for user sync
      *
      * @var string
@@ -1167,6 +1174,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => array()
+        ),
+        self::SENTRY_URI => array(
+            //_('Sentry service URI')
+            'label'                 => 'Sentry service URI',
+            //_('URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>')
+            'description'           => 'URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
         ),
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')

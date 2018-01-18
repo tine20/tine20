@@ -30,6 +30,13 @@ class Tinebase_Exception extends Exception
      * @var string
      */
     protected $_title = NULL;
+
+    /**
+     * only send exceptions to sentry if this is true - don't send exceptions that are important to the code flow / domain logic
+     *
+     * @var bool
+     */
+    protected $_logToSentry = true;
     
     /**
      * the constructor
@@ -124,7 +131,43 @@ class Tinebase_Exception extends Exception
             if ($additionalData) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
             }
+
+            self::sendExceptionToSentry($exception);
         }
+    }
+
+    /**
+     * @param Exception $exception
+     */
+    public static function sendExceptionToSentry(Exception $exception)
+    {
+        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
+        if (! $sentryClient) {
+            return;
+        }
+
+        if ($exception instanceof Tinebase_Exception) {
+            if (!$exception->logToSentry()) {
+                return;
+            }
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending exception to Sentry');
+        $sentryClient->captureException($exception, array(
+            // TODO add more information?
+            'extra' => array(
+                'php_version' => phpversion(),
+                'tinebaseId' => Tinebase_Core::getTinebaseId(),
+            ),
+        ));
+    }
+
+    /**
+     * @return bool
+     */
+    public function logToSentry()
+    {
+        return $this->_logToSentry;
     }
     
     /**

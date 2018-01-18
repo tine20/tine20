@@ -447,6 +447,8 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        self::setupSentry();
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' initializing framework ('
                 . 'PID: ' . getmypid() . ')');
@@ -2059,5 +2061,26 @@ class Tinebase_Core
         }
 
         return ! static::isReplicationSlave();
+    }
+
+    /**
+     * @todo get sentry server uri from config
+     */
+    public static function setupSentry()
+    {
+        $sentryServerUri = Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI);
+        if (! $sentryServerUri) {
+            return;
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
+
+        $client = new Raven_Client($sentryServerUri);
+        $error_handler = new Raven_ErrorHandler($client);
+        $error_handler->registerExceptionHandler();
+        $error_handler->registerErrorHandler();
+        $error_handler->registerShutdownFunction();
+
+        self::set('SENTRY', $client);
     }
 }
