@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Ext.ns('Tine.widgets.grid');
+Ext.ns('Tine.widgets.form');
 
 /**
  * central form field manager
@@ -60,7 +60,7 @@ Tine.widgets.form.FieldManager = function() {
                 fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {},
                 fieldType = fieldDefinition.type || 'textfield',
                 app = Tine.Tinebase.appMgr.get(appName),
-                i18n = fieldDefinition.useGlobalTranslation ? i18n : app.i18n;
+                i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
 
             if (fieldType === 'virtual' && fieldDefinition.config) {

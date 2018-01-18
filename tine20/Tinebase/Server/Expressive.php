@@ -9,10 +9,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use \Psr\Http\Message\RequestInterface;
 use \Zend\Diactoros\Response;
 use \Zend\Diactoros\Response\EmitterInterface;
 use \Zend\Diactoros\Response\SapiEmitter;
-use \Zend\Diactoros\ServerRequestFactory;
 use \Zend\Stratigility\MiddlewarePipe;
 
 /**
@@ -51,20 +51,14 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     protected $_emitter = null;
 
     /**
-     * @var bool
-     */
-    protected $_requestFromGlobals = true;
-
-    /**
      * Tinebase_Server_Expressive constructor.
      *
      * @param EmitterInterface|null $emitter
      * @param bool $requestFromGlobals
      */
-    public function __construct(EmitterInterface $emitter = null, $requestFromGlobals = true)
+    public function __construct(EmitterInterface $emitter = null)
     {
         $this->_emitter = $emitter;
-        $this->_requestFromGlobals = $requestFromGlobals;
         parent::__construct();
     }
 
@@ -78,21 +72,6 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        if (true === $this->_requestFromGlobals) {
-            $this->_request = ServerRequestFactory::fromGlobals();
-        } else {
-            // ATTENTION, unittesting only, \Zend\Psr7Bridge is a dev requirement in composer!
-            if (TINE20_BUILDTYPE !== 'DEVELOPMENT') {
-                throw new Tinebase_Exception_NotImplemented('this is a test path, not for production use');
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                . __LINE__ . ' using Psr7Bridge to forge request from old Zend\Http\Request provided');
-            if (null !== $body) {
-                $request->setContent($body);
-            }
-            $this->_request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($request);
-        }
-
         // TODO session handling in middle ware? this is a question!
         try {
             if (Tinebase_Session::sessionExists()) {
@@ -105,6 +84,8 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
             }
 
             Tinebase_Core::initFramework();
+
+            $this->_request = Tinebase_Core::getContainer()->get(RequestInterface::class);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'

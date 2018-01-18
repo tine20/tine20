@@ -11,7 +11,7 @@
 /**
  * event class for changed list
  *
- * @package     Admin
+ * @package     Addressbook
  */
 class Addressbook_Event_DeleteList extends Tinebase_Event_Abstract
 {

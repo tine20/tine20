@@ -24,14 +24,26 @@ Ext.ns('Tine.widgets.grid');
  */
 Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
-     * @property recordClass
+     * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
-    dataField: null,
-    
     /**
-     * useBBar 
-     * @config Boolean
+     * @cfg {Tine.Tinebase.widgets.Dialog.EditDialog} editDialog
+     */
+    editDialog: null,
+    /**
+     * @cfg {String} parentRecordField
+     */
+    parentRecordField: null,
+
+    /**
+     * @cfg {String} dataField
+     * @deprecated
+     * use this (single) field as data instead of whole data object
+     */
+    dataField: null,
+    /**
+     * @cfg {Bool} useBBar
      */
     useBBar: false,
     
@@ -45,20 +57,36 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @private
      */
     initComponent: function() {
+        var _ = window.lodash,
+            me = this,
+            parent = me.findParentBy(function(c){return !!c.record})
+                || me.findParentBy(function(c) {return c.editDialog});
+
+        this.defaultSortInfo = this.defaultSortInfo || {};
+
         this.initGrid();
         this.initActions();
-        
+
         this.on('rowcontextmenu', this.onRowContextMenu, this);
         if (! this.store) {
             // create basic store
             this.store = new Ext.data.Store({
                 // explicitly create reader
+                sortInfo: this.defaultSortInfo,
                 reader: new Ext.data.ArrayReader({
                         idIndex: 0  // id for each record will be the first element
                     },
                     this.recordClass
                 )
             });
+        }
+
+        if (me.parentRecordField && !this.editDialog) {
+            me.editDialog = _.get(parent, 'editDialog');
+        }
+        if (me.editDialog && me.parentRecordField) {
+            me.editDialog.on('load', me.onRecordLoad, me);
+            me.editDialog.on('recordUpdate', me.onRecordUpdate, me);
         }
 
         Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
@@ -106,7 +134,40 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Ext.grid.ColumnModel}
      */
     getColumnModel: function() {
-        return new Ext.grid.ColumnModel([]);
+        var _ = window.lodash,
+            me = this;
+
+        if (! this.colModel) {
+            if (this.columns) {
+                // convert string cols
+                _.each(me.columns, function(col, idx) {
+                    if (_.isString(col)) {
+                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        if (config) {
+                            me.columns[idx] = config;
+                            _.each(['quickaddField', 'editor'], function(prop) {
+                                config[prop] = Ext.ComponentMgr.create(Tine.widgets.form.FieldManager.getByModelConfig(
+                                    me.recordClass.getMeta('appName'),
+                                    me.recordClass.getMeta('modelName'),
+                                    col,
+                                    Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID
+                                ));
+                            });
+                        }
+                    }
+                });
+                _.remove(me.columns, _.isString)
+            }
+
+            this.colModel = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: false
+                },
+                columns: this.columns || []
+            });
+        }
+
+        return this.colModel;
     },
     
     /**
@@ -116,15 +177,23 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        var initialData = null;
-        if (Ext.isFunction(this.recordClass.getDefaultData)) {
-            initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
-        } else {
-            initialData = recordData;
-        }
-        var newRecord = new this.recordClass(initialData, Ext.id());
+        var _ = window.lodash,
+            defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {},
+            newRecord = new this.recordClass(defaultData, Ext.id());
+
+        _.each(recordData, function(val, key) {
+            if (val) {
+                // we want to see the red dirty triangles
+                Tine.Tinebase.common.assertComparable(val);
+                newRecord.set(key, '');
+            }
+
+            newRecord.set(key, val);
+        });
+
         this.store.insert(0 , [newRecord]);
-        
+
         return true;
     },
     
@@ -225,7 +294,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Array}
      */
     getFromStoreAsArray: function(deleteAutoIds) {
-        var result = [];
+        var result = Tine.Tinebase.common.assertComparable([]);
         this.store.each(function(record) {
             var data = (this.dataField === null) ? record.data : record.get(this.dataField);
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
@@ -235,5 +304,50 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         }, this);
 
         return result;
+    },
+
+    onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            me = this,
+            data = _.get(record, 'data.' + me.parentRecordField) || [],
+            idProperty = me.recordClass.getMeta('idProperty'),
+            copyOmitFields = _.filter(me.recordClass.getModelConfiguration().fields, {copyOmit: true});
+
+        /* generic client driven resolve attempt
+        var byType = _.groupBy(me.recordClass.getModelConfiguration().fields, 'type'),
+            recordsByType = _.groupBy(_.get(byType, 'record', []), function(f) {
+                return _.get(f, 'config.appName', '') + '.' + _.get(f, 'config.modelName', '')
+            }),
+            idMap = {};
+
+        _.assign(byType, recordsByType);
+
+        _.each(['user', 'Addressbook.Contact'], function(type) {
+            _.each(byType[type], function(field) {
+                idMap[type] = _.uniq(_.concat(_.get(idMap, type, []), _.compact(_.map(data, field.key))));
+            });
+        });
+
+        // resolve all user and Addressbook.contact -> argh, there is no user API
+        */
+
+        if (me.editDialog.copyRecord) {
+            _.each(data, function(recordData) {
+                recordData[idProperty] = Tine.Tinebase.data.Record.generateUID();
+                _.each(copyOmitFields, function (copyOmitField) {
+                    delete (recordData[copyOmitField.key]);
+                });
+            });
+        }
+        me.setStoreFromArray(data);
+
+    },
+
+    onRecordUpdate: function(editDialog, record) {
+        var _ = window.lodash,
+            me = this,
+            data = me.getFromStoreAsArray();
+
+        record.set(me.parentRecordField, data);
     }
 });

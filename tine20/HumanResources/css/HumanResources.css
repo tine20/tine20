@@ -12,10 +12,10 @@
     background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
 }
 
-.x-btn-medium .HumanResourcesIconCls {
+.x-btn-medium .HumanResourcesIconCls, .x-btn-medium .HumanResourcesEmployee {
     background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
 }
-.x-btn-large .HumanResourcesIconCls {
+.x-btn-large .HumanResourcesIconCls, .x-btn-large .HumanResourcesEmployee {
     background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
 }
 

@@ -12,9 +12,9 @@
     background-image:url(../../images/../Projects/res/projects_small.png) !important;
 }
 
-.x-btn-medium .ProjectsIconCls {
+.x-btn-medium .ProjectsIconCls, .x-btn-medium .ProjectsProject {
     background-image:url(../../images/../Projects/res/projects_medium.png) !important;
 }
-.x-btn-large .ProjectsIconCls {
+.x-btn-large .ProjectsIconCls, .x-btn-large .ProjectsProject {
     background-image:url(../../images/../Projects/res/projects_big.png) !important;
 }

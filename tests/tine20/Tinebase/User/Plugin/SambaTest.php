@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_Plugin_SambaTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -188,8 +184,3 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null,                          $testUser->sambaSAM->kickoffTime);
     }
 }        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_Plugin_SambaTest::main') {
-    Tinebase_Group_SqlTest::main();
-}

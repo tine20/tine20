@@ -55,3 +55,53 @@ div.page
 .rp-print-single-image {
     text-align: left;
 }
+
+.gridpanelrenderer_header_gridtitle {
+    font-weight: bold;
+    margin-top: 0.4cm;
+    text-decoration: underline;
+}
+
+.rp-print-single .gridpanelrenderer_header_title,
+.rp-print-single .gridpanelrenderer_header_logo {
+    display: none;
+}
+
+.rp-print-single-tags {
+    margin-top: 2px;
+}
+
+.x-widget-tag-tagitem {
+    margin: 1px 2px 1px 1px;
+    background-color: #FFF8E0;
+    height: 16px;
+    border: 1px solid gray;
+    float: left;
+    color: gray;
+}
+
+.x-widget-tag-tagitem-color {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    float: left;
+    background-color: #FFFFFF;
+    border-right: 1px solid gray;
+    width: 4px;
+    height: 16px;
+}
+
+.x-widget-tag-tagitem-text {
+    padding: 0 5px 0 5px;
+    margin: 0 0 0 0;
+    line-height: 16px;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.x-clear {
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    line-height: 0;
+    font-size: 0;
+}

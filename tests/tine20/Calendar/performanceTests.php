@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_performanceTests::main');
-}
-
 /**
  * Test class for Json Frontend
  * 
@@ -143,9 +139,4 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
             $numSearches += 1;
         }
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_performanceTests::main') {
-    Calendar_performanceTests::main();
 }

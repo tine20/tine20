@@ -41,4 +41,4 @@ Tine.widgets.printer.fieldsRenderer = function(appName, record, fieldName){
 
 Tine.widgets.printer.headerRenderer = function() {
     return  '<div class="rp-print-single-logo"><img src="' + Tine.logo + '"></div>';
-}
+};

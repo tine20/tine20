@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -23,6 +23,11 @@ class Tinebase_CustomFieldTest extends TestCase
      * @var Tinebase_CustomField
      */
     protected $_instance;
+
+    /**
+     * @var Tinebase_Model_CustomField_Config
+     */
+    protected $_testCustomField = null;
 
     /**
      * Sets up the fixture.
@@ -242,78 +247,105 @@ class Tinebase_CustomFieldTest extends TestCase
         self::assertTrue(in_array($contact->customfields['test'][0]['org_name'], array('contact 1', 'contact 2')));
     }
 
+    /**
+     * testBoolCustomField
+     */
     public function testBoolCustomField()
     {
-        $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
-            'name'              => 'test',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'model'             => 'Addressbook_Model_Contact',
-            'definition' => array('type' => 'bool')
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => 1, 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => '1', 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => true, 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => 0, 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => '0', 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => false, 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => null, 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('bool', 1, $filtersToTest);
+    }
+
+    /**
+     * @param mixed $customFieldValue
+     * @return Tinebase_Record_Interface
+     */
+    protected function _createContactWithCustomField($customFieldValue)
+    {
+        return Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'customfield_test_contact',
+            'customfields' => [
+                $this->_testCustomField->name => $customFieldValue
+            ]
         )));
+    }
 
-        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
-            'n_family'     => 'contact',
-            'customfields' => [$createdCustomField->name => 1]
-        )));
+    /**
+     * @param string $type
+     * @param mixed $customFieldValue
+     * @param array $filtersToTest
+     */
+    protected function _testContactCustomFieldOfType($type, $customFieldValue, $filtersToTest)
+    {
+        $this->_testCustomField = $this->_createCustomField('test', 'Addressbook_Model_Contact', $type);
+        $contact = $this->_createContactWithCustomField($customFieldValue);
 
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => 1
-            ]]
-        ]));
-        static::assertEquals(1, $result->count());
-        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+        foreach ($filtersToTest as $filterToTest) {
+            $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+                ['field' => 'customfield', 'operator' => $filterToTest['operator'], 'value' => [
+                    // TODO is this needed for textarea types?
+                    //Tinebase_Model_Filter_CustomField::OPT_FORCE_FULLTEXT => true,
+                    'cfId' => $this->_testCustomField->getId(),
+                    'value' => $filterToTest['value']
+                ]]
+            ]));
+            if ($filterToTest['expectContactToBeFound']) {
+                static::assertEquals(1, $result->count(), 'contact not found with filter '
+                    . print_r($filterToTest, true)
+                    . ' cf value: ' . $customFieldValue
+                );
+                static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+            } else {
+                static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+            }
+        }
+    }
 
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => '1'
-            ]]
-        ]));
-        static::assertEquals(1, $result->count());
-        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+    /**
+     * testStringCustomField
+     */
+    public function testStringCustomField()
+    {
+        $value = 'abc def 1234';
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => true],
+            ['operator' => 'contains', 'value' => 'a', 'expectContactToBeFound' => true],
+            ['operator' => 'contains', 'value' => '1234', 'expectContactToBeFound' => true],
+            ['operator' => 'startswith', 'value' => 'abc', 'expectContactToBeFound' => true],
+            ['operator' => 'endswith', 'value' => '1234', 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => 'abc', 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => 'x', 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('string', $value, $filtersToTest);
+    }
 
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => true
-            ]]
-        ]));
-        static::assertEquals(1, $result->count());
-        static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+    /**
+     * testFullTextCustomField
+     *
+     * @todo make it work
+     * @todo is textarea always fulltext?
+     */
+    public function testFullTextCustomField()
+    {
+        self::markTestSkipped('TODO make it work');
 
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => 0
-            ]]
-        ]));
-        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
-
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => '0'
-            ]]
-        ]));
-        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
-
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => false
-            ]]
-        ]));
-        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
-
-        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
-            ['field' => 'customfield', 'operator' => 'equals', 'value' => [
-                'cfId' => $createdCustomField->getId(),
-                'value' => null
-            ]]
-        ]));
-        static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+        $value = 'abc def 1234';
+        $filtersToTest = [
+            ['operator' => 'startswith', 'value' => 'abc', 'expectContactToBeFound' => true],
+            ['operator' => 'startswith', 'value' => 'def', 'expectContactToBeFound' => true],
+            ['operator' => 'startswith', 'value' => '1234', 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => 'abc', 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('textarea', $value, $filtersToTest);
     }
 
     /**

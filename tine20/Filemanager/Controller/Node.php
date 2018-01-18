@@ -184,34 +184,64 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $_record->pin_protected = $_oldRecord->pin_protected;
         }
 
-        // update node acl
-        $aclNode = $_oldRecord->acl_node;
-        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type
-            && Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')
-        ) {
-            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($_record->getId(), true));
-            if (! $nodePath->isSystemPath()) {
+        $aclNode = $this->_updateNodeAcl($_record, $_oldRecord);
 
-                if (empty($_record->acl_node) && ! $nodePath->isToplevelPath()) {
-                    // acl_node empty -> remove acl
-                    $node = $this->_backend->setAclFromParent($nodePath->statpath);
-                    $aclNode = $node->acl_node;
-
-                } elseif ($_record->acl_node === $_record->getId() && isset($_record->grants)) {
-                    $oldGrants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($_oldRecord);
-                    if (is_array($_record->grants)) {
-                        $_record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->grants);
-                    }
-                    $diff = $_record->grants->diff($oldGrants);
-                    if (!$diff->isEmpty() || $_oldRecord->acl_node !== $_record->acl_node) {
-                        $this->_backend->setGrantsForNode($_record, $_record->grants);
-                    }
-                    $aclNode = $_record->acl_node;
-                }
-            }
-        }
         // reset node acl value to prevent spoofing
         $_record->acl_node = $aclNode;
+    }
+
+    /**
+     * update node acl
+     *
+     * @param $record
+     * @param $oldRecord
+     * @return string
+     */
+    protected function _updateNodeAcl($record, $oldRecord)
+    {
+        $aclNode = $oldRecord->acl_node;
+
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $record->type) {
+            return $aclNode;
+        }
+
+        if (! Tinebase_Core::getUser()->hasGrant(
+            $record,
+            Tinebase_Model_Grants::GRANT_ADMIN,
+            'Tinebase_Model_Tree_Node')
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Update node ACL requires ADMIN grant');
+            return $aclNode;
+        }
+
+        $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record->getId(), true));
+        if ($nodePath->isSystemPath()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Could not update ACL for system path');
+            return $aclNode;
+        }
+
+        if (empty($record->acl_node) && !$nodePath->isToplevelPath()) {
+            // acl_node empty -> remove acl
+            $node = $this->_backend->setAclFromParent($nodePath->statpath);
+            $aclNode = $node->acl_node;
+
+        } elseif ($record->acl_node === $record->getId() && isset($record->grants)) {
+            $oldGrants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($oldRecord);
+            if (is_array($record->grants)) {
+                $record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $record->grants);
+            }
+            $diff = $record->grants->diff($oldGrants);
+            if (!$diff->isEmpty() || $aclNode !== $record->acl_node) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Setting new node grants.');
+                $this->_backend->setGrantsForNode($record, $record->grants);
+            }
+            $aclNode = $record->acl_node;
+        }
+
+        return $aclNode;
     }
     
     /**

@@ -170,7 +170,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::FILTER_EMAIL_URIS => array(
             //_('Filter E-Mail URIs')
             'label'                 => 'Filter E-Mail URIs',
-            // _('Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on.)')
+            // _('Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on')
             'description'           => 'Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => FALSE,

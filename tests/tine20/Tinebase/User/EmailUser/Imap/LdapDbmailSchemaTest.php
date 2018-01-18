@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -154,8 +150,3 @@ class Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest extends PHPUnit_Framewor
     }
     
 }        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest::main') {
-    Tinebase_Group_SqlTest::main();
-}

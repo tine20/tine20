@@ -158,6 +158,10 @@ Tine.Calendar.EventUI.prototype = {
 
         this.extraCls += ' cal-status-' + this.event.get('status');
 
+        if (this.event.hasPoll()) {
+            this.extraCls += ' cal-poll-event';
+        }
+
         // compute status icons
         this.statusIcons = Tine.Calendar.EventUI.getStatusInfo(this.event, this.attendeeRecord);
     }

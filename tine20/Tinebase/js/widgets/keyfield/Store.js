@@ -109,6 +109,15 @@ Tine.Tinebase.widgets.keyfield.StoreMgr = function(){
             }
             
             return stores[key];
+        },
+
+        has: function(app, keyFieldName) {
+            var store;
+            try {
+                store = this.get(app, keyFieldName);
+            } catch (e){}
+
+            return !! store;
         }
     };
 }();

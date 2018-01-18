@@ -530,4 +530,21 @@ class Tinebase_ApplicationTest extends TestCase
         // no models should remain
         $this->assertEquals(0, count($models), 'unexpected models found: '.print_r($models, true));
     }
+
+    public function testInstallApplicationWithId()
+    {
+        Setup_Core::set(Setup_Core::CHECKDB, true);
+        Setup_Controller::unsetInstance();
+        Setup_Controller::getInstance()->uninstallApplications(['ExampleApplication']);
+
+        $this->_testNeedsTransaction();
+
+        $appId = Tinebase_Record_Abstract::generateUID();
+        Setup_Controller::getInstance()->installApplications([$appId => 'ExampleApplication'],
+            [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication');
+
+        static::assertEquals($appId, $app->getId());
+    }
 }

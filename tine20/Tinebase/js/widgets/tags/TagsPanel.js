@@ -442,6 +442,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     
 });
 
+Ext.reg('Tine.widgets.tags.TagPanel', Tine.widgets.tags.TagPanel);
+
 /**
  * @private Helper class to have tags processing in the standard form/record cycle
  */

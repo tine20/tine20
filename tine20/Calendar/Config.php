@@ -511,8 +511,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS => array(
             //_('Mute Event Notifications for Polls')
             'label'                 => 'Mute Event Notifications for Polls',
-            //_('Do not send invitations notifications for alternatie events in an active poll.')
-            'description'           => 'Do not send invitations notifications for alternatie events in an active poll.',
+            //_('Do not send invitations notifications for alternative events in an active poll.')
+            'description'           => 'Do not send invitations notifications for alternative events in an active poll.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,

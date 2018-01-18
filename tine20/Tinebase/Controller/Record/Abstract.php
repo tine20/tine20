@@ -2742,4 +2742,38 @@ HumanResources_CliTests.testSetContractsEndDate */
     {
         return $this->_backend->has($_ids, $_getDeleted);
     }
+
+    /**
+     * get resolved group records
+     * NOTE: modelconfig only!
+     *
+     * TODO replace converter usage when we have refactored the record resolving
+     *
+     * @param Tinebase_Record_Abstract $record
+     * @param $foreignModel
+     * @param $groupField
+     * @param $idProp
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getResolvedGroupRecords(Tinebase_Record_Abstract $record, $foreignModel, $groupField, $idProp)
+    {
+        $record = $this->get($record->getId());
+
+        // use converter to resolve the foreign records recursivly
+        // NOTE: you have to activate 'recursiveResolving' for the 'records' field
+        // TODO: replace this when we have better resolving in the controllers
+        $converter = Tinebase_Convert_Factory::factory($this->_modelName);
+        $converter->setRecursiveResolve(true);
+        $recordArray = $converter->fromTine20Model($record);
+
+        $result = new Tinebase_Record_RecordSet($foreignModel);
+        $foreignData = isset($recordArray[$groupField]) && is_array($recordArray[$groupField]) ? $recordArray[$groupField] : array();
+
+        foreach ($foreignData as $groupArray) {
+            $record = new $foreignModel(array(), TRUE);
+            $record->setFromJsonInUsersTimezone($groupArray[$idProp]);
+            $result->addRecord($record);
+        }
+        return $result;
+    }
 }

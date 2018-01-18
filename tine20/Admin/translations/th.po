@@ -1,83 +1,609 @@
-# 
+#
 # Translators:
-# jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
 # Phinitnan Chanasabaeng <crackerizer@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-28 09:49+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ApplicationFilter.js:33 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:143 js/customfield/GridPanel.js:70
-#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
-#: js/Models.js:128
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "การประยุกต์ใช้"
+#: js/TagEditDialog.js:38 js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
+msgid "Please wait"
+msgstr "กรุณารอ"
 
-#: js/Admin.js:26 js/AccessLog.js:106 js/user/Users.js:75
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "ผู้ใช้"
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "กำลังปรับปรุงป้ายกำกับ"
 
-#: js/Admin.js:39 js/Models.js:87
-msgid "Groups"
-msgstr "กลุ่ม"
+#: js/TagEditDialog.js:84 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
+#: js/Roles.js:69 js/Groups.js:74 js/GroupEditDialog.js:73
+msgid "Failed"
+msgstr "ได้ล้มเหลว"
 
-#: js/Admin.js:52
-msgid "Roles"
-msgstr "หน้าที่"
+#: js/TagEditDialog.js:85
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr "ไม่สามารถจัดเก็บป้ายกำกับ ({0}) ได้"
 
-#: js/Admin.js:64 js/Models.js:128
-msgid "Applications"
-msgstr "การประยุกต์ใช้"
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:115 js/GroupEditDialog.js:78
+#: js/customfield/EditDialog.js:138 js/customfield/EditDialog.js:274
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
 
-#: js/Admin.js:77
-msgid "Containers"
-msgstr "ที่จัดเก็บ"
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:115 js/GroupEditDialog.js:78
+msgid "Please fix the errors noted."
+msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
 
-#: js/Admin.js:89
-msgid "Shared Tags"
-msgstr "ป้ายกำกับที่ใช้ร่วมกัน"
+#: js/TagEditDialog.js:172
+msgid "Allowed Contexts"
+msgstr "เนื้อหาที่อนุญาต"
 
-#: js/Admin.js:102
-msgid "Customfields"
-msgstr ""
+#: js/TagEditDialog.js:178
+msgid "Context"
+msgstr "เนื้อหา"
 
-#: js/Admin.js:114
-msgid "Computers"
-msgstr "คอมพิวเตอร์"
+#: js/TagEditDialog.js:191
+msgid "Account Rights"
+msgstr "สิทธิ์เกี่ยวกับบัญชี"
 
-#: js/Admin.js:128 js/AccessLog.js:104 js/Models.js:51
+#: js/TagEditDialog.js:200
+msgid "View"
+msgstr "ดู"
+
+#: js/TagEditDialog.js:205
+msgid "Use"
+msgstr "ใช้"
+
+#: js/TagEditDialog.js:222
+msgid "Tag Name"
+msgstr "ชื่อป้ายกำกับ"
+
+#: js/TagEditDialog.js:229 js/Tags.js:227 js/container/EditDialog.js:195
+msgid "Color"
+msgstr "สี"
+
+#: js/TagEditDialog.js:234 js/user/GridPanel.js:104 js/RoleEditDialog.js:294
+#: js/Tags.js:231 js/Roles.js:243 js/Groups.js:241 js/GroupEditDialog.js:129
+#: js/config/GridPanel.js:63 js/SambaMachineGrid.js:57
+#: js/SambaMachineGrid.js:89 js/config/EditDialog.js:129 js/Roles.js:239
+#: js/user/GridPanel.js:105
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: js/TagEditDialog.js:294 js/RoleEditDialog.js:361 js/GroupEditDialog.js:222
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "กำลังโอนย้าย {0}..."
+
+#: js/TagEditDialog.js:294
+msgid "Tag"
+msgstr "ป้ายกำกับ"
+
+#: js/TagEditDialog.js:304
+msgid "Add New Tag"
+msgstr "เพิ่มป้ายกำกับใหม่"
+
+#: js/TagEditDialog.js:306
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "แก้ไขป้ายกำกับ \"{0}\""
+
+#: js/AccessLog.js:104 js/Admin.js:88 js/Models.js:51 js/Admin.js:128
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "บันทึกการใช้งาน"
 
-#: js/Admin.js:141
+#: js/AccessLog.js:105 js/AccessLog.js:133
+msgid "IP Address"
+msgstr "หมายเลขไอพี"
+
+#: js/AccessLog.js:106 js/user/Users.js:72 js/Admin.js:23 js/user/Users.js:75
+#: js/Admin.js:26
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "ผู้ใช้"
+
+#: js/AccessLog.js:107 js/AccessLog.js:134
+msgid "Login Time"
+msgstr "เวลาเข้าใช้"
+
+#: js/AccessLog.js:108 js/AccessLog.js:135
+msgid "Logout Time"
+msgstr "เวลาเลิกใช้"
+
+#: js/AccessLog.js:109 js/AccessLog.js:137
+msgid "Client Type"
+msgstr "ประเภทลูกค้า"
+
+#: js/AccessLog.js:130
+msgid "Session ID"
+msgstr "รหัสเซสชัน"
+
+#: js/AccessLog.js:131
+msgid "Login Name"
+msgstr "ชื่อที่เข้าใช้"
+
+#: js/AccessLog.js:132 js/user/EditDialog.js:288 js/user/EditDialog.js:324
+#: js/Tags.js:230 js/Roles.js:242 js/Groups.js:240 js/Applications.js:276
+#: js/config/GridPanel.js:74 js/container/EditDialog.js:131
+#: js/SambaMachineGrid.js:83 js/customfield/GridPanel.js:68
+#: js/customfield/EditDialog.js:459 js/config/EditDialog.js:115 js/Roles.js:238
+#: js/user/EditDialog.js:304 js/user/EditDialog.js:340 js/QuotaUsage.js:51
+msgid "Name"
+msgstr "ชื่อ"
+
+#: js/AccessLog.js:136
+msgid "Result"
+msgstr "ผลลัพธ์"
+
+#: js/AccessLog.js:157
+msgid "user blocked"
+msgstr "ผู้ใช้ถูกล็อก"
+
+#: js/AccessLog.js:161
+msgid "password expired"
+msgstr "รหัสผ่านหมดอายุแล้ว"
+
+#: js/AccessLog.js:165
+msgid "user disabled"
+msgstr "ผู้ใช้ปิดใช้งานแล้ว"
+
+#: js/AccessLog.js:169
+msgid "invalid password"
+msgstr "รหัสผ่านไม่ถูกต้อง"
+
+#: js/AccessLog.js:173
+msgid "ambiguous username"
+msgstr "ชื่อผู้ใช้คลุมเครือ"
+
+#: js/AccessLog.js:177
+msgid "user not found"
+msgstr "ผู้ใช้ไม่พบ"
+
+#: js/AccessLog.js:181
+msgid "failure"
+msgstr "ความล้มเหลว"
+
+#: js/AccessLog.js:185
+msgid "success"
+msgstr "ความสำเร็จ"
+
+#: js/user/GridPanel.js:50 js/user/GridPanel.js:51
+msgid "Enable Account"
+msgstr "อนุญาตใช้บัญชี"
+
+#: js/user/GridPanel.js:60 js/user/GridPanel.js:61
+msgid "Disable Account"
+msgstr "เลิกบัญชี"
+
+#: js/user/GridPanel.js:70 js/user/GridPanel.js:71
+msgid "Reset Password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+#: js/user/GridPanel.js:79 js/user/GridPanel.js:80
+msgid "Reset Pin"
+msgstr ""
+
+#: js/user/GridPanel.js:188 js/Roles.js:241 js/Groups.js:239
+#: js/container/GridPanel.js:65 js/SambaMachineGrid.js:76
+#: js/customfield/GridPanel.js:66 js/Roles.js:237 js/user/GridPanel.js:189
+msgid "ID"
+msgstr "รหัส"
+
+#: js/user/GridPanel.js:189 js/user/EditDialog.js:882 js/Applications.js:277
+#: js/user/EditDialog.js:927 js/user/GridPanel.js:190
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/user/GridPanel.js:190 js/user/GridPanel.js:191
+msgid "Display name"
+msgstr "ชื่อที่ใช้"
+
+#: js/user/GridPanel.js:191 js/user/EditDialog.js:813 js/user/EditDialog.js:858
+#: js/user/EditDialog.js:903 js/user/GridPanel.js:192
+msgid "Login name"
+msgstr "ชื่อที่เข้าใช้"
+
+#: js/user/GridPanel.js:192 js/user/EditDialog.js:807 js/user/EditDialog.js:852
+#: js/user/GridPanel.js:193
+msgid "Last name"
+msgstr "นามสกุล"
+
+#: js/user/GridPanel.js:193 js/user/EditDialog.js:796 js/user/EditDialog.js:841
+#: js/user/GridPanel.js:194
+msgid "First name"
+msgstr "ชื่อตัว"
+
+#: js/user/GridPanel.js:194 js/user/EditDialog.js:850 js/user/EditDialog.js:895
+#: js/user/GridPanel.js:195
+msgid "Email"
+msgstr "อีเมล"
+
+#: js/user/GridPanel.js:195 js/user/EditDialog.js:857 js/user/EditDialog.js:902
+#: js/user/GridPanel.js:198
+msgid "OpenID"
+msgstr "รหัสเปิด"
+
+#: js/user/GridPanel.js:196 js/user/EditDialog.js:990
+#: js/user/EditDialog.js:1035 js/user/GridPanel.js:199
+msgid "Last login at"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
+
+#: js/user/GridPanel.js:197 js/user/EditDialog.js:994
+#: js/user/EditDialog.js:1039 js/user/GridPanel.js:200
+msgid "Last login from"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
+
+#: js/user/GridPanel.js:198 js/user/GridPanel.js:201
+msgid "Password changed"
+msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
+
+#: js/user/GridPanel.js:199 js/user/EditDialog.js:923 js/user/EditDialog.js:968
+#: js/user/GridPanel.js:202
+msgid "Expires"
+msgstr "หมดอายุ"
+
+#: js/user/GridPanel.js:258 js/user/GridPanel.js:261
+msgid "Set new password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+#: js/user/GridPanel.js:258 js/user/GridPanel.js:261
+msgid "Please enter the new password:"
+msgstr "กรุณาใส่รหัสผ่านใหม่:"
+
+#: js/user/GridPanel.js:286 js/user/GridPanel.js:289
+msgid "Set new pin"
+msgstr ""
+
+#: js/user/GridPanel.js:286 js/user/GridPanel.js:289
+msgid "Please enter the new pin:"
+msgstr ""
+
+#: js/user/EditDialog.js:190 js/user/EditDialog.js:206
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:237 js/user/EditDialog.js:240
+#: js/user/EditDialog.js:736 js/user/EditDialog.js:253
+#: js/user/EditDialog.js:256 js/user/EditDialog.js:781
+msgid "Passwords do not match!"
+msgstr "รหัสผ่านไม่ตรง"
+
+#: js/user/EditDialog.js:243 js/user/EditDialog.js:259
+msgid "Passwords match!"
+msgstr "รหัสผ่านตรง!"
+
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:864
+#: js/user/EditDialog.js:305 js/user/EditDialog.js:909
+msgid "Primary group"
+msgstr "กลุ่มหลัก"
+
+#: js/user/EditDialog.js:366 js/user/EditDialog.js:382
+msgid "Unix"
+msgstr "ยูนิกซ์"
+
+#: js/user/EditDialog.js:380 js/user/EditDialog.js:396
+msgid "Home Directory"
+msgstr "โฮมไดเรคทอรี่"
+
+#: js/user/EditDialog.js:384 js/user/EditDialog.js:400
+msgid "Login Shell"
+msgstr ""
+
+#: js/user/EditDialog.js:390 js/user/EditDialog.js:406
+msgid "Windows"
+msgstr ""
+
+#: js/user/EditDialog.js:404 js/user/EditDialog.js:420
+msgid "Home Drive"
+msgstr ""
+
+#: js/user/EditDialog.js:409 js/user/EditDialog.js:425
+msgid "Logon Time"
+msgstr "เวลาเข้าใช้"
+
+#: js/user/EditDialog.js:411 js/user/EditDialog.js:992
+#: js/user/EditDialog.js:996 js/user/EditDialog.js:427
+#: js/user/EditDialog.js:1037 js/user/EditDialog.js:1041
+msgid "never logged in"
+msgstr "ไม่เคยได้เข้าใช้"
+
+#: js/user/EditDialog.js:414 js/user/EditDialog.js:430
+msgid "Home Path"
+msgstr ""
+
+#: js/user/EditDialog.js:419 js/user/EditDialog.js:435
+msgid "Logoff Time"
+msgstr "เวลาเลิกใช้"
+
+#: js/user/EditDialog.js:421 js/user/EditDialog.js:437
+msgid "never logged off"
+msgstr "ไม่เคยเลิกใช้"
+
+#: js/user/EditDialog.js:424 js/user/EditDialog.js:440
+msgid "Profile Path"
+msgstr ""
+
+#: js/user/EditDialog.js:429 js/user/EditDialog.js:445
+msgid "Password Last Set"
+msgstr "รหัสผ่านที่ตั้งครั้งสุดท้าย"
+
+#: js/user/EditDialog.js:431 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:1000 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:971 js/user/EditDialog.js:1045
+msgid "never"
+msgstr "ไม่เลย"
+
+#: js/user/EditDialog.js:434 js/user/EditDialog.js:450
+msgid "Logon Script"
+msgstr ""
+
+#: js/user/EditDialog.js:439 js/user/EditDialog.js:455
+msgid "Password Can Change"
+msgstr "รหัสผ่านสามารถเปลี่ยน"
+
+#: js/user/EditDialog.js:441 js/user/EditDialog.js:446
+#: js/user/EditDialog.js:451 js/user/EditDialog.js:457
+#: js/user/EditDialog.js:462 js/user/EditDialog.js:467
+msgid "not set"
+msgstr "ยังไม่ได้กำหนด"
+
+#: js/user/EditDialog.js:444 js/user/EditDialog.js:460
+msgid "Password Must Change"
+msgstr "รหัสผ่านต้องเปลี่ยน"
+
+#: js/user/EditDialog.js:449 js/user/EditDialog.js:465
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/user/EditDialog.js:469
+msgid "IMAP Quota (MB)"
+msgstr "โควต้า IMAP (MB)"
+
+#: js/user/EditDialog.js:488 js/user/EditDialog.js:526
+#: js/user/EditDialog.js:503 js/user/EditDialog.js:545
+#: js/user/EditDialog.js:577
+msgid "Quota"
+msgstr "โควต้า"
+
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
+#: js/user/EditDialog.js:504 js/user/EditDialog.js:546
+#: js/user/EditDialog.js:578
+msgid "no quota set"
+msgstr "ไม่ได้ตั้งโควต้า"
+
+#: js/user/EditDialog.js:499 js/user/EditDialog.js:550
+msgid "Current Mailbox size"
+msgstr "ขนาดของกล่องจดหมายตอนนี้"
+
+#: js/user/EditDialog.js:507
+msgid "Sieve Quota (MB)"
+msgstr "กรอง โควต้า (MB)"
+
+#: js/user/EditDialog.js:537 js/user/EditDialog.js:582
+msgid "Current Sieve size"
+msgstr "ขนาดของกรองปัจจุบัน"
+
+#: js/user/EditDialog.js:546 js/user/EditDialog.js:975
+#: js/user/EditDialog.js:591 js/user/EditDialog.js:1020
+msgid "Information"
+msgstr "ข้อมูล"
+
+#: js/user/EditDialog.js:560 js/user/EditDialog.js:605
+msgid "Last Login"
+msgstr "ลงบันทึกเข้าครั้งล่าสุด"
+
+#: js/user/EditDialog.js:621 js/user/EditDialog.js:666
+msgid "Domain not allowed"
+msgstr "โดเมนไม่ได้รับอนุญาต"
+
+#: js/user/EditDialog.js:622 js/user/EditDialog.js:667
+#, python-brace-format
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is "
+"configured already."
+msgstr ""
+
+#: js/user/EditDialog.js:631 js/user/EditDialog.js:676
+msgid "Email Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:637 js/user/EditDialog.js:682
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/user/EditDialog.js:655 js/user/EditDialog.js:700
+msgid "Forwarding to self"
+msgstr "ส่งต่อให้ตัวเอง"
+
+#: js/user/EditDialog.js:656 js/user/EditDialog.js:701
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr "คุณไม่ได้รับอนุญาตให้ตั้งที่อยู่อีเมลที่ใช้ส่งต่อที่ตรงกับที่อยู่หรือชื่อของผู้ที่ส่งอีเมล"
+
+#: js/user/EditDialog.js:665 js/user/EditDialog.js:710
+msgid "Email Forward"
+msgstr "ส่งต่ออีเมล"
+
+#: js/user/EditDialog.js:671 js/user/EditDialog.js:716
+msgid "Add a forward address..."
+msgstr "เพิ่ม ที่อยู่ที่จะส่งต่อ..."
+
+#: js/user/EditDialog.js:684 js/user/EditDialog.js:729
+msgid "Forward Only"
+msgstr "ส่งต่อเท่านั้น"
+
+#: js/user/EditDialog.js:703 js/user/EditDialog.js:748
+msgid "Password confirmation"
+msgstr "การยืนยันรหัสผ่าน"
+
+#: js/user/EditDialog.js:720 js/user/EditDialog.js:765
+msgid "Repeat password"
+msgstr "ใส่รหัสผ่านอีกครั้ง"
+
+#: js/user/EditDialog.js:739 js/customfield/EditDialog.js:311
+#: js/user/EditDialog.js:784
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: js/user/EditDialog.js:746 js/user/EditDialog.js:791
+msgid "Ok"
+msgstr "ตกลง"
+
+#: js/user/EditDialog.js:781 js/user/EditDialog.js:826
+msgid "Account"
+msgstr "บัญชี"
+
+#: js/user/EditDialog.js:819 js/user/EditDialog.js:864
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: js/user/EditDialog.js:890 js/Applications.js:223 js/user/EditDialog.js:935
+msgid "enabled"
+msgstr "เปิดใช้งานแล้ว"
+
+#: js/user/EditDialog.js:891 js/Applications.js:220 js/user/EditDialog.js:936
+msgid "disabled"
+msgstr "ปิดใช้งานแล้ว"
+
+#: js/user/EditDialog.js:892 js/user/EditDialog.js:937
+msgid "expired"
+msgstr "หมดอายุแล้ว"
+
+#: js/user/EditDialog.js:893 js/user/EditDialog.js:938
+msgid "blocked"
+msgstr "ถูกล็อก"
+
+#: js/user/EditDialog.js:900 js/user/EditDialog.js:945
+msgid "Invalid Status"
+msgstr "สถานะใช้ไม่ได้"
+
+#: js/user/EditDialog.js:901 js/user/EditDialog.js:946
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+"สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ "
+"ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
+
+#: js/user/EditDialog.js:929 js/GroupEditDialog.js:137
+#: js/user/EditDialog.js:974
+msgid "Visibility"
+msgstr "การมองเห็นได้"
+
+#: js/user/EditDialog.js:936 js/GroupEditDialog.js:143
+#: js/user/EditDialog.js:981
+msgid "Display in addressbook"
+msgstr "แสดงในสมุดรายชื่อ"
+
+#: js/user/EditDialog.js:936 js/GroupEditDialog.js:143
+#: js/user/EditDialog.js:981
+msgid "Hide from addressbook"
+msgstr "ซ่อนจากสมุดรายชื่อ"
+
+#: js/user/EditDialog.js:950 js/GroupEditDialog.js:159
+#: js/user/EditDialog.js:995
+msgid "Saved in Addressbook"
+msgstr "บันทึกแล้วในสมุดรายชื่อ"
+
+#: js/user/EditDialog.js:992 js/user/EditDialog.js:996
+#: js/user/EditDialog.js:1037 js/user/EditDialog.js:1041
+msgid "don't know"
+msgstr "ไม่ทราบ"
+
+#: js/user/EditDialog.js:998 js/user/EditDialog.js:1043
+msgid "Password set"
+msgstr "ตั้งรหัสผ่าน"
+
+#: js/user/EditDialog.js:1005 js/user/EditDialog.js:1050
+msgid "User groups"
+msgstr "กลุ่มผู้ใช้"
+
+#: js/user/EditDialog.js:1011 js/user/EditDialog.js:1056
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:1017 js/user/EditDialog.js:1062
+msgid "Fileserver"
+msgstr "ตัวจัดเก็บไฟล์"
+
+#: js/user/EditDialog.js:1023 js/user/EditDialog.js:1073
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1032 js/user/EditDialog.js:1082
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/Users.js:72 js/user/Users.js:75
+msgid "Users"
+msgstr "ผู้ใช้"
+
+#: js/user/Users.js:120 js/user/Users.js:123
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "ผู้ใช้ Samba"
+
+#: js/user/Users.js:146 js/user/Users.js:149
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "ผู้ใช้อีเมล"
+
+#: js/Admin.js:36 js/Models.js:87 js/Admin.js:39
+msgid "Groups"
+msgstr "กลุ่ม"
+
+#: js/Admin.js:49 js/Admin.js:52
+msgid "Roles"
+msgstr "หน้าที่"
+
+#: js/Admin.js:61 js/Admin.js:114
+msgid "Computers"
+msgstr "คอมพิวเตอร์"
+
+#: js/Admin.js:75 js/Models.js:128 js/Admin.js:64
+msgid "Applications"
+msgstr "การประยุกต์ใช้"
+
+#: js/Admin.js:101 js/Admin.js:89
+msgid "Shared Tags"
+msgstr "ป้ายกำกับที่ใช้ร่วมกัน"
+
+#: js/Admin.js:114 js/Admin.js:77
+msgid "Containers"
+msgstr "ที่จัดเก็บ"
+
+#: js/Admin.js:126 js/Admin.js:102
+msgid "Customfields"
+msgstr ""
+
+#: js/Admin.js:138 js/Admin.js:141
 msgid "Server Information"
 msgstr "ข้อมูลระบบ"
 
-#: js/Admin.js:157
+#: js/Admin.js:154 js/Admin.js:157
 msgid "ActiveSync Devices"
 msgstr ""
 
-#: js/Admin.js:228
+#: js/Admin.js:192 js/Admin.js:228
 msgid "Admin"
 msgstr "ผู้ดูแลระบบ"
 
-#: js/Admin.js:318
+#: js/Admin.js:277 js/Admin.js:318
 msgid "Refresh"
 msgstr ""
 
@@ -85,121 +611,72 @@ msgstr ""
 msgid "Default Addressbook for new contacts and groups"
 msgstr "สมุดรายชื่อหลักสำหรับการติดต่อและกลุ่มใหม่"
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
-msgid "Computer Name"
-msgstr "ชื่อของคอมพิวเตอร์"
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "คอมพิวเตอร์"
 
-#: js/config/GridPanel.js:49 js/Models.js:160
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-
-#: js/config/GridPanel.js:63 js/GroupEditDialog.js:129 js/Tags.js:231
-#: js/Roles.js:243 js/Groups.js:241 js/user/GridPanel.js:105
-#: js/RoleEditDialog.js:294 js/SambaMachineGrid.js:57
-#: js/SambaMachineGrid.js:89 js/TagEditDialog.js:234
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: js/config/GridPanel.js:74 js/Tags.js:230 js/Roles.js:242
-#: js/container/EditDialog.js:131 js/Groups.js:240 js/AccessLog.js:132
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:459
-#: js/user/EditDialog.js:304 js/user/EditDialog.js:340
-#: js/SambaMachineGrid.js:83 js/QuotaUsage.js:51 js/Applications.js:276
-msgid "Name"
-msgstr "ชื่อ"
-
-#: js/config/GridPanel.js:80 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:465
-msgid "Label"
-msgstr "ป้าย"
-
-#: js/config/GridPanel.js:87
-msgid "Value"
-msgstr "ค่า"
-
-#: js/config/GridPanel.js:242
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-#: js/config/FieldManager.js:49
-msgid "Yes"
-msgstr ""
-
-#: js/config/FieldManager.js:49
-msgid "No"
-msgstr ""
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
-msgid "Please wait"
-msgstr "กรุณารอ"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "กำลังปรับปรุงการเป็นสมาชิก"
-
-#: js/GroupEditDialog.js:73 js/Roles.js:69 js/Groups.js:74
-#: js/RoleEditDialog.js:108 js/RoleEditDialog.js:136 js/TagEditDialog.js:84
-msgid "Failed"
-msgstr "ได้ล้มเหลว"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "ไม่สามารถจัดเก็บกลุ่มได้"
-
-#: js/GroupEditDialog.js:78 js/customfield/EditDialog.js:138
-#: js/customfield/EditDialog.js:274 js/RoleEditDialog.js:115
-#: js/TagEditDialog.js:91
-msgid "Errors"
-msgstr "ข้อผิดพลาด"
-
-#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:91
-msgid "Please fix the errors noted."
-msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "ชื่อกลุ่ม"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:974
-msgid "Visibility"
-msgstr "การมองเห็นได้"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:981
-msgid "Display in addressbook"
-msgstr "แสดงในสมุดรายชื่อ"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:981
-msgid "Hide from addressbook"
-msgstr "ซ่อนจากสมุดรายชื่อ"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:995
-msgid "Saved in Addressbook"
-msgstr "บันทึกแล้วในสมุดรายชื่อ"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "สมาชิกของกลุ่ม"
-
-#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:294
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "กำลังโอนย้าย {0}..."
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:493 js/Models.js:87
+#: js/Models.js:87 js/GroupEditDialog.js:222 js/customfield/EditDialog.js:493
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "กลุ่ม"
 
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "เพิ่มกลุ่มใหม่"
+#: js/Models.js:128 js/container/GridPanel.js:67 js/container/EditDialog.js:143
+#: js/ApplicationFilter.js:33 js/customfield/GridPanel.js:70
+#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "การประยุกต์ใช้"
 
-#: js/GroupEditDialog.js:240
+#: js/Models.js:160 js/config/GridPanel.js:49
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+
+#: js/Models.js:160
+msgid "Configs"
+msgstr ""
+
+#: js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
+msgid "Updating Memberships"
+msgstr "กำลังปรับปรุงการเป็นสมาชิก"
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "กำลังลบ หน้าที่..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "สิทธิ์"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "สมาชิก"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "ชื่อหน้าที่"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "หน้าที่"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "เพิ่มหน้าที่ใหม่"
+
+#: js/RoleEditDialog.js:373
 #, python-brace-format
-msgid "Edit Group \"{0}\""
-msgstr "แก้ไขกลุ่ม \"{0}\""
+msgid "Edit Role \"{0}\""
+msgstr "แก้ไขหน้าที่ \"{0}\""
 
 #: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
 msgid "Confirm"
@@ -238,10 +715,6 @@ msgstr "กำกังแสดงป้ายกำกับ {0} - {1} จา�
 msgid "No tags to display"
 msgstr "ไม่มีป้ายกำกับใด ๆ ให้แสดง"
 
-#: js/Tags.js:227 js/container/EditDialog.js:195 js/TagEditDialog.js:229
-msgid "Color"
-msgstr "สี"
-
 #: js/Tags.js:228
 msgid "Usage:&#160;"
 msgstr "การใช้:&#160;"
@@ -253,10 +726,6 @@ msgstr "คุณแน่ใจว่าต้องการลบหน้า
 #: js/Roles.js:64
 msgid "Deleting role(s)..."
 msgstr "กำลังลบ หน้าที่(s)..."
-
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
 
 #: js/Roles.js:107
 msgid "Add Role"
@@ -270,61 +739,14 @@ msgstr "แก้ไขหน้าที่"
 msgid "Delete Role"
 msgstr "ลบหน้าที่"
 
-#: js/Roles.js:230
+#: js/Roles.js:230 js/Roles.js:226
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "กำลังแสดงหน้าที่ {0} - {1} จาก {2}"
 
-#: js/Roles.js:231 js/Roles.js:285
+#: js/Roles.js:231 js/Roles.js:285 js/Roles.js:227 js/Roles.js:281
 msgid "No roles to display"
 msgstr "ไม่มีหน้าที่ใด ๆ ให้แสดง"
-
-#: js/Roles.js:241 js/container/GridPanel.js:65 js/Groups.js:239
-#: js/customfield/GridPanel.js:66 js/user/GridPanel.js:189
-#: js/SambaMachineGrid.js:76
-msgid "ID"
-msgstr "รหัส"
-
-#: js/container/GridPanel.js:66
-msgid "Container Name"
-msgstr "ชื่อที่จัดเก็บ"
-
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
-#: js/container/EditDialog.js:175 js/customfield/GridPanel.js:69
-#: js/customfield/EditDialog.js:447
-msgid "Type"
-msgstr "ประเภท"
-
-#: js/container/GridPanel.js:69
-msgid "Container Order"
-msgstr ""
-
-#: js/container/GridPanel.js:99 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "ที่จัดเก็บ"
-
-#: js/container/EditDialog.js:164 js/customfield/GridPanel.js:71
-#: js/customfield/EditDialog.js:411
-msgid "Model"
-msgstr "รุ่น"
-
-#: js/container/EditDialog.js:176
-msgid "personal"
-msgstr "ส่วนตัว"
-
-#: js/container/EditDialog.js:176
-msgid "shared"
-msgstr "ใช้ร่วมกัน"
-
-#: js/container/EditDialog.js:189 js/customfield/EditDialog.js:498
-#: js/Applications.js:275
-msgid "Order"
-msgstr "คำสั่ง"
-
-#: js/container/EditDialog.js:200
-msgid "Note for Owner"
-msgstr "บันทึกสำหรับเจ้าของ"
 
 #: js/Groups.js:52
 msgid "Do you really want to delete the selected groups?"
@@ -355,87 +777,147 @@ msgstr "ลบกลุ่ม"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "กำลังแสดงกลุ่ม {0} - {1} จาก {2}"
 
-#: js/Groups.js:229 js/Groups.js:287
+#: js/Groups.js:229 js/Groups.js:283 js/Groups.js:287
 msgid "No groups to display"
 msgstr "ไม่มีกลุ่มใด ๆ ให้แสดง"
 
-#: js/Groups.js:242
-msgid "Creation Time"
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
+msgid "Computer Name"
+msgstr "ชื่อของคอมพิวเตอร์"
+
+#: js/Applications.js:23
+msgid "Enable Application"
+msgstr "อนุญาตให้ใช้แอพลิเคชั่น"
+
+#: js/Applications.js:31
+msgid "Disable Application"
+msgstr "ยกเลิกการใช้แอพลิเคชั่น"
+
+#: js/Applications.js:39
+msgid "Settings"
+msgstr "ค่าติดตั้ง"
+
+#: js/Applications.js:68
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "ค่าติดตั้ง {0}"
+
+#: js/Applications.js:141
+msgid "enable application"
+msgstr "อนุญาตการประยุกต์ใช้"
+
+#: js/Applications.js:142
+msgid "disable application"
+msgstr "ไม่อนุญาตการประยุกต์ใช้"
+
+#: js/Applications.js:143
+msgid "settings"
+msgstr "ค่าติดตั้ง"
+
+#: js/Applications.js:227
+#, python-brace-format
+msgid "unknown status ({0})"
+msgstr "ไม่ทราบสถานะ ({0})"
+
+#: js/Applications.js:265
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "แสดงการใช้ {0} - {1} จาก {2}"
+
+#: js/Applications.js:266
+msgid "No applications to display"
+msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
+
+#: js/Applications.js:275 js/container/EditDialog.js:189
+#: js/customfield/EditDialog.js:498
+msgid "Order"
+msgstr "คำสั่ง"
+
+#: js/Applications.js:278
+msgid "Version"
+msgstr "ภาค"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "ไม่สามารถจัดเก็บกลุ่มได้"
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "ชื่อกลุ่ม"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "สมาชิกของกลุ่ม"
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "เพิ่มกลุ่มใหม่"
+
+#: js/GroupEditDialog.js:240
+#, python-brace-format
+msgid "Edit Group \"{0}\""
+msgstr "แก้ไขกลุ่ม \"{0}\""
+
+#: js/config/GridPanel.js:80 js/customfield/GridPanel.js:67
+#: js/customfield/EditDialog.js:465 js/config/EditDialog.js:125
+msgid "Label"
+msgstr "ป้าย"
+
+#: js/config/GridPanel.js:87 js/config/EditDialog.js:137
+msgid "Value"
+msgstr "ค่า"
+
+#: js/config/GridPanel.js:242 js/config/EditDialog.js:54
+#: js/config/EditDialog.js:74
+#, python-brace-format
+msgid "Default ({0})"
 msgstr ""
 
-#: js/Groups.js:243
-msgid "Created By"
+#: js/config/FieldManager.js:49
+msgid "Yes"
 msgstr ""
 
-#: js/Groups.js:244
-msgid "Last Modified Time"
+#: js/config/FieldManager.js:49
+msgid "No"
 msgstr ""
 
-#: js/Groups.js:245
-msgid "Last Modified By"
+#: js/container/GridPanel.js:66
+msgid "Container Name"
+msgstr "ชื่อที่จัดเก็บ"
+
+#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
+#: js/container/EditDialog.js:175 js/customfield/GridPanel.js:69
+#: js/customfield/EditDialog.js:447 js/config/EditDialog.js:118
+msgid "Type"
+msgstr "ประเภท"
+
+#: js/container/GridPanel.js:69
+msgid "Container Order"
 msgstr ""
 
-#: js/AccessLog.js:105 js/AccessLog.js:133
-msgid "IP Address"
-msgstr "หมายเลขไอพี"
+#: js/container/GridPanel.js:99 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "ที่จัดเก็บ"
 
-#: js/AccessLog.js:107 js/AccessLog.js:134
-msgid "Login Time"
-msgstr "เวลาเข้าใช้"
+#: js/container/EditDialog.js:164 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:411
+msgid "Model"
+msgstr "รุ่น"
 
-#: js/AccessLog.js:108 js/AccessLog.js:135
-msgid "Logout Time"
-msgstr "เวลาเลิกใช้"
+#: js/container/EditDialog.js:176
+msgid "personal"
+msgstr "ส่วนตัว"
 
-#: js/AccessLog.js:109 js/AccessLog.js:137
-msgid "Client Type"
-msgstr "ประเภทลูกค้า"
+#: js/container/EditDialog.js:176
+msgid "shared"
+msgstr "ใช้ร่วมกัน"
 
-#: js/AccessLog.js:130
-msgid "Session ID"
-msgstr "รหัสเซสชัน"
+#: js/container/EditDialog.js:200
+msgid "Note for Owner"
+msgstr "บันทึกสำหรับเจ้าของ"
 
-#: js/AccessLog.js:131
-msgid "Login Name"
-msgstr "ชื่อที่เข้าใช้"
-
-#: js/AccessLog.js:136
-msgid "Result"
-msgstr "ผลลัพธ์"
-
-#: js/AccessLog.js:157
-msgid "user blocked"
-msgstr "ผู้ใช้ถูกล็อก"
-
-#: js/AccessLog.js:161
-msgid "password expired"
-msgstr "รหัสผ่านหมดอายุแล้ว"
-
-#: js/AccessLog.js:165
-msgid "user disabled"
-msgstr "ผู้ใช้ปิดใช้งานแล้ว"
-
-#: js/AccessLog.js:169
-msgid "invalid password"
-msgstr "รหัสผ่านไม่ถูกต้อง"
-
-#: js/AccessLog.js:173
-msgid "ambiguous username"
-msgstr "ชื่อผู้ใช้คลุมเครือ"
-
-#: js/AccessLog.js:177
-msgid "user not found"
-msgstr "ผู้ใช้ไม่พบ"
-
-#: js/AccessLog.js:181
-msgid "failure"
-msgstr "ความล้มเหลว"
-
-#: js/AccessLog.js:185
-msgid "success"
-msgstr "ความสำเร็จ"
-
-#: js/customfield/GridPanel.js:111 js/customfield/Customfield.js:44
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:111
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
@@ -459,10 +941,6 @@ msgstr "บันทึก ชั้น"
 #: js/customfield/EditDialog.js:274
 msgid "Given record class not found"
 msgstr "ที่ให้บันทึกชั้นมานั้นหาไม่พบ"
-
-#: js/customfield/EditDialog.js:311 js/user/EditDialog.js:784
-msgid "Cancel"
-msgstr "ยกเลิก"
 
 #: js/customfield/EditDialog.js:317
 msgid "OK"
@@ -540,522 +1018,17 @@ msgstr ""
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
-#: js/user/GridPanel.js:51
-msgid "Enable Account"
-msgstr "อนุญาตใช้บัญชี"
-
-#: js/user/GridPanel.js:61
-msgid "Disable Account"
-msgstr "เลิกบัญชี"
-
-#: js/user/GridPanel.js:71
-msgid "Reset Password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-#: js/user/GridPanel.js:80
-msgid "Reset Pin"
-msgstr ""
-
-#: js/user/GridPanel.js:190 js/user/EditDialog.js:927 js/Applications.js:277
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/user/GridPanel.js:191
-msgid "Display name"
-msgstr "ชื่อที่ใช้"
-
-#: js/user/GridPanel.js:192 js/user/EditDialog.js:858
-#: js/user/EditDialog.js:903
-msgid "Login name"
-msgstr "ชื่อที่เข้าใช้"
-
-#: js/user/GridPanel.js:193 js/user/EditDialog.js:852
-msgid "Last name"
-msgstr "นามสกุล"
-
-#: js/user/GridPanel.js:194 js/user/EditDialog.js:841
-msgid "First name"
-msgstr "ชื่อตัว"
-
-#: js/user/GridPanel.js:195 js/user/EditDialog.js:895
-msgid "Email"
-msgstr "อีเมล"
-
-#: js/user/GridPanel.js:196
-msgid "Email usage"
-msgstr ""
-
-#: js/user/GridPanel.js:197
-msgid "Filesystem usage"
-msgstr ""
-
-#: js/user/GridPanel.js:198 js/user/EditDialog.js:902
-msgid "OpenID"
-msgstr "รหัสเปิด"
-
-#: js/user/GridPanel.js:199 js/user/EditDialog.js:1035
-msgid "Last login at"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
-
-#: js/user/GridPanel.js:200 js/user/EditDialog.js:1039
-msgid "Last login from"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
-
-#: js/user/GridPanel.js:201
-msgid "Password changed"
-msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
-
-#: js/user/GridPanel.js:202 js/user/EditDialog.js:968
-msgid "Expires"
-msgstr "หมดอายุ"
-
-#: js/user/GridPanel.js:261
-msgid "Set new password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-#: js/user/GridPanel.js:261
-msgid "Please enter the new password:"
-msgstr "กรุณาใส่รหัสผ่านใหม่:"
-
-#: js/user/GridPanel.js:289
-msgid "Set new pin"
-msgstr ""
-
-#: js/user/GridPanel.js:289
-msgid "Please enter the new pin:"
-msgstr ""
-
-#: js/user/Users.js:75
-msgid "Users"
-msgstr "ผู้ใช้"
-
-#: js/user/Users.js:123
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "ผู้ใช้ Samba"
-
-#: js/user/Users.js:149
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "ผู้ใช้อีเมล"
-
-#: js/user/EditDialog.js:206
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/user/EditDialog.js:253 js/user/EditDialog.js:256
-#: js/user/EditDialog.js:781
-msgid "Passwords do not match!"
-msgstr "รหัสผ่านไม่ตรง"
-
-#: js/user/EditDialog.js:259
-msgid "Passwords match!"
-msgstr "รหัสผ่านตรง!"
-
-#: js/user/EditDialog.js:305 js/user/EditDialog.js:909
-msgid "Primary group"
-msgstr "กลุ่มหลัก"
-
-#: js/user/EditDialog.js:382
-msgid "Unix"
-msgstr "ยูนิกซ์"
-
-#: js/user/EditDialog.js:396
-msgid "Home Directory"
-msgstr "โฮมไดเรคทอรี่"
-
-#: js/user/EditDialog.js:400
-msgid "Login Shell"
-msgstr ""
-
-#: js/user/EditDialog.js:406
-msgid "Windows"
-msgstr ""
-
-#: js/user/EditDialog.js:420
-msgid "Home Drive"
-msgstr ""
-
-#: js/user/EditDialog.js:425
-msgid "Logon Time"
-msgstr "เวลาเข้าใช้"
-
-#: js/user/EditDialog.js:427 js/user/EditDialog.js:1037
-#: js/user/EditDialog.js:1041
-msgid "never logged in"
-msgstr "ไม่เคยได้เข้าใช้"
-
-#: js/user/EditDialog.js:430
-msgid "Home Path"
-msgstr ""
-
-#: js/user/EditDialog.js:435
-msgid "Logoff Time"
-msgstr "เวลาเลิกใช้"
-
-#: js/user/EditDialog.js:437
-msgid "never logged off"
-msgstr "ไม่เคยเลิกใช้"
-
-#: js/user/EditDialog.js:440
-msgid "Profile Path"
-msgstr ""
-
-#: js/user/EditDialog.js:445
-msgid "Password Last Set"
-msgstr "รหัสผ่านที่ตั้งครั้งสุดท้าย"
-
-#: js/user/EditDialog.js:447 js/user/EditDialog.js:971
-#: js/user/EditDialog.js:1045
-msgid "never"
-msgstr "ไม่เลย"
-
-#: js/user/EditDialog.js:450
-msgid "Logon Script"
-msgstr ""
-
-#: js/user/EditDialog.js:455
-msgid "Password Can Change"
-msgstr "รหัสผ่านสามารถเปลี่ยน"
-
-#: js/user/EditDialog.js:457 js/user/EditDialog.js:462
-#: js/user/EditDialog.js:467
-msgid "not set"
-msgstr "ยังไม่ได้กำหนด"
-
-#: js/user/EditDialog.js:460
-msgid "Password Must Change"
-msgstr "รหัสผ่านต้องเปลี่ยน"
-
-#: js/user/EditDialog.js:465
-msgid "Kick Off Time"
-msgstr ""
-
-#: js/user/EditDialog.js:484
-msgid "Filesystem Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:503 js/user/EditDialog.js:545
-#: js/user/EditDialog.js:577
-msgid "Quota"
-msgstr "โควต้า"
-
-#: js/user/EditDialog.js:504 js/user/EditDialog.js:546
-#: js/user/EditDialog.js:578
-msgid "no quota set"
-msgstr "ไม่ได้ตั้งโควต้า"
-
-#: js/user/EditDialog.js:508
-msgid "Current Filesystem usage"
-msgstr ""
-
-#: js/user/EditDialog.js:526
-msgid "IMAP Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:550
-msgid "Current Mailbox size"
-msgstr "ขนาดของกล่องจดหมายตอนนี้"
-
-#: js/user/EditDialog.js:558
-msgid "Sieve Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:582
-msgid "Current Sieve size"
-msgstr "ขนาดของกรองปัจจุบัน"
-
-#: js/user/EditDialog.js:591 js/user/EditDialog.js:1020
-msgid "Information"
-msgstr "ข้อมูล"
-
-#: js/user/EditDialog.js:605
-msgid "Last Login"
-msgstr "ลงบันทึกเข้าครั้งล่าสุด"
-
-#: js/user/EditDialog.js:666
-msgid "Domain not allowed"
-msgstr "โดเมนไม่ได้รับอนุญาต"
-
-#: js/user/EditDialog.js:667
-#, python-brace-format
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup. Please add this "
-"domain to the secondary domains in SMTP setup or use another domain which is"
-" configured already."
-msgstr ""
-
-#: js/user/EditDialog.js:676
-msgid "Email Alias"
-msgstr ""
-
-#: js/user/EditDialog.js:682
-msgid "Add an alias address..."
-msgstr ""
-
-#: js/user/EditDialog.js:700
-msgid "Forwarding to self"
-msgstr "ส่งต่อให้ตัวเอง"
-
-#: js/user/EditDialog.js:701
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr "คุณไม่ได้รับอนุญาตให้ตั้งที่อยู่อีเมลที่ใช้ส่งต่อที่ตรงกับที่อยู่หรือชื่อของผู้ที่ส่งอีเมล"
-
-#: js/user/EditDialog.js:710
-msgid "Email Forward"
-msgstr "ส่งต่ออีเมล"
-
-#: js/user/EditDialog.js:716
-msgid "Add a forward address..."
-msgstr "เพิ่ม ที่อยู่ที่จะส่งต่อ..."
-
-#: js/user/EditDialog.js:729
-msgid "Forward Only"
-msgstr "ส่งต่อเท่านั้น"
-
-#: js/user/EditDialog.js:748
-msgid "Password confirmation"
-msgstr "การยืนยันรหัสผ่าน"
-
-#: js/user/EditDialog.js:765
-msgid "Repeat password"
-msgstr "ใส่รหัสผ่านอีกครั้ง"
-
-#: js/user/EditDialog.js:791
-msgid "Ok"
-msgstr "ตกลง"
-
-#: js/user/EditDialog.js:826
-msgid "Account"
-msgstr "บัญชี"
-
-#: js/user/EditDialog.js:864
-msgid "Password"
-msgstr "รหัสผ่าน"
-
-#: js/user/EditDialog.js:935 js/Applications.js:223
-msgid "enabled"
-msgstr "เปิดใช้งานแล้ว"
-
-#: js/user/EditDialog.js:936 js/Applications.js:220
-msgid "disabled"
-msgstr "ปิดใช้งานแล้ว"
-
-#: js/user/EditDialog.js:937
-msgid "expired"
-msgstr "หมดอายุแล้ว"
-
-#: js/user/EditDialog.js:938
-msgid "blocked"
-msgstr "ถูกล็อก"
-
-#: js/user/EditDialog.js:945
-msgid "Invalid Status"
-msgstr "สถานะใช้ไม่ได้"
-
-#: js/user/EditDialog.js:946
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr "สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
-
-#: js/user/EditDialog.js:1037 js/user/EditDialog.js:1041
-msgid "don't know"
-msgstr "ไม่ทราบ"
-
-#: js/user/EditDialog.js:1043
-msgid "Password set"
-msgstr "ตั้งรหัสผ่าน"
-
-#: js/user/EditDialog.js:1050
-msgid "User groups"
-msgstr "กลุ่มผู้ใช้"
-
-#: js/user/EditDialog.js:1056
-msgid "User roles"
-msgstr ""
-
-#: js/user/EditDialog.js:1062
-msgid "Fileserver"
-msgstr "ตัวจัดเก็บไฟล์"
-
-#: js/user/EditDialog.js:1068
-msgid "Filesystem"
-msgstr ""
-
-#: js/user/EditDialog.js:1073
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:1082
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "คอมพิวเตอร์"
-
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "กำลังลบ หน้าที่..."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "สิทธิ์"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "สมาชิก"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "ชื่อหน้าที่"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "หน้าที่"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "เพิ่มหน้าที่ใหม่"
-
-#: js/RoleEditDialog.js:373
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "แก้ไขหน้าที่ \"{0}\""
-
-#: js/Models.js:160
-msgid "Configs"
-msgstr ""
-
-#: js/QuotaUsage.js:57
-msgid "Size"
-msgstr ""
-
-#: js/QuotaUsage.js:69
-msgid "Revision Size"
-msgstr ""
-
-#: js/QuotaUsage.js:70
-msgid "Total size of all available revisions"
-msgstr ""
-
-#: js/QuotaUsage.js:107
-msgid "Quota Usage"
-msgstr ""
-
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "กำลังปรับปรุงป้ายกำกับ"
-
-#: js/TagEditDialog.js:85
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr "ไม่สามารถจัดเก็บป้ายกำกับ ({0}) ได้"
-
-#: js/TagEditDialog.js:172
-msgid "Allowed Contexts"
-msgstr "เนื้อหาที่อนุญาต"
-
-#: js/TagEditDialog.js:178
-msgid "Context"
-msgstr "เนื้อหา"
-
-#: js/TagEditDialog.js:191
-msgid "Account Rights"
-msgstr "สิทธิ์เกี่ยวกับบัญชี"
-
-#: js/TagEditDialog.js:200
-msgid "View"
-msgstr "ดู"
-
-#: js/TagEditDialog.js:205
-msgid "Use"
-msgstr "ใช้"
-
-#: js/TagEditDialog.js:222
-msgid "Tag Name"
-msgstr "ชื่อป้ายกำกับ"
-
-#: js/TagEditDialog.js:294
-msgid "Tag"
-msgstr "ป้ายกำกับ"
-
-#: js/TagEditDialog.js:304
-msgid "Add New Tag"
-msgstr "เพิ่มป้ายกำกับใหม่"
-
-#: js/TagEditDialog.js:306
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "แก้ไขป้ายกำกับ \"{0}\""
-
-#: js/Applications.js:23
-msgid "Enable Application"
-msgstr "อนุญาตให้ใช้แอพลิเคชั่น"
-
-#: js/Applications.js:31
-msgid "Disable Application"
-msgstr "ยกเลิกการใช้แอพลิเคชั่น"
-
-#: js/Applications.js:39
-msgid "Settings"
-msgstr "ค่าติดตั้ง"
-
-#: js/Applications.js:68
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "ค่าติดตั้ง {0}"
-
-#: js/Applications.js:141
-msgid "enable application"
-msgstr "อนุญาตการประยุกต์ใช้"
-
-#: js/Applications.js:142
-msgid "disable application"
-msgstr "ไม่อนุญาตการประยุกต์ใช้"
-
-#: js/Applications.js:143
-msgid "settings"
-msgstr "ค่าติดตั้ง"
-
-#: js/Applications.js:227
-#, python-brace-format
-msgid "unknown status ({0})"
-msgstr "ไม่ทราบสถานะ ({0})"
-
-#: js/Applications.js:265
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "แสดงการใช้ {0} - {1} จาก {2}"
-
-#: js/Applications.js:266
-msgid "No applications to display"
-msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
-
-#: js/Applications.js:278
-msgid "Version"
-msgstr "ภาค"
+#: Controller/Container.php:194 Controller/Container.php:190
+msgid "Your container has been changed"
+msgstr "เปลี่ยนแปลงตู้ใส่ของของคุณแล้ว"
+
+#: Controller/Container.php:195 Controller/Container.php:191
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "มีการเปลี่ยนแปลงตู้ใส่ของของคุณ โดย %1$s %2$sหมายเหตุ: %3$s"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
 msgstr "ค่าตั้งตั้งของผู้ใช้ IMAP หลัก "
-
-#: Controller/Container.php:190
-msgid "Your container has been changed"
-msgstr "เปลี่ยนแปลงตู้ใส่ของของคุณแล้ว"
-
-#: Controller/Container.php:191
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "มีการเปลี่ยนแปลงตู้ใส่ของของคุณ โดย %1$s %2$sหมายเหตุ: %3$s"
 
 #: Acl/Rights.php:215
 msgid "manage access log"
@@ -1070,8 +1043,7 @@ msgid "manage accounts"
 msgstr "จัดการบัญชี"
 
 #: Acl/Rights.php:220
-msgid ""
-"add and edit users and groups, add group members, change user passwords"
+msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "เพิ่ม และแก้ไขผู้ใช้ และกลุ่ม, เพิ่มสมาชิกกลุ่ม, เปลี่ยนรหัสผ่านผู้ใช้"
 
 #: Acl/Rights.php:223
@@ -1088,8 +1060,7 @@ msgstr "จัดการภารกิจ"
 
 #: Acl/Rights.php:228
 msgid ""
-"add and edit roles, add new members to roles, add application rights to "
-"roles"
+"add and edit roles, add new members to roles, add application rights to roles"
 msgstr "เพิ่ม และแก้ไขภารกิจ, เพิ่มสมาชิกใหม่ให้กับภารกิจ, เพิ่มสิทธิการใช้แอพพลิเคชั่นให้กับภารกิจ"
 
 #: Acl/Rights.php:231
@@ -1190,4 +1161,68 @@ msgstr "ดู รายชื่อระบบข้อมูล"
 
 #: Acl/Rights.php:279 Acl/Rights.php:280
 msgid "view quota usage"
+msgstr ""
+
+#: js/Groups.js:242
+msgid "Creation Time"
+msgstr ""
+
+#: js/Groups.js:243
+msgid "Created By"
+msgstr ""
+
+#: js/Groups.js:244
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Groups.js:245
+msgid "Last Modified By"
+msgstr ""
+
+#: js/config/EditDialog.js:121
+msgid "Source"
+msgstr ""
+
+#: js/user/EditDialog.js:484
+msgid "Filesystem Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:508
+msgid "Current Filesystem usage"
+msgstr ""
+
+#: js/user/EditDialog.js:526
+msgid "IMAP Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:558
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:1068
+msgid "Filesystem"
+msgstr ""
+
+#: js/user/GridPanel.js:196
+msgid "Email usage"
+msgstr ""
+
+#: js/user/GridPanel.js:197
+msgid "Filesystem usage"
+msgstr ""
+
+#: js/QuotaUsage.js:57
+msgid "Size"
+msgstr ""
+
+#: js/QuotaUsage.js:69
+msgid "Revision Size"
+msgstr ""
+
+#: js/QuotaUsage.js:70
+msgid "Total size of all available revisions"
+msgstr ""
+
+#: js/QuotaUsage.js:107
+msgid "Quota Usage"
 msgstr ""

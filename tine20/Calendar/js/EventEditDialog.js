@@ -32,12 +32,28 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'CalEventEditWindow_',
     appName: 'Calendar',
     recordClass: Tine.Calendar.Model.Event,
-    recordProxy: Tine.Calendar.backend,
     showContainerSelector: false,
     displayNotes: true,
     requiredSaveGrant: 'readGrant',
 
     mode: 'local',
+
+    saveEvent: function(record, options, additionalArguments) {
+        // NOTE: only mainscreen can handle busyConflicts
+        additionalArguments.checkBusyConflicts = 0;
+
+        return Tine.Calendar.Model.EventJsonBackend.prototype.saveRecord.apply(this.recordProxy, arguments);
+        //
+        // var cp = this.app.getMainScreen().getCenterPanel(),
+        //     activePanel = cp.getCalendarPanel(cp.activeView),
+        //     activeView = activePanel.getView();
+        //
+        // activeView.showEvent(record)
+        //     .then(function() {
+        //         // save via mainscreen to show fbExceptions and recurring decistions
+        //         // but we would need to foreground the window and this is not possible for the browser
+        //     });
+    },
 
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
@@ -337,6 +353,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             'dtStartChange'
         );
 
+        this.recordProxy = new Tine.Calendar.Model.EventJsonBackend({
+            saveRecord: this.saveEvent.createDelegate(this)
+        });
+
         this.tbarItems = [new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
             handler: this.onFreeTimeSearch,
@@ -536,6 +556,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (String(this.record.id).match(/new-ext-gen/)) {
             this.record.set('id', '');
         }
+
+        this.omitCopyTitle = this.record.hasPoll();
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
     },
 

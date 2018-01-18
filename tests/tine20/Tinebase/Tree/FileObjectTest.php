@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Tree_FileObjectTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
@@ -218,8 +214,3 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
         return $object;
     }
 }        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Tree_FileObjectTest::main') {
-    Tinebase_Tree_FileObjectTest::main();
-}

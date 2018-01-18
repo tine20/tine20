@@ -15,10 +15,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Scheduler_AllTests::main');
-}
-
 class Scheduler_AllTests
 {
     public static function main ()
@@ -33,9 +29,3 @@ class Scheduler_AllTests
         return $suite;
     }
 }
-
-if (PHPUnit_MAIN_METHOD == 'Scheduler_AllTests::main') {
-    Scheduler_AllTests::main();
-}
-#EOF
-

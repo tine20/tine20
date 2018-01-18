@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Log_AllTests::main');
-}
-
 class Tinebase_Log_AllTests
 {
     public static function main() 
@@ -32,8 +28,4 @@ class Tinebase_Log_AllTests
         $suite->addTestSuite('Tinebase_Log_FormatterTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Log_AllTests::main') {
-    Tinebase_Log_AllTests::main();
 }

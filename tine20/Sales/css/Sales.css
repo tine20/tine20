@@ -12,35 +12,71 @@
 .SalesIconCls, .x-tree-node-icon.SalesContract, .SalesContract {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
 }
-.x-btn-medium .SalesIconCls {
+.x-btn-medium .SalesIconCls, .x-btn-medium .SalesContract {
     background-image:url(../../images/oxygen/22x22/apps/kcalc.png) !important;
 }
-.x-btn-large .SalesIconCls {
+.x-btn-large .SalesIconCls, .x-btn-large .SalesContract {
     background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
 
 .x-tree-node-icon.SalesProduct, .SalesProduct, .x-tree-node-icon.SalesProductAggregate, .SalesProductAggregate {
     background-image:url(../../images/oxygen/16x16/apps/ark.png) !important;
 }
+.x-btn-medium .SalesProduct, .x-btn-medium .SalesProductAggregate {
+    background-image:url("../../images/oxygen/22x22/apps/ark.png") !important;
+}
+.x-btn-large .SalesProduct, .x-btn-medium .SalesProductAggregate {
+    background-image:url("../../images/oxygen/32x32/apps/ark.png") !important;
+}
 
 .SalesCostCenter {
     background-image:url("../../images/oxygen/16x16/apps/preferences-web-browser-cache.png") !important;
+}
+.x-btn-medium .SalesCostCenter {
+    background-image:url("../../images/oxygen/22x22/apps/preferences-web-browser-cache.png") !important;
+}
+.x-btn-large .SalesCostCenter {
+    background-image:url("../../images/oxygen/32x32/apps/preferences-web-browser-cache.png") !important;
 }
 
 .SalesCustomer {
     background-image:url("../../images/oxygen/16x16/apps/system-users.png") !important;
 }
+.x-btn-medium .SalesCustomer {
+    background-image:url("../../images/oxygen/22x22/apps/system-users.png") !important;
+}
+.x-btn-large .SalesCustomer {
+    background-image:url("../../images/oxygen/32x32/apps/system-users.png") !important;
+}
 
 .SalesAddress {
     background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
+}
+.x-btn-medium .SalesAddress {
+    background-image:url("../../images/oxygen/22x22/apps/khangman.png") !important;
+}
+.x-btn-large .SalesAddress {
+    background-image:url("../../images/oxygen/32x32/apps/khangman.png") !important;
 }
 
 .SalesInvoice {
     background-image:url("../../images/oxygen/16x16/actions/edit-select-all.png") !important;
 }
+.x-btn-medium .SalesInvoice {
+    background-image:url("../../images/oxygen/22x22/actions/edit-select-all.png") !important;
+}
+.x-btn-large .SalesInvoice {
+    background-image:url("../../images/oxygen/32x32/actions/edit-select-all.png") !important;
+}
 
 .SalesDivision {
     background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+}
+.x-btn-medium .SalesDivision {
+    background-image:url("../../images/oxygen/22x22/actions/view-process-users.png") !important;
+}
+.x-btn-large .SalesDivision {
+    background-image:url("../../images/oxygen/32x32/actions/view-process-users.png") !important;
 }
 
 .x-btn-medium .action_reversal {
@@ -106,7 +142,19 @@
 .SalesOrderConfirmation {
     background-image:url("../../images/oxygen/16x16/apps/kwrite.png") !important;
 }
+.x-btn-medium .SalesOrderConfirmation {
+    background-image:url("../../images/oxygen/22x22/apps/kwrite.png") !important;
+}
+.x-btn-large .SalesOrderConfirmation {
+    background-image:url("../../images/oxygen/32x32/apps/kwrite.png") !important;
+}
 
 .SalesOffer {
     background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
+}
+.x-btn-medium .SalesOffer {
+    background-image:url("../../images/oxygen/22x22/apps/khangman.png") !important;
+}
+.x-btn-large .SalesOffer {
+    background-image:url("../../images/oxygen/32x32/apps/khangman.png") !important;
 }

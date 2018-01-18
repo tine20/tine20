@@ -923,6 +923,23 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect update of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        $modelName = $this->_modelName;
+        /** @noinspection PhpUndefinedMethodInspection */
+        $modelConf = $modelName::getConfiguration();
+        $rs = new Tinebase_Record_RecordSet($this->_modelName, array($updatedRecord));
+        Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs, $modelConf);
+    }
+
+    /**
      * get dummy role record
      *
      * @param integer $_id [optional]

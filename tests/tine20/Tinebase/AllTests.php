@@ -21,19 +21,12 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Tinebase_AllTests
 {
     /**
-     * main
-     */
-    public static function main()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-
-    /**
      * suite
      */
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
+
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);
         $suite->addTestSuite(Tinebase_AuthTest::class);
@@ -75,6 +68,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_DaemonTest::class);
         $suite->addTestSuite(Tinebase_FullTextTest::class);
         $suite->addTestSuite(Tinebase_Helper_AllTests::class);
+        $suite->addTestSuite(Tinebase_Export_DocTest::class);
 
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
@@ -85,6 +79,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Record_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
         $suite->addTest(OpenDocument_AllTests::suite());
+
         return $suite;
     }
 }

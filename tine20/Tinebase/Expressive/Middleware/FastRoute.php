@@ -41,11 +41,16 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 
         $dispatcher = $this->_getDispatcher();
 
+        $uri = $request->getUri()->getPath();
+
+        // remove trailing slashes - FastRoute is not handling uris with them correctly it seems
+        $uri = preg_replace('/\/+$/', '', $uri);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
-            . $request->getUri()->getPath());
+            . $uri);
 
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
+        $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'

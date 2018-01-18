@@ -918,4 +918,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         return $this->_listOfRecords;
     }
+
+    /**
+     * @return Tinebase_ModelConfiguration
+     */
+    public function getModelConfiguration()
+    {
+        $modelName = $this->getRecordClassName();
+        /** @var Tinebase_ModelConfiguration $modelConfig */
+        $modelConfig = $modelName::getConfiguration();
+        return $modelConfig;
+    }
 }

@@ -118,7 +118,7 @@
         </b-modal>
       </div>
       <div>
-        <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="Bitte benutzen Sie Ihren persönlichen Link." v-model="showGtc" @hide="usePersonalLink">
+        <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="Bitte benutzen Sie Ihren persönlichen Link." v-model="usePersonalLink" @hide="usePersonalLink">
           <p>Bitte benutzen Sie Ihren persönlichen Link.</p>
           <p>Wir haben Ihn erneut an Ihre Emailadresse gesendet.</p>
           <p>Falls Sie die Email nicht erhalten habe, wenden Sie sich bitte an den Organisator.</p>

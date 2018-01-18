@@ -137,20 +137,20 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param   string $_accountId  account id
      * @param   string $_status     status to set
-     * @return  int
+     * @return  integer (0 for no change, 1 for changed status)
      */
     public function setAccountStatus($_accountId, $_status)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
-        
-        $result = $this->_userBackend->setStatus($_accountId, $_status);
-        
-        if ($_status === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
-            // TODO send this for blocked/expired, too? allow to configure this?
-            Tinebase_User::getInstance()->sendDeactivationNotification($_accountId);
+
+        $user = $this->get($_accountId);
+        if ($user->accountStatus !== $_status) {
+            $user->accountStatus = $_status;
+            $this->update($user);
+            return 1;
         }
-        
-        return $result;
+
+        return 0;
     }
     
     /**
@@ -204,10 +204,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  Tinebase_Model_FullUser    $_user            the user
      * @param  string                     $_password        the new password
      * @param  string                     $_passwordRepeat  the new password again
+     * @throws Tinebase_Exception_Backend_Database_LockTimeout
+     * @throws Exception
      * 
      * @return Tinebase_Model_FullUser
      */
-    public function update(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
+    public function update(Tinebase_Model_FullUser $_user, $_password = null, $_passwordRepeat = null)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -234,18 +236,23 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             $user = $this->_userBackend->updateUser($_user);
 
+            // make sure primary groups is in the list of group memberships
+            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+            Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
+
             // update account status if changed to enabled/disabled
             if ($oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
                     Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
                     Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
                 ))) {
                 $this->_userBackend->setStatus($_user->getId(), $_user->accountStatus);
+
+                if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
+                    // TODO send this for blocked/expired, too? allow to configure this?
+                    Tinebase_User::getInstance()->sendDeactivationNotification($_user);
+                }
             }
-            
-            // make sure primary groups is in the list of groupmemberships
-            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
-            Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
-            
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
@@ -415,7 +422,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $oldUser = $this->get($accountId);
-            
+
+            $eventBefore = new Admin_Event_BeforeDeleteAccount();
+            $eventBefore->account = $oldUser;
+            Tinebase_Event::fireEvent($eventBefore);
+
             $memberships = $groupsController->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             

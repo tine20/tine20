@@ -153,17 +153,23 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(
                 !Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS));
             Calendar_Controller_Event::getInstance()->delete($existingAlternatives->getId());
-            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
+            $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
 
             $poll->closed = true;
-            $this->update($poll);
+            $updatedPoll = $this->update($poll);
 
             $event->poll_id = $pollId;
             $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
             $updatedEvent = Calendar_Controller_Event::getInstance()->update($event);
 
+            Tinebase_ActionQueue::getInstance()->queueAction(self::class . '.sendDefiniteEventNotifications',
+                $updatedPoll,
+                $updatedEvent
+            );
+
         } finally {
             $this->_inspectedPoll = null;
+            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
         }
 
         return $updatedEvent;
@@ -446,11 +452,10 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // nothing to do for us
             return;
         }
-        if (!preg_match('#/Calendar/view/poll/([^/]+)#', $_message->body, $matches)) {
+        if (!preg_match('#/Calendar/view/poll/([^/^\s]+)#', $_message->body, $matches)) {
             throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
         }
         $pollId = $matches[1];
-        $replaceUrl = $matches[0];
 
         /** @var Calendar_Model_Poll $poll */
         if (!isset($this->_cachedPolls[$pollId])) {
@@ -473,14 +478,14 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 // TODO what about groups? is it legal to invite groups to polls anyway?
                 foreach (array_filter(array_merge((array)$attender->getEmail(), $attender->getEmailsFromHistory()))
                         as $email) {
-                    $this->_cachedAttenders[$pollId][$email] = $attender->status_authkey;
+                    $this->_cachedAttenders[$pollId][$email] = $attender;
                 }
             }
         }
 
         if (isset($this->_cachedAttenders[$pollId][$emailTo])) {
-            $_message->body = str_replace($replaceUrl, $replaceUrl . $emailTo . '/'
-                . $this->_cachedAttenders[$pollId][$emailTo], $_message->body);
+            $attendee = $this->_cachedAttenders[$pollId][$emailTo];
+            $_message->body = str_replace($poll->getPollLink(), $poll->getPollLink($attendee), $_message->body);
         }
 
         return;
@@ -750,9 +755,10 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 $returnAttendees->addRecord($returnAttendee);
             }
 
-            // @TODO: queue some sort of notification
-            // - added user gets personal link
-            // - organizer?
+            $this->_sendPollConfirmationMail($poll, $contact);
+
+            // @TODO: queue some sort of notification for organizer?
+
             $response = new \Zend\Diactoros\Response();
             $response->getBody()->write(json_encode($returnAttendees->toArray()));
 
@@ -790,7 +796,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attendee, $attendee->status_authkey);
             }
 
-            // @TODO: queue some sort of notification?
+            // @TODO: queue some sort of notification
 
             $response = new \Zend\Diactoros\Response();
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -857,5 +863,74 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         $response = new \Zend\Diactoros\Response();
         $response->getBody()->write(Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC));
         return $response;
+    }
+
+    protected function _sendPollConfirmationMail(Calendar_Model_Poll $poll, Addressbook_Model_Contact $contact)
+    {
+        $alternativeEvents = $this->getPollEvents($poll->getId());
+        $event = $alternativeEvents->getFirstRecord();
+        $attendee = new Calendar_Model_Attender([
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id' => $contact,
+        ]);
+        $organiser = $event->resolveOrganizer();
+        list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) =
+            Calendar_Controller_EventNotifications::getNotificationPreferences($attendee, $event);
+
+        $twig = new Tinebase_Twig($locale, $translate);
+
+        $htmlTemplate = $twig->load('Calendar/views/pollConfirmationMail.html.twig');
+        $textTemplate = $twig->load('Calendar/views/pollConfirmationMail.text.twig');
+
+        $renderContext = [
+            'name'              => $poll->name ? $poll->name : $event->summary,
+            'recipient'         => $contact,
+            'link'              => $poll->getPollLink($attendee),
+            'organiser'         => $organiser,
+            'poll'              => $poll,
+            'event'             => $event,
+            'alternativeEvents' => $alternativeEvents,
+        ];
+
+        $subject = sprintf($translate->_('Attendance Confirmation for Poll "%1$s"'), $renderContext['name']);
+
+        Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
+            $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+    }
+
+    public function sendDefiniteEventNotifications(Calendar_Model_Poll $poll, Calendar_Model_Event $definiteEvent)
+    {
+        /** @var Addressbook_Model_Contact $organiser */
+        $organiser = $definiteEvent->resolveOrganizer();
+
+        /** @var Calendar_Model_Attender $attendee */
+        foreach($definiteEvent->attendee as $attendee) {
+            list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) =
+                Calendar_Controller_EventNotifications::getNotificationPreferences($attendee, $definiteEvent);
+
+            /** @var Addressbook_Model_Contact $contact */
+            $contact = $attendee->getResolvedUser();
+
+            $twig = new Tinebase_Twig($locale, $translate);
+
+            $htmlTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.html.twig');
+            $textTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.text.twig');
+
+            $renderContext = [
+                'name'              => $poll->name ? $poll->name : $definiteEvent->summary,
+                'sstart'            => Tinebase_Translation::dateToStringInTzAndLocaleFormat($definiteEvent->dtstart, $timezone, $locale, 'datetime', true),
+                'recipient'         => $contact,
+                'link'              => $poll->getPollLink($attendee),
+                'organiser'         => $organiser,
+                'poll'              => $poll,
+                'event'             => $definiteEvent,
+            ];
+
+            $subject = sprintf($translate->_('%1$s is scheduled for %2$s'), $renderContext['name'], $renderContext['sstart']);
+
+            Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
+                $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+
+        }
     }
 }

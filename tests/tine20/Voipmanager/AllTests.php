@@ -32,7 +32,3 @@ class Voipmanager_AllTests
         return $suite;
     }
 }
-
-if (PHPUnit_MAIN_METHOD == 'Voipmanager_AllTests::main') {
-    Voipmanager_AllTests::main();
-}

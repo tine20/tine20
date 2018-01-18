@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Sales_AllTests::main');
-}
-
 class Sales_AllTests
 {
     public static function main ()
@@ -43,8 +39,4 @@ class Sales_AllTests
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Sales_AllTests::main') {
-    Sales_AllTests::main();
 }

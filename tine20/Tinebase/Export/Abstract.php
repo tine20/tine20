@@ -162,8 +162,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_hasTemplate = false;
 
-    /** @var Twig_Environment */
-    protected $_twigEnvironment = null;
+    /** @var Tinebase_Twig */
+    protected $_twig = null;
     /**
      * @var Twig_TemplateWrapper|null
      */
@@ -350,15 +350,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getExportConfig($_additionalOptions = array())
     {
-        if ((isset($_additionalOptions['definitionFilename']) ||
-            array_key_exists('definitionFilename', $_additionalOptions))) {
+        if (isset($_additionalOptions['definitionFilename'])) {
             // get definition from file
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $_additionalOptions['definitionFilename'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             );
-        } elseif ((isset($_additionalOptions['definitionId']) ||
-            array_key_exists('definitionId', $_additionalOptions))) {
+        } elseif (isset($_additionalOptions['definitionId'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
         } else {
             // get preference from db and set export definition name
@@ -570,51 +568,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
 
-        $tineTwigLoader = new Twig_Loader_Chain(array(
-            new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
-                array($this, '_getTwigSource'))));
+        $options = [
+            // in order to cache the templates, we need to cache $this->_twigMapping too!
+            Tinebase_Twig::TWIG_CACHE       => false,
+            Tinebase_Twig::TWIG_AUTOESCAPE  => 'json',
+            Tinebase_Twig::TWIG_LOADER      => new Twig_Loader_Chain(array(
+                new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
+                    array($this, '_getTwigSource'))))
+        ];
 
-        // TODO turn on caching
-        // in order to cache the templates, we need to cache $this->_twigMapping too!
-        /*
-        $cacheDir = rtrim(Tinebase_Core::getTempDir(), '/') . '/tine20Twig';
-        if (!is_dir($cacheDir)) {
-            mkdir($cacheDir, 0777, true);
-        }*/
+        $this->_twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
 
-        $this->_twigEnvironment = new Twig_Environment($tineTwigLoader, array(
-            'autoescape' => 'json',
-            'cache' => false, //$cacheDir
-        ));
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @noinspection PhpUnusedParameterInspection */
-        $this->_twigEnvironment->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
-            return json_encode($string);
-        });
-
-        $this->_addTwigFunctions();
-
-        $this->_twigTemplate = $this->_twigEnvironment->load($this->_templateFileName);
-    }
-
-    /**
-     * adds twig function to the twig environment to be used in the templates
-     */
-    protected function _addTwigFunctions()
-    {
-        $locale = $this->_locale;
-        $translate = $this->_translate;
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
-            function ($str) use($locale, $translate) {
-                return $translate->_($str, $locale);
-            }));
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
-            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
-        }));
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
-            // TODO implement this!
-            return $model;
-        }));
+        $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
     }
 
     /**
@@ -782,6 +747,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $record = $_records->getFirstRecord();
         // FIXME think what to do
         // TODO fix ALL this!
+        // this is code present in the abstract controller, getRelatedData... why is it here?
 
         // get field types/identifiers from config
         $identifiers = array();
@@ -819,73 +785,122 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
         }
 
-        if ($record->has('relations')) {
-            /** @var Tinebase_Record_Abstract $modelName */
-            $modelName = $_records->getRecordClassName();
+        /** @var Tinebase_Record_Abstract $modelName */
+        $modelName = $_records->getRecordClassName();
 
+        if ($record->has('relations')) {
             $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
                 $_records->getArrayOfIds());
-
-            $appConfig = Tinebase_Config::factory($this->_applicationName);
-            $modelConfig = $modelName::getConfiguration();
+            $this->_resolveRelationsType($relations);
 
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
                 }
+            }
+        }
 
-                if (null === $modelConfig) {
-                    foreach ($this->_keyFields as $name => $keyField) {
-                        /** @var Tinebase_Config_KeyField $keyField */
-                        $keyField = $appConfig->{$keyField};
-                        $record->{$name} = $keyField->getTranslatedValue($record->{$name});
-                    }
+        $appConfig = Tinebase_Config::factory($this->_applicationName);
+        $modelConfig = $modelName::getConfiguration();
 
-                    foreach ($this->_virtualFields as $name => $virtualField) {
-                        $value = null;
-                        if (!empty($record->relations)) {
-                            /** @var Tinebase_Model_Relation $relation */
-                            foreach ($record->relations as $relation) {
-                                if ($relation->related_model === $virtualField['relatedModel'] &&
-                                    $relation->related_degree === $virtualField['relatedDegree'] &&
-                                    $relation->type === $virtualField['type']
-                                ) {
-                                    $value = $relation->related_record;
-                                    break;
-                                }
+        if (null === $modelConfig && $_records->getRecordClassName() === $this->_modelName) {
+            /** @var Tinebase_Record_Abstract $record */
+            foreach ($_records as $idx => $record) {
+                foreach ($this->_keyFields as $name => $keyField) {
+                    /** @var Tinebase_Config_KeyField $keyField */
+                    $keyField = $appConfig->{$keyField};
+                    $record->{$name} = $keyField->getTranslatedValue($record->{$name});
+                }
+
+                foreach ($this->_virtualFields as $name => $virtualField) {
+                    $value = null;
+                    if (!empty($record->relations)) {
+                        /** @var Tinebase_Model_Relation $relation */
+                        foreach ($record->relations as $relation) {
+                            if ($relation->related_model === $virtualField['relatedModel'] &&
+                                $relation->related_degree === $virtualField['relatedDegree'] &&
+                                $relation->type === $virtualField['type']
+                            ) {
+                                $value = $relation->related_record;
+                                break;
                             }
                         }
-                        $record->{$name} = $value;
                     }
+                    $record->{$name} = $value;
+                }
 
-                    foreach ($this->_foreignIdFields as $name => $controller) {
-                        if (!empty($record->{$name})) {
-                            /** @var Tinebase_Controller_Record_Abstract $controller */
-                            $controller = $controller::getInstance();
-                            $record->{$name} = $controller->get($record->{$name});
-                        }
+                foreach ($this->_foreignIdFields as $name => $controller) {
+                    if (!empty($record->{$name})) {
+                        /** @var Tinebase_Controller_Record_Abstract $controller */
+                        $controller = $controller::getInstance();
+                        $record->{$name} = $controller->get($record->{$name});
                     }
-                } else {
-                    foreach ($modelConfig->virtualFields as $field) {
-                        // resolve virtual relation record from relations property
-                        if (isset($field['type']) && $field['type'] === 'relation') {
-                            $fc = $field['config'];
-                            if (!empty($record->relations)) {
-                                foreach ($record->relations as $relation) {
-                                    if ($relation->type === $fc['type'] &&
-                                            $relation->related_model === ($fc['appName'] . '_Model_' . $fc['modelName'])) {
-                                        $record->{$field['key']} = $relation->related_record;
-                                    }
+                }
+            }
+        } else if ($modelConfig) {
+            $modelConfig->resolveRecords($_records);
+        }
+
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
+    }
+
+    protected function _resolveRelationsType(array $relations)
+    {
+        $models = array();
+        foreach($relations as $rels) {
+            $models = array_merge($models, $rels->own_model);
+            $models = array_merge($models, $rels->related_model);
+        }
+        $models = array_unique($models);
+        $relConfig = Tinebase_Relations::getConstraintsConfigs($models);
+        if (empty($relConfig)) {
+            return;
+        }
+
+        foreach ($relations as $rels) {
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($rels as $relation) {
+                $text = null;
+                $relatedApp = null;
+                $revertedText = null;
+                $revertedRelatedApp = null;
+                foreach ($relConfig as $cfg) {
+                    if ($cfg['ownRecordClassName'] === $relation->own_model && $cfg['relatedRecordClassName'] ===
+                            $relation->related_model && isset($cfg['config'])) {
+                        foreach ($cfg['config'] as $cfg1) {
+                            if ($relation->type === $cfg1['type'] && $relation->related_degree === $cfg1['degree']) {
+                                if (isset($cfg['reverted'])) {
+                                    $revertedText = $cfg1['text'];
+                                    $revertedRelatedApp = $cfg['relatedApp'];
+                                } else {
+                                    $relatedApp = $cfg['relatedApp'];
+                                    $text = $cfg1['text'];
+                                    break 2;
                                 }
                             }
                         }
                     }
                 }
+                if (null === $text && null !== $revertedText) {
+                    $text = $revertedText;
+                    $relatedApp = $revertedRelatedApp;
+                }
+
+                if (null !== $text) {
+                    $translatedStr = $this->_translate->_($text, $this->_locale);
+                    if ($translatedStr === $text) {
+                        $translatedStr = Tinebase_Translation::getTranslation($relatedApp, $this->_locale)
+                            ->translate($text, $this->_locale);
+                        if ($translatedStr === $text) {
+                            $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $this->_locale)
+                                ->translate($text, $this->_locale);
+                        }
+                    }
+                    $relation->type = $translatedStr;
+                }
             }
         }
-
-        $_records->setTimezone(Tinebase_Core::getUserTimezone());
     }
 
     protected function _writeGenericHead()

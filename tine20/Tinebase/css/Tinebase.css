@@ -630,6 +630,11 @@ html, body {
     background-position: 2px 2px;
 }
 
+/* TODO make this work */
+.x-tine-relation-degree-value {
+    color: black;
+    font-size: 11px;
+}
 
 .renderer_accountAnyoneIcon {
     background-image: url(../../images/oxygen/16x16/actions/users.png) !important;

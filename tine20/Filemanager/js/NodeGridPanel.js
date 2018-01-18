@@ -668,13 +668,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.EventObjet} e
      */
     onRowDblClick: function (grid, row, e) {
-        var rowRecord = grid.getStore().getAt(row);
-        var _ = window.lodash;
-        var prefs = this.app.getRegistry().get('preferences');
+        var rowRecord = grid.getStore().getAt(row),
+            _ = window.lodash,
+            prefs = this.app.getRegistry().get('preferences'),
+            dbClickAction = Tine.Tinebase.configManager.get('downloadsAllowed') ? prefs.get('dbClickAction') : 'preview';
 
-        if (prefs && prefs.get('dbClickAction') === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
+        if (prefs && dbClickAction === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
             Tine.Filemanager.downloadFile(rowRecord);
-        } else if (this.previewsEnabled && prefs && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
+        } else if (this.previewsEnabled && prefs && dbClickAction === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
             this.action_preview.execute();
         } else if (rowRecord.data.type == 'folder') {
             this.expandFolder(rowRecord);

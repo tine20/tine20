@@ -64,7 +64,9 @@ Tine.widgets.MapPanel = Ext.extend(Ext.Panel, {
     },
 
     beforeDestroy: function() {
-        delete this.geoExtPanel.map;
+        if (this.geoExtPanel && this.geoExtPanel.map) {
+            delete this.geoExtPanel.map;
+        }
         this.supr().beforeDestroy.apply(this, arguments);
     }
 });

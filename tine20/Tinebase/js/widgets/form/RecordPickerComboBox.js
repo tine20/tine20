@@ -117,7 +117,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 
-        this.emptyText = this.emptyText || i18n._('Search for record ...')
+        this.emptyText = this.emptyText || String.format(i18n._('Search for {0} ...'), this.recordClass.getRecordName())
 
         this.loadingText = i18n._('Searching...');
 

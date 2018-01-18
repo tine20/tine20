@@ -486,6 +486,22 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_resolveVFGlobally = FALSE;
+
+    /**
+     * if this is an array, rights are converted to grants. config example:
+     *
+     *       'convertRightToGrants' => [
+     *          'right' => KeyManager_Acl_Rights::MANAGE_KEYS,
+     *          'providesGrants' => [
+     *              Tinebase_Model_Grants::GRANT_ADD => true,
+     *              Tinebase_Model_Grants::GRANT_EDIT => true,
+     *              Tinebase_Model_Grants::GRANT_DELETE => true,
+     *          ]
+     *       ],
+     *
+     * @var boolean|array
+     */
+    protected $_convertRightToGrants = false;
     
     /**
      * holds all field definitions of type records
@@ -764,15 +780,13 @@ class Tinebase_ModelConfiguration {
     /**
      * This defines the filters use for all known types
      * @var array
-     *
-     * NOTE: "records" type has no automatic filter definition/mapping!
-     * TODO generalize this for "records" type (see Sales_Model_Filter_ContractProductAggregateFilter)
      */
     protected $_filterModelMapping = array(
         'date'     => 'Tinebase_Model_Filter_Date',
         'datetime' => 'Tinebase_Model_Filter_DateTime',
         'time'     => 'Tinebase_Model_Filter_Date',
         'string'   => 'Tinebase_Model_Filter_Text',
+        'stringAutocomplete'   => 'Tinebase_Model_Filter_Text',
         'text'     => 'Tinebase_Model_Filter_Text',
         'fulltext' => 'Tinebase_Model_Filter_FullText',
         'json'     => 'Tinebase_Model_Filter_Text',
@@ -781,6 +795,7 @@ class Tinebase_ModelConfiguration {
         'float'    => 'Tinebase_Model_Filter_Float',
         'money'    => 'Tinebase_Model_Filter_Float',
         'record'   => 'Tinebase_Model_Filter_ForeignId',
+        'records'  => 'Tinebase_Model_Filter_ForeignRecords',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
         'keyfield'  => 'Tinebase_Model_Filter_Text',
@@ -890,7 +905,7 @@ class Tinebase_ModelConfiguration {
         $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
         $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
 
-        // some cruid validating
+        // some crude validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
@@ -1511,6 +1526,8 @@ class Tinebase_ModelConfiguration {
 
     /**
      * returns the field configuration of the model
+     *
+     * @return array
      */
     public function getFields()
     {
@@ -1540,6 +1557,116 @@ class Tinebase_ModelConfiguration {
         return $this->{'_' . $_property};
     }
 
+    /**
+     * this is the new resolve function, param $_what can be something like this:
+     *
+     * ['*'] = everything
+     * ['/'] = two levels (discuss)
+     * ['relations'] = relations with related records
+     * ['relations/*'] = relations and one level into related records (discuss)
+     * ['location'] = record field with name 'location' - if that is a virtual field or an id, it is resolved
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_what
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * @todo move it to a "resolver" class?
+     * @todo finish implementation - currently only supports ['relations'] and ['VIRTUALRELATIONPROPERTY']
+     * @todo support resolving path ('FIRSTLEVEL/SECONDLEVEL/THIRD/...')
+     * @todo support '*'
+     */
+    public function resolve(Tinebase_Record_RecordSet $_records, $_what)
+    {
+        if (count($_records) == 0) {
+            return;
+        }
+
+        $fields = $this->getFields();
+        foreach ($_what as $fieldToResolve) {
+            // TODO explode resolving path
+
+            if (! in_array($fieldToResolve, array_keys($fields))) {
+                throw new Tinebase_Exception_NotImplemented(
+                    $fieldToResolve . ' resolving not supported yet or field is no property of model');
+            }
+
+            $fieldConfig = $fields[$fieldToResolve];
+
+            switch ($fieldConfig['type']) {
+                case 'virtual':
+                    $virtualConfig = isset($fieldConfig['config']) ? $fieldConfig['config'] : null;
+                    if (! isset($virtualConfig['type']) || $virtualConfig['type'] !== 'relation') {
+                        throw new Tinebase_Exception_NotImplemented('supports only relation virtual type');
+                    }
+                    $this->_resolveVirtualRelations($_records, $fieldConfig);
+                default:
+                    // do nothing
+            }
+
+            if ($fieldToResolve === 'relations') {
+                $this->_resolveRelations($_records);
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_field
+     */
+    protected function _resolveVirtualRelations(Tinebase_Record_RecordSet $_records, $_field)
+    {
+        // @todo always resolve or just on demand?
+        $this->_resolveRelations($_records);
+
+        foreach ($_records as $record) {
+            $fc = $_field['config']['config'];
+            foreach ($record->relations as $relation) {
+                if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                    $record[$_field['key']] = $relation['related_record'];
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     *
+     * @todo check if already resolved?
+     */
+    protected function _resolveRelations(Tinebase_Record_RecordSet $_records)
+    {
+        if ($_records->getFirstRecord()->has('relations')) {
+            $_records->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
+                $_records->getRecordClassName(), 'Sql', $_records->getId())
+            );
+        }
+    }
+
+    /**
+     * @param $records
+     * @return mixed
+     *
+     * @deprecated implement functionality in resolve
+     */
+    public function resolveRecords($records)
+    {
+        // temporary till we fixed resolving
+        $recordClassName = $records->getRecordClassName();
+        $converter = Tinebase_Convert_Factory::factory($recordClassName);
+
+        return $converter->resolveRecords($records);
+    }
+
+    /**
+     * @deprecated do not use - it's a modified copy of Tinebase_Convert_Json::_resolveMultipleRecordFields fix it!
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param $modelConfiguration
+     * @param bool $isSearch
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotDefined
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public static function resolveRecordsPropertiesForRecordSet(Tinebase_Record_RecordSet $_records, $modelConfiguration, $isSearch = false)
     {
         if (0 === $_records->count() || ! ($resolveFields = $modelConfiguration->recordsFields)) {
@@ -1574,8 +1701,7 @@ class Tinebase_ModelConfiguration {
                 $filterArray = $config['addFilters'];
             }
 
-            /** @var Tinebase_Model_Filter_FilterGroup $filter */
-            $filter = new $filterName($filterArray);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
 
             $paging = NULL;

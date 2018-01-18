@@ -333,21 +333,37 @@ class Sales_JsonTest extends TestCase
     }
 
     /**
-     * try to get a customer
+     * testSearchCustomers
+     *
+     * search and resolve
      */
     public function testSearchCustomers()
     {
         $customerController = Sales_Controller_Customer::getInstance();
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $i = 0;
         
         while ($i < 104) {
-            $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+            $customerController->create(new Sales_Model_Customer([
+                'name' => Tinebase_Record_Abstract::generateUID(),
+                'cpextern_id' => $contact->getId(),
+                'bic' => 'SOMEBIC',
+            ]));
             $i++;
         }
-        $result = $this->_instance->searchCustomers(array(), array('limit' => 50));
+        $result = $this->_instance->searchCustomers([
+            ['field' => 'bic', 'operator' => 'equals', 'value' => 'SOMEBIC']
+        ], array('limit' => 50));
         
         $this->assertEquals(50, count($result['results']));
-        $this->assertGreaterThanOrEqual(104, $result['totalcount']);
+        $this->assertEquals(104, $result['totalcount']);
+        $firstcustomer = $result['results'][0];
+        $this->assertTrue(is_array($firstcustomer['created_by']), 'creator not resolved: '
+            . print_r($firstcustomer, true));
+        $this->assertTrue(is_array($firstcustomer['cpextern_id']), 'cpextern_id not resolved: '
+            . print_r($firstcustomer, true));
+        $this->assertTrue(is_array($firstcustomer['cpextern_id']['created_by']), 'cpextern_id creator not resolved: '
+            . print_r($firstcustomer, true));
     }
     
     /**

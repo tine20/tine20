@@ -15,10 +15,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Admin_AllTests::main');
-}
-
 class Admin_AllTests
 {
     public static function main ()
@@ -35,8 +31,4 @@ class Admin_AllTests
         $suite->addTestSuite('Admin_Acl_RightsTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Admin_AllTests::main') {
-    Admin_AllTests::main();
 }

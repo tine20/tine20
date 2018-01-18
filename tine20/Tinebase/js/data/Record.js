@@ -282,13 +282,13 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getRecordName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :i18n;
-            
+            i18n = app && app.i18n ? app.i18n : window.i18n;
+
         return i18n.n_(p.recordName, p.recordsName, 1);
     };
     f.getModuleName = function () {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n : i18n,
+            i18n = app && app.i18n ? app.i18n : window.i18n,
             moduleName;
 
         if (p.modelConfiguration && p.modelConfiguration.moduleName) {
@@ -299,24 +299,27 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getRecordsName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :i18n;
-            
+            i18n = app && app.i18n ? app.i18n : window.i18n;
+
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getContainerName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :i18n;
-            
+            i18n = app && app.i18n ? app.i18n : window.i18n;
+
         return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :i18n;
-            
+            i18n = app && app.i18n ? app.i18n : window.i18n;
+
         return i18n.n_(p.containerName, p.containersName, 50);
     };
     f.getAppName = function() {
-        return Tine.Tinebase.appMgr.get(p.appName).i18n._(p.appName);
+        var app = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n : window.i18n;
+
+        return i18n._(p.appName);
     };
     /**
      * returns the php class name of the record itself or by the application(name) and model(name)
@@ -340,7 +343,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getModelConfiguration = function() {
         return p.modelConfiguration;
     };
-    
+
     // sanitize containerProperty label
     var containerProperty = f.getMeta('containerProperty');
     if (containerProperty) {

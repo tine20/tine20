@@ -891,7 +891,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this,
             success: function(createdEvent) {
                 if (createdEvent.isRecurBase() || createdEvent.hasPoll()) {
-                    store.load({refresh: true});
+                    if (store) {
+                        store.load({refresh: true});
+                    } else {
+                        this.refresh();
+                    }
                 } else {
                     // store may be lost on conflict or else
                     if (store) {
@@ -1278,6 +1282,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 oldRecord.ui.remove();
             }
         } else {
+            this.omitCopyTitle = record.hasPoll();
             record = Tine.Calendar.EventEditDialog.superclass.doCopyRecordToReturn.call(this, record);
 
             record.set('editGrant', true);
@@ -1621,6 +1626,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (error.code === 901) {
             this.onConflict(error, event, ignoreFn);
         } else {
+            error.component = this;
+            error.proxyEvent = event;
             Tine.Tinebase.ExceptionHandler.handleRequestException(error);
         }
     },

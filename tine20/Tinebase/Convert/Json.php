@@ -17,6 +17,18 @@
  */
 class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {
+    /**
+     * @var bool
+     *
+     * if this is true, type = records fields are always resolved recursively
+     */
+    protected $_recursiveResolve = false;
+
+    /**
+     * control variable for recursive resolving
+     *
+     * @var array
+     */
     protected $_recursiveResolvingProtection = [];
 
     /**
@@ -103,6 +115,21 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $result = $this->_resolveAfterToArray($result, $config, $multiple);
 
         return $result;
+    }
+
+    /**
+     * temporary hacks to have json converter logic available outside (e.g. modelconfig/exports)
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    public function resolveRecords(Tinebase_Record_RecordSet $records, $multiple = true)
+    {
+        $recordClassName = $records->getRecordClassName();
+        $modelConfiguration = $recordClassName::getConfiguration();
+        $this->_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+        $this->_resolveAfterToArray($records, $modelConfiguration, $multiple);
+
+        return $records;
     }
 
     /**
@@ -197,6 +224,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
     }
 
+    /**
+     * @param $foreignIds
+     * @param $foreignRecordClassName
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _getForeignRecords($foreignIds, $foreignRecordClassName)
     {
         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
@@ -325,20 +357,43 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
     }
 
-    protected function _resolveRecursive(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
-    {
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_ModelConfiguration|null $modelConfiguration
+     * @param bool $multiple
+     */
+    protected function _resolveRecursive(
+        Tinebase_Record_RecordSet $_records,
+        Tinebase_ModelConfiguration $modelConfiguration = NULL,
+        $multiple = false
+    ) {
         if (! $modelConfiguration || (! $_records->count())) {
             return;
         }
 
-        if (! ($resolveFields = $modelConfiguration->recursiveResolvingFields)) {
+        if ($this->_recursiveResolve) {
+            $resolveFields = [];
+            foreach ($modelConfiguration->getFields() as $name => $field) {
+                if ($field['type'] === 'records') {
+                    $resolveFields[] = $name;
+                }
+            }
+        } else if (! ($resolveFields = $modelConfiguration->recursiveResolvingFields)) {
             return;
         }
 
         $first = true;
         $recursions = [];
         foreach ($resolveFields as $property) {
-            foreach ($_records->{$property} as $idx => $records) {
+            foreach ($_records->{$property} as $idx => $recordOrRecords) {
+                // cope with single records
+                if ($recordOrRecords instanceof Tinebase_Record_Abstract) {
+                    $records = new Tinebase_Record_RecordSet(get_class($recordOrRecords));
+                    $records->addRecord($recordOrRecords);
+                } else {
+                    $records = $recordOrRecords;
+                }
+
                 // recursion protection
                 $id = $_records->getByIndex($idx)->getId();
                 if (isset($recursions[$id]) || ($first && isset($this->_recursiveResolvingProtection[$id]))) {
@@ -371,6 +426,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             $first = false;
         }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setRecursiveResolve($value)
+    {
+        $this->_recursiveResolve = $value;
     }
     
     /**
@@ -461,8 +524,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if ($foreignRecords->count() > 0) {
                 /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
-                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
-                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);
+                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
                     $record->{$fieldKey} = $filtered;
                 }
                 
@@ -510,7 +572,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 }
                 foreach($tmp as &$rS) {
                     $fc = $field['config'];
-                    if (isset($rS['relations']) && (is_array($rS['relations']))) {
+                    if (isset($rS['relations']) && (is_array($rS['relations']) || $rS['relations'] instanceof Tinebase_Record_RecordSet)) {
                         foreach ($rS['relations'] as $relation) {
                             if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
                                 $rS[$field['key']] = $relation['related_record'];
@@ -613,6 +675,36 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
+        $result = $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
         return $result;
+    }
+
+    /**
+     * adds account_grants if configured in model
+     *
+     * @param array $resultSet
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     * @return array
+     */
+    protected function _convertRightToAccountGrants($resultSet, $modelConfiguration = NULL, $multiple = false)
+    {
+        if (! $modelConfiguration || ! $modelConfiguration->convertRightToGrants) {
+            return $resultSet;
+        }
+
+        $userGrants = Tinebase_Core::getUser()->hasRight(
+            $modelConfiguration->appName,
+            $modelConfiguration->convertRightToGrants['right']
+        ) ? $modelConfiguration->convertRightToGrants['providesGrants'] : array();
+
+        // TODO can't we do this in a more elegant way?? maybe use array_walk?
+        $tmp = ($multiple) ? $resultSet : array($resultSet);
+        foreach ($tmp as &$record) {
+            if ($record instanceof Tinebase_Record_Abstract || $record instanceof Tinebase_Record_RecordSet) continue;
+            $record['account_grants'] = $userGrants;
+        }
+
+        return ($multiple) ? $tmp : $tmp[0];
     }
 }

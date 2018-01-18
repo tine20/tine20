@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timetracker_AllTests::main');
-}
-
 class Timetracker_AllTests
 {
     public static function main ()
@@ -33,8 +29,4 @@ class Timetracker_AllTests
         $suite->addTestSuite('Timetracker_FilterTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Timetracker_AllTests::main') {
-    Timetracker_AllTests::main();
 }

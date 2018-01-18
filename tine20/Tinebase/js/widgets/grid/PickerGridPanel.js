@@ -117,8 +117,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
         
         this.initStore();
-        this.initActionsAndToolbars();
         this.initGrid();
+        this.initActionsAndToolbars();
+
 
         this.on('afterrender', this.onAfterRender, this);
 
@@ -156,12 +157,18 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (!this.store) {
             this.store = new Ext.data.SimpleStore({
+                sortInfo: this.defaultSortInfo || {
+                    field: this.recordClass.getMeta('titleProperty'),
+                    order: 'DESC'
+                },
                 fields: this.recordClass
             });
         }
         
         // focus+select new record
         this.store.on('add', this.focusAndSelect, this);
+        this.store.on('beforeload', this.showLoadMask, this);
+        this.store.on('load', this.hideLoadMask, this);
     },
 
     focusAndSelect: function(store, records, index) {
@@ -189,9 +196,23 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             disabled: true,
             scope: this,
             handler: this.onRemove,
-            iconCls: 'action_deleteContact'
+            iconCls: 'action_deleteContact',
+            actionUpdater: this.actionRemoveUpdater
         });
-        
+
+        // init actions
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: this.recordClass,
+            evalGrants: this.evalGrants
+        });
+        this.actionUpdater.addActions([
+            this.actionRemove
+        ]);
+
+        this.selModel.on('selectionchange', function(sm) {
+            this.actionUpdater.updateActions(sm);
+        }, this);
+
         var contextItems = [this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
@@ -289,6 +310,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @return {}
      */
     getColumnModel: function() {
+        var _ = window.lodash,
+            me = this;
+
         if (! this.colModel) {
             if (!this.columns) {
                 var labelColumn = {
@@ -296,13 +320,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     // TODO use translated records name here
                     //header: String.format(i18n._('Selected {0}'),
                     //    this.recordClass.getMeta('recordsName')),
-                    header: i18n._('Records'),
+                    header: this.recordClass.getRecordsName(),
                     dataIndex: this.labelField
                 };
                 if (this.labelRenderer != Ext.emptyFn) {
                     labelColumn.renderer = this.labelRenderer;
                 }
                 this.columns = [labelColumn];
+            } else {
+                // convert string cols
+                _.each(me.columns, function(col, idx) {
+                    if (_.isString(col)) {
+                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        if (config) {
+                            me.columns[idx] = config;
+                        }
+                    }
+                });
+                _.remove(me.columns, _.isString)
             }
 
             this.colModel = new Ext.grid.ColumnModel({
@@ -412,6 +447,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     break;
             }
         }
+    },
+
+    showLoadMask: function() {
+        var me = this;
+        return me.afterIsRendered()
+            .then(function() {
+                if (! me.loadMask) {
+                    me.loadMask = new Ext.LoadMask(me.getEl(), {msg: String.format(i18n._('Loading {0} ...'), me.recordClass.getRecordsName())});
+                }
+                me.loadMask.show.defer(100, me.loadMask);
+            });
+    },
+
+    hideLoadMask: function() {
+        if (this.loadMask) {
+            this.loadMask.hide.defer(100, this.loadMask);
+        }
+        return Promise.resolve();
     }
 });
 

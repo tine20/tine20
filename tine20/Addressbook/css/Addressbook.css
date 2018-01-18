@@ -11,10 +11,10 @@
 .AddressbookIconCls, .AddressbookContact {
     background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
 }
-.x-btn-medium .AddressbookIconCls {
+.x-btn-medium .AddressbookIconCls, .x-btn-medium .AddressbookContact {
     background-image:url(../../images/oxygen/22x22/apps/kaddressbook.png) !important;
 }
-.x-btn-large .AddressbookIconCls {
+.x-btn-large .AddressbookIconCls, .x-btn-large .AddressbookContact {
     background-image:url(../../images/oxygen/32x32/apps/kaddressbook.png) !important;
 }
 
@@ -46,6 +46,13 @@
     background-repeat: no-repeat;
     /*background-position: 2px 2px;*/
     /*height: 16px;*/
+}
+.x-btn-medium .AddressbookList {
+    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
+}
+
+.x-btn-large .AddressbookList {
+    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
 
 .renderer_typeListIcon {

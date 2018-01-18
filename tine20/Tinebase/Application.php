@@ -546,8 +546,10 @@ class Tinebase_Application
                 case 'rootnode':
                     $count = 0;
                     try {
-                        // note: TFS expects name here, not ID
-                        $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                        if (Tinebase_FileSystem::getInstance()->isDir($_application->name)) {
+                            // note: TFS expects name here, not ID
+                            $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                        }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // nothing to do
                         Tinebase_Exception::log($tenf);
@@ -694,7 +696,8 @@ class Tinebase_Application
                 // close transaction open in \Tinebase_Timemachine_ModificationLog::applyReplicationModLogs
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
-                Setup_Controller::getInstance()->installApplications([$record->name],
+                Setup_Controller::unsetInstance();
+                Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
                 break;
 

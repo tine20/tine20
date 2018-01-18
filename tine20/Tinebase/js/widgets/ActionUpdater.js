@@ -15,7 +15,7 @@
     
     Ext.apply(this, config);
 
-    if (this.recordClass) {
+    if (this.recordClass && Ext.isFunction(this.recordClass.getMeta)) {
         this.grantsPath = this.recordClass.getMeta('grantsPath');
     }
     this.addActions(actions);

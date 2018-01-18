@@ -22,8 +22,13 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
      * Generates the body HTML for the grid
      * @param {Ext.grid.GridPanel} grid The grid to print
      */
-    generateBody: function (grid) {
+    generateBody: function (grid, data) {
         var me = this;
+
+        // when called inside other components the outer generateHTML (outer page renderer) didn't prepare data
+        // this is the case e.g. inside editDialogs - we don't load remote data then
+        data = data || me.extractData(grid, grid.store.data.items);
+
         return new Promise(function (fulfill, reject) {
             var columns = me.getColumns(grid);
 
@@ -38,7 +43,11 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 header_logo: brandingLogoImg
             });
 
-            fulfill(String.format('{0}<table>{1}<tpl for=".">{2}</tpl></table>', header, headings, body));
+            if (grid.title) {
+                header += '<div class="gridpanelrenderer_header_gridtitle">' + grid.title + '</div>';
+            }
+
+            fulfill(new Ext.XTemplate(String.format('{0}<table>{1}<tpl for=".">{2}</tpl></table>', header, headings, body)).apply(data));
         });
     },
 
@@ -55,6 +64,13 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 options.params = options.params || {};
                 delete options.params.start;
                 delete options.params.limit;
+
+                // @TODO rethink - with local sort we don't need a remote query at all?
+                if (! options.params.sort && !grid.store.remoteSort) {
+                    var sortState = grid.store.getSortState();
+                    options.params.sort = sortState.field;
+                    options.params.dir = sortState.direction;
+                }
             }, me, {'single': true});
             grid.store.on('beforeloadrecords', function (o, options, success, store) {
                 var data = me.extractData(grid, o.records);

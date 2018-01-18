@@ -28,9 +28,11 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogR
                 '<div class="rp-print-single-details-row">',
                 '{[this.fieldRenderer(values.org_unit, "Unit")]}',
                 '</div>',
+                '<tpl if="this.featureIndustry()">',
                 '<div class="rp-print-single-details-row">',
                 '{[this.fieldRenderer(values.industry, "Industry")]}',
                 '</div>',
+                '</tpl>',
                 '<div class="rp-print-single-details-row">',
                 '{[this.fieldRenderer(values.title, "Job Title")]}',
                 '</div>',
@@ -39,6 +41,12 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogR
                 '</div>',
                 '</div>',
                 '</td></tr></table></br>',
+                new Ext.ux.Printer.TagsRenderer().generateBody(component.getForm().findField('tags').tagsPanel),
+                '<div class="cal-print-single-block-heading">', i18n._('Description'), '</div>',
+                '<div class="rp-print-single-block">',
+                '{[this.encode(values.note)]}',
+                '</div>',
+                '</br>',
                 '<div class="cal-print-single-block-heading">', i18n._('Contact Information'), '</div>',
                 '<div class="rp-print-single-block">',
                 '<div class="rp-print-single-details-row">',
@@ -64,12 +72,12 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogR
                 '</div>',
                 '</div>',
                 '</br>',
-                '<div class="cal-print-single-block-heading">', i18n._('Company Address'), '</div>',
+                '<div class="cal-print-single-block-heading">', i18n._('Company Address'), '{[values.preferred_address == "0" ? (" (" + Tine.Tinebase.appMgr.get("Addressbook").i18n._("Preferred Address") + ")") : ""]}</div>',
                 '<div class="rp-print-single-block">',
                 "{[this.addressRenderer({'street': 'adr_one_street', 'street2': 'adr_one_street2', 'postalcode': 'adr_one_postalcode', 'locality': 'adr_one_locality', 'region': 'adr_one_region','country': 'adr_one_countryname'})]}",
                 '</div>',
                 '</br>',
-                '<div class="cal-print-single-block-heading">', i18n._('Private Address'), '</div>',
+                '<div class="cal-print-single-block-heading">', i18n._('Private Address'), '{[values.preferred_address == "1" ? (" (" + Tine.Tinebase.appMgr.get("Addressbook").i18n._("Preferred Address") + ")") : ""]}</div>',
                 '<div class="rp-print-single-block">',
                 "{[this.addressRenderer({'street': 'adr_two_street', 'street2': 'adr_two_street2', 'postalcode': 'adr_two_postalcode', 'locality': 'adr_two_locality', 'region': 'adr_two_region','country': 'adr_two_countryname'})]}",
                 '</div>',
@@ -96,6 +104,9 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogR
                     relationRenderer: function (values) {
                         return Tine.widgets.relation.Renderer.renderAll(values);
 
+                    },
+                    featureIndustry: function() {
+                        return Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry');
                     }
 
                 });

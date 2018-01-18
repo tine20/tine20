@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_Json_ContainerTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */
@@ -218,9 +214,4 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($result['results'][0]['account_grants']['readGrant']), 'account_grants missing');
         $this->assertTrue(isset($result['results'][0]['ownerContact']['email']), 'ownerContact missing');
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_ContainerTest::main') {
-    Tinebase_Frontend_Json_ContainerTest::main();
 }

@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_ControllerTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  * 
@@ -183,8 +179,3 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         return $this->objects['contact'];
     }
 }       
-    
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_ControllerTest::main') {
-    Addressbook_ControllerTest::main();
-}
