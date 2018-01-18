@@ -908,8 +908,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessageToCache(Felamimail_Model_Message $_message)
     {
-        $_message->from_email = substr($_message->from_email, 0, 254);
-        $_message->from_name  = substr($_message->from_name,  0, 254);
+        // TODO remove filterInputForDatabase when we finally support utf8mb4!
+        $_message->from_email = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_email, 0, 254));
+        $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_name,  0, 254));
         
         try {
             $result = $this->_backend->create($_message);
