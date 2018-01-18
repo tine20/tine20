@@ -904,7 +904,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $structure = $message->getPartStructure($_partId);
         if (! isset($structure['parts'])) {
-            if ($structure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            if (isset($structure['contentType']) && $structure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
                 && isset($structure['messageStructure']['parts']) && is_array($structure['messageStructure']['parts'])
             ) {
                 $structure = $structure['messageStructure'];
