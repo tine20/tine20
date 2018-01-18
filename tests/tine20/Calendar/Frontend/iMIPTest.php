@@ -721,4 +721,33 @@ class Calendar_Frontend_iMIPTest extends TestCase
      {
          $this->markTestIncomplete('implement me');
      }
+
+    /**
+     * testExternalInvitationRescheduleOutlook
+     */
+    public function testExternalInvitationRescheduleOutlook()
+    {
+        $iMIP = $this->_testExternalImap('outlook_invitation.ics',
+            3, 'Metaways Folgetermin ');
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->_eventIdsToDelete[] = $eventId = $iMIP->event->getId();
+
+        $ics = file_get_contents(dirname(__FILE__) . '/files/outlook_reschedule.ics');
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id' => Tinebase_Record_Abstract::generateUID(),
+            'ics' => $ics,
+            'method' => 'REQUEST',
+            'originator' => 'l.kneschke@caldav.org',
+        ));
+        // TEST REQUEST
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST REQUEST autoProcess throws Exception: ' . $e);
+        }
+        unset($iMIP->existing_event);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($eventId);
+        $this->assertEquals('2017-08-16 09:00:00',$updatedEvent->dtstart->toString());
+    }
 }

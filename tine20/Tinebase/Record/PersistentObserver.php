@@ -85,6 +85,9 @@ class Tinebase_Record_PersistentObserver
      */
     public function fireEvent(Tinebase_Event_Observer_Abstract $_event)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Fire Event ' . get_class($_event));
+
         $setOuterCall = false;
         if (true === $this->_outerCall) {
             $this->_eventRecursionPrevention = array();
@@ -97,6 +100,9 @@ class Tinebase_Record_PersistentObserver
 
             /** @var Tinebase_Model_PersistentObserver $observer */
             foreach ($observers as $observer) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Handling event in observer ' . $observer->observer_model);
 
                 $observerId = $observer->getId();
                 if (isset($this->_eventRecursionPrevention[$observerId])) {

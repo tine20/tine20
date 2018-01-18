@@ -173,6 +173,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _createDocument()
     {
+        Tinebase_Export_Spreadsheet_NumberFormat::fillBuildInTypes();
+
         $templateFile = $this->_getTemplateFilename();
 
         if ($templateFile !== NULL) {
@@ -428,8 +430,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                         throw new Tinebase_Exception('could not store filecontents in a temp file');
                     }
 
-                    $drawing->setPath($tempFile);
-
+                    $this->_replaceDrawing($tempFile, $drawing);
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                         Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' could not get file content: ' . $desc);
@@ -438,5 +439,34 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 }
             }
         }
+    }
+
+    protected function _replaceDrawing($filePath, PHPExcel_Worksheet_Drawing $drawing)
+    {
+        list($newWidth, $newHeight) = getimagesize($filePath);
+        $oldWidth = $drawing->getWidth();
+        $oldHeight = $drawing->getHeight();
+
+        $drawing->setResizeProportional(false);
+        if ($newWidth <= $oldWidth && $newHeight <= $oldHeight) {
+            $drawing->setWidth($newWidth);
+            $drawing->setHeight($newHeight);
+        } else {
+            // 0,25         1           4
+            // 4            4           1
+            $oldRatio = $oldWidth / $oldHeight;
+            // 0,75         3           4
+            $newRatio = $newWidth / $newHeight;
+
+            if ($newRatio >= $oldRatio) {
+                $drawing->setWidth($oldWidth);
+                $drawing->setHeight((int)($newHeight * $oldWidth / $newWidth));
+            } else {
+                $drawing->setHeight($oldHeight);
+                $drawing->setWidth((int)($newWidth * $oldHeight / $newHeight));
+            }
+        }
+
+        $drawing->setPath($filePath);
     }
 }

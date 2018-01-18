@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Convert_Contact_VCard_TelefonbuchTest::main');
-}
-
 /**
  * Test class for Addressbook_Convert_Contact_VCard_TelefonbuchTest
  */

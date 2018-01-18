@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Backend_AllTests::main');
-}
-
 class Crm_Backend_AllTests
 {
     public static function main ()
@@ -30,8 +26,4 @@ class Crm_Backend_AllTests
         $suite->addTestSuite('Crm_Backend_LeadTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Backend_AllTests::main') {
-    Crm_Backend_AllTests::main();
 }

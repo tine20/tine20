@@ -683,6 +683,12 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.tineInit.initUploadMgr();
 
         Tine.Tinebase.tineInit.initLoginPanel();
+
+        // we don't want iOS/Andorid to place stuff to some other cloud
+        // we might need to add a real config for this
+        // it's not clear how to detect devices w.o. local storage or clients which place
+        // downloads in a cloud :-(
+        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
     },
 
     /**
@@ -781,21 +787,6 @@ Tine.Tinebase.tineInit = {
                     taps: 2
                 }));
 
-                Ext.getDoc().on('orientationchange', function() {
-                    // @TODO: iOS safari only?
-                    var metas = document.getElementsByTagName('meta');
-                    for (var i = 0; i < metas.length; i++) {
-                        if (metas[i].name == "viewport") {
-                            metas[i].content = "width=device-width, maximum-scale=1.0";
-                            // NOTE: if we don't release the max scale here, we get wired layout effects
-                            metas[i].content = "width=device-width, maximum-scale=10, user-scalable=no";
-                        }
-                    }
-                    // NOTE: need to hide soft-keybord before relayouting to preserve layout
-                    document.activeElement.blur();
-                    Tine.Tinebase.viewport.doLayout.defer(500, Tine.Tinebase.viewport);
-                }, this);
-
                 // NOTE: document scroll only happens when soft keybord is displayed and therefore viewport scrolls.
                 //       in this case, content might not be accessable
                 //Ext.getDoc().on('scroll', function() {
@@ -804,6 +795,37 @@ Tine.Tinebase.tineInit = {
 
             }, 'Tinebase/js/hammerjs');
         }
+
+        Ext.getDoc().on('orientationchange', function() {
+            // @TODO: iOS safari only?
+            var metas = document.getElementsByTagName('meta');
+            for (var i = 0; i < metas.length; i++) {
+                if (metas[i].name == "viewport") {
+                    metas[i].content = "width=device-width, maximum-scale=1.0";
+                    // NOTE: if we don't release the max scale here, we get wired layout effects
+                    metas[i].content = "width=device-width, maximum-scale=10, user-scalable=no";
+                }
+            }
+            // NOTE: need to hide soft-keybord before relayouting to preserve layout
+            document.activeElement.blur();
+            Tine.Tinebase.viewport.doLayout.defer(500, Tine.Tinebase.viewport);
+        }, this);
+
+        // adjust modal windows when browser gets resized (also orientation change)
+        Tine.Tinebase.viewport.on('resize', function(viewport, adjWidth, adjHeight, rawWidth, rawHeight) {
+            Ext.WindowMgr.each(function(win) {
+                var currSize = win.getSize(),
+                    normSize = win.normSize || currSize,
+                    maxSize = {width: adjWidth, height: adjHeight};
+
+                win.setSize(
+                    Math.min(Math.max(currSize.width, normSize.width), maxSize.width),
+                    Math.min(Math.max(currSize.height, normSize.height), maxSize.height)
+                );
+
+                win.center();
+            });
+        }, this, {buffer: 150});
 
         // initialise window types
         var windowType = 'Browser';

@@ -958,6 +958,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
             
             $ownField = $this->__get($fieldName);
+
+            if ($ownField instanceof Tinebase_Model_Filter_FilterGroup) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' why do we have an filter object in the diff?!?!? class: ' . get_class($ownField) . ' '
+                    . print_r($_record->toArray(), true));
+                continue;
+            }
+
             $recordField = $_record->$fieldName;
 
             if ($fieldName == 'customfields' && is_array($ownField) && is_array($recordField)) {
@@ -1292,7 +1300,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return $this->{$c->titleProperty};
         }
     }
-    
+
+    public static function getRecordName($locale = null)
+    {
+        // @TODO implement modelConfig version based on record(s)name
+        $translation = Tinebase_Translation::getTranslation(preg_replace('/_.*/', '', static::class), $locale);
+        return $translation->translate(preg_replace('/.*_/', '', static::class));
+    }
     /**
      * returns the foreignId fields (used in Tinebase_Convert_Json)
      * @return array

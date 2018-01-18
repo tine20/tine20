@@ -66,7 +66,10 @@ Tine.Tinebase.ApplicationStarter = {
      */
     getField: function(fieldDefinition, key) {
         // default type is auto
-        var field = {name: key};
+        var field = {
+            name: key,
+            fieldDefinition: fieldDefinition
+        };
         
         if (fieldDefinition.type) {
             // add pre defined type
@@ -85,6 +88,9 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'records':
                     fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
+                    field.getRecordClass = function() {
+                        return Tine.Tinebase.data.RecordMgr.get(field.type);
+                    }
                     break;
             }
             // allow overwriting date pattern in model

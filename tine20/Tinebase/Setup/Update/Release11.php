@@ -234,4 +234,59 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.14');
     }
+
+    /**
+     * update to 11.15
+     *
+     * update relations of type SITE
+     */
+    public function update_14()
+    {
+        $filter = new Tinebase_Model_RelationFilter([
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'SITE'],
+        ]);
+        $relationController = Tinebase_Relations::getInstance();
+        $relationBackend = new Tinebase_Relation_Backend_Sql();
+        $childModels = [
+            Addressbook_Model_List::class,
+            Calendar_Model_Resource::class,
+        ];
+
+        /** @var Tinebase_Model_Relation $relation */
+        foreach ($relationController->search($filter) as $relation) {
+            if (in_array($relation->own_model, $childModels)) {
+                if ($relation->related_degree === Tinebase_Model_Relation::DEGREE_PARENT) {
+                    continue;
+                }
+                $relation->related_degree = Tinebase_Model_Relation::DEGREE_PARENT;
+            } elseif (in_array($relation->related_model, $childModels)) {
+                if ($relation->related_degree === Tinebase_Model_Relation::DEGREE_CHILD) {
+                    continue;
+                }
+                $relation->related_degree = Tinebase_Model_Relation::DEGREE_CHILD;
+            } elseif ($relation->related_degree !== Tinebase_Model_Relation::DEGREE_SIBLING) {
+                $relation->related_degree = Tinebase_Model_Relation::DEGREE_SIBLING;
+            } else {
+                continue;
+            }
+            try {
+                $relationBackend->updateRelation($relation);
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.15');
+    }
+
+    /**
+     * update to 11.16
+     *
+     * make sure setup user has admin rights
+     */
+    public function update_15()
+    {
+        $update = new Tinebase_Setup_Update_Release9($this->_backend);
+        $update->update_14();
+
+        $this->setApplicationVersion('Tinebase', '11.16');
+    }
 }

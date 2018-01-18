@@ -483,7 +483,8 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         if (empty($smtpConfig)) {
             $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
         }
-        
+
+        Calendar_Config::getInstance()->set(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS, false);
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
         self::flushMailer();
         $this->testCreatePoll();

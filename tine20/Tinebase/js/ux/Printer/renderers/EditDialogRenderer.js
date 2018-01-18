@@ -13,6 +13,9 @@ Ext.ns('Ext.ux.Printer');
  * Render any EditDialog.
  */
 Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
+
+    stylesheetPath: 'Tinebase/css/widgets/print.css',
+
     /**
      * @param {Tine.widgets.dialog.EditDialog} editDialog the edit dialog to print
      * @return {Array} Data suitable for use in the XTemplate
@@ -37,7 +40,7 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 editDialog.getForm().items.each(function (field) {
                     if (field instanceof Ext.form.ComboBox || ! Ext.isString(recordData[name])) {
                         var name = field.getName(),
-                            isCustomField = name.match(/^customfield_(.*)/),
+                            isCustomField = String(name).match(/^customfield_(.*)/),
                             string = field.getRawValue();
 
                         if (isCustomField) {
@@ -53,5 +56,94 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             }).defer(1000);
 
         });
+    },
+
+    generateBody: function (editDialog, data) {
+        var _ = window.lodash,
+            me = this,
+            appName = editDialog.recordClass.getMeta('appName');
+
+        data.titleHTML = editDialog.record.getTitle();
+        data.customFieldHTML = Tine.widgets.customfields.Renderer.renderAll(appName, editDialog.recordClass, data.customfields);
+
+
+        // @TODO render container
+        // @TODO render tags, notes, attachments
+        return new Promise(function (fulfill, reject) {
+            me.generateRecordHTML(editDialog).then(function(recordHTML) {
+                data.recordHTML = recordHTML;
+
+                var bodyTpl = new Ext.XTemplate(
+                    '<div class="rp-print-single">',
+                    '    {[Tine.widgets.printer.headerRenderer()]}',
+                    '    <div class="rp-print-single-summary">{titleHTML}</div>',
+                    '    <table>',
+                    '        <tr>',
+                    '            <td>',
+                    '            </td>',
+                    '            <td>',
+                    '                <div class="rp-print-single-block">',
+                    '                    {values.recordHTML}',
+                    '                    <br/>',
+                    '                    {values.customFieldHTML}',
+                    '                    <br/>',
+                    '                    <div class="cal-print-single-block-heading">', window.i18n._('Related to'), '</div>',
+                    '                    <div class="rp-print-single-block">',
+                    '                        {[this.relationRenderer(values.relations)]}',
+                    '                    </div>',
+                    '                </div>',
+                    '            </td>',
+                    '        </tr>',
+                    '    </table>',
+                    '</div>',
+                    {
+                        relationRenderer: function (values) {
+                            return Tine.widgets.relation.Renderer.renderAll(values);
+                        }
+                    });
+                fulfill(bodyTpl.apply(data));
+            })
+        })
+    },
+
+    /**
+     * generate html for direct record properties
+     *
+     *
+     * @param editDialog
+     * @param {Array} recordComponents Array of components/strings
+     * @returns {Promise}
+     */
+    generateRecordHTML: function(editDialog, recordComponents) {
+        var _ = window.lodash,
+            me = this,
+            appName = editDialog.recordClass.getMeta('appName'),
+            app = Tine.Tinebase.appMgr.get(appName),
+            form = editDialog.recordForm || editDialog.getForm(),
+            fields = form.items.items;
+
+        recordComponents = recordComponents || fields;
+
+        return _.reduce(recordComponents || fields, function(promise, cmp) {
+            return promise.then(function(html) {
+                return new Promise(function(resolve, reject) {
+                    var renderer = Ext.ux.Printer.findRenderer(_.isString(cmp) ? form.findField(cmp) : cmp),
+                        result = renderer ? renderer.generateBody(cmp) : '';
+
+                    if (_.isString(result)) {
+                        resolve(html + result);
+                    } else {
+                        result.then(function(string) {
+                            resolve(html + string);
+                        })
+                    }
+                });
+            });
+        }, Promise.resolve(''));
+    },
+
+    getTitle: function(editDialog) {
+        return editDialog.recordClass.getRecordName() + ': ' + editDialog.record.getTitle();
     }
+
 });

@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Phone_Backend_Snom_AllTests::main');
-}
-
 class Phone_Backend_Snom_AllTests
 {
     public static function main ()
@@ -30,8 +26,4 @@ class Phone_Backend_Snom_AllTests
         $suite->addTestSuite('Phone_Backend_Snom_CallTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Phone_Backend_Snom_AllTests::main') {
-    Phone_Backend_Snom_AllTests::main();
 }

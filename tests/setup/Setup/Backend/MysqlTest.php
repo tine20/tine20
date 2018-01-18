@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_MysqlTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
@@ -101,8 +97,3 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
     }    
 
 }        
-                
-                
-if (PHPUnit_MAIN_METHOD == 'Setup_Backend_MysqlTest::main') {
-    Setup_Backend_MysqlTest::main();
-}

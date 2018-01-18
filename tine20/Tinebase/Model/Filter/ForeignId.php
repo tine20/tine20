@@ -49,6 +49,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      * set options 
      *
      * @param array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _setOptions(array $_options)
     {

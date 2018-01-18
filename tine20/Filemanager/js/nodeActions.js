@@ -19,7 +19,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
 //  */
 // Tine.Filemanager.nodeActions.Reload = {
 //     app: 'Filemanager',
-//     text: 'Reload', // _('Reload),
+//     text: 'Reload', // _('Reload'),
 //     iconCls: 'x-tbar-loading',
 //     handler: function() {
 //         var record = this.initialConfig.selections[0];
@@ -284,6 +284,7 @@ Tine.Filemanager.nodeActions.Download = {
     text: 'Save locally', // _('Save locally')
     iconCls: 'action_filemanager_save_all',
     disabled: true,
+    hidden: !Tine.Tinebase.configManager.get('downloadsAllowed'),
     scope: this,
     handler: function() {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);

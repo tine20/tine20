@@ -91,7 +91,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'appName'     => 'Addressbook',
                     'modelName'   => 'Contact',
                     'idProperty'  => 'id',
-                )
+                ),
+                'recursiveResolving' => true,
             ),
             'cpintern_id'    => array(
                 'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
@@ -102,7 +103,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'appName'     => 'Addressbook',
                     'modelName'   => 'Contact',
                     'idProperty'  => 'id',
-                )
+                ),
+                'recursiveResolving' => true,
             ),
             'vatid' => array (
                 'label'   => 'VAT No.', // _('VAT No.')
@@ -248,6 +250,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'shy'           => TRUE
                 ),           
             ),
+            // TODO should be marked as virtual as it's missing from the db schema
             'fulltext' => array(
                 'type' => 'string'
             ),

@@ -56,10 +56,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
-    {name: 'readGrant'   , type: 'bool'},
-    {name: 'editGrant'   , type: 'bool'},
-    {name: 'deleteGrant' , type: 'bool'},
-    {name: 'editGrant'   , type: 'bool'},
+    {name: 'readGrant'      , type: 'bool'},
+    {name: 'editGrant'      , type: 'bool'},
+    {name: 'deleteGrant'    , type: 'bool'},
+    {name: 'exportGrant'    , type: 'bool'},
+    {name: 'freebusyGrant'  , type: 'bool'},
+    {name: 'privateGrant'   , type: 'bool'},
+    {name: 'syncGrant'      , type: 'bool'},
     // relations
     { name: 'relations',   omitDuplicateResolving: true},
     { name: 'customfields', omitDuplicateResolving: true}
@@ -452,7 +455,10 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', '
  * JSON backend for events
  */
 Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {
-    
+    appName: 'Calendar',
+    modelName: 'Event',
+    recordClass: Tine.Calendar.Model.Event,
+
     /**
      * Creates a recuring event exception
      * 
@@ -545,11 +551,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
  * default event backend
  */
 if (Tine.Tinebase.widgets) {
-    Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({
-        appName: 'Calendar',
-        modelName: 'Event',
-        recordClass: Tine.Calendar.Model.Event
-    });
+    Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({});
 } else {
     Tine.Calendar.backend = new Tine.Tinebase.data.MemoryBackend({
         appName: 'Calendar',

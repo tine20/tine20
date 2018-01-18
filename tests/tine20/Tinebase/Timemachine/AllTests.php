@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Timemachine_AllTests::main');
-}
-
 class Tinebase_Timemachine_AllTests
 {
     public static function main ()
@@ -30,8 +26,4 @@ class Tinebase_Timemachine_AllTests
         $suite->addTestSuite('Tinebase_Timemachine_ModificationLogTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Timemachine_AllTests::main') {
-    Tinebase_Timemachine_AllTests::main();
 }

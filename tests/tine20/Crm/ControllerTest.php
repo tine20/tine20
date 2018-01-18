@@ -16,10 +16,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_ControllerTest::main');
-}
-
 /**
  * Test class for Tinebase_Group
  */

@@ -843,7 +843,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $translate = Tinebase_Translation::getTranslation('Felamimail');
             $downloadLinkFolder = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
                 . '/' . Tinebase_Core::getUser()->getId()
-                . '/' . $translate->_('.My Mail Download Links');
+                . '/.' . $translate->_('My Mail Download Links');
             $downloadLink = Filemanager_Controller_Node::getInstance()->createNodeWithDownloadLinkFromTempFile(
                 $tempFile,
                 $downloadLinkFolder,

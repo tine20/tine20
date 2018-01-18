@@ -521,4 +521,65 @@ EOT;
         }
 
     }
+
+    public function testPublicApiAddAttenderNotification()
+    {
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+
+        try {
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+            static::flushMailer();
+
+            list ($responseData, $pollData) = $this->testPublicApiAddAttender();
+
+            $messages = static::getMessages();
+            $expectedMessages = Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS) ? 1 : 2;
+            static::assertEquals($expectedMessages, count($messages), 'expected ' . $expectedMessages . ' mails send');
+
+            if (isset($messages[1])) {
+                /** @var Tinebase_Mail $confirmationMessage */
+                $confirmationMessage = $messages[1];
+                $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
+                $text = $confirmationMessage->getBodyText()->getContent();
+                $this->assertContains('Thank you for attendening', $text);
+            }
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
+        }
+    }
+
+    public function testDefiniteEventNotification()
+    {
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+
+        try {
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+            static::flushMailer();
+
+            list ($updatedEvent, $alternativeEvents) = $this->jt->testSetDefiniteEvent();
+
+            $messages = static::getMessages();
+//            $message = current(array_filter($messages, function($message) {
+//                return $message->getRecipients()[0] == Zend_Registry::get('personas')['sclever']->accountEmailAddress;
+//            }));
+            $message = $messages[1];
+            $text = $message->getBodyText()->getContent();
+//            $html = $message->getBodyHtml()->getContent();
+
+            $this->assertContains('has been closed', $text);
+
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
+        }
+    }
 }

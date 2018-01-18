@@ -459,7 +459,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         this.items = [{
             xtype: 'container',
-            layout: 'absolute',
+            layout: window.innerWidth < 768 ? 'column' : 'absolute',
             border: false,
             items: [
                 this.getLoginPanel(),

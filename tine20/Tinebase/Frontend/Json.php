@@ -1585,7 +1585,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 /** @var Tinebase_Model_Filter_Abstract $f */
                 foreach ($tmpFilter->getFilter($field, true, true) as $f) {
                     if (empty($f->getValue())) {
-                        $tmpFilter->removeFilter($f);
+                        $tmpFilter->removeFilter($f, true);
                     }
                 }
             }

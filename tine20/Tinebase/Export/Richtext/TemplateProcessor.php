@@ -123,9 +123,10 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         }
     }
 
-    protected function _replaceTine20ImagePaths($xmlData, $relData)
+    protected function _replaceTine20ImagePaths(&$xmlData, $relData)
     {
-        if (preg_match_all('#<wp:docPr[^>]+"(\w+://[^"]+)".*?r:embed="([^"]+)"#is', $xmlData, $matches, PREG_SET_ORDER)) {
+        $replacements = [];
+        if (preg_match_all('#<w:drawing[^>]*>.*?<wp:docPr[^>]+"(\w+://[^"]+)".*?r:embed="([^"]+)".*?</w:drawing>#is', $xmlData, $matches, PREG_SET_ORDER)) {
             foreach($matches as $match) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -141,6 +142,73 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     if (!empty($fileContent)) {
                         $this->zipClass->deleteName('word/' . $relMatch[1]);
                         $this->zipClass->addFromString('word/' . $relMatch[1], $fileContent);
+                        if (false === ($imageSize = getimagesize($match[1]))) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' could not get image size: ' . $match[1]);
+                        } else {
+                            $replaceStr = $match[0];
+                            $replaced = false;
+                            $width = $imageSize[0] * 914400 / 96;
+                            $height = $imageSize[1] * 914400 / 96;
+                            if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                                    $submatches, PREG_SET_ORDER)) {
+                                if (count($submatches) > 1) {
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' found ' . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
+                                }
+                                foreach ($submatches as $submatch) {
+                                    if ($submatch[1] === 'x') {
+                                        $var1 = $width;
+                                        $var2 = $height;
+                                    } else {
+                                        $var1 = $height;
+                                        $var2 = $width;
+                                    }
+                                    $replaceStr = str_replace($submatch[0], str_replace([
+                                        'c' . $submatch[1] . '="' . $submatch[2] . '"',
+                                        'c' . $submatch[3] . '="' . $submatch[4] . '"'
+                                    ], [
+                                        'c' . $submatch[1] . '="' . $var1 . '"',
+                                        'c' . $submatch[3] . '="' . $var2 . '"'
+                                    ], $submatch[0]), $replaceStr);
+                                    $replaced = true;
+                                }
+                            } else {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' could not find <a:ext cx= cy= ' . $match[1]);
+                            }
+
+                            if (preg_match_all('#<wp:extent[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                                $submatches, PREG_SET_ORDER)) {
+                                if (count($submatches) > 1) {
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' found ' . count($submatches) . ' <wp:extent cx= cy= ' . $match[1]);
+                                }
+                                foreach ($submatches as $submatch) {
+                                    if ($submatch[1] === 'x') {
+                                        $var1 = $width;
+                                        $var2 = $height;
+                                    } else {
+                                        $var1 = $height;
+                                        $var2 = $width;
+                                    }
+                                    $replaceStr = str_replace($submatch[0], str_replace([
+                                        'c' . $submatch[1] . '="' . $submatch[2] . '"',
+                                        'c' . $submatch[3] . '="' . $submatch[4] . '"'
+                                    ], [
+                                        'c' . $submatch[1] . '="' . $var1 . '"',
+                                        'c' . $submatch[3] . '="' . $var2 . '"'
+                                    ], $submatch[0]), $replaceStr);
+                                    $replaced = true;
+                                }
+                            } else {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' could not find <wp:extent cx= cy= ' . $match[1]);
+                            }
+
+                            if ($replaced) {
+                                $replacements[] = [
+                                    $match[0],
+                                    $replaceStr
+                                ];
+                            }
+                        }
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                             Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' could not get file content: ' . $match[1]);
@@ -150,6 +218,10 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                         Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' could not find relation matching found url: ' . $match[1]);
                 }
             }
+        }
+
+        foreach ($replacements as $rep) {
+            $xmlData = str_replace($rep[0], $rep[1], $xmlData);
         }
     }
 

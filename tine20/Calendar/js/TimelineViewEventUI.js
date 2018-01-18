@@ -41,5 +41,7 @@ Tine.Calendar.TimelineViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 
         view.templates.event.insertFirst(view.getEl(), data, true);
         this.domIds.push(data.id);
+
+
     }
 });

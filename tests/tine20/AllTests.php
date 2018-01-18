@@ -16,11 +16,6 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
  */
 class AllTests
 {
-    public static function main()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-    
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
@@ -48,16 +43,16 @@ class AllTests
             'ExampleApplication',
             'SimpleFAQ',
             'CoreData',
-            'Zend'
+            'Zend',
         );
 
-        foreach($oldSuits as $className) {
+        foreach ($oldSuits as $className) {
             $className .= '_AllTests';
             $suite->addTest($className::suite());
         }
 
         // this will not find ./library/OpenDocument/AllTests.php ... but it had not been added previously neither. So nothing changed with regards to that
-        foreach(new DirectoryIterator(__DIR__) as $dirIter) {
+        foreach (new DirectoryIterator(__DIR__) as $dirIter) {
             if ($dirIter->isDir() && !$dirIter->isDot() &&
                 is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
                 'Scheduler' !== $dirIter->getFilename() &&
@@ -66,7 +61,7 @@ class AllTests
                 $suite->addTest($className::suite());
             }
         }
-        
+
         return $suite;
     }
 }

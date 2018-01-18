@@ -553,6 +553,28 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
+    public function testAddAttachementFromFilemanager()
+    {
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+        file_put_contents($tempPath, 'someData');
+        $result = $this->_getUit()->createNodes([$sharedContainerNode['path'] . '/file1'],
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId], false);
+
+        $adbJsonFE = new Addressbook_Frontend_Json();
+        $contact = $adbJsonFE->getContact($this->_personas['sclever']->contact_id);
+        static::assertTrue(!isset($contact['attachments']) || empty($contact['attachments']),
+            'contact should have 0 attachments');
+
+        $contact['attachments'] = $result;
+        $savedContact = $adbJsonFE->saveContact($contact);
+        static::assertTrue(is_array($savedContact) && isset($savedContact['id']) && $savedContact['id'] ===
+            $contact['id'], 'saving the contact with the attachment failed');
+        static::assertTrue(isset($savedContact['attachments']) && is_array($savedContact['attachments']) &&
+            count($savedContact['attachments']) === 1, 'saving the attachment failed');
+    }
+
     public function testOverwriteFileNode()
     {
         $filepaths = $this->testCreateFileNodes(true);
@@ -655,7 +677,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         file_put_contents($tempPath, 'someData');
 
         try {
-            $result = $this->_getUit()->createNodes(array($testPath), Tinebase_Model_Tree_FileObject::TYPE_FILE,
+            $this->_getUit()->createNodes(array($testPath), Tinebase_Model_Tree_FileObject::TYPE_FILE,
                 $tempFileIds, false);
             self::fail('it is not allowed to create new files here');
         } catch (Tinebase_Exception_AccessDenied $tead) {

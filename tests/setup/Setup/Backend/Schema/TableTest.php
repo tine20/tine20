@@ -1,8 +1,4 @@
 <?php
-// Call Setup_Backend_Schema_TableTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_Schema_TableTest::main');
-}
 
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
@@ -163,9 +159,4 @@ class Setup_Backend_Schema_TableTest extends Setup_Backend_AbstractTest
         
     }
 
-}
-
-// Call Setup_Backend_Schema_TableTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'Setup_Backend_Schema_TableTest::main') {
-    Setup_Backend_Schema_TableTest::main();
 }

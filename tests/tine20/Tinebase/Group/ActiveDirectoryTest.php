@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Group_SqlTest::main');
-}
-
 /**
  * Test class for Tinebase_Group_ActiveDirectory
  */

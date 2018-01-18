@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tasks_Backend_SqlTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  * @todo move concurrency tests to controller test!
@@ -198,8 +194,3 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $count);
     }
 }        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tasks_Backend_SqlTest::main') {
-    Tasks_Backend_SqlTest::main();
-}

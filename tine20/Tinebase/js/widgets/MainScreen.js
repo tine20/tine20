@@ -238,7 +238,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         return (this.activeContentType) ? this.activeContentType : '';
     },
 
-    getContentTypeDefinition(contentType) {
+    getContentTypeDefinition: function(contentType) {
         var _ = window.lodash;
 
         return _.find(this.contentTypes, {contentType: contentType}) ||

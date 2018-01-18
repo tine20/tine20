@@ -54,7 +54,8 @@ module.exports = {
     //devtool: 'source-map', // use -d option if you need sourcemaps
     output: {
         path: baseDir + '/',
-        publicPath: '/',
+        // avoid public path, see #13430.
+        // publicPath: '/',
         filename: '[name]-[hash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
         libraryTarget: "umd"

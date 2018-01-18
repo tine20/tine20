@@ -549,48 +549,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGenericColumnModel: function() {
         if (this.modelConfig) {
-            var columns = [];
+            var columns = [],
+                appName = this.recordClass.getMeta('appName'),
+                modelName = this.recordClass.getMeta('modelName');
+
             Ext.each(this.modelConfig.fieldKeys, function(key) {
-                var fieldConfig = this.modelConfig.fields[key];
-                    globalI18n = (fieldConfig && fieldConfig.hasOwnProperty('useGlobalTranslation'));
-
-                if (fieldConfig.type === 'virtual') {
-                    fieldConfig = fieldConfig.config;
-                }
-
-                // don't show multiple record fields
-                if (fieldConfig.type == 'records') {
-                    return true;
-                }
-                
-                // don't show parent property in dependency of an editDialog
-                if (this.editDialog && fieldConfig.hasOwnProperty('config') && fieldConfig.config.isParent) {
-                    return true;
-                }
-                
-                // don't show record field if the user doesn't have the right on the application
-                if (fieldConfig.type == 'record' && !(fieldConfig.config && fieldConfig.config.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', fieldConfig.config.appName, fieldConfig.config.modelName.toLowerCase() + 's'))) {
-                    return true;
-                }
-                
-                // If no label exists, don't use in grid
-                if (fieldConfig.label) {
-                    var config = {
-                        id: key,
-                        dataIndex: (fieldConfig.type == 'relation') ? 'relations' : key,
-                        header: globalI18n ? i18n._(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
-                        hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
-                        sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
-                    };
-                    
-                    if (fieldConfig.hasOwnProperty('summaryType')) {
-                        config.summaryType = fieldConfig.summaryType;
-                    }
-                    
-                    var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
-                    if (renderer) {
-                        config.renderer = renderer;
-                    }
+                var config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
+                if (config) {
                     columns.push(config);
                 }
             }, this);
@@ -728,11 +693,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initActions: function() {
-        this.newRecordIcon =  this.newRecordIcon!== null ? this.newRecordIcon : this.app.appName + 'IconCls';
-        if (! Ext.util.CSS.getRule('.' + this.newRecordIcon)) {
-            this.newRecordIcon = 'ApplicationIconCls';
+        if (! this.newRecordIcon) {
+            Ext.each((this.recordClass ? [this.recordClass.getMeta('appName') + this.recordClass.getMeta('modelName')] : []).concat([
+                this.app.appName + 'IconCls',
+                'ApplicationIconCls'
+            ]), function(cls) {
+                if (Ext.util.CSS.getRule('.' + cls)) {
+                    this.newRecordIcon = cls;
+                    return false;
+                }
+            }, this);
         }
-        
+
         var services = Tine.Tinebase.registry.get('serviceMap').services;
         
         this.action_editInNewWindow = new Ext.Action({
@@ -991,6 +963,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         if (this.recordProxy) {
+            if (! this.defaultSortInfo.field && this.recordClass) {
+                var titleProperty = this.recordClass.getMeta('titleProperty'),
+                    defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
+
+                this.defaultSortInfo = this.recordClass.hasField(titleProperty) ? {
+                    field: defaultSortField,
+                    order: 'DESC'
+                }: null;
+            }
+
             var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;
             this.store = new storeClass({
                 fields: this.recordClass,
@@ -1438,7 +1420,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             store: this.store,
             sm: this.selectionModel,
             parentScope: this,
-            view: this.createView()
+            view: this.createView(),
+            recordClass: this.recordClass
         }));
 
         // init various grid / sm listeners

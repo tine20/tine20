@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Model_AllTests::main');
-}
-
 class Calendar_Model_AllTests
 {
     public static function main ()
@@ -32,8 +28,4 @@ class Calendar_Model_AllTests
         $suite->addTestSuite('Calendar_Model_EventTests');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Model_AllTests::main') {
-    Calendar_Model_AllTests::main();
 }

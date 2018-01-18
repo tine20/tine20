@@ -116,8 +116,12 @@ class Calendar_Model_Poll extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function getPollLink()
+    public function getPollLink(Calendar_Model_Attender $attendee = null)
     {
-        return Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $this->getId();
+        $publicUrl = Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $this->getId();
+
+        return $publicUrl . ($attendee ? (
+            '/' . $attendee->getUserId() . '/' . $attendee->status_authkey
+        ) : '');
     }
 }

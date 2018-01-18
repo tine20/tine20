@@ -19,6 +19,15 @@ Tine.Tinebase.configManager = function(){
                 path = pathParts.join('.value.') + (pathParts.length == 1 ? '.value' : '');
 
             return lodash.get(config, path);
+        },
+        set: function(name, value, appName) {
+            var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,
+                config = registry ? registry.get('config') : false,
+                pathParts = String(name).split('.'),
+                path = pathParts.join('.value.') + (pathParts.length == 1 ? '.value' : '');
+
+            lodash.set(config, path, value);
+            registry.set('config', config);
         }
     }
 }();

@@ -260,7 +260,32 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_Record_NotDefined("No relation found.");
         }
     }
-    
+
+    /**
+     * converts raw data from adapter into a set of records
+     *
+     * @param  array $_rawDatas of arrays
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _rawDataToRecordSet(array $_rawDatas)
+    {
+        foreach ($_rawDatas as &$data) {
+            $data['id'] = $data['rel_id'];
+        }
+
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $_rawDatas, true);
+
+        /** @var Tinebase_Record_Abstract $record *
+        foreach ($result as $record) {
+            if (! empty($this->_foreignTables)) {
+                $this->_explodeForeignValues($record);
+            }
+            $record->runConvertToRecord();
+        }*/
+
+        return $result;
+    }
+
     /**
      * converts raw data from adapter into a single record
      *
@@ -271,7 +296,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $_rawData['id'] = $_rawData['rel_id'];
         $result = new Tinebase_Model_Relation($_rawData, true);
-        
+        //$result->runConvertToRecord();
         return $result;
     }
     
@@ -308,14 +333,15 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
     {
-        $backend = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Tinebase_Model_Relation', 
-            'tableName' => 'relations',
-        ));
-        
-        $_filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', (int)FALSE));
-        
-        return $backend->search($_filter, $_pagination, $_onlyIds);
+        try {
+            $this->_modelName = Tinebase_Model_Relation::class;
+
+            $_filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', (int)false));
+
+            return parent::search($_filter, $_pagination, $_onlyIds);
+        } finally {
+            $this->_modelName = null;
+        }
     }
     
     /**
@@ -487,6 +513,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * remove all relations for application
      *
+     * TODO fix this, bad code!
+     *
      * @param string $applicationName
      *
      * @return void
@@ -512,6 +540,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
     /**
      * remove all relations of a specific type
+     *
+     * TODO fix this, bad code!
      *
      * @param string $_type
      *

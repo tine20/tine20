@@ -78,7 +78,7 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         //second factor? No, not really please, CLI job...
         //parent::_checkRight($_action);
 
-        $this->checkRight('admin');
+        $this->checkRight(Tinebase_Acl_Rights::ADMIN);
     }
 
     /**

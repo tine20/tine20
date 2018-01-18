@@ -47,6 +47,10 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         var mask = new Ext.LoadMask(Ext.getBody(), {msg: i18n._("Preparing print, please wait...")});
         mask.show();
 
+        if (this.debug) {
+            this.printStrategy = 'window';
+        }
+
         return this[this.printStrategy + 'Print'](component)
         .then(function() {
             mask.hide.defer(200, mask);
@@ -75,7 +79,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
 
         var me = this;
         return me.generateHTML(component).then(function(html) {
-            win.document.write(this.generateHTML(component));
+            win.document.write(html);
             win.document.close();
 
             // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself

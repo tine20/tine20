@@ -1334,11 +1334,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
 
         /** @var Tinebase_Model_ModificationLog $modification */
-        foreach($modifications as $modification)
+        foreach ($modifications as $modification)
         {
             $transactionId = $transactionManager->startTransaction($db);
 
             $this->_externalInstanceId = $modification->instance_id;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Processing master sequence ' . $modification->instance_seq);
 
             try {
                 if ($currentRecordType !== $modification->record_type || !isset($controller)) {
@@ -1357,6 +1360,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     static::defaultApply($modification, $controller);
                 }
 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Update replication master id to ' . $modification->instance_seq);
                 $tinebaseApplication->xprops('state')[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
                     $modification->instance_seq;
                 $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
