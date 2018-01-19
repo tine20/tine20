@@ -18,6 +18,8 @@
  */
 class Filemanager_Exception extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * the name of the application, this exception belongs to
      *
