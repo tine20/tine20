@@ -410,12 +410,14 @@ class Tinebase_Helper
 
     /**
      * get filename (might be an url)
+     * note: local files are returned with prepended "file://" scheme
      *
-     * @param $filenameOrUrl
+     * @param string $filenameOrUrl
+     * @param boolean $throwException
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getFilename($filenameOrUrl, $throwException=true)
+    public static function getFilename($filenameOrUrl, $throwException = true)
     {
         if (strpos($filenameOrUrl, 'http') === 0) {
             // TODO use "real" tempfile?
