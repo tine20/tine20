@@ -19,11 +19,17 @@
 class Felamimail_Exception_IMAPMessageNotFound extends Felamimail_Exception_IMAP
 {
     /**
+     * don't log this to sentry in Tinebase_Exception::log()
+     *
+     * @var bool
+     */
+    protected $_logToSentry = false;
+
+    /**
      * construct
      * 
      * @param string $_message
      * @param integer $_code
-     * @return void
      */
     public function __construct($_message = 'Message not found on IMAP server.', $_code = 914) {
         parent::__construct($_message, $_code);

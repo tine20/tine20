@@ -16,6 +16,6 @@
  * @package     Felamimail
  * @subpackage  Exception
  */
-class Felamimail_Exception extends Exception
+class Felamimail_Exception extends Tinebase_Exception
 {
 }
