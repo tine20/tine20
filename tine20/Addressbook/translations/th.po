@@ -17,155 +17,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:122
-msgid "manage shared addressbooks"
-msgstr "จัดการ สมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
-
-#: Acl/Rights.php:123
-msgid "Create new shared addressbook folders"
-msgstr "สร้าง แฟ้มใหม่สำหรับสมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
-
-#: Acl/Rights.php:126
-msgid "manage shared addressbook favorites"
-msgstr "จัดการ สมุดรายชื่อร่วมที่ใช้บ่อย"
-
-#: Acl/Rights.php:127
-msgid "Create or update shared addressbook favorites"
-msgstr "สร้าง หรือ ปรับปรุง สมุดรายชื่อร่วมที่ใช้บ่อย"
-
-#: Acl/Rights.php:130
-msgid "Manage lists in CoreData"
-msgstr ""
-
-#: Acl/Rights.php:131
-msgid "View, create, delete or update lists in CoreData application"
-msgstr ""
-
-#: Acl/Rights.php:134
-msgid "Manage list functions in CoreData"
-msgstr ""
-
-#: Acl/Rights.php:135
-msgid "View, create, delete or update list functions in CoreData application"
-msgstr ""
-
-#: Config.php:102
-msgid "Enabled Features"
-msgstr ""
-
-#: Config.php:104
-msgid "Enabled Features in Calendar Application."
-msgstr ""
-
-#: Config.php:112
-msgid "Addressbook List View"
-msgstr ""
-
-#: Config.php:114
-msgid "Shows an additional view for lists inside the addressbook"
-msgstr ""
-
-#: Config.php:117
-msgid "Addressbook Industries"
-msgstr ""
-
-#: Config.php:118
-msgid "Add Industry field to Adressbook"
-msgstr ""
-
-#: Config.php:121
-msgid "Manage resources in Addressbook"
-msgstr ""
-
-#: Config.php:122
-msgid "Show the resources grid also inside the Addressbook"
-msgstr ""
-
-#: Config.php:125
-msgid "Show Structure Panel in Addressbook"
-msgstr ""
-
-#: Config.php:126
-msgid "Visualize relations of records"
-msgstr ""
-
-#: Config.php:137
-msgid "Contact duplicate check fields"
-msgstr "การติดต่อซ้ำซ้อน ตรวจสอบที่กล่อง"
-
-#: Config.php:139
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr "กล่องเหล่านี้จะถูกทำเครื่องหมาย เมื่อมีการสร้างการติดต่อใหม่ขึ้น หากมีการตรวจสอบว่ามีข้อมูลที่ซ้ำซ้อนกันอยู่ ข้อยกเว้นที่ซ้ำซ้อนจะได้รับการเพิกเฉย"
-
-#: Config.php:156
-msgid "Contact Hidden Criteria"
-msgstr ""
-
-#: Config.php:158
-msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
-msgstr ""
-
-#: Config.php:165
-msgid "Contact salutations available"
-msgstr "คำขึ้นต้นที่ใช้ในการติดต่อที่มีอยู่"
-
-#: Config.php:167
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
-msgstr "คำขึ้นต้นการติดต่อที่น่าจะเป็นไปได้ กรุณาระลึกไว้ว่าค่าเพิ่มเติมเหล่านี้อาจมีผลกระทบต่อระบบของสมุดที่อยู่เวลาส่งออกหรือการที่มีการซิงค์ข้อมูล"
-
-#: Config.php:175 Setup/Update/Release5.php:194
-msgid "Mr"
-msgstr "นาย"
-
-#: Config.php:176 Setup/Update/Release5.php:195
-msgid "Ms"
-msgstr "นาง"
-
-#: Config.php:177 js/ContactEditDialog.js:168 js/ContactGrid.js:216
-#: js/Model.js:27 js/Model.js:166 Setup/Update/Release5.php:196
-msgid "Company"
-msgstr "บริษัท"
-
-#: Config.php:183
-msgid "Parsing rules for addresses"
-msgstr "กฎการตรวจสอบที่อยู่ต่าง ๆ"
-
-#: Config.php:185
-msgid "Path to a XML file with address parsing rules."
-msgstr ""
-
-#: Config.php:193
-msgid "List types available"
-msgstr ""
-
-#: Config.php:195
-msgid "List types available."
-msgstr ""
-
-#: Config.php:202
-msgid "Department"
-msgstr ""
-
-#: Config.php:203
-msgid "Mailing list"
-msgstr ""
-
-#: Config.php:208
-msgid "Use Nominatim during contact import"
-msgstr ""
-
-#: Config.php:218 Config.php:220
-msgid "Sync Backends"
-msgstr ""
-
-#: Controller/Contact.php:595
-msgid "Uploaded new contact image."
-msgstr "ได้อัพโหลดภาพที่ใช้ในการติดต่อใหม่แล้ว"
-
-#: Controller/Contact.php:598
-msgid "Deleted contact image."
-msgstr ""
-
 #: Controller.php:129
 #, python-format
 msgid "%s's personal addressbook"
@@ -184,144 +35,6 @@ msgstr ""
 msgid "Industries"
 msgstr ""
 
-#: Export/definitions/adb_by_company_xls.xml:7
-msgid "Excel phone list"
-msgstr ""
-
-#: Export/definitions/adb_by_company_xls.xml:9
-msgid "Excel phone list grouped by company"
-msgstr ""
-
-#: Export/definitions/adb_csv.xml:5
-msgid "CSV all data"
-msgstr ""
-
-#: Export/definitions/adb_default_ods.xml:7
-msgid "OpenDocument all data"
-msgstr ""
-
-#: Export/definitions/adb_doc.xml:5 Export/definitions/adb_list_doc.xml:5
-msgid "Word details"
-msgstr ""
-
-#: Export/definitions/adb_doc_letter.xml:6
-msgid "Word letter"
-msgstr ""
-
-#: Export/definitions/adb_list_overview_xls.xml:5
-#: Export/definitions/adb_xls_overview.xml:5
-msgid "Excel overview"
-msgstr ""
-
-#: Export/definitions/adb_list_xls.xml:5 Export/definitions/adb_xls.xml:5
-msgid "Excel all data"
-msgstr ""
-
-#: Export/definitions/adb_pdf.xml:5
-msgid "PDF details"
-msgstr ""
-
-#: Export/Pdf.php:37
-msgid "Business Contact Data"
-msgstr "ข้อมูลการติดต่อทางธุรกิจ"
-
-#: Export/Pdf.php:39
-msgid "Organisation / Unit"
-msgstr "องค์กร / หน่วย"
-
-#: Export/Pdf.php:44
-msgid "Business Address"
-msgstr "ที่อยู่ธุรกิจ"
-
-#: Export/Pdf.php:52 js/ContactGrid.js:232 Model/List.php:124
-msgid "Email"
-msgstr "อีเมล"
-
-#: Export/Pdf.php:55
-msgid "Telephone Work"
-msgstr "โทรศัพท์ ที่ทำงาน"
-
-#: Export/Pdf.php:58
-msgid "Telephone Cellphone"
-msgstr "โทรศัพท์ เคลื่อนที่"
-
-#: Export/Pdf.php:61
-msgid "Telephone Car"
-msgstr "โทรศัพท์ ในรถ"
-
-#: Export/Pdf.php:64
-msgid "Telephone Fax"
-msgstr "โทรศัพท์ โทรสาร"
-
-#: Export/Pdf.php:67
-msgid "Telephone Page"
-msgstr "โทรศัพท์ หน้า"
-
-#: Export/Pdf.php:70
-msgid "URL"
-msgstr "ที่อยู่ของไฟล์หรือเวบไซด์บนอินเตอร์เนต"
-
-#: Export/Pdf.php:73
-msgid "Role"
-msgstr "หน้าที่"
-
-#: Export/Pdf.php:76 js/ContactEditDialog.js:187 js/ContactGrid.js:220
-#: js/Model.js:33
-msgid "Room"
-msgstr "ห้อง"
-
-#: Export/Pdf.php:79
-msgid "Assistant"
-msgstr "ผู้ช่วย"
-
-#: Export/Pdf.php:82
-msgid "Assistant Telephone"
-msgstr "โทรศัพท์ของผู้ช่วย"
-
-#: Export/Pdf.php:86
-msgid "Private Contact Data"
-msgstr "ข้อมูลการติดต่อส่วนบุคคล"
-
-#: Export/Pdf.php:88 js/ContactEditDialog.js:356 js/Model.js:43
-#: js/Model.js:180 js/Model.js:181 js/Model.js:182 js/Model.js:183
-#: js/Model.js:184 js/Printer/ContactRecord.js:72
-msgid "Private Address"
-msgstr "ที่อยู่ส่วนบุคคล"
-
-#: Export/Pdf.php:96
-msgid "Email Home"
-msgstr "อีเมล ส่วนตัว"
-
-#: Export/Pdf.php:99
-msgid "Telephone Home"
-msgstr "โทรศัพท์ ที่บ้าน"
-
-#: Export/Pdf.php:102
-msgid "Telephone Cellphone Private"
-msgstr "โทรศัพท์ เคลื่อนที่ ส่วนบุคคล"
-
-#: Export/Pdf.php:105
-msgid "Telephone Fax Home"
-msgstr "โทรศัพท์ โทรสารที่บ้าน"
-
-#: Export/Pdf.php:108
-msgid "URL Home"
-msgstr " URL บ้าน"
-
-#: Export/Pdf.php:112
-msgid "Other Data"
-msgstr "ข้อมูลอื่น"
-
-#: Export/Pdf.php:114 js/ContactEditDialog.js:222 js/ContactGrid.js:247
-#: js/Model.js:26 js/Model.js:174
-msgid "Birthday"
-msgstr "วันเกิด"
-
-#: Export/Pdf.php:117 js/ContactEditDialog.js:216 js/ContactGrid.js:218
-#: js/Model.js:30 js/Model.js:169
-msgid "Job Title"
-msgstr "ตำแหน่งงาน"
-
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
 msgstr "การติดต่อทั้งหมด"
@@ -330,65 +43,127 @@ msgstr "การติดต่อทั้งหมด"
 msgid "This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: Import/definitions/adb_google_import_csv.xml:11
-msgid "Import CSV formated contacts from Google address book"
+#: Preference.php:28
+msgid "All contacts"
+msgstr "การติดต่อทั้งหมด"
+
+#: Preference.php:81
+msgid "Default Addressbook"
+msgstr "สมุดรายชื่อหลัก"
+
+#: Preference.php:82
+msgid "The default addressbook for new contacts"
+msgstr "สมุดรายชื่อหลักสำหรับการติดต่อใหม่"
+
+#: Preference.php:85
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+#: Preference.php:86
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "ค่าที่ชอบหลักที่จะโหลดทันทีเมื่อเริ่มเปิดสมุดที่อยู่"
+
+#: Preference.php:89
+msgid "Contacts ODS export configuration"
+msgstr "การกำหนดค่าส่งออกการติดต่อแบบ ODS"
+
+#: Preference.php:90
+msgid "Use this configuration for the contact ODS export."
+msgstr "ใช้ค่าติดตั้งนี้สำหรับการส่งออกการติดต่อแบบ ODS"
+
+#: Preference.php:93
+msgid "Contacts XLS export configuration"
+msgstr "การกำหนดค่าการส่งออกการติดต่อแบบ XLS"
+
+#: Preference.php:94
+msgid "Use this configuration for the contact XLS export."
+msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกการติดต่อแบบ XLS"
+
+#: Preference.php:165
+msgid "default"
+msgstr "ค่าหลัก"
+
+#: js/ContactFilterModel.js:35 js/ContactGrid.js:162 js/Model.js:100
+#: js/Model.js:155
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "การติดต่อ"
+
+#: js/ListRoleMemberFilterModel.js:37 js/Model.js:350
+msgid "List Function"
+msgid_plural "List Functions"
+msgstr[0] ""
+
+#: js/ListEditDialog.js:55
+#, python-brace-format
+msgid "Print {0}"
 msgstr ""
 
-#: Import/definitions/adb_google_import_csv.xml:13
-msgid "Contact import from Google address book"
-msgstr "รายชื่อติดต่อนำเข้ามาจากสมุดรายชื่อของกูเกิล"
-
-#: Import/definitions/adb_import_vcard.xml:9
-msgid "Import vCard formated contacts"
+#: js/ListEditDialog.js:86
+msgid "List Information"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:15
-msgid "Contact VCARD import"
-msgstr "นำเข้ารายชื่อติดต่อ VCARD"
+#: js/ListEditDialog.js:98 js/ListEditDialog.js:181 js/Addressbook.js:77
+#: js/Addressbook.js:112 js/ListRoleGridPanel.js:65 js/ListGrid.js:102
+#: js/contactListsGridPanel.js:57 js/Model.js:19 js/Model.js:272
+msgid "Name"
+msgstr "ชื่อ"
 
-#: Import/definitions/adb_lxoffice_import_csv.xml:11
-msgid "LX-Office CSV Contact import"
+#: js/ListEditDialog.js:104 js/ListGrid.js:103
+msgid "List type"
 msgstr ""
 
-#: Import/definitions/adb_lxoffice_import_csv.xml:13
-msgid "Import CSV formated contacts from LX-Office"
+#: js/ListEditDialog.js:133 js/Printer/ContactRecord.js:45 js/Addressbook.js:83
+#: js/Addressbook.js:118 js/ContactEditDialog.js:405 js/Model.js:69
+#: js/Model.js:170 js/Model.js:273 Model/List.php:112
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: js/ListEditDialog.js:147 js/ContactEditDialog.js:419
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+#: js/ListEditDialog.js:181
+#, python-brace-format
+msgid "{0} must be given"
 msgstr ""
 
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของแมค"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+#: js/ListSearchCombo.js:27
+msgid "Search for system groups ..."
 msgstr ""
 
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
-
-#: Import/definitions/adb_outlook_import_csv.xml:10
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+#: js/ListSearchCombo.js:28
+msgid "Search for groups ..."
 msgstr ""
 
-#: Import/definitions/adb_outlook_import_csv.xml:14
-msgid "Contact CSV import from Outlook address book"
-msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของโปรแกรม Outlook"
+#: js/Printer/ContactRecord.js:50 js/ContactEditDialog.js:230
+msgid "Contact Information"
+msgstr "ข้อมูลที่ใช้ในการติดต่อ"
 
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Tine 2.0 contact CSV import"
+#: js/Printer/ContactRecord.js:75 js/ContactEditDialog.js:327 js/Model.js:34
+#: js/Model.js:175 js/Model.js:176 js/Model.js:177 js/Model.js:178
+#: js/Model.js:179
+msgid "Company Address"
+msgstr "ที่อยู่ของบริษัท"
+
+#: js/Printer/ContactRecord.js:80 js/ContactEditDialog.js:356 js/Model.js:43
+#: js/Model.js:180 js/Model.js:181 js/Model.js:182 js/Model.js:183
+#: js/Model.js:184 Export/Pdf.php:88
+msgid "Private Address"
+msgstr "ที่อยู่ส่วนบุคคล"
+
+#: js/Printer/ContactRecord.js:87 js/Printer/ListRecord.js:67
+msgid "Related to"
 msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:13
-msgid "Import CSV formated contacts from Tine 2.0 address book"
+#: js/Printer/ListRecord.js:40 js/ListRoleGridPanel.js:71
+#: js/ListMemberRoleGridPanel.js:37 Model/List.php:118
+msgid "Members"
 msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:19
-msgid "Import list (###CURRENTDATE###)"
-msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
-
-#: Import/definitions/adb_tine_import_csv.xml:21
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "รายชื่อติดต่อถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
+#: js/Printer/ListRecord.js:56
+msgid "Customfields"
+msgstr ""
 
 #: js/Addressbook.js:24
 msgid "New Contact"
@@ -403,18 +178,6 @@ msgstr[0] "สมุดรายชื่อ"
 msgid "ID"
 msgstr ""
 
-#: js/Addressbook.js:77 js/Addressbook.js:112 js/contactListsGridPanel.js:57
-#: js/ListEditDialog.js:98 js/ListEditDialog.js:181 js/ListGrid.js:102
-#: js/ListRoleGridPanel.js:65 js/Model.js:19 js/Model.js:272
-msgid "Name"
-msgstr "ชื่อ"
-
-#: js/Addressbook.js:83 js/Addressbook.js:118 js/ContactEditDialog.js:405
-#: js/ListEditDialog.js:133 js/Model.js:69 js/Model.js:170 js/Model.js:273
-#: Model/List.php:112
-msgid "Description"
-msgstr "การอธิบาย"
-
 #: js/Addressbook.js:155 js/Model.js:410
 msgid "Structure"
 msgid_plural "Structures"
@@ -423,10 +186,6 @@ msgstr[0] ""
 #: js/Addressbook.js:170
 msgid "Resources"
 msgstr ""
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr "CalDAV URL"
 
 #: js/ContactEditDialog.js:46 js/ContactEditDialog.js:55 js/MapPanel.js:40
 msgid "Map"
@@ -466,6 +225,11 @@ msgstr "ชื่อกลาง"
 msgid "Last Name"
 msgstr "นามสกุล"
 
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:216 js/Model.js:27
+#: js/Model.js:166 Setup/Update/Release5.php:196 Config.php:177
+msgid "Company"
+msgstr "บริษัท"
+
 #: js/ContactEditDialog.js:173 js/ContactGrid.js:217 js/Model.js:28
 #: js/Model.js:167
 msgid "Unit"
@@ -480,6 +244,11 @@ msgstr "คำลงท้ายชื่อ"
 msgid "Job Role"
 msgstr "หน้าที่งาน"
 
+#: js/ContactEditDialog.js:187 js/ContactGrid.js:220 js/Model.js:33
+#: Export/Pdf.php:76
+msgid "Room"
+msgstr "ห้อง"
+
 #: js/ContactEditDialog.js:204 js/ContactGrid.js:215 js/Model.js:24
 msgid "Display Name"
 msgstr "ชื่อที่ใช้"
@@ -489,9 +258,15 @@ msgid "Industry"
 msgid_plural "Industries"
 msgstr[0] ""
 
-#: js/ContactEditDialog.js:230 js/Printer/ContactRecord.js:42
-msgid "Contact Information"
-msgstr "ข้อมูลที่ใช้ในการติดต่อ"
+#: js/ContactEditDialog.js:216 js/ContactGrid.js:218 js/Model.js:30
+#: js/Model.js:169 Export/Pdf.php:117
+msgid "Job Title"
+msgstr "ตำแหน่งงาน"
+
+#: js/ContactEditDialog.js:222 js/ContactGrid.js:247 js/Model.js:26
+#: js/Model.js:174 Export/Pdf.php:114
+msgid "Birthday"
+msgstr "วันเกิด"
 
 #: js/ContactEditDialog.js:239 js/ContactGrid.js:233
 #: js/ContactGridDetailsPanel.js:117 js/Model.js:52 js/Model.js:168
@@ -520,8 +295,8 @@ msgstr "โทรศัพท์เคลื่อนที่ (ส่วนต�
 msgid "Fax (private)"
 msgstr "โทรสาร (ส่วนตัว)"
 
-#: js/ContactEditDialog.js:269 js/ContactGridDetailsPanel.js:129
-#: js/Model.js:63 js/Model.js:171
+#: js/ContactEditDialog.js:269 js/ContactGridDetailsPanel.js:129 js/Model.js:63
+#: js/Model.js:171
 msgid "E-Mail"
 msgstr "อีเมล"
 
@@ -533,12 +308,6 @@ msgstr " อีเมล (ส่วนตัว)"
 #: js/ContactGridDetailsPanel.js:135 js/Model.js:65
 msgid "Web"
 msgstr "เวบไซด์"
-
-#: js/ContactEditDialog.js:327 js/Model.js:34 js/Model.js:175 js/Model.js:176
-#: js/Model.js:177 js/Model.js:178 js/Model.js:179
-#: js/Printer/ContactRecord.js:67
-msgid "Company Address"
-msgstr "ที่อยู่ของบริษัท"
 
 #: js/ContactEditDialog.js:330 js/ContactEditDialog.js:359
 #: js/ContactGrid.js:221 js/Model.js:175 js/Model.js:180
@@ -568,10 +337,6 @@ msgstr "เมือง"
 #: js/ContactGrid.js:225 js/Model.js:179 js/Model.js:184
 msgid "Country"
 msgstr "ประเทศ"
-
-#: js/ContactEditDialog.js:419 js/ListEditDialog.js:147
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
 
 #: js/ContactEditDialog.js:423 js/Model.js:83
 msgid "Groups"
@@ -605,12 +370,6 @@ msgstr ""
 msgid "End token mode"
 msgstr "จบโหมดสัญลักษณ์"
 
-#: js/ContactFilterModel.js:35 js/ContactGrid.js:162 js/Model.js:100
-#: js/Model.js:155
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "การติดต่อ"
-
 #: js/ContactGrid.js:110
 msgid "Import contacts"
 msgstr "นำเข้า การติดต่อ"
@@ -635,7 +394,7 @@ msgstr "ส่วนตัว"
 msgid "Not set"
 msgstr ""
 
-#: js/ContactGrid.js:200 js/contactListsGridPanel.js:56 js/ListGrid.js:100
+#: js/ContactGrid.js:200 js/ListGrid.js:100 js/contactListsGridPanel.js:56
 #: js/Model.js:185 Model/List.php:130
 msgid "Type"
 msgstr "ประเภท"
@@ -672,6 +431,10 @@ msgstr "รหัสไปรษณีย์ (ส่วนตัว)"
 msgid "Country (private)"
 msgstr "ประเทศ (ส่วนตัว)"
 
+#: js/ContactGrid.js:232 Model/List.php:124 Export/Pdf.php:52
+msgid "Email"
+msgstr "อีเมล"
+
 #: js/ContactGrid.js:236
 msgid "Car phone"
 msgstr "โทรศัพท์ในรถ"
@@ -700,31 +463,37 @@ msgstr "เส้นแบ่งเวลา"
 msgid "Geo"
 msgstr "ภูมิศาสตร์"
 
-#: js/ContactSearchCombo.js:68
-msgid "Search for users ..."
+#: js/StructurePanel.js:57
+msgid "Select record to see its details"
 msgstr ""
 
-#: js/ContactSearchCombo.js:69
-msgid "Search for Contacts ..."
+#: js/StructurePanel.js:67
+msgid "This module visualises hierarchically depended relations between records of different types."
 msgstr ""
 
-#: js/ListEditDialog.js:55
-#, python-brace-format
-msgid "Print {0}"
+#: js/StructurePanel.js:68
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
 msgstr ""
 
-#: js/ListEditDialog.js:86
-msgid "List Information"
+#: js/StructurePanel.js:488
+msgid "Loading Structure data..."
 msgstr ""
 
-#: js/ListEditDialog.js:104 js/ListGrid.js:103
-msgid "List type"
-msgstr ""
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr "สมาชิกของรายชื่อ"
 
-#: js/ListEditDialog.js:181
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
+#: js/MapPanel.js:58
+msgid "Company address"
+msgstr "ที่อยู่ของบริษัท"
+
+#: js/MapPanel.js:65
+msgid "Private address"
+msgstr "ที่อยู่ส่วนบุคคล"
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CalDAV URL"
 
 #: js/ListGrid.js:104
 msgid "Emails"
@@ -738,6 +507,14 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
+#: js/ListMemberRoleGridPanel.js:201
+msgid "List Roles"
+msgstr ""
+
+#: js/ListMemberRoleGridPanel.js:223
+msgid "Remove Member"
+msgstr ""
+
 #: js/ListGridDetailsPanel.js:60
 msgid "Select list"
 msgstr ""
@@ -747,40 +524,6 @@ msgstr ""
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] "รายชื่อ"
-
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr "สมาชิกของรายชื่อ"
-
-#: js/ListMemberRoleGridPanel.js:37 js/ListRoleGridPanel.js:71
-#: js/Printer/ListRecord.js:40 Model/List.php:118
-msgid "Members"
-msgstr ""
-
-#: js/ListMemberRoleGridPanel.js:221
-msgid "Remove Member"
-msgstr ""
-
-#: js/ListRoleMemberFilterModel.js:37 js/Model.js:350
-msgid "List Function"
-msgid_plural "List Functions"
-msgstr[0] ""
-
-#: js/ListSearchCombo.js:27
-msgid "Search for system groups ..."
-msgstr ""
-
-#: js/ListSearchCombo.js:28
-msgid "Search for groups ..."
-msgstr ""
-
-#: js/MapPanel.js:58
-msgid "Company address"
-msgstr "ที่อยู่ของบริษัท"
-
-#: js/MapPanel.js:65
-msgid "Private address"
-msgstr "ที่อยู่ส่วนบุคคล"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -862,7 +605,7 @@ msgstr "สมุดที่อยู่"
 msgid "User Account"
 msgstr "บัญชีผู้ใช้"
 
-#: js/Model.js:158
+#: js/Model.js:158 js/Model.js:269
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
@@ -882,10 +625,6 @@ msgstr "เวลาที่สร้างขึ้น"
 msgid "Created By"
 msgstr "สร้าง โดย"
 
-#: js/Model.js:269 js/Model.js:334 js/Model.js:364 js/Model.js:395
-msgid "Quick search"
-msgstr ""
-
 #: js/Model.js:303
 msgid "Email Address"
 msgid_plural "Email Addresses"
@@ -895,81 +634,37 @@ msgstr[0] ""
 msgid "Email Addresses"
 msgstr ""
 
+#: js/Model.js:334 js/Model.js:364 js/Model.js:395
+msgid "Quick search"
+msgstr ""
+
 #: js/Model.js:410
 msgid "Structures"
 msgstr ""
 
-#: js/Printer/ContactRecord.js:79 js/Printer/ListRecord.js:67
-msgid "Related to"
+#: js/ContactSearchCombo.js:68
+msgid "Search for users ..."
 msgstr ""
 
-#: js/Printer/ListRecord.js:56
-msgid "Customfields"
+#: js/ContactSearchCombo.js:69
+msgid "Search for Contacts ..."
 msgstr ""
 
-#: js/StructurePanel.js:57
-msgid "Select record to see its details"
-msgstr ""
-
-#: js/StructurePanel.js:67
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-#: js/StructurePanel.js:68
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-#: js/StructurePanel.js:487
-msgid "Loading Structure data..."
-msgstr ""
-
-#: Model/List.php:106
-msgid "Percent"
-msgstr ""
-
-#: Preference.php:28
-msgid "All contacts"
-msgstr "การติดต่อทั้งหมด"
-
-#: Preference.php:81
-msgid "Default Addressbook"
-msgstr "สมุดรายชื่อหลัก"
-
-#: Preference.php:82
-msgid "The default addressbook for new contacts"
-msgstr "สมุดรายชื่อหลักสำหรับการติดต่อใหม่"
-
-#: Preference.php:85
-msgid "Default Favorite"
-msgstr "ค่าที่ชอบหลัก"
-
-#: Preference.php:86
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "ค่าที่ชอบหลักที่จะโหลดทันทีเมื่อเริ่มเปิดสมุดที่อยู่"
-
-#: Preference.php:89
-msgid "Contacts ODS export configuration"
-msgstr "การกำหนดค่าส่งออกการติดต่อแบบ ODS"
-
-#: Preference.php:90
-msgid "Use this configuration for the contact ODS export."
-msgstr "ใช้ค่าติดตั้งนี้สำหรับการส่งออกการติดต่อแบบ ODS"
-
-#: Preference.php:93
-msgid "Contacts XLS export configuration"
-msgstr "การกำหนดค่าการส่งออกการติดต่อแบบ XLS"
-
-#: Preference.php:94
-msgid "Use this configuration for the contact XLS export."
-msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกการติดต่อแบบ XLS"
-
-#: Preference.php:165
-msgid "default"
-msgstr "ค่าหลัก"
-
-#: Setup/Initialize.php:125 Setup/Update/Release3.php:37
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:125
 msgid "All contacts I have read grants for"
 msgstr "การติดต่อทั้งหมดที่ฉันได้อ่านแล้วอนุญาตสำหรับ"
+
+#: Setup/Update/Release5.php:194 Config.php:175
+msgid "Mr"
+msgstr "นาย"
+
+#: Setup/Update/Release5.php:195 Config.php:176
+msgid "Ms"
+msgstr "นาง"
+
+#: Setup/setup.xml:964
+msgid "Internal Contacts"
+msgstr "การติดต่อภายใน"
 
 #: Setup/Initialize.php:130
 msgid "My company"
@@ -995,9 +690,322 @@ msgstr "ปรับปรุงครั้งล่าสุด โดยฉ�
 msgid "All contacts that I have last modified"
 msgstr "การติดต่อทั้งหมดที่ฉันได้ปรับปรุงครั้งล่าสุด"
 
-#: Setup/setup.xml:964
-msgid "Internal Contacts"
-msgstr "การติดต่อภายใน"
+#: Config.php:102
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:104
+msgid "Enabled Features in Calendar Application."
+msgstr ""
+
+#: Config.php:112
+msgid "Addressbook List View"
+msgstr ""
+
+#: Config.php:114
+msgid "Shows an additional view for lists inside the addressbook"
+msgstr ""
+
+#: Config.php:117
+msgid "Addressbook Industries"
+msgstr ""
+
+#: Config.php:118
+msgid "Add Industry field to Adressbook"
+msgstr ""
+
+#: Config.php:121
+msgid "Manage resources in Addressbook"
+msgstr ""
+
+#: Config.php:122
+msgid "Show the resources grid also inside the Addressbook"
+msgstr ""
+
+#: Config.php:125
+msgid "Show Structure Panel in Addressbook"
+msgstr ""
+
+#: Config.php:126
+msgid "Visualize relations of records"
+msgstr ""
+
+#: Config.php:137
+msgid "Contact duplicate check fields"
+msgstr "การติดต่อซ้ำซ้อน ตรวจสอบที่กล่อง"
+
+#: Config.php:139
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgstr "กล่องเหล่านี้จะถูกทำเครื่องหมาย เมื่อมีการสร้างการติดต่อใหม่ขึ้น หากมีการตรวจสอบว่ามีข้อมูลที่ซ้ำซ้อนกันอยู่ ข้อยกเว้นที่ซ้ำซ้อนจะได้รับการเพิกเฉย"
+
+#: Config.php:156
+msgid "Contact Hidden Criteria"
+msgstr ""
+
+#: Config.php:158
+msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
+msgstr ""
+
+#: Config.php:165
+msgid "Contact salutations available"
+msgstr "คำขึ้นต้นที่ใช้ในการติดต่อที่มีอยู่"
+
+#: Config.php:167
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
+msgstr "คำขึ้นต้นการติดต่อที่น่าจะเป็นไปได้ กรุณาระลึกไว้ว่าค่าเพิ่มเติมเหล่านี้อาจมีผลกระทบต่อระบบของสมุดที่อยู่เวลาส่งออกหรือการที่มีการซิงค์ข้อมูล"
+
+#: Config.php:183
+msgid "Parsing rules for addresses"
+msgstr "กฎการตรวจสอบที่อยู่ต่าง ๆ"
+
+#: Config.php:185
+msgid "Path to a XML file with address parsing rules."
+msgstr ""
+
+#: Config.php:193
+msgid "List types available"
+msgstr ""
+
+#: Config.php:195
+msgid "List types available."
+msgstr ""
+
+#: Config.php:202
+msgid "Department"
+msgstr ""
+
+#: Config.php:203
+msgid "Mailing list"
+msgstr ""
+
+#: Config.php:208
+msgid "Use Nominatim during contact import"
+msgstr ""
+
+#: Config.php:218 Config.php:220
+msgid "Sync Backends"
+msgstr ""
+
+#: Controller/Contact.php:596
+msgid "Uploaded new contact image."
+msgstr "ได้อัพโหลดภาพที่ใช้ในการติดต่อใหม่แล้ว"
+
+#: Controller/Contact.php:599
+msgid "Deleted contact image."
+msgstr ""
+
+#: Model/List.php:106
+msgid "Percent"
+msgstr ""
+
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "ข้อมูลการติดต่อทางธุรกิจ"
+
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "องค์กร / หน่วย"
+
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "ที่อยู่ธุรกิจ"
+
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "โทรศัพท์ ที่ทำงาน"
+
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "โทรศัพท์ เคลื่อนที่"
+
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "โทรศัพท์ ในรถ"
+
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "โทรศัพท์ โทรสาร"
+
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "โทรศัพท์ หน้า"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "ที่อยู่ของไฟล์หรือเวบไซด์บนอินเตอร์เนต"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "หน้าที่"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "ผู้ช่วย"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "โทรศัพท์ของผู้ช่วย"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "ข้อมูลการติดต่อส่วนบุคคล"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "อีเมล ส่วนตัว"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "โทรศัพท์ ที่บ้าน"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "โทรศัพท์ เคลื่อนที่ ส่วนบุคคล"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "โทรศัพท์ โทรสารที่บ้าน"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr " URL บ้าน"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "ข้อมูลอื่น"
+
+#: Export/definitions/adb_list_overview_xls.xml:5
+#: Export/definitions/adb_xls_overview.xml:5
+msgid "Excel overview"
+msgstr ""
+
+#: Export/definitions/adb_list_doc.xml:5 Export/definitions/adb_doc.xml:5
+msgid "Word details"
+msgstr ""
+
+#: Export/definitions/adb_list_doc.xml:21
+msgid "Relations"
+msgstr ""
+
+#: Export/definitions/adb_csv.xml:5
+msgid "CSV all data"
+msgstr ""
+
+#: Export/definitions/adb_pdf.xml:5
+msgid "PDF details"
+msgstr ""
+
+#: Export/definitions/adb_xls.xml:5 Export/definitions/adb_list_xls.xml:5
+msgid "Excel all data"
+msgstr ""
+
+#: Export/definitions/adb_doc_letter.xml:6
+msgid "Word letter"
+msgstr ""
+
+#: Export/definitions/adb_default_ods.xml:7
+msgid "OpenDocument all data"
+msgstr ""
+
+#: Export/definitions/adb_by_company_xls.xml:7
+msgid "Excel phone list"
+msgstr ""
+
+#: Export/definitions/adb_by_company_xls.xml:9
+msgid "Excel phone list grouped by company"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
+msgid "Contact CSV import from Outlook address book"
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของโปรแกรม Outlook"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
+
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:13
+msgid "Contact import from Google address book"
+msgstr "รายชื่อติดต่อนำเข้ามาจากสมุดรายชื่อของกูเกิล"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:19
+msgid "Import list (###CURRENTDATE###)"
+msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
+
+#: Import/definitions/adb_tine_import_csv.xml:21
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "รายชื่อติดต่อถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
+
+#: Import/definitions/adb_lxoffice_import_csv.xml:11
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:15
+msgid "Contact VCARD import"
+msgstr "นำเข้ารายชื่อติดต่อ VCARD"
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของแมค"
+
+#: Acl/Rights.php:122
+msgid "manage shared addressbooks"
+msgstr "จัดการ สมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
+
+#: Acl/Rights.php:123
+msgid "Create new shared addressbook folders"
+msgstr "สร้าง แฟ้มใหม่สำหรับสมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
+
+#: Acl/Rights.php:126
+msgid "manage shared addressbook favorites"
+msgstr "จัดการ สมุดรายชื่อร่วมที่ใช้บ่อย"
+
+#: Acl/Rights.php:127
+msgid "Create or update shared addressbook favorites"
+msgstr "สร้าง หรือ ปรับปรุง สมุดรายชื่อร่วมที่ใช้บ่อย"
+
+#: Acl/Rights.php:130
+msgid "Manage lists in CoreData"
+msgstr ""
+
+#: Acl/Rights.php:131
+msgid "View, create, delete or update lists in CoreData application"
+msgstr ""
+
+#: Acl/Rights.php:134
+msgid "Manage list functions in CoreData"
+msgstr ""
+
+#: Acl/Rights.php:135
+msgid "View, create, delete or update list functions in CoreData application"
+msgstr ""
 
 #~ msgid "Dear Mister"
 #~ msgstr "เรียน คุณ"

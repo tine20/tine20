@@ -17,3 +17,5 @@
         </keyField>
     </keyFields>
 </config>
+<!-- @todo: Remove when we can detect translation string inside templates! -->
+<!-- _('Relations') -->
