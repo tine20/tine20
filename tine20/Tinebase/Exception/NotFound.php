@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_NotFound extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     public function __construct($_message, $_code=404)
     {
         parent::__construct($_message, $_code);

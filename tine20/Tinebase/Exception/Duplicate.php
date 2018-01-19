@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
 {
+    protected $_logToSentry = false;
+
     /**
      * the client record
      * 

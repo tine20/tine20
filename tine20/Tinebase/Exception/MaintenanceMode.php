@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_MaintenanceMode extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     public function __construct($_message='Installation is in maintenance mode. Please try again later', $_code=503) {
         parent::__construct($_message, $_code);
     }

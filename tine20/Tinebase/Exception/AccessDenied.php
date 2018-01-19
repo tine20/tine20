@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_AccessDenied extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * the constructor
      * 

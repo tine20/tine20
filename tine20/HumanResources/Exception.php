@@ -18,4 +18,5 @@
  */
 class HumanResources_Exception extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
 }

@@ -11,7 +11,7 @@
  *
  * @package Calendar
  */
-class Calendar_Exception_IcalParser extends Exception
+class Calendar_Exception_IcalParser extends Calendar_Exception
 {
     /**
      * @var Exception

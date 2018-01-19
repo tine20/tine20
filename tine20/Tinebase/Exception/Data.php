@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_Data extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * exception data
      * 

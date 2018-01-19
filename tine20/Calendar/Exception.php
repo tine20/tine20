@@ -18,4 +18,5 @@
  */
 class Calendar_Exception extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
 }

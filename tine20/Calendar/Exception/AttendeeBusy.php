@@ -11,7 +11,7 @@
  *
  * @package Calendar
  */
-class Calendar_Exception_AttendeeBusy extends Exception
+class Calendar_Exception_AttendeeBusy extends Calendar_Exception
 {
     /**
      * free busy info

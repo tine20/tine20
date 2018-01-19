@@ -18,6 +18,8 @@
  */
 class Tinebase_Exception_InvalidRelationConstraints extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * the title of the Exception (may be shown in a dialog)
      *

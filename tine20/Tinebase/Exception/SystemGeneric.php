@@ -23,6 +23,8 @@
  */
 class Tinebase_Exception_SystemGeneric extends Tinebase_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * @var string _('Generic System Exception')
      */

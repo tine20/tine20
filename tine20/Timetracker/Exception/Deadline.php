@@ -18,6 +18,8 @@
  */
 class Timetracker_Exception_Deadline extends Timetracker_Exception
 {
+    protected $_logToSentry = false;
+
     /**
      * create new Deadline exception
      * 
