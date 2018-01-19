@@ -548,9 +548,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     disabled: false,
                     scope: this,
                     handler: function() {
+                        var _ = window.lodash;
                         var email = Tine.Felamimail.getEmailStringFromContact(new Tine.Addressbook.Model.Contact(attender.get('user_id')));
                         var record = new Tine.Felamimail.Model.Message({
-                            subject: this.record.get('summary'),
+                            subject: _.get(this.record, 'data.poll.name', _.get(this.record, 'data.summary', '') , ''),
                             body: this.record.hasPoll() ? String.format(this.app.i18n._('Poll URL: {0}'), this.record.getPollUrl()) : '',
                             massMailingFlag: this.record.hasPoll(),
                             to: [email]
