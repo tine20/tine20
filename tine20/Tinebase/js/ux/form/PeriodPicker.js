@@ -39,10 +39,16 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
      */
     startDate: null,
 
+    /**
+     * @cfg {Bool} periodIncludesUntil
+     * the period includes until timestamp
+     */
+    periodIncludesUntil: false,
+
     initComponent: function() {
         Ext.ux.form.PeriodPicker.superclass.initComponent.call(this);
 
-        this.value = Ext.ux.form.PeriodPicker.getPeriod(this.value ? this.value.from : this.startDate || new Date(), this.range);
+        this.value = Ext.ux.form.PeriodPicker.getPeriod(this.value ? this.value.from : this.startDate || new Date(), this.range, this.periodIncludesUntil);
         this.startDate = this.value.from;
         this.startValue = this.value;
     },
@@ -62,7 +68,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         value.until = Ext.isDate(value.until) ? value.until : new Date(value.until);
 
         this.range = Ext.ux.form.PeriodPicker.getRange(value);
-        this.value = Ext.ux.form.PeriodPicker.getPeriod(value.from, this.range);
+        this.value = Ext.ux.form.PeriodPicker.getPeriod(value.from, this.range , this.periodIncludesUntil);
         this.startDate = this.value.from;
 
         this.getRangeCombo().setValue(this.range);
@@ -104,7 +110,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     },
 
     setStartDate: function(startDate) {
-        var value = Ext.ux.form.PeriodPicker.getPeriod(startDate, this.range);
+        var value = Ext.ux.form.PeriodPicker.getPeriod(startDate, this.range, this.periodIncludesUntil);
         this.setValue(value);
     },
 
@@ -115,7 +121,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
     // private
     onRangeComboChange: function() {
-        this.setValue(Ext.ux.form.PeriodPicker.getPeriod(this.startDate, this.getRangeCombo().getValue()));
+        this.setValue(Ext.ux.form.PeriodPicker.getPeriod(this.startDate, this.getRangeCombo().getValue()), this.periodIncludesUntil);
     },
 
     // private
@@ -258,9 +264,10 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
  * @static
  * @param {Date} startDate date within period
  * @param {String} range day|week|month|year
+ * @param {Bool} includeUntil
  * @return {Object} {from: Date, until: Date}
  */
-Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range) {
+Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range, includeUntil) {
     var from, until;
     switch(range) {
         case 'day':
@@ -287,6 +294,10 @@ Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range) {
             from = Date.parseDate(year + '-01-01 00:00:00', 'Y-m-d H:i:s');
             until = Date.parseDate(++year + '-01-01 00:00:00', 'Y-m-d H:i:s');
             break;
+    }
+
+    if (includeUntil) {
+        until = until.add(Date.SECOND, -1);
     }
 
     return {from: from, until: until};

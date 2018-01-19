@@ -597,6 +597,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 if (! this.pp) {
                     this.pp = new Ext.ux.form.PeriodPicker({
                         range: range,
+                        periodIncludesUntil: true,
                         width: me.filterValueWidth - 18,
                         cls: 'x-pp-combo',
                         'renderTo': this.wrap
