@@ -517,7 +517,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,
             'setByAdminModule'      => true,
-            'default'               => false
+            'default'               => true
         ),
         self::POLL_GTC => array(
             //_('GTCs for polls')
