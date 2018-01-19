@@ -447,6 +447,8 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        Tinebase_Core::setupBuildConstants();
+
         self::setupSentry();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -463,8 +465,6 @@ class Tinebase_Core
         
         Tinebase_Core::setupStreamWrapper();
 
-        Tinebase_Core::setupBuildConstants();
-        
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
@@ -2075,7 +2075,13 @@ class Tinebase_Core
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
 
-        $client = new Raven_Client($sentryServerUri);
+        $config = [
+            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
+            'tags' => array(
+                'php_version' => phpversion(),
+            ),
+        ];
+        $client = new Raven_Client($sentryServerUri, $config);
         $error_handler = new Raven_ErrorHandler($client);
         $error_handler->registerExceptionHandler();
         $error_handler->registerErrorHandler();
