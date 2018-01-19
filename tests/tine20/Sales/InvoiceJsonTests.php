@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -14,12 +14,21 @@
  */
 class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
 {
+    /**
+     * @var Sales_Frontend_Json
+     */
+    protected $_uit = null;
 
+    /**
+     * setUp
+     */
     protected function setUp()
     {
         if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('needs enabled invoices module');
         }
+        
+        $this->_uit = new Sales_Frontend_Json();
 
         parent::setUp();
     }
@@ -32,8 +41,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->_createCustomers();
         $this->_createContracts();
         
-        $json = new Sales_Frontend_Json();
-        $customer = $json->getCustomer($this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId());
+        $customer = $this->_uit->getCustomer($this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId());
         
         $this->assertTrue(is_array($customer['postal_id']));
         $this->assertEquals($customer['adr_id'], $customer['postal_id']['id']);
@@ -53,7 +61,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $customer['billing'][1] = array('prefix1' => 'Dr.', 'prefix2' => 'George Harbottle', 'street' => 'Glasgow Str. 432', 'postalcode' => '532 45', 'locality' => 'Birmingham', 'type' => 'billing');
         $customer['delivery'][1] = array('prefix1' => 'Mr.', 'prefix2' => 'Peter Harbottle', 'street' => 'London Str. 123', 'postalcode' => '532 23', 'locality' => 'Birmingham', 'type' => 'delivery');
         
-        $customer = $json->saveCustomer($customer);
+        $customer = $this->_uit->saveCustomer($customer);
         
         $this->assertEquals(2, count($customer['billing']));
         $this->assertEquals(2, count($customer['delivery']));
@@ -61,11 +69,11 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         // remove contracts, otherwise deleting customers having an contract-assigned billing address would fail
         $this->_contractController->delete($this->_contractRecords->getId());
         
-        $json->deleteCustomers(array($customer['id']));
+        $this->_uit->deleteCustomers(array($customer['id']));
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
 
-        $json->getCustomer($customer['id']);
+        $this->_uit->getCustomer($customer['id']);
     }
     
     /**
@@ -85,8 +93,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $this->_invoiceController->createAutoInvoices($date);
         
-        $json = new Sales_Frontend_Json();
-        $invoices = $json->searchInvoices(array(), array());
+        $invoices = $this->_uit->searchInvoices(array(), array());
         
         $this->assertEquals(2, $invoices['totalcount']);
         $c4Invoice = $c1Invoice = NULL;
@@ -107,7 +114,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertTrue(is_array($c4Invoice));
         
         // first invoice for customer 4
-        $invoice = $json->getInvoice($c4Invoice['id']);
+        $invoice = $this->_uit->getInvoice($c4Invoice['id']);
         
         $this->assertEquals(9, count($invoice['positions']));
         
@@ -123,7 +130,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             }
         }
         
-        $invoice = $json->getInvoice($c1Invoice['id']);
+        $invoice = $this->_uit->getInvoice($c1Invoice['id']);
         
         // first invoice for customer 1
         $this->assertEquals(3, count($invoice['relations']));
@@ -159,10 +166,8 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $date->addMonth(12);
         $this->_invoiceController->createAutoInvoices($date);
         
-        $json = new Sales_Frontend_Json();
-        
         // test if timesheets get cleared
-        $invoices = $json->searchInvoices(array(
+        $invoices = $this->_uit->searchInvoices(array(
             array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
                 'appName' => 'Sales',
                 'linkType' => 'relation',
@@ -181,9 +186,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         foreach($invoices['results'] as $invoice) {
             $invoiceIds[] = $invoice['id'];
             // fetch invoice by get to have all relations set
-            $invoice = $json->getInvoice($invoice['id']);
+            $invoice = $this->_uit->getInvoice($invoice['id']);
             $invoice['cleared'] = 'CLEARED';
-            $json->saveInvoice($invoice);
+            $this->_uit->saveInvoice($invoice);
         }
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
@@ -195,7 +200,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         }
         
         // test if timeaccounts get cleared
-        $invoices = $json->searchInvoices(array(
+        $invoices = $this->_uit->searchInvoices(array(
             array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
                 'appName' => 'Sales',
                 'linkType' => 'relation',
@@ -212,7 +217,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         foreach($invoices['results'] as $invoice) {
             $invoiceIds[] = $invoice['id'];
             // fetch invoice by get to have all relations set
-            $invoice = $json->getInvoice($invoice['id']);
+            $invoice = $this->_uit->getInvoice($invoice['id']);
             $invoice['cleared'] = 'CLEARED';
             
             // check set empty number fields to an empty string
@@ -220,7 +225,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $invoice['price_gross'] = '';
             $invoice['price_net'] = '';
             
-            $invoice = $json->saveInvoice($invoice);
+            $invoice = $this->_uit->saveInvoice($invoice);
             
             $this->assertEquals(0,$invoice['sales_tax']);
             $this->assertEquals(0,$invoice['price_gross']);
@@ -251,8 +256,6 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->_createProducts();
         $this->_createContracts();
         
-        $json = new Sales_Frontend_Json();
-        
         $firstContract = $this->_contractRecords->filter('number', 4)->getFirstRecord();
         
         // TODO: fix test
@@ -260,11 +263,11 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $this->markTestSkipped('TODO');
         }
         
-        $contract = $json->getContract($firstContract->getId());
+        $contract = $this->_uit->getContract($firstContract->getId());
         
         $this->assertTrue(is_array($contract['products'][0]['product_id']));
         
-        $json->saveContract($contract);
+        $this->_uit->saveContract($contract);
     }
     
     /**
@@ -285,15 +288,14 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $result = $this->_invoiceController->createAutoInvoices($date);
         
-        $json = new Sales_Frontend_Json();
-        $invoices = $json->searchInvoices(array(), array());
+        $invoices = $this->_uit->searchInvoices(array(), array());
         $this->assertEquals(2, $invoices['totalcount']);
         
         foreach($invoices['results'] as $result) {
             $ids[] = $result['id'];
         }
         
-        $json->deleteInvoices($ids);
+        $this->_uit->deleteInvoices($ids);
         
         $taJson = new Timetracker_Frontend_Json();
         $tas = $taJson->searchTimeaccounts(array(), array());
@@ -313,13 +315,12 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testTimeaccountRelation()
     {
-        $sjson = new Sales_Frontend_Json();
         $tjson = new Timetracker_Frontend_Json();
         
         $ta = $tjson->saveTimeaccount(array('number' => 43379, 'title' => 'bla'));
         
-        $c1 = $sjson->saveContract(array('number' => '1', 'description' => 'blub bla', 'title' => 'blub'));
-        $c2 = $sjson->saveContract(array('number' => '2', 'description' => 'bla blub', 'title' => 'bla'));
+        $c1 = $this->_uit->saveContract(array('number' => '1', 'description' => 'blub bla', 'title' => 'blub'));
+        $c2 = $this->_uit->saveContract(array('number' => '2', 'description' => 'bla blub', 'title' => 'bla'));
         
         $c1['relations'] = array(array(
             'related_model' => 'Timetracker_Model_Timeaccount',
@@ -330,13 +331,13 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             'related_backend' => 'Sql'
         ));
         
-        $c1 = $sjson->saveContract($c1);
+        $c1 = $this->_uit->saveContract($c1);
         $c1Id = $c1['id'];
         
         // delete timeaccount relation from the first contract
-        $c1 = $sjson->getContract($c1Id);
+        $c1 = $this->_uit->getContract($c1Id);
         $c1['relations'] = array();
-        $c1 = $sjson->saveContract($c1);
+        $c1 = $this->_uit->saveContract($c1);
         
         // save second contract having the timeaccount related
         $c2['relations'] = array(array(
@@ -348,8 +349,56 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             'related_backend' => 'Sql'
         ));
         
-        $c2 = $sjson->saveContract($c2);
+        $c2 = $this->_uit->saveContract($c2);
         
         $this->assertEquals(1, count($c2['relations']));
+    }
+
+    /**
+     * testDateFilterUntil
+     */
+    public function testDateFilterUntil()
+    {
+        $this->_createMinimalInvoice();
+
+        $filter = [
+            ['field' => 'date', 'operator' => 'within', 'value' => [
+                'from' => "2017-12-01 00:00:00",
+                'until' => "2017-12-31 23:59:59"
+            ]]
+        ];
+        $result = $this->_uit->searchInvoices($filter, []);
+        self::assertEquals(0, $result['totalcount'], 'should not be found');
+
+        $filter = [
+            ['field' => 'date', 'operator' => 'within', 'value' => [
+                'from' => "2017-12-01 00:00:00",
+                'until' => "2018-01-01 00:00:00"
+            ]]
+        ];
+        $result = $this->_uit->searchInvoices($filter, []);
+        self::assertEquals(1, $result['totalcount'], 'should be found');
+    }
+
+    /**
+     * @return Tinebase_Record_Interface
+     */
+    protected function _createMinimalInvoice()
+    {
+        $this->_createCustomers();
+        $this->_createCostCenters();
+
+        $customer = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
+        $invoiceData = array(
+            'number' => 'R-3000',
+            'customer_id' => $customer->getId(),
+            'description' => 'Manual',
+            'address_id' => $this->_addressRecords->filter('customer_id', $customer->getId())->getFirstRecord()->getId(),
+            'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId(),
+            'date' => '2018-01-01',
+        );
+        $invoice = $this->_invoiceController->create(new Sales_Model_Invoice($invoiceData));
+
+        return $invoice;
     }
 }
