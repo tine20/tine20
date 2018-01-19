@@ -155,7 +155,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             foreignAppName: 'Calendar',
             modelName: 'Event',
             subjectFn: function(record) {
-                return record ? record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(record.get('dtstart')) : '';
+                return record ? record.get('summary') : '';
             },
             bodyFn: function(record) {
                 if (record && record.hasPoll()) {
