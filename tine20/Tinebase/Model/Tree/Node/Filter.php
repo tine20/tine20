@@ -193,7 +193,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
             )
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
     }
-    
+
     /**
      * check if filter is a recursive filter
      *
