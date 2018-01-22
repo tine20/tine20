@@ -532,6 +532,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 //$definition = is_object($config->definition) ? $config->definition->toArray() : (array)$config->definition;
                 $clonedConfig = clone $config;
                 $clonedConfig->value = $value;
+                
+                if (isset($clonedConfig->definition) && $clonedConfig->definition instanceof Tinebase_Config_Struct) {
+                    $clonedConfig->label = $clonedConfig->definition->label;   
+                }
                 $recordCfs[$config->name] = $clonedConfig;
             } else {
                 $recordCfs[$config->name] = $value;
