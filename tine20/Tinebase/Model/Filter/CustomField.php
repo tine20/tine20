@@ -143,6 +143,7 @@ switch ($type) {
                 $filterClass = Tinebase_Model_Filter_Date::class;
                 break;
             case 'integer':
+            case 'int':
                 $filterClass = Tinebase_Model_Filter_Int::class;
                 break;
             case 'bool':
