@@ -213,6 +213,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = FALSE)
     {
+        if ($_filter instanceof Tinebase_Model_Filter_FilterGroup) {
+            return $_filter;
+        }
+        
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
