@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -323,6 +323,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param bool $_onlyIds
      * @param string|optional $_action
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
@@ -430,6 +431,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $context['pinProtectedData'] = true;
             $this->setRequestContext($context);
         }
+
+        $this->resolveGrants($result);
         
         return $result;
     }
@@ -794,6 +797,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param type
      * @param string $_tempFileId
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _createNodeInBackend($_statpath, $_type, $_tempFileId = NULL)
     {
@@ -894,6 +898,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
      * @param Tinebase_Model_Tree_Node_Path $_path
+     * @return Tinebase_Record_RecordSet
      */
     public function resolvePath($_records, Tinebase_Model_Tree_Node_Path $_path)
     {
@@ -912,7 +917,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param $_records
+     * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotFound
      */
@@ -940,7 +945,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $records;
     }
 
-    protected function _getGrantNode($record)
+    /**
+     * @param Tinebase_Model_Tree_Node $record
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getGrantNode(Tinebase_Model_Tree_Node $record)
     {
         try {
             switch ($record->getId()) {
@@ -1132,6 +1142,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Filemanager_Exception_NodeExists
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {

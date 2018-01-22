@@ -1495,6 +1495,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $result = $this->_getUit()->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
         $this->assertEquals(3, count($result['results']), '3 files should have been found!');
+        $this->assertTrue(isset($result['results'][0]['account_grants']), 'account grants missing from record '
+            . print_r($result['results'][0], true));
     }
     
     /**
