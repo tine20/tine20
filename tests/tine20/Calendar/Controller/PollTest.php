@@ -570,6 +570,12 @@ EOT;
 //            $message = current(array_filter($messages, function($message) {
 //                return $message->getRecipients()[0] == Zend_Registry::get('personas')['sclever']->accountEmailAddress;
 //            }));
+//            foreach($messages as $message) {
+//                echo $message->getSubject() . "\n";
+//                echo $message->getBodyText()->getContent();
+//                echo "\n -- \n\n";
+//            }
+
             $message = $messages[1];
             $text = $message->getBodyText()->getContent();
 //            $html = $message->getBodyHtml()->getContent();

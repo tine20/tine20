@@ -162,6 +162,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
             $updatedEvent = Calendar_Controller_Event::getInstance()->update($event);
 
+            // @TODO: append/be iMIP invitation if $sendNotifications is false
             Tinebase_ActionQueue::getInstance()->queueAction(self::class . '.sendDefiniteEventNotifications',
                 $updatedPoll,
                 $updatedEvent
