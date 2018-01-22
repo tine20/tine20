@@ -44,10 +44,7 @@ Tine.Filemanager.RecursiveFilter = Ext.extend(Ext.Toolbar, {
             scope: this
         });
 
-        this.items = [{
-            xtype: 'tbtext',
-            text: this.app.i18n._('Search') + ': '
-        }, this.globalBtn, {
+        this.localBtn = new Ext.Button({
             text: this.app.i18n._('This Folder'),
             pressed: true,
             ref: '../localBtn',
@@ -55,7 +52,12 @@ Tine.Filemanager.RecursiveFilter = Ext.extend(Ext.Toolbar, {
             toggleGroup: 'Calendar_Toolbar_tgViewTypes',
             handler: this.onFilterChange,
             scope: this
-        }];
+        });
+
+        this.items = [{
+            xtype: 'tbtext',
+            text: this.app.i18n._('Search') + ': '
+        }, this.globalBtn, this.localBtn];
 
         this.supr().initComponent.call(this);
     },
@@ -74,10 +76,12 @@ Tine.Filemanager.RecursiveFilter = Ext.extend(Ext.Toolbar, {
                 case 'query':
                     setVisible |= !!filters[i].value;
                     break;
+                case 'type':
                 case 'path':
                     break;
                 case 'recursive':
                     this.globalBtn.toggle(!!filters[i].value);
+                    this.localBtn.toggle(!filters[i].value);
                     break;
                 default:
                     setVisible |= true;
@@ -90,6 +94,7 @@ Tine.Filemanager.RecursiveFilter = Ext.extend(Ext.Toolbar, {
         if (! setVisible) {
             // reset own filter
             this.globalBtn.toggle(false);
+            this.localBtn.toggle(true);
         }
     }
 });

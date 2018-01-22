@@ -37,6 +37,11 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchNodes($filter, $paging)
     {
         $controller = Filemanager_Controller_Node::getInstance();
+
+        // remove recursive filter if not appropriate
+        $filter = $this->_decodeFilter($filter, 'Filemanager_Model_NodeFilter');
+        $filter->isRecursiveFilter(true);
+
         $result = $this->_search($filter, $paging, $controller, 'Filemanager_Model_NodeFilter');
         $this->_removeAppIdFromPathFilter($result);
 
