@@ -26,8 +26,8 @@ msgstr ""
 msgid "Defines which action should be executed on double click by default?"
 msgstr ""
 
-#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:150
-#: js/NotificationGridPanel.js:117
+#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:134
+#: js/NotificationGridPanel.js:111
 msgid "Name"
 msgstr "Namn"
 
@@ -39,7 +39,7 @@ msgstr "Storlek"
 msgid "Contenttype"
 msgstr "Innehållstyp"
 
-#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:70
+#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:61
 #: js/Model.js:26
 msgid "Folder"
 msgid_plural "Folders"
@@ -91,12 +91,12 @@ msgid "Deleting Download Link..."
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:270
-#: js/NodeEditDialog.js:189
+#: js/NodeEditDialog.js:173
 msgid "Created By"
 msgstr "Skapad Av "
 
 #: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:263
-#: js/NodeEditDialog.js:192 js/Model.js:606
+#: js/NodeEditDialog.js:176 js/Model.js:606
 msgid "Creation Time"
 msgstr "Skapad"
 
@@ -136,11 +136,11 @@ msgstr ""
 msgid "Hold-back in months"
 msgstr ""
 
-#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:785
+#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:786
 msgid "Upload Failed"
 msgstr "Uppladdning Misslyckades"
 
-#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:786
+#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:787
 msgid "Putting files in this folder is not allowed!"
 msgstr "Skapa filer i denna mappen är inte tillåtet!"
 
@@ -156,7 +156,7 @@ msgstr ""
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:170 js/Model.js:612
+#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:154 js/Model.js:612
 msgid "Indexed"
 msgstr ""
 
@@ -176,49 +176,49 @@ msgstr "Mapp Upp"
 msgid "Filemanager"
 msgstr "Filhanterare"
 
-#: js/Filemanager.js:74 js/NodeEditDialog.js:51 js/nodeActions.js:284
+#: js/Filemanager.js:74 js/nodeActions.js:284
 msgid "Save locally"
 msgstr "Spara lokalt"
 
-#: js/NodeEditDialog.js:68
+#: js/NodeEditDialog.js:59
 msgid "Edit folder"
 msgstr ""
 
-#: js/NodeEditDialog.js:68
+#: js/NodeEditDialog.js:59
 msgid "edit file"
 msgstr ""
 
-#: js/NodeEditDialog.js:70 js/Model.js:23
+#: js/NodeEditDialog.js:61 js/Model.js:23
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "Fil"
 msgstr[1] "Filer"
 
-#: js/NodeEditDialog.js:112
+#: js/NodeEditDialog.js:96
 msgid "Public Links"
 msgstr ""
 
-#: js/NodeEditDialog.js:158 js/Model.js:604
+#: js/NodeEditDialog.js:142 js/Model.js:604
 msgid "Type"
 msgstr "Typ"
 
-#: js/NodeEditDialog.js:170
+#: js/NodeEditDialog.js:154
 msgid "Not yet indexed"
 msgstr ""
 
-#: js/NodeEditDialog.js:201
+#: js/NodeEditDialog.js:185
 msgid "Modified By"
 msgstr "Ändrad av"
 
-#: js/NodeEditDialog.js:204
+#: js/NodeEditDialog.js:188
 msgid "Last Modified"
 msgstr "Senast ändrad"
 
-#: js/NodeEditDialog.js:225 js/Model.js:607
+#: js/NodeEditDialog.js:209 js/Model.js:607
 msgid "Description"
 msgstr "Beskrivning"
 
-#: js/NodeEditDialog.js:239
+#: js/NodeEditDialog.js:223
 msgid "Enter description"
 msgstr "Fyll i beskrivning"
 
@@ -255,12 +255,12 @@ msgstr "Ett objekt med detta namnet existerar redan!"
 msgid "Whole Filemanager"
 msgstr ""
 
-#: js/RecursiveFilter.js:49
-msgid "Search"
+#: js/RecursiveFilter.js:48
+msgid "This Folder"
 msgstr ""
 
-#: js/RecursiveFilter.js:51
-msgid "This Folder"
+#: js/RecursiveFilter.js:59
+msgid "Search"
 msgstr ""
 
 #: js/Model.js:251 js/Model.js:266
@@ -324,11 +324,14 @@ msgid "Summary"
 msgstr ""
 
 #: js/NotificationGridPanel.js:73
-msgid "Day"
-msgstr ""
+#, python-brace-format
+msgid "Once a Day"
+msgid_plural "Every {0} Days"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/NotificationGridPanel.js:77
-msgid "Days"
+#: js/NotificationGridPanel.js:74
+msgid "No"
 msgstr ""
 
 #: js/NotificationGridPanel.js:145
@@ -371,7 +374,7 @@ msgstr ""
 msgid "The grant to download files"
 msgstr ""
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:334
+#: js/GrantsPanel.js:57 js/nodeActions.js:337
 msgid "Publish"
 msgstr ""
 
@@ -421,6 +424,10 @@ msgstr ""
 
 #: js/UsagePanel.js:161
 msgid "unknown"
+msgstr ""
+
+#: js/nodeActions.js:22
+msgid "Reload"
 msgstr ""
 
 #: js/nodeActions.js:39
@@ -492,20 +499,16 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: js/nodeActions.js:308
+#: js/nodeActions.js:311
 msgid "Preview"
 msgstr ""
 
-#: js/nodeActions.js:365
+#: js/nodeActions.js:368
 msgid "Folder has been published successfully"
 msgstr ""
 
-#: js/nodeActions.js:365
+#: js/nodeActions.js:368
 msgid "File has been published successfully"
-msgstr ""
-
-#: js/nodeActions.js:22
-msgid "Reload),"
 msgstr ""
 
 #: Config.php:26
@@ -516,47 +519,47 @@ msgstr ""
 msgid "Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules."
 msgstr ""
 
-#: Controller/Node.php:474
+#: Controller/Node.php:507
 msgid "My folders"
 msgstr "Mina mappar"
 
-#: Controller/Node.php:481
+#: Controller/Node.php:514
 msgid "Shared folders"
 msgstr "Delade mappar"
 
-#: Controller/Node.php:488
+#: Controller/Node.php:521
 msgid "Other users folders"
 msgstr "Andra användares mappar"
 
-#: Controller/Node.php:1433
+#: Controller/Node.php:1475
 msgid "Received"
 msgstr ""
 
-#: Controller/Node.php:1434
+#: Controller/Node.php:1476
 msgid "To"
 msgstr ""
 
-#: Controller/Node.php:1435
+#: Controller/Node.php:1477
 msgid "Cc"
 msgstr ""
 
-#: Controller/Node.php:1436
+#: Controller/Node.php:1478
 msgid "Bcc"
 msgstr ""
 
-#: Controller/Node.php:1437
+#: Controller/Node.php:1479
 msgid "From (E-Mail)"
 msgstr ""
 
-#: Controller/Node.php:1438
+#: Controller/Node.php:1480
 msgid "From (Name)"
 msgstr ""
 
-#: Controller/Node.php:1439
+#: Controller/Node.php:1481
 msgid "Body"
 msgstr ""
 
-#: Controller/Node.php:1440
+#: Controller/Node.php:1482
 msgid "Attachments"
 msgstr ""
 
