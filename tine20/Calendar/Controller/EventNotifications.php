@@ -339,14 +339,18 @@
             
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
             if (!empty($recipients)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: " . count($recipients));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " receiver: " . count($recipients));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " body: $messageBody");
                 
                 Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
             }
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Failed to send notification: ' . $e->getMessage());
             if ($_action === 'alarm') {
                 // throw exception in case of alarm as the exception is catched in \Tinebase_Alarm::sendPendingAlarms
                 // and alarm sending is marked as failure
@@ -356,6 +360,11 @@
         }
     }
 
+     /**
+      * @param Calendar_Model_Attender $attendee
+      * @param Calendar_Model_Event $event
+      * @return array
+      */
     public static function getNotificationPreferences(Calendar_Model_Attender $attendee, Calendar_Model_Event $event)
     {
         $organizer = $event->resolveOrganizer();
