@@ -356,7 +356,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         try {
             $this->_getUit()->saveLead($savedLead);
             $this->fail('expected concurrency exception');
-        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+        } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
             $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
         }
     }

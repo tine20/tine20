@@ -465,7 +465,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param Tinebase_Model_ModificationLog $modification
      * @return string id
      * @throws Tinebase_Exception_Record_Validation
-     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_ConcurrencyConflict
      * @throws Zend_Db_Statement_Exception
      */
     public function setModification(Tinebase_Model_ModificationLog $modification)
@@ -502,7 +502,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             ));
             $result = $this->_backend->search($filter);
             if (count($result) > 0) {
-                throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('Seq ' . $modification->seq . ' for record ' . $modification->record_id . ' already exists');
+                throw new Tinebase_Exception_ConcurrencyConflict('Seq ' . $modification->seq . ' for record ' . $modification->record_id . ' already exists');
             } else {
                 throw $zdse;
             }
@@ -518,7 +518,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param  Tinebase_Record_Interface $newRecord record from user data
      * @param  Tinebase_Record_Interface $curRecord record from storage
      * @return Tinebase_Record_Diff with resolved concurrent updates
-     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_ConcurrencyConflict
      */
     public function manageConcurrentUpdates($applicationId, Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord)
     {
@@ -639,7 +639,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param Tinebase_Record_Interface $newRecord
      * @param string $attribute
      * @param string $newValue
-     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_ConcurrencyConflict
      */
     protected function _resolveRecordSetMergeUpdate(Tinebase_Record_Interface $newRecord, $attribute, $newValue)
     {
@@ -698,7 +698,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 }
                 $this->manageConcurrentUpdates($this->_applicationId, $newRecordsRecord, $modifiedRecord);
             } else {
-                throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict - modified record changes could not be merged!');
+                throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict - modified record changes could not be merged!');
             }
         }
         
@@ -712,7 +712,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param string $newUserValue
      * @param string $attribute
      * @param Tinebase_Record_Diff $diff
-     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_ConcurrencyConflict
      */
     protected function _nonResolvableConflict($newUserValue, $attribute, Tinebase_Record_Diff $diff)
     {
@@ -723,7 +723,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             . ' New diff value: ' . var_export($diff->diff[$attribute], TRUE)
             . ' Old diff value: ' . var_export($diff->oldData[$attribute], TRUE));
         
-        throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
+        throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict!');
     }
     
     /**
@@ -735,7 +735,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param  string $_backend
      * @param  string $_id
      * @return Tinebase_Record_Diff with resolved concurrent updates
-     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_ConcurrencyConflict
      * 
      * @deprecated this should be removed when all records have seq(uence)
      */
