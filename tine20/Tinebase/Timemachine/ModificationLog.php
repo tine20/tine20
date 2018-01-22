@@ -1255,6 +1255,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     /**
      * @return bool
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
      */
     public function readModificationLogFromMaster()
     {
@@ -1280,7 +1281,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         $tine20Service = new Zend_Service_Tine20($tine20Url);
 
-        $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+        $authResponse = null;
+        try {
+            $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
             throw new Tinebase_Exception_AccessDenied('login failed');
         }
@@ -1298,9 +1304,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             ' master replication id: ' . $masterReplicationId);
 
         $tinebaseProxy = $tine20Service->getProxy('Tinebase');
-        /** @noinspection PhpUndefinedMethodInspection */
-        $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
-        /* TODO make the amount above configurable  */
+
+        try {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
+            /* TODO make the amount above configurable  */
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' received ' . count($result['results']) . ' modification logs');
