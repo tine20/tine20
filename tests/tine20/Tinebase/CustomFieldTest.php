@@ -349,6 +349,22 @@ class Tinebase_CustomFieldTest extends TestCase
     }
 
     /**
+     * testIntCustomField
+     */
+    public function testIntCustomField()
+    {
+        $value = 1234;
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => true],
+            ['operator' => 'greater', 'value' => 1233, 'expectContactToBeFound' => true],
+            ['operator' => 'less', 'value' => 1235, 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => 123, 'expectContactToBeFound' => false],
+            ['operator' => 'greater', 'value' => $value, 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('int', $value, $filtersToTest);
+    }
+
+    /**
      * @see 0012222: customfields with space in name are not shown
      */
     public function testAddCustomFieldWithSpace()
