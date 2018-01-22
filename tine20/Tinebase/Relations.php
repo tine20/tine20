@@ -625,6 +625,13 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Resolving " . count($relations) . " relations");
 
+            if (! $records instanceof Tinebase_Record_RecordSet) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    " No recordset found");
+                return;
+            }
+
+            /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
                 $relationIndex  = $_relations->getIndexById($relation->getId());
