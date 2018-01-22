@@ -16,6 +16,9 @@
  * @package     Tinebase
  * @subpackage    Export
  *
+ * 
+ * @todo remove: Commonly used export translation strings:
+ * _('Exporttime')
  */
 abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {

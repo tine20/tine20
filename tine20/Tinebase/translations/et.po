@@ -302,7 +302,7 @@ msgstr ""
 
 #: js/MainMenu.js:293 js/common.js:815 js/widgets/tree/ContextMenu.js:351
 #: js/widgets/persistentfilter/PickerPanel.js:350
-#: js/widgets/dialog/EditDialog.js:1189
+#: js/widgets/dialog/EditDialog.js:1191
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:713
 #: js/widgets/grid/GridPanel.js:2267
 msgid "Confirm"
@@ -349,9 +349,9 @@ msgid "Please help improving this software and notify the vendor. Include a brie
 msgstr ""
 
 #: js/ExceptionDialog.js:154 js/Models.js:500
-#: js/widgets/relation/GenericPickerGridPanel.js:484
+#: js/widgets/relation/GenericPickerGridPanel.js:487
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
-#: js/widgets/tags/TagsPanel.js:527 js/widgets/dialog/EditDialog.js:474
+#: js/widgets/tags/TagsPanel.js:529 js/widgets/dialog/EditDialog.js:474
 #: js/widgets/dialog/SimpleRecordEditDialog.js:59 Model/Role.php:64
 msgid "Description"
 msgstr "Kirjeldus"
@@ -372,15 +372,15 @@ msgstr "Aruande saatmine..."
 msgid "Please wait a moment"
 msgstr ""
 
-#: js/ExceptionDialog.js:274
+#: js/ExceptionDialog.js:283
 msgid "Transmission Completed"
 msgstr ""
 
-#: js/ExceptionDialog.js:275
+#: js/ExceptionDialog.js:284
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr ""
 
-#: js/ExceptionDialog.js:275
+#: js/ExceptionDialog.js:284
 msgid "Please restart your browser now!"
 msgstr ""
 
@@ -536,7 +536,7 @@ msgstr ""
 msgid "Login failure"
 msgstr ""
 
-#: js/LoginPanel.js:523 js/widgets/dialog/EditDialog.js:1147
+#: js/LoginPanel.js:523 js/widgets/dialog/EditDialog.js:1149
 #: js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:658
 #: js/widgets/dialog/ExportDialog.js:149
@@ -545,7 +545,7 @@ msgstr ""
 msgid "Errors"
 msgstr "Vead"
 
-#: js/LoginPanel.js:523 js/widgets/dialog/EditDialog.js:1182
+#: js/LoginPanel.js:523 js/widgets/dialog/EditDialog.js:1184
 #: js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:658
 #: js/widgets/dialog/ExportDialog.js:149
@@ -575,7 +575,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:349 js/widgets/dialog/ExportDialog.js:54
-#: js/widgets/container/GrantsGrid.js:52 Export/Abstract.php:457
+#: js/widgets/container/GrantsGrid.js:52 Export/Abstract.php:458
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] ""
@@ -637,7 +637,7 @@ msgstr ""
 msgid "Available Revision"
 msgstr ""
 
-#: js/Models.js:498 js/widgets/relation/GenericPickerGridPanel.js:487
+#: js/Models.js:498 js/widgets/relation/GenericPickerGridPanel.js:490
 #: js/widgets/ActivitiesGridPanel.js:106 js/widgets/ActivitiesPanel.js:83
 #: js/widgets/ActivitiesPanel.js:263 js/widgets/grid/LinkGridPanel.js:118
 #: Model/Container.php:93
@@ -783,6 +783,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: js/ux/Printer/renderers/Tags.js:11 js/widgets/tags/TagsPanel.js:57
+#: js/widgets/tags/TagsPanel.js:436 Export/Pdf.php:216
+msgid "Tags"
+msgstr "Sildid"
+
 #: js/ux/Printer/renderers/EditDialogRenderer.js:90
 #: js/widgets/grid/ForeignRecordFilter.js:113
 msgid "Related to"
@@ -855,11 +860,11 @@ msgstr "Puuduv rakendus"
 msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr ""
 
-#: js/tineInit.js:699
+#: js/tineInit.js:705
 msgid "Your Client is Outdated"
 msgstr ""
 
-#: js/tineInit.js:700
+#: js/tineInit.js:706
 msgid "A new client is available, press OK to get this version"
 msgstr ""
 
@@ -1223,8 +1228,8 @@ msgid "Search for {0} ..."
 msgstr ""
 
 #: js/widgets/form/RecordPickerComboBox.js:314
-#: js/widgets/relation/GenericPickerGridPanel.js:1000
-#: js/widgets/relation/GenericPickerGridPanel.js:1012
+#: js/widgets/relation/GenericPickerGridPanel.js:1003
+#: js/widgets/relation/GenericPickerGridPanel.js:1015
 #: js/widgets/dialog/ImportDialog.js:709
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/grid/FileUploadGrid.js:490 js/PasswordChangeDialog.js:108
@@ -1233,7 +1238,7 @@ msgid "Failure"
 msgstr "Ebaõnnestus"
 
 #: js/widgets/form/RecordPickerComboBox.js:315
-#: js/widgets/relation/GenericPickerGridPanel.js:1013
+#: js/widgets/relation/GenericPickerGridPanel.js:1016
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
 
@@ -1271,34 +1276,34 @@ msgstr ""
 msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:311
+#: js/widgets/relation/GenericPickerGridPanel.js:314
 msgid "No Dialog"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:312
+#: js/widgets/relation/GenericPickerGridPanel.js:315
 msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:483
+#: js/widgets/relation/GenericPickerGridPanel.js:486
 #: js/widgets/dialog/ImportDialog.js:705 js/widgets/grid/GridPanel.js:1447
 msgid "Record"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:485
+#: js/widgets/relation/GenericPickerGridPanel.js:488
 msgid "Remark"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:486
+#: js/widgets/relation/GenericPickerGridPanel.js:489
 msgid "Dependency"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:488
+#: js/widgets/relation/GenericPickerGridPanel.js:491
 #: js/widgets/dialog/AttachmentsGridPanel.js:119
 #: js/widgets/grid/GridPanel.js:1781
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:1001
+#: js/widgets/relation/GenericPickerGridPanel.js:1004
 msgid "The record you tried to link is already linked. Please edit the existing link."
 msgstr ""
 
@@ -1507,11 +1512,6 @@ msgstr ""
 msgid "Detaching Tags"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:57 js/widgets/tags/TagsPanel.js:436
-#: Export/Pdf.php:216
-msgid "Tags"
-msgstr "Sildid"
-
 #: js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
 msgstr ""
@@ -1595,7 +1595,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:293 js/widgets/tags/TagsPanel.js:390
-#: js/widgets/tags/TagsPanel.js:423 js/widgets/dialog/EditDialog.js:1201
+#: js/widgets/tags/TagsPanel.js:423 js/widgets/dialog/EditDialog.js:1203
 msgid "Failed"
 msgstr ""
 
@@ -1619,7 +1619,7 @@ msgstr ""
 msgid "Could not update tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:531
+#: js/widgets/tags/TagsPanel.js:533
 #: js/widgets/container/PropertiesDialog.js:113
 #: js/widgets/keyfield/ConfigGrid.js:178 Model/Container.php:108
 msgid "Color"
@@ -1907,47 +1907,47 @@ msgstr ""
 msgid "Saved in"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:884
+#: js/widgets/dialog/EditDialog.js:885
 #, python-brace-format
 msgid "{0} (copy)"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:903 js/widgets/grid/GridPanel.js:729
+#: js/widgets/dialog/EditDialog.js:905 js/widgets/grid/GridPanel.js:729
 #, python-brace-format
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:906
+#: js/widgets/dialog/EditDialog.js:908
 #, python-brace-format
 msgid "Add New {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:908
+#: js/widgets/dialog/EditDialog.js:910
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1000
+#: js/widgets/dialog/EditDialog.js:1002
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1189
+#: js/widgets/dialog/EditDialog.js:1191
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1191 js/widgets/grid/GridPanel.js:2310
+#: js/widgets/dialog/EditDialog.js:1193 js/widgets/grid/GridPanel.js:2310
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1201
+#: js/widgets/dialog/EditDialog.js:1203
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1262
+#: js/widgets/dialog/EditDialog.js:1264
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
@@ -2952,43 +2952,43 @@ msgstr ""
 msgid "filemanager "
 msgstr ""
 
-#: Setup/setup.xml:3740
+#: Setup/setup.xml:3741
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3745
+#: Setup/setup.xml:3746
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3771
+#: Setup/setup.xml:3772
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:3776
+#: Setup/setup.xml:3777
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3802
+#: Setup/setup.xml:3803
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:3807
+#: Setup/setup.xml:3808
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3833
+#: Setup/setup.xml:3834
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3838
+#: Setup/setup.xml:3839
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3864
+#: Setup/setup.xml:3865
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3869
+#: Setup/setup.xml:3870
 msgid "record changed"
 msgstr ""
 
@@ -2996,675 +2996,683 @@ msgstr ""
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
-#: Config.php:585
+#: Config.php:592
 msgid "Account Deletion Event"
 msgstr ""
 
-#: Config.php:587
+#: Config.php:594
 msgid "Configure what should happen to data of deleted users"
 msgstr ""
 
-#: Config.php:599
+#: Config.php:606
 msgid "Available Languages"
 msgstr ""
 
-#: Config.php:601
+#: Config.php:608
 msgid "Whitelist available languages that can be chosen in the GUI"
 msgstr ""
 
-#: Config.php:612
+#: Config.php:619
 msgid "Default Locale"
 msgstr ""
 
-#: Config.php:614
+#: Config.php:621
 msgid "Default locale for this installation."
 msgstr ""
 
-#: Config.php:631
+#: Config.php:638
 msgid "Internet proxy config"
 msgstr ""
 
-#: Config.php:655
+#: Config.php:662
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:657
+#: Config.php:664
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:666
+#: Config.php:673
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:668
+#: Config.php:675
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:677
+#: Config.php:684
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:679
+#: Config.php:686
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:688
+#: Config.php:695
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:690
+#: Config.php:697
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:698
+#: Config.php:705
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:700
+#: Config.php:707
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:722
+#: Config.php:729
 msgid "Second Factor Authentication Configuration"
 msgstr ""
 
-#: Config.php:732
+#: Config.php:739
 msgid "Second Factor Protected Applications"
 msgstr ""
 
-#: Config.php:734
+#: Config.php:741
 msgid "Second Factor Authentication is needed to access these applications"
 msgstr ""
 
-#: Config.php:742
+#: Config.php:749
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:744
+#: Config.php:751
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:752
+#: Config.php:759
 msgid "Replication master configuration"
 msgstr ""
 
-#: Config.php:754
+#: Config.php:761
 msgid "Replication master configuration."
 msgstr ""
 
-#: Config.php:768
+#: Config.php:775
 msgid "Replication slave configuration"
 msgstr ""
 
-#: Config.php:770
+#: Config.php:777
 msgid "Replication slave configuration."
 msgstr ""
 
-#: Config.php:793
+#: Config.php:800
 msgid "Full text configuration"
 msgstr ""
 
-#: Config.php:795
+#: Config.php:802
 msgid "Full text configuration."
 msgstr ""
 
-#: Config.php:818
+#: Config.php:825
 msgid "Action queue configuration"
 msgstr ""
 
-#: Config.php:820
+#: Config.php:827
 msgid "Action queue configuration."
 msgstr ""
 
-#: Config.php:852
+#: Config.php:859
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:854
+#: Config.php:861
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:966 Config.php:1182
+#: Config.php:973 Config.php:1199
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:968 Config.php:1184
+#: Config.php:975 Config.php:1201
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:977
+#: Config.php:984
 msgid "Sync contact photo from sync backend"
 msgstr ""
 
-#: Config.php:979
+#: Config.php:986
 msgid "Sync user contact photo from sync backend"
 msgstr ""
 
-#: Config.php:988 Config.php:990
+#: Config.php:995 Config.php:997
 msgid "Sync deleted users from sync backend"
 msgstr ""
 
-#: Config.php:1004
+#: Config.php:1011
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:1012
+#: Config.php:1019
 msgid "Show Advanced Search"
 msgstr ""
 
-#: Config.php:1014
+#: Config.php:1021
 msgid "Show toggle button to switch on or off the advanced search for the quickfilter"
 msgstr ""
 
-#: Config.php:1017
+#: Config.php:1024
 msgid "Container Custom Sort"
 msgstr ""
 
-#: Config.php:1019
+#: Config.php:1026
 msgid "Allows to sort containers by setting the sort order in Admin/Container"
 msgstr ""
 
-#: Config.php:1022
+#: Config.php:1029
 msgid "Show Account Email Address"
 msgstr ""
 
-#: Config.php:1024
+#: Config.php:1031
 msgid "Show email address in account picker and attendee grids"
 msgstr ""
 
-#: Config.php:1027
+#: Config.php:1034
 msgid "Remeber Popup Size"
 msgstr ""
 
-#: Config.php:1029
+#: Config.php:1036
 msgid "Save edit dialog size in state"
 msgstr ""
 
-#: Config.php:1046
+#: Config.php:1053
 msgid "Default Admin Role Name"
 msgstr ""
 
-#: Config.php:1056
+#: Config.php:1063
 msgid "Default User Role Name"
 msgstr ""
 
-#: Config.php:1066
+#: Config.php:1073
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:1068
+#: Config.php:1075
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:1076
+#: Config.php:1083
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:1078
+#: Config.php:1085
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:1086
+#: Config.php:1093
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:1088
+#: Config.php:1095
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:1096
+#: Config.php:1103
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:1098
+#: Config.php:1105
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:1106
+#: Config.php:1113
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:1108
+#: Config.php:1115
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:1116
+#: Config.php:1123
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:1118
+#: Config.php:1125
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:1126
+#: Config.php:1133
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:1128
+#: Config.php:1135
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:1136
+#: Config.php:1143
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:1138
+#: Config.php:1145
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:1148
+#: Config.php:1155
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:1150
+#: Config.php:1157
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:1161
+#: Config.php:1168
 msgid "Contact fields overwritten by LDAP"
 msgstr ""
 
-#: Config.php:1163
+#: Config.php:1170
 msgid "These fields are overwritten during LDAP sync if empty"
 msgstr ""
 
-#: Config.php:1172
+#: Config.php:1179
+msgid "Sentry service URI"
+msgstr ""
+
+#: Config.php:1181
+msgid "URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>"
+msgstr ""
+
+#: Config.php:1189
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:1174
+#: Config.php:1191
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:1195
+#: Config.php:1212
 msgid "Removed users should be deleted after X months"
 msgstr ""
 
-#: Config.php:1193
+#: Config.php:1210
 msgid "Sync user: delete after X months)label"
 msgstr ""
 
-#: Config.php:1204
+#: Config.php:1221
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:1206
+#: Config.php:1223
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:1214
+#: Config.php:1231
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:1216
+#: Config.php:1233
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:1225
+#: Config.php:1242
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:1227
+#: Config.php:1244
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:1235 Config.php:1237
+#: Config.php:1252 Config.php:1254
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:1245 Config.php:1247
+#: Config.php:1262 Config.php:1264
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:1256 Config.php:1258
+#: Config.php:1273 Config.php:1275
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:1266
+#: Config.php:1283
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:1268
+#: Config.php:1285
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:1276
+#: Config.php:1293
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:1278
+#: Config.php:1295
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:1286
+#: Config.php:1303
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:1288
+#: Config.php:1305
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:1296
+#: Config.php:1313
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:1298
+#: Config.php:1315
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:1306
+#: Config.php:1323
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:1308
+#: Config.php:1325
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:1316
+#: Config.php:1333
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:1318
+#: Config.php:1335
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:1326
+#: Config.php:1343
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:1328
+#: Config.php:1345
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:1336
+#: Config.php:1353
 msgid "Change Password After ... Days"
 msgstr ""
 
-#: Config.php:1338
+#: Config.php:1355
 msgid "Users need to change their passwords after defined number of days"
 msgstr ""
 
-#: Config.php:1347
+#: Config.php:1364
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:1349
+#: Config.php:1366
 msgid "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:1357
+#: Config.php:1374
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:1359
+#: Config.php:1376
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:1367
+#: Config.php:1384
 msgid "Warn after X login failures"
 msgstr ""
 
-#: Config.php:1369
+#: Config.php:1386
 msgid "Maximum allowed login failures before writing warn log messages"
 msgstr ""
 
-#: Config.php:1378
+#: Config.php:1395
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:1380
+#: Config.php:1397
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Config.php:1388
+#: Config.php:1405
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:1390
+#: Config.php:1407
 msgid "Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:1398
+#: Config.php:1415
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:1400
+#: Config.php:1417
 msgid "Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account"
 msgstr ""
 
-#: Config.php:1408
+#: Config.php:1425
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:1410
+#: Config.php:1427
 msgid "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:1418 Config.php:1420
+#: Config.php:1435 Config.php:1437
 msgid "Max username length"
 msgstr ""
 
-#: Config.php:1427
+#: Config.php:1444
 msgid "conf.d folder name"
 msgstr ""
 
-#: Config.php:1429 Config.php:1440
+#: Config.php:1446 Config.php:1457
 msgid "Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!"
 msgstr ""
 
-#: Config.php:1438
+#: Config.php:1455
 msgid "Maintenance mode enabled"
 msgstr ""
 
-#: Config.php:1449
+#: Config.php:1466
 msgid "Version check enabled"
 msgstr ""
 
-#: Config.php:1461
+#: Config.php:1478
 msgid "Custom Javascript includes for Fat-Client"
 msgstr ""
 
-#: Config.php:1463
+#: Config.php:1480
 msgid "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver."
 msgstr ""
 
-#: Config.php:1472
+#: Config.php:1489
 msgid "custom description"
 msgstr ""
 
-#: Config.php:1474
+#: Config.php:1491
 msgid "Custom description for branding."
 msgstr ""
 
-#: Config.php:1483
+#: Config.php:1500
 msgid "custom weburl"
 msgstr ""
 
-#: Config.php:1485
+#: Config.php:1502
 msgid "Custom weburl for branding."
 msgstr ""
 
-#: Config.php:1494
+#: Config.php:1511
 msgid "custom title"
 msgstr ""
 
-#: Config.php:1496
+#: Config.php:1513
 msgid "Custom title for branding."
 msgstr ""
 
-#: Config.php:1505
+#: Config.php:1522
 msgid "custom logo path"
 msgstr ""
 
-#: Config.php:1507
+#: Config.php:1524
 msgid "Path to custom logo."
 msgstr ""
 
-#: Config.php:1516
+#: Config.php:1533
 msgid "custom favicon path"
 msgstr ""
 
-#: Config.php:1518 Config.php:1562
+#: Config.php:1535 Config.php:1579
 msgid "Path to custom favicon."
 msgstr ""
 
-#: Config.php:1527
+#: Config.php:1544
 msgid "Use login name instead of full name"
 msgstr ""
 
-#: Config.php:1529
+#: Config.php:1546
 msgid "Use login name instead of full name for webdav."
 msgstr ""
 
-#: Config.php:1538
+#: Config.php:1555
 msgid "List of WebDav agent strings that will be denied"
 msgstr ""
 
-#: Config.php:1540
-msgid "List of WebDav agent strings that will be denied."
+#: Config.php:1557
+msgid "List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 msgstr ""
 
-#: Config.php:1549
+#: Config.php:1566
 msgid "Enable SyncToken plugin"
 msgstr ""
 
-#: Config.php:1551
+#: Config.php:1568
 msgid "Enable the use of the SyncToken plugin."
 msgstr ""
 
-#: Config.php:1560
+#: Config.php:1577
 msgid "currency symbol"
 msgstr ""
 
-#: Config.php:1571
+#: Config.php:1588
 msgid "Filesystem settings"
 msgstr ""
 
-#: Config.php:1573
+#: Config.php:1590
 msgid "Filesystem settings."
 msgstr ""
 
-#: Config.php:1582
+#: Config.php:1599
 msgid "Filesystem history"
 msgstr ""
 
-#: Config.php:1584
+#: Config.php:1601
 msgid "Filesystem keeps history, default is false."
 msgstr ""
 
-#: Config.php:1593
+#: Config.php:1610
 msgid "Filesystem number of revisions"
 msgstr ""
 
-#: Config.php:1595
+#: Config.php:1612
 msgid "Filesystem number of revisions being kept before they are automatically deleted."
 msgstr ""
 
-#: Config.php:1604
+#: Config.php:1621
 msgid "Filesystem months of revisions"
 msgstr ""
 
-#: Config.php:1606
+#: Config.php:1623
 msgid "Filesystem number of months revisions being kept before they are automatically deleted."
 msgstr ""
 
-#: Config.php:1615
+#: Config.php:1632
 msgid "Filesystem index content"
 msgstr ""
 
-#: Config.php:1617
+#: Config.php:1634
 msgid "Filesystem index content."
 msgstr ""
 
-#: Config.php:1626
+#: Config.php:1643
 msgid "Filesystem enable notifications"
 msgstr ""
 
-#: Config.php:1628
+#: Config.php:1645
 msgid "Filesystem enable notifications."
 msgstr ""
 
-#: Config.php:1637
+#: Config.php:1654
 msgid "Filesystem create previews"
 msgstr ""
 
-#: Config.php:1639
+#: Config.php:1656
 msgid "Filesystem create previews."
 msgstr ""
 
-#: Config.php:1648
+#: Config.php:1665
 msgid "URL of preview service"
 msgstr ""
 
-#: Config.php:1650
+#: Config.php:1667
 msgid "URL of preview service."
 msgstr ""
 
-#: Config.php:1662 Config.php:1664
+#: Config.php:1679 Config.php:1681
 msgid "Quota settings"
 msgstr ""
 
-#: Config.php:1673
+#: Config.php:1690
 msgid "Show UI"
 msgstr ""
 
-#: Config.php:1675
+#: Config.php:1692
 msgid "Should the quota UI elements be rendered or not."
 msgstr ""
 
-#: Config.php:1684
+#: Config.php:1701
 msgid "Include revisions"
 msgstr ""
 
-#: Config.php:1686
+#: Config.php:1703
 msgid "Should all revisions be used to calculate total usage?"
 msgstr ""
 
-#: Config.php:1695
+#: Config.php:1712
 msgid "Total quota in MB"
 msgstr ""
 
-#: Config.php:1697
+#: Config.php:1714
 msgid "Total quota in MB (0 for unlimited)"
 msgstr ""
 
-#: Config.php:1706
+#: Config.php:1723
 msgid "Total quota by user in MB"
 msgstr ""
 
-#: Config.php:1708
+#: Config.php:1725
 msgid "Total quota by user in MB (0 for unlimited)"
 msgstr ""
 
-#: Config.php:1717
+#: Config.php:1734
 msgid "Soft quota in %"
 msgstr ""
 
-#: Config.php:1719
+#: Config.php:1736
 msgid "Soft quota in % (0-100, 0 means off)"
 msgstr ""
 
-#: Config.php:1728
+#: Config.php:1745
 msgid "Soft quota notification role"
 msgstr ""
 
-#: Config.php:1730
+#: Config.php:1747
 msgid "Name of the role to notify if soft quota is exceeded"
 msgstr ""
 
-#: Config.php:1739
+#: Config.php:1756
 msgid "Skip Imap Quota Notfication"
 msgstr ""
 
-#: Config.php:1741
+#: Config.php:1758
 msgid "NSkip Imap Quota Notfication"
 msgstr ""
 
-#: Config.php:1753
+#: Config.php:1770
 msgid "Tine20 URL"
 msgstr ""
 
-#: Config.php:1755
+#: Config.php:1772
 msgid "The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable."
 msgstr ""
 
@@ -3815,6 +3823,10 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
+#: Export/Abstract.php:21
+msgid "Exporttime"
+msgstr ""
+
 #: Export/Pdf.php:437
 msgid "Created by"
 msgstr "Lisas"
@@ -3871,7 +3883,7 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
-#: Exception.php:49
+#: Exception.php:56
 #, python-brace-format
 msgid "Exception ({0})"
 msgstr ""
@@ -3884,31 +3896,31 @@ msgstr ""
 msgid "This is a system container which could not be deleted!"
 msgstr ""
 
-#: Exception/SecondFactorRequired.php:22
+#: Exception/SecondFactorRequired.php:24
 msgid "Second Factor Required"
 msgstr ""
 
-#: Exception/InvalidRelationConstraints.php:26
+#: Exception/InvalidRelationConstraints.php:28
 msgid "Invalid Relations"
 msgstr ""
 
-#: Exception/InvalidRelationConstraints.php:36
+#: Exception/InvalidRelationConstraints.php:38
 msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
 msgstr ""
 
-#: Exception/SystemGeneric.php:27
+#: Exception/SystemGeneric.php:29
 msgid "Generic System Exception"
 msgstr ""
 
-#: Exception/MonthFormat.php:26
+#: Exception/MonthFormat.php:28
 msgid "Wrong month format!"
 msgstr ""
 
-#: Exception/MonthFormat.php:31
+#: Exception/MonthFormat.php:33
 msgid "The month must have the format YYYY-MM!"
 msgstr ""
 
-#: Exception/PasswordPolicyViolation.php:22
+#: Exception/PasswordPolicyViolation.php:24
 msgid "Password Policy Violation"
 msgstr ""
 
