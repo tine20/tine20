@@ -390,4 +390,28 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '11.21');
     }
+
+    /**
+     * update to 11.22
+     *
+     * fix pin_protected_node
+     */
+    public function update_21()
+    {
+        if (! $this->_backend->columnExists('ntlmv2hash', 'accounts')) {
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>ntlmv2hash</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('accounts') == 14) {
+            $this->setTableVersion('accounts', 15);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.22');
+    }
 }

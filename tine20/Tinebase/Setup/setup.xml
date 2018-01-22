@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.21</version>
+    <version>11.22</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -253,7 +253,7 @@
 
         <table>
             <name>accounts</name>
-            <version>14</version>
+            <version>15</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -271,6 +271,12 @@
                     <name>password</name>
                     <type>text</type>
                     <length>100</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>ntlmv2hash</name>
+                    <type>text</type>
+                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

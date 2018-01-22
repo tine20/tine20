@@ -401,6 +401,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_POLICY_CHANGE_AFTER = 'pwPolicyChangeAfter';
 
     /**
+     * PASSWORD_SUPPORT_NTLMV2
+     *
+     * @var string
+     */
+    const PASSWORD_SUPPORT_NTLMV2 = 'pwSupportNtlmV2';
+
+    /**
+     * PASSWORD_NTLMV2_ENCRYPTION_KEY
+     *
+     * @var string
+     */
+    const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
+
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -1307,6 +1321,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => TRUE
+        ),
+        self::PASSWORD_SUPPORT_NTLMV2 => array(
+            //_('Support NTLM V2 authentication')
+            'label'                 => 'Support NTLM V2 authentication',
+            //_('Support NTLM V2 authentication and store account password as ntlm v2 hash')
+            'description'           => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false
+        ),
+        self::PASSWORD_NTLMV2_ENCRYPTION_KEY => array(
+            //_('NTLM V2 password hash encryption key')
+            'label'                 => 'NTLM V2 password hash encryption key',
+            //_('Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database.')
+            'description'           => 'Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => null
         ),
         self::USER_PASSWORD_POLICY => array(
             //_('User password policy')

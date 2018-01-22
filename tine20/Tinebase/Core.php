@@ -576,6 +576,7 @@ class Tinebase_Core
             $coreSession->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
         self::set('jsonKey', $coreSession->jsonKey);
+        self::set(self::SESSION, $coreSession);
     }
 
     /**

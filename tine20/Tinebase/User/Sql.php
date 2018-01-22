@@ -497,6 +497,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array();
         $accountData[$_property] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
         if ($_property === 'password') {
+            if (Tinebase_Auth_NtlmV2::isEnabled()) {
+                $accountData['ntlmv2hash'] = Tinebase_Auth_CredentialCache::encryptData(
+                    Tinebase_Auth_NtlmV2::getPwdHash($_password),
+                    Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
+            }
             $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         }
 
@@ -1328,6 +1333,20 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $userCount = $this->_db->fetchOne($select);
 
         return $userCount;
+    }
+
+    /**
+     * @param string $accountId
+     * @return boolean|string
+     */
+    public function getNtlmV2Hash($accountId)
+    {
+        $select = $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'ntlmv2hash')
+            ->where($this->_db->quoteIdentifier('id') . ' = ?', $accountId);
+
+        return Tinebase_Auth_CredentialCache::decryptData($this->_db->fetchOne($select),
+            Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
     }
 
     /**
