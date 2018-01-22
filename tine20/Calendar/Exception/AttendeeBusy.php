@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -13,6 +13,13 @@
  */
 class Calendar_Exception_AttendeeBusy extends Calendar_Exception
 {
+    /**
+     * default log level for Tinebase_Exception::log()
+     *
+     * @var string
+     */
+    protected $_logLevelMethod = 'info';
+
     /**
      * free busy info
      * 

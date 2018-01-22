@@ -5,7 +5,7 @@
  * @package     Calendar
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  *
  */
@@ -16,7 +16,6 @@
  * @package     Calendar
  * @subpackage  Exception
  */
-class Calendar_Exception extends Tinebase_Exception
+class Calendar_Exception extends Tinebase_Exception_ProgramFlow
 {
-    protected $_logToSentry = false;
 }

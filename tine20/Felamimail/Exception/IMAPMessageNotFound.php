@@ -19,13 +19,6 @@
 class Felamimail_Exception_IMAPMessageNotFound extends Felamimail_Exception_IMAP
 {
     /**
-     * don't log this to sentry in Tinebase_Exception::log()
-     *
-     * @var bool
-     */
-    protected $_logToSentry = false;
-
-    /**
      * construct
      * 
      * @param string $_message

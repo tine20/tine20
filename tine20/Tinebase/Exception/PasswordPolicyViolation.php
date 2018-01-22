@@ -18,8 +18,6 @@
  */
 class Tinebase_Exception_PasswordPolicyViolation extends Tinebase_Exception_SystemGeneric
 {
-    protected $_logToSentry = false;
-
     /**
      * @var string _('Password Policy Violation')
      */

@@ -33,13 +33,6 @@ class Felamimail_Exception_IMAPInvalidCredentials extends Felamimail_Exception_I
     protected $_username = '';
 
     /**
-     * don't log this to sentry in Tinebase_Exception::log()
-     *
-     * @var bool
-     */
-    protected $_logToSentry = false;
-
-    /**
      * construct
      * 
      * @param string $_message

@@ -16,10 +16,8 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_InvalidRelationConstraints extends Tinebase_Exception
+class Tinebase_Exception_InvalidRelationConstraints extends Tinebase_Exception_ProgramFlow
 {
-    protected $_logToSentry = false;
-
     /**
      * the title of the Exception (may be shown in a dialog)
      *

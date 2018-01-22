@@ -21,10 +21,8 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_SystemGeneric extends Tinebase_Exception
+class Tinebase_Exception_SystemGeneric extends Tinebase_Exception_ProgramFlow
 {
-    protected $_logToSentry = false;
-
     /**
      * @var string _('Generic System Exception')
      */
