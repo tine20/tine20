@@ -1767,3 +1767,6 @@ msgstr "Gefilterte Teilnehmer"
 
 msgid "Send Alarm Notifications Emails"
 msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
+
+msgid "Attendee/Resources"
+msgstr "Teilnehmer/Ressourcen"
