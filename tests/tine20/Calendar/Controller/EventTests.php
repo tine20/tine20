@@ -424,6 +424,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     public function testSearchFreeTime()
     {
+        static::markTestSkipped('rrules are disabled for search free time');
+
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
