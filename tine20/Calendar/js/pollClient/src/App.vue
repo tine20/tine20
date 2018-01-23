@@ -11,7 +11,7 @@
           </div>
           <div class="col-md-4 col-sm-12 text-right">
             <a :href="poll.config.brandingWeburl">
-              <img :src="baseUrl + poll.config.brandingLogo" :alt="poll.config.brandingTitle" />
+              <img :src="poll.config.brandingLogo" :alt="poll.config.brandingTitle" />
             </a>
           </div>
         </div>
@@ -473,6 +473,9 @@
       },
       nextStatus (attendee, id) {
         if (attendee.status_authkey === null && id !== null) {
+          return
+        }
+        if (!this.showChangeButtons()) {
           return
         }
 
