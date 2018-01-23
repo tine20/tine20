@@ -38,10 +38,19 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
      * @param  string $_condition {AND|OR}
      * @param  array $_options
      * @throws Tinebase_Exception_InvalidArgument
+     *
+     * TODO $_options param is not used - discard or merge with $_data['options']?
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
-        $condition = (0 === strpos($_data['operator'], 'not')) ? Tinebase_Model_Filter_FilterGroup::CONDITION_AND : Tinebase_Model_Filter_FilterGroup::CONDITION_OR;
+        if (count($_options) > 0) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' Given options are not used ... put options in $_data[\'options\']');
+        }
+
+        $condition = (0 === strpos($_data['operator'], 'not'))
+            ? Tinebase_Model_Filter_FilterGroup::CONDITION_AND
+            : Tinebase_Model_Filter_FilterGroup::CONDITION_OR;
 
         parent::__construct(array(),
             $condition,
@@ -84,7 +93,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                             } else {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                        ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                                        ' field: ' . $field . ' => filter: ' . get_class($filter)
+                                        . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
                                 }
                             }
                         }
@@ -101,7 +111,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                         } else {
                             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                    ' field: ' . $field . ' => filter: ' . get_class($filter) . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+                                    ' field: ' . $field . ' => filter: ' . get_class($filter)
+                                    . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
                             }
                         }
                     }
