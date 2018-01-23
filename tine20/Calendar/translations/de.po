@@ -832,7 +832,7 @@ msgstr "Erstellen sie Terminvorschläge und wählen Sie die beste Alternative ba
 
 #: js/PollPanel.js:119
 msgid "Share the link below to poll for attendee status feedback."
-msgstr "Teilen sie diesen Link um die Teilnehmer um Feedback zu erfragen."
+msgstr "Teilen sie diesen Link um Teilnehmer Feedback zu erfragen."
 
 #: js/PollPanel.js:126
 msgid "Public URL"

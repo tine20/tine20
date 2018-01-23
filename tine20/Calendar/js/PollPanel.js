@@ -142,6 +142,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     hideLabel: true
                 }], [{
                     xtype: 'checkbox',
+                    columnWidth: 1,
                     ref: '../../../../isLockedPollCheckbox',
                     disabled: true,
                     hideLabel: true,
