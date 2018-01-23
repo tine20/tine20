@@ -2089,4 +2089,13 @@ class Tinebase_Core
 
         self::set('SENTRY', $client);
     }
+
+    /**
+     * @return Raven_client|null
+     */
+    public static function getSentry()
+    {
+        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
+        return $sentryClient;
+    }
 }

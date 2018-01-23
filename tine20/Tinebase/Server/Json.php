@@ -148,18 +148,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $isBatchedRequest = false;
             $requests = array(Zend_Json::decode($json));
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            $_requests = $requests;
-            foreach (array('password', 'oldPassword', 'newPassword') as $field) {
-                if (isset($requests[0]["params"][$field])) {
-                    $_requests[0]["params"][$field] = "*******";
-                }
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' is JSON request. rawdata: ' . var_export($_requests, true));
-        } 
-        
+
+        $this->_logRequests($requests);
+        $this->_addRequestsToSentryContext($requests);
+
         $response = array();
         foreach ($requests as $requestOptions) {
             if ($requestOptions !== NULL) {
@@ -194,7 +186,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             // trying to fix this:
-            foreach($response as $r) {
+            foreach ($response as $r) {
                 $result = $r->getResult();
                 $this->_jsonClean($result);
                 $r->setResult($result);
@@ -212,6 +204,57 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         echo $output;
     }
 
+    /**
+     * log request in log
+     *
+     * @param array $requestData
+     */
+    protected function _logRequests($requestData)
+    {
+        if (! Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            return;
+        }
+
+        $requestData = $this->_stripPasswordsFromRequestData($requestData);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' is JSON request. rawdata: ' . var_export($requestData, true));
+    }
+
+    /**
+     * @param array $requestData
+     * @return array
+     */
+    protected function _stripPasswordsFromRequestData($requestData)
+    {
+        foreach ($requestData as $i => $request) {
+            foreach (array('password', 'oldPassword', 'newPassword') as $field) {
+                if (isset($requestData[$i]["params"][$field])) {
+                    $requestData[$i]["params"][$field] = "*******";
+                }
+            }
+        }
+        return $requestData;
+    }
+
+    /**
+     * add json data to sentry client as extra context
+     *
+     * @param array $requestData
+     */
+    protected function _addRequestsToSentryContext($requestData)
+    {
+        // TODO allow to configure this?
+        $sentryClient = Tinebase_Core::getSentry();
+        if ($sentryClient) {
+            $requestData = $this->_stripPasswordsFromRequestData($requestData);
+            $sentryClient->extra_context($requestData);
+        }
+    }
+
+    /**
+     * @param $data
+     */
     protected function _jsonClean(&$data)
     {
         if (is_null($data) || is_int($data)) {

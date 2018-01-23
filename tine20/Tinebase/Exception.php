@@ -161,7 +161,7 @@ class Tinebase_Exception extends Exception
      */
     public static function sendExceptionToSentry(Exception $exception)
     {
-        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
+        $sentryClient = Tinebase_Core::getSentry();
         if (! $sentryClient) {
             return;
         }
