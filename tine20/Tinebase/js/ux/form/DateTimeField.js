@@ -45,6 +45,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.DateTimeField.superclass.initComponent.call(this);
         this.lastValues = [];
         this.on('change', this.onChange, this);
+
     },
     
     /**
@@ -154,15 +155,21 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     onRender: function (ct, position) {
+        var me = this,
+            dateField = (this.allowBlank) ? Ext.ux.form.ClearableDateField : Ext.form.DateField;
+
         //Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
         this.el = document.createElement(this.autoEl);
         this.el.id = this.getId();
         this.el = Ext.get(this.el);
         ct.dom.insertBefore(this.el.dom, position);
         this.el.applyStyles('overflow:visible;');
-        
-        var dateField = (this.allowBlank) ? Ext.ux.form.ClearableDateField : Ext.form.DateField;
-        
+
+        this.el.blur = this.el.blur.createSequence(function() {
+            me.dateField.el.blur();
+            me.timeField.el.blur();
+        });
+
         this.dateField = new dateField(Ext.apply({
             lazyRender: false,
             renderTo: this.el,
@@ -196,21 +203,47 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
                 scope: this,
                 change: this.onTimeChange,
                 select: this.onTimeChange,
-                focus: this.onDateFocus,
-                blur: this.onDateBlur
+                focus: this.onTimeFocus,
+                blur: this.onTimeBlur
             }
         }, this.timeConf || {}));
         
     },
-    
+
+    triggerBlur: function() {
+        if (this.dateField.hasFocus) {
+            this.dateField.triggerBlur();
+        } else if (this.timeField.hasFocus) {
+            this.timeField.triggerBlur();
+        }
+    },
+
     onDateFocus: function () {
-        this.hasFocus = true;
-        this.fireEvent('focus', this);
+        if (! this.timeField.hasFocus) {
+            this.hasFocus = true;
+            this.fireEvent('focus', this);
+        }
     },
     
     onDateBlur: function () {
-        this.hasFocus = false;
-        this.fireEvent('blur', this);
+        if (! this.timeField.hasFocus) {
+            this.hasFocus = false;
+            this.fireEvent('blur', this);
+        }
+    },
+
+    onTimeFocus: function () {
+        if (! this.dateField.hasFocus) {
+            this.hasFocus = true;
+            this.fireEvent('focus', this);
+        }
+    },
+
+    onTimeBlur: function () {
+        if (! this.dateField.hasFocus) {
+            this.hasFocus = false;
+            this.fireEvent('blur', this);
+        }
     },
     
     onDateChange: function () {
