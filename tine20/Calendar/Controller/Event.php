@@ -345,7 +345,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $from = $from ? min($from, $period['from']) : $period['from'];
             $until = $until ?  max($until, $period['until']) : $period['until'];
         }
-        Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
+        if ($from instanceof DateTime) {
+            // NOTE: $periodCandidates might be empty e.g. transparent event
+            Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
+        }
 
         $conflicts = array();
         foreach ($periodCandidates as $periodFilter) {
