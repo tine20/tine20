@@ -624,6 +624,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['organizer']) && is_array($_data['organizer'])) {
             $_data['organizer'] = $_data['organizer']['id'];
         }
+
+        if (empty($_data['originator_tz'])) {
+            $_data['originator_tz'] = Tinebase_Core::getUserTimezone();
+        }
         
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
             $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters, $this->convertDates);
