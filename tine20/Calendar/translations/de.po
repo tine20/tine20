@@ -1764,3 +1764,9 @@ msgstr "Auch bei Teilnehmer-Antworten"
 
 #~ msgid "Search for records ..."
 #~ msgstr "Suche nach Einträgen ..."
+
+msgid "Send Alarm Notifications Emails"
+msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
+
+msgid "Attendee/Resources"
+msgstr "Teilnehmer/Ressourcen"
