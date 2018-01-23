@@ -128,13 +128,13 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
 }
 
-.action_delete {
+.action_delete, actionDelete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
-.x-btn-medium .action_delete {
+.x-btn-medium .action_delete, .x-btn-medium .actionDelete {
     background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
 }
-.x-btn-large .action_delete {
+.x-btn-large .action_delete, .x-btn-large .actionDelete {
     background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
 }
 
