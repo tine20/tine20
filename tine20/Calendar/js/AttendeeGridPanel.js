@@ -339,7 +339,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     //       WELL we could add the info to search attendee somehow
                     if (   (o.record.get('user_type') == 'user' && ! o.value.account_id )
                         || (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').container_id && o.record.get('user_id').container_id.account_grants && o.record.get('user_id').container_id.account_grants.editGrant)) {
-                        o.record.set('status_authkey', 1);
+                        o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
                     }
                     
                     o.record.explicitlyAdded = true;
