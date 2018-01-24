@@ -139,6 +139,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'user':
                     field.xtype = 'addressbookcontactpicker';
                     field.userOnly = true;
+                    field.useAccountRecord = true;
                     break;
                 case 'relation':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
