@@ -1732,41 +1732,5 @@ msgstr "Bei allen Änderungen außer Teilnehmer-Anworten"
 msgid "On attendee responses too"
 msgstr "Auch bei Teilnehmer-Antworten"
 
-#~ msgid "Is a location"
-#~ msgstr "Ist ein Ort"
-
-#~ msgid "Errors"
-#~ msgstr "Fehler"
-
-#~ msgid "Export Events"
-#~ msgstr "Termine exportieren"
-
-#~ msgid "Export as ODS"
-#~ msgstr "Exportieren als ODS"
-
-#~ msgid "Export as ..."
-#~ msgstr "Exportieren als ..."
-
-#~ msgid "If enabled every created event is always privat."
-#~ msgstr "Wenn aktiviert ist jeder neu erstellte Termin privat."
-
-#~ msgid "Me"
-#~ msgstr "Meine"
-
-#~ msgid "Intelligent"
-#~ msgstr "Intelligent"
-
-#~ msgid "Calendar owner"
-#~ msgstr "Kalender Besitzer"
-
-#~ msgid "Filtered attendee"
-#~ msgstr "Gefilterte Teilnehmer"
-
-#~ msgid "Search for records ..."
-#~ msgstr "Suche nach Einträgen ..."
-
-msgid "Send Alarm Notifications Emails"
-msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
-
 msgid "Attendee/Resources"
 msgstr "Teilnehmer/Ressourcen"
