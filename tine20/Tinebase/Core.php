@@ -2064,7 +2064,7 @@ class Tinebase_Core
     }
 
     /**
-     * @todo get sentry server uri from config
+     * setup sentry Raven_Client
      */
     public static function setupSentry()
     {
@@ -2074,6 +2074,10 @@ class Tinebase_Core
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
+
+        if (! defined('TINE20_CODENAME')) {
+            self::setupBuildConstants();
+        }
 
         $config = [
             'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
