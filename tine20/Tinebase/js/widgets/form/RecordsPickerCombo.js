@@ -35,7 +35,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     recordClass: null,
 
     initComponent: function () {
-        this.emptyText = this.emptyText || i18n._('Search for records ...');
+        this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.currentValue = this.currentValue || [];
 
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);

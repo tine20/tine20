@@ -64,10 +64,10 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             this.recordProxy = Tine.Addressbook.contactBackend;
         }
 
-        this.emptyText = this.emptyText || (this.userOnly ?
+        this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : (this.userOnly ?
             this.app.i18n._('Search for users ...') :
             this.app.i18n._('Search for Contacts ...')
-        );
+        ));
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
