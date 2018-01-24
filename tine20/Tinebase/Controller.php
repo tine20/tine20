@@ -892,4 +892,34 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         return true;
     }
+
+    public static function addFastRoutes(
+        /** @noinspection PhpUnusedParameterInspection */
+        \FastRoute\RouteCollector $r
+    ) {
+        $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/_status', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getStatus', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+    }
+
+    /**
+     * @return \Zend\Diactoros\Response
+     */
+    public function getStatus()
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_INFO)) {
+            return new \Zend\Diactoros\Response\EmptyResponse();
+        }
+
+        // @todo fetch more status info
+
+        $data = [
+            'actionqueue' => Tinebase_ActionQueue::getStatus(),
+        ];
+        $response = new \Zend\Diactoros\Response\JsonResponse($data);
+        return $response;
+    }
 }

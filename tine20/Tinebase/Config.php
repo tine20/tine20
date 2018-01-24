@@ -523,6 +523,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const STATUS_INFO = 'statusInfo';
+
+    /**
+     * @var string
+     */
     const MASTER_URL = 'masterURL';
 
     /**
@@ -1115,6 +1120,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to configured redirect URL also for login.')
             'description'           => 'Redirect to configured redirect URL also for login.',
             'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::STATUS_INFO => array(
+            //_('Status Info')
+            'label'                 => 'Status Info',
+            //_('If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status')
+            'description'           => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
+            'type'                  => 'bool',
+            'default'               => false,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

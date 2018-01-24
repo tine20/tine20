@@ -74,6 +74,31 @@
     {
         self::$_instance = NULL;
     }
+
+     /**
+      * returns queue status
+      *
+      * @todo use in \Tinebase_Frontend_Cli::monitoringCheckQueue
+      */
+    public static function getStatus()
+    {
+        $queueStatus = [
+            'active' => false,
+            'size' => 0,
+            'problems' => [],
+        ];
+        $queueConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::ACTIONQUEUE);
+        if ($queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+            $queueStatus['active'] = true;
+            try {
+                $queueStatus['size'] = Tinebase_ActionQueue::getInstance()->getQueueSize();
+            } catch (Exception $e) {
+                $queueStatus['problems'][] = $e->getMessage();
+            }
+        }
+
+        return $queueStatus;
+    }
     
     /**
      * constructor
