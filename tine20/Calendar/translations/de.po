@@ -1755,10 +1755,6 @@ msgid "Get notifications emails for actions you did yourself"
 msgstr ""
 "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
-#: Preference.php:189
-msgid "Send Alarm Notifications Emails"
-msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
-
 #: Preference.php:190
 msgid "Get event alarms via email"
 msgstr "Erhalte Termin Alarme per Mail"
@@ -1847,6 +1843,10 @@ msgstr "Auch bei Teilnehmer-Antworten"
 
 msgid "Attendee/Resources"
 msgstr "Teilnehmer/Ressourcen"
+
+#: Preference.php:189
+msgid "Send Alarm Notifications Emails"
+msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
 
 msgid "Is a location"
 msgstr "Ist ein Ort"
