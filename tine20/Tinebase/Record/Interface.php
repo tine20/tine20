@@ -316,4 +316,12 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return null|Tinebase_Record_RecordSetDiff
      */
     public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo);
+
+    /**
+     * @param string $_property
+     * @param mixed $_diffValue
+     * @param mixed $_oldValue
+     * @return null|boolean
+     */
+    public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue);
 }
