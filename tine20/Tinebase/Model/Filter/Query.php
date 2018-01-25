@@ -88,7 +88,9 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                         $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
                         foreach ($this->_options['fields'] as $field) {
                             $filter = $parentFilterGroup->createFilter($field, $this->_operator, $query);
-                            if (in_array($this->_operator, $filter->getOperators())) {
+                            if (in_array($this->_operator, $filter->getOperators())
+                                || $filter instanceof Tinebase_Model_Filter_ForeignRecord)
+                            {
                                 $subGroup->addFilter($filter);
                             } else {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
