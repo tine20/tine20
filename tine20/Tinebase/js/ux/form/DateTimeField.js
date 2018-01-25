@@ -25,7 +25,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     increment: 15,
     timeEditable: true,
     markedInvalid: false,
-    
+
+    // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
+    minWidth: 160,
+
     /**
      * @cfg {Object} config to be applied to date field 
      */

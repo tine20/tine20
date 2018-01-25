@@ -108,6 +108,7 @@ Tine.widgets.grid.MappingPickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                 columns.unshift({
                     dataIndex: me.recordClass.getMeta('idProperty'),
                     header: i18n._('via'),
+                    width: 150,
                     renderer: function(id, meta, record) {
                         return _.reduce(me.mappingRecordStore.data.items, function(names, mappingRecord) {
                             if (_.get(mappingRecord, 'data.' + me.mappingField) == id) {

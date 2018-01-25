@@ -104,7 +104,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     minChars: 3,
     forceSelection: true,
     minListWidth: 300,
-    
+
+    // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
+    minWidth: 180,
+
     /**
      * additional filters to use for each query
      * @type {Array}
