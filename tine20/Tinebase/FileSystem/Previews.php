@@ -246,6 +246,7 @@ class Tinebase_FileSystem_Previews
 
         } finally {
             if (null !== $transactionId) {
+                // this only happens if an exception is thrown, no need to return false
                 Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
