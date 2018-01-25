@@ -716,9 +716,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-
         Tinebase_Exception::log($e);
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
 
         if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Lock wait timeout exceeded/', $e->getMessage())) {
             throw new Tinebase_Exception_Backend_Database_LockTimeout($e->getMessage());
