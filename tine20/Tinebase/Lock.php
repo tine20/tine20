@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -15,6 +15,8 @@
  */
 class Tinebase_Lock
 {
+    protected static $mysqlLockId = null;
+
     /**
      * @param string $id
      * @return bool|null bool on success / failure, null if not supported
@@ -26,6 +28,9 @@ class Tinebase_Lock
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $id = sha1($id);
+            if (null !== static::$mysqlLockId && $id !== static::$mysqlLockId) {
+                throw new Tinebase_Exception_Backend_Database('mysql only supports one lock at a time!');
+            }
             if (    ($stmt = $db->query('SELECT IS_FREE_LOCK("' . $id . '")')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
@@ -35,6 +40,7 @@ class Tinebase_Lock
                         $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                         ($row = $stmt->fetch()) &&
                         $row[0] == 1) {
+                    static::$mysqlLockId = $id;
                     return true;
                 }
             }
@@ -72,6 +78,9 @@ class Tinebase_Lock
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
                     $row[0] == 1) {
+                if (static::$mysqlLockId === $id) {
+                    static::$mysqlLockId = null;
+                }
                 return true;
             }
             return false;
