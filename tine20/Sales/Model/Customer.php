@@ -180,6 +180,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'postal_id' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => NULL,
                 )
@@ -187,6 +188,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             
             'adr_prefix1' => array(
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Prefix', //_('Prefix')
                     'shy'           => TRUE
@@ -195,6 +197,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             ),
             'adr_prefix2' => array(
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Additional Prefix', //_('Additional Prefix')
                     'shy'           => TRUE
@@ -203,6 +206,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             ),
             'adr_street' => array(
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Street', //_('Street')
                     'shy'           => TRUE
@@ -212,6 +216,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'adr_postalcode' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Postalcode', //_('Postalcode')
                     'shy'           => TRUE
@@ -220,6 +225,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'adr_locality' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Locality', //_('Locality')
                     'shy'           => TRUE
@@ -228,6 +234,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'adr_region' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Region', //_('Region')
                     'shy'           => TRUE
@@ -236,6 +243,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'adr_countryname' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Country', //_('Country')
                     'shy'           => TRUE,
@@ -245,6 +253,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'adr_pobox' => array(
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable' => false,
                     'duplicateOmit' => TRUE,
                     'label'         => 'Postbox', //_('Postbox')
                     'shy'           => TRUE
@@ -252,7 +261,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             ),
             // TODO should be marked as virtual as it's missing from the db schema
             'fulltext' => array(
-                'type' => 'string'
+                'sortable' => false,
+                'type' => 'string',
             ),
         )
     );
