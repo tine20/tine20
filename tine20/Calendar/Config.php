@@ -478,8 +478,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 self::TENTATIVE_NOTIFICATIONS_FILTER    => array(
                     'label'         => 'Additional Filter', //_('Additional Filter')
                     'description'   => 'Additional filter to limit events notifications should be send for.', //_('Additional filter to limit events notifications should be send for.')
-                    'type'          => Tinebase_Config_Abstract::TYPE_STRING,
-                    'default'       => NULL,
+                    'type'          => Tinebase_Config_Abstract::TYPE_ARRAY,
+                    'default'       => [],
                 ),
             ),
             'default'               => array(),
