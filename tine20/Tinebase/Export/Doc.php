@@ -364,9 +364,10 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $disallowedKeys = null;
         if ($property === 'customfields' && $this->_config->customfieldBlackList) {
-            $disallowedKeys = [];
-            foreach ($this->_config->customfieldBlackList as $name) {
-                $disallowedKeys[] = (string)$name;
+            if (is_string($this->_config->customfieldBlackList->name)) {
+                $disallowedKeys = [$this->_config->customfieldBlackList->name];
+            } else {
+                $disallowedKeys = $this->_config->customfieldBlackList->name->toArray();
             }
         }
 
