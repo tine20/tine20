@@ -2768,7 +2768,7 @@ msgstr "Hinzufügen zu ..."
 
 #: js/widgets/grid/GridPanel.js:1783
 msgid "Last Modified Time"
-msgstr "Letztes Modifikationsdatum"
+msgstr "Zuletzt geändert am"
 
 #: js/widgets/grid/GridPanel.js:1784
 msgid "Last Modified By"
