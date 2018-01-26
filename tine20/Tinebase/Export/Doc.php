@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -364,11 +364,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $disallowedKeys = null;
         if ($property === 'customfields' && $this->_config->customfieldBlackList) {
-            if (is_string($this->_config->customfieldBlackList->name)) {
-                $disallowedKeys = [$this->_config->customfieldBlackList->name];
-            } else {
-                $disallowedKeys = $this->_config->customfieldBlackList->name->toArray();
-            }
+            $disallowedKeys = Tinebase_Helper_ZendConfig::getChildrenStrings($this->_config->customfieldBlackList,
+                'name');
         }
 
         $recordSet = $this->_currentRecord->{$property};

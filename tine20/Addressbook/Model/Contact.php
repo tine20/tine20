@@ -497,42 +497,55 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ],
             'tel_other'                     => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_prefer'                    => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_assistent_normalized'      => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_car_normalized'            => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_cell_normalized'           => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_cell_private_normalized'   => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_fax_normalized'            => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_fax_home_normalized'       => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_home_normalized'           => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_pager_normalized'          => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_work_normalized'           => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_other_normalized'          => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_prefer_normalized'         => [
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'title'                         => [
                 'label'                         => 'Job Title', // _('Job Title')
@@ -540,6 +553,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ],
             'type'                          => [
                 'label'                         => 'Type', // _('Type')
+                'system'                        => true,
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,

@@ -93,6 +93,7 @@
  * @property array      $validatorMapping This maps field types to their default validators, just zendfw validators can be used here.
  * @property array      $converterDefaultMapping This maps field types to their default converter
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
+ * @property array      $keyfieldFields
  */
 
 class Tinebase_ModelConfiguration {
@@ -636,6 +637,13 @@ class Tinebase_ModelConfiguration {
      * @var array
     */
     protected $_datetimeFields = array();
+
+    /**
+     * holds the keyfield fields
+     *
+     * @var array
+     */
+    protected $_keyfieldFields = array();
 
     /**
      * holds the date fields (maybe we use Tinebase_Date sometimes)
@@ -1411,6 +1419,9 @@ class Tinebase_ModelConfiguration {
                     // add to datetime fields
                     $this->_datetimeFields[] = $fieldKey;
                 }
+                break;
+            case 'keyfield':
+                $this->_keyfieldFields[] = $fieldKey;
                 break;
             default:
                 break;

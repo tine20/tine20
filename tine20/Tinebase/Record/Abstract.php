@@ -1604,6 +1604,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * @return array
+     */
+    public function getValidators()
+    {
+        return $this->_validators;
+    }
+
+    /**
      * @param array $_validators
      */
     public function setValidators(array $_validators)
