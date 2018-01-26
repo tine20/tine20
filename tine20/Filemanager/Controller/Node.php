@@ -411,15 +411,26 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         // resolve path
         $parents = array();
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $appPath = '/' . $app->getId() . '/' . Tinebase_Model_Tree_Node_Path::FOLDERS_PART;
+        $appPathLen = strlen($appPath);
 
         /** @var Tinebase_Model_Tree_Node $fileNode */
         foreach($result as $fileNode) {
             if (!isset($parents[$fileNode->parent_id])) {
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($this->_backend->get($fileNode->parent_id), true));
-                $parents[$fileNode->parent_id] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($path, $app);
+                if (strpos($path, $appPath) === 0) {
+                    $parents[$fileNode->parent_id] = substr($path, $appPathLen);
+                } else {
+                    $parents[$fileNode->parent_id] = false;
+
+                }
             }
 
-            $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+            if ($parents[$fileNode->parent_id] === false) {
+                $result->removeRecord($fileNode);
+            } else {
+                $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+            }
         }
 
         $filter->ignorePinProtection();
