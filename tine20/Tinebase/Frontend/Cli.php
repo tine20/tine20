@@ -998,12 +998,40 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * nagios monitoring for tine 2.0 action queue
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringCheckQueue()
+    {
+        $result = 0;
+        $queueConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::ACTIONQUEUE);
+        if (! $queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+            $message = 'QUEUE INACTIVE';
+        } else {
+            try {
+                $queueSize = Tinebase_ActionQueue::getInstance()->getQueueSize();
+                $message = 'QUEUE OK | size=' . $queueSize . ';;;;';
+            } catch (Exception $e) {
+                $message = 'QUEUE FAIL';
+                $result = 2;
+            }
+        }
+        echo $message . "\n";
+        return $result;
+    }
+
+
+    /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
      * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
      *   -- record_type=Addressbook_Model_Contact modification_time=2013-05-08 modification_account=3263
      * 
      * @param Zend_Console_Getopt $opts
+     * @return integer
      */
     public function undo(Zend_Console_Getopt $opts)
     {
