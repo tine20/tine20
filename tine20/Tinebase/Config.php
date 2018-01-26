@@ -541,6 +541,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MASTER_PASSWORD = 'masterPassword';
 
     /**
+     * var string
+     */
+    const STATUS_API_KEY = 'statusApiKey';
+
+    /**
      * @var string
      */
     const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
@@ -1196,6 +1201,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Sentry service URI',
             //_('URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>')
             'description'           => 'URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+        ),
+        self::STATUS_API_KEY => array(
+            //_('API key to access status URI')
+            'label'                 => 'API key to access status URI',
+            //_('API key to access status URI')
+            'description'           => 'API key to access status URIs',
             'type'                  => 'string',
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,

@@ -214,12 +214,38 @@ class Tinebase_ControllerTest extends TestCase
      */
     public function testGetStatus()
     {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
-        $jsonResponse = Tinebase_Controller::getInstance()->getStatus();
+        
+        $jsonResponse = Tinebase_Controller::getInstance()->getStatus('fooobar123');
         $status = Tinebase_Helper::jsonDecode($jsonResponse->getBody()->getContents());
         self::assertTrue(isset($status['actionqueue']));
         self::assertEquals(Tinebase_Config::getInstance()->get(
             Tinebase_Config::ACTIONQUEUE)->{Tinebase_Config::ACTIONQUEUE_ACTIVE}, $status['actionqueue']['active']);
         self::assertEquals(0, $status['actionqueue']['size']);
+    }
+
+    /**
+     * testGetStatus invalid api key
+     */
+    public function testGetStatusInvalidApiKey()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
+        Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
+
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        Tinebase_Controller::getInstance()->getStatus('hahahaIhackyou!!!');
+    }
+
+    /**
+     * testGetStatus no api key
+     */
+    public function testGetStatusNoApiKey()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
+        Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
+
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        Tinebase_Controller::getInstance()->getStatus();
     }
 }
