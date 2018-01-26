@@ -1587,6 +1587,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return null;
     }
 
+    /**
+     * @param string $_property
+     * @param mixed $_diffValue
+     * @param mixed $_oldValue
+     * @return null|boolean
+     */
+    public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue)
+    {
+        return null;
+    }
+
     public static function getSortExternalMapping()
     {
         return static::$_sortExternalMapping;

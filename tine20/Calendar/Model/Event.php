@@ -253,7 +253,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $recordRrule = ! $record->rrule instanceof Calendar_Model_Rrule ? Calendar_Model_Rrule::getRruleFromString($record->rrule) : $record->rrule;
             
             $rruleDiff = $ownRrule->diff($recordRrule);
-            
+            if ($ownRrule->interval === 1 && $recordRrule->interval === 1) {
+                if (isset($ownRrule['interval']) && !isset($recordRrule['interval'])) {
+                    $rruleDiff->xprops('diff')['interval'] = null;
+                    $rruleDiff->xprops('oldData')['interval'] = 1;
+                } elseif (!isset($ownRrule['interval']) && isset($recordRrule['interval'])) {
+                    $rruleDiff->xprops('diff')['interval'] = 1;
+                    $rruleDiff->xprops('oldData')['interval'] = null;
+                }
+            }
+
             // don't take small ( < one day) rrule_until changes as diff
             if (
                     $ownRrule->until instanceof Tinebase_DateTime 
@@ -737,7 +746,33 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         return $this->summary . '(' . $this->dtstart . ' - ' . $this->dtend . ')';
     }
-    
+
+    /**
+     * @param string $_property
+     * @param mixed $_diffValue
+     * @param mixed $_oldValue
+     * @return null|boolean
+     */
+    public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue)
+    {
+        if ('rrule' === $_property) {
+            $oldRrule = new Calendar_Model_Rrule($_oldValue, true);
+            $oldRruleStr = (string)$oldRrule;
+            if ($this->rrule instanceof Calendar_Model_Rrule) {
+                $myRrule = (string)$this->rrule;
+            } else {
+                $myRrule = (string)Calendar_Model_Rrule::getRruleFromString($this->rrule);
+            }
+            if ($myRrule === $oldRruleStr) {
+                $oldRrule->applyDiff(new Tinebase_Record_Diff($_diffValue));
+                $this->rrule = $oldRrule;
+                return true;
+            }
+            return false;
+        }
+        return null;
+    }
+
     public function getTitle()
     {
         return $this->summary;

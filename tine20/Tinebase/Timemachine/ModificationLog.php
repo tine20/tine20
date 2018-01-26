@@ -318,7 +318,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         if ($_fromInstanceId) {
             $select->where($db->quoteInto($db->quoteIdentifier('instance_seq') . ' >= ?', $_fromInstanceId));
         }
-       
+
         $stmt = $db->query($select);
         $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
        
@@ -560,7 +560,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     }
     
     /**
-     * we loop over the diff! -> changes over fields which have no diff in storage are not in the loop!
+     * we loop over the diff! -> changes on fields which have no diff in storage are not in the loop!
      *
      * @param Tinebase_Record_Diff $diff
      * @param Tinebase_Record_Interface $newRecord
@@ -578,23 +578,53 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         foreach ($diffArray as $key => $value) {
             $newUserValue = isset($newRecord->$key) ? Tinebase_Helper::normalizeLineBreaks($newRecord->$key) : NULL;
-            
+            $result = $newRecord->resolveConcurrencyUpdate($key, $value, $diff->oldData[$key]);
+            if (null !== $result) {
+                if (true === $result) {
+                    continue;
+                }
+                $this->_nonResolvableConflict($newUserValue, $key, $diff);
+            }
+
+            if (is_array($value) && count($value) === 4 && isset($value['model']) && isset($value['diff'])
+                    && isset($value['oldData'])) {
+                $value = new Tinebase_Record_Diff($value);
+            } elseif (is_array($value) && count($value) === 4 &&
+                isset($value['model']) && isset($value['added']) &&
+                isset($value['removed']) && isset($value['modified'])) {
+                $value = new Tinebase_Record_RecordSetDiff($value);
+            }
+
             if (isset($newRecord->$key) && $newUserValue == Tinebase_Helper::normalizeLineBreaks($value)) {
                 //$this->_resolveScalarSameValue($newRecord, $diff);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " User updated to same value for field '" . $key . "', nothing to do.");
             
-            } else if (! isset($newRecord[$key]) || $newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->oldData[$key])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Merge current value into update data, as it was not changed in update request.');
-                if ($newRecord->has($key)) {
-                    $newRecord->$key = $value;
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' It seems that the attribute ' . $key . ' no longer exists in this record. Skipping ...');
+            } elseif (! isset($newRecord[$key])) {
+                if (!is_object($value)) {
+                    if ($newRecord->has($key)) {
+                        $newRecord->{$key} = $value;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' It seems that the attribute ' . $key . ' no longer exists in this record. Skipping ...');
+                        }
+                    }
                 }
-            
-            } else if ($newRecord[$key] instanceof Tinebase_Record_RecordSet) {
+            } elseif ($newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->oldData[$key])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Merge current value into update data, as it was not changed in update request.');
+                }
+                if ($newRecord->has($key)) {
+                    $newRecord->{$key} = $value;
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' It seems that the attribute ' . $key . ' no longer exists in this record. Skipping ...');
+                    }
+                }
+            } elseif ($newRecord[$key] instanceof Tinebase_Record_RecordSet && $value instanceof Tinebase_Record_RecordSetDiff) {
                 $this->_resolveRecordSetMergeUpdate($newRecord, $key, $value);
             
             } else {
@@ -638,7 +668,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      *
      * @param Tinebase_Record_Interface $newRecord
      * @param string $attribute
-     * @param string $newValue
+     * @param Tinebase_Record_RecordSetDiff $newValue
      * @throws Tinebase_Exception_ConcurrencyConflict
      */
     protected function _resolveRecordSetMergeUpdate(Tinebase_Record_Interface $newRecord, $attribute, $newValue)
@@ -648,9 +678,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' New record: ' . print_r($newRecord->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Mod log: ' . print_r($newValue, TRUE));
+            . ' Mod log: ' . print_r($newValue->toArray(true), TRUE));
 
-        $concurrentChangeDiff = new Tinebase_Record_RecordSetDiff($newValue);
+        $concurrentChangeDiff = $newValue;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' RecordSet diff: ' . print_r($concurrentChangeDiff->toArray(), TRUE));

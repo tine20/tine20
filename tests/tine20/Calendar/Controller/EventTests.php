@@ -135,7 +135,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
-    
+
+    /**
+     * testConcurrentUpdate
+     */
     public function testConcurrentUpdate()
     {
         $event = $this->testCreateEvent();
@@ -144,6 +147,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $resolvableConcurrentEvent1 = clone $event;
         $resolvableConcurrentEvent1->dtstart = $resolvableConcurrentEvent1->dtstart->addMonth(1);
         $resolvableConcurrentEvent1->dtend = $resolvableConcurrentEvent1->dtend->addMonth(1);
+        $resolvableConcurrentEvent1->rrule = new Calendar_Model_Rrule([
+            'freq' => 'WEEKLY',
+            'interval' => 1,
+            'wkst' => 'MO',
+            'byday' => 'TU',
+        ]);
         $resolvableConcurrentEvent1Update = $this->_controller->update($resolvableConcurrentEvent1);
         
         sleep(1);
@@ -152,6 +161,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $resolvableConcurrentEvent2Update = $this->_controller->update($resolvableConcurrentEvent2);
         
         $this->assertEquals($resolvableConcurrentEvent1Update->dtstart, $resolvableConcurrentEvent2Update->dtstart);
+        $this->assertEquals((string) $resolvableConcurrentEvent1Update->rrule, (string) $resolvableConcurrentEvent2Update->rrule);
     }
     
     public function testUpdateAttendeeStatus()
