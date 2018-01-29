@@ -198,8 +198,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             },
             menu:{
                 items:[{
-                    text: this.app.i18n._('Grid'),
-                    iconCls: 'cal-grid-view-type',
+                    text: this.app.i18n._('Loose-Leaf'),
+                    iconCls: 'cal-print-loose-leaf',
                     handler: this.onPrint.createDelegate(this, ['grid'])
                 }, {
                     text: this.app.i18n._('Sheet'),

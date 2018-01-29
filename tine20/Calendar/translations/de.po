@@ -601,9 +601,13 @@ msgstr "Drucke Seite"
 msgid "Grid"
 msgstr "Liste"
 
-#: js/MainScreenCenterPanel.js:205 js/MainScreenCenterPanel.js:220
+#: js/MainScreenCenterPanel.js:220
 msgid "Sheet"
 msgstr "Blatt"
+
+#: js/MainScreenCenterPanel.js:201
+msgid "Loose-Leaf"
+msgstr "Ringbuch"
 
 #: js/MainScreenCenterPanel.js:250
 msgid "Timeline"
