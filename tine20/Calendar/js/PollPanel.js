@@ -294,12 +294,12 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
         var _ = window.lodash,
             me = this;
 
+        // load poll
+        me.onPollLoad(this.editDialog.record.get('poll_id'));
+        
         this.alternativeEventsGrid.afterIsRendered().then(function() {
             // preset quickadd
             me.alternativeEventsGrid.getCols(true)[0].quickaddField.setValue(me.editDialog.record.get('dtstart'));
-
-            // load poll
-            me.onPollLoad(this.editDialog.record.get('poll_id'));
         });
     },
 
