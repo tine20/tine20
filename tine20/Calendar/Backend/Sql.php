@@ -649,7 +649,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $events->addIndices(array('rrule', 'recurid'));
         
         foreach ($_rawData as $rawEvent) {
-            $rawEvent['rrule_constraints'] = Tinebase_Helper::is_json($rawEvent['rrule_constraints']) ?
+            $rawEvent['rrule_constraints'] = isset($rawEvent['rrule_constraints']) && Tinebase_Helper::is_json($rawEvent['rrule_constraints']) ?
                 json_decode($rawEvent['rrule_constraints'], true) : NULL;
 
             $events->addRecord(new Calendar_Model_Event($rawEvent, true));
