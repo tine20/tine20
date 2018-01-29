@@ -568,8 +568,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $eventRecord = new Calendar_Model_Event([], TRUE);
             $eventRecord->setFromJsonInUsersTimezone($event);
 
-            if ($eventRecord->dtstart === null || empty($eventRecord->getId()) || empty($eventRecord->uid)) {
+            if ($eventRecord->dtstart === null || empty($eventRecord->getId())) {
                 continue;
+            }
+
+            if (empty($eventRecord->uid)) {
+                $eventRecord->uid = Tinebase_Record_Abstract::generateUID();
             }
 
             $eventPeriods = $calendarController->getBlockingPeriods($eventRecord, [
