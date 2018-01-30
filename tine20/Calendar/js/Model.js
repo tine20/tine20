@@ -840,15 +840,18 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
     return attendeeRecord;
 };
 
+Tine.Calendar.Model.Attender.getAttendeeStore.signatureDelimiter = ';';
+
 Tine.Calendar.Model.Attender.getAttendeeStore.getSignature = function(attendee) {
     var _ = window.lodash;
 
     attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
-    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, attendee.role].join('/');
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, attendee.role]
+        .join(Tine.Calendar.Model.Attender.getAttendeeStore.signatureDelimiter);
 };
 
 Tine.Calendar.Model.Attender.getAttendeeStore.fromSignature = function(signatureId) {
-    var ids = signatureId.split('/');
+    var ids = signatureId.split(Tine.Calendar.Model.Attender.getAttendeeStore.signatureDelimiter);
 
     return new Tine.Calendar.Model.Attender({
         cal_event_id: ids[0],
