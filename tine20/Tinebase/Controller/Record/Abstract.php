@@ -762,6 +762,11 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Found ' . count($duplicates) . ' duplicate(s).');
 
+            // fetch tags here as they are not included yet - this is important when importing records with merge strategy
+            if ($_record->has('tags')) {
+                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($duplicates);
+            }
+
             $ted = new Tinebase_Exception_Duplicate('Duplicate record(s) found');
             $ted->setModelName($this->_modelName);
             $ted->setData($duplicates);

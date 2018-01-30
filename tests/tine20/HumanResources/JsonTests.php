@@ -4,14 +4,9 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -199,18 +194,25 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $e = $this->_getEmployee();
         $e->contracts = array($this->_getContract()->toArray());
-        $savedEmployee = $this->_json->saveEmployee($e->toArray());
-
-        $exception = new Tinebase_Exception();
+        $e->tags = [[
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => 'hr test tag',
+            'description'    => 'testDuplicateException',
+            'color'         => '#009B31',
+        ]];
+        $this->_json->saveEmployee($e->toArray());
 
         try {
             $e = $this->_getEmployee();
             $e->contracts = array($this->_getContract()->toArray());
-            $savedEmployee = $this->_json->saveEmployee($e->toArray());
+            $this->_json->saveEmployee($e->toArray());
+            self::fail('duplicate exception expected');
         } catch (Tinebase_Exception_Duplicate $exception) {
+            $duplicates = $exception->getData();
+            self::assertGreaterThan(0, count($duplicates));
+            self::assertEquals(1, count($duplicates->getFirstRecord()->tags));
+            self::assertEquals(629, $exception->getCode());
         }
-
-        $this->assertEquals($exception->getCode(), 629);
     }
 
     /**
