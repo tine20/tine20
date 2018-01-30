@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -23,7 +23,7 @@ class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
      */
     public function testModelCreationTraditional()
     {
-        $contact = new Addressbook_Model_Contact(array('n_family' => 'Spencer', 'n_given' => 'Bud'));
+        $contact = new Addressbook_Model_Industry([], true);
         $cObj = $contact->getConfiguration();
 
         // at first this is just null

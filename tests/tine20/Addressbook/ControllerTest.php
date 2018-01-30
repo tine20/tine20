@@ -44,14 +44,7 @@ class Addressbook_ControllerTest extends TestCase
 
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
 
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        
-        $container = $personalContainer[0];
+        $container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
         
         $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -271,6 +264,7 @@ class Addressbook_ControllerTest extends TestCase
         $contact = $this->_addContact();
         
         $this->objects['updatedContact']->setId($contact->getId());
+        $date = Tinebase_DateTime::now()->subSecond(1);
         $contact = $this->_instance->update($this->objects['updatedContact']);
 
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
@@ -282,9 +276,9 @@ class Addressbook_ControllerTest extends TestCase
         $count = $this->_instance->searchCount($filter);
         $this->assertTrue($count > 0);
         
-        $date = Tinebase_DateTime::now();
+        $date = Tinebase_DateTime::now()->subSecond(5);
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'last_modified_time', 'operator' => 'equals', 'value' => $date->toString('Y-m-d'))
+            array('field' => 'last_modified_time', 'operator' => 'after', 'value' => $date)
         ));
         $count = $this->_instance->searchCount($filter);
         $this->assertTrue($count > 0);
@@ -383,29 +377,6 @@ class Addressbook_ControllerTest extends TestCase
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
-            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
-        ));
-        $count2 = $this->_instance->searchCount($filter);
-        $this->assertEquals($count1, $count2);
-    }
-    
-    /**
-     * test equals operator of creation time filter
-     */
-    public function testCreationTimeEqualsOperator()
-    {
-        $contact = $this->_addContact();
-        
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
-        ));
-        $count1 = $this->_instance->searchCount($filter);
-        
-        $date = Tinebase_DateTime::now();
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('Y-m-d')),
             array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));

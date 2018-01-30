@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,151 +19,9 @@
 class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
+     * if this is set, the filtergroup will be created using the configurationObject for this model
+     *
+     * @var string
      */
-    protected $_className = 'Addressbook_Model_ContactFilter';
-    
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'Addressbook';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Addressbook_Model_Contact';
-    
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'id'                   => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
-        'query'                => array(
-            'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality', 'note'))
-        ),
-        'path'                => array(
-            'filter' => 'Tinebase_Model_Filter_Path',
-            'options' => array()
-        ),
-        'list'                 => array('filter' => 'Addressbook_Model_ListMemberFilter'),
-        'list_role_id'         => array('filter' => 'Addressbook_Model_ListRoleMemberFilter'),
-        'telephone'            => array(
-            'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array(
-                'tel_assistent',
-                'tel_car',
-                'tel_cell',
-                'tel_cell_private',
-                'tel_fax',
-                'tel_fax_home',
-                'tel_home',
-                'tel_other',
-                'tel_pager',
-                'tel_prefer',
-                'tel_work'
-            ))
-        ),
-        'telephone_normalized' => array(
-            'filter' => 'Tinebase_Model_Filter_Query',
-            'options' => array('fields' => array(
-                'tel_assistent_normalized',
-                'tel_car_normalized',
-                'tel_cell_normalized',
-                'tel_cell_private_normalized',
-                'tel_fax_normalized',
-                'tel_fax_home_normalized',
-                'tel_home_normalized',
-                'tel_other_normalized',
-                'tel_pager_normalized',
-                'tel_prefer_normalized',
-                'tel_work_normalized'
-            ))
-        ),
-        'email_query'          => array(
-            'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array(
-                'email',
-                'email_home',
-            ))
-        ),
-        'n_given'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'n_family'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'n_fileas'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'n_prefix'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'n_suffix'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'org_unit'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'room'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'title'                => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_region'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_countryname'  => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_one_lon'          => array('filter' => 'Tinebase_Model_Filter_Float'),
-        'adr_one_lat'          => array('filter' => 'Tinebase_Model_Filter_Float'),
-        'adr_two_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_two_region'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_two_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_two_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_two_countryname'  => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'adr_two_lon'          => array('filter' => 'Tinebase_Model_Filter_Float'),
-        'adr_two_lat'          => array('filter' => 'Tinebase_Model_Filter_Float'),
-        'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'email_home'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_assistent'        => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_car'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_cell'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_cell_private'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_fax'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_fax_home'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_home'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_other'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_pager'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_work'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_prefer'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_assistent_normalized'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_car_normalized'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_cell_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_cell_private_normalized'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_fax_normalized'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_fax_home_normalized'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_home_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_other_normalized'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_pager_normalized'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_prefer_normalized'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tel_work_normalized'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'note'                 => array('filter' => 'Tinebase_Model_Filter_FullText'),
-        'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'assistent'            => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-            'idProperty' => 'addressbook.id',
-            'applicationName' => 'Addressbook',
-        )),
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
-        'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
-        'showDisabled'         => array('filter' => 'Addressbook_Model_ContactHiddenFilter', 'options' => array(
-            'requiredCols'  => array('account_id' => 'accounts.id')
-        )),
-        'salutation'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'industry'             => array(
-            'filter' => 'Tinebase_Model_Filter_ForeignId',
-            'options' => array(
-                    'filtergroup' => 'Addressbook_Model_IndustryFilter',
-                    'controller' => 'Addressbook_Controller_Industry'
-            )
-        ),
-    );
+    protected $_configuredModel = Addressbook_Model_Contact::class;
 }

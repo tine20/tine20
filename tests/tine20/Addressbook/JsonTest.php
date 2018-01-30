@@ -401,8 +401,7 @@ class Addressbook_JsonTest extends TestCase
 
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 '. $translate->_('added') .': ');
-        $this->_checkChangedNote($record['id'], ') customfields ( ->  ');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( ->  YomiName: PHPUNIT_multipleUpdate) relations (1 '. $translate->_('added') .': ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);

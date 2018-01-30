@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -782,29 +782,27 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_filterModelMapping = array(
-        'date'     => 'Tinebase_Model_Filter_Date',
-        'datetime' => 'Tinebase_Model_Filter_DateTime',
-        'time'     => 'Tinebase_Model_Filter_Date',
-        'string'   => 'Tinebase_Model_Filter_Text',
-        'stringAutocomplete'   => 'Tinebase_Model_Filter_Text',
-        'text'     => 'Tinebase_Model_Filter_Text',
-        'fulltext' => 'Tinebase_Model_Filter_FullText',
-        'json'     => 'Tinebase_Model_Filter_Text',
-        'boolean'  => 'Tinebase_Model_Filter_Bool',
-        'integer'  => 'Tinebase_Model_Filter_Int',
-        'float'    => 'Tinebase_Model_Filter_Float',
-        'money'    => 'Tinebase_Model_Filter_Float',
-        'record'   => 'Tinebase_Model_Filter_ForeignId',
-        'records'  => 'Tinebase_Model_Filter_ForeignRecords',
-        'relation' => 'Tinebase_Model_Filter_Relation',
-
-        'keyfield'  => 'Tinebase_Model_Filter_Text',
-        'container' => 'Tinebase_Model_Filter_Container',
-        'tag'       => 'Tinebase_Model_Filter_Tag',
-        'user'      => 'Tinebase_Model_Filter_User',
-
-        'numberableStr' => 'Tinebase_Model_Filter_Text',
-        'numberableInt' => 'Tinebase_Model_Filter_Int',
+        'date'                  => Tinebase_Model_Filter_Date::class,
+        'datetime'              => Tinebase_Model_Filter_DateTime::class,
+        'time'                  => Tinebase_Model_Filter_Date::class,
+        'string'                => Tinebase_Model_Filter_Text::class,
+        'stringAutocomplete'    => Tinebase_Model_Filter_Text::class,
+        'text'                  => Tinebase_Model_Filter_Text::class,
+        'fulltext'              => Tinebase_Model_Filter_FullText::class,
+        'json'                  => Tinebase_Model_Filter_Text::class,
+        'boolean'               => Tinebase_Model_Filter_Bool::class,
+        'integer'               => Tinebase_Model_Filter_Int::class,
+        'float'                 => Tinebase_Model_Filter_Float::class,
+        'money'                 => Tinebase_Model_Filter_Float::class,
+        'record'                => Tinebase_Model_Filter_ForeignId::class,
+        'records'               => Tinebase_Model_Filter_ForeignRecords::class,
+        'relation'              => Tinebase_Model_Filter_Relation::class,
+        'keyfield'              => Tinebase_Model_Filter_Text::class,
+        'container'             => Tinebase_Model_Filter_Container::class,
+        'tag'                   => Tinebase_Model_Filter_Tag::class,
+        'user'                  => Tinebase_Model_Filter_User::class,
+        'numberableStr'         => Tinebase_Model_Filter_Text::class,
+        'numberableInt'         => Tinebase_Model_Filter_Int::class,
     );
 
     /**
@@ -921,6 +919,13 @@ class Tinebase_ModelConfiguration {
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'length' => 40,
             'shy' => true,
+            'filterDefinition'  => [
+                'filter'    => 'Tinebase_Model_Filter_Id',
+                'options'   => [
+                    'idProperty'    => $this->_idProperty,
+                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                ]
+            ]
         );
 
         if ($this->_hasCustomFields) {
@@ -1116,7 +1121,7 @@ class Tinebase_ModelConfiguration {
                         $reflect  = new ReflectionClass($if);
                         $this->_filters[$fieldKey][] = $reflect->newInstanceArgs($val);
                     } else {
-                        $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
+                        $this->_filters[$fieldKey][] = $if && !is_int($if) ? new $if($val) : new $val();
                     }
                 }
             } elseif (isset($this->_inputFilterDefaultMapping[$fieldDef['type']])) {
@@ -1151,7 +1156,15 @@ class Tinebase_ModelConfiguration {
         if (count($queryFilters)) {
             $this->_getQueryFilter($queryFilters);
         }
-        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
+        if (!isset($this->_filterModel[$this->_idProperty])) {
+            $this->_filterModel[$this->_idProperty] = [
+                'filter'    => 'Tinebase_Model_Filter_Id',
+                'options'   => [
+                    'idProperty'    => $this->_idProperty,
+                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                ]
+            ];
+        }
         $this->_fieldKeys = array_keys($this->_fields);
     }
 
