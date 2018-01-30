@@ -58,7 +58,7 @@ module.exports = {
         port: 10443,
         proxy: [
             {
-                context: ['**', '!/webpack-dev-server'],
+                context: ['**', '!/webpack-dev-server*/**'],
                 target: 'http://localhost/',
                 secure: false
             }
