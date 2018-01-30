@@ -311,7 +311,9 @@ Ext.ux.form.PeriodPicker.getPeriod = function(startDate, range, includeUntil) {
  * @return {String} range day|week|month|year
  */
 Ext.ux.form.PeriodPicker.getRange = function(period) {
-    var ms = period.from.getElapsed(period.until),
+    var from = Ext.isDate(period.from) ? period.from : new Date(period.from),
+        until = Ext.isDate(period.until) ? period.until : new Date(period.until),
+        ms = from.getElapsed(until),
         msDay = 86400000;
 
     if (ms > msDay * 300) {
