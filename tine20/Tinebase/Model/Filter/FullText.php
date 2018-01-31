@@ -62,7 +62,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         }
         // mysql supports full text for InnoDB as of 5.6.4
         // full text can't do a pure negative search...
-        $useMysqlFullText = false === $not && Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4');
+        $useMysqlFullText = false === $not && Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5');
 
         $values = static::sanitizeValue($this->_value, $useMysqlFullText);
 
@@ -78,7 +78,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         if (false === $useMysqlFullText) {
 
             if (false === $not && Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
+                ' full text search is only supported on mysql 5.6.4+ / mariadb 10.0.5+ ... do yourself a favor and migrate. This query now maybe very slow for larger amount of data!');
 
             $filterGroup = new Tinebase_Model_Filter_FilterGroup(array(), $in ?
                 Tinebase_Model_Filter_FilterGroup::CONDITION_OR : Tinebase_Model_Filter_FilterGroup::CONDITION_AND);

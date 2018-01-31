@@ -80,7 +80,7 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
      */
     public static function checkCapabilities()
     {
-        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.7.5')) {
+        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.7.5 | mariadb >= 10.0.2')) {
             static::$supportsMultipleLocks = true;
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

@@ -539,7 +539,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             return 0;
         }
 
-        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
                 SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
                 $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.creation_time < "' . date('Y-m-d H:i:s', time() - 3600 * 24 * 30 * $months) . '"');
