@@ -51,7 +51,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @var array (app id + modelname => Tinebase_Record_RecordSet with cfs)
      */
     protected $_cfByApplicationCache = array();
-    
+
     /**
      * holds the instance of the singleton
      *
@@ -570,7 +570,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             if ($type === 'record') {
                 $result = $controller->get($value)->toArray();
             } else {
+                // prevent recursion
+                $current = $controller->resolveCustomfields(false);
                 $result = $controller->getMultiple(Tinebase_Helper::jsonDecode($value))->toArray();
+                $controller->resolveCustomfields($current);
             }
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
