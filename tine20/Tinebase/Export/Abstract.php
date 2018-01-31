@@ -923,6 +923,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                                 }
                             }
                         }
+
+                        if ($text === null && $revertedText === null) {
+                            foreach ($cfg['config'] as $cfg1) {
+                                if ($relation->type === $cfg1['type']) {
+                                    $relatedApp = $cfg['relatedApp'];
+                                    $text = $cfg1['text'];
+                                    break 2;
+                                }
+                            }
+                        }
                     }
                 }
                 if (null === $text && null !== $revertedText) {
