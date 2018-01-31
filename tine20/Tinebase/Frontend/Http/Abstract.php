@@ -266,4 +266,34 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             }
         }
     }
+
+    /**
+     * receives file uploads and stores it in the file_uploads db
+     *
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _uploadTempFile()
+    {
+        try {
+            // close session to allow other requests
+            Tinebase_Session::writeClose(true);
+
+            $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
+
+            die(Zend_Json::encode(array(
+                'status'   => 'success',
+                'tempFile' => $tempFile->toArray(),
+            )));
+        } catch (Tinebase_Exception $exception) {
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
+
+            if (! headers_sent()) {
+                header("HTTP/1.0 500 Internal Server Error");
+            }
+            die(Zend_Json::encode(array(
+                'status'   => 'failed',
+            )));
+        }
+    }
 }
