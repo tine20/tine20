@@ -105,6 +105,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @var string
      */
     protected $_externalInstanceId = NULL;
+
+    protected $_readModificationLogFromMasterLockId = null;
     
     /**
      * the singleton pattern
@@ -1291,18 +1293,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
+        $this->_readModificationLogFromMasterLockId = __METHOD__;
         $result = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (false === $result) {
             // we are already running
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                ' failed to aquire DB lock, it seems we are already running in a parallel process.');
+                ' failed to aquire multi server lock, it seems we are already running in a parallel process.');
             return true;
-        }
-        if (null === $result) {
-            // DB backend does not suppport lock, no way we do replication without proper thread concurrency!
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                ' failed to aquire DB lock, the DB backend doesn\'t support locks. You should not run a replication on this type of DB backend!');
-            return false;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -1362,6 +1359,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+        $lock = null;
+        if (null !== $this->_readModificationLogFromMasterLockId) {
+            $lock = Tinebase_Core::getMultiServerLock($this->_readModificationLogFromMasterLockId);
+        }
 
         /** @var Tinebase_Model_ModificationLog $modification */
         foreach($modifications as $modification)
@@ -1390,6 +1391,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $tinebaseApplication->xprops('state')[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
                     $modification->instance_seq;
                 $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
+
+                if (null !== $lock && !$lock->isLocked()) {
+                    throw new Tinebase_Exception_Backend('lock of type ' . get_class($lock) . ' lost lock');
+                }
 
                 $transactionManager->commitTransaction($transactionId);
 
