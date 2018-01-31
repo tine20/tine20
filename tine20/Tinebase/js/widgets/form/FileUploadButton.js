@@ -23,7 +23,17 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
      * array with allowed file types (for example: ['jpg', 'gif', 'png']
      */
     allowedTypes: null,
-    
+
+    /**
+     * @cfg {String} uploadTempFileMethod
+     */
+    uploadTempFileMethod: 'Tinebase.uploadTempFile',
+
+    /**
+     * @cfg {String} uploadUrl
+     */
+    uploadUrl: 'index.php',
+
     /**
      * @property browsePlugin
      * @type Ext.ux.file.BrowsePlugin
@@ -69,7 +79,9 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
         }
         
         this.upload = new Ext.ux.file.Upload({
-            fileSelector: fileSelector
+            fileSelector: fileSelector,
+            uploadTempFileMethod: this.uploadTempFileMethod,
+            url: this.uploadUrl
         });
         this.upload.on('uploadcomplete', this.onUploadComplete, this);
         
