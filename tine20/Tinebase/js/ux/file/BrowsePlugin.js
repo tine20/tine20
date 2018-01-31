@@ -57,7 +57,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
     /**
      * @property inputFileEl
      * @type Ext.Element
-     * Element for the hiden file input.
+     * Element for the hidden file input.
      * @private
      */
     input_file: null,

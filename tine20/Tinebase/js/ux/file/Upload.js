@@ -188,7 +188,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * size of the file to upload
      */
     fileSize: 0,
-    
+
+    /**
+     * method for uploading temp file
+     */
+    uploadTempFileMethod: 'Tinebase.uploadTempFile',
     
     /**
      * creates a form where the upload takes place in
@@ -306,7 +310,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         var conn = new Ext.data.Connection({
             disableCaching: true,
             method: 'POST',
-            url: this.url + '?method=Tinebase.uploadTempFile',
+            url: this.url + '?method=' + this.uploadTempFileMethod,
             timeout: 300000, // 5 mins
             defaultHeaders: defaultHeaders
         });
@@ -546,7 +550,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             success: this.onUploadSuccess.createDelegate(this, [this.fileRecord], true),
             failure: this.onUploadFail.createDelegate(this, [this.fileRecord], true),
             params: {
-                method: 'Tinebase.uploadTempFile',
+                method: this.uploadTempFileMethod,
                 requestType: 'HTTP'
             }
         });
