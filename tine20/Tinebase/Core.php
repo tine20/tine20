@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -2006,7 +2006,7 @@ class Tinebase_Core
      */
     public static function acquireMultiServerLock($id)
     {
-        $result = Tinebase_Lock::aquireDBSessionLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
         if ( true === $result || null === $result ) {
             return true;
         }
@@ -2021,11 +2021,20 @@ class Tinebase_Core
      */
     public static function releaseMultiServerLock($id)
     {
-        $result = Tinebase_Lock::releaseDBSessionLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::releaseLock($id . '::' . static::getTinebaseId());
         if ( true === $result || null === $result ) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param string $id
+     * @return Tinebase_Lock_Interface
+     */
+    public static function getMultiServerLock($id)
+    {
+        return Tinebase_Lock::getLock($id . '::' . static::getTinebaseId());
     }
 
     /**

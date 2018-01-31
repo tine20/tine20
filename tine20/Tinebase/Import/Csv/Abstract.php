@@ -142,7 +142,10 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         $data = array();
         $_data_indexed = array();
         
-        if (! empty($this->_headline) && sizeof($this->_headline) == sizeof($_data)) {
+        if (! empty($this->_headline)) {
+            if (sizeof($this->_headline) != sizeof($_data)) {
+                $_data = array_merge($_data, array_fill(sizeof($_data), sizeof($this->_headline)-sizeof($_data), ''));
+            }
             $_data_indexed = array_combine($this->_headline, $_data);
         }
 

@@ -15,90 +15,96 @@
  */
 class Tinebase_Lock
 {
-    protected static $mysqlLockId = null;
+    protected static $locks = [];
 
+    /**
+     * @var string
+     */
+    protected static $backend = null;
+
+    /**
+     * @param $id
+     * @return Tinebase_Lock_Interface
+     */
+    public static function getLock($id)
+    {
+        $id = static::preFixId($id);
+        if (!isset(static::$locks[$id])) {
+            static::$locks[$id] = static::getBackend($id);
+        }
+        return static::$locks[$id];
+    }
     /**
      * @param string $id
      * @return bool|null bool on success / failure, null if not supported
      */
-    public static function aquireDBSessionLock($id)
+    public static function tryAcquireLock($id)
     {
-        $id = 'tine20_' . $id;
-        $db = Tinebase_Core::getDb();
-
-        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $id = sha1($id);
-            if (null !== static::$mysqlLockId && $id !== static::$mysqlLockId) {
-                throw new Tinebase_Exception_Backend_Database('mysql only supports one lock at a time!');
-            }
-            if (    ($stmt = $db->query('SELECT IS_FREE_LOCK("' . $id . '")')) &&
-                    $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                    ($row = $stmt->fetch()) &&
-                    $row[0] == 1) {
-                $stmt->closeCursor();
-                if (    ($stmt = $db->query('SELECT GET_LOCK("' . $id . '", 1)')) &&
-                        $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                        ($row = $stmt->fetch()) &&
-                        $row[0] == 1) {
-                    static::$mysqlLockId = $id;
-                    return true;
-                }
-            }
-            return false;
-
-        } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $id = sha1($id, true);
-            $intId = unpack('N', $id);
-            if (    ($stmt = $db->query('SELECT pg_try_advisory_lock(' . current($intId) . ')')) &&
-                    $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                    ($row = $stmt->fetch()) &&
-                    $row[0] == 1) {
-                return true;
-            }
-            return false;
-
-        } else {
-            // not implemented / supported
+        $id = static::preFixId($id);
+        if (isset(static::$locks[$id])) {
+            return static::$locks[$id]->tryAcquire();
+        }
+        if (($lock = static::getBackend($id)) === null) {
             return null;
         }
+        static::$locks[$id] = $lock;
+        return $lock->tryAcquire();
     }
 
     /**
      * @param string $id
      * @return bool|null bool on success / failure, null if not supported
      */
-    public static function releaseDBSessionLock($id)
+    public static function releaseLock($id)
     {
-        $id = 'tine20_' . $id;
-        $db = Tinebase_Core::getDb();
-
-        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $id = sha1($id);
-            if (    ($stmt = $db->query('SELECT RELEASE_LOCK("' . $id . '")')) &&
-                    $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                    ($row = $stmt->fetch()) &&
-                    $row[0] == 1) {
-                if (static::$mysqlLockId === $id) {
-                    static::$mysqlLockId = null;
-                }
-                return true;
-            }
-            return false;
-
-        } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $id = sha1($id, true);
-            $intId = unpack('N', $id);
-            if (    ($stmt = $db->query('SELECT pg_advisory_unlock(' . current($intId) . ')')) &&
-                $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                ($row = $stmt->fetch()) &&
-                $row[0] == 1) {
-                return true;
-            }
-            return false;
-
-        } else {
-            // not implemented / supported
+        $id = static::preFixId($id);
+        if (isset(static::$locks[$id])) {
+            return static::$locks[$id]->release();
+        }
+        if (static::getBackend($id) === null) {
             return null;
         }
+        return false;
+    }
+
+    public static function preFixId($id)
+    {
+        return 'tine20_' . $id;
+    }
+    /**
+     * @param string $id
+     * @return Tinebase_Lock_Interface
+     */
+    protected static function getBackend($id)
+    {
+        if (null === static::$backend) {
+            $config = Tinebase_Config::getInstance();
+            $cachingBackend = null;
+            if ($config->caching && $config->caching->backend) {
+                $cachingBackend = ucfirst($config->caching->backend);
+            }
+            $db = Tinebase_Core::getDb();
+            if ($cachingBackend === 'Redis' && extension_loaded('redis')) {
+                $host = $config->caching->host ? $config->caching->host :
+                    ($config->caching->redis && $config->caching->redis->host ?
+                        $config->caching->redis->host : 'localhost');
+                $port = $config->caching->port ? $config->caching->port :
+                    ($config->caching->redis && $config->caching->redis->port ? $config->caching->redis->port : 6379);
+                static::$backend = Tinebase_Lock_Redis::class;
+                Tinebase_Lock_Redis::connect($host, $port);
+            } elseif ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                static::$backend = Tinebase_Lock_Mysql::class;
+                Tinebase_Lock_Mysql::checkCapabilities();
+            } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                static::$backend = Tinebase_Lock_Pgsql::class;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ .' no lock backend found');
+                return null;
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                .' lock backend is: ' . static::$backend);
+        }
+        return new static::$backend($id);
     }
 }

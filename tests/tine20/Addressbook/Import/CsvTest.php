@@ -360,4 +360,14 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->assertEquals(2, $result['totalcount'], print_r($result, true));
         $this->assertEquals(2, count(array_unique($result['results']->getArrayOfIds())));
     }
+
+    public function testImportOutlook2013()
+    {
+        $definition = $this->_getDefinitionFromFile('../../../../../tine20/Addressbook/Import/definitions/adb_outlook_import_csv.xml');
+
+        $this->_filename = dirname(__FILE__) . '/files/importtest_outlook2013.csv';
+
+        $result = $this->_doImport(array('dryrun' => true), $definition);
+        $this->assertEquals('c.baumann@unittest.de', $result['results'][0]->email);
+    }
 }
