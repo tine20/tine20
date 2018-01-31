@@ -118,7 +118,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
 
     getBodyItems: function() {
         var modelConfig = this.recordClass.getModelConfiguration(),
-            fieldsToExclude = ['tags', 'notes', 'attachments', 'relations', 'customfields',
+            fieldsToExclude = ['alarms', 'tags', 'notes', 'attachments', 'relations', 'customfields',
                 this.recordClass.getMeta('idProperty'),
                 this.recordClass.getMeta('titleProperty'),
                 this.recordClass.getMeta('containerProperty')
