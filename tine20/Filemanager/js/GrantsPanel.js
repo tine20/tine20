@@ -46,10 +46,10 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             disabled: true,
             hidden: ! Tine.Tinebase.registry.get('secondFactor'),
-            boxLabel: this.app.i18n._('This folder is pin protected')
+            boxLabel: this.app.i18n._('Data safe: needs PIN to unlock')
         });
         this.pinProtectionDescription = new Ext.form.Label({
-            text: this.app.i18n._("If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents.")
+            text: this.app.i18n._("If PIN protection is enabled, users have to authenticate with their PIN before they can access the folder contents.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             downloadGrantTitle: 'Download', // i18n._('Download')

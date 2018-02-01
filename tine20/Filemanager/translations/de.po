@@ -367,11 +367,11 @@ msgid "Grants of a folder also apply recursively for all of its sub folders as l
 msgstr "Berechtigungen gelten ebenfalls rekursiv für alle Unterordner sofern diese nicht über eigene Berechtigungen verfügen."
 
 #: js/GrantsPanel.js:49
-msgid "This folder is pin protected"
-msgstr "Dieser Ordner ist PIN-geschützt"
+msgid "Data safe: needs PIN to unlock"
+msgstr "Datentresor: Erfordert PIN"
 
 #: js/GrantsPanel.js:52
-msgid "If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents."
+msgid "If PIN protection is enabled, users have to authenticate with their PIN before they can access the folder contents."
 msgstr "Wenn PIN-Schutz aktiviert ist, müssen sich Benutzer  mit ihrem PIN authentifizieren, bevor Sie auf den Ordnerinhalt zugreifen können."
 
 #: js/GrantsPanel.js:56
