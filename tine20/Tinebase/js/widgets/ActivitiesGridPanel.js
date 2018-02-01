@@ -340,8 +340,11 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             valueField: 'type_id',
             mode: 'local',
             displayField: 'name',
-            labelAlign: 'top',
-            region: 'north'
+            fieldLabel: i18n._('Type'),
+            forceSelection: true,
+            allowEmpty: false,
+            editable: false,
+            anchor: '100% 100%'
         });
 
         this.typeComboBox.setValue(typeId || 1);
@@ -350,8 +353,8 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             labelAlign: 'top',
             border: false,
             frame: true,
-            region: 'center',
             items: [
+                this.typeComboBox,
                 {
                     xtype: 'textarea',
                     name: 'notification',
@@ -407,20 +410,12 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.window = Tine.WindowFactory.getWindow({
             title: i18n._('Add Note'),
             width: 500,
-            height: 260,
+            height: 450,
             modal: true,
             actionAlign: 'right',
             border: false,
             buttons: this.buttons,
-            items: {
-                xtype: 'panel',
-                layout: 'border',
-                anchor: '100% 100%',
-                items: [
-                    this.typeComboBox,
-                    this.formPanel
-                ]
-            }
+            items: this.formPanel
         });
     },
 
