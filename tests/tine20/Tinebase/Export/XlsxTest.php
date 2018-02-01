@@ -138,6 +138,10 @@ class Tinebase_Export_XlsxTest extends TestCase
         $nameIndex = array_search('Last Name', $arrayData[0], true);
         static::assertEquals($testContact->n_family, $arrayData[1][$nameIndex]);
         
+        // test resolving of user fields
+        $createdByIndex = array_search('Created By', $arrayData[0], true);
+        static::assertEquals(Tinebase_Core::getUser()->accountDisplayName, $arrayData[1][$createdByIndex]);
+        
         foreach ($testContact->getFields() as $field) {
             if ('customfields' === $field) {
                 static::assertFalse(in_array($field, $arrayData[0]), 'mustn\'t find customfields in ' . $printRdata0);
