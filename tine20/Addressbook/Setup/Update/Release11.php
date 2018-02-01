@@ -101,4 +101,20 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '11.6');
     }
+
+    /**
+     * update to 11.7
+     *
+     * Update export templates
+     *
+     * @return void
+     * @throws \Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function update_6()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+
+        $this->setApplicationVersion('Addressbook', '11.7');
+    }
 }

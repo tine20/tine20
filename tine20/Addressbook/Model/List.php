@@ -260,6 +260,43 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
         return $result;
     }
+
+    /**
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getListMembersWithFunctions()
+    {
+        // @todo huge crap messed up by currently broken resolving.
+        if (is_string($this->members) || empty($this->members)) {
+            $members = Addressbook_Controller_List::getInstance()->get($this->getId())->members;
+        } else {
+            $members = $this->members;
+        }
+        
+        $roles = Addressbook_Controller_List::getInstance()->getMemberRolesBackend()->search(new Addressbook_Model_ListMemberRoleFilter([
+            'list_id' => $this->getId()
+        ]));
+        
+        $membersWithRoles = [];
+        
+        foreach($members as $memberId) {
+            if (!($memberRole = $roles->filter('contact_id', $memberId)->getFirstRecord())) {
+                $membersWithRoles[] = Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle();
+                continue;
+            }
+
+            $membersWithRoles[] = \sprintf(
+                '%s (%s)',
+                Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle(),
+                Addressbook_Controller_ListRole::getInstance()->get($memberRole->list_role_id)->getTitle()
+            );
+        }
+        
+        return implode(', ', $membersWithRoles);
+    }
+    
     /**
      * @return bool
      */
