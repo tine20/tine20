@@ -395,6 +395,10 @@ class Tinebase_ModelConfiguration {
      *
      * - shy: If this is set to true, the row for this field won't be shown in the grid, but can be activated
      * 
+     * - system: If this is set to true, fields are marked as internal or system relevant fields which are not important to be shown anywhere.
+     *           Unlike shy, the user has no option to see them. At the moment this is only implemented within the export.
+     *       @type boolean, @default: null
+     * 
      * - sortable: If this is set to false, no sort by this field is possible in the gridpanel, defaults to true
      * 
      *   // TODO: generalize, currently only in ContractGridPanel, take it from there:
