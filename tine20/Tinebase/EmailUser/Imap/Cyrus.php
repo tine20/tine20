@@ -128,8 +128,8 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
         $emailUser = new Tinebase_Model_EmailUser(array(
             'emailUsername'  => $this->_appendDomain($_user->accountLoginName),
             'emailUserId'    => $this->_appendDomain($_user->accountLoginName),
-            'emailMailQuota' => isset($quota['STORAGE']) ? round($quota['STORAGE']['limit'] / 1024) : null,
-            'emailMailSize'  => isset($quota['STORAGE']) ? round($quota['STORAGE']['usage'] / 1024) : null,
+            'emailMailQuota' => isset($quota['STORAGE']) ? round($quota['STORAGE']['limit'] * 1024) : null,
+            'emailMailSize'  => isset($quota['STORAGE']) ? round($quota['STORAGE']['usage'] * 1024) : null,
             'emailHost'     => $this->_config['host'],
             'emailPort'     => $this->_config['port'],
             'emailSecure'   => $this->_config['ssl'],
