@@ -174,7 +174,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         }
         
         $filteredHeadLine = array_filter($arrayData[0]);
-        static::assertEquals(count($testContact->getFields()) - 1 - $systemFieldCount + $cfConfigs->count(), count($filteredHeadLine),
+        static::assertEquals(count($testContact->getFields()) - 4 - $systemFieldCount + $cfConfigs->count(), count($filteredHeadLine),
             'count of fields + customfields - "customfields property" does not equal amount of headline columns');
         
         // test the relations
