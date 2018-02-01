@@ -417,6 +417,7 @@ class Setup_Controller
      *
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
+     * @throws Tinebase_Exception
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
@@ -469,6 +470,8 @@ class Setup_Controller
                 }
             }
         }
+
+        $this->_clearCache();
         
         return array(
             'messages' => $messages,
@@ -612,10 +615,8 @@ class Setup_Controller
                 break;
         }
         
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache after update ...');
-        $this->_enableCaching();
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
-        
+        $this->_clearCache();
+
         return $messages;
     }
 
