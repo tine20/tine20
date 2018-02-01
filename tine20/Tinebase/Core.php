@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -447,6 +447,10 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        Tinebase_Core::setupBuildConstants();
+
+        self::setupSentry();
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' initializing framework ('
                 . 'PID: ' . getmypid() . ')');
@@ -461,8 +465,6 @@ class Tinebase_Core
         
         Tinebase_Core::setupStreamWrapper();
 
-        Tinebase_Core::setupBuildConstants();
-        
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
@@ -2004,7 +2006,7 @@ class Tinebase_Core
      */
     public static function acquireMultiServerLock($id)
     {
-        $result = Tinebase_Lock::aquireDBSessionLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
         if ( true === $result || null === $result ) {
             return true;
         }
@@ -2019,11 +2021,20 @@ class Tinebase_Core
      */
     public static function releaseMultiServerLock($id)
     {
-        $result = Tinebase_Lock::releaseDBSessionLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::releaseLock($id . '::' . static::getTinebaseId());
         if ( true === $result || null === $result ) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param string $id
+     * @return Tinebase_Lock_Interface
+     */
+    public static function getMultiServerLock($id)
+    {
+        return Tinebase_Lock::getLock($id . '::' . static::getTinebaseId());
     }
 
     /**
@@ -2059,5 +2070,45 @@ class Tinebase_Core
         }
 
         return ! static::isReplicationSlave();
+    }
+
+    /**
+     * setup sentry Raven_Client
+     */
+    public static function setupSentry()
+    {
+        $sentryServerUri = Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI);
+        if (! $sentryServerUri) {
+            return;
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
+
+        if (! defined('TINE20_CODENAME')) {
+            self::setupBuildConstants();
+        }
+
+        $config = [
+            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
+            'tags' => array(
+                'php_version' => phpversion(),
+            ),
+        ];
+        $client = new Raven_Client($sentryServerUri, $config);
+        $error_handler = new Raven_ErrorHandler($client);
+        $error_handler->registerExceptionHandler();
+        $error_handler->registerErrorHandler();
+        $error_handler->registerShutdownFunction();
+
+        self::set('SENTRY', $client);
+    }
+
+    /**
+     * @return Raven_client|null
+     */
+    public static function getSentry()
+    {
+        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
+        return $sentryClient;
     }
 }

@@ -284,8 +284,10 @@ Tine.Filemanager.nodeActions.Download = {
     text: 'Save locally', // _('Save locally')
     iconCls: 'action_filemanager_save_all',
     disabled: true,
-    hidden: !Tine.Tinebase.configManager.get('downloadsAllowed'),
     scope: this,
+    init: function() {
+        this.hidden = !Tine.Tinebase.configManager.get('downloadsAllowed');
+    },
     handler: function() {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
     },

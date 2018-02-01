@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 - 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
@@ -65,10 +65,6 @@ class HumanResources_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('created_by',       $resolveFields);
         $this->assertArrayHasKey('last_modified_by', $resolveFields);
         $this->assertArrayHasKey('deleted_by',       $resolveFields);
-
-        $contact = new Addressbook_Model_Contact(array('n_family' => 'Spencer', 'n_given' => 'Bud'));
-        $co = $contact::getConfiguration();
-        $this->assertNull($co);
         
         // test the created filter model
         $filterModel = $employee::getConfiguration()->filterModel;

@@ -46,6 +46,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     minChars: 3,
 
     forceSelection: true,
+    minListWidth: 400,
 
     /*
      * shows date pager on bottom of the resultlist
@@ -229,9 +230,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                         var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') :
                                        Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}', 'i');
 
-                        var startYear = start.getYear() + 1900;
-                        return start.getDate() + '.' + (start.getMonth() + 1) + '.' + startYear + ' ' + duration;
-
+                        return Tine.Tinebase.common.dateTimeRenderer(start) + ' (' + duration + ')';
                     }
                 }
             );

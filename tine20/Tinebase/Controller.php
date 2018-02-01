@@ -892,4 +892,39 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         return true;
     }
+
+    public static function addFastRoutes(
+        /** @noinspection PhpUnusedParameterInspection */
+        \FastRoute\RouteCollector $r
+    ) {
+        $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getStatus', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+    }
+
+    /**
+     * @return \Zend\Diactoros\Response
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getStatus($apiKey = null)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_INFO) || ! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY)) {
+            return new \Zend\Diactoros\Response\EmptyResponse();
+        }
+        
+        if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY, false)) {
+            throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid API Key.');
+        }
+
+        // @todo fetch more status info
+
+        $data = [
+            'actionqueue' => Tinebase_ActionQueue::getStatus(),
+        ];
+        $response = new \Zend\Diactoros\Response\JsonResponse($data);
+        return $response;
+    }
 }

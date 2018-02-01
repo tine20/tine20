@@ -339,7 +339,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     //       WELL we could add the info to search attendee somehow
                     if (   (o.record.get('user_type') == 'user' && ! o.value.account_id )
                         || (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').container_id && o.record.get('user_id').container_id.account_grants && o.record.get('user_id').container_id.account_grants.editGrant)) {
-                        o.record.set('status_authkey', 1);
+                        o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
                     }
                     
                     o.record.explicitlyAdded = true;
@@ -548,9 +548,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     disabled: false,
                     scope: this,
                     handler: function() {
+                        var _ = window.lodash;
                         var email = Tine.Felamimail.getEmailStringFromContact(new Tine.Addressbook.Model.Contact(attender.get('user_id')));
                         var record = new Tine.Felamimail.Model.Message({
-                            subject: this.record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(this.record.get('dtstart')),
+                            subject: _.get(this.record, 'data.poll.name', _.get(this.record, 'data.summary', '') , ''),
                             body: this.record.hasPoll() ? String.format(this.app.i18n._('Poll URL: {0}'), this.record.getPollUrl()) : '',
                             massMailingFlag: this.record.hasPoll(),
                             to: [email]

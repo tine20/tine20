@@ -877,3 +877,29 @@ Ext.override(Ext.Component, {
         });
     }
 });
+
+Ext.override(Ext.form.CheckboxGroup, {
+    /**
+     * is this component rendered?
+     * @return {Promise}
+     */
+    getValue : function(){
+        var _ = window.lodash,
+            out = [];
+        if (_.isArray(this.items)) {
+            // not yet rendered
+            _.each(this.items, function(item) {
+                if (item.checked) {
+                    out.push(item);
+                }
+            });
+        } else {
+            this.eachItem(function (item) {
+                if (item.checked) {
+                    out.push(item);
+                }
+            });
+        }
+        return out;
+    }
+});

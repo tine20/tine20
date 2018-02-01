@@ -547,6 +547,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         var comboValue = 'weekThis';
         if (filter.data.value && filter.data.value.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = filter.data.value.toString();
+        } else if (filter.data.value && filter.data.value.from) {
+            comboValue = filter.data.value;
         } else if (this.defaultValue && this.defaultValue.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = this.defaultValue.toString();
         }
@@ -583,8 +585,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.withinCombo.origOnSelect = filter.withinCombo.onSelect;
         filter.withinCombo.setValue = function(value) {
             // try to convert some values when initialising
-            var range = this.range || Ext.ux.form.PeriodPicker.prototype.range;
-            if (! this.manualSelect && value != 'period') {
+            var range = this.range || (value && value.from ?
+                Ext.ux.form.PeriodPicker.getRange(value):
+                Ext.ux.form.PeriodPicker.prototype.range);
+
+            if (! this.manualSelect && value != 'period' && !value.from) {
                 range = window.lodash.get(String(value).match(/(day|week|month|quater|year)This$/), 1);
                 if (range) {
                     value = 'period';
@@ -597,6 +602,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 if (! this.pp) {
                     this.pp = new Ext.ux.form.PeriodPicker({
                         range: range,
+                        periodIncludesUntil: true,
                         width: me.filterValueWidth - 18,
                         cls: 'x-pp-combo',
                         'renderTo': this.wrap

@@ -193,4 +193,31 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
             )
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
     }
+
+    /**
+     * check if filter is a recursive filter
+     *
+     * recursive must be set AND a recursive criteria must be given
+     *
+     * @return bool
+     */
+    public function isRecursiveFilter($removeIfNot = false)
+    {
+        if ($this->getFilter('recursive', false, true)) {
+            foreach($this->getFilterModel() as $field => $config) {
+                if ($filter = $this->getFilter($field, false, true)) {
+                    if (in_array($field, ['path', 'type', 'recursive'])) continue;
+                    if ($field == 'query' && !$filter->getValue()) continue;
+
+                    return true;
+                }
+            }
+
+            if ($removeIfNot) {
+                $this->removeFilter('recursive', true);
+            }
+        }
+
+        return false;
+    }
 }

@@ -239,6 +239,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
 
     /**
+     * uri for sentry service (https://sentry.io)
+     *
+     * @var string
+     */
+    const SENTRY_URI = 'sentryUri';
+
+    /**
      * configure hook class for user sync
      *
      * @var string
@@ -516,6 +523,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const STATUS_INFO = 'statusInfo';
+
+    /**
+     * @var string
+     */
     const MASTER_URL = 'masterURL';
 
     /**
@@ -527,6 +539,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MASTER_PASSWORD = 'masterPassword';
+
+    /**
+     * var string
+     */
+    const STATUS_API_KEY = 'statusApiKey';
 
     /**
      * @var string
@@ -1112,6 +1129,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::STATUS_INFO => array(
+            //_('Status Info')
+            'label'                 => 'Status Info',
+            //_('If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status')
+            'description'           => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
+            'type'                  => 'bool',
+            'default'               => false,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
         self::ALLOWEDJSONORIGINS => array(
                                    //_('Allowed Origins')
             'label'                 => 'Allowed Origins',
@@ -1167,6 +1195,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => array()
+        ),
+        self::SENTRY_URI => array(
+            //_('Sentry service URI')
+            'label'                 => 'Sentry service URI',
+            //_('URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>')
+            'description'           => 'URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+        ),
+        self::STATUS_API_KEY => array(
+            //_('API key to access status URI')
+            'label'                 => 'API key to access status URI',
+            //_('API key to access status URI')
+            'description'           => 'API key to access status URIs',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
         ),
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')
@@ -1518,7 +1566,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 //_('Path to custom favicon.')
                 'description'           => 'Path to custom favicon.',
                 'type'                  => 'string',
-                'default'               => '',
+                'default'               => './images/favicon.ico',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,

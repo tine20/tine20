@@ -202,6 +202,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (!$this->_schema) {
             try {
                 $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
+                if (!is_array($this->_schema)) {
+                    throw new Tinebase_Exception_Backend_Database('could not get table description for :' . $this->_tablePrefix . $this->_tableName);
+                }
             } catch (Zend_Db_Adapter_Exception $zdae) {
                 throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
             }

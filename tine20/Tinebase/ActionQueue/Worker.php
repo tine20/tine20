@@ -68,8 +68,10 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             }
         }
         parent::__construct($config);
+
+        Tinebase_Core::setupSentry();
     }
-    
+
     /**
      * infinite loop where daemon manages the execution of the jobs from the job queue
      */
@@ -77,7 +79,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     {
         $actionQueue = Tinebase_ActionQueue::getInstance();
         if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
-            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker! Configure Redis backend if you want to make use of the worker.');
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker!'
+                . ' Configure Redis backend if you want to make use of the worker.');
             exit(1);
         }
 

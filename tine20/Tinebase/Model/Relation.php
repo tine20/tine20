@@ -187,4 +187,17 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     {
         return !empty($this->type) ? '{' . $this->type . '}' : '';
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        /** @var Tinebase_Record_Abstract $model */
+        $model = $this->related_model;
+        return (class_exists($model) ? $model::getRecordName() : $model)
+            . (empty($this->type) ? '' :  ' ' . $this->type)
+            . ($this->related_record instanceof Tinebase_Record_Abstract ? ' ' . $this->related_record->getTitle()
+                : '');
+    }
 }

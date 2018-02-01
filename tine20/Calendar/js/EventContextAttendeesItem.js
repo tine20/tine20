@@ -8,12 +8,13 @@
 
 
 Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
-    text: 'Teilnehmer/Ressources',
     event: null,
     datetime: null,
 
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+
+        this.text = this.app.i18n._('Attendee/Resources')
 
         this.hidden = this.app.getMainScreen().getCenterPanel().isActiveView('Grid') || ! (
             this.event

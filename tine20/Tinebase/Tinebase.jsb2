@@ -666,6 +666,10 @@
           "path": "js/widgets/"
         },
         {
+          "text": "importAction.js",
+          "path": "js/widgets/"
+        },
+        {
           "text": "FilterToolbar.js",
           "path": "js/widgets/grid/"
         },

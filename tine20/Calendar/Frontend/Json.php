@@ -586,6 +586,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 continue;
             }
 
+            if (empty($eventRecord->uid)) {
+                $eventRecord->uid = Tinebase_Record_Abstract::generateUID();
+            }
+
             $eventPeriods = $calendarController->getBlockingPeriods($eventRecord, [
                 'from'  => $eventRecord->dtstart,
                 'until' => $eventRecord->dtstart->getClone()->addMonth(2)

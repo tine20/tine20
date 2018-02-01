@@ -659,7 +659,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller->createRecurException($firstSessionExdate, FALSE, TRUE);
         
         // try to update exception concurrently
-        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
         $secondSessionExdate = clone $recurSet[1];
         $secondSessionExdate->summary = 'just an update';
         $this->_controller->createRecurException($secondSessionExdate, FALSE, TRUE);
@@ -925,7 +925,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $updatedPersistentEvent->dtstart = new Tinebase_DateTime('2012-03-09 13:00:00');
         $updatedPersistentEvent->dtend = new Tinebase_DateTime('2012-03-09 14:00:00');
         
-        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
         $updatedPersistentEvent = $this->_controller->createRecurException($updatedPersistentEvent);
     }
 

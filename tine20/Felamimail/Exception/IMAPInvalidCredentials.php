@@ -31,13 +31,12 @@ class Felamimail_Exception_IMAPInvalidCredentials extends Felamimail_Exception_I
      * @var string
      */
     protected $_username = '';
-    
+
     /**
      * construct
      * 
      * @param string $_message
      * @param integer $_code
-     * @return void
      */
     public function __construct($_message = 'Invalid IMAP Credentials.', $_code = 912) {
         parent::__construct($_message, $_code);

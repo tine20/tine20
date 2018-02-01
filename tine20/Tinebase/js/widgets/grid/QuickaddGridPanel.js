@@ -143,6 +143,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 _.each(me.columns, function(col, idx) {
                     if (_.isString(col)) {
                         var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        // NOTE: in editor grids we need a type based certain min-width
                         if (config) {
                             me.columns[idx] = config;
                             _.each(['quickaddField', 'editor'], function(prop) {
@@ -152,6 +153,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                                     col,
                                     Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID
                                 ));
+                                config.width = config.width || config[prop].minWidth ? Math.max(config.width || 0, config[prop].minWidth || 0) : config.width;
                             });
                         }
                     }

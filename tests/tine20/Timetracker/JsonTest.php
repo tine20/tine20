@@ -4,7 +4,7 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -1116,7 +1116,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ta = $this->_lastCreatedRecord;
         
         $contactController  = Addressbook_Controller_Contact::getInstance();
-        $taController       = Timetracker_Controller_Timeaccount::getInstance();
         
         $bday = new Tinebase_DateTime();
         $bday->setDate(2013, 12, 24);
@@ -1134,7 +1133,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->saveTimeaccount($tajson);
         $tajson = $this->_json->getTimeaccount($ta['id']);
         $this->_json->saveTimeaccount($tajson);
-        $tajson = $this->_json->getTimeaccount($ta['id']);
+        $this->_json->getTimeaccount($ta['id']);
         
         $ajson = new Addressbook_Frontend_Json();
         $contactJson = $ajson->getContact($contact->getId());

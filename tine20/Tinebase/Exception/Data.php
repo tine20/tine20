@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_Data extends Tinebase_Exception
+class Tinebase_Exception_Data extends Tinebase_Exception_ProgramFlow
 {
     /**
      * exception data

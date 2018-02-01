@@ -355,7 +355,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $from = $from ? min($from, $period['from']) : $period['from'];
             $until = $until ?  max($until, $period['until']) : $period['until'];
         }
-        Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
+        if ($from instanceof DateTime) {
+            // NOTE: $periodCandidates might be empty e.g. transparent event
+            Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
+        }
 
         $conflicts = array();
         foreach ($periodCandidates as $periodFilter) {
@@ -686,6 +689,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_event->originator_tz = Tinebase_Core::getUserTimezone();
         }
 
+        // disable rrule for the moment:
+        $_event->rrule = null;
+
         $from = isset($_options['from']) ? ($_options['from'] instanceof Tinebase_DateTime ? $_options['from'] :
             new Tinebase_DateTime($_options['from'])) : clone $_event->dtstart;
         $until = isset($_options['until']) ? ($_options['until'] instanceof Tinebase_DateTime ? $_options['until'] :
@@ -851,7 +857,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         } while ($until->isLater($currentFrom));
 
-        return new Tinebase_Record_RecordSet('Calendar_Model_Event', array());
+        $exception = new Calendar_Exception_AttendeeBusy();
+        $exception->setEvent(new Calendar_Model_Event(array('dtend' => $until), true));
+        throw $exception;
     }
 
     protected function _tryForFreeSlot(Calendar_Model_Event $_event, $_startSec, $_endSec, $_durationSec, Tinebase_DateTime $_until)
@@ -1413,7 +1421,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($baseEvent->last_modified_time != $_event->last_modified_time) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . " It is not allowed to create recur instance if it is clone of base event");
-            throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
+            throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict!');
         }
 
 //        // Maybe Later

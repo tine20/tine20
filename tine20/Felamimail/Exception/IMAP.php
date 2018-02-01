@@ -23,7 +23,6 @@ class Felamimail_Exception_IMAP extends Felamimail_Exception
      * 
      * @param string $_message
      * @param integer $_code
-     * @return void
      */
     public function __construct($_message = 'General IMAP error.', $_code = 910) {
         parent::__construct($_message, $_code);

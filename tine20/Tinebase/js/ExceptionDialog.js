@@ -208,7 +208,16 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         this.exception.description   = Ext.getCmp('tb-exceptiondialog-description').getValue();
         this.exception.clientVersion = Tine.clientVersion;
         this.exception.serverVersion = (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {};
-        
+
+        if (Ext.isArray(this.exception.clientProps)) {
+            Ext.each(this.exception.clientProps, function(prop) {
+                this.exception[prop] = null;
+                delete this.exception[prop];
+            }, this);
+
+            delete this.exception['clientProps'];
+        }
+
         // tinebase version
         Ext.each(Tine.Tinebase.registry.get('userApplications'), function (app) {
             if (app.name == 'Tinebase') {

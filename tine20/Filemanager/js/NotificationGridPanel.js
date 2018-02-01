@@ -65,19 +65,13 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
             }), {
                 id: 'summary',
                 dataIndex: 'summary',
-                width: 100,
+                width: 150,
                 sortable: true,
                 header: this.app.i18n._('Summary'),
                 renderer: function (value) {
-                    if (value === 1) {
-                        return value + ' ' + this.app.i18n._('Day');
-                    }
-
-                    if (value > 1) {
-                        return value + ' ' + this.app.i18n._('Days');
-                    }
-
-                    return '';
+                    return value ?
+                        String.format(me.app.i18n.ngettext('Once a Day', 'Every {0} Days', value), value) :
+                        me.app.i18n._('No');
                 },
                 editor: {
                     xtype: 'numberfield'
@@ -135,6 +129,12 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
         var iconCls = _.get(record, 'data.accountType') === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
 
         return '<div class="' + iconCls + '">&#160;</div>' + Ext.util.Format.htmlEncode(_.get(record, 'data.accountName') || value);
+    },
+
+    resetCombobox: function (combo) {
+        combo.collapse();
+        combo.clearValue();
+        combo.reset();
     },
 
     getContactSearchCombo: function () {

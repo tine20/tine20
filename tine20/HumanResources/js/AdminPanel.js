@@ -218,6 +218,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
                         Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                             containerName: this.app.i18n._('Calendar'),
                             containersName: this.app.i18n._('Calendars'),
+                            recordClass: Tine.Calendar.Model.Event,
                             appName: 'Calendar',
                             requiredGrant: 'readGrant',
                             hideTrigger2: true,

@@ -766,9 +766,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-
         Tinebase_Exception::log($e);
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
 
         if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Lock wait timeout exceeded/', $e->getMessage())) {
             throw new Tinebase_Exception_Backend_Database_LockTimeout($e->getMessage());
@@ -811,6 +811,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count($duplicates) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Found ' . count($duplicates) . ' duplicate(s).');
+
+            // fetch tags here as they are not included yet - this is important when importing records with merge strategy
+            if ($_record->has('tags')) {
+                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($duplicates);
+            }
 
             $ted = new Tinebase_Exception_Duplicate('Duplicate record(s) found');
             $ted->setModelName($this->_modelName);

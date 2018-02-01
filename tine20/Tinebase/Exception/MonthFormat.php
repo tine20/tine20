@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_MonthFormat extends Tinebase_Exception
+class Tinebase_Exception_MonthFormat extends Tinebase_Exception_ProgramFlow
 {
     /**
      * the title of the Exception (may be shown in a dialog)

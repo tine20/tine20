@@ -81,10 +81,6 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      */
     public function sendPendingAlarms()
     {
-        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
-            return true;
-        }
-
         // get all pending alarms
         $filter = new Tinebase_Model_AlarmFilter(array(
             array(
@@ -136,7 +132,6 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        Tinebase_Core::releaseMultiServerLock(__METHOD__);
         return true;
     }
     
