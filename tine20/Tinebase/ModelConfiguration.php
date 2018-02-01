@@ -863,6 +863,7 @@ class Tinebase_ModelConfiguration {
     protected $_copyOmitFields = NULL;
 
     /**
+     * @deprecated -> use definitions
      * import configuration
      *
      * sub keys:
@@ -875,6 +876,7 @@ class Tinebase_ModelConfiguration {
     protected $_import = NULL;
 
     /**
+     * @deprecated -> use definitions
      * export configuration
      *
      * sub keys:

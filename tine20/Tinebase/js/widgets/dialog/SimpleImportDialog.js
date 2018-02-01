@@ -40,7 +40,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
         });
 
         if (Tine[this.appName].registry.get('importDefinitions')) {
-            Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
+            Ext.each(Tine.widgets.importAction.getImports(this.recordClass), function(defData) {
                 var options = defData.plugin_options,
                     extension = options ? options.extension : null;
                 
@@ -54,8 +54,13 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             }, this);
             this.definitionsStore.sort('label');
         }
-        if (! this.selectedDefinition && Tine[this.appName].registry.get('defaultImportDefinition')) {
-            this.selectedDefinition = this.definitionsStore.getById(Tine[this.appName].registry.get('defaultImportDefinition').id);
+        if (! this.selectedDefinition) {
+            var defaultConfig = Tine[this.appName].registry.get('defaultImportDefinition'),
+                defaultExists = defaultConfig && this.definitionsStore.getById(defaultConfig.id);
+
+            this.selectedDefinition = defaultExists ?
+                this.definitionsStore.getById(defaultConfig.id) :
+                this.definitionsStore.getAt(0);
         }
 
         this.items = [this.getFilePanel()];
@@ -121,7 +126,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
         }
         
         var def = this.selectedDefinition,
-            description = def ? def.get('description') : '',
+            description = def ? this.app.i18n._hidden(def.get('description')) : '',
             options = def ? def.get('plugin_options') : null,
             example = options && options.example ? options.example : '';
             
