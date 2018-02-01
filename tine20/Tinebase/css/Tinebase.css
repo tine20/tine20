@@ -128,13 +128,13 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
 }
 
-.action_delete {
+.action_delete, actionDelete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
 }
-.x-btn-medium .action_delete {
+.x-btn-medium .action_delete, .x-btn-medium .actionDelete {
     background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
 }
-.x-btn-large .action_delete {
+.x-btn-large .action_delete, .x-btn-large .actionDelete {
     background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
 }
 
@@ -503,6 +503,11 @@ html, body {
     height: 60px;
 }
 
+.tb-login-lobobox img {
+    max-width: 400px;
+    max-height: 80px;
+}
+
 .tb-login-big-label {
     font-size: 16px;
     font-weight: bold;
@@ -543,6 +548,10 @@ html, body {
 }
 .tb-about-img {
     margin-top: 10px;
+}
+.tb-about-img img {
+    max-width: 380px;
+    max-height: 80px;
 }
 .tb-about-version {
     margin-top: 50px;
@@ -769,6 +778,7 @@ html, body {
 
 .tine-favicon {
     background-image:url(../../images/favicon.png) !important;
+    background-size: 16px 16px;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {

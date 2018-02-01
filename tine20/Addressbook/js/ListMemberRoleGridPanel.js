@@ -197,7 +197,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      * @return {Array}
      */
     getColumns: function() {
-        return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n);
+        return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n).concat([
+            { id: 'memberroles', header: this.app.i18n._('List Roles'), dataIndex: 'memberroles', renderer: this.listMemberRoleRenderer }
+        ]);
     },
 
     // NOTE: Ext doc seems to be wrong on arguments here
@@ -242,5 +244,26 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             });
             this.ctxMenu.showAt(e.getXY());
         }
+    },
+
+    /**
+     *list member role render
+     *
+     * @param value
+     * @returns {string}
+     * @constructor
+     */
+    listMemberRoleRenderer: function(value) {
+        if (Ext.isArray(value)) {
+            var result = [];
+            Ext.each(value, function(memberrole) {
+                if (memberrole.list_role_id.name) {
+                    result.push(memberrole.list_role_id.name);
+                }
+            });
+            return result.toString();
+        }
+
+        return '';
     }
 });

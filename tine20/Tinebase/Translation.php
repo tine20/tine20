@@ -202,6 +202,7 @@ class Tinebase_Translation
             
             // check if we support the locale
             $supportedLocales = array();
+            // @todo: maybe allow to pass application here?
             $availableTranslations = self::getAvailableTranslations();
             foreach ($availableTranslations as $translation) {
                 $supportedLocales[] = $translation['locale'];

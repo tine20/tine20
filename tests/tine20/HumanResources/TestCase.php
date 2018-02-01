@@ -9,14 +9,9 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Group
  */
-class HumanResources_TestCase extends PHPUnit_Framework_TestCase
+class HumanResources_TestCase extends TestCase
 {
     /**
      * Feast Calendar
@@ -39,18 +34,6 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     protected $_department = NULL;
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 HumanResources Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -65,18 +48,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         $filter = new Sales_Model_CostCenterFilter(array());
         Sales_Controller_CostCenter::getInstance()->deleteByFilter($filter);
         
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::setUp();
     }
 
     /**

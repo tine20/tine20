@@ -19,5 +19,5 @@
  */
 class Calendar_Export_Resource_Xls extends Tinebase_Export_Xls
 {
-    protected $_defaultExportname = 'calendar_resource_xls';
+    protected $_defaultExportname = 'cal_resource_xls';
 }

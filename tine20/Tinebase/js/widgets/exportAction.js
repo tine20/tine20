@@ -9,6 +9,7 @@ Ext.ns('Tine', 'Tine.widgets', 'Tine.widgets.exportAction');
 
 Tine.widgets.exportAction.SCOPE_SINGLE = 'single';
 Tine.widgets.exportAction.SCOPE_MULTI = 'multi';
+Tine.widgets.exportAction.SCOPE_HIDDEN = 'hidden';
 
 /**
  * get all (favorite) export definitions for given model
@@ -36,7 +37,7 @@ Tine.widgets.exportAction.getExports = function (recordClass, favorites, scope) 
 
     if (_.isString(scope)) {
         exportDefinitions = _.filter(exportDefinitions, function(d) {
-            return d.scope === null || d.scope == "" || d.scope == scope;
+            return Tine.widgets.exportAction.SCOPE_HIDDEN !== d.scope && (d.scope === null || d.scope == "" || d.scope == scope);
         });
     }
 

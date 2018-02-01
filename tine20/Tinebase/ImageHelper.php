@@ -136,4 +136,37 @@ class Tinebase_ImageHelper
         
         return file_get_contents($tempFile->path);
     }
+
+    /**
+     * get data url from given image path
+     *
+     * @param string $imagePath
+     * @return string
+     * @throws Tinebase_Exception
+     */
+    public static function getDataUrl($imagePath)
+    {
+        if (substr($imagePath, 0, 5) === 'data:') {
+            return $imagePath;
+        }
+
+        $cacheId = md5(self::class . 'getDataUrl' . $imagePath);
+        $dataUrl = Tinebase_Core::getCache()->load($cacheId);
+
+        if (! $dataUrl) {
+            $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
+
+            if (substr($imagePath, -4) === '.ico') {
+                $mime = 'image/x-icon';
+            } elseif ($blob) {
+                $info = self::getImageInfoFromBlob($blob);
+                $mime = $info['mime'];
+            }
+
+            $dataUrl = 'data:' . $mime . ';base64,' . base64_encode($blob);
+            Tinebase_Core::getCache()->save($dataUrl, $cacheId);
+        }
+
+        return $dataUrl;
+    }
 }

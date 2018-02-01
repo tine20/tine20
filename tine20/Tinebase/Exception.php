@@ -30,7 +30,21 @@ class Tinebase_Exception extends Exception
      * @var string
      */
     protected $_title = NULL;
-    
+
+    /**
+     * only send exceptions to sentry if this is true - don't send exceptions that are important to the code flow / domain logic
+     *
+     * @var bool
+     */
+    protected $_logToSentry = true;
+
+    /**
+     * default loglevel method for Tinebase_Exception::log()
+     *
+     * @var string
+     */
+    protected $_logLevelMethod = 'err';
+
     /**
      * the constructor
      * 
@@ -101,30 +115,84 @@ class Tinebase_Exception extends Exception
             // no logger -> exception happened very early
             error_log($exception);
         } else {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-            
-            if ($suppressTrace === null) {
-                try {
-                    $config = Tinebase_Core::getConfig();
-                    $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : true;
-                } catch (Exception $e) {
-                    // catch all config exceptions here
-                    $suppressTrace = true;
-                }
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR) && ! $suppressTrace) {
-                $traceString = $exception->getTraceAsString();
-                $traceString = self::_replaceBasePath($traceString);
-                $traceString = self::_removeCredentials($traceString);
-                 
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
-            }
-            
-            if ($additionalData) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
+            self::logExceptionToLogger($exception, $suppressTrace, $additionalData);
+            self::sendExceptionToSentry($exception);
+        }
+    }
+
+    /**
+     * @param Exception $exception
+     * @param null $suppressTrace
+     * @param null $additionalData
+     */
+    public static function logExceptionToLogger(Exception $exception, $suppressTrace = null, $additionalData = null)
+    {
+        $logMethod = $exception instanceof Tinebase_Exception ? $exception->getLogLevelMethod() : 'err';
+        $logLevel = strtoupper($logMethod);
+
+        Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception)
+            . ' -> ' . $exception->getMessage());
+
+        if ($additionalData) {
+            Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
+        }
+
+        // log trace?
+        if ($suppressTrace === null) {
+            try {
+                $config = Tinebase_Core::getConfig();
+                $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : true;
+            } catch (Exception $e) {
+                // catch all config exceptions here
+                $suppressTrace = true;
             }
         }
+
+        if (Tinebase_Core::isLogLevel(constant("Zend_Log::$logLevel")) && ! $suppressTrace) {
+            $traceString = $exception->getTraceAsString();
+            $traceString = self::_replaceBasePath($traceString);
+            $traceString = self::_removeCredentials($traceString);
+            Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
+        }
+    }
+
+    /**
+     * @param Exception $exception
+     */
+    public static function sendExceptionToSentry(Exception $exception)
+    {
+        $sentryClient = Tinebase_Core::getSentry();
+        if (! $sentryClient) {
+            return;
+        }
+
+        if ($exception instanceof Tinebase_Exception && ! $exception->logToSentry()) {
+            return;
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending exception to Sentry');
+        $sentryClient->captureException($exception, array(
+            // TODO add more information? add it here or in \Tinebase_Core::setupSentry?
+            'extra' => array(
+                'tinebaseId' => Tinebase_Core::getTinebaseId(),
+            ),
+        ));
+    }
+
+    /**
+     * @return bool
+     */
+    public function logToSentry()
+    {
+        return $this->_logToSentry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogLevelMethod()
+    {
+        return $this->_logLevelMethod;
     }
     
     /**

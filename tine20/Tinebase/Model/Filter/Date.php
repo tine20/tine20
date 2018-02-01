@@ -41,6 +41,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'            => array('sqlop' => ' = ?'),
+        // NOTE: "until"-date/time should not be included - this needs to be refactored
+        // js client has "periodIncludesUntil" to fix this behavior - it just subtracts one second
         'within'            => array('sqlop' => array(' >= ? ', ' <= ?')),
         'before'            => array('sqlop' => ' < ?'),
         'after'             => array('sqlop' => ' > ?'),

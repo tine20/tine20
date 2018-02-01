@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -93,6 +93,7 @@
  * @property array      $validatorMapping This maps field types to their default validators, just zendfw validators can be used here.
  * @property array      $converterDefaultMapping This maps field types to their default converter
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
+ * @property array      $keyfieldFields
  */
 
 class Tinebase_ModelConfiguration {
@@ -394,6 +395,10 @@ class Tinebase_ModelConfiguration {
      *
      * - shy: If this is set to true, the row for this field won't be shown in the grid, but can be activated
      * 
+     * - system: If this is set to true, fields are marked as internal or system relevant fields which are not important to be shown anywhere.
+     *           Unlike shy, the user has no option to see them. At the moment this is only implemented within the export.
+     *       @type boolean, @default: null
+     * 
      * - sortable: If this is set to false, no sort by this field is possible in the gridpanel, defaults to true
      * 
      *   // TODO: generalize, currently only in ContractGridPanel, take it from there:
@@ -638,6 +643,13 @@ class Tinebase_ModelConfiguration {
     protected $_datetimeFields = array();
 
     /**
+     * holds the keyfield fields
+     *
+     * @var array
+     */
+    protected $_keyfieldFields = array();
+
+    /**
      * holds the date fields (maybe we use Tinebase_Date sometimes)
      * 
      * @var array
@@ -782,29 +794,27 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_filterModelMapping = array(
-        'date'     => 'Tinebase_Model_Filter_Date',
-        'datetime' => 'Tinebase_Model_Filter_DateTime',
-        'time'     => 'Tinebase_Model_Filter_Date',
-        'string'   => 'Tinebase_Model_Filter_Text',
-        'stringAutocomplete'   => 'Tinebase_Model_Filter_Text',
-        'text'     => 'Tinebase_Model_Filter_Text',
-        'fulltext' => 'Tinebase_Model_Filter_FullText',
-        'json'     => 'Tinebase_Model_Filter_Text',
-        'boolean'  => 'Tinebase_Model_Filter_Bool',
-        'integer'  => 'Tinebase_Model_Filter_Int',
-        'float'    => 'Tinebase_Model_Filter_Float',
-        'money'    => 'Tinebase_Model_Filter_Float',
-        'record'   => 'Tinebase_Model_Filter_ForeignId',
-        'records'  => 'Tinebase_Model_Filter_ForeignRecords',
-        'relation' => 'Tinebase_Model_Filter_Relation',
-
-        'keyfield'  => 'Tinebase_Model_Filter_Text',
-        'container' => 'Tinebase_Model_Filter_Container',
-        'tag'       => 'Tinebase_Model_Filter_Tag',
-        'user'      => 'Tinebase_Model_Filter_User',
-
-        'numberableStr' => 'Tinebase_Model_Filter_Text',
-        'numberableInt' => 'Tinebase_Model_Filter_Int',
+        'date'                  => Tinebase_Model_Filter_Date::class,
+        'datetime'              => Tinebase_Model_Filter_DateTime::class,
+        'time'                  => Tinebase_Model_Filter_Date::class,
+        'string'                => Tinebase_Model_Filter_Text::class,
+        'stringAutocomplete'    => Tinebase_Model_Filter_Text::class,
+        'text'                  => Tinebase_Model_Filter_Text::class,
+        'fulltext'              => Tinebase_Model_Filter_FullText::class,
+        'json'                  => Tinebase_Model_Filter_Text::class,
+        'boolean'               => Tinebase_Model_Filter_Bool::class,
+        'integer'               => Tinebase_Model_Filter_Int::class,
+        'float'                 => Tinebase_Model_Filter_Float::class,
+        'money'                 => Tinebase_Model_Filter_Float::class,
+        'record'                => Tinebase_Model_Filter_ForeignId::class,
+        'records'               => Tinebase_Model_Filter_ForeignRecords::class,
+        'relation'              => Tinebase_Model_Filter_Relation::class,
+        'keyfield'              => Tinebase_Model_Filter_Text::class,
+        'container'             => Tinebase_Model_Filter_Container::class,
+        'tag'                   => Tinebase_Model_Filter_Tag::class,
+        'user'                  => Tinebase_Model_Filter_User::class,
+        'numberableStr'         => Tinebase_Model_Filter_Text::class,
+        'numberableInt'         => Tinebase_Model_Filter_Int::class,
     );
 
     /**
@@ -857,6 +867,7 @@ class Tinebase_ModelConfiguration {
     protected $_copyOmitFields = NULL;
 
     /**
+     * @deprecated -> use definitions
      * import configuration
      *
      * sub keys:
@@ -869,6 +880,7 @@ class Tinebase_ModelConfiguration {
     protected $_import = NULL;
 
     /**
+     * @deprecated -> use definitions
      * export configuration
      *
      * sub keys:
@@ -921,6 +933,13 @@ class Tinebase_ModelConfiguration {
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'length' => 40,
             'shy' => true,
+            'filterDefinition'  => [
+                'filter'    => 'Tinebase_Model_Filter_Id',
+                'options'   => [
+                    'idProperty'    => $this->_idProperty,
+                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                ]
+            ]
         );
 
         if ($this->_hasCustomFields) {
@@ -997,14 +1016,15 @@ class Tinebase_ModelConfiguration {
             $this->_fields['creation_time']      = array('label' => 'Creation Time',      'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'nullable' => true);
             $this->_fields['last_modified_by']   = array('label' => 'Last Modified By',   'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
             $this->_fields['last_modified_time'] = array('label' => 'Last Modified Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'nullable' => true);
-            $this->_fields['seq']                = array('label' => NULL,                 'type' => 'integer',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'default' => 0, 'unsigned' => true);
+            $this->_fields['seq']                = array('label' => NULL,                 'type' => 'integer', 'system' => true,  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'default' => 0, 'unsigned' => true);
             
             // don't show deleted information
-            $this->_fields['deleted_by']         = array('label' => NULL, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
-            $this->_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            $this->_fields['deleted_by']         = array('label' => NULL, 'system' => true, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
+            $this->_fields['deleted_time']       = array('label' => NULL, 'system' => true, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
             $this->_fields['is_deleted']         = array(
                 'label'   => NULL,
                 'type'    => 'integer',
+                'system' => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'useGlobalTranslation' => TRUE,
                 'default' => 0
@@ -1116,7 +1136,7 @@ class Tinebase_ModelConfiguration {
                         $reflect  = new ReflectionClass($if);
                         $this->_filters[$fieldKey][] = $reflect->newInstanceArgs($val);
                     } else {
-                        $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
+                        $this->_filters[$fieldKey][] = $if && !is_int($if) ? new $if($val) : new $val();
                     }
                 }
             } elseif (isset($this->_inputFilterDefaultMapping[$fieldDef['type']])) {
@@ -1151,7 +1171,15 @@ class Tinebase_ModelConfiguration {
         if (count($queryFilters)) {
             $this->_getQueryFilter($queryFilters);
         }
-        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
+        if (!isset($this->_filterModel[$this->_idProperty])) {
+            $this->_filterModel[$this->_idProperty] = [
+                'filter'    => 'Tinebase_Model_Filter_Id',
+                'options'   => [
+                    'idProperty'    => $this->_idProperty,
+                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                ]
+            ];
+        }
         $this->_fieldKeys = array_keys($this->_fields);
     }
 
@@ -1398,6 +1426,9 @@ class Tinebase_ModelConfiguration {
                     // add to datetime fields
                     $this->_datetimeFields[] = $fieldKey;
                 }
+                break;
+            case 'keyfield':
+                $this->_keyfieldFields[] = $fieldKey;
                 break;
             default:
                 break;

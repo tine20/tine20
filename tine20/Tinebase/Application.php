@@ -493,6 +493,9 @@ class Tinebase_Application
      */
     public function updateApplication(Tinebase_Model_Application $_application)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Update application: ' . print_r($_application->toArray(), true));
+
         $result = $this->_getBackend()->update($_application);
         
         $this->resetClassCache();

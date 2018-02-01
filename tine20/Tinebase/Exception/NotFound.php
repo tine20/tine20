@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_NotFound extends Tinebase_Exception
+class Tinebase_Exception_NotFound extends Tinebase_Exception_ProgramFlow
 {
     public function __construct($_message, $_code=404)
     {

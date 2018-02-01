@@ -162,6 +162,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
             $updatedEvent = Calendar_Controller_Event::getInstance()->update($event);
 
+            // @TODO: append/be iMIP invitation if $sendNotifications is false
             Tinebase_ActionQueue::getInstance()->queueAction(self::class . '.sendDefiniteEventNotifications',
                 $updatedPoll,
                 $updatedEvent
@@ -671,8 +672,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     'current_contact'   => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray(),
                     'jsonKey'           => Tinebase_Core::get('jsonKey'),
                     'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-                    'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),
-                    'brandingFavicon'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON),
+                    'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+                    'brandingFavicon'   => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON)),
                     'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
                 ]
             ])));

@@ -22,6 +22,7 @@
  * @property    string      definition
  * @property    string      account_grants
  * @property    string      value
+ * @property    string      label
  */
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract 
 {
@@ -47,6 +48,8 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         'definition'        => array('presence' => 'required', 'allowEmpty' => false ),
         'account_grants'    => array('allowEmpty' => true ),
         'value'             => array('allowEmpty' => true ),
+        // Set label from definition if extended resolving is enabled
+        'label'             => array('allowEmpty' => true ),
     );
     
     /**

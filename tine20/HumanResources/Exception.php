@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  *
  */
@@ -16,6 +16,6 @@
  * @package     HumanResources
  * @subpackage  Exception
  */
-class HumanResources_Exception extends Tinebase_Exception
+class HumanResources_Exception extends Tinebase_Exception_ProgramFlow
 {
 }

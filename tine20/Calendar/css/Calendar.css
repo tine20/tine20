@@ -61,6 +61,16 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-timeline.png) !important;
 }
 
+.cal-print-loose-leaf {
+    background-image:url(../../images/oxygen/16x16/actions/kontact-journal.png) !important;
+}
+.x-btn-medium .cal-print-loose-leaf {
+    background-image:url(../../images/oxygen/22x22/actions/kontact-journal.png) !important;
+}
+.x-btn-large .cal-print-loose-leaf {
+    background-image:url(../../images/oxygen/32x32/actions/kontact-journal.png) !important;
+}
+
 .cal-grid-view-color {
     background-image:url(../../images/oxygen/16x16/actions/color-fill.png) !important;
 }

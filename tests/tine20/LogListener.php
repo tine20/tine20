@@ -76,8 +76,8 @@ class LogListener implements PHPUnit_Framework_TestListener
      * Risky test.
      *
      * @param PHPUnit_Framework_Test $test
-     * @param Exception $e
-     * @param float $time
+     * @param Exception              $e
+     * @param float                  $time
      * @since  Method available since Release 4.0.0
      */
     public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)

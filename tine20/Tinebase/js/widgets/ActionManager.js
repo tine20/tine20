@@ -106,6 +106,9 @@ Tine.widgets.ActionManager.prototype = {
         // NOTE: an Ext.Action can't be extended :-(
         var action = new Ext.Action(config);
         action.initialConfig.scope = action;
+        if (_.isFunction(action.initialConfig.init)) {
+            action.initialConfig.init.call(action.initialConfig);
+        }
 
         return action;
     }

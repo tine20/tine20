@@ -34,8 +34,11 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     inEditor: true,
     recordClass: null,
 
+    // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
+    minWidth: 200,
+
     initComponent: function () {
-        this.emptyText = this.emptyText || i18n._('Search for records ...');
+        this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.currentValue = this.currentValue || [];
 
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);

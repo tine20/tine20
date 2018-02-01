@@ -15,7 +15,7 @@
  * @package Calendar
  * @subpackage  Exception
  */
-class Calendar_Exception_iMIP extends Exception
+class Calendar_Exception_iMIP extends Calendar_Exception
 {
     /**
      * construct

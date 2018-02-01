@@ -908,8 +908,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessageToCache(Felamimail_Model_Message $_message)
     {
-        $_message->from_email = substr($_message->from_email, 0, 254);
-        $_message->from_name  = substr($_message->from_name,  0, 254);
+        // TODO remove filterInputForDatabase when we finally support utf8mb4!
+        $_message->from_email = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_email, 0, 254));
+        $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_name,  0, 254));
         
         try {
             $result = $this->_backend->create($_message);
@@ -1229,7 +1230,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * set flags on cache if different
      * 
      * @param array $flags
-     * @param Felamimail_Model_Folder $_folderId
+     * @param Felamimail_Model_Folder $folder
      * @param Tinebase_Record_RecordSet $messages
      * @param boolean $checkDiff
      */
@@ -1256,7 +1257,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     } catch (Zend_Db_Statement_Exception $zdse) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' Could not update flags, maybe message was deleted or is not in the cache yet.');
-                        Tinebase_Exception::log($zdse);
                     }
                 }
             }

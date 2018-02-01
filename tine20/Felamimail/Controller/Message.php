@@ -655,10 +655,27 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $messageBody = '';
-        
+
         foreach ($bodyParts as $partId => $partStructure) {
             $bodyPart = $this->getMessagePart($_message, $partId, TRUE, $partStructure);
-            
+
+            if ($bodyPart->type === Zend_Mime::MULTIPART_MIXED) {
+                foreach ($partStructure['messageStructure']['parts'] as $subPartId => $subpart) {
+                    // TODO add all subparts here?
+                    if ($subpart['contentType'] === Zend_Mime::TYPE_TEXT || $subpart['contentType'] === Zend_Mime::TYPE_HTML) {
+                        $messageBody .= $this->_getAndDecodeMessageBody($_message, $subPartId, $_contentType, $_account);
+                    }
+                }
+                continue;
+            } else if ($bodyPart->type === Zend_Mime::MULTIPART_ALTERNATIVE) {
+                foreach ($partStructure['messageStructure']['parts'] as $subPartId => $subpart) {
+                    if ($subpart['contentType'] === $_contentType) {
+                        $messageBody .= $this->_getAndDecodeMessageBody($_message, $subPartId, $_contentType, $_account);
+                    }
+                }
+                continue;
+            }
+
             $body = Tinebase_Mail::getDecodedContent($bodyPart, $partStructure);
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
@@ -904,7 +921,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $structure = $message->getPartStructure($_partId);
         if (! isset($structure['parts'])) {
-            if ($structure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            if (isset($structure['contentType']) && $structure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
                 && isset($structure['messageStructure']['parts']) && is_array($structure['messageStructure']['parts'])
             ) {
                 $structure = $structure['messageStructure'];

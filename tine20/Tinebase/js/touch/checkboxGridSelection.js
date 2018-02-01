@@ -29,9 +29,6 @@ if (Ext.isTouchDevice) {
         if (!hasCheckboxSelModel) {
             cols.unshift(sm);
         }
-
-        this.enableDragDrop = false;
-        this.enableDrag = false;
     });
 
     Ext.grid.RowSelectionModel.prototype.initEvents = Ext.grid.RowSelectionModel.prototype.initEvents.createSequence(function() {

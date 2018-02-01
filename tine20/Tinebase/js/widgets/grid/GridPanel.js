@@ -859,7 +859,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initImports: function() {
         if (this.actions_import !== undefined) return;
 
-        if (this.modelConfig && this.modelConfig['import']) {
+
+        if (
+                // create items from available import formats (depricated -> use definitions)
+                this.modelConfig && this.modelConfig['import']
+                // imports from import definitions
+                || Tine.widgets.importAction.getImports(this.recordClass).length) {
+
             this.actions_import = new Ext.Action({
                 requiredGrant: 'addGrant',
                 text: i18n._('Import items'),
@@ -872,6 +878,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             this.actionUpdater.addActions([this.actions_import]);
         }
+
     },
 
     /**

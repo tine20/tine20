@@ -527,11 +527,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
 
             if (isset($definition['filter'])
-                && $definition['filter'] === Tinebase_Model_Filter_ForeignRecords::class
+                && (
+                    $definition['filter'] === Tinebase_Model_Filter_ForeignRecords::class
+                    || $definition['filter'] === Tinebase_Model_Filter_ForeignRecord::class
+                    || $definition['filter'] === Tinebase_Model_Filter_ForeignId::class
+                )
             ) {
-                // special handling for foreign records filtering
+                // special handling for foreign record filtering: creates a subfilter with CONDITION_AND
                 // NOTE: maybe this should be fixed in the client / this is just sanitizing here
-                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND])) {
+                // equals is also valid (for Tinebase_Model_Filter_ForeignId)
+                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals'])) {
                     // add a sub-query filter
                     $data['value'] = [
                         ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]

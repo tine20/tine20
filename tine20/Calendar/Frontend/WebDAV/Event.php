@@ -507,7 +507,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     {
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
-        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+        } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             throw new Sabre\DAV\Exception\Forbidden('forbidden update');

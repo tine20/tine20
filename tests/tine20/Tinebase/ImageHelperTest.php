@@ -166,4 +166,11 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
         $imageBlobSize = strlen($this->_testImage->getBlob('image/jpeg', $maxBlobSize));
         $this->assertTrue($imageBlobSize <= $maxBlobSize);
     }
+
+    public function testGetDataUrl()
+    {
+        $dataUrl = Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_FAVICON});
+
+        $this->assertTrue(strlen($dataUrl) > 100);
+    }
 }

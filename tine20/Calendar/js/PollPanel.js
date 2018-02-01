@@ -142,6 +142,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     hideLabel: true
                 }], [{
                     xtype: 'checkbox',
+                    columnWidth: 1,
                     ref: '../../../../isLockedPollCheckbox',
                     disabled: true,
                     hideLabel: true,
@@ -290,11 +291,16 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordLoad: function() {
-        // preset quickadd
-        this.alternativeEventsGrid.getCols(true)[0].quickaddField.setValue(this.editDialog.record.get('dtstart'));
+        var _ = window.lodash,
+            me = this;
 
         // load poll
-        this.onPollLoad(this.editDialog.record.get('poll_id'));
+        me.onPollLoad(this.editDialog.record.get('poll_id'));
+        
+        this.alternativeEventsGrid.afterIsRendered().then(function() {
+            // preset quickadd
+            me.alternativeEventsGrid.getCols(true)[0].quickaddField.setValue(me.editDialog.record.get('dtstart'));
+        });
     },
 
     onPollLoad: function(pollData) {

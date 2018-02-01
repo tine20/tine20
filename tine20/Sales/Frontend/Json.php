@@ -727,16 +727,16 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $foundCustomer = FALSE;
         $customerCalculated = FALSE;
         
-        if (is_array($recordData['relations'])) {
+        if (isset($recordData['relations']) && is_array($recordData['relations'])) {
             foreach($recordData['relations'] as $relation) {
-                if ($relation['related_model'] == 'Sales_Model_Customer') {
+                if ($relation['related_model'] == 'Sales_Model_Customer' && isset($relation['related_record'])) {
                     $foundCustomer = $relation['related_record'];
                     break;
                 }
             }
         }
         // if no customer is set, try to find by contract
-        if (is_array($recordData['relations']) && ! $foundCustomer) {
+        if (isset($recordData['relations']) && is_array($recordData['relations']) && ! $foundCustomer) {
             foreach($recordData['relations'] as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Contract') {
                     $foundContractRecord = Sales_Controller_Contract::getInstance()->get($relation['related_record']['id']);
@@ -768,10 +768,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_Data('You have to set a customer!');
         }
         
-        if (is_array($recordData["address_id"])) {
+        if (isset($recordData['address_id']) && is_array($recordData["address_id"])) {
             $recordData["address_id"] = $recordData["address_id"]['id'];
         }
-        if (is_array($recordData["costcenter_id"])) {
+        if (isset($recordData['costcenter_id']) && is_array($recordData["costcenter_id"])) {
             $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
         }
         // sanitize product_id
@@ -783,7 +783,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-        if (is_array($recordData['relations'])) {
+        if (isset($recordData['relations']) && is_array($recordData['relations'])) {
             for ($i = 0; $i < count($recordData['relations']); $i++) {
                 if (isset($recordData['relations'][$i]['related_record']['product_id'])) {
         

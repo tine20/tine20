@@ -32,7 +32,12 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
      */
     public function getPreviewsForFile($_filePath, array $_config)
     {
-        $httpClient = Tinebase_Core::getHttpClient($this->_url, array('timeout' => 300));
+        if (isset($_config['synchronRequest']) && $_config['synchronRequest']) {
+            $synchronRequest = true;
+        } else {
+            $synchronRequest = false;
+        }
+        $httpClient = Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($synchronRequest ? 10 : 300)));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
@@ -49,6 +54,9 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                     . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getMessage());
+                if ($synchronRequest) {
+                    return false;
+                }
             }
             $run = time() - $lastRun;
             if ($run < 5) {
@@ -63,6 +71,8 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
                 foreach($urls as $url) {
                     $blob = file_get_contents($url);
                     if (false === $blob) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                            . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
                         return false;
                     }
                     $response[$key][] = $blob;

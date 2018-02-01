@@ -10,4 +10,8 @@
     <favorite>true</favorite>
     <order>400</order>
     <template>tine20:///Tinebase/folders/shared/export/templates/Addressbook/addressbook_contact_export.docx</template>
+    <customfieldBlackList>
+        <name>favorite_day</name>
+        <name>favorite_partner</name>
+    </customfieldBlackList>
 </config>

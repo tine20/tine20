@@ -123,10 +123,11 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             // transform id to path
             if (strpos($v, '/') === FALSE) {
                 try {
-                    $v = Tinebase_Container::getInstance()->getContainerById($v, TRUE)->getPath();
+                    $container = Tinebase_Container::getInstance()->getContainerById($v, TRUE);
+                    $v = $container ? $container->getPath() : '/';
+
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getTraceAsString());
+                    Tinebase_Exception::log($teia);
                     $v = '/';
                 }
             }

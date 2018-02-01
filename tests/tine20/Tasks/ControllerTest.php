@@ -231,7 +231,7 @@ class Tasks_ControllerTest extends TestCase
         try {
             $updatedTask = $this->_controller->update($resolvableConcurrencyTask2);
             $this->assertEquals($resolvableConcurrencyTask2->due, $updatedTask->due);
-        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+        } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
             $this->fail($ttecc);
         }
     }
@@ -250,7 +250,7 @@ class Tasks_ControllerTest extends TestCase
         try {
             $updatedTask = $this->_controller->update($resolvableConcurrencyTask2);
             $this->assertEquals($resolvableConcurrencyTask->due, $updatedTask->due);
-        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+        } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
             $this->fail($ttecc);
         }
     }
@@ -267,7 +267,7 @@ class Tasks_ControllerTest extends TestCase
         $conflictTask = clone $utask;
         $conflictTask->seq = 0;
         $conflictTask->summary = 'Non resolvable conflict';
-        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
         $this->_controller->update($conflictTask);
     }
 

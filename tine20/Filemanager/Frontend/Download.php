@@ -203,7 +203,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $view = new Zend_View();
         $view->setScriptPath('Filemanager/views');
 
-        $view->logoPath = Tinebase_Core::getUrl() . '/images/tine_logo.png';
+        $view->logoPath = Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO));
 
         if ($path !== null) {
             $view->path = (empty($path)) ? '/' . $node->name : '/' . implode('/', $path);

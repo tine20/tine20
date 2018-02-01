@@ -88,10 +88,13 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
         foreach ($records as $list) {
             if (isset($list->memberroles)) {
                 foreach ($list->memberroles as $memberrole) {
-                    $contact = $contacts->getById($memberrole->contact_id);
-                    if ($contact) {
-                        $memberrole->contact_id = $contact;
+                    if ($contacts !== null) {
+                        $contact = $contacts->getById(is_array($memberrole) ? $memberrole['contact_id'] : $memberrole->contact_id);
+                        if ($contact) {
+                            $memberrole->contact_id = $contact;
+                        }
                     }
+
                     $listRole = $listRoles->getById($memberrole->list_role_id);
                     if ($listRole) {
                         $memberrole->list_role_id = $listRole;

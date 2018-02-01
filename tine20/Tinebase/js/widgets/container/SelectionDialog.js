@@ -64,7 +64,8 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
     initComponent: function(){
         Tine.widgets.container.SelectionDialog.superclass.initComponent.call(this);
 
-        this.title = this.title ? this.title : String.format(i18n._('please select a {0}'), this.recordClass.getContainerName());
+        var containerName = this.recordClass ? this.recordClass.getContainerName() : i18n._('Container');
+        this.title = this.title ? this.title : String.format(i18n._('please select a {0}'), containerName);
 
         this.cancelAction = new Ext.Action({
             text: i18n._('Cancel'),

@@ -213,6 +213,10 @@ class Tinebase_Cache_PerRequest
                         
                         throw new Tinebase_Exception_NotFound('cacheId not found');
                     }
+                    // race condition... is the value really false or did just somebody add the value to the cache?
+                    $value = $persistentCache->load($persistentCacheId);
+                    // it is still a race condition, load [T1], add [T2], test [T1], remove [T2], load [T1] ...
+                    // but that seems rather extremely unlikely
                 }
                 
                 $this->_inMemoryCache[$class][$method][$cacheId] = array('value' => $value, 'usePersistentCache' => $usePersistentCache);

@@ -685,28 +685,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function uploadTempFile()
     {
-        try {
-            $this->checkAuth();
-            
-            // close session to allow other requests
-            Tinebase_Session::writeClose(true);
-        
-            $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
-            
-            die(Zend_Json::encode(array(
-               'status'   => 'success',
-               'tempFile' => $tempFile->toArray(),
-            )));
-        } catch (Tinebase_Exception $exception) {
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
-            
-            if (! headers_sent()) {
-               header("HTTP/1.0 500 Internal Server Error");
-            }
-            die(Zend_Json::encode(array(
-               'status'   => 'failed',
-            )));
-        }
+        $this->checkAuth();
+        $this->_uploadTempFile();
     }
     
     /**

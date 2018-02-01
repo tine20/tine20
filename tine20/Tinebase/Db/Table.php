@@ -97,24 +97,7 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         
         $cacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
         
-        // try to get description from in-memory caches first
-        try {
-            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, false /* ignore persistent cache */);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // try to get description from APC
-            if (function_exists('apc_fetch')) {
-                // prefix with applications hash, as this hash changes if an application got updated
-                $apcCacheId = Tinebase_Application::getInstance()->getApplicationsHash() . $cacheId;
-                
-                if ($result = apc_fetch($apcCacheId)) {
-                    Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, false /* store in in-memory cache only */);
-                    
-                    return $result;
-                }
-            }
-        }
-        
-        // try to get description from persistent cache
+        // try to get description from in-memory cache & persistent cache
         try {
             return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -128,12 +111,6 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         if (count($result) > 0) {
             // save result for next request
             Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-            
-            // if APC extension is installed also store in APC
-            if (function_exists('apc_store')) {
-                /** @noinspection PhpUndefinedVariableInspection */
-                apc_store($apcCacheId, $result, 3600);
-            }
         }
         
         return $result;

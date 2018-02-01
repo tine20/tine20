@@ -402,24 +402,22 @@ class Tinebase_Helper
                 $requestBody = null;
             }
             return $requestBody;
-        } else if (file_exists($filenameOrUrl)) {
-            return file_get_contents($filenameOrUrl);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
-                    . ' File not found');
-
-            return null;
         }
+
+        $filename = self::getFilename($filenameOrUrl, false);
+        return $filename ? file_get_contents($filename) : null;
     }
 
     /**
      * get filename (might be an url)
+     * note: local files are returned with prepended "file://" scheme
      *
-     * @param $filenameOrUrl
+     * @param string $filenameOrUrl
+     * @param boolean $throwException
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getFilename($filenameOrUrl)
+    public static function getFilename($filenameOrUrl, $throwException = true)
     {
         if (strpos($filenameOrUrl, 'http') === 0) {
             // TODO use "real" tempfile?
@@ -432,8 +430,23 @@ class Tinebase_Helper
             $filename = self::writeToTempFile($content, $extension);
         } else {
             $filename = $filenameOrUrl;
-            if (! file_exists($filenameOrUrl)) {
-                throw new FileNotFoundException('File ' . $filenameOrUrl . ' not found');
+            $baseDir = dirname(__DIR__) . '/';
+
+            if (strpos($filename, '://') === false) {
+                // relative to tine20 root
+                if ('/' !== $filename[0]) {
+                    $filename = $baseDir . $filename;
+                }
+
+                $filename = 'file://' . $filename;
+            }
+
+            if (! file_exists($filename)) {
+                if ($throwException) {
+                    throw new FileNotFoundException('File ' . $filename . ' not found');
+                } else {
+                    $filename = null;
+                }
             }
         }
 

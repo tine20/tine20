@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -362,13 +362,30 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             $property = $_name;
         }
 
+        $disallowedKeys = null;
+        if ($property === 'customfields' && $this->_config->customfieldBlackList) {
+            $disallowedKeys = Tinebase_Helper_ZendConfig::getChildrenStrings($this->_config->customfieldBlackList,
+                'name');
+        }
+
         $recordSet = $this->_currentRecord->{$property};
         if (is_array($recordSet)) {
             if (count($recordSet) === 0) {
                 return;
             }
             if (($record = reset($recordSet)) instanceof Tinebase_Record_Abstract) {
-                $recordSet = new Tinebase_Record_RecordSet(get_class($record), $recordSet);
+                if (null !== $disallowedKeys) {
+                    $realRecordSet = new Tinebase_Record_RecordSet(get_class($record));
+                    foreach($recordSet as $key => $value) {
+                        if (in_array($key, $disallowedKeys)) {
+                            continue;
+                        }
+                        $realRecordSet->addRecord($value);
+                    }
+                    $recordSet = $realRecordSet;
+                } else {
+                    $recordSet = new Tinebase_Record_RecordSet(get_class($record), $recordSet);
+                }
             } else {
                 $realRecordSet = new Tinebase_Record_RecordSet(Tinebase_Record_Generic::class, array());
                 $mergedRecords = array();
@@ -380,7 +397,10 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 }
                 $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 unset($validators['customfields']);
-                foreach($recordSet as $recordArray) {
+                foreach($recordSet as $key => $recordArray) {
+                    if (null !== $disallowedKeys && in_array($key, $disallowedKeys)) {
+                        continue;
+                    }
                     $record = new Tinebase_Record_Generic(array(), true);
                     $record->setValidators($validators);
                     $record->setFromArray($recordArray);
@@ -397,6 +417,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         } else {
             return;
         }
+
         $oldTemplateVariables = $this->_templateVariables;
         $oldProcessor = $this->_currentProcessor;
         $oldDocTemplate = $this->_docTemplate;
