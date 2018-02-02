@@ -42,7 +42,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                   => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality', 'note'))
+            'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality'))
         ),
         'path'                => array(
             'filter' => 'Tinebase_Model_Filter_Path',
