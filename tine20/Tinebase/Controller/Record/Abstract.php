@@ -54,7 +54,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_secondFactorValidated = false;
+    protected $_areaLockValidated = false;
 
     /**
      * use notes - can be enabled/disabled by useNotes
@@ -2035,7 +2035,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_SecondFactorRequired
+     * @throws Tinebase_Exception_AreaLocked
      */
     protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
                                     $_action)
@@ -2044,31 +2044,40 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-        $this->_checkSecondFactor();
+        $this->_checkAreaLock();
     }
 
     /**
-     * check second factor
+     * check area lock
      *
-     * @throws Tinebase_Exception_SecondFactorRequired
+     * @throws Tinebase_Exception_AreaLocked
+     *
+     * TODO only check with json frontend? maybe we should enable this only from json frontends
      */
-    protected function _checkSecondFactor()
+    protected function _checkAreaLock()
     {
-        if ($this->_secondFactorValidated) {
+        if ($this->_areaLockValidated) {
             return;
         }
 
-        // TODO only check with json frontend? maybe we should enable this only from json frontends
-
-        $protectedApps = Tinebase_Config::getInstance()->get(Tinebase_Config::SECONDFACTORPROTECTEDAPPS, array());
-        if (in_array($this->_applicationName, $protectedApps)) {
-            if (! Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-                throw new Tinebase_Exception_SecondFactorRequired('Second Factor required for application '
+        if (Tinebase_AreaLock::getInstance()->hasLock($this->_applicationName)) {
+            if (Tinebase_AreaLock::getInstance()->isLocked($this->_applicationName)) {
+                throw new Tinebase_Exception_AreaLocked('Application is locked: '
                     . $this->_applicationName);
             } else {
-                $this->_secondFactorValidated = true;
+                $this->_areaLockValidated = true;
             }
+        } else {
+            $this->_areaLockValidated = true;
         }
+    }
+
+    /**
+     * reset area lock validation
+     */
+    public function resetValidatedAreaLock()
+    {
+        $this->_areaLockValidated = false;
     }
 
     /**

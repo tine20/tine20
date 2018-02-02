@@ -21,6 +21,13 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     /**
+     * area locks
+     *
+     * @var string
+     */
+    const AREA_LOCKS = 'areaLocks';
+
+    /**
      * authentication backend config
      *
      * @var string
@@ -33,20 +40,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
-
-    /**
-     * authentication second factor
-     *
-     * @var string
-     */
-    const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
-
-    /**
-     * authentication second factor protection for apps
-     *
-     * @var string
-     */
-    const SECONDFACTORPROTECTEDAPPS = 'Tinebase_Authentication_SecondFactor_Protected_Apps';
 
     /**
      * save automatic alarms when creating new record
@@ -457,6 +450,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MAX_USERNAME_LENGTH = 'max_username_length';
 
     /**
+     * USER_PIN
+     *
+     * @var string
+     */
+    const USER_PIN = 'userPin';
+
+    /**
      * conf.d folder name
      *
      * @var string
@@ -610,6 +610,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         /**
+         * lock certain areas of tine20 (apps, login, data safe, ...) with additional auth (pin, privacy idea, ...)
+         */
+        self::AREA_LOCKS => array(
+            //_('Area Locks')
+            'label'                 => 'Area Locks',
+            //_('Configured Area Locks')
+            'description'           => 'Configured Area Locks',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Tinebase_Model_AreaLockConfig'),
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => true,
+            'setByAdminModule'      => false,
+            'default'               => [],
+        ),
+        /**
          * for example: array('en', 'de')
          */
         self::AVAILABLE_LANGUAGES => array(
@@ -721,39 +736,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
-        ),
-        /**
-         * example config:
-         *
-         * array(
-         *      'active'                => true,
-         *      'provider'              => 'PrivacyIdea',
-         *      'url'                   => 'https://localhost/validate/check',
-         *      'allow_self_signed'     => true,
-         *      'ignorePeerName'        => true,
-         *      'login'                 => true, // validate during login + show field on login screen
-         *      'sessionLifetime'       => 15 // minutes
-         * )
-         */
-        self::AUTHENTICATIONSECONDFACTOR => array(
-            //_('Second Factor Authentication Configuration')
-            'label'                 => 'Second Factor Authentication Configuration',
-            'description'           => 'Second Factor Authentication Configuration',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::SECONDFACTORPROTECTEDAPPS => array(
-            //_('Second Factor Protected Applications')
-            'label'                 => 'Second Factor Protected Applications',
-            //_('Second Factor Authentication is needed to access these applications')
-            'description'           => 'Second Factor Authentication is needed to access these applications',
-            'type'                  => 'array',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
         ),
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')
@@ -1470,6 +1452,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'type'                  => 'int',
             'default'               => NULL,
             'clientRegistryInclude' => FALSE,
+        ),
+        self::USER_PIN => array(
+            //_('User PIN')
+            'label'                 => 'User PIN',
+            //_('Users can have a PIN')
+            'description'           => 'Users can have a PIN',
+            'type'                  => 'boolean',
+            'default'               => false,
+            'clientRegistryInclude' => true,
         ),
         self::CONFD_FOLDER => array(
             //_('conf.d folder name')

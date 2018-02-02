@@ -213,69 +213,41 @@ class Tinebase_AuthTest extends TestCase
     /**
      * @see 0011366: support privacyIdea authentication
      */
-    public function testSecondFactor()
+    public function testMockAuthAdapter()
     {
-        $result = Tinebase_Auth::validateSecondFactor('phil', 'phil', array(
+        $authAdapter = Tinebase_Auth_Factory::factory('Mock', array(
             'active' => true,
-            'provider' => 'Mock',
             'url' => 'https://localhost/validate/check',
         ));
-        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
+        $authAdapter->setIdentity('phil');
+        $authAdapter->setCredential('phil');
+        $result = $authAdapter->authenticate();
+        $this->assertEquals(true, $result->isValid());
     }
 
     /**
      * @see 0013272: add pin column, backend and config
      */
-    public function testSecondFactorTine20()
+    public function testPinAuth()
     {
         $user = Tinebase_Core::getUser();
-        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, '', array(
-            'active' => true,
-            'provider' => 'Tine20',
-        ));
-        $this->assertEquals(Tinebase_Auth::FAILURE, $result, 'empty password should always fail');
 
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, '1234', array(
-            'active' => true,
-            'provider' => 'Tine20',
-        ));
-        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
-    }
-
-    /**
-     * @see 0013328: protect applications with second factor
-     */
-    public function testSecondFactorAppProtection()
-    {
-        // set configs
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SECONDFACTORPROTECTEDAPPS, array(
-            'Tasks'
-        ));
-        Tinebase_Config::getInstance()->set(Tinebase_Config::AUTHENTICATIONSECONDFACTOR, array(
-            'active' => true,
-            'provider' => 'Tine20',
-        ));
-
-        // set pin
-        $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, '1234');
-
-        // try to access app
         try {
-            $tasks = Tasks_Controller_Task::getInstance()->getAll();
-            self::fail('it should not be possible to access app without PIN');
-        } catch (Tinebase_Exception $te) {
-            // check exception
-            self::assertTrue($te instanceof Tinebase_Exception_SecondFactorRequired);
+            Tinebase_User::getInstance()->setPin($user, 'abcd1234');
+            self::fail('expected exception - it is not allowed to have non-numbers in pin');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            self::assertEquals('Only numbers are allowed for PINs', $tesg->getMessage());
         }
 
-        // validate pin
-        $json = new Tinebase_Frontend_Json();
-        $json->validateSecondFactor('1234');
+        Tinebase_User::getInstance()->setPin($user, '1234');
+        $authAdapter = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
+        $authAdapter->setIdentity($user->accountLoginName);
+        $authAdapter->setCredential('');
+        $result = $authAdapter->authenticate();
+        $this->assertFalse($result->isValid(), 'empty pin should always fail');
 
-        // try to access app again
-        $result = Tasks_Controller_Task::getInstance()->getAll();
-        self::assertGreaterThanOrEqual(0, count($result));
+        $authAdapter->setCredential('1234');
+        $result = $authAdapter->authenticate();
+        $this->assertTrue($result->isValid());
     }
 }

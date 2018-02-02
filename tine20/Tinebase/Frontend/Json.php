@@ -205,28 +205,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * validate second factor
-     *
-     * @param $password
-     * @return array
-     * @throws Tinebase_Exception_Backend
-     */
-    public function validateSecondFactor($password)
-    {
-        $user = Tinebase_Core::getUser();
-        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, $password);
-        $success = Tinebase_Auth::SUCCESS === $result;
-
-        if ($success) {
-            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
-        }
-
-        return array(
-            'success' => $success
-        );
-    }
-
-    /**
      * change pin of user
      *
      * @param  string $oldPassword the old password
@@ -802,7 +780,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-        $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
         try {
             $filesHash = Tinebase_Frontend_Http::getAssetHash();
         } catch (Exception $e) {
@@ -811,16 +788,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-
-            // secondfactor config
-            // TODO pass sf config as array (but don't send everything to client)
-            'secondFactor' => $secondFactorConfig && $secondFactorConfig->active,
-            'secondFactorLogin' => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
-            'secondFactorSessionLifetime' => $secondFactorConfig && $secondFactorConfig->sessionLifetime
-                ? $secondFactorConfig->sessionLifetime
-                : 15,
-            'secondFactorPinChangeAllowed' => $secondFactorConfig
-                && $secondFactorConfig->active && $secondFactorConfig->provider && $secondFactorConfig->provider === 'Tine20',
 
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
@@ -1552,15 +1519,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * @throws Exception
      * @throws Zend_Session_Exception
+     *
+     * @todo throw event here that can be used for example to extend an area lock (@see \Tinebase_AreaLock::extendLock)
      */
     public function reportPresence($lastPresence)
     {
-        if (Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
-            $result = true;
-        } else {
-            $result = false;
-        }
+        // TODO tinebase_presenceObserver einführen - getlastpresence for current user
+        // TODO save presence in SESSION (use some struct)
 
         return array(
             'success' => $result

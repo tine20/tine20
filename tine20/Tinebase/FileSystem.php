@@ -102,7 +102,7 @@ class Tinebase_FileSystem implements
      *
      * @var array
      */
-    protected $_secondFactorCache = array();
+    protected $_areaLockCache = array();
 
     /**
      * class cache to remember all members of the notification role
@@ -2646,8 +2646,8 @@ class Tinebase_FileSystem implements
     {
         // always refetch node to have current acl_node value
         $node = $this->get($_containerId);
-        if (!isset($this->_secondFactorCache[$node->getId()]) &&
-            null !== $node->acl_node && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+        if (!isset($this->_areaLockCache[$node->getId()]) &&
+            null !== $node->acl_node && ! Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
             if ($node->getId() !== $node->acl_node) {
                 $acl_node = $this->get($node->acl_node);
             } else {
@@ -2657,7 +2657,7 @@ class Tinebase_FileSystem implements
                 return false;
             }
         }
-        $this->_secondFactorCache[$node->getId()] = true;
+        $this->_areaLockCache[$node->getId()] = true;
         /** @noinspection PhpUndefinedMethodInspection */
         $account = $_accountId instanceof Tinebase_Model_FullUser
             ? $_accountId

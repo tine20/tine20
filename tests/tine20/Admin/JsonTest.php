@@ -424,11 +424,11 @@ class Admin_JsonTest extends TestCase
         $pw = '1234';
         $this->_json->resetPin($userArray, $pw);
 
-        $result = Tinebase_Auth::validateSecondFactor($userArray['accountLoginName'], '1234', array(
-            'active' => true,
-            'provider' => 'Tine20',
-        ));
-        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
+        $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
+        $pinAuth->setIdentity($userArray['accountLoginName']);
+        $pinAuth->setCredential($pw);
+        $result = $pinAuth->authenticate();
+        $this->assertEquals(Tinebase_Auth::SUCCESS, $result->getCode());
     }
 
     /**

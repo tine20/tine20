@@ -399,6 +399,8 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Tinebase' => array(
                 'Tinebase_Model_AccessLog',
+                'Tinebase_Model_AreaLockConfig',
+                'Tinebase_Model_AreaLockState',
                 'Tinebase_Model_ContainerContent',
                 'Tinebase_Model_Application',
                 'Tinebase_Model_Registration',

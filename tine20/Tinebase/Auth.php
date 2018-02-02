@@ -45,6 +45,12 @@ class Tinebase_Auth
     const MODSSL = 'ModSsl';
 
     /**
+     * PIN auth
+     *
+     */
+    const PIN = 'Pin';
+
+    /**
      * General Failure
      */
     const FAILURE                       =  Zend_Auth_Result::FAILURE;
@@ -395,7 +401,7 @@ class Tinebase_Auth
      * Returns default configuration for all supported backends 
      * and overrides the defaults with concrete values stored in this configuration 
      * 
-     * @param String | optional $_key
+     * @param bool $_getConfiguredBackend
      * @return mixed [If {@param $_key} is set then only the specified option is returned, otherwise the whole options hash]
      */
     public static function getBackendConfigurationWithDefaults($_getConfiguredBackend = TRUE)
@@ -423,6 +429,7 @@ class Tinebase_Auth
      * Getter for {@see $_backendConfigurationDefaults}
      * @param String | optional $_backendType
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function getBackendConfigurationDefaults($_backendType = null) {
         if ($_backendType) {
@@ -433,34 +440,5 @@ class Tinebase_Auth
         } else {
             return self::$_backendConfigurationDefaults;
         }
-    }
-
-    /**
-     * Second factor authentication
-     *
-     * @param string $username
-     * @param string $password
-     * @param array $options
-     * @param boolean $allowEmpty
-     * @return int
-     * @throws Tinebase_Exception_Backend
-     */
-    public static function validateSecondFactor($username, $password, $options = null, $allowEmpty = false)
-    {
-        if (! $options) {
-            $options = Tinebase_Config::getInstance()->get(
-                Tinebase_Config::AUTHENTICATIONSECONDFACTOR,
-                new Tinebase_Config_Struct()
-            )->toArray();
-        }
-
-        if (isset($options['provider'])) {
-            $authProviderClass = 'Tinebase_Auth_SecondFactor_' . $options['provider'];
-            if (class_exists($authProviderClass)) {
-                $authProvider = new $authProviderClass($options);
-                return $authProvider->validate($username, $password, $allowEmpty);
-            }
-        }
-        throw new Tinebase_Exception_Backend('Second factor backend not recognized / misconfigured');
     }
 }

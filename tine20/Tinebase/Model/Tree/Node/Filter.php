@@ -154,7 +154,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     {
         parent::_appendGrantsFilter($select, $backend, $user);
 
-        if (!$this->_ignorePinProtection && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+        if (! $this->_ignorePinProtection && ! Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
             $db = $backend->getAdapter();
             $uniqueId = uniqid('pinProtected');
             $select->joinLeft(array(

@@ -81,7 +81,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             disabled: true,
             handler: this.resetPinHandler,
             iconCls: 'action_password',
-            hidden: ! Tine.Tinebase.registry.get('secondFactorPinChangeAllowed'),
+            hidden: ! (Tine.Tinebase.registry.get('config').userPin && Tine.Tinebase.registry.get('config').userPin.value),
             scope: this
         });
 
