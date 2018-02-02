@@ -40,7 +40,12 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
      * @cfg {Boolean} userOnly
      */
     userOnly: false,
-    
+
+    /**
+     * @cfg {Boolean} addPathFilter
+     */
+    addPathFilter: true,
+
     /**
      * use account objects/records in get/setValue
      * 
@@ -95,13 +100,20 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
 
-        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter},
-            pathFilter = { field: 'path', operator: 'contains', value: qevent.query };
+        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter};
 
-        this.store.baseParams.filter = [{condition: "OR", filters: [
-            contactFilter,
-            pathFilter
-        ] }];
+        if (this.addPathFilter) {
+            var pathFilter = {field: 'path', operator: 'contains', value: qevent.query};
+
+            this.store.baseParams.filter = [{
+                condition: "OR", filters: [
+                    contactFilter,
+                    pathFilter
+                ]
+            }];
+        } else {
+            this.store.baseParams.filter = [contactFilter];
+        }
 
         if (this.userOnly) {
             this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
