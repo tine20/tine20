@@ -95,24 +95,39 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         $tasks = [];
 
         do {
-            // first get and mark a task as running (within a transaction)
-            $transactionId = $transactionManager->startTransaction($db);
-            if (null === ($task = $this->_backend->getDueTask())) {
+            // first get a random task due to execute (without a transaction to avoid deadlocks!)
+            if (null === ($dueTask = $this->_backend->getDueTask())) {
                 // nothing to do, stop work
-                $transactionManager->commitTransaction($transactionId);
                 break;
             }
 
             // in case a task fails quickly, we may run by here every few milli seconds... so better keep count
-            if (!isset($tasks[$task->getId()])) {
-                $tasks[$task->getId()] = 1;
+            if (!isset($tasks[$dueTask->getId()])) {
+                $tasks[$dueTask->getId()] = 1;
             } else {
-                if (++$tasks[$task->getId()] > 5) {
+                if (++$tasks[$dueTask->getId()] > 5) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
-                        . __LINE__ . ' task ' . $task->name . ' already passed by 5 times, aborting now');
-                    $transactionManager->commitTransaction($transactionId);
+                        . __LINE__ . ' task ' . $dueTask->name . ' already passed by 5 times, aborting now');
                     return false;
                 }
+            }
+
+            // now get the task transaction and deadlock safe and mark it running
+            $transactionId = $transactionManager->startTransaction($db);
+
+            if (null === ($task = $this->_backend->getTaskForUpdate($dueTask->getId()))) {
+                // this may happen legally, though very unlikely, in case the task was deleted
+                // in a parallel process after getting it in the first select statement
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' task ' . $dueTask->name . ' ' . $dueTask->getId() . ' disappeared');
+                $transactionManager->commitTransaction($transactionId);
+                continue;
+            }
+
+            if (!empty($task->lock_id)) {
+                // somebody else snatched it away, no worry, just continue and maybe get another task
+                $transactionManager->commitTransaction($transactionId);
+                continue;
             }
 
             if (true !== $this->_backend->markTaskRunning($task)) {
