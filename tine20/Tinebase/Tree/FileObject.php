@@ -564,7 +564,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     {
         // TODO PGSQL =>  this is only supported by MySQL
         // pgsql -> subquery with ids?
-        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.5')) {
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $stmt = $this->_db->query('DELETE revisions.* FROM ' . SQL_TABLE_PREFIX . $this->_revisionsTableName . ' AS revisions LEFT JOIN ' .
                 SQL_TABLE_PREFIX . $this->_tableName . ' AS  objects ON revisions.id = objects.id AND revisions.revision = objects.revision WHERE ' .
                 $this->_db->quoteInto('revisions.id = ?', $_id) . ' AND objects.id IS NULL AND revisions.revision IN ' .

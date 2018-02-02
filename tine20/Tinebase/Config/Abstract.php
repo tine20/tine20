@@ -808,7 +808,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $features = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $features = $this->get(self::ENABLED_FEATURES);
-            if ('Tinebase' === $this->_appName && !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
+            if ('Tinebase' === $this->_appName && !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
                 $features->{Tinebase_Config::FEATURE_SEARCH_PATH} = false;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -818,10 +818,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         if (isset($features->{$featureName})) {
-            if (Tinebase_Config::FEATURE_SEARCH_PATH === $featureName && 'Tinebase' === $this->_appName &&
-                !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
-                return false;
-            }
             return $features->{$featureName};
         }
 
