@@ -818,6 +818,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         if (isset($features->{$featureName})) {
+            if (Tinebase_Config::FEATURE_SEARCH_PATH === $featureName && 'Tinebase' === $this->_appName &&
+                !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+                return false;
+            }
             return $features->{$featureName};
         }
 
