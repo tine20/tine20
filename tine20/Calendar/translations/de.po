@@ -1770,3 +1770,18 @@ msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
 
 msgid "Attendee/Resources"
 msgstr "Teilnehmer/Ressourcen"
+
+msgid "Confirmed"
+msgstr "Bestätigt"
+
+msgid "Canceled"
+msgstr "Abgesagt"
+
+msgid "Public"
+msgstr "Öffentlich"
+
+msgid "Transparent"
+msgstr "Transparent"
+
+msgid "Opaque"
+msgstr "Undurchsichtig"

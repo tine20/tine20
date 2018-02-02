@@ -21,7 +21,28 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FIXED_CALENDARS = 'fixedCalendars';
-    
+
+    /**
+     * Event Status Available
+     *
+     * @var string
+     */
+    const EVENT_STATUS = 'eventStatus';
+
+    /**
+     * Event Transparencies Available
+     *
+     * @var string
+     */
+    const EVENT_TRANSPARENCIES = 'eventTransparencies';
+
+    /**
+     * Event Classes Available
+     *
+     * @var string
+     */
+    const EVENT_CLASSES = 'eventClasses';
+
     /**
      * Attendee Status Available
      * 
@@ -220,6 +241,56 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => 'attendee',
         ),
+        self::EVENT_STATUS => [
+            //_('Event Status Available')
+            'label'                 => 'Event Status Available',
+            //_('Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'default'               => [
+                'records' => [
+                    ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true], //_('Confirmed')
+                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true], //_('Canceled')
+                    ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true], //_('Tentative')
+                ],
+                'default' => 'CONFIRMED'
+            ]
+        ],
+        self::EVENT_CLASSES => [
+            //_('Event Classes Available')
+            'label'                 => 'Event Classes Available',
+            //_('Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'default'               => [
+                'records' => [
+                    ['id' => 'PUBLIC',       'value' => 'Public',       'system' => true], //_('Public')
+                    ['id' => 'PRIVATE',      'value' => 'Private',      'system' => true], //_('Private')
+//                    ['id' => 'CONFIDENTIAL', 'value' => 'Confidential', 'system' => true], //_('Confidential')
+                ],
+                'default' => 'PUBLIC'
+            ]
+        ],
+        self::EVENT_TRANSPARENCIES => [
+            //_('Event Transparencies Available')
+            'label'                 => 'Event Transparencies Available',
+            //_('Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'default'               => [
+                'records' => [
+                    ['id' => 'TRANSPARENT', 'value' => 'Transparent', 'system' => true], //_('Transparent')
+                    ['id' => 'OPAQUE',      'value' => 'Opaque',      'system' => true], //_('Opaque')
+                ],
+                'default' => 'OPAQUE'
+            ]
+        ],
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')
             'label'                 => 'Attendee Status Available',
