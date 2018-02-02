@@ -177,11 +177,16 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Model_Path $path */
         foreach($paths as $path) {
             if (false === ($pos = mb_strpos($path->path, $oldPathPart))) {
-                throw new Tinebase_Exception_UnexpectedValue('could not find old part part: ' . $oldPathPart . ' in path: ' . $path->path);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                    . __LINE__ . 'could not find old part part: ' . $oldPathPart . ' in path: ' . $path->path);
+                $this->_backend->delete($path->getId());
+                continue;
             }
             if (false !== mb_strpos($path->path, $oldPathPart, $pos + 1)) {
                 // TODO split by /, find right part, replace it, glue it with /
                 // TODO write test for this code path!!!!
+                $this->_backend->delete($path->getId());
+                continue;
             } else {
                 $path->path = str_replace($oldPathPart, $newPathPart, $path->path);
             }
