@@ -28,8 +28,8 @@ class Tinebase_Record_PathTest extends TestCase
 
     protected function setUp()
     {
-        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
-            $this->markTestSkipped('mysql 5.6.4 or higher required');
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            $this->markTestSkipped('mysql 5.6.4+ | mariadb >= 10.0.5+ required');
         }
 
         $this->_uit = Tinebase_Record_Path::getInstance();
