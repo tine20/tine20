@@ -66,8 +66,19 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
         this.fbar = ['->', this.action_close];
 
         Ext.getBody().on('keydown', function (e) {
-            if (e.getKey() === e.SPACE || e.getKey() === e.ESC) {
-                this.onClose();
+            switch (e.getKey()) {
+                case e.SPACE:
+                case e.ESC:
+                    this.onClose();
+                    break;
+                case e.DOWN:
+                case e.UP:
+                case e.LEFT:
+                case e.RIGHT:
+                    this.onNavigate(e);
+                    break;
+                default:
+                    break;
             }
         }, this);
 
@@ -103,11 +114,8 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
                 _revision: revision
             }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-            me.add({
-                html: '<img style="width: 100%;" src="' + url + '" />',
-                xtype: 'panel',
-                frame: true,
-                border: true
+            me.afterIsRendered().then(function() {
+                me.update('<img style="width: 100%;" src="' + url + '" />');
             });
         }, this);
     },
@@ -116,9 +124,33 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
      * Fires if no previews are available
      */
     onNoPreviewAvailable: function () {
-        this.html = '<b>' + this.app.i18n._('No preview available.') + '</b>';
+        var me = this;
+        me.afterIsRendered().then(function() {
+            me.update('<b>' + me.app.i18n._('No preview available.') + '</b>');
+        });
     },
 
+    onNavigate: function(e) {
+        if (this.sm) {
+            switch (e.getKey()) {
+                case e.DOWN:
+                    this.sm.selectNext();
+                    break;
+                case e.UP:
+                    this.sm.selectPrevious();
+                    break;
+                default:
+                    break;
+            }
+
+            if (this.sm.getSelected() != this.record) {
+                this.record = this.sm.getSelected();
+                this.removeAll(true);
+                this.loadPreview();
+            }
+
+        }
+    },
     /**
      * @private
      */

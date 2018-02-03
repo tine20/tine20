@@ -318,7 +318,8 @@ Tine.Filemanager.nodeActions.Preview = {
             if (selection && selection.get('type') === 'file') {
                 Tine.Filemanager.DocumentPreview.openWindow({
                     record: selection,
-                    initialApp: this.initialConfig.initialApp || null
+                    initialApp: this.initialConfig.initialApp || null,
+                    sm: this.initialConfig.sm
                 });
             }
         }
