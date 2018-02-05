@@ -458,24 +458,29 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             /** @var Tinebase_Record_Abstract $model */
             $model = $this->_modelName;
             if (null !== ($modelConf = $model::getConfiguration())) {
-                $model = '_' . $this->_translate->_($modelConf->recordName, $this->_locale);
+                $model = ' ' . $this->_translate->_($modelConf->recordName, $this->_locale);
             } else {
-                $model = explode('_', $model, 3);
+                $model = explode(' ', $model, 3);
                 if (count($model) === 3) {
-                    $model = '_' . $this->_translate->_($model[2], $this->_locale);
+                    $model = ' ' . $this->_translate->_($model[2], $this->_locale);
                 } else {
                     $model = '';
                 }
             }
         }
+        
         $name = '';
         if (!empty($this->_config->label)) {
-            $name = '_' . $this->_translate->_($this->_config->label, $this->_locale);
+            
+            if ($model !== '') {
+                $name .= ' ';
+            }
+            
+            $name .= $this->_translate->_($this->_config->label, $this->_locale);
         }
         $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        return preg_replace('/\s+/', '_',
-            mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
-            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format));
+        return mb_strtolower($tineTranslate->_('Export', $this->_locale) . ' ' .
+            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format);
     }
 
 
