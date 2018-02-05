@@ -347,7 +347,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         // Open preview on space if a node is selected and the node type equals file
-        if (e.getKey() == e.SPACE) {
+        if (e.getKey() === 32) {
             this.action_preview.execute()
         }
     },
@@ -471,10 +471,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_systemLink = Tine.Filemanager.nodeActionsMgr.get('systemLink');
 
         if (this.previewsEnabled) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
-                initialApp: this.app,
-                sm: this.grid.getSelectionModel()
-            });
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
         }
 
         // grid only actions - work on node which is displayed (this.currentFolderNode)

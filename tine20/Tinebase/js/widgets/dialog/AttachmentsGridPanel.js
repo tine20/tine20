@@ -153,27 +153,14 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         // TODO: does user need rights for Filemanager?
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
-                initialApp: this.app,
-                sm: this.getSelectionModel()
-            });
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
         }
 
         this.actionUpdater.addActions([this.action_download, this.action_preview]);
         this.getTopToolbar().addItem(this.action_download);
         this.contextMenu.addItem(this.action_download);
         
-        this.on('rowdblclick', this.onRowDbClick, this);
-        this.on('keydown', this.onKeyDown, this);
-    },
-
-    onKeyDown: function(e) {
-        var selectedRows = this.getSelectionModel().getSelections(),
-            rowRecord = selectedRows[0];
-
-        if (e.getKey() == e.SPACE && Tine.Tinebase.configManager.get('filesystem').createPreviews && rowRecord.data.type == 'file' && !this.readOnly) {
-            this.action_preview.execute();
-        }
+        this.on('rowdblclick', this.onRowDbClick.createDelegate(this), this);
     },
 
     onRowDbClick: function () {
