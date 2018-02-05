@@ -242,11 +242,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->summary = 'detail update notification has precedence over attendee update';
         $persistentEvent->url = 'http://somedetail.com';
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $persistentEvent->status = Calendar_Model_Event::STATUS_TENTATIVE;
         
         self::flushMailer();
         $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
+
+        $messages = self::getMessages();
+        $this->assertContains('"' . Tinebase_Translation::getTranslation('Calendar')->translate('Tentative') . '"', $messages[0]->getBodyText()->getRawContent(), 'keyfield not resolved');
     }
         
     /**
