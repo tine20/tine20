@@ -640,6 +640,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             '_currentRowType'       => $this->_currentRowType,
             '_twigTemplate'         => $this->_twigTemplate,
             '_twigMapping'          => $this->_twigMapping,
+            '_keyFields'            => $this->_keyFields,
+            '_virtualField'         => $this->_virtualFields,
         );
     }
 
@@ -880,7 +882,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
-        foreach ($this->_keyFields as $name => $keyField) {
+        foreach ((array)$this->_keyFields as $name => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
             $keyField = $appConfig->{$keyField};
             $record->{$name} = $keyField->getTranslatedValue($record->{$name});

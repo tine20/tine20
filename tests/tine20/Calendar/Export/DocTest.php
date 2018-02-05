@@ -37,5 +37,40 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $doc->save($tempfile);
 
         $this->assertGreaterThan(0, filesize($tempfile));
+        unlink($tempfile);
+    }
+
+    public function testExportCalendarResource()
+    {
+        $resourceTest = new Calendar_Controller_ResourceTest();
+        $resourceTest->setUp();
+        $resource = $resourceTest->testCreateResource();
+        $resource->relations = [
+            new Tinebase_Model_Relation([
+                'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
+                'related_model' => Addressbook_Model_Contact::class,
+                'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_id' => $this->_personas['sclever']->contact_id,
+                'type' => 'STANDORT'
+            ], true)
+        ];
+        Calendar_Controller_Resource::getInstance()->update($resource);
+
+        $filter = new Calendar_Model_ResourceFilter();
+        $export = new Calendar_Export_Resource_Doc($filter, null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
+                    new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => Calendar_Model_Resource::class,
+                    'name' => 'cal_resource_doc'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $tempfile = Tinebase_TempFile::getTempPath() . '.docx';
+        $export->generate();
+        $export->save($tempfile);
+
+        $this->assertGreaterThan(0, filesize($tempfile));
+        unlink($tempfile);
     }
 }
