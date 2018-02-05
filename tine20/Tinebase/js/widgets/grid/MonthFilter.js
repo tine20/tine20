@@ -20,6 +20,7 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     
     valueType: 'date',
     defaultValue: 'monthLast',
+    dateFilterSupportsPeriod: false,
 
     appName: null,
     label: null,

@@ -99,6 +99,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * @type Integer
      */
     filterValueWidth: 200,
+
+    /**
+     * @cfg dateFilterSupportsPeriod
+     * @type Boolean
+     */
+    dateFilterSupportsPeriod: true,
     
     /**
      * holds the future operators of date filters. Auto set by getDateFutureOps
@@ -552,7 +558,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         } else if (this.defaultValue && this.defaultValue.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = this.defaultValue.toString();
         }
-        comboOps.unshift(['period',        i18n._('Period ...')]);
+        if (this.dateFilterSupportsPeriod) {
+            comboOps.unshift(['period', i18n._('Period ...')]);
+        }
 
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
@@ -589,7 +597,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 Ext.ux.form.PeriodPicker.getRange(value):
                 Ext.ux.form.PeriodPicker.prototype.range);
 
-            if (! this.manualSelect && value != 'period' && !value.from) {
+            if (this.dateFilterSupportsPeriod && ! this.manualSelect && value != 'period' && !value.from) {
                 range = window.lodash.get(String(value).match(/(day|week|month|quater|year)This$/), 1);
                 if (range) {
                     value = 'period';
