@@ -78,7 +78,7 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     
     /**
      * do conversions
-     * -> sanitize account_id
+     * -> sanitize account_id and n_family
      *
      * @param array $_data
      * @return array
@@ -95,8 +95,6 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         if (empty($result['n_family']) && empty($result['org_name'])) {
             if (isset($result['n_fn'])) {
                 $result['n_family'] = $result['n_fn'];
-            } else {
-                $result['n_family'] = 'imported';
             }
         } 
         
