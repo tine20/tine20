@@ -1,6 +1,14 @@
 DirectoryIndex index.php
 
 <IfModule mod_php5.c>
+      Define PHP_MODULE_INSTALLED
+</IfModule>
+
+<IfModule mod_php7.c>
+      Define PHP_MODULE_INSTALLED
+</IfModule>
+
+<IfDefine PHP_MODULE_INSTALLED>
     php_value max_input_time 120
     php_value session.gc_maxlifetime 86400
     php_value memory_limit 128M
@@ -13,7 +21,7 @@ DirectoryIndex index.php
     php_flag magic_quotes_runtime off
     php_flag register_globals off
     php_value max_execution_time 90
-</IfModule>
+</IfDefine>
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
