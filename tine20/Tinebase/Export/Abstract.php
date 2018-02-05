@@ -772,7 +772,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // this is code present in the abstract controller, getRelatedData... why is it here?
 
         // get field types/identifiers from config
-        $identifiers = array();
+        $identifiers = [];
+        $types = [];
         if ($this->_config->columns) {
             $types = array();
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
@@ -780,13 +781,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $identifiers[] = $column->identifier;
             }
             $types = array_unique($types);
-        } else {
+        } /* else {
             $types = $this->_resolvedFields;
-        }
+        }*/
 
         // resolve users
         foreach ($this->_userFields as $field) {
-            if (in_array($field, $types) || in_array($field, $identifiers)) {
+            if (empty($types) || in_array($field, $types) || in_array($field, $identifiers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, true);
             }
