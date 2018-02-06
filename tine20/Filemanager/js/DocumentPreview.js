@@ -93,31 +93,41 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     },
 
     loadPreview: function () {
-        var me = this;
-
         if ('0' === this.record.get('preview_count')) {
             this.fireEvent('noPreviewAvailable');
             return;
         }
+        
+        this.removeAll(true);
+        
+        this.afterIsRendered().then(function () {
+            var me = this,
+                _ = window.lodash;
+            
+            _.range(me.record.get('preview_count')).forEach(function (previewNumber) {
+                var path = me.record.get('path'),
+                    revision = me.record.get('revision');
 
-        lodash.range(this.record.get('preview_count')).forEach(function (previewNumber) {
-            var path = this.record.get('path'),
-                revision = this.record.get('revision');
+                var url = Ext.urlEncode({
+                    method: 'Tinebase.downloadPreview',
+                    frontend: 'http',
+                    _path: path,
+                    _appId: me.initialApp ? me.initialApp.id : me.app.id,
+                    _type: 'previews',
+                    _num: previewNumber,
+                    _revision: revision
+                }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-            var url = Ext.urlEncode({
-                method: 'Tinebase.downloadPreview',
-                frontend: 'http',
-                _path: path,
-                _appId: this.initialApp ? this.initialApp.id : this.app.id,
-                _type: 'previews',
-                _num: previewNumber,
-                _revision: revision
-            }, Tine.Tinebase.tineInit.requestUrl + '?');
-
-            me.afterIsRendered().then(function() {
-                me.update('<img style="width: 100%;" src="' + url + '" />');
+                me.add({
+                    html: '<img style="width: 100%;" src="' + url + '" />',
+                    xtype: 'panel',
+                    frame: true,
+                    border: true
+                });
             });
-        }, this);
+            
+            me.doLayout();
+        }.bind(this));
     },
 
     /**
@@ -126,7 +136,14 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     onNoPreviewAvailable: function () {
         var me = this;
         me.afterIsRendered().then(function() {
-            me.update('<b>' + me.app.i18n._('No preview available.') + '</b>');
+            me.removeAll(true);
+            me.add({
+                html: '<b>' + me.app.i18n._('No preview available.') + '</b>',
+                xtype: 'panel',
+                frame: true,
+                border: true
+            });
+            me.doLayout();
         });
     },
 
@@ -143,7 +160,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
                     break;
             }
 
-            if (this.sm.getSelected() != this.record) {
+            if (this.sm.getSelected() !== this.record) {
                 this.record = this.sm.getSelected();
                 this.removeAll(true);
                 this.loadPreview();
