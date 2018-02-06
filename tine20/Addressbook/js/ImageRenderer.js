@@ -16,7 +16,8 @@ Ext.ns('Tine.Addressbook');
  */
 Tine.Addressbook.imageRenderer = function (jpegphoto, metadata, record) {
     function getImageUrl(url, width, height, contact) {
-        var mtime = contact.last_modified_time || contact.creation_time;
+        var _ = window.lodash,
+            mtime = (_.get(contact, 'data.last_modified_time') || _.get(contact, 'data.creation_time')) || null;
         if (url.match(/&/)) {
             url = Ext.ux.util.ImageURL.prototype.parseURL(url);
             url.width = width;
@@ -26,8 +27,8 @@ Tine.Addressbook.imageRenderer = function (jpegphoto, metadata, record) {
         }
         return url;
     }
-
-    var url = getImageUrl(jpegphoto, 90, 113, record.data);
+    
+    var url = getImageUrl(jpegphoto, 90, 113, record);
 
     return '<img src="' + url + '" />';
 };
