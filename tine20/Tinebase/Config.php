@@ -516,7 +516,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
-    
+
+    const INSTALL_LOGO = 'install_logo';
+    const WEBSITE_URL = 'website_url';
+
     const BRANDING_LOGO = 'branding_logo';
     const BRANDING_FAVICON = 'branding_favicon';
     const BRANDING_TITLE = 'branding_title';
@@ -1715,6 +1718,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO => array(
+            //_('Installation logo')
+            'label'                 => 'Installation logo',
+            //_('Path to custom installation logo.')
+            'description'           => 'Path to custom installation logo.',
+            'type'                  => 'string',
+            'default'               => false,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
         self::BRANDING_DESCRIPTION => array(
                 //_('custom description')
                 'label'                 => 'custom description',
@@ -1735,7 +1750,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'default'               => '',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+                'setBySetupModule'      => FALSE
+        ),
+        self::WEBSITE_URL => array(
+            //_('custom website url')
+            'label'                 => 'custom website url',
+            //_('Custom url used for logo on login page.')
+            'description'           => 'Custom url used for logo on login page.',
+            'type'                  => 'string',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_TITLE => array(
                 //_('custom title')

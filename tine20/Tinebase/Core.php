@@ -2134,4 +2134,20 @@ class Tinebase_Core
         $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
         return $sentryClient;
     }
+
+    /**
+     * Returns path to install logo, if no install logo is set use branding logo
+     * 
+     * @return null|string
+     * @throws FileNotFoundException
+     */
+    public static function getInstallLogo() {
+        $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
+        
+        if (!$logo) {
+            $logo =Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO};
+        }
+        
+        return Tinebase_Helper::getFilename($logo, false);
+    }
 }

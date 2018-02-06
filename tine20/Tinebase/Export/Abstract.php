@@ -1286,7 +1286,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _getTwigContext(array $context)
     {
         if (null === $this->_logoPath) {
-            $this->_logoPath = Tinebase_Helper::getFilename(Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO}, false);
+            $this->_logoPath = Tinebase_Core::getInstallLogo();
         }
 
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
