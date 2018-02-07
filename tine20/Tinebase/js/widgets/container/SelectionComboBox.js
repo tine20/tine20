@@ -203,7 +203,6 @@ Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
             fields: Tine.Tinebase.Model.Container,
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
             listeners: {
                 beforeload: this.onBeforeLoad.createDelegate(this),
                 load: this.onStoreLoad.createDelegate(this)
