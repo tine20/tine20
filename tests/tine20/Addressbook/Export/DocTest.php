@@ -117,30 +117,75 @@ class Addressbook_Export_DocTest extends TestCase
         ));
     }
 
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     * @throws Tinebase_Exception_AccessDenied
+     */
     public function testExportLetter()
     {
-        static::markTestSkipped('FIX ME');
+        // privat
+        $contactPrivat = new Addressbook_Model_Contact([
+                'n_given' => 'Privat',
+                'n_family' => 'Test Preferred',
+                'adr_two_street' => 'Privat Street 1',
+                'adr_two_postalcode' => '1234',
+                'adr_two_locality' => 'Privat City',
+                'preferred_address' => 1
+            ]
+        );
+        /* @var $contactPrivat Addressbook_Model_Contact */
+        $contactPrivat = Addressbook_Controller_Contact::getInstance()->create($contactPrivat);
 
-        $this->_genericExportTest(array(
-            'definition' => __DIR__ . '/../../../../tine20/Addressbook/Export/definitions/adb_doc_letter.xml',
-            'template' => 'file://' . __DIR__ . '/../../../../tine20/Addressbook/Export/templates/FIXME.docx',
-            'filename' => __METHOD__ . '_',
-        ));
-        /*
-        // make sure definition is imported
-        $definitionFile = __DIR__ . '/../../../../tine20/Addressbook/Export/definitions/adb_default_doc.xml';
-        $app = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
-        Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($definitionFile, $app);
+        // business
+        $contactBusiness = new Addressbook_Model_Contact([
+                'n_given' => 'Business',
+                'n_family' => 'Test Preferred',
+                'adr_one_street' => 'Business Street 22',
+                'adr_one_postalcode' => '1235',
+                'adr_one_locality' => 'Business City',
+                'preferred_address' => 0
+            ]
+        );
+        /* @var $contactBusiness Addressbook_Model_Contact */
+        $contactBusiness = Addressbook_Controller_Contact::getInstance()->create($contactBusiness);
 
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'n_given', 'operator' => 'in', 'value' => array('James', 'John'))
-        ));
-        $doc = new Addressbook_Export_Doc($filter);
-        $doc->generate();
+        $filter = new Addressbook_Model_ContactFilter([
+            ['field' => 'n_family', 'operator' => 'equals', 'value' => $contactPrivat->n_family]
+        ]);
+        $export = new Addressbook_Export_Doc($filter, null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => 'Addressbook_Model_Contact',
+                    'name' => 'adb_letter_doc'
+                ]))->getFirstRecord()->getId()
+            ]);
 
-        $tempfile = tempnam(Tinebase_Core::getTempDir(), __METHOD__ . '_') . '.docx';
-        $doc->save($tempfile);
+        $doc = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->save($doc);
 
-        $this->assertGreaterThan(0, filesize($tempfile));*/
+        $plain = $this->getPlainTextFromDocx($doc);
+     
+        static::assertContains($contactPrivat->n_given, $plain);
+        static::assertContains($contactPrivat->adr_two_street, $plain);
+        static::assertContains($contactBusiness->n_given, $plain);
+        static::assertContains($contactBusiness->adr_one_street, $plain);
+    }
+
+    /**
+     * @param $docx
+     * @return string
+     * @throws Tinebase_Exception
+     */
+    protected function getPlainTextFromDocx($docx) {
+        $zip = new ZipArchive();
+
+        if ($zip->open($docx, ZipArchive::CREATE) !== true) {
+            throw new Tinebase_Exception('Cannot open docx file.');
+        }
+        
+        return strip_tags($zip->getFromName('word/document.xml'));
     }
 }
