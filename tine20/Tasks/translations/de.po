@@ -187,8 +187,8 @@ msgid "Created By"
 msgstr "Angelegt von"
 
 #: Controller/Task.php:202
-msgid "Notification for Task "
-msgstr "Benachrichtigung für Aufgabe "
+msgid "Notification for Task %1$s"
+msgstr "Benachrichtigung für Aufgabe %1$s"
 
 #: Preference.php:24
 msgid "All my tasks"
