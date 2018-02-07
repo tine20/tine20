@@ -3337,7 +3337,7 @@ class Tinebase_FileSystem implements
 
         foreach($_accountIds as $accountId) {
             $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $accountId));
-            $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+            $translate = Tinebase_Translation::getTranslation('Tinebase', $locale);
 
             try {
                 $user = Tinebase_User::getInstance()->getFullUserById($accountId);
