@@ -199,7 +199,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             
             // create message
             $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-            $messageSubject = $translate->_('Notification for Task ' . $task->summary);
+            $messageSubject = sprintf($translate->_('Notification for Task %1$s'), $task->summary);
             $messageBody = $task->getNotificationMessage();
             
             $notificationsBackend = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
