@@ -289,10 +289,20 @@ Tine.Tinebase.tineInit = {
             return;
         } else {
             var sessionLifeTime = Tine.Tinebase.registry.get('sessionLifeTime') || 86400,
-                presenceObserver = new Tine.Tinebase.PresenceObserver({
-                    maxAbsenseTime: sessionLifeTime / 60,
+
+                // log out after sessionLifeTime of absence (NOTE: session is not over due to background requests)
+                sessionLifeTimeObserver = new Tine.Tinebase.PresenceObserver({
+                    maxAbsenceTime: sessionLifeTime / 60,
                     absenceCallback: function(lastPresence, po) {
-                        Tine.Tinebase.MainMenu.prototype._doLogout()
+                        Tine.Tinebase.MainMenu.prototype._doLogout();
+                    }
+                }),
+
+                // report users presence to server
+                userPresenceObserver = new Tine.Tinebase.PresenceObserver({
+                    maxAbsenceTime: 3,
+                    presenceCallback: function(lastPresence, po) {
+                        Tine.Tinebase.reportPresence(lastPresence);
                     }
                 });
         }

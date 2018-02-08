@@ -26,9 +26,14 @@ Tine.Tinebase.PresenceObserver = function(config) {
 
 Tine.Tinebase.PresenceObserver.prototype = {
     /**
-     * @cfg {integer} maxAbsenseTime in minutes
+     * @cfg {integer} maxAbsenceTime in minutes
      */
-    maxAbsenseTime: 240,
+    maxAbsenceTime: 240,
+
+    /**
+     * @cfg {integer} presenceCheckInterval in seconds
+     */
+    presenceCheckInterval: 5,
 
     /**
      * @cfg {Function} callback to be called when absence is detected
@@ -46,23 +51,18 @@ Tine.Tinebase.PresenceObserver.prototype = {
     scope: window,
 
     /**
-     * @property {Number} lastPresenceCheck
-     */
-    lastPresenceCheck: null,
-
-    /**
      * @property {Ext.util.DelayedTask} checkTask
      */
     checkTask: null,
 
     startChecking: function() {
         var now = new Date();
-        firstCheck = now.add(Date.MINUTE, this.maxAbsenseTime);
+        firstCheck = now.add(Date.MINUTE, this.maxAbsenceTime);
 
-        this.setLastPresece(now);
+        this.setLastPresence(now);
 
         Tine.log.debug('Tine.Tinebase.PresenceObserver.startChecking register fist presence check for ' + firstCheck);
-        this.checkTask.delay(this.maxAbsenseTime * 60000);
+        this.checkTask.delay(this.maxAbsenceTime * 60000);
     },
 
     stopChecking: function() {
@@ -72,24 +72,32 @@ Tine.Tinebase.PresenceObserver.prototype = {
     checkPresence: function() {
         var now = new Date(),
             nowTS = now.getTime(),
-            lastPresence = this.getLastPresence();
+            lastPresence = this.getLastPresence(),
+            state = lastPresence + this.maxAbsenceTime * 60000 < nowTS ? 'absence' : 'presence';
 
         Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence checking presece now ' + now);
         Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence last presence detected at ' + new Date(lastPresence));
 
-        if (lastPresence + this.maxAbsenseTime * 60000 < nowTS) {
-            Tine.log.info('Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenseTime + ' minutes');
-            this.absenceCallback.call(this.scope, lastPresence, this);
+        if (state == 'absence') {
+            Tine.log.info('Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenceTime + ' minutes');
+            if (this.state == 'presence') {
+                this.state = 'absence';
+                this.absenceCallback.call(this.scope, new Date(lastPresence), this);
+            }
+            // wait for user to return
+            this.checkTask.delay(this.presenceCheckInterval * 1000);
+
         } else {
-            var nextCheck = this.maxAbsenseTime * 60000 - (nowTS - lastPresence);
+            var nextCheck = this.maxAbsenceTime * 60000 - (nowTS - lastPresence);
             Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence next presence check at ' + now.add(Date.MILLI, nextCheck));
+            this.state = 'presence';
             this.checkTask.delay(nextCheck);
-            this.absenceCallback.call(this.scope, nextCheck, this);
+            this.presenceCallback.call(this.scope, new Date(lastPresence), this);
         }
     },
 
     /**
-     * get last presence timestramp
+     * get last presence timestamp
      *
      * @returns {number}
      */
@@ -101,13 +109,13 @@ Tine.Tinebase.PresenceObserver.prototype = {
                 Tine.Tinebase.registry.get('lastPresence');
 
         if (myLastPresence > otherLastPresence) {
-            this.setLastPresece(myLastPresence);
+            this.setLastPresence(myLastPresence);
         }
 
         return Tine.Tinebase.PresenceObserver.lastPresence;
     },
 
-    setLastPresece: function(ts) {
+    setLastPresence: function(ts) {
         ts = ts.getTime ? ts.getTime() : ts;
         Tine.Tinebase.PresenceObserver.lastPresence = ts;
         Tine.Tinebase.registry.set('lastPresence', ts);
@@ -118,6 +126,7 @@ Tine.Tinebase.PresenceObserver.prototype = {
  * @static {Number} lastPresence last event timestamp
  */
 Tine.Tinebase.PresenceObserver.lastPresence = null;
+
 
 Ext.EventObjectImpl.prototype.setEvent = Ext.EventObjectImpl.prototype.setEvent.createInterceptor(function(e) {
     // timeStamp property of object sucks, see https://developers.google.com/web/updates/2016/01/high-res-timestamps
