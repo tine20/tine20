@@ -9,7 +9,7 @@
     <img alt="Tine 2.0" src="<?php echo $this->logoPath ?>"><h1><?php echo $this->path ?></h1>
     <hr>
     <table>
-        <tr><th>Name</th><th>letzte Änderung</th><th>Größe</th><th>Beschreibung</th></tr>
+        <tr><th><?php echo $this->name ?></th><th><?php echo $this->lastmodified ?></th><th><?php echo $this->size ?></th><th><?php echo $this->description ?></th></tr>
         <?php foreach ($this->files as $file) { ?>
         <tr>
             <td><a href="<?php echo $file->path ?>"><?php echo htmlentities($file->name) ?></a></td>
