@@ -425,8 +425,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public static function getTranslatedValue($_field, $_value, $_translation, $_timezone)
     {
+        $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
+
         if ($_value instanceof Tinebase_DateTime) {
-            $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale, 'datetime', true);
         }
         
@@ -443,6 +444,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     $rrule = $_value instanceof Calendar_Model_Rrule ? $_value : new Calendar_Model_Rrule($_value);
                     return $rrule->getTranslatedRule($_translation);
                 }
+                return '';
+            case 'status':
+                return Tinebase_Config_KeyFieldRecord::getTranslatedValue('Calendar', Calendar_Config::EVENT_STATUS, $_value);
+            case 'transp':
+                return Tinebase_Config_KeyFieldRecord::getTranslatedValue('Calendar', Calendar_Config::EVENT_TRANSPARENCIES, $_value);
+            case 'class':
+                return Tinebase_Config_KeyFieldRecord::getTranslatedValue('Calendar', Calendar_Config::EVENT_CLASSES, $_value);
             default:
                 return $_value;
         }

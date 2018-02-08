@@ -138,6 +138,10 @@ class Tinebase_Export_XlsxTest extends TestCase
         $nameIndex = array_search('Last Name', $arrayData[0], true);
         static::assertEquals($testContact->n_family, $arrayData[1][$nameIndex]);
         
+        // test resolving of user fields
+        $createdByIndex = array_search('Created By', $arrayData[0], true);
+        static::assertEquals(Tinebase_Core::getUser()->accountDisplayName, $arrayData[1][$createdByIndex]);
+        
         foreach ($testContact->getFields() as $field) {
             if ('customfields' === $field) {
                 static::assertFalse(in_array($field, $arrayData[0]), 'mustn\'t find customfields in ' . $printRdata0);
@@ -163,8 +167,11 @@ class Tinebase_Export_XlsxTest extends TestCase
         $recordListCFfield = $export->getTranslate()->_($recordListCF->definition->label);
         static::assertTrue(false !== ($recordListCFKey = array_search($recordListCFfield, $arrayData[0])),
             'couldn\'t find field ' . $recordListCFfield . ' in ' . $printRdata0);
-        static::assertEquals($scleverContact->getTitle() . ', ' . $jmcblackContact->getTitle(),
-            $arrayData[1][$recordListCFKey], $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
+
+        $names = explode( ', ', $arrayData[1][$recordListCFKey]);
+        sort($names);
+        static::assertEquals([$jmcblackContact->getTitle(), $scleverContact->getTitle()],
+            $names, $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
         
         $systemFieldCount = 0;
         foreach(Addressbook_Model_Contact::getConfiguration()->getFields() as $field) {
@@ -174,8 +181,8 @@ class Tinebase_Export_XlsxTest extends TestCase
         }
         
         $filteredHeadLine = array_filter($arrayData[0]);
-        static::assertEquals(count($testContact->getFields()) - 4 - $systemFieldCount + $cfConfigs->count(), count($filteredHeadLine),
-            'count of fields + customfields - "customfields property" does not equal amount of headline columns');
+        static::assertEquals(count($testContact->getFields()) - 1 - $systemFieldCount + $cfConfigs->count(), count($filteredHeadLine),
+            'count of fields + customfields - "customfields property" - systemfields does not equal amount of headline columns ' . print_r($filteredHeadLine, true));
         
         // test the relations
         $relationsField = $export->getTranslate()->_('relations');
@@ -183,8 +190,11 @@ class Tinebase_Export_XlsxTest extends TestCase
             'couldn\'t find field ' . $relationsField . ' in ' . $printRdata0);
 
         $modelTranslated = $export->getTranslate()->_('Contact');
-        static::assertEquals($modelTranslated . ' type1 ' . $scleverContact->getTitle() . ', ' . $modelTranslated .
-            ' type2 ' . $jmcblackContact->getTitle(),
-            $arrayData[1][$relationsKey], $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
+        $relations = explode( ', ', $arrayData[1][$relationsKey]);
+        sort($relations);
+        static::assertEquals([
+            $modelTranslated .' type1 ' . $scleverContact->getTitle(),
+            $modelTranslated . ' type2 ' . $jmcblackContact->getTitle()
+        ], $relations, $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
     }
 }

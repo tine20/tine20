@@ -390,9 +390,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             . '[' . $this->_className . '] Debug: ' . print_r($this->_filterModel, true));
         
         if (empty($fieldModel)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
-        
+            if (isset($_filterData['field']) && strpos($_filterData['field'], '#') === 0) {
+                $this->_addCustomFieldFilter($_filterData);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
+            }
         } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData['value']) || array_key_exists('value', $_filterData))) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
@@ -410,6 +413,38 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (filter syntax problem) -> ' 
                 . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
         }
+    }
+
+    /**
+     * create and add custom field filter with the name #CUSTOMFIELDNAME
+     *
+     * @param $_filterData
+     */
+    protected function _addCustomFieldFilter($_filterData)
+    {
+        $cfName = ltrim($_filterData['field'], '#');
+        $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            $this->_applicationName,
+            $cfName,
+            $this->_modelName
+        );
+        if (! $customFieldConfig) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' No custom field with name ' . $cfName . ' found for model ' . $this->_modelName);
+            return;
+        }
+
+        $customFieldFilterData = [
+            'field' => 'customfield',
+            'operator' => $_filterData['operator'],
+            'value' => [
+                'cfId' => $customFieldConfig->getId(),
+                'value' => $_filterData['value'],
+            ]
+        ];
+
+        $filter = $this->createFilter($customFieldFilterData);
+        $this->addFilter($filter, TRUE);
     }
     
     /**

@@ -68,7 +68,7 @@ Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
             }
         }      
       
-        return true;
+        return Ext.ux.form.ClearableDateField.superclass.validateValue.apply(this, arguments);
     },    
     // clear contents of combobox
     onTrigger1Click : function() {

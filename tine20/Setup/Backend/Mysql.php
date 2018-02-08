@@ -342,9 +342,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         } elseif (!empty($_key->unique)) {
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         } elseif (!empty($_key->fulltext)) {
-            if (!$this->supports('mysql >= 5.6.4')) {
+            if (!$this->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
                 if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                    ' full text search is only supported on mysql/mariadb 5.6.4+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
+                    ' full text search is only supported on mysql 5.6.4+ / mariadb 10.0.5+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
                 return '';
             }
             $snippet = " FULLTEXT KEY `" . $_key->name . "`" ;
@@ -499,10 +499,17 @@ EOT;
      */
     public function supports($requirement)
     {
-        if (preg_match('/^mysql ([<>=]+) ([\d\.]+)$/', $requirement, $m))
+        if (preg_match('/mysql ([<>=]+) ([\d\.]+)/', $requirement, $m))
         {
             $version = $this->_db->getServerVersion();
-            if (version_compare($version, $m[2], $m[1]) === true) {
+            if (version_compare($m[2], '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
+                return true;
+            }
+        }
+        if (preg_match('/mariadb ([<>=]+) ([\d\.]+)/', $requirement, $m))
+        {
+            $version = $this->_db->getServerVersion();
+            if (version_compare($m[2], '10', '>=') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }
         }

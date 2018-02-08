@@ -78,4 +78,9 @@ class Addressbook_Model_ListRole extends Tinebase_Record_Simple
     {
         return true;
     }
+
+    public function getTitle()
+    {
+        return $this->name;
+    }
 }

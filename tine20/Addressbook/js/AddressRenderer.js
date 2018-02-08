@@ -28,6 +28,17 @@ Tine.Addressbook.addressRenderer = function (v, metadata, record, store, a, b, c
         '<tpl if="country">{country}</tpl>' +
         '</tpl>');
     template.compile();
+    
+    if (!record) {
+        return template.applyTemplate({
+            street: '',
+            street2: '',
+            postalcode: '',
+            locality: '',
+            region: '',
+            country: ''
+        });
+    }
 
     var local = Ext.apply({}, config);
     var keys = Object.keys(local);

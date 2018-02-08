@@ -212,3 +212,52 @@
     overflow: hidden;
     padding-right: 5px;
 }
+
+/* Multi */
+.preview-multi-panel-description {
+    width: 98%;
+    position: relative;
+    height: 97px;
+    padding: 3px;
+}
+
+.preview-multi-panel-left {
+    float: left;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    padding: 5px;
+    border-right: 5px solid white;
+    font-family: verdana, sans-serif;
+    box-sizing: border-box;
+}
+
+.preview-multi-panel-right {
+    float: left;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    padding: 5px;
+    border: solid 3px #e5e6fe;
+    font-family: verdana, sans-serif;
+    box-sizing: border-box;
+}
+
+.preview-multi-panel-leftside {
+    width: 200px;
+    padding: 5px;
+}
+
+/* TODO make this right-aligned */
+.preview-multi-panel-rightside {
+    width: auto;
+    padding: 5px;
+    padding-left: 150px;
+}
+
+.preview-multi-panel-nobreak {
+    min-width: 900px;
+    padding: 5px;
+    height: 100%;
+    box-sizing: border-box;
+}

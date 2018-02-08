@@ -154,7 +154,7 @@ class Tinebase_TransactionManager
      */
     public function rollBack()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
 
         // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
         $callbacks = $this->_onRollbackCallbacks;

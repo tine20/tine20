@@ -1128,9 +1128,10 @@ class Tinebase_Core
         );
         
         if ($config && (bool) $config->queryProfiles) {
-            $queryProfiles = $profiler->getQueryProfiles();
+            $queryProfiles = $profiler->getQueryProfiles(null, true);
             if (is_array($queryProfiles)) {
                 $data['queryProfiles'] = array();
+                /** @var Zend_Db_Profiler_Query $profile */
                 foreach ($queryProfiles as $profile) {
                     if ((bool) $config->queryProfilesDetails) {
                         $data['queryProfiles'][] = array(

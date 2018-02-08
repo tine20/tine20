@@ -152,6 +152,15 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             return array();
         }
 
+        if (null !== $_filter) {
+            $rruleFilter = $_filter->getFilter('rrule', false, true);
+            if ($rruleFilter && in_array($rruleFilter->getOperator(), ['in', 'notin'])) {
+                foreach($_records as $record) {
+                    $_records->merge(Calendar_Controller_Event::getInstance()->getRecurExceptions($record));
+                }
+            }
+        }
+
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         if (Tinebase_Core::isFilesystemAvailable()) {
@@ -164,19 +173,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
-
-        $skipRruleComputation = false;
-
-        if (null !== $_filter) {
-            $rruleFilter = $_filter->getFilter('rrule', false, true);
-            if ($rruleFilter && in_array($rruleFilter->getOperator(), ['in', 'notin'])) {
-                $skipRruleComputation = true;
-            }
-
-            if (!$skipRruleComputation) {
-                Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
-            }
-        }
+        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
 
         $_records->sortByPagination($_pagination);
         
