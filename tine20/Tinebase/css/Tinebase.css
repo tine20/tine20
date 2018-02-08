@@ -1173,3 +1173,10 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .x-item-disabled.rangeslider-component .rangeslider-component-slider-label {
     visibility: hidden !important;
 }
+
+.ext-el-mask-msg.tb-arealocks-msg,
+.ext-el-mask-msg.tb-arealocks-msg div{
+    border: none;
+    background: none;
+    cursor: pointer;
+}

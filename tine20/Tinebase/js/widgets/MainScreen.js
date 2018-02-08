@@ -51,84 +51,28 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     },
 
     initMessageBus: function() {
-        // check config, only subscribe in protected apps
-        var protectedApps = Tine.Tinebase.configManager.get('Tinebase_Authentication_SecondFactor_Protected_Apps');
-        if (protectedApps && protectedApps.indexOf(this.app.appName) !== -1) {
+        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
             postal.subscribe({
-                channel: "messagebus",
-                topic: 'secondfactor.*',
-                callback: this.onSecondFactorValidation.createDelegate(this)
+                channel: "areaLocks",
+                topic: this.app.appName + '.*',
+                callback: this.onAreaLockChange.createDelegate(this)
             });
         }
     },
 
-    /**
-     * validate second factor
-     *
-     * @param data
-     * @param e
-     *
-     * @refactor use/create layer helper
-     */
-    onSecondFactorValidation: function(data, e) {
-        if (! this.rendered) {
-            return;
-        }
+    onAreaLockChange: function(data, e) {
+        var topic = e.topic,
+            locked = !topic.match(/unlocked$/),
+            cp = this.getCenterPanel(),
+            grid = cp ? cp.getGrid() : null,
+            store = grid.getStore();
 
-        // get grid for removing or reloading data from grid depending on valid second factor
-        var cp = this.getCenterPanel(),
-            grid = cp ? cp.getGrid() : null;
-
-        switch (e.topic) {
-            case 'secondfactor.invalid':
-
-                this.getEl().mask();
-                if (grid) {
-                    grid.getStore().removeAll();
-                }
-
-                if (! this.secondfactorDialogLayer) {
-
-                    this.secondfactorDialog = new Tine.Tinebase.widgets.dialog.SecondFactorDialog();
-                    this.secondfactorDialogLayer = new Ext.Layer({
-                        items: [this.secondfactorDialog]
-                    });
-
-                    // create layer for sf dialog
-                    var layerParent = this.getEl(); // Ext.getDom(this.getLayerParent() || Ext.getBody());
-                    this.secondfactorDialogLayer = new Ext.Layer({
-                        parentEl: layerParent,
-                        shadow: true,
-                        constrain: false
-                    });
-
-                    this.innerLayer = this.secondfactorDialogLayer.createChild({});
-                    this.innerLayer.setWidth(400);
-
-                    this.secondfactorDialog.render(this.innerLayer);
-
-                    var height = 120;
-                    this.innerLayer.dom.style.height = '';
-                    this.innerLayer.setHeight(height);
-                }
-
-                // align layer
-                this.secondfactorDialogLayer.beginUpdate();
-                this.secondfactorDialogLayer.setHeight(height);
-                this.secondfactorDialogLayer.alignTo(this.getEl(), 'c', [-100, -50]);
-                this.secondfactorDialogLayer.endUpdate();
-
-                this.secondfactorDialogLayer.show();
-
-                break;
-            case 'secondfactor.valid':
-                this.getEl().unmask();
-                if (grid) {
-                    grid.getStore().reload();
-                }
-
-                this.secondfactorDialogLayer.hide();
-                break;
+        // shouldn't this be done by the gird itself?
+        if (locked) {
+            store.removeAll();
+            // @TODO: quit bg refresh task?
+        } else {
+            store.reload();
         }
     },
 
@@ -226,6 +170,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.MainScreen.superclass.afterRender.call(this);
 
+        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
+            Tine.Tinebase.areaLocks.setOptions(this.app.appName, {
+                maskEl: this.getEl()
+            });
+            Tine.Tinebase.areaLocks.unlock(this.app.appName)
+        }
         this.setActiveContentType(this.activeContentType);
     },
 

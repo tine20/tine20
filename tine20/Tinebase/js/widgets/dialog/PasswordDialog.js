@@ -88,7 +88,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
                         ref: '../../../../passwordField',
                         listeners: {
                             scope: this,
-                            keyup: this.onChange.createDelegate(this)
+                            keyup: this.onChange,
+                            keydown: this.onKeyDown
                         }
                     }]
                 ]
@@ -128,6 +129,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
     afterRender: function () {
         Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.afterRender.call(this);
         this.buttonApply.setDisabled(!this.allowEmptyPassword);
+
+        this.passwordField.focus(true, 100);
     },
 
     /**
@@ -151,6 +154,12 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
         this.passwordField.setValue(gen.generatePassword());
         // revalidate button
         this.onChange(this.passwordField);
+    },
+
+    onKeyDown: function(f, e) {
+        if (e.getKey() === e.ENTER) {
+            this.onButtonApply()
+        }
     },
 
     /**

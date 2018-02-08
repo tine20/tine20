@@ -192,12 +192,10 @@ Tine.Tinebase.tineInit = {
         postal.configuration.promise.getPromise = function(dfd) {
             return dfd.promise;
         };
-        postal.fedx.addFilter( [
-            { channel: 'thirdparty', topic: '#', direction: 'both' },
-            { channel: 'recordchange', topic: '#', direction: 'both' },
-            { channel: 'messagebus', topic: '#', direction: 'both' }
-            //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
-        ] );
+        postal.fedx.configure({
+            filterMode: 'blacklist'
+        });
+
         postal.fedx.signalReady();
 
         postal.addWireTap( function( d, e ) {
@@ -699,6 +697,9 @@ Tine.Tinebase.tineInit = {
         // it's not clear how to detect devices w.o. local storage or clients which place
         // downloads in a cloud :-(
         Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
+
+        var AreaLocks = require('./AreaLocks.es6');
+        Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
     },
 
     /**

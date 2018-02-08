@@ -280,13 +280,9 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }));
                 break;
 
-            // second factor validation required
+            // area is locked
             case 630:
-                // TODO add more actions depending on request?
-                window.postal.publish({
-                    channel: "messagebus",
-                    topic: 'secondfactor.invalid'
-                });
+                Tine.Tinebase.areaLocks.lock(exception.area);
                 break;
 
             // Tinebase_Exception_InvalidRelationConstraints
