@@ -49,6 +49,10 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 $password,
                 $this->_request
             );
+
+        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+            header('HTTP/1.1 503 Service Unavailable');
+            return;
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             $authResult = false;

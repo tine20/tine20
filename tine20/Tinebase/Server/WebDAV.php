@@ -53,16 +53,21 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
         
         Tinebase_Core::initFramework();
-        
-        if (Tinebase_Controller::getInstance()->login(
-            $loginName,
-            $password,
-            $this->_request,
-            self::REQUEST_TYPE
-        ) !== true) {
-            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            
+
+        try {
+            if (Tinebase_Controller::getInstance()->login(
+                    $loginName,
+                    $password,
+                    $this->_request,
+                    self::REQUEST_TYPE
+                ) !== true) {
+                header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
+                header('HTTP/1.1 401 Unauthorized');
+
+                return;
+            }
+        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+            header('HTTP/1.1 503 Service Unavailable');
             return;
         }
         
