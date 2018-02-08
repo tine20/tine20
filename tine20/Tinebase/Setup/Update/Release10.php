@@ -379,7 +379,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             <name>path</name>
             <version>2</version>
             <requirements>
-                <required>mysql >= 5.6.4</required>
+                <required>mysql >= 5.6.4 | mariadb >= 10.0.5</required>
             </requirements>
             <declaration>
                 <field>

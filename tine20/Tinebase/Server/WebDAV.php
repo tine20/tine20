@@ -30,46 +30,51 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        try {$this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        if ($body !== null) {
-            $this->_body = $body;
-        } else {if ($this->_request instanceof \Zend\Http\Request) {
-            $this->_body = fopen('php://temp', 'r+');
-            fwrite($this->_body, $request->getContent());
-            rewind($this->_body);
-            /*
-             * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
-             * client sends empty request instead empty xml-sceleton -> inject it here
-             *(improvement: do not rely on user agent because other clients use windows stuff, too)
-            */
-            if (isset($_SERVER['REQUEST_METHOD']) && ( $_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
-                    $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
-                    $broken_user_agent_body.= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
-                $broken_user_agent_body.= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
-                    $broken_user_agent_body.= '</D:prop></D:propfind>';
-                    fwrite($this->_body, $broken_user_agent_body);
+        try {
+            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+            if ($body !== null) {
+                $this->_body = $body;
+            } else {
+                if ($this->_request instanceof \Zend\Http\Request) {
+                    $this->_body = fopen('php://temp', 'r+');
+                    fwrite($this->_body, $request->getContent());
                     rewind($this->_body);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)){
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
-                        $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
+                    /*
+                     * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
+                     * client sends empty request instead empty xml-skeleton -> inject it here
+                     *(improvement: do not rely on user agent because other clients use windows stuff, too)
+                    */
+                    if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
+                        $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
+                        $broken_user_agent_body .= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
+                        $broken_user_agent_body .= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
+                        $broken_user_agent_body .= '</D:prop></D:propfind>';
+                        fwrite($this->_body, $broken_user_agent_body);
+                        rewind($this->_body);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
+                                $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
 
+                        }
+                    }
+                }
             }
-        }
-        }
-        }try {
-            list($loginName, $password) = $this->_getAuthData($this->_request);
+            try {
+                list($loginName, $password) = $this->_getAuthData($this->_request);
 
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
+                header('HTTP/1.1 401 Unauthorized');
 
-            return;
-        }
+                return;
+            }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)){
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');}
-        
-        Tinebase_Core::initFramework();
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' is CalDav, CardDAV or WebDAV request.');
+            }
+
+
+            Tinebase_Core::initFramework();
 
             if (null !== ($denyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) &&
                 is_array($denyList)) {
@@ -81,25 +86,27 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
             }
 
-            if (Tinebase_Controller::getInstance()->login(
-                    $loginName,
-                    $password,
-                    $this->_request,
-                    self::REQUEST_TYPE
-                ) !== true) {
-                header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                header('HTTP/1.1 401 Unauthorized');
-
+            try {
+                if (Tinebase_Controller::getInstance()->login(
+                        $loginName,
+                        $password,
+                        $this->_request,
+                        self::REQUEST_TYPE
+                    ) !== true) {
+                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
+                    header('HTTP/1.1 401 Unauthorized');
+                    return;
+                }
+            } catch (Tinebase_Exception_MaintenanceMode $temm) {
+                header('HTTP/1.1 503 Service Unavailable');
                 return;
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Starting to handle WebDAV request (requestUri:' . $this->_request->getRequestUri()
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to handle WebDAV request ( requestUri:' . $this->_request->getRequestUri()
                     . ' PID: ' . getmypid() . ')'
                 );
             }
-
             self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
             \Sabre\DAV\Server::$exposeVersion = false;
 
@@ -142,12 +149,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
             $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-            $aclPlugin->principalCollectionSet = array(
-                Tinebase_WebDav_PrincipalBackend::PREFIX_USERS,
-                Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
-                Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
             );
-
             $aclPlugin->principalSearchPropertySet = array(
                 '{DAV:}displayname' => 'Display name',
                 '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',

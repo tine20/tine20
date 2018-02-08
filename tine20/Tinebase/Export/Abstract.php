@@ -458,24 +458,29 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             /** @var Tinebase_Record_Abstract $model */
             $model = $this->_modelName;
             if (null !== ($modelConf = $model::getConfiguration())) {
-                $model = '_' . $this->_translate->_($modelConf->recordName, $this->_locale);
+                $model = ' ' . $this->_translate->_($modelConf->recordName, $this->_locale);
             } else {
-                $model = explode('_', $model, 3);
+                $model = explode(' ', $model, 3);
                 if (count($model) === 3) {
-                    $model = '_' . $this->_translate->_($model[2], $this->_locale);
+                    $model = ' ' . $this->_translate->_($model[2], $this->_locale);
                 } else {
                     $model = '';
                 }
             }
         }
+        
         $name = '';
         if (!empty($this->_config->label)) {
-            $name = '_' . $this->_translate->_($this->_config->label, $this->_locale);
+            
+            if ($model !== '') {
+                $name .= ' ';
+            }
+            
+            $name .= $this->_translate->_($this->_config->label, $this->_locale);
         }
         $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        return preg_replace('/\s+/', '_',
-            mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
-            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format));
+        return mb_strtolower($tineTranslate->_('Export', $this->_locale) . ' ' .
+            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format);
     }
 
 
@@ -640,6 +645,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             '_currentRowType'       => $this->_currentRowType,
             '_twigTemplate'         => $this->_twigTemplate,
             '_twigMapping'          => $this->_twigMapping,
+            '_keyFields'            => $this->_keyFields,
+            '_virtualField'         => $this->_virtualFields,
         );
     }
 
@@ -772,7 +779,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // this is code present in the abstract controller, getRelatedData... why is it here?
 
         // get field types/identifiers from config
-        $identifiers = array();
+        $identifiers = [];
+        $types = [];
         if ($this->_config->columns) {
             $types = array();
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
@@ -780,13 +788,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $identifiers[] = $column->identifier;
             }
             $types = array_unique($types);
-        } else {
+        } /* else {
             $types = $this->_resolvedFields;
-        }
+        }*/
 
         // resolve users
         foreach ($this->_userFields as $field) {
-            if (in_array($field, $types) || in_array($field, $identifiers)) {
+            if (empty($types) || in_array($field, $types) || in_array($field, $identifiers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, true);
             }
@@ -879,7 +887,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
-        foreach ($this->_keyFields as $name => $keyField) {
+        foreach ((array)$this->_keyFields as $name => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
             $keyField = $appConfig->{$keyField};
             $record->{$name} = $keyField->getTranslatedValue($record->{$name});

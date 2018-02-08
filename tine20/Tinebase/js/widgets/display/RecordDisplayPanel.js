@@ -135,7 +135,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                 field = {
                     xtype: 'ux.displayfield',
                     name: fieldDefinition.fieldName,
-                    fieldLabel: this.app.i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName),
+                    fieldLabel: this.app.i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName)
                 };
 
             if (fieldType === 'virtual') {
@@ -143,7 +143,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                 fieldType = fieldDefinition.config.type || 'textfield';
             }
 
-            if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
+            if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {
                 if (fieldType == 'text') {
                     Ext.apply(field, {
                         flex: 1,
@@ -178,8 +178,22 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
 
     loadRecord: function(record) {
         this.record = record;
+        
+        this.fields.each(function (field) {
+            var renderedValue,
+                data = record.get(field.name) ? record.get(field.name) : '',
+                _ = window.lodash;
 
-        this.supr().loadRecord.apply(this, arguments);
+            renderedValue = _.isFunction(field.renderer) ? field.renderer(data) : data;
+
+            if (renderedValue === '' || renderedValue === undefined || (_.isString(renderedValue) && renderedValue.startsWith('[Object'))) {
+                field.hide();
+                return;
+            }
+            
+            field.show();
+            field.setValue(data);
+        });
     },
 
     titleRenderer: function(title) {

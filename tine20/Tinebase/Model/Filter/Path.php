@@ -92,7 +92,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
             if ($paths->count() > 0) {
 
                 $searchTerms = Tinebase_Model_Filter_FullText::sanitizeValue($this->_value,
-                    Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4'));
+                    Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'));
 
                 if (count($searchTerms) < 1) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {

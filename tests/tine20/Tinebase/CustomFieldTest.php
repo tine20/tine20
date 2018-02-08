@@ -410,7 +410,11 @@ class Tinebase_CustomFieldTest extends TestCase
     public function testSearchByDate()
     {
         $date = new Tinebase_DateTime();
-        $cf = self::getCustomField(array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(), 'model' => 'Addressbook_Model_Contact', 'definition' => array('type' => 'date')));
+        $cf = self::getCustomField([
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'date')
+        ]);
         $this->_instance->addCustomField($cf);
         
         $contact = new Addressbook_Model_Contact(array('n_given' => 'Rita', 'n_family' => 'Blütenrein'));
@@ -429,7 +433,21 @@ class Tinebase_CustomFieldTest extends TestCase
         
         $this->assertEquals(1, $result['totalcount'], 'searched contact not found. filter: ' . print_r($filter, true));
         $this->assertEquals('Rita', $result['results'][0]['n_given']);
-        
+
+        // new syntax
+        $filter = array("condition" => "OR",
+            "filters" => array(array("condition" => "AND",
+                "filters" => array(
+                    array("field" => "#" . $cf->name, "operator" => "within", "value" => "weekThis"),
+                )
+            ))
+        );
+        $result = $json->searchContacts(array($filter), array());
+
+        $this->assertEquals(1, $result['totalcount'], 'searched contact not found. filter: ' . print_r($filter, true));
+        $this->assertEquals('Rita', $result['results'][0]['n_given']);
+
+
         $json->deleteContacts(array($contact->getId()));
         
         $this->_instance->deleteCustomField($cf);
@@ -485,6 +503,21 @@ class Tinebase_CustomFieldTest extends TestCase
             )
         ), array());
         
+        $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-bool is not set (Rainer Blütenrein)');
+        $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
+
+        // new syntax
+        $result = $json->searchContacts(array(
+            array("condition" => "OR",
+                "filters" => array(array("condition" => "AND",
+                    "filters" => array(
+                        array("field" => "#" . $cf->name, "operator" => "equals", "value" => false),
+                        array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Blütenrein')
+                    )
+                ))
+            )
+        ), array());
+
         $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-bool is not set (Rainer Blütenrein)');
         $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
     }

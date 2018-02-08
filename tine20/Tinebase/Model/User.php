@@ -473,4 +473,12 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         static::$_forceSuperUser = (bool)$bool;
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->accountDisplayName;
+    }
 }

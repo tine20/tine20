@@ -1,5 +1,0 @@
-<?php
-/**
- * This constant defines the Expresso Lite URL to be tested.
- */
-DEFINE('LITE_URL', 'http://localhost/expressolite');
