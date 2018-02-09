@@ -289,4 +289,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.16');
     }
+
+    /**
+     * update to 11.17
+     *
+     * update mariadb if required
+     */
+    public function update_16()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_53();
+        $this->setApplicationVersion('Tinebase', '11.17');
+    }
 }
