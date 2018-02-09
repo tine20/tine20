@@ -701,6 +701,17 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     }
 });
 
+Tine.Calendar.Model.Attender.getSortOrder = function(user_type) {
+    var sortOrders = {
+        'user': 1,
+        'groupmemeber': 1,
+        'group': 2,
+        'resource': 3
+    };
+
+    return sortOrders[user_type] || 4;
+};
+
 /**
  * @namespace Tine.Calendar.Model
  * 
