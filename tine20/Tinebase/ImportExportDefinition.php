@@ -122,7 +122,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         
         return $result;
     }
-    
+
     /**
      * get definition from file
      *
@@ -131,6 +131,9 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      * @param string $_name [optional]
      * @return Tinebase_Model_ImportExportDefinition
      * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Zend_Config_Exception
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getFromFile($_filename, $_applicationId, $_name = NULL)
     {
@@ -153,6 +156,10 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                         $format = $plugin::getDefaultFormat();
                     }
                 } catch(Exception $e) {}
+            }
+            
+            if ($config->overrideApplication) {
+                $_applicationId = Tinebase_Application::getInstance()->getApplicationByName($config->overrideApplication)->getId();
             }
             
             $definition = new Tinebase_Model_ImportExportDefinition(array(
@@ -217,16 +224,22 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         
         return $config;
     }
-    
+
     /**
      * update existing definition or create new from file
      * - use backend functions (create/update) directly because we do not want any default controller handling here
      * - calling function needs to make sure that user has admin right!
-     * 
+     *
      * @param string $_filename
      * @param Tinebase_Model_Application $_application
      * @param string $_name
      * @return Tinebase_Model_ImportExportDefinition
+     * @throws Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Config_Exception
      */
     public function updateOrCreateFromFilename($_filename, $_application, $_name = NULL)
     {
