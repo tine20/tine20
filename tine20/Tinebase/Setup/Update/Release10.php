@@ -2357,4 +2357,27 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.53');
     }
+
+    /**
+     * update to 10.54
+     *
+     * update mariadb if required
+     */
+    public function update_53()
+    {
+        if (Setup_Backend_Factory::factory()->supports('mariadb >= 10.0.5')) {
+            ob_start();
+            $cli = new Tinebase_Frontend_Cli();
+            $result = $cli->upgradeMysql564();
+            ob_end_clean();
+            if (0 !== $result) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 returned: '
+                        . $result);
+                throw new Tinebase_Exception_Backend('upgradeMysql564 returned: ' . $result);
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.54');
+    }
 }
