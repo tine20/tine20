@@ -897,6 +897,7 @@ class Setup_Frontend_Cli
      * compare shema of two tine databases
      *
      * @param Zend_Console_Getopt $_opts
+     * @return integer
      * @throws Exception
      */
     protected function _compare(Zend_Console_Getopt $_opts)
@@ -913,9 +914,19 @@ class Setup_Frontend_Cli
                 $db = Setup_Core::getDb();
                 foreach ($schemaChanges as $change) {
                     echo "applying sql: " . $change . "\n";
-                    $db->query($change);
+                    try {
+                        $db->query($change);
+                    } catch (Exception $e) {
+                        echo $e;
+                        $continue = Tinebase_Server_Cli::promptInput("Do you want to continue?\n");
+                        if ($continue !== 'y' && $continue !== 'yes') {
+                            return 2;
+                        }
+                    }
                 }
             }
         }
+
+        return 0;
     }
 }
