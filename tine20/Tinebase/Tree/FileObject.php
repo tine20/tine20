@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -577,6 +577,27 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         }
 
         return $stmt->rowCount();
+    }
+
+    /**
+     * @param array $_hashes
+     * @return array
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function getRevisionForHashes(array $_hashes)
+    {
+        $result = [];
+        $stmt = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, ['id', 'revision'])->where(
+            $this->_db->quoteIdentifier('hash') . ' in (?)', $_hashes)->query(Zend_Db::FETCH_NUM);
+        while ($row = $stmt->fetch()) {
+            if (isset($result[$row[0]])) {
+                $result[$row[0]][] = $row[1];
+            } else {
+                $result[$row[0]] = [$row[1]];
+            }
+        }
+
+        return $result;
     }
 
     /**

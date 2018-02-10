@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -113,7 +113,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         Tinebase_FileSystem::getInstance()->resetBackends();
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         
         $this->_personalContainer  = null;
         $this->_sharedContainer    = null;
@@ -1287,6 +1287,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testDeletedFileCleanupFromDatabase()
     {
+        // initial clean up
+        static::assertEquals(0, Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false),
+            'VFS is not clean, DB contains hashes that have been deleted in the FS');
+
         $fileNode = $this->testCreateFileNodeWithTempfile();
         
         // get "real" filesystem path + unlink
@@ -1294,18 +1298,19 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $fileObject = $fileObjectBackend->get($fileNode['object_id']);
         unlink($fileObject->getFilesystemPath());
         
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
-        $this->assertEquals(1, $result, 'should cleanup one file');
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false);
+        static::assertEquals(1, $result, 'should cleanup one file');
 
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
-        $this->assertEquals(0, $result, 'should cleanup no file');
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false);
+        static::assertEquals(0, $result, 'should cleanup no file');
         
         // node should no longer be found
         try {
             $this->_getUit()->getNode($fileNode['id']);
-            $this->fail('tree node still exists: ' . print_r($fileNode, true));
+            static::fail('tree node still exists: ' . print_r($fileNode, true));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!', $tenf->getMessage());
+            static::assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!',
+                $tenf->getMessage());
         }
     }
     
@@ -1521,7 +1526,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // why here?
         //$this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
         $this->tearDown();
         
@@ -1529,7 +1534,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
         $this->_fsController->resetBackends();
         $this->testDeleteFileNodes(true);
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(1, $result, 'should cleanup one file');
     }
     

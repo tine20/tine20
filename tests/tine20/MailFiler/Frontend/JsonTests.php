@@ -4,7 +4,7 @@
  * 
  * @package     MailFiler
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -47,7 +47,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
         parent::tearDown();
 
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
     }
 
     /**

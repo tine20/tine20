@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -1162,7 +1162,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * clears deleted files from filesystem + database
+     * clears deleted files from filesystem
      *
      * @return int
      */
@@ -1175,6 +1175,33 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_addOutputLogWriter();
         
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+
+        return 0;
+    }
+
+    /**
+     * clears deleted files from the database, use -- d=false or -- d=0 to turn off dryRun. Default is -- d=true
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function clearDeletedFilesFromDatabase(Zend_Console_Getopt $opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $this->_addOutputLogWriter();
+
+        $data = $this->_parseArgs($opts);
+        if (isset($data['d']) && ($data['d'] === 'false' || $data['d'] === '0')) {
+            $dryrun = false;
+        } else {
+            $dryrun = true;
+        }
+
+        echo PHP_EOL . ($dryrun ? 'would delete ' : 'deleted ') . Tinebase_FileSystem::getInstance()
+                ->clearDeletedFilesFromDatabase((bool)$dryrun) . ' hashes from the database' . PHP_EOL;
 
         return 0;
     }

@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,20 +26,20 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_Tree_FileObject';
+    protected $_modelName = Tinebase_Model_Tree_FileObject::class;
 
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'Tinebase_Model_Tree_FileObjectFilter';
+    protected $_className = Tinebase_Model_Tree_FileObjectFilter::class;
 
     /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = [
-        'is_deleted'            => ['filter' => 'Tinebase_Model_Filter_Bool'],
-        'type'                  => ['filter' => 'Tinebase_Model_Filter_Text']
+        'is_deleted'            => ['filter' => Tinebase_Model_Filter_Bool::class],
+        'type'                  => ['filter' => Tinebase_Model_Filter_Text::class]
     ];
 }
