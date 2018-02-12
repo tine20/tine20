@@ -486,6 +486,50 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
 
     /**
+     * copy from Tine.Filemanager.NodeTreePanel
+     * 
+     * @todo: Maybe it makes sence to override expand path in extFixes? 
+     * 
+     * @param path
+     * @param attr
+     * @param callback
+     */
+    expandPath : function(path, attr, callback){
+        if (! path.match(/^\/xnode-/)) {
+            path = this.getTreePath(path);
+        }
+
+        var keys = path.split(this.pathSeparator);
+        var curNode = this.root;
+        var curPath = curNode.attributes.path;
+        var index = 1;
+        var f = function(){
+            if(++index == keys.length){
+                if(callback){
+                    callback(true, curNode);
+                }
+                return;
+            }
+
+            if (index > 2) {
+                var c = curNode.findChild('path', curPath + '/' + keys[index]);
+            } else {
+                var c = curNode.findChild('id', keys[index]);
+            }
+            if(!c){
+                if(callback){
+                    callback(false, curNode);
+                }
+                return;
+            }
+            curNode = c;
+            curPath = c.attributes.path;
+            c.expand(false, false, f);
+        };
+        curNode.expand(false, false, f);
+    },
+    
+    /**
      * @private
      */
     initContextMenu: function() {

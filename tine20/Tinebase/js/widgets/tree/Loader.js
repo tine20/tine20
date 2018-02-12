@@ -92,30 +92,45 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
 
         // read every node
         Ext.each(response.responseData, function (node) {
-            var parentNode = newResponse;
-            
-            if (! Ext.isString(node.name)) {
+            var containerName,
+                parentNode = newResponse;
+
+            if (!Ext.isString(node.name)) {
                 parentNode.push(node);
                 return;
             }
-            
+
             // Get folder name to final container
             var parts = Ext.isString(node.name) ? node.name.split("/") : [''];
-            var containerName = parts[parts.length-1];
+            containerName = parts[parts.length - 1];
 
             // Remove first "" and last item because they don't belong to the folder names
             // This could be "" if the name starts with a /
-            if (parts[0] == "") {
+            if (parts[0] === "") {
                 parts.shift();
             }
+            
             parts.pop();
 
-            Ext.each(parts, function (part, idx) {
+            Ext.each(parts, function (part, idx, parts, node) {
                 var child = this.findNodeByName(part, parentNode);
 
+                this.preloadChildren = true;
+                
                 if (! child) {
+                    var reducedParts = [];
+                    
+                    // add shared or personal
+                    reducedParts.push(node.path.split('/')[1]);
+                    
+                    // create a path for each virtual node, this path is actually invalid and won't be send to server!
+                    for(var i = 0; i <= parts.indexOf(part); ++i) {
+                        reducedParts.push(parts[i]);    
+                    }
+                    
                     child = {
                         'name': part,
+                        'path': '/' + reducedParts.join('/'),
                         'id': Ext.id(),
                         'children': [],
                         'leaf': false,
@@ -140,11 +155,21 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                 }
 
                 parentNode = child.children;
-            }, this);
+            }.createDelegate(this, [node], true), this);
 
+            var nodePathSegments = node.path.split('/');
+            var containerId = nodePathSegments.pop();
+            nodePathSegments = nodePathSegments.concat(parts);
+            nodePathSegments.push(containerId);
+            
             node.longName = node.name;
             node.text = node.name = containerName;
-
+            
+            node.originalPath = node.path;
+            node.path = nodePathSegments.join('/');
+            
+            
+            parentNode.leaf = true;
             parentNode.push(node);
         }, this);
 

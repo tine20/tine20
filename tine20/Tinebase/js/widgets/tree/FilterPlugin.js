@@ -53,7 +53,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
     getFilter: function() {
         var filter = {field: this.field},
             sm = this.treePanel.getSelectionModel(),
-            multiSelection = typeof sm.getSelectedNodes == 'function',
+            multiSelection = typeof sm.getSelectedNodes === 'function',
             selection = multiSelection ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
         filter.operator = multiSelection ? 'in' : this.singleNodeOperator;
@@ -61,7 +61,10 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         var values = [];
         Ext.each(selection, function(node) {
             if (node) {
-                values.push(node.attributes[this.nodeAttributeField]);
+                // if path was override in frontend for any reason, restore it
+                var container = node.attributes[this.nodeAttributeField];
+                container.path = node.attributes.originalPath || node.attributes.path;
+                values.push(container);
             }
         }, this);
         
@@ -202,22 +205,22 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         attr = attr || 'id';
         var keys = path.split(this.pathSeparator),
             v = keys.pop();
-            
-        if(keys.length > 1){
-            var f = function(success, node){
-                if(success && node) {
+
+        if (keys.length > 1) {
+            var f = function (success, node) {
+                if (success && node) {
                     var n = node.findChild(attr, v) || node.findChild('path', node.attributes.path + '/' + v);
-                    if(n){
+                    if (n) {
                         n.getOwnerTree().getSelectionModel().select(n, false, keep);
-                        if(callback){
+                        if (callback) {
                             callback(true, n);
                         }
-                    }else if(callback){
+                    } else if (callback) {
                         callback(false, n);
                     }
-                }else{
-                    if(callback){
-                        callback(false, n);
+                } else {
+                    if (callback) {
+                        callback(false, node);
                     }
                 }
             };
