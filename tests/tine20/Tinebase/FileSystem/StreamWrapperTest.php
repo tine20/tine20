@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -66,7 +66,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
     }
     
     public function testMkdir()
