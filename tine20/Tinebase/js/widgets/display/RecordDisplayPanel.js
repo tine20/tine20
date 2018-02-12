@@ -118,6 +118,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
 
     getBodyItems: function() {
         var modelConfig = this.recordClass.getModelConfiguration(),
+            typesToExclude = ['records'], // most likely never fetch from backend in any grid view!
             fieldsToExclude = ['alarms', 'tags', 'notes', 'attachments', 'relations', 'customfields',
                 this.recordClass.getMeta('idProperty'),
                 this.recordClass.getMeta('titleProperty'),
@@ -137,6 +138,10 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                     name: fieldDefinition.fieldName,
                     fieldLabel: this.app.i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName)
                 };
+            
+            if (typesToExclude.indexOf(fieldDefinition.type) !== -1) {
+                return;
+            }
 
             if (fieldType === 'virtual') {
                 field.fieldLabel = this.app.i18n._hidden(fieldDefinition.config.label);
@@ -144,7 +149,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             }
 
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {
-                if (fieldType == 'text') {
+                if (fieldType === 'text') {
                     Ext.apply(field, {
                         flex: 1,
                         cls: 'x-ux-display-background-border',
@@ -178,22 +183,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
 
     loadRecord: function(record) {
         this.record = record;
-        
-        this.fields.each(function (field) {
-            var renderedValue,
-                data = record.get(field.name) ? record.get(field.name) : '',
-                _ = window.lodash;
-
-            renderedValue = _.isFunction(field.renderer) ? field.renderer(data) : data;
-
-            if (renderedValue === '' || renderedValue === undefined || (_.isString(renderedValue) && renderedValue.startsWith('[Object'))) {
-                field.hide();
-                return;
-            }
-            
-            field.show();
-            field.setValue(data);
-        });
+        this.supr().loadRecord.apply(this, arguments);
     },
 
     titleRenderer: function(title) {
