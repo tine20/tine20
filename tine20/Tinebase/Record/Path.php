@@ -545,9 +545,14 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         foreach($recordIds as $data) {
             $model = $data['model'];
             if (isset($controllerCache[$model])) {
-                $controller = $controllerCache[$model];
+                $controller = $controllerCache[$model]['controller'];
             } else {
-                $controller = $controllerCache[$model] = Tinebase_Core::getApplicationInstance($model);
+                $controllerCache[$model] = [];
+                $controller = $controllerCache[$model]['controller'] =
+                    Tinebase_Core::getApplicationInstance($model, '', true);
+                $controllerCache[$model]['doRightChecks'] = $controller->doRightChecks(false);
+                $controllerCache[$model]['doContainerACLChecks'] = $controller->doContainerACLChecks(false);
+                $controllerCache[$model]['sendNotifications'] = $controller->sendNotifications(false);
             }
 
             try {
@@ -559,6 +564,14 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             }
 
             $this->rebuildPaths($record);
+        }
+
+        foreach ($controllerCache as $data) {
+            /** @var Tinebase_Controller_Record_Abstract $controller */
+            $controller = $data['controller'];
+            $controller->doRightChecks($data['doRightChecks']);
+            $controller->doContainerACLChecks($data['doContainerACLChecks']);
+            $controller->sendNotifications($data['sendNotifications']);
         }
     }
 }
