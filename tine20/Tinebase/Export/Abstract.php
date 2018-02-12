@@ -230,6 +230,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_modelConfig = null;
 
+    protected $_noRecordResolving = false;
+
     /**
      * the constructor
      *
@@ -303,6 +305,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (isset($_additionalOptions['recordData']['container_id']) && is_array($_additionalOptions['recordData']['container_id'])) {
                 $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
             }
+            $this->_noRecordResolving = true;
             $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
                 array(new $this->_modelName($_additionalOptions['recordData'])));
         }
@@ -769,6 +772,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
+        if ($this->_noRecordResolving) {
+            return;
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolving export records...');
         if ($_records->count() === 0) {
             return;
