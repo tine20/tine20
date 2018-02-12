@@ -492,29 +492,27 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
     getAdditionalHeaders: Tine.Calendar.Printer.DaysViewRenderer.prototype.getAdditionalHeaders,
     generateBody: function(splitView) {
         var viewRenderer = splitView.calPanel.view.printRenderer,
-            htmlArray = [];
+            htmlArray = [],
+            me = this,
+            _ = window.lodash;
 
-        this.rendererArray = [];
-        this.viewArray = [];
-
-        this.paperHeight = viewRenderer.paperHeight;
-        // Splitview creates a new renderer so we need to set this again
-        // This is a hack! This is ugly but we have no better idea...fix it.
-        this.useHtml2Canvas = this.printMode == 'sheet' && splitView.calPanel.view.cls != "cal-monthview";
+        me.paperHeight = viewRenderer.paperHeight;
+        me.useHtml2Canvas = me.printMode == 'sheet' && splitView.calPanel.view.cls != "cal-monthview";
         
-        
-        splitView.attendeeViews.each(function(v, i) {
-            var renderer = new v.printRenderer({printMode: this.printMode});
-            this.rendererArray.push(renderer);
-            this.viewArray.push(v);
+        return _.reduce(splitView.attendeeViews.items, function(promise, view, i) {
+            return promise.then(function() {
+                var renderer = new view.printRenderer({printMode: me.printMode});
 
-            renderer.extraTitle = v.title + ' // ';
-            renderer.titleStyle = i > 0 ? 'page-break-before:always' : '';
+                renderer.extraTitle = view.title + ' // ';
+                renderer.titleStyle = i > 0 ? 'page-break-before:always' : '';
+                return renderer.generateBody(view);
 
-            htmlArray.push('<div class="page">' + renderer.generateBody(v) + '</div>');
-        }, this);
-        
-        return htmlArray.join('');
+            }).then(function(html) {
+                htmlArray.push('<div class="page">' + html + '</div>');
+            })
+        }, Promise.resolve('')).then(function(){
+            return htmlArray.join('');
+        });
     },
 
     onBeforePrint: function(doc, view) {
