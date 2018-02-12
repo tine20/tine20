@@ -2339,8 +2339,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_51()
     {
-        $scheduler = Tinebase_Core::getScheduler();
-        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+        // scheduler_task table might not be available yet - task is added in \Tinebase_Setup_Update_Release11::update_11
+//        $scheduler = Tinebase_Core::getScheduler();
+//        Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
 
         $this->setApplicationVersion('Tinebase', '10.52');
     }
