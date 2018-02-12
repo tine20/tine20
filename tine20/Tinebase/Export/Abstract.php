@@ -1175,17 +1175,24 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
                         $this->_config->datetimeformat);
                 } elseif ($_value instanceof Tinebase_Model_CustomField_Config) {
-                    if (is_array($_value->value)) {
-                        $value = '';
-                        $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
-                        if (strtolower($_value->definition['type']) === 'record') {
-                            $value = new $model($_value->value, true);
-                        } elseif (strtolower($_value->definition['type']) === 'recordlist') {
-                            $value = new Tinebase_Record_RecordSet($model, $_value->value, true);
-                        }
-                        $_value = $this->_convertToString($value);
-                    } else {
-                        $_value = $this->_convertToString($_value->value);
+                    $type = strtolower($_value->definition['type']);
+                    switch ($type) {
+                        case 'record':
+                            $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
+                            $_value = $this->_convertToString(new $model($_value->value, true));
+                            break;
+                        case 'recordlist':
+                            $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
+                            $_value = $this->_convertToString(
+                                new Tinebase_Record_RecordSet($model, $_value->value, true));
+                            break;
+                        case 'keyfield':
+                            $keyfield = Tinebase_Config_KeyField::create($_value->definition->keyFieldConfig->value
+                                ->toArray());
+                            $_value = $keyfield->getValue($_value->value);
+                            break;
+                        default:
+                            $_value = $this->_convertToString($_value->value);
                     }
                 } elseif ($_value instanceof Tinebase_Record_Abstract) {
                     $_value = $_value->getTitle();
