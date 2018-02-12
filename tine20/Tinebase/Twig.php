@@ -136,6 +136,10 @@ class Tinebase_Twig
                 return (is_scalar($str) && strlen($str) > 0) ? $str . "\n" : $str;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
+            if (!($date instanceof DateTime)) {
+                $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
+            }
+            
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
