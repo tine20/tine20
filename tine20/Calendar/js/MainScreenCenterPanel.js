@@ -1491,8 +1491,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
             }
             // update container tree
-            // why do we need this?
-            // Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+            Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
             
             // update attendee filter grid
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getAttendeeFilter().setFilterValue(store.proxy.jsonReader.jsonData.filter);
