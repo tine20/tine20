@@ -25,6 +25,17 @@ class Tinebase_Numberable_Abstract
     const BUCKETKEY        = 'bucketkey';
     const START            = 'start';
 
+    /**
+     * allows to override config with a defined method (for example Tinebase_Container::getNumberableConfig)
+     *  - method has $record as param and is called from \Tinebase_Controller_Record_Abstract::_getNumberable
+     */
+    const CONFIG_OVERRIDE  = 'configOverride';
+
+    /**
+     * xprops numberables config key
+     */
+    const CONFIG_XPROPS = 'numberableXpropsConfig';
+
     protected $_numberableColumn = NULL;
     protected $_stepSize = 1;
     protected $_bucketColumn = NULL;

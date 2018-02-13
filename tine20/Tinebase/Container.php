@@ -216,7 +216,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder 
      * @param   bool  $_ignoreAcl
      * @return  Tinebase_Model_Container the newly created container
-     * @throws  Tinebase_Exception_Record_Validation
+     * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
@@ -2070,6 +2070,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * apply modification logs from a replication master locally
      *
      * @param Tinebase_Model_ModificationLog $_modification
+     * @throws Tinebase_Exception
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
     {
@@ -2100,5 +2101,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             default:
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
         }
+    }
+
+    /**
+     * returns container numberable config if present in xprops
+     *
+     * @param $record
+     * @return array
+     */
+    public function getNumberableConfig($record)
+    {
+        if ($record->has('container_id')) {
+            $container = $this->getContainerById($record->container_id);
+            if (isset($container->xprops()[Tinebase_Numberable::CONFIG_XPROPS]) && is_array($container->xprops()[Tinebase_Numberable::CONFIG_XPROPS])) {
+                return $container->xprops()[Tinebase_Numberable::CONFIG_XPROPS];
+            }
+        }
+
+        return [];
     }
 }

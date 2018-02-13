@@ -745,6 +745,8 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * get record numberable value for given field
+     *
      * @param $_record
      * @param $className
      * @param $fieldName
@@ -753,6 +755,15 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
     {
+        if (isset($fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
+            list($objectClass, $method) = explode('::', $fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
+            $object = call_user_func($objectClass . '::getInstance');
+            if (method_exists($object, $method)) {
+                $configOverride = call_user_func_array([$object, $method], [$_record]);
+                $fieldConfig['config'] = array_merge($fieldConfig, $configOverride);
+            }
+        }
+
         return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
