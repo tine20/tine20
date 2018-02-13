@@ -10,14 +10,14 @@
  */
 
 /**
- * Adapter
+ * AreaLock facility
  *
  * - handles locking/unlocking of certain "areas" (could be login, apps, data safe, ...)
  * - areas can be locked with Tinebase_Auth_AreaLock_*
  * - @todo add more doc
  *
  * @package     Tinebase
- * @subpackage  Adapter
+ * @subpackage  AreaLock
  */
 class Tinebase_AreaLock implements Tinebase_Controller_Interface
 {
@@ -27,8 +27,6 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      * @var Tinebase_AreaLock
      */
     private static $_instance = NULL;
-
-    const AREALOCK_VALIDITY_SESSION_NAMESPACE = 'areaLockValidity';
 
     /**
      * don't clone. Use the singleton.
@@ -140,8 +138,8 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             throw new Tinebase_Exception_NotFound('config for area ' . $area . ' not found');
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . " AreaLockConfig: " . print_r($areaConfig->toArray(), true));
+//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+//            . " AreaLockConfig: " . print_r($areaConfig->toArray(), true));
 
         return $areaConfig;
     }
@@ -171,32 +169,12 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     }
 
     /**
-     * @todo implement
-     *
-     * @param $area
-     * @return bool
-     */
-    public function extendLock($area)
-    {
-//        if (Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-//            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
-//            $result = true;
-//        } else {
-//            $result = false;
-//        }
-
-        throw new Tinebase_Exception_NotImplemented('TODO implement');
-
-        return false;
-    }
-
-    /**
      * @param $area
      * @return Tinebase_Model_AreaLockState
      */
     public function getState($area)
     {
-        $expires = $this->_getAuthValidityFromSession($area);
+        $expires = $this->_getAuthValidity($area);
 
         return new Tinebase_Model_AreaLockState([
             'area' => $area,
@@ -212,15 +190,27 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _saveValidAuth($area, Tinebase_Model_AreaLockConfig $config)
     {
+        $alBackend = $this->_getBackend($config);
+        $sessionValidity = $alBackend->saveValidAuth($area);
+
+        return $sessionValidity;
+    }
+
+    /**
+     * @param $config
+     * @return Tinebase_AreaLock_Interface
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getBackend($config)
+    {
         switch ($config->validity) {
             case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
-                $valid = new Tinebase_DateTime('2150-01-01');
-                break;
             case Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME:
-                $lifetimeSeconds = $config->lifetime;
-                $valid = Tinebase_DateTime::now()->addSecond($lifetimeSeconds ? $lifetimeSeconds : 15 * 60);
+                $backend = new Tinebase_AreaLock_Session($config);
                 break;
             case Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE:
+                $backend = new Tinebase_AreaLock_Presence($config);
+                break;
             case Tinebase_Model_AreaLockConfig::VALIDITY_ONCE:
             case Tinebase_Model_AreaLockConfig::VALIDITY_DEFINEDBYPROVIDER:
                 // @todo add support
@@ -229,13 +219,8 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             default:
                 throw new Tinebase_Exception_InvalidArgument('validity ' . $config->validity . ' not supported');
         }
-#
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' saveValidAreaLock until ' . $valid->toString() . ' (' . $config->validity . ')');
 
-        Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE}[$area] = $valid->toString();
-
-        return $valid;
+        return $backend;
     }
 
     /**
@@ -246,45 +231,20 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _hasValidAuth($area)
     {
-        if (!Tinebase_Session::isStarted()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' No session started to check auth in session');
-            }
-            return true;
-        }
-        if (!Tinebase_Session::getSessionEnabled()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Session not enabled to check auth in session');
-            }
-            return true;
-        }
-
-        if ($validUntil = $this->_getAuthValidityFromSession($area)) {
-            return Tinebase_DateTime::now()->isEarlier($validUntil);
-        } else {
-            return false;
-        }
+        $config = $this->_getAreaConfig($area);
+        $alBackend = $this->_getBackend($config);
+        return $alBackend->hasValidAuth($area);
     }
 
     /**
      * @param $area
      * @return bool|Tinebase_DateTime
      */
-    protected function _getAuthValidityFromSession($area)
+    protected function _getAuthValidity($area)
     {
-        $areaLocksInSession = Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE};
-        if (!isset($areaLocksInSession[$area])) {
-            return false;
-        }
-
-        $currentValidUntil = $areaLocksInSession[$area];
-        if (is_string($currentValidUntil)) {
-            return new Tinebase_DateTime($currentValidUntil);
-        }
-
-        return false;
+        $config = $this->_getAreaConfig($area);
+        $alBackend = $this->_getBackend($config);
+        return $alBackend->getAuthValidity($area);
     }
 
     /**
@@ -292,10 +252,8 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _resetValidAuth($area)
     {
-        $areaLocksInSession = Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE};
-        if (isset($areaLocksInSession[$area])) {
-            unset($areaLocksInSession[$area]);
-            Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE} = $areaLocksInSession;
-        }
+        $config = $this->_getAreaConfig($area);
+        $alBackend = $this->_getBackend($config);
+        $alBackend->resetValidAuth($area);
     }
 }

@@ -108,13 +108,15 @@ class Tinebase_AreaLockTest extends TestCase
     }
 
     /**
+     * @param string $validity
      * @see 0013328: protect applications with second factor
      */
-    public function testAppProtection()
+    public function testAppProtection($validity = Tinebase_Model_AreaLockConfig::VALIDITY_SESSION)
     {
         Tasks_Controller_Task::getInstance()->resetValidatedAreaLock();
         $this->_createLockConfig([
-            'area' => 'Tasks'
+            'area' => 'Tasks',
+            'validity' => $validity,
         ]);
 
         // try to access app
@@ -134,23 +136,49 @@ class Tinebase_AreaLockTest extends TestCase
         self::assertGreaterThanOrEqual(0, count($result));
     }
 
-    public function testLockWithPresence()
+    /**
+     * testAppProtectionWithPresence
+     */
+    public function testAppProtectionWithPresence()
     {
-        // @todo implement
-        self::markTestIncomplete('no implemented yet');
+        $this->testAppProtection(Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE);
     }
 
+    /**
+     * create VALIDITY_PRESENCE config and test report presence
+     */
+    public function testLockWithPresence()
+    {
+        $this->_createLockConfig([
+            'lifetime' => 5,
+            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE,
+        ]);
+        $this->_setPin();
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        sleep(3);
+        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'should be unlocked for at least 5 secs'));
+        Tinebase_Presence::getInstance()->reportPresence();
+        sleep(3);
+        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN), 'should still be unlocked - presence was reported');
+        sleep(3);
+        self::assertTrue($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN), 'should now be locked - no presence was reported for 6 secs');
+    }
+
+    /**
+     * create VALIDITY_SESSION config with lifetime of 5 secs
+     */
     public function testLockWithLifetime()
     {
         $this->_createLockConfig([
-            'lifetime' => 5
+            'lifetime' => 5,
+            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME,
         ]);
         $this->_setPin();
         $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
         self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN));
-        sleep(5);
+        sleep(6);
 
-        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN),
-            'should be locked again after 5 seconds');
+        self::assertTrue($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN),
+            'should be locked again after 6 seconds');
     }
 }

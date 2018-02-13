@@ -1515,17 +1515,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param string $lastPresence
      * @return array
-     * @throws Exception
-     * @throws Zend_Session_Exception
-     *
-     * @todo throw event here that can be used for example to extend an area lock (@see \Tinebase_AreaLock::extendLock)
      */
-    public function reportPresence($lastPresence)
+    public function reportPresence()
     {
-        // TODO tinebase_presenceObserver einführen - getlastpresence for current user
-        // TODO save presence in SESSION (use some struct)
+        Tinebase_Presence::getInstance()->reportPresence();
 
         return array(
             'success' => true
