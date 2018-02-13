@@ -15,36 +15,35 @@
  * @package     Tinebase
  * @subpackage  Adapter
  *
- * @todo lock state auch in registry data zurückgeben
- * @todo unlock gibt auch lock state ({area' xyz, expires: timestamp USERTIME}) zurück
+ * @todo return lock state in registry data (areaLocks key)
  */
 class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 {
     /**
-     * @param $area
-     * @param null $password
-     * @return boolean
+     * @param string $area
+     * @param string $password
+     * @return array
      */
     public function unlock($area, $password = null)
     {
         $result = Tinebase_AreaLock::getInstance()->unlock($area, $password);
 
-        return $result;
+        return $result->toArray();
     }
 
     /**
-     * @param $area
-     * @return boolean
+     * @param string $area
+     * @return array
      */
     public function lock($area)
     {
         $result = Tinebase_AreaLock::getInstance()->lock($area);
 
-        return $result;
+        return $result->toArray();
     }
 
     /**
-     * @param $area
+     * @param string $area
      * @return boolean
      */
     public function isLocked($area)

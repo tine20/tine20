@@ -55,4 +55,18 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
     {
         return $this->_area;
     }
+
+    /**
+     * returns existing nodes info as array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'code'          => $this->getCode(),
+            'message'       => $this->getMessage(),
+            'area'          => $this->_area,
+        );
+    }
 }

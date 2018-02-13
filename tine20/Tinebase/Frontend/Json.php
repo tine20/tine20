@@ -1528,7 +1528,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // TODO save presence in SESSION (use some struct)
 
         return array(
-            'success' => $result
+            'success' => true
         );
     }
 

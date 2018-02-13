@@ -462,6 +462,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (self::userIsRegistered()) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
+            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_Frontend_Json_AreaLock';
 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             foreach ($userApplications as $application) {
