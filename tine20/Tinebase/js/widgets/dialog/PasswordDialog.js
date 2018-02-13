@@ -8,42 +8,58 @@
 
 Ext.ns('Tine.Tinebase.widgets.dialog');
 
-Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
-    layout: 'fit',
-    border: false,
-    frame: false,
-
+Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     /**
-     * ok button action held here
-     */
-    okAction: null,
-
-    /**
+     * @cfg {Boolean} allowEmptyPassword
      * Allow to proceed with an empty password
      */
     allowEmptyPassword: false,
 
     /**
+     * @cfg {Boolean} hasPwGen
      * dialog provides password generation action
      */
     hasPwGen: true,
 
     /**
+     * @cfg {Boolean} locked
+     * password field is locked (****) per default
+     */
+    locked: true,
+
+    /**
+     * @cfg {String} windowTitle
+     * title text when openWindow is used
+     */
+    windowTitle: '',
+
+    /**
+     * @cfg {String} questionText
+     * question label for user prompt
+     */
+    questionText: '',
+
+    /**
+     * @cfg {String} passwordFieldLabel
+     * label of password field
+     */
+    passwordFieldLabel: '',
+
+    /**
+     * @property {Tine.Tinebase.widgets.form.PasswordTriggerField} passwordField
      * Password field
      */
     passwordField: null,
+
+    layout: 'fit',
+    border: false,
+
 
     /**
      * Constructor.
      */
     initComponent: function () {
-        this.addEvents(
-            /**
-             * If the dialog will close and a password was chosen
-             * @param node
-             */
-            'passwordEntered'
-        );
+        this.windowTitle = this.windowTitle || i18n._('Set password');
 
         this.items = [{
             border: false,
@@ -51,22 +67,24 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             layout: 'border',
             items: [{
                 region: 'center',
+                border: false,
                 xtype: 'columnform',
                 labelAlign: 'top',
                 formDefaults: {
                     xtype: 'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: .333
+                    columnWidth: 1
                 },
                 items: [
                     [{
-                        columnWidth: 1,
                         xtype: 'tw-passwordTriggerField',
-                        fieldLabel: i18n._('Password'),
+                        fieldLabel: this.passwordFieldLabel || i18n._('Password'),
                         name: 'password',
                         maxLength: 100,
-                        allowBlank: false,
+                        allowBlank: this.allowEmptyPassword,
+                        locked: this.locked,
+                        clipboard: this.hasPwGen,
                         ref: '../../../../passwordField',
                         listeners: {
                             scope: this,
@@ -77,19 +95,21 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             }]
         }];
 
+        if (this.questionText) {
+            this.items[0].items[0].items[0].unshift({
+                xtype: 'label',
+                text: this.questionText
+            }, {
+                xtype: 'label',
+                html: '<br>'
+            })
+        }
+
         var me = this;
-        this.okAction = new Ext.Action({
-            disabled: !this.allowEmptyPassword,
-            text: 'Ok',
-            iconCls: 'action_saveAndClose',
-            minWidth: 70,
-            handler: this.onOk.createDelegate(me),
-            scope: this
-        });
 
         this.pwgenAction = new Ext.Action({
             disabled: false,
-            text: 'Generate password',
+            text: i18n._('Generate password'),
             minWidth: 70,
             iconCls: 'action_managePermissions',
             handler: this.onPWGen.createDelegate(me),
@@ -102,12 +122,12 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
             ];
         }
 
-        this.bbar = [
-            '->',
-            this.okAction
-        ];
-
         Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.initComponent.call(this);
+    },
+
+    afterRender: function () {
+        Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.afterRender.call(this);
+        this.buttonApply.setDisabled(!this.allowEmptyPassword);
     },
 
     /**
@@ -129,6 +149,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
         var gen = new Tine.Tinebase.PasswordGenerator(config);
 
         this.passwordField.setValue(gen.generatePassword());
+        // revalidate button
+        this.onChange(this.passwordField);
     },
 
     /**
@@ -136,16 +158,12 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
      * @param el
      */
     onChange: function (el) {
-        this.okAction.setDisabled(!this.allowEmptyPassword && el.getValue().length === 0)
+        this.buttonApply.setDisabled(!this.allowEmptyPassword && el.getValue().length === 0)
     },
 
-    /**
-     * button handler
-     */
-    onOk: function () {
-        this.fireEvent('passwordEntered', this.passwordField.getValue());
-        if (this.window) {
-            this.window.close();
+    getEventData: function (event) {
+        if (event === 'apply') {
+            return [this.passwordField.getValue()];
         }
     },
 
@@ -157,15 +175,14 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Ext.Panel, {
     openWindow: function (config) {
         config = config || {};
         this.window = Tine.WindowFactory.getWindow(Ext.apply({
-            title: i18n._('Set password'),
+            title: this.windowTitle,
             closeAction: 'close',
             modal: true,
             width: 400,
-            height: 150,
+            height: 130 +
+                (this.hasPwGen ? 20 : 0) +
+                (Math.ceil(this.questionText.length/70) * 20),
             layout: 'fit',
-            plain: true,
-            bodyStyle: 'padding:5px;',
-
             items: [
                 this
             ]

@@ -349,11 +349,13 @@ Tine.Filemanager.nodeActions.Publish = {
         }
 
         var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-            allowEmptyPassword: true
+            allowEmptyPassword: true,
+            locked: false,
+            questionText: i18n._('Public download links can be password protected. If left blank anyone who knows the link can download the selected files.')
         });
         passwordDialog.openWindow();
 
-        passwordDialog.on('passwordEntered', function (password) {
+        passwordDialog.on('apply', function (password) {
             var date = new Date();
             date.setDate(date.getDate() + 30);
 

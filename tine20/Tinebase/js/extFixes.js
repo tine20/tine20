@@ -615,6 +615,22 @@ Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(funct
 
 Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
 
+Ext.override(Ext.form.TwinTriggerField, {
+    getTriggerWidth: function(){
+        var tw = 0;
+        Ext.each(this.triggers, function(t, index){
+            var triggerIndex = 'Trigger' + (index + 1),
+                w = t.getWidth();
+            if(w === 0 && !t['hidden' + triggerIndex]){
+                tw += this.defaultTriggerWidth;
+            }else{
+                tw += w;
+            }
+        }, this);
+        return tw;
+    }
+});
+
 // fixing layers in LayerCombo
 // TODO maybe expand this to all Ext.Layers:
 // Ext.Layer.prototype.showAction = Ext.Layer.prototype.showAction.createSequence(function() {

@@ -550,6 +550,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "Dialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "EditDialog.js",
           "path": "js/widgets/dialog/"
         },

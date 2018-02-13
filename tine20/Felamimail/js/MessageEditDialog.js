@@ -1298,7 +1298,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 var dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog();
                 dialog.openWindow();
 
-                dialog.on('passwordEntered', function (password) {
+                // password entered
+                dialog.on('apply', function (password) {
                     attachmentStore.each(function (attachment) {
                         if (attachment.get('attachment_type') === 'download_protected_fm') {
                             attachment.data.password = password;
@@ -1307,6 +1308,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                     me.onApplyChanges(closeWindow, emptySubject, true);
                 });
+                
+                // user presses cancel in dialog => allow to submit again or edit mail and so on!
+                dialog.on('cancel', function () {
+                    this.loadMask.hide();
+                }, this);
                 return;
             }
         }
