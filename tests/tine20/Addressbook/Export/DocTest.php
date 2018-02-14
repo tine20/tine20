@@ -118,10 +118,10 @@ class Addressbook_Export_DocTest extends TestCase
     }
 
     /**
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     * @throws Tinebase_Exception_AccessDenied
      */
     public function testExportLetter()
     {
@@ -174,6 +174,68 @@ class Addressbook_Export_DocTest extends TestCase
         static::assertContains($contactBusiness->adr_one_street, $plain);
     }
 
+    /**
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    public function testExportDetailDoc()
+    {
+        $contact = new Addressbook_Model_Contact([
+                'n_given' => 'Privat',
+                'n_family' => 'Test Contact with a relation',
+                'adr_two_street' => 'Privat Street 1',
+                'adr_two_postalcode' => '1234',
+                'adr_two_locality' => 'Privat City',
+                'preferred_address' => 1
+            ]
+        );
+        /* @var $contact Addressbook_Model_Contact */
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+
+        $contactRelated = new Addressbook_Model_Contact([
+                'n_given' => 'Privat Related',
+                'n_family' => 'Test Related',
+                'adr_two_street' => 'Privat Street 1',
+                'adr_two_postalcode' => '1234',
+                'adr_two_locality' => 'Privat City',
+                'preferred_address' => 1
+            ]
+        );
+        /* @var $contactRelated Addressbook_Model_Contact */
+        $contactRelated = Addressbook_Controller_Contact::getInstance()->create($contactRelated);
+
+        Tinebase_Relations::getInstance()->setRelations(Addressbook_Model_Contact::class, 'Sql', $contact->getId(), [[
+            'related_degree' => 'sibling',
+            'related_model' => Addressbook_Model_Contact::class,
+            'related_backend' => 'Sql',
+            'related_id' => $contactRelated->getId(),
+            'type' => 'Contact'
+        ]]);
+
+        $filter = new Addressbook_Model_ContactFilter([
+            ['field' => 'n_family', 'operator' => 'equals', 'value' => $contact->n_family]
+        ]);
+        
+        $export = new Addressbook_Export_Doc($filter, null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => Addressbook_Model_Contact::class,
+                    'format' => 'docx',
+                    'label' => 'Word details'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $doc = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->save($doc);
+
+        $plain = $this->getPlainTextFromDocx($doc);
+
+        static::assertContains($contactRelated->getTitle(), $plain);
+    }
+    
     /**
      * @param $docx
      * @return string
