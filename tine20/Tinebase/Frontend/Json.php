@@ -861,10 +861,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
         
         $userRegistryData = array(
+            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
+            'areaLocks'          => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
             'timeZone'           => Tinebase_Core::getUserTimezone(),
             'currentAccount'     => $user->toArray(),
             'userContact'        => $userContactArray,
-            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
             'jsonKey'            => Tinebase_Core::get('jsonKey'),
             'userApplications'   => $user->getApplications()->toArray(),
             'NoteTypes'          => $this->getNoteTypes(),
@@ -890,6 +891,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      *
      * @return mixed array 'variable name' => 'data'
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function getAllRegistryData()
     {
@@ -1410,8 +1412,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $modelName
      * @param string $property
      * @param string $startswith
-     * 
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function autoComplete($appName, $modelName, $property, $startswith)
     {
@@ -1490,6 +1492,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $hash
      * @return array
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
      */
     public function getBlob($hash)
     {

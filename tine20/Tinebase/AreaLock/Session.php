@@ -43,7 +43,7 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
      */
     public function saveValidAuth($area)
     {
-        switch ($this->_config->validity) {
+        switch (strtolower($this->_config->validity)) {
             case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
                 $sessionValidity = new Tinebase_DateTime('2150-01-01');
                 break;

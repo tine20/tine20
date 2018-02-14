@@ -26,11 +26,11 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
     /**
      * supported validity
      */
-    const VALIDITY_ONCE = 'ONCE';
-    const VALIDITY_SESSION = 'SESSION';
-    const VALIDITY_LIFETIME = 'LIFETIME';
-    const VALIDITY_PRESENCE = 'PRESENCE';
-    const VALIDITY_DEFINEDBYPROVIDER = 'DEFINEDBYPROVIDER';
+    const VALIDITY_ONCE = 'once';
+    const VALIDITY_SESSION = 'session';
+    const VALIDITY_LIFETIME = 'lifetime';
+    const VALIDITY_PRESENCE = 'presence';
+    const VALIDITY_DEFINEDBYPROVIDER = 'definedbyprovider';
 
     /**
      * some predefined areas
@@ -77,13 +77,16 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
                 'queryFilter'   => true,
             ],
              /** example config:
-             *
-             * array(
-             *      'url'                   => 'https://localhost/validate/check',
-             *      'allow_self_signed'     => true,
-             *      'ignorePeerName'        => true,
-             * )
-             */
+              *
+              * array(
+              *      'url'                   => 'https://localhost/validate/check',
+              *      'allow_self_signed'     => true,
+              *      'ignorePeerName'        => true,
+              * )
+              *
+              * NOTE: as this might contain confidential data it is removed (in toArray) before sent to any client via
+              *       getRegistryData()
+              */
             'provider_config' => [
                 'type'          => 'array',
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -118,4 +121,20 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
             // allowEmpty?
         ]
     ];
+
+    /**
+     * returns array with record related properties
+     *
+     * @param boolean $_recursive
+     * @return array
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+
+        // unset provider_config as this is confidential
+        unset($result['provider_config']);
+
+        return $result;
+    }
 }

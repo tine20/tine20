@@ -28,7 +28,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
     {
         $result = Tinebase_AreaLock::getInstance()->unlock($area, $password);
 
-        return $result->toArray();
+        return $this->_recordToJson($result);
     }
 
     /**
@@ -39,7 +39,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
     {
         $result = Tinebase_AreaLock::getInstance()->lock($area);
 
-        return $result->toArray();
+        return $this->_recordToJson($result);
     }
 
     /**

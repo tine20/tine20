@@ -619,7 +619,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Configured Area Locks',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tinebase_Model_AreaLockConfig'),
-            'clientRegistryInclude' => false,
+            'clientRegistryInclude' => true,
             'setBySetupModule'      => true,
             'setByAdminModule'      => false,
             'default'               => [],

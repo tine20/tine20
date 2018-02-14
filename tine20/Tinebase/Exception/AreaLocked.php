@@ -63,10 +63,8 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
      */
     public function toArray()
     {
-        return array(
-            'code'          => $this->getCode(),
-            'message'       => $this->getMessage(),
-            'area'          => $this->_area,
-        );
+        $result = parent::toArray();
+        $result['area'] = $this->getArea();
+        return $result;
     }
 }

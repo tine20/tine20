@@ -89,7 +89,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     public function lock($area)
     {
         if ($this->_hasValidAuth($area)) {
-            $this->_resetValidAuth($area);
+            $this->resetValidAuth($area);
         }
 
         return new Tinebase_Model_AreaLockState([
@@ -102,6 +102,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      * @param $area
      * @param $password
      * @return Tinebase_Model_AreaLockState
+     * @throws Tinebase_Exception_AreaUnlockFailed
      *
      * @todo allow "non-authentication" providers?
      */
@@ -113,9 +114,13 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         $authProvider->setIdentity($user->accountLoginName)->setCredential($password);
         $authResult = $authProvider->authenticate();
 
-        $expires = $authResult->isValid()
-            ? $this->_saveValidAuth($area, $areaConfig)
-            : new Tinebase_DateTime('1970-01-01');
+        if ($authResult->isValid()) {
+            $expires =$this->_saveValidAuth($area, $areaConfig);
+        } else {
+            $teauf = new Tinebase_Exception_AreaUnlockFailed('Invalid authentication: ' . $authResult->getCode());
+            $teauf->setArea($area);
+            throw $teauf;
+        }
 
         return new Tinebase_Model_AreaLockState([
             'area' => $area,
@@ -183,6 +188,21 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     }
 
     /**
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_AreaLockState
+     */
+    public function getAllStates()
+    {
+        $states = new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockState::class);
+        $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
+        if ($areaConfigs->records) {
+            foreach ($areaConfigs->records as $areaConfig) {
+                $states->addRecord($this->getState($areaConfig->area));
+            }
+        }
+        return $states;
+    }
+
+    /**
      * @param string $area
      * @param Tinebase_Model_AreaLockConfig $config
      * @return Tinebase_DateTime
@@ -203,7 +223,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _getBackend($config)
     {
-        switch ($config->validity) {
+        switch (strtolower($config->validity)) {
             case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
             case Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME:
                 $backend = new Tinebase_AreaLock_Session($config);
@@ -250,7 +270,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     /**
      * @param string $area
      */
-    protected function _resetValidAuth($area)
+    public function resetValidAuth($area)
     {
         $config = $this->_getAreaConfig($area);
         $alBackend = $this->_getBackend($config);

@@ -2073,8 +2073,10 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if (Tinebase_AreaLock::getInstance()->hasLock($this->_applicationName)) {
             if (Tinebase_AreaLock::getInstance()->isLocked($this->_applicationName)) {
-                throw new Tinebase_Exception_AreaLocked('Application is locked: '
+                $teal = new Tinebase_Exception_AreaLocked('Application is locked: '
                     . $this->_applicationName);
+                $teal->setArea($this->_applicationName);
+                throw $teal;
             } else {
                 $this->_areaLockValidated = true;
             }

@@ -36,11 +36,11 @@ class Tinebase_AreaLockTest extends TestCase
 
     /**
      * @param array $config
+     *
+     * @todo add more providers (in separate test classes?)
      */
     protected function _createLockConfig($config = [])
     {
-        // @todo add more providers (in separate test classes?)
-
         $config = array_merge([
             'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
             'provider' => Tinebase_Auth::PIN,
@@ -50,6 +50,7 @@ class Tinebase_AreaLockTest extends TestCase
             'records' => new Tinebase_Record_RecordSet('Tinebase_Model_AreaLockConfig', [$config])
         ]);
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
+        $this->_uit->resetValidAuth($config['area']);
     }
 
     public function testGetState()
@@ -65,13 +66,21 @@ class Tinebase_AreaLockTest extends TestCase
         self::assertEquals(new Tinebase_DateTime('2150-01-01'), $state->expires);
     }
 
+    /**
+     * test unlock with correct and incorrect pins
+     */
     public function testUnlock()
     {
         $this->_createLockConfig();
 
         $incorrectPin = '5678';
-        $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $incorrectPin);
-        self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
+        try {
+            $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $incorrectPin);
+            self::fail('wrong pin should throw exception - ' . print_r($state->toArray(), true));
+        } catch (Exception $e) {
+            self::assertTrue($e instanceof Tinebase_Exception_AreaUnlockFailed);
+            self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $e->getArea());
+        }
 
         $this->_setPin();
         $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
@@ -124,8 +133,8 @@ class Tinebase_AreaLockTest extends TestCase
             Tasks_Controller_Task::getInstance()->getAll();
             self::fail('it should not be possible to access app without PIN');
         } catch (Tinebase_Exception $te) {
-            // check exception
             self::assertTrue($te instanceof Tinebase_Exception_AreaLocked);
+            self::assertEquals('Tasks', $te->getArea());
         }
 
         $this->_setPin();
@@ -180,5 +189,18 @@ class Tinebase_AreaLockTest extends TestCase
 
         self::assertTrue($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN),
             'should be locked again after 6 seconds');
+    }
+
+    /**
+     * called in \Tinebase_Frontend_Json::_getUserRegistryData
+     */
+    public function testGetAllStates()
+    {
+        $this->_createLockConfig();
+        $states = $this->_uit->getAllStates();
+        self::assertEquals(1, count($states));
+        $state = $states->getFirstRecord();
+        self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $state->area);
+        self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
     }
 }
