@@ -760,7 +760,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $object = call_user_func($objectClass . '::getInstance');
             if (method_exists($object, $method)) {
                 $configOverride = call_user_func_array([$object, $method], [$_record]);
-                $fieldConfig['config'] = array_merge($fieldConfig, $configOverride);
+                $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
             }
         }
 
