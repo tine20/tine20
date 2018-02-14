@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -519,6 +519,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
                     . " Remove invalid user: " . $username);
+                // this will fire a delete event
                 $userBackend->deleteUserInSqlBackend($invalidUser);
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
@@ -736,8 +737,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Start synchronizing users with options ' . print_r($options, true));
 
-        /** TODO replace this with something more generic, like interface "syncable" */
-        if (! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
+        if (! Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return;
@@ -747,7 +747,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to sync ' . count($users) . ' users from sync backend ...');
-        
+
         foreach ($users as $user) {
             try {
                 self::syncUser($user, $options);
@@ -893,8 +893,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $addressBookController = Addressbook_Controller_Contact::getInstance();
 
         // make sure we have a setup user:
-        // remove plugin, create setup user if required, register it again
-        Tinebase_User::getInstance()->removePlugin($addressBookController);
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
@@ -913,9 +911,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
 
-        Tinebase_User::getInstance()->registerPlugin($addressBookController);
-
-
         $oldAcl = $addressBookController->doContainerACLChecks(false);
         $oldRequestContext = $addressBookController->getRequestContext();
         $requestContext = array(
@@ -925,17 +920,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $addressBookController->setRequestContext($requestContext);
 
 
-
         $adminLoginName     = $_options['adminLoginName'];
         $adminPassword      = $_options['adminPassword'];
         $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
         $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
         $adminEmailAddress  = ((isset($_options['adminEmailAddress']) || array_key_exists('adminEmailAddress', $_options))) ? $_options['adminEmailAddress'] : NULL;
 
-        // get admin & user groups
         $userBackend   = Tinebase_User::getInstance();
         $groupsBackend = Tinebase_Group::getInstance();
-        
+
+        // get admin & user groupss
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
         
@@ -963,11 +957,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         // update or create user in local sql backend
         try {
-            $userBackend->getUserByProperty('accountLoginName', $adminLoginName);
+            $existingUser = $userBackend->getUserByProperty('accountLoginName', $adminLoginName);
+            $user->setId($existingUser->getId());
+            $user->contact_id = $existingUser->contact_id;
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'update');
             $user = $userBackend->updateUserInSqlBackend($user);
             // Addressbook is registered as plugin and will take care of the update
-            Tinebase_User::getInstance()->updatePluginUser($user, $user);
+            $userBackend->updatePluginUser($user, $user);
         } catch (Tinebase_Exception_NotFound $ten) {
             // call addUser here to make sure, sql user plugins (email, ...) are triggered
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -89,7 +89,12 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
                 $applicationName,
                 Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
             ) . '/' . $account->getId() . '/' . $nodeName;
-        $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
+
+        if (true === Tinebase_FileSystem::getInstance()->fileExists($path)) {
+            $personalNode = Tinebase_FileSystem::getInstance()->stat($path);
+        } else {
+            $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
+        }
 
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($personalNode));
 

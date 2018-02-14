@@ -595,9 +595,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 // contact image deleted
                 $noteMessage = $translate->_('Deleted contact image.');
             }
-            $traceException = new Exception($noteMessage);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' ' . $traceException);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . (new Exception($noteMessage)));
+            }
             Tinebase_Notes::getInstance()->addSystemNote($_record, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
         }
 

@@ -1585,6 +1585,8 @@ class Setup_Controller
                 $this->_installApplication($xml, $_options);
             }
         }
+
+        Tinebase_Event::reFireForNewApplications();
     }
 
     /**
