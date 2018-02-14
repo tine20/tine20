@@ -59,12 +59,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     /**
      * return loginPanel
      * 
-     * @return {Ext.FromPanel}
+     * @return {Ext.FormPanel}
      */
     getLoginPanel: function () {
-        //Do we have a cutom Logo for branding?
+        //Do we have a custom Logo for branding?
         var modSsl = Tine.Tinebase.registry.get('modSsl'),
-            secondFactor = Tine.Tinebase.registry.get('secondFactorLogin'),
+            secondFactor = Tine.Tinebase.registry.get('secondFactor'),
             logo = this.loginLogo ? this.loginLogo : Tine.logo;
         
         if (! this.loginPanel) {

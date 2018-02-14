@@ -789,6 +789,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
+            // secondfactor config
+            'secondFactor' => $this->_getSecondFactorConfig(),
+
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
@@ -825,6 +828,20 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             . ' Anonymous registry: ' . print_r($registryData, TRUE));
         
         return $registryData;
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function _getSecondFactorConfig()
+    {
+        try {
+            $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        } catch (Tinebase_Exception $te) {
+            return null;
+        }
+
+        return $config->toArray();
     }
     
     /**

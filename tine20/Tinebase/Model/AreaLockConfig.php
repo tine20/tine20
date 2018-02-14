@@ -99,7 +99,7 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     'presence' => 'required',
                     ['InArray', [
-                        self::VALIDITY_ONCE, // @todo define ONCE (not implemented yet)
+                        self::VALIDITY_ONCE, // default
                         self::VALIDITY_SESSION, // valid until session ends
                         self::VALIDITY_LIFETIME, // @see lifetime
                         self::VALIDITY_PRESENCE, // lifetime is relative to last presence recording (requires presence api)
@@ -108,6 +108,7 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
                 ],
                 'label'         => 'Validity', // _('Validity')
                 'queryFilter'   => true,
+                'default'       => self::VALIDITY_ONCE
             ],
             // absolute lifetime from unlock
             'lifetime' => [

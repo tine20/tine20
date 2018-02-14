@@ -69,8 +69,6 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
 
     /**
      * returns area lock status
-     *
-     * @todo implement or remove
      */
     public static function getStatus()
     {
@@ -78,7 +76,10 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             'active' => false,
             'problems' => [],
         ];
-        //$config = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
+
+        $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
+        $status['active'] = $areaConfigs && $areaConfigs->records && count($areaConfigs->records) > 0;
+
         // @todo check configs + backends
 
         return $status;
@@ -101,19 +102,25 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     }
 
     /**
-     * @param $area
-     * @param $password
+     * @param string $area
+     * @param string $password
+     * @param string $identity
      * @return Tinebase_Model_AreaLockState
      * @throws Tinebase_Exception_AreaUnlockFailed
      *
      * @todo allow "non-authentication" providers?
      */
-    public function unlock($area, $password)
+    public function unlock($area, $password, $identity = null)
     {
-        $user = Tinebase_Core::getUser();
-        $areaConfig = $this->_getAreaConfig($area);
+        $areaConfig = $this->getAreaConfig($area);
         $authProvider = Tinebase_Auth_Factory::factory($areaConfig->provider, $areaConfig->provider_config);
-        $authProvider->setIdentity($user->accountLoginName)->setCredential($password);
+
+        if (! $identity) {
+            $user = Tinebase_Core::getUser();
+            $identity = $user->accountLoginName;
+        }
+        $authProvider->setIdentity($identity)
+            ->setCredential($password);
         $authResult = $authProvider->authenticate();
 
         if ($authResult->isValid()) {
@@ -135,7 +142,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      * @return Tinebase_Model_AreaLockConfig
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _getAreaConfig($area)
+    public function getAreaConfig($area)
     {
         $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
         $areaConfig = $areaConfigs && $areaConfigs->records
@@ -144,9 +151,6 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         if (!$areaConfig) {
             throw new Tinebase_Exception_NotFound('config for area ' . $area . ' not found');
         }
-
-//        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-//            . " AreaLockConfig: " . print_r($areaConfig->toArray(), true));
 
         return $areaConfig;
     }
@@ -161,7 +165,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             return true;
         }
         try {
-            $this->_getAreaConfig($area);
+            $this->getAreaConfig($area);
             $this->_hasLocks[] = $area;
         } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
@@ -217,14 +221,14 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     protected function _saveValidAuth($area, Tinebase_Model_AreaLockConfig $config)
     {
         $alBackend = $this->_getBackend($config);
-        $sessionValidity = $alBackend->saveValidAuth($area);
+        $sessionValidity = $alBackend ? $alBackend->saveValidAuth($area) : Tinebase_DateTime::now();
 
         return $sessionValidity;
     }
 
     /**
      * @param $config
-     * @return Tinebase_AreaLock_Interface
+     * @return null|Tinebase_AreaLock_Interface
      * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getBackend($config)
@@ -237,13 +241,13 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             case Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE:
                 $backend = new Tinebase_AreaLock_Presence($config);
                 break;
-            case Tinebase_Model_AreaLockConfig::VALIDITY_ONCE:
             case Tinebase_Model_AreaLockConfig::VALIDITY_DEFINEDBYPROVIDER:
                 // @todo add support
                 throw new Tinebase_Exception_InvalidArgument('validity ' . $config->validity . ' not supported yet');
                 break;
             default:
-                throw new Tinebase_Exception_InvalidArgument('validity ' . $config->validity . ' not supported');
+                // no persistent backend
+                $backend = null;
         }
 
         return $backend;
@@ -257,9 +261,9 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _hasValidAuth($area)
     {
-        $config = $this->_getAreaConfig($area);
+        $config = $this->getAreaConfig($area);
         $alBackend = $this->_getBackend($config);
-        return $alBackend->hasValidAuth($area);
+        return $alBackend ? $alBackend->hasValidAuth($area) : false;
     }
 
     /**
@@ -268,9 +272,9 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     protected function _getAuthValidity($area)
     {
-        $config = $this->_getAreaConfig($area);
+        $config = $this->getAreaConfig($area);
         $alBackend = $this->_getBackend($config);
-        return $alBackend->getAuthValidity($area);
+        return $alBackend ? $alBackend->getAuthValidity($area) : false;
     }
 
     /**
@@ -281,8 +285,10 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         // invalidate class cache
         $this->_hasLocks = [];
 
-        $config = $this->_getAreaConfig($area);
+        $config = $this->getAreaConfig($area);
         $alBackend = $this->_getBackend($config);
-        $alBackend->resetValidAuth($area);
+        if ($alBackend) {
+            $alBackend->resetValidAuth($area);
+        }
     }
 }

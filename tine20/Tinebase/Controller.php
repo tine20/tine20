@@ -738,7 +738,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        if (! $this->_validateSecondFactor($accessLog)) {
+        if (! $this->_validateSecondFactor($accessLog, $user)) {
             $authResult = new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
                 $user->accountLoginName,
@@ -754,9 +754,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
     /**
      * @param Tinebase_Model_AccessLog $accessLog
+     * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog)
+    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user)
     {
         if (! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
             || $accessLog->clienttype !== 'JSON-RPC'
@@ -767,9 +768,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $context = $this->getRequestContext();
         $password = $context['otp'];
-        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $password);
-
-        if (Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+        try {
+            Tinebase_AreaLock::getInstance()->unlock(
+                Tinebase_Model_AreaLockConfig::AREA_LOGIN,
+                $password,
+                $user->accountLoginName
+            );
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
             return false;
         }
 
