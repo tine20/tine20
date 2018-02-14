@@ -324,4 +324,12 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
 
         return $responsibles;
     }
+
+    /**
+     * @return mixed|string
+     */
+    public function getTitle()
+    {
+        return $this->lead_name;
+    }
 }
