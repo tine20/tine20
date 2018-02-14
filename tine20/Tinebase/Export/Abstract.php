@@ -48,6 +48,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_translate;
 
     /**
+     * translation object
+     *
+     * @var Zend_Translate
+     */
+    protected $_tinebaseTranslate;
+
+    /**
      * locale object
      *
      * @var Zend_Locale
@@ -238,6 +245,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
         Tinebase_Model_Filter_FilterGroup $_filter,
@@ -245,16 +255,17 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $_additionalOptions = array()
     ) {
         $this->_filter = $_filter;
-        if (! $this->_modelName) {
+        if (!$this->_modelName) {
             $this->_modelName = $this->_filter->getModelName();
         }
-        if (! $this->_applicationName) {
+        if (!$this->_applicationName) {
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
         $this->_controller = ($_controller !== null) ? $_controller :
             Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         $this->_config = $this->_getExportConfig($_additionalOptions);
         if ($this->_config->template) {
@@ -262,17 +273,21 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
         if ($this->_config->templateFileId) {
             try {
-                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId, true));
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId,
+                    true));
                 $this->_templateFileName = $path->streamwrapperpath;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
         if (isset($_additionalOptions['template'])) {
             try {
-                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'], true));
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'],
+                    true));
                 $this->_templateFileName = $path->streamwrapperpath;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
-        if (! $this->_modelName && !empty($this->_config->model)) {
+        if (!$this->_modelName && !empty($this->_config->model)) {
             $this->_modelName = $this->_config->model;
         }
         $this->_exportTimeStamp = Tinebase_DateTime::now();
@@ -1021,8 +1036,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                             $field = $modelConfigFields[$field]['label'];
                         }
                     }
+
+                    $name = $this->_translate->_($field);
                     
-                    $this->_writeValue($this->_translate->_($field) ?: $field);
+                    if (!$name || $name === $field) {
+                        $name = $this->_tinebaseTranslate->_($field);   
+                    }
+                    
+                    $this->_writeValue($name);
                 }
             } else {
                 foreach ($this->_fields as $field) {

@@ -444,7 +444,7 @@ class Admin_CliTest extends TestCase
     public function testImportGroups()
     {
         $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array(dirname(__FILE__) . '/files/import_groups.csv', 'definition=admin_group_import_csv'));
+        $opts->setArguments(array(__DIR__ . '/files/import_groups.csv', 'definition=admin_group_import_csv'));
         
         // start import (dry run)
         ob_start();
@@ -455,7 +455,7 @@ class Admin_CliTest extends TestCase
         $expected = array('men' => 3, 'women' => 2, 'highperformers' => 2, 'lowperformers' => 3);
         $this->_testImportGroupsHelper($expected);
         
-        $opts->setArguments(array(dirname(__FILE__) . '/files/import_groups_update.csv', 'definition=admin_group_import_csv'));
+        $opts->setArguments(array(__DIR__ . '/files/import_groups_update.csv', 'definition=admin_group_import_csv'));
         ob_start();
         $this->_cli->importGroups($opts);
         $out = ob_get_clean();

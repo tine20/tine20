@@ -483,12 +483,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             //. print_r($_group->toArray(), true)
         );
         
-        if(!isset($_group->id)) {
+        if(!$_group->getId()) {
             $groupId = $_group->generateUID();
             $_group->setId($groupId);
         }
         
-        if (empty($_group->list_id)) {
+        if (!$_group->list_id) {
             $_group->visibility = 'hidden';
             $_group->list_id    = null;
         }

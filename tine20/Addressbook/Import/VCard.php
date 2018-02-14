@@ -50,20 +50,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     protected $_additionalOptions = array(
         'container_id'      => '',
     );
-    
-    /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_options
-     * @return Addressbook_Import_VCard
-     * 
-     * @todo move this to abstract when we no longer need to be php 5.2 compatible
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
-    {
-        return new Addressbook_Import_VCard(self::getOptionsArrayFromDefinition($_definition, $_options));
-    }
 
     /**
      * constructs a new importer from given config
