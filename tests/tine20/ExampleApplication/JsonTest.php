@@ -5,7 +5,7 @@
  * @package     ExampleApplication
  * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -226,6 +226,9 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
      */
     public function testNumberableQuerySearch()
     {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsq) {
+            static::markTestSkipped('pgsl doesnt support query filter on integer numberables');
+        }
         $exRecord = $this->testCreateExampleRecord();
         $filter = [[
             'field' => 'query',
