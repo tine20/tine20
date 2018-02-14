@@ -99,6 +99,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected $_customfieldIdsToDelete = array();
 
+    protected $_areaLocksToInvalidate = [];
+
     /**
      * set up tests
      */
@@ -147,6 +149,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Tinebase_Cache_PerRequest::getInstance()->reset();
 
         $this->_releaseDBLocks();
+
+        foreach ($this->_areaLocksToInvalidate as $area) {
+            Tinebase_AreaLock::getInstance()->resetValidAuth($area);
+        }
     }
 
     /**
@@ -753,5 +759,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $appName,
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
         ) . '/' . $userId;
+    }
+
+    /**
+     * @param array $config
+     */
+    protected function _createAreaLockConfig($config = [])
+    {
+        $config = array_merge([
+            'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
+            'provider' => Tinebase_Auth::PIN,
+            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
+        ], $config);
+        $locks = new Tinebase_Config_KeyField([
+            'records' => new Tinebase_Record_RecordSet('Tinebase_Model_AreaLockConfig', [$config])
+        ]);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
+        $this->_areaLocksToInvalidate[] = $config['area'];
     }
 }

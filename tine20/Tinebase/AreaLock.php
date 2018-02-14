@@ -28,6 +28,8 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     private static $_instance = NULL;
 
+    protected $_hasLocks = [];
+
     /**
      * don't clone. Use the singleton.
      *
@@ -155,8 +157,12 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     public function hasLock($area)
     {
+        if (in_array($area, $this->_hasLocks)) {
+            return true;
+        }
         try {
             $this->_getAreaConfig($area);
+            $this->_hasLocks[] = $area;
         } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
@@ -272,6 +278,9 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     public function resetValidAuth($area)
     {
+        // invalidate class cache
+        $this->_hasLocks = [];
+
         $config = $this->_getAreaConfig($area);
         $alBackend = $this->_getBackend($config);
         $alBackend->resetValidAuth($area);

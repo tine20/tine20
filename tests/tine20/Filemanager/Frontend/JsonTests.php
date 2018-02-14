@@ -492,7 +492,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     }
 
     /**
-     * create container in shared folder
+     * create node in shared folder
      *
      * @param string $_name
      * @return array created node
@@ -2330,6 +2330,56 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+    }
 
+    /**
+     * testPinProtection with area lock
+     */
+    public function testPinProtection()
+    {
+        $this->_createAreaLockConfig([
+            'area' => Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
+        ]);
+        $folder = $this->testCreateContainerNodeInSharedFolder('protected');
+
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+        ), array(
+            'field'    => 'type',
+            'operator' => 'equals',
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+        ));
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $nodes = array_filter($result['results'], function($item) {
+            return $item['name'] === 'protected';
+        });
+        self::assertEquals(1, count($nodes), 'unprotected node should be found: '
+            . print_r($result, true));
+
+        // protect
+        $folder['pin_protected'] = true;
+        $this->_getUit()->saveNode($folder);
+
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) {
+            return $item['pin_protected'] === true;
+        });
+        self::assertEquals(0, count($protectedNodes), 'protected nodes should not be found: '
+            . print_r($protectedNodes, true));
+        self::assertEquals(1, $result['pinProtectedData']);
+
+        // unlock
+        $user = Tinebase_Core::getUser();
+        Tinebase_User::getInstance()->setPin($user, 1234);
+        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE, 1234);
+
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) {
+            return $item['pin_protected'];
+        });
+        self::assertEquals(1, count($protectedNodes), 'protected node should be found '
+            . print_r($result, true));
     }
 }

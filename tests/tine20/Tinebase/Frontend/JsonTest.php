@@ -549,19 +549,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testAreaLockProviderConfigRemovedFromRegistryData()
     {
-        $config = [
-            'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-            'provider' => Tinebase_Auth::PIN,
+        $this->_createAreaLockConfig([
             'provider_config' => [
                 'confidential' => 'secret!'
             ],
-            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
-        ];
-        $locks = new Tinebase_Config_KeyField([
-            'records' => new Tinebase_Record_RecordSet('Tinebase_Model_AreaLockConfig', [$config])
         ]);
-        Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
-
         $registryData = $this->_instance->getAllRegistryData();
         $registryConfigValue = $registryData['Tinebase']['config'][Tinebase_Config::AREA_LOCKS]['value'];
         self::assertTrue(isset($registryConfigValue['records'][0]));

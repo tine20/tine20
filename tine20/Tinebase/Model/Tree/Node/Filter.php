@@ -156,7 +156,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
 
         if (! $this->_ignorePinProtection
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
-            && ! Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+            && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
         ) {
             $db = $backend->getAdapter();
             $uniqueId = uniqid('pinProtected');

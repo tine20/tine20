@@ -2678,9 +2678,8 @@ class Tinebase_FileSystem implements
         $node = $this->get($_containerId);
         if (!isset($this->_areaLockCache[$node->getId()])
             && null !== $node->acl_node
-            && (   ! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
-                || ! Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
-            )
+            && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+            && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
         ) {
             if ($node->getId() !== $node->acl_node) {
                 $acl_node = $this->get($node->acl_node);
