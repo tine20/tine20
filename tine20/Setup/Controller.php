@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -448,7 +448,15 @@ class Setup_Controller
         }
         
         $messages = array();
-        
+        $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
+                $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
+            $fsConfig->unsetParent();
+            $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = false;
+            $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = false;
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
+        }
+
         // update tinebase first (to biggest major version)
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         if ($idx = $applications->getIndexById($tinebase->getId())) {
@@ -1560,7 +1568,16 @@ class Setup_Controller
         $applications = $this->_sortInstallableApplications($applications);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
-        
+
+        $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
+                $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
+            $fsConfig->unsetParent();
+            $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = false;
+            $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = false;
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
+        }
+
         foreach ($applications as $name => $xml) {
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);

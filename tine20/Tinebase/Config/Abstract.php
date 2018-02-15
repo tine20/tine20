@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -269,9 +269,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         if (null === $_value) {
             $this->delete($_name);
-            if (isset($this->_mergedConfigCache[$_name]) || array_key_exists($_name, $this->_mergedConfigCache)) {
-                unset($this->_mergedConfigCache[$_name]);
-            }
             return;
         }
 
@@ -283,6 +280,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         $this->_saveConfig($configRecord);
 
+        $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
+    }
+
+    public function setInMemory($_name, $_value)
+    {
         $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
     }
     
@@ -297,7 +299,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $config = $this->_loadConfig($_name);
         if ($config) {
             $this->_getBackend()->delete($config->getId());
-            $this->clearCache();
+            $this->clearCache(null, true);
+            if (isset($this->_mergedConfigCache[$_name]) || array_key_exists($_name, $this->_mergedConfigCache)) {
+                unset($this->_mergedConfigCache[$_name]);
+            }
         }
     }
     
@@ -635,7 +640,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $result = $this->_getBackend()->create($_config);
         }
         
-        $this->clearCache();
+        $this->clearCache(null, true);
         
         return $result;
     }
@@ -644,7 +649,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * clear the cache
      * @param   array $appFilter
      */
-    public function clearCache($appFilter = null)
+    public function clearCache($appFilter = null, $keepMemoryCache = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Clearing config cache');
@@ -669,7 +674,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         // reset class caches last because they would be filled again by Tinebase_Core::guessTempDir()
         self::$_configFileData = null;
         $this->_cachedApplicationConfig = null;
-        $this->_mergedConfigCache = array();
+        if (!$keepMemoryCache) {
+            $this->_mergedConfigCache = array();
+        }
     }
     
     /**

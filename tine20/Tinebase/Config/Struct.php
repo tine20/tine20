@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -139,5 +139,13 @@ class Tinebase_Config_Struct extends ArrayObject
             return true;
         }
         return false;
+    }
+
+    /**
+     * unset the parent references so __set will not propagate upwards
+     */
+    public function unsetParent()
+    {
+        $this->_parent = $this->_parentKey = null;
     }
 }
