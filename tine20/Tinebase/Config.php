@@ -457,6 +457,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const USER_PIN = 'userPin';
 
     /**
+     * USER_PIN_MIN_LENGTH
+     *
+     * @var string
+     */
+    const USER_PIN_MIN_LENGTH = 'userPinMinLength';
+
+    /**
      * conf.d folder name
      *
      * @var string
@@ -1466,6 +1473,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Users can have a PIN',
             'type'                  => 'boolean',
             'default'               => false,
+            'clientRegistryInclude' => true,
+        ),
+        self::USER_PIN_MIN_LENGTH => array(
+            //_('User PIN minimum length')
+            'label'                 => 'User PIN minimum length',
+            //_('User PIN minimum length')
+            'description'           => 'User PIN minimum length',
+            'type'                  => 'integer',
+            'default'               => 4,
             'clientRegistryInclude' => true,
         ),
         self::CONFD_FOLDER => array(
