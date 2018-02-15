@@ -67,6 +67,8 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
         ), Tinebase_Application::ENABLED);
         
         $this->_cli = new Courses_Frontend_Cli();
+
+        Courses_Config::getInstance()->clearCache();
         
         try {
             $internetGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
