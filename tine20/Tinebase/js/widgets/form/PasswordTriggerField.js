@@ -30,6 +30,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     enableKeyEvents: true,
 
     initComponent: function() {
+        // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
+        this.defaultAutoCreate = {tag: "input", type: "password", size: "16", autocomplete: "off"};
+
         this.defaultAutoCreate.type = this.locked ? 'password' : 'text';
         Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initComponent.apply(this, arguments);
     },

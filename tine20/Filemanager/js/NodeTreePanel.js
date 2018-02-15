@@ -29,6 +29,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     ddGroup: 'fileDDGroup',
     enableDD: true,
 
+    dataSafeAreaName: 'Tinebase.datasafe',
+    dataSafeEnabled: false,
+
     initComponent: function() {
         this.on('nodedragover', this.onNodeDragOver, this);
 
@@ -72,6 +75,17 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
         });
+
+        this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
+        if (this.dataSafeEnabled) {
+            postal.subscribe({
+                channel: 'areaLocks',
+                topic: this.dataSafeAreaName +'.*',
+                callback: this.applyDataSafeState.createDelegate(this)
+            });
+
+            this.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(this.dataSafeAreaName)
+        }
     },
 
     onRecordChanges: function(data, e) {
@@ -125,6 +139,28 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 });
             } catch (e) {}
         }
+    },
+
+    applyDataSafeState: function() {
+        var me = this;
+
+        Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
+            me.dataSafeIsLocked.then(function(wasLocked) {
+                me.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName);
+                if (isLocked != wasLocked) {
+                    var rootNode = me.getRootNode(),
+                        selectedNode = me.getSelectionModel().getSelectedNode();
+
+                    rootNode.collapse(true);
+                    if (selectedNode) {
+                        me.selectPath(selectedNode.attributes.path);
+                    } else {
+                        rootNode.expand();
+                    }
+                }
+            })
+
+        });
     },
 
     /**
@@ -294,6 +330,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         // copy 'real' data to a node record NOTE: not a full record as we have no record reader here
         var nodeData = Ext.copyTo({}, attr, this.recordClass.getFieldNames());
         attr.nodeRecord = new this.recordClass(nodeData);
+
+        if(this.dataSafeEnabled && +attr.nodeRecord.get('pin_protected')) {
+            attr.cls = 'x-type-data-safe';
+        }
     },
 
     /**

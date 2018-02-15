@@ -59,6 +59,7 @@ Tine.Tinebase.PresenceObserver.prototype = {
         var now = new Date();
         firstCheck = now.add(Date.MINUTE, this.maxAbsenceTime);
 
+        this.state = 'presence';
         this.setLastPresence(now);
 
         Tine.log.debug('Tine.Tinebase.PresenceObserver.startChecking register fist presence check for ' + firstCheck);

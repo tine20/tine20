@@ -75,19 +75,7 @@ class AbstractProvider extends Ext.util.Observable {
     let me = this
     return new Promise((resolve) => {
       me.expires = new Date().getTime() + me.lifetime * 60000
-      if (String(me.validity).toLowerCase() === 'presence') {
-        if (!me.presenceObserver) {
-          me.presenceObserver = new Tine.Tinebase.PresenceObserver({
-            maxAbsenceTime: me.lifetime,
-            absenceCallback: me.lock.bind(me),
-            presenceCallback: me.updateState.bind(me)
-          })
-        } else {
-          me.presenceObserver.startChecking()
-        }
-      } else {
-        me.timer = setTimeout(me.lock.bind(me), me.lifetime * 60000)
-      }
+      me.assertTimerRunning()
       me.fireEvent('stateChange', me, me.getState())
       me.fireEvent('unlock', me)
       resolve(me.expires)
@@ -110,7 +98,32 @@ class AbstractProvider extends Ext.util.Observable {
     })
   }
 
+  assertTimerRunning () {
+    let me = this
+    if (String(me.validity).toLowerCase() === 'presence') {
+      if (!me.presenceObserver) {
+        me.presenceObserver = new Tine.Tinebase.PresenceObserver({
+          maxAbsenceTime: me.lifetime,
+          absenceCallback: me.lock.bind(me),
+          presenceCallback: me.updateState.bind(me)
+        })
+      } else {
+        me.presenceObserver.startChecking()
+      }
+    } else {
+      if (!me.timer) {
+        let lifetime = Math.min(new Date().getTime() - me.expires, me.lifetime * 60000)
+        me.timer = setTimeout(me.lock.bind(me), lifetime)
+      }
+    }
+  }
+
   setState (state) {
+    let _ = window.lodash
+    let expires = _.get(state, 'expires', 0)
+    if (!_.isNumber(expires)) {
+      _.set(state, 'expires', new Date(expires).getTime())
+    }
     Object.assign(this, state)
   }
 
@@ -129,6 +142,10 @@ class AbstractProvider extends Ext.util.Observable {
         me.expires = expires
         me.fireEvent('stateChange', me, me.getState())
       }
+    }
+    // timers are not running after page reload / new window
+    if (me.expires > new Date().getTime()) {
+      me.assertTimerRunning()
     }
   }
 }

@@ -151,6 +151,7 @@ class AreaLocks {
     let me = this
     let options = me.getOptions(area)
 
+    // @TODO: support array of maskEls?
     if (options.maskEl) {
       me.isLocked(area).then((isLocked) => {
         if (isLocked) {
@@ -227,7 +228,7 @@ class AreaLocks {
   }
 
   getOptions (area) {
-    return this.areaOptions[area]
+    return this.areaOptions[area] || {}
   }
 
   isLocked (area, askServer) {

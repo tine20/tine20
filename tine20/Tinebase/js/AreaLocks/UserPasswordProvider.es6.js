@@ -44,5 +44,18 @@ class UserPasswordProvider extends AbstractProvider {
       })
     })
   }
+
+  lock () {
+    let me = this
+    me.isLocking = true
+    me.fireEvent('locking', me)
+    return Tine.Tinebase_AreaLock.lock(me.area)
+      .finally(() => {
+        me.isLocking = false
+      })
+      .then(() => {
+        return super.lock()
+      })
+  }
 }
 export default UserPasswordProvider

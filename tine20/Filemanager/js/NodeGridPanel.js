@@ -61,6 +61,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     previewsEnabled: false,
 
+    dataSafeAreaName: 'Tinebase.datasafe',
+    dataSafeEnabled: false,
+
     /**
      * inits this cmp
      * @private
@@ -83,6 +86,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         this.previewsEnabled = Tine.Tinebase.configManager.get('filesystem').createPreviews;
+        this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
 
         this.recordProxy = this.recordProxy || Tine.Filemanager.fileRecordBackend;
 
@@ -477,6 +481,24 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
         }
 
+        if (this.dataSafeEnabled) {
+            this.action_dataSafe = new Ext.Action({
+                text: 'Open Data Safe', // _('Open Data Safe')
+                iconCls: 'action_filemanager_data_safe_locked',
+                scope: this,
+                handler: this.onDataSafeToggle,
+                enableToggle: true
+            });
+
+            postal.subscribe({
+                channel: 'areaLocks',
+                topic: this.dataSafeAreaName +'.*',
+                callback: this.applyDataSafeState.createDelegate(this)
+            });
+
+            this.applyDataSafeState();
+        }
+
         // grid only actions - work on node which is displayed (this.currentFolderNode)
         // @TODO: fixme - ux problems with filterselect / initialData
         this.action_upload = new Ext.Action(this.getAddAction());
@@ -552,6 +574,51 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.currentFolderNode = currentFolderNode.parentNode;
             currentFolderNode.parentNode.select();
         }
+    },
+
+    onDataSafeToggle: function(button, e) {
+        button.toggle(!button.pressed);
+
+        var me = this,
+            promise = !button.pressed ?
+                Tine.Tinebase.areaLocks.unlock(me.dataSafeAreaName) :
+                Tine.Tinebase.areaLocks.lock(me.dataSafeAreaName);
+
+        me.getEl().mask('some text');
+        promise
+            .finally(function() {
+                me.getEl().unmask();
+            })
+    },
+
+    applyDataSafeState: function() {
+        var me = this;
+
+        Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
+            // if state change -> reload
+            if (isLocked == me.action_dataSafe.items[0].pressed) {
+                me.store.reload();
+            }
+
+            var cls = isLocked ? 'removeClass' : 'addClass';
+            me.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
+            me.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
+            me.action_dataSafe.setText(isLocked ? me.app.i18n._('Open Data Safe') : me.app.i18n._('Close Data Safe'));
+            me.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
+        });
+    },
+
+    /**
+     * returns view row class
+     */
+    getViewRowClass: function(record, index, rowParams, store) {
+        var className = Tine.Filemanager.NodeGridPanel.superclass.getViewRowClass.apply(this, arguments);
+
+        if (this.dataSafeEnabled && +record.get('pin_protected')) {
+            className += ' x-type-data-safe'
+        }
+
+        return className;
     },
 
     /**
@@ -634,6 +701,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             if (this.previewsEnabled) {
                 items.push(Ext.apply(new Ext.Button(this.action_preview), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                }));
+            }
+
+            if (this.dataSafeEnabled) {
+                items.push(Ext.apply(new Ext.Button(this.action_dataSafe), {
                     scale: 'medium',
                     rowspan: 2,
                     iconAlign: 'top'

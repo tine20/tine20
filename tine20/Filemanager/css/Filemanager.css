@@ -51,6 +51,28 @@
     background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
 }
 
+/* @TODO improve me */
+.action_filemanager_data_safe_locked {
+    background-image:url(../../images/oxygen/16x16/actions/encrypted.png) !important;
+}
+.x-btn-medium .action_filemanager_data_safe_locked {
+    background-image:url(../../images/oxygen/22x22/actions/encrypted.png) !important;
+}
+.x-btn-large .action_filemanager_data_safe_locked {
+    background-image:url(../../images/oxygen/32x32/actions/encrypted.png) !important;
+}
+
+/* @TODO improve me */
+.action_filemanager_data_safe_unlocked {
+    background-image:url(../../images/oxygen/16x16/actions/decrypted.png) !important;
+}
+.x-btn-medium .action_filemanager_data_safe_unlocked {
+    background-image:url(../../images/oxygen/22x22/actions/decrypted.png) !important;
+}
+.x-btn-large .action_filemanager_data_safe_unlocked {
+    background-image:url(../../images/oxygen/32x32/actions/decrypted.png) !important;
+}
+
 .action_create_folder {
     background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
 }
@@ -71,6 +93,25 @@
 .x-btn-large .action_create_folder {
     background-image:url(../../images/oxygen/32x32/actions/folder-new.png) !important;
 }
+
+.x-type-data-safe .x-tree-node-icon,
+.x-type-data-safe .x-tinebase-typefolder .x-grid3-cell-inner {
+    filter: invert(10%) saturate(500%) hue-rotate(345deg);
+}
+
+.x-tree-node .x-type-data-safe a span,
+.x-type-data-safe td {
+    color: red;
+}
+
+.x-btn.x-type-data-safe button {
+    filter: hue-rotate(-140deg)
+}
+
+table.x-btn.x-type-data-safe {
+    filter: hue-rotate(140deg)
+}
+
 
 .x-tinebase-typefolder .x-grid3-cell-inner {
     background-image:url(../../themes/tine20/resources/images/tine20/tree/folder.gif);

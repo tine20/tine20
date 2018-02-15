@@ -106,6 +106,10 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
      */
     public function getLastPresence($key)
     {
+        if (! Tinebase_Session::isStarted()) {
+            return null;
+        }
+
         $presenceKeys = Tinebase_Session::getSessionNamespace()->{self::PRESENCE_SESSION_NAMESPACE};
         if (isset($presenceKeys[$key]['lastPresence'])) {
             return new Tinebase_DateTime($presenceKeys[$key]['lastPresence']);
