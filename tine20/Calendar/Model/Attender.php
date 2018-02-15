@@ -275,11 +275,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
+            if (! $resource instanceof Calendar_Model_Resource) {
+                throw new Tinebase_Exception_UnexpectedValue('did not get valid resource object');
+            }
             // return pseudo contact with resource data
             $result = new Addressbook_Model_Contact(array(
-                'n_family'  => $resource->name,
-                'email'     => $resource->email,
-                'id'        => $resource->getId(),
+                'n_family' => $resource->name,
+                'email' => $resource->email,
+                'id' => $resource->getId(),
             ));
         } else {
             $result = $clone->user_id;
