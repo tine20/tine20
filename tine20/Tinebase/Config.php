@@ -554,6 +554,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FULLTEXT_BACKEND = 'backend';
     const FULLTEXT_JAVABIN = 'javaBin';
     const FULLTEXT_TIKAJAR = 'tikaJar';
+    const FULLTEXT_QUERY_FILTER = 'queryFilter';
 
     const FILESYSTEM = 'filesystem';
     const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
@@ -809,6 +810,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
                 self::FULLTEXT_TIKAJAR          => array(
                     'type'                              => Tinebase_Config::TYPE_STRING,
+                ),
+                // shall we include fulltext fields in the query filter?
+                self::FULLTEXT_QUERY_FILTER     => array(
+                    'type'                              => Tinebase_Config::TYPE_BOOL,
+                    'default'                           => false
                 ),
             ),
             'default'                           => array()
