@@ -131,7 +131,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         'sieve_ssl'=> array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
-            array('InArray', array(self::SECURE_NONE, self::SECURE_TLS)),
+            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
         ),
         'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'sieve_notification_email' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
