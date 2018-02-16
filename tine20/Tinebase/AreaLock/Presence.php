@@ -30,7 +30,7 @@ class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
     {
         if (! $config->lifetime) {
             // set lifetime default
-            $config->lifetime = 60;
+            $config->lifetime = 15;
         }
         $this->_config = $config;
     }
@@ -42,7 +42,7 @@ class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
      */
     public function saveValidAuth($area)
     {
-        $lifetimeSeconds = $this->_config->lifetime;
+        $lifetimeSeconds = $this->_config->lifetime * 60;
         $validity = Tinebase_DateTime::now()->addSecond($lifetimeSeconds);
         Tinebase_Presence::getInstance()->setPresence(__CLASS__ . '#' . $area, $lifetimeSeconds);
         return $validity;
@@ -68,7 +68,8 @@ class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
     public function getAuthValidity($area)
     {
         $lastPresence = Tinebase_Presence::getInstance()->getLastPresence(__CLASS__ . '#' . $area);
-        return $lastPresence ? $lastPresence->addSecond($this->_config->lifetime) : false;
+        $lifetimeSeconds = $this->_config->lifetime * 60;
+        return $lastPresence ? $lastPresence->addSecond($lifetimeSeconds) : false;
     }
 
     /**

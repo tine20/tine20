@@ -70,7 +70,7 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
 
     /**
      * @param $key
-     * @param $increment
+     * @param integer $increment in seconds
      * @param bool $setLastPresence
      */
     public function setPresence($key, $increment, $setLastPresence = true)

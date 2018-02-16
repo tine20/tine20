@@ -142,7 +142,7 @@ class Tinebase_AreaLockTest extends TestCase
     public function testLockWithPresence()
     {
         $this->_createAreaLockConfig([
-            'lifetime' => 5,
+            'lifetime' => 5 / 60,
             'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE,
         ]);
         $this->_setPin();
@@ -162,7 +162,7 @@ class Tinebase_AreaLockTest extends TestCase
     public function testLockWithLifetime()
     {
         $this->_createAreaLockConfig([
-            'lifetime' => 5,
+            'lifetime' => 5 / 60,
             'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME,
         ]);
         $this->_setPin();

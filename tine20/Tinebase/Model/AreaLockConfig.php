@@ -130,7 +130,7 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
             'lifetime' => [
                 'type'          => 'integer',
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Lifetime in Seconds', // _('Lifetime in Seconds')
+                'label'         => 'Lifetime in Minutes', // _('Lifetime in Minutes')
             ],
             // @todo add more fields:
             // individual: true,      // each area must be unlocked individually (when applied hierarchically / with same provider) -> NOT YET

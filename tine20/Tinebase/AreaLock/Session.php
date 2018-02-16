@@ -48,8 +48,9 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
                 $sessionValidity = new Tinebase_DateTime('2150-01-01');
                 break;
             case Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME:
-                $lifetimeSeconds = $this->_config->lifetime;
-                $sessionValidity = Tinebase_DateTime::now()->addSecond($lifetimeSeconds ? $lifetimeSeconds : 15 * 60);
+                $lifetimeMinutes = $this->_config->lifetime;
+                $lifetimeSeconds = $lifetimeMinutes ? $lifetimeMinutes * 60  : 15 * 60;
+                $sessionValidity = Tinebase_DateTime::now()->addSecond($lifetimeSeconds);
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('validity ' . $this->_config->validity . ' not supported');
