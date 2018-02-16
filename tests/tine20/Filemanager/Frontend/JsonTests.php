@@ -2083,6 +2083,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     public function testRecursiveFilter()
     {
+        Tinebase_Core::getConfig()->clearCache();
         // check for tika installation
         if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
             self::markTestSkipped('no tika.jar found');
