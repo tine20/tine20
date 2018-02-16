@@ -353,6 +353,10 @@ class Tinebase_CustomFieldTest extends TestCase
      */
     public function testIntCustomField()
     {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsql doesnt support int customfield filters');
+        }
+
         $value = 1234;
         $filtersToTest = [
             ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => true],
