@@ -226,7 +226,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
      */
     public function testNumberableQuerySearch()
     {
-        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsq) {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             static::markTestSkipped('pgsl doesnt support query filter on integer numberables');
         }
         $exRecord = $this->testCreateExampleRecord();
