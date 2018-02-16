@@ -751,8 +751,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * require reload when node is collapsed
      */
     onBeforeCollapse: function(node) {
+        // NOTE: we should somehow keep the state if user expands again -> seams hard
+        // var selections = this.getSelectionModel().getSelectedNodes();
+
+        this.getSelectionModel().suspendEvents();
         node.removeAll();
         node.loaded = false;
+
+        this.getSelectionModel().resumeEvents();
     },
 
     onFilterChange: function() {
