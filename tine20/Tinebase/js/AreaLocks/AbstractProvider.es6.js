@@ -90,6 +90,7 @@ class AbstractProvider extends Ext.util.Observable {
       }
       if (me.timer) {
         clearTimeout(me.timer)
+        me.timer = null
       }
       me.expires = 0
       me.fireEvent('stateChange', me, me.getState())
@@ -112,7 +113,7 @@ class AbstractProvider extends Ext.util.Observable {
       }
     } else {
       if (!me.timer) {
-        let lifetime = Math.min(new Date().getTime() - me.expires, me.lifetime * 60000)
+        let lifetime = Math.min(me.expires - new Date().getTime(), me.lifetime * 60000)
         me.timer = setTimeout(me.lock.bind(me), lifetime)
       }
     }

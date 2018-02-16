@@ -151,12 +151,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     var rootNode = me.getRootNode(),
                         selectedNode = me.getSelectionModel().getSelectedNode();
 
+                    me.getSelectionModel().suspendEvents();
                     rootNode.collapse(true);
                     if (selectedNode) {
-                        me.selectPath(selectedNode.attributes.path);
+                        me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
                     } else {
-                        rootNode.expand();
+                        rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
                     }
+
                 }
             })
 
