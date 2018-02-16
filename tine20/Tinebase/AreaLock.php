@@ -113,7 +113,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     public function unlock($area, $password, $identity = null)
     {
         $areaConfig = $this->getAreaConfig($area);
-        $authProvider = Tinebase_Auth_Factory::factory($areaConfig->provider, $areaConfig->provider_config);
+        $authProvider = $this->_getAuthProvider($areaConfig);
 
         if (! $identity) {
             $user = Tinebase_Core::getUser();
@@ -135,6 +135,32 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             'area' => $area,
             'expires' => $expires
         ]);
+    }
+
+    /**
+     * @param Tinebase_Model_AreaLockConfig $areaConfig
+     * @return Tinebase_Auth_Interface
+     */
+    protected function _getAuthProvider(Tinebase_Model_AreaLockConfig $areaConfig)
+    {
+        switch (strtolower($areaConfig->provider)) {
+            case Tinebase_Model_AreaLockConfig::PROVIDER_PIN:
+                $authProvider = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
+                break;
+            case Tinebase_Model_AreaLockConfig::PROVIDER_USERPASSWORD:
+                $authProvider = Tinebase_Auth::getInstance()->getBackend();
+                break;
+            case Tinebase_Model_AreaLockConfig::PROVIDER_TOKEN:
+                if (! isset($areaConfig->provider_config) || ! isset($areaConfig->provider_config['adapter'])) {
+                    throw new Tinebase_Exception_UnexpectedValue('"adapter" needs to be set in provider_config');
+                }
+                $authProvider = Tinebase_Auth_Factory::factory($areaConfig->provider_config['adapter'], $areaConfig->provider_config);
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('no valid area lock provider given');
+        }
+
+        return $authProvider;
     }
 
     /**

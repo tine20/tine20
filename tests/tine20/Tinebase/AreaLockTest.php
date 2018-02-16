@@ -186,4 +186,33 @@ class Tinebase_AreaLockTest extends TestCase
         self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $state->area);
         self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
     }
+
+    /**
+     * test PROVIDER_USERPASSWORD
+     */
+    public function testUserPasswordProvider()
+    {
+        $this->_createAreaLockConfig([
+            'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_USERPASSWORD
+        ]);
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $credentials['password']);
+        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN));
+    }
+
+    /**
+     * test PROVIDER_TOKEN with Tinebase_Auth_Mock
+     */
+    public function testUserMockTokenProvider()
+    {
+        $this->_createAreaLockConfig([
+            'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_TOKEN,
+            'provider_config' => [
+                'adapter' => 'Mock', // \Tinebase_Auth_Mock
+                'url' => 'https://localhost/validate/check',
+            ]
+        ]);
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'phil', 'phil');
+        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN));
+    }
 }

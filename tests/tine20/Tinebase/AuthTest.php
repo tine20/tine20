@@ -216,7 +216,6 @@ class Tinebase_AuthTest extends TestCase
     public function testMockAuthAdapter()
     {
         $authAdapter = Tinebase_Auth_Factory::factory('Mock', array(
-            'active' => true,
             'url' => 'https://localhost/validate/check',
         ));
         $authAdapter->setIdentity('phil');

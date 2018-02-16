@@ -768,7 +768,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $config = array_merge([
             'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-            'provider' => Tinebase_Auth::PIN,
+            'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_PIN,
             'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
         ], $config);
         $locks = new Tinebase_Config_KeyField([

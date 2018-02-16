@@ -292,6 +292,14 @@ class Tinebase_Auth
         
         $this->_backend = Tinebase_Auth_Factory::factory($backendType);
     }
+
+    /**
+     * @return Tinebase_Auth_Interface
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
+    }
     
     /**
      * setter for {@see $_backendType}

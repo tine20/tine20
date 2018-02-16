@@ -39,6 +39,13 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
     const AREA_DATASAFE = 'Tinebase.datasafe';
 
     /**
+     * supported providers
+     */
+    const PROVIDER_PIN = 'pin';
+    const PROVIDER_USERPASSWORD = 'userpassword';
+    const PROVIDER_TOKEN = 'token';
+
+    /**
      * holds the configuration object (must be declared in the concrete class)
      *
      * @var Tinebase_ModelConfiguration
@@ -69,16 +76,25 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
                 'queryFilter'   => true
             ],
             'provider' => [
-                // NOTE: must implement Tinebase_Auth_Interface
                 'type'          => 'string',
                 'length'        => 255,
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                'validators'    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    'presence' => 'required',
+                    ['InArray', [
+                        self::PROVIDER_PIN,
+                        self::PROVIDER_USERPASSWORD,
+                        self::PROVIDER_TOKEN,
+                    ]],
+                ],
                 'label'         => 'Provider', // _('Provider')
-                'queryFilter'   => true,
             ],
              /** example config:
               *
               * array(
+              *      // some auth adapter below Tinebase_Auth (i.e. Tinebase_Auth_PrivacyIdea)
+              *      // NOTE: must implement Tinebase_Auth_Interface
+              *      'adapter'               => 'PrivacyIdea',
               *      'url'                   => 'https://localhost/validate/check',
               *      'allow_self_signed'     => true,
               *      'ignorePeerName'        => true,
