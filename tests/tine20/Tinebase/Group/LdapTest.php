@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO extend TestCase to use generic cleanup
@@ -200,9 +200,13 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGroupMembers()
     {
+        $this->objects['initialAccount']->accountLoginName = $this->objects['initialAccount']->accountLoginName
+            . 'testSetGroupMembers';
+
         $group = $this->testAddGroup();
 
         $user = $this->_addUserToGroup($group);
+
         $this->_groupLDAP->setGroupMembers($group, array($user));
         
         $groupMemberships = $this->_groupLDAP->getGroupMembershipsFromSyncBackend($user);

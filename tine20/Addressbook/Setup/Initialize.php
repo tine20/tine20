@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -40,21 +40,19 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $userController = Tinebase_User::getInstance();
         $oldGroupValue = $groupController->modlogActive(false);
         $oldUserValue = $userController->modlogActive(false);
-        
-        if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
-            Tinebase_User::syncUsers(array('syncContactData' => TRUE));
-        }
 
         $initialUserName = $initialAdminUserOptions['adminLoginName'];
 
-        try {
-            $initialUser = $userController->getUserByProperty('accountLoginName', $initialUserName);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' Could not find initial admin account ' . $initialUserName . ' in user backend. Creating new one ...');
-            Tinebase_User::createInitialAccounts($initialAdminUserOptions);
-            $initialUser = $userController->getUserByProperty('accountLoginName', $initialUserName);
+        // make sure we have a setup user:
+        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
+
+        // in case we have an ldap setup, we sync the users from the ldap before creating the initial accounts
+        Tinebase_User::syncUsers([Tinebase_User::SYNC_WITH_CONFIG_OPTIONS => true]);
+        Tinebase_User::createInitialAccounts($initialAdminUserOptions);
+        $initialUser = $userController->getUserByProperty('accountLoginName', $initialUserName);
         
         Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
 
