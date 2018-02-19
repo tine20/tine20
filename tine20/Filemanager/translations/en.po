@@ -14,6 +14,50 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Frontend/Download.php:109
+msgid "Password for download required"
+msgstr "Password for download required"
+
+#: Frontend/Download.php:111
+msgid "Submit"
+msgstr "Submit"
+
+#: Frontend/Download.php:125
+msgid "File not found!"
+msgstr "File not found!"
+
+#: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:275
+#: js/NodeGridPanel.js:237 js/NodeEditDialog.js:134
+#: js/NotificationGridPanel.js:111
+msgid "Name"
+msgstr "Name"
+
+#: Frontend/Download.php:197 Frontend/Download.php:224 js/FilePicker.js:282
+#: js/NodeGridPanel.js:244 js/UsagePanel.js:39
+msgid "Size"
+msgstr "Size"
+
+#: Frontend/Download.php:198 Frontend/Download.php:225 js/NodeEditDialog.js:188
+msgid "Last Modified"
+msgstr "Last Modified"
+
+#: Frontend/Download.php:199 js/NodeEditDialog.js:209 js/Model.js:607
+msgid "Description"
+msgstr "Description"
+
+#: Frontend/Download.php:200 js/FilePicker.js:297 js/NodeGridPanel.js:259
+#: js/NodeEditDialog.js:61 js/Model.js:26
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Folder"
+msgstr[1] "Folders"
+
+#: Frontend/Download.php:226 js/NodeEditDialog.js:61 js/Model.js:23
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+msgstr[1] "Files"
+
 #: Preference.php:61
 msgid "Row double click default"
 msgstr "Row double click default"
@@ -22,25 +66,9 @@ msgstr "Row double click default"
 msgid "Defines which action should be executed on double click by default?"
 msgstr "Defines which action should be executed on double click by default?"
 
-#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:111
-msgid "Name"
-msgstr "Name"
-
-#: js/FilePicker.js:282 js/NodeGridPanel.js:240 js/UsagePanel.js:39
-msgid "Size"
-msgstr "Size"
-
-#: js/FilePicker.js:289 js/NodeGridPanel.js:247 js/Model.js:605
+#: js/FilePicker.js:289 js/NodeGridPanel.js:251 js/Model.js:605
 msgid "Contenttype"
 msgstr "Contenttype"
-
-#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:61
-#: js/Model.js:26
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Folder"
-msgstr[1] "Folders"
 
 #: js/PathFilterModel.js:50
 msgid "path"
@@ -86,12 +114,12 @@ msgstr "Deleting Download Links..."
 msgid "Deleting Download Link..."
 msgstr "Deleting Download Link..."
 
-#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:270
+#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:274
 #: js/NodeEditDialog.js:173
 msgid "Created By"
 msgstr "Created By"
 
-#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:263
+#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:267
 #: js/NodeEditDialog.js:176 js/Model.js:606
 msgid "Creation Time"
 msgstr "Creation Time"
@@ -104,11 +132,11 @@ msgstr "Expiration Time"
 msgid "Access Count"
 msgstr "Access Count"
 
-#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:277
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:281
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:284
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:288
 msgid "Last Modified By"
 msgstr "Last Modified By"
 
@@ -132,41 +160,49 @@ msgstr "Limit revision amount to"
 msgid "Hold-back in months"
 msgstr "Hold-back in months"
 
-#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:786
+#: js/NodeTreePanel.js:560 js/NodeGridPanel.js:868
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
-#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:787
+#: js/NodeTreePanel.js:561 js/NodeGridPanel.js:869
 msgid "Putting files in this folder is not allowed!"
 msgstr "Putting files in this folder is not allowed!"
 
-#: js/NodeGridPanel.js:225
+#: js/NodeGridPanel.js:229
 msgid "Tags"
 msgstr "Tags"
 
-#: js/NodeGridPanel.js:295 js/UsagePanel.js:84
+#: js/NodeGridPanel.js:299 js/UsagePanel.js:84
 msgid "Revision Size"
 msgstr "Revision Size"
 
-#: js/NodeGridPanel.js:296
+#: js/NodeGridPanel.js:300
 msgid "Total size of all available revisions"
 msgstr "Total size of all available revisions"
 
-#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:154 js/Model.js:612
+#: js/NodeGridPanel.js:312 js/NodeEditDialog.js:154 js/Model.js:612
 msgid "Indexed"
 msgstr "Indexed"
 
-#: js/NodeGridPanel.js:309
+#: js/NodeGridPanel.js:313
 msgid "File contents is part of the search index"
 msgstr "File contents is part of the search index"
 
-#: js/NodeGridPanel.js:421
+#: js/NodeGridPanel.js:425
 msgid "Upload"
 msgstr "Upload"
 
-#: js/NodeGridPanel.js:483
+#: js/NodeGridPanel.js:486 js/NodeGridPanel.js:610
+msgid "Open Data Safe"
+msgstr "Open Data Safe"
+
+#: js/NodeGridPanel.js:508
 msgid "Folder Up"
 msgstr "Folder Up"
+
+#: js/NodeGridPanel.js:610
+msgid "Close Data Safe"
+msgstr "Close Data Safe"
 
 #: js/Filemanager.js:24
 msgid "Filemanager"
@@ -184,12 +220,6 @@ msgstr "Edit folder"
 msgid "edit file"
 msgstr "edit file"
 
-#: js/NodeEditDialog.js:61 js/Model.js:23
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "File"
-msgstr[1] "Files"
-
 #: js/NodeEditDialog.js:96
 msgid "Public Links"
 msgstr "Public Links"
@@ -205,14 +235,6 @@ msgstr "Not yet indexed"
 #: js/NodeEditDialog.js:185
 msgid "Modified By"
 msgstr "Modified By"
-
-#: js/NodeEditDialog.js:188
-msgid "Last Modified"
-msgstr "Last Modified"
-
-#: js/NodeEditDialog.js:209 js/Model.js:607
-msgid "Description"
-msgstr "Description"
 
 #: js/NodeEditDialog.js:223
 msgid "Enter description"
@@ -295,7 +317,7 @@ msgstr "Node Download Links"
 msgid "Close"
 msgstr "Close"
 
-#: js/DocumentPreview.js:119
+#: js/DocumentPreview.js:141
 msgid "No preview available."
 msgstr "No preview available."
 
@@ -359,18 +381,18 @@ msgid "Grants of a folder also apply recursively for all of its sub folders as l
 msgstr "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
 
 #: js/GrantsPanel.js:49
-msgid "This folder is pin protected"
-msgstr "This folder is pin protected"
+msgid "This folder is part of the data safe"
+msgstr "This folder is part of the data safe"
 
 #: js/GrantsPanel.js:52
-msgid "If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents."
-msgstr "If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents."
+msgid "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
+msgstr "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
 
 #: js/GrantsPanel.js:56
 msgid "The grant to download files"
 msgstr "The grant to download files"
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:337
+#: js/GrantsPanel.js:57 js/nodeActions.js:338
 msgid "Publish"
 msgstr "Publish"
 
@@ -499,11 +521,15 @@ msgstr "Move Items"
 msgid "Preview"
 msgstr "Preview"
 
-#: js/nodeActions.js:368
+#: js/nodeActions.js:354
+msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
+msgstr "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
+
+#: js/nodeActions.js:371
 msgid "Folder has been published successfully"
 msgstr "Folder has been published successfully"
 
-#: js/nodeActions.js:368
+#: js/nodeActions.js:371
 msgid "File has been published successfully"
 msgstr "File has been published successfully"
 
@@ -512,50 +538,50 @@ msgid "Public Download URL"
 msgstr "Public Download URL"
 
 #: Config.php:28
-msgid "Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules."
-msgstr "Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules."
+msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
+msgstr "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
 
-#: Controller/Node.php:507
+#: Controller/Node.php:518
 msgid "My folders"
 msgstr "My folders"
 
-#: Controller/Node.php:514
+#: Controller/Node.php:525
 msgid "Shared folders"
 msgstr "Shared folders"
 
-#: Controller/Node.php:521
+#: Controller/Node.php:532
 msgid "Other users folders"
 msgstr "Other users folders"
 
-#: Controller/Node.php:1475
+#: Controller/Node.php:1486
 msgid "Received"
 msgstr "Received"
 
-#: Controller/Node.php:1476
+#: Controller/Node.php:1487
 msgid "To"
 msgstr "To"
 
-#: Controller/Node.php:1477
+#: Controller/Node.php:1488
 msgid "Cc"
 msgstr "Cc"
 
-#: Controller/Node.php:1478
+#: Controller/Node.php:1489
 msgid "Bcc"
 msgstr "Bcc"
 
-#: Controller/Node.php:1479
+#: Controller/Node.php:1490
 msgid "From (E-Mail)"
 msgstr "From (E-Mail)"
 
-#: Controller/Node.php:1480
+#: Controller/Node.php:1491
 msgid "From (Name)"
 msgstr "From (Name)"
 
-#: Controller/Node.php:1481
+#: Controller/Node.php:1492
 msgid "Body"
 msgstr "Body"
 
-#: Controller/Node.php:1482
+#: Controller/Node.php:1493
 msgid "Attachments"
 msgstr "Attachments"
 

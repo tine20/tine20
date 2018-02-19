@@ -264,8 +264,8 @@ function generatePOTFiles($_verbose)
         $tempExportExtractDir = $appPath . 'tempExportExtract';
         
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
-        
-        `cd "$appPath"`;
+
+        chdir($appPath);
         if (file_exists($appPath . 'Export/templates')) {
             if (!file_exists($tempExportExtractDir)) {
                 mkdir($tempExportExtractDir);

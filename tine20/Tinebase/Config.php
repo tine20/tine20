@@ -1799,7 +1799,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::QUOTA_SKIP_IMAP_QUOTA => array(
                     //_('Skip Imap Quota Notfication')
                     'label'                 => 'Skip Imap Quota Notfication',
-                    //_('NSkip Imap Quota Notfication')
+                    //_('Skip Imap Quota Notfication')
                     'description'           => 'Skip Imap Quota Notfication',
                     'type'                  => 'bool',
                     'clientRegistryInclude' => true,

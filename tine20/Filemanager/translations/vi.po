@@ -17,6 +17,50 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Frontend/Download.php:109
+msgid "Password for download required"
+msgstr ""
+
+#: Frontend/Download.php:111
+msgid "Submit"
+msgstr ""
+
+#: Frontend/Download.php:125
+msgid "File not found!"
+msgstr ""
+
+#: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:275
+#: js/NodeGridPanel.js:237 js/NodeEditDialog.js:134
+#: js/NotificationGridPanel.js:111
+msgid "Name"
+msgstr "Tên"
+
+#: Frontend/Download.php:197 Frontend/Download.php:224 js/FilePicker.js:282
+#: js/NodeGridPanel.js:244 js/UsagePanel.js:39
+msgid "Size"
+msgstr "Kích thước"
+
+#: Frontend/Download.php:198 Frontend/Download.php:225 js/NodeEditDialog.js:188
+msgid "Last Modified"
+msgstr "Sửa lần cuối"
+
+#: Frontend/Download.php:199 js/NodeEditDialog.js:209 js/Model.js:607
+msgid "Description"
+msgstr "Mô tả"
+
+#: Frontend/Download.php:200 js/FilePicker.js:297 js/NodeGridPanel.js:259
+#: js/NodeEditDialog.js:61 js/Model.js:26
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+"one:Thư mục\n"
+"other:Thư mục"
+
+#: Frontend/Download.php:226 js/NodeEditDialog.js:61 js/Model.js:23
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+
 #: Preference.php:61
 msgid "Row double click default"
 msgstr ""
@@ -25,26 +69,9 @@ msgstr ""
 msgid "Defines which action should be executed on double click by default?"
 msgstr ""
 
-#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:111
-msgid "Name"
-msgstr "Tên"
-
-#: js/FilePicker.js:282 js/NodeGridPanel.js:240 js/UsagePanel.js:39
-msgid "Size"
-msgstr "Kích thước"
-
-#: js/FilePicker.js:289 js/NodeGridPanel.js:247 js/Model.js:605
+#: js/FilePicker.js:289 js/NodeGridPanel.js:251 js/Model.js:605
 msgid "Contenttype"
 msgstr "Contenttype"
-
-#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:61
-#: js/Model.js:26
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-"one:Thư mục\n"
-"other:Thư mục"
 
 #: js/PathFilterModel.js:50
 msgid "path"
@@ -90,12 +117,12 @@ msgstr ""
 msgid "Deleting Download Link..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:270
+#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:274
 #: js/NodeEditDialog.js:173
 msgid "Created By"
 msgstr "Tạo bởi"
 
-#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:263
+#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:267
 #: js/NodeEditDialog.js:176 js/Model.js:606
 msgid "Creation Time"
 msgstr "Thời gian tạo"
@@ -108,11 +135,11 @@ msgstr ""
 msgid "Access Count"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:277
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:281
 msgid "Last Modified Time"
 msgstr "Thời gian sửa cuối"
 
-#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:284
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:288
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
 
@@ -136,41 +163,49 @@ msgstr ""
 msgid "Hold-back in months"
 msgstr ""
 
-#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:786
+#: js/NodeTreePanel.js:560 js/NodeGridPanel.js:868
 msgid "Upload Failed"
 msgstr "Lỗi upload"
 
-#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:787
+#: js/NodeTreePanel.js:561 js/NodeGridPanel.js:869
 msgid "Putting files in this folder is not allowed!"
 msgstr "Đặt file vào thư mục này là không được phép!"
 
-#: js/NodeGridPanel.js:225
+#: js/NodeGridPanel.js:229
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/NodeGridPanel.js:295 js/UsagePanel.js:84
+#: js/NodeGridPanel.js:299 js/UsagePanel.js:84
 msgid "Revision Size"
 msgstr ""
 
-#: js/NodeGridPanel.js:296
+#: js/NodeGridPanel.js:300
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:154 js/Model.js:612
+#: js/NodeGridPanel.js:312 js/NodeEditDialog.js:154 js/Model.js:612
 msgid "Indexed"
 msgstr ""
 
-#: js/NodeGridPanel.js:309
+#: js/NodeGridPanel.js:313
 msgid "File contents is part of the search index"
 msgstr ""
 
-#: js/NodeGridPanel.js:421
+#: js/NodeGridPanel.js:425
 msgid "Upload"
 msgstr "Upload"
 
-#: js/NodeGridPanel.js:483
+#: js/NodeGridPanel.js:486 js/NodeGridPanel.js:610
+msgid "Open Data Safe"
+msgstr ""
+
+#: js/NodeGridPanel.js:508
 msgid "Folder Up"
 msgstr "Thư mục trên"
+
+#: js/NodeGridPanel.js:610
+msgid "Close Data Safe"
+msgstr ""
 
 #: js/Filemanager.js:24
 msgid "Filemanager"
@@ -188,11 +223,6 @@ msgstr ""
 msgid "edit file"
 msgstr ""
 
-#: js/NodeEditDialog.js:61 js/Model.js:23
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "File"
-
 #: js/NodeEditDialog.js:96
 msgid "Public Links"
 msgstr ""
@@ -208,14 +238,6 @@ msgstr ""
 #: js/NodeEditDialog.js:185
 msgid "Modified By"
 msgstr "Sửa bởi"
-
-#: js/NodeEditDialog.js:188
-msgid "Last Modified"
-msgstr "Sửa lần cuối"
-
-#: js/NodeEditDialog.js:209 js/Model.js:607
-msgid "Description"
-msgstr "Mô tả"
 
 #: js/NodeEditDialog.js:223
 msgid "Enter description"
@@ -297,7 +319,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: js/DocumentPreview.js:119
+#: js/DocumentPreview.js:141
 msgid "No preview available."
 msgstr ""
 
@@ -360,18 +382,18 @@ msgid "Grants of a folder also apply recursively for all of its sub folders as l
 msgstr ""
 
 #: js/GrantsPanel.js:49
-msgid "This folder is pin protected"
+msgid "This folder is part of the data safe"
 msgstr ""
 
 #: js/GrantsPanel.js:52
-msgid "If pin protection is enabled, users have to authenticate with their pin before they can access the folder contents."
+msgid "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
 msgstr ""
 
 #: js/GrantsPanel.js:56
 msgid "The grant to download files"
 msgstr ""
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:337
+#: js/GrantsPanel.js:57 js/nodeActions.js:338
 msgid "Publish"
 msgstr ""
 
@@ -500,11 +522,15 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: js/nodeActions.js:368
+#: js/nodeActions.js:354
+msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
+msgstr ""
+
+#: js/nodeActions.js:371
 msgid "Folder has been published successfully"
 msgstr ""
 
-#: js/nodeActions.js:368
+#: js/nodeActions.js:371
 msgid "File has been published successfully"
 msgstr ""
 
@@ -513,50 +539,50 @@ msgid "Public Download URL"
 msgstr ""
 
 #: Config.php:28
-msgid "Serve anonymous downloads from a differnt URL. Make sure to setup propper rewrite rules."
+msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
 msgstr ""
 
-#: Controller/Node.php:507
+#: Controller/Node.php:518
 msgid "My folders"
 msgstr "Thư mục của tôi"
 
-#: Controller/Node.php:514
+#: Controller/Node.php:525
 msgid "Shared folders"
 msgstr "Thư mục chung"
 
-#: Controller/Node.php:521
+#: Controller/Node.php:532
 msgid "Other users folders"
 msgstr "Thư mục người dùng khác"
 
-#: Controller/Node.php:1475
+#: Controller/Node.php:1486
 msgid "Received"
 msgstr ""
 
-#: Controller/Node.php:1476
+#: Controller/Node.php:1487
 msgid "To"
 msgstr ""
 
-#: Controller/Node.php:1477
+#: Controller/Node.php:1488
 msgid "Cc"
 msgstr ""
 
-#: Controller/Node.php:1478
+#: Controller/Node.php:1489
 msgid "Bcc"
 msgstr ""
 
-#: Controller/Node.php:1479
+#: Controller/Node.php:1490
 msgid "From (E-Mail)"
 msgstr ""
 
-#: Controller/Node.php:1480
+#: Controller/Node.php:1491
 msgid "From (Name)"
 msgstr ""
 
-#: Controller/Node.php:1481
+#: Controller/Node.php:1492
 msgid "Body"
 msgstr ""
 
-#: Controller/Node.php:1482
+#: Controller/Node.php:1493
 msgid "Attachments"
 msgstr ""
 
