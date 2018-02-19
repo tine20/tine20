@@ -173,7 +173,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected'))) {
+            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'))) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
@@ -181,7 +181,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (!Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
             $_record->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $_oldRecord->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
             $_record->quota = $_oldRecord->quota;
-            $_record->pin_protected = $_oldRecord->pin_protected;
+            $_record->pin_protected_node = $_oldRecord->pin_protected_node;
         }
 
         $aclNode = $this->_updateNodeAcl($_record, $_oldRecord);

@@ -1238,6 +1238,14 @@ class Tinebase_FileSystem implements
                         $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
                     }
                 }
+                if ($node->pin_protected_node === $oldParent->pin_protected_node
+                        && $newParent->pin_protected_node !== $node->pin_protected_node) {
+                    $node->pin_protected_node = $newParent->pin_protected_node;
+                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                        $this->_recursiveInheritPropertyUpdate($node, 'pin_protected_node',
+                            $newParent->pin_protected_node, $oldParent->pin_protected_node);
+                    }
+                }
 
                 if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
                     $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
@@ -1758,6 +1766,8 @@ class Tinebase_FileSystem implements
                     'object_id' => $directoryObject->getId(),
                     'parent_id' => $parentId,
                     'acl_node' => $parentNode && !empty($parentNode->acl_node) ? $parentNode->acl_node : null,
+                    'pin_protected_node' => $parentNode && !empty($parentNode->pin_protected_node) ?
+                        $parentNode->pin_protected_node : null,
                     Tinebase_Model_Tree_Node::XPROPS_REVISION => $parentNode &&
                         !empty($parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION}) ?
                         $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
@@ -1840,6 +1850,8 @@ class Tinebase_FileSystem implements
                     'object_id' => $fileObject->getId(),
                     'parent_id' => $parentId,
                     'acl_node' => $parentNode && empty($parentNode->acl_node) ? null : $parentNode->acl_node,
+                    'pin_protected_node' => $parentNode && empty($parentNode->pin_protected_node) ? null :
+                        $parentNode->pin_protected_node,
                 ));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
@@ -2063,6 +2075,11 @@ class Tinebase_FileSystem implements
             if ($currentNodeObject->acl_node !== $_node->acl_node) {
                 // update acl_node of subtree if changed
                 $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
+            }
+            if ($currentNodeObject->pin_protected_node !== $_node->pin_protected_node) {
+                // update pin_protected_node of subtree if changed
+                $this->_recursiveInheritPropertyUpdate($_node, 'pin_protected_node', $_node->pin_protected_node,
+                    $currentNodeObject->pin_protected_node);
             }
 
             $oldValue = $currentNodeObject->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
@@ -2678,21 +2695,14 @@ class Tinebase_FileSystem implements
      */
     public function hasGrant($_accountId, $_containerId, $_grant)
     {
-        // always refetch node to have current acl_node value
+        // always refetch node to have current acl_node & pin_protected_node value
         $node = $this->get($_containerId);
         if (!isset($this->_areaLockCache[$node->getId()])
-            && null !== $node->acl_node
+            && null !== $node->pin_protected_node
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
             && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
         ) {
-            if ($node->getId() !== $node->acl_node) {
-                $acl_node = $this->get($node->acl_node);
-            } else {
-                $acl_node = $node;
-            }
-            if ($acl_node->pin_protected) {
-                return false;
-            }
+            return false;
         }
         $this->_areaLockCache[$node->getId()] = true;
         /** @noinspection PhpUndefinedMethodInspection */

@@ -34,7 +34,7 @@
  * @property    string             preview_count
  * @property    integer            quota
  * @property    Tinebase_Record_RecordSet grants
- * @property    bool               pin_protected
+ * @property    string             pin_protected_node
  * @property    string             path
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
@@ -145,11 +145,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits',
             Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'pin_protected'         => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            Zend_Filter_Input::DEFAULT_VALUE => false,
-            array('InArray', array(true, false))
-        ),
+        'pin_protected_node'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

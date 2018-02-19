@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.17</version>
+    <version>11.18</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3406,7 +3406,7 @@
 
         <table>
             <name>tree_nodes</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3471,10 +3471,9 @@
                     <length>64</length>
                 </field>
                 <field>
-                    <name>pin_protected</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                    <notnull>true</notnull>
+                    <name>pin_protected_node</name>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>deleted_time</name>

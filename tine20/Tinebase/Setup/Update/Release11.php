@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -216,6 +216,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_13()
     {
+        // make filesystem structure changes first, we may create a folder here?
+        $this->update_17();
+
         $defaultAnonymousGroupName =
             Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
                 ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
@@ -300,5 +303,33 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_53();
         $this->setApplicationVersion('Tinebase', '11.17');
+    }
+
+    /**
+     * update to 11.18
+     *
+     * replace pin_protected with pin_protected_node in tree_nodes table
+     */
+    public function update_17()
+    {
+
+        if ($this->_backend->columnExists('pin_protected', 'tree_nodes')) {
+            $this->_backend->dropCol('tree_nodes', 'pin_protected');
+        }
+
+        if (! $this->_backend->columnExists('pin_protected_node', 'tree_nodes')) {
+            $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>pin_protected_node</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('tree_nodes') == 8) {
+            $this->setTableVersion('tree_nodes', 9);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.18');
     }
 }

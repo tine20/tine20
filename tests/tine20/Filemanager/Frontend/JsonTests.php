@@ -2391,13 +2391,22 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals(1, count($nodes), 'unprotected node should be found: '
             . print_r($result, true));
 
+        // add subfolders and files
+        $testPath = $folder['path'] . '/subdir';
+        $this->_getUit()->createNode($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $filepaths = array(
+            $folder['path'] . '/file1',
+            $folder['path'] . '/file2',
+        );
+        $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE);
+
         // protect
-        $folder['pin_protected'] = true;
+        $folder['pin_protected_node'] = $folder['id'];
         $this->_getUit()->saveNode($folder);
 
         $result = $this->_getUit()->searchNodes($filter, array());
-        $protectedNodes = array_filter($result['results'], function($item) {
-            return $item['pin_protected'] === true;
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
         });
         self::assertEquals(0, count($protectedNodes), 'protected nodes should not be found: '
             . print_r($protectedNodes, true));
@@ -2409,10 +2418,25 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE, 1234);
 
         $result = $this->_getUit()->searchNodes($filter, array());
-        $protectedNodes = array_filter($result['results'], function($item) {
-            return $item['pin_protected'];
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
         });
-        self::assertEquals(1, count($protectedNodes), 'protected node should be found '
+//        self::assertEquals(1, count($protectedNodes), 'protected node should be found '
+//            . print_r($result, true));
+        self::assertGreaterThanOrEqual(1, count($protectedNodes), 'protected node should be found '
+            . print_r($result, true));
+
+        // check if subfolders have pin_protected_node prop, too
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => $folder['path'],
+        ));
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
+        });
+        self::assertEquals(3, count($protectedNodes), 'should find 3 protected nodes (2 files, 1 folder)'
             . print_r($result, true));
     }
 }
