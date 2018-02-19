@@ -77,13 +77,13 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         $this->_afterRebuildQueueHook[$this->_recursionCounter][] = $hook;
     }
 
-    public function addToRebuildQueue(array $_rebuildPathParams)
+    public function addToRebuildQueue(Tinebase_Record_Interface $_rebuildPathParams)
     {
         // attention, this code contains recursion prevention logic, do not change this, except you understand that logic!
         // see __CLASS__::_workRebuildQueue function
-        $shadowPathPart = $_rebuildPathParams[0]->getShadowPathPart();
+        $shadowPathPart = $_rebuildPathParams->getShadowPathPart();
         if (!isset($this->_rebuildQueue[$shadowPathPart])) {
-            $this->_rebuildQueue[$shadowPathPart] = $_rebuildPathParams;
+            $this->_rebuildQueue[$shadowPathPart] = [$_rebuildPathParams];
         }
     }
 
@@ -213,11 +213,16 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         }
 
         $ownShadowPathPart = $_record->getShadowPathPart();
+        $this->_rebuildQueue[$ownShadowPathPart] = false;
 
         try {
             $pathNeighbours = $_record->getPathNeighbours();
         } catch (Tinebase_Exception_Record_StopPathBuild $e) {
             $this->_recursionCounter--;
+            if (0 === $this->_recursionCounter)
+            {
+                $this->_rebuildQueue = [];
+            }
             return;
         }
 
@@ -290,7 +295,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         $this->_recursionCounter--;
         if (0 === $this->_recursionCounter)
         {
-            $this->_rebuildQueue = array();
+            $this->_rebuildQueue = [];
         }
     }
 
@@ -521,9 +526,12 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             $filter = new Tinebase_Model_PathFilter(array(
                 array('field' => 'shadow_path', 'operator' => 'contains', 'value' => $shadowPathPart)
             ));
-            $paths = $this->_backend->search($filter);
-            foreach($paths as $path) {
-                $ids[$path->getId()] = true;
+            $result = $this->_backend->search($filter);
+            foreach($result as $path) {
+                if (!isset($ids[$path->getId()])) {
+                    $ids[$path->getId()] = true;
+                    $paths[] = $path;
+                }
             }
         }
 
@@ -563,7 +571,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
                 continue;
             }
 
-            $this->rebuildPaths($record);
+            $this->addToRebuildQueue($record);
         }
 
         foreach ($controllerCache as $data) {
@@ -573,5 +581,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             $controller->doContainerACLChecks($data['doContainerACLChecks']);
             $controller->sendNotifications($data['sendNotifications']);
         }
+
+        $this->_workRebuildQueue();
     }
 }

@@ -674,4 +674,19 @@ class Addressbook_ControllerTest extends TestCase
         static::assertEquals(1, $undidContact->attachments->count());
         static::assertEquals(1, count($undidContact->customfields));
     }
+
+    public function testUpdateInternalContactHiddenListMembership()
+    {
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $defaultGroup->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
+        Tinebase_Group::getInstance()->updateGroup($defaultGroup);
+
+        $adminContact = $this->_instance->get(Tinebase_Core::getUser()->contact_id);
+
+        $adminContact->tel_car = '0132451566';
+
+        $result = $this->_instance->update($adminContact);
+
+        static::assertEquals($adminContact->tel_car, $result->tel_car);
+    }
 }
