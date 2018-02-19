@@ -55,7 +55,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
                 items: [
                     [{
                         columnWidth: 1,
-                        fieldLabel: i18n._('Url'),
+                        fieldLabel: this.app.i18n._('Url'),
                         name: 'url',
                         value: this.record.get('url'),
                         maxLength: 100,
@@ -63,7 +63,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
                         readOnly: true
                     }, {
                         columnWidth: 1,
-                        fieldLabel: i18n._('Password'),
+                        fieldLabel: this.app.i18n._('Password'),
                         name: 'url',
                         value: this.password,
                         xtype: 'tw-passwordTriggerField',
@@ -71,7 +71,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
                         editable: false
                     }, {
                         columnWidth: 1,
-                        fieldLabel: i18n._('Valid until'),
+                        fieldLabel: this.app.i18n._('Valid until'),
                         name: 'url',
                         xtype: 'datefield',
                         editable: false,
