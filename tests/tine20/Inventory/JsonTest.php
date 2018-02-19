@@ -265,13 +265,21 @@ class Inventory_JsonTest extends Inventory_TestCase
         $invItem['image'] = $imageUrl;
         $savedInvItem = $this->_json->saveInventoryItem($invItem);
 
-        //$savedInvItem = $this->_json->getInventoryItem($savedInvItem['id']);
         $this->assertTrue(! empty($savedInvItem['image']), 'image url is empty');
         $this->assertTrue(preg_match('/location=vfs&id=([a-z0-9]*)/', $savedInvItem['image']) == 1, print_r($savedInvItem, true));
 
         // check if favicon is delivered
         $image = Tinebase_Model_Image::getImageFromImageURL($savedInvItem['image']);
         $this->assertEquals(52, $image->width);
+
+        // check in search result
+        $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedInvItem['id']));
+        $result = $this->_json->searchInventoryItems($filter, []);
+        self::assertEquals(1, $result['totalcount']);
+        self::assertTrue(isset($result['results'][0]['image']), 'image missing from result '
+            . print_r($result['results'], true));
+        $this->assertTrue(preg_match('/location=vfs&id=([a-z0-9]*)/', $result['results'][0]['image']) == 1,
+            print_r($result['results'][0], true));
     }
 
     /**

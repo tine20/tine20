@@ -652,7 +652,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
         /** @var Tinebase_Record_Interface $record */
         foreach ($records as $record) {
-            if ($record->has('image') && $record->attachments instanceof Tinebase_Record_RecordSet) {
+            if ($record->has('image') && $record->has('attachments')) {
+                if (! $record->attachments instanceof Tinebase_Record_RecordSet) {
+                    // re-fetch attachments
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+                }
                 foreach ($record->attachments as $attachment) {
                     if (in_array($attachment->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
                         $record->image = Tinebase_Model_Image::getImageUrl('Tinebase', $attachment->getId(), 'vfs');

@@ -116,6 +116,9 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
         return headlineItems;
     },
 
+    /**
+     * @returns {Array.<*>}
+     */
     getBodyItems: function() {
         var modelConfig = this.recordClass.getModelConfiguration(),
             typesToExclude = ['records'], // most likely never fetch from backend in any grid view!
@@ -126,7 +129,17 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             ],
             fieldNames = this.recordClass.getFieldNames(),
             displayFields = [],
-            displayAreas = [];
+            displayAreas = [],
+            textDisplayAreas = [],
+            fieldDisplayArea = {
+                flex: 1,
+                layout: 'ux.display',
+                labelWidth: 150,
+                autoScroll: true,
+                layoutConfig: {
+                    background: 'solid'
+                }
+            };
 
         Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
 
@@ -155,9 +168,32 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                         cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea'
                     });
-                    displayAreas.push(field);
+                    textDisplayAreas.push(field);
+                } else if (fieldType === 'image') {
+                    // should be the first area
+                    displayAreas.unshift({
+                        width: 90,
+                        layout: 'ux.display',
+                        layoutConfig: {
+                            background: 'solid'
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: fieldDefinition.fieldName,
+                            cls: 'preview-panel-image',
+                            anchor: '100% 100%',
+                            hideLabel: true,
+                            htmlEncode: false,
+                            // TODO move image renderer to Tinebase
+                            //renderer: Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
+                            // fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)
+                            renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact',
+                                fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)
+                        }]
+                    });
                 } else {
-                    var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName, fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
+                    var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
+                        fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
                     if (renderer) {
                         field.renderer = renderer;
                     }
@@ -169,16 +205,9 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
         // auto height
         this.defaultHeight = 25 +  displayFields.length * 18;
 
-        return [{
-            flex: 1,
-            layout: 'ux.display',
-            labelWidth: 150,
-            autoScroll: true,
-            layoutConfig: {
-                background: 'solid'
-            },
-            items: [displayFields]
-        }].concat(displayAreas);
+        fieldDisplayArea.items = displayFields;
+        displayAreas.push(fieldDisplayArea);
+        return displayAreas.concat(textDisplayAreas);
     },
 
     loadRecord: function(record) {
