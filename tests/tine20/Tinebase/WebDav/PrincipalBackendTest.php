@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -186,6 +186,9 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     
     public function testGetMemberSetGroup()
     {
+        /*Tinebase_Core::getCache()->clean();
+        Tinebase_Group::getInstance()->resetClassCache();*/
+
         $list = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
         
         $groupMemberships = $this->_backend->getGroupMemberSet(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id);

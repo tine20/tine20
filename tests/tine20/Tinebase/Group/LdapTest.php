@@ -146,9 +146,23 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
      *
      * @return Tinebase_Model_Group
      */
-    public function testAddGroup()
+    public function testAddGroup($recursion = false)
     {
-        $group = $this->_groupLDAP->addGroup($this->objects['initialGroup']);
+        try {
+            $group = $this->_groupLDAP->addGroup($this->objects['initialGroup']);
+        } catch (Zend_Ldap_Exception $zle) {
+            if (!$recursion) {
+                foreach ($this->_groupLDAP->getGroupsFromSyncBackend() as $group) {
+                    if ($group->name === $this->objects['initialGroup']->name) {
+                        $this->_groupLDAP->deleteGroupsInSyncBackend($group);
+                        break;
+                    }
+                }
+                $group = $this->testAddGroup(true);
+            } else {
+                throw $zle;
+            }
+        }
         $this->objects['groups']->addRecord($group);
         
         $this->assertNotNull($group->id);
@@ -217,7 +231,20 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
     protected function _addUserToGroup($group)
     {
         $this->objects['initialAccount']->accountPrimaryGroup = $group->getId();
-        $user = $this->_userLDAP->addUser($this->objects['initialAccount']);
+        try {
+            $user = $this->_userLDAP->addUser($this->objects['initialAccount']);
+        } catch (Zend_Ldap_Exception $zle) {
+            $user = $this->_userLDAP->getUserByPropertyFromSyncBackend('accountLoginName',
+                $this->objects['initialAccount']->accountLoginName);
+            $this->_userLDAP->deleteUserInSyncBackend($user);
+            try {
+                $user = $this->_userLDAP->getUserByPropertyFromSqlBackend('accountLoginName',
+                    $this->objects['initialAccount']->accountLoginName);
+                $this->_userLDAP->deleteUserInSqlBackend($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+            $user = $this->_userLDAP->addUser($this->objects['initialAccount']);
+
+        }
         $this->objects['users']->addRecord($user);
         return $user;
     }
@@ -335,6 +362,14 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
 
         // check group memberships
         $memberships = $this->_groupLDAP->getGroupMembers($defaultUserGroup);
-        $this->assertTrue(in_array($user->getId(), $memberships), 'group memberships not updated: ' . print_r($memberships, true));
+        $this->assertTrue(in_array($user->getId(), $memberships), 'group memberships not updated: '
+            . print_r($memberships, true));
+
+        $list = Addressbook_Controller_List::getInstance()->get($defaultUserGroup->list_id);
+        $members = $list->members;
+        $contactIds = Tinebase_User::getInstance()->getMultiple($memberships)->contact_id;
+        sort($contactIds);
+        sort($members);
+        static::assertEquals($contactIds, $members, print_r($contactIds, true) . PHP_EOL . print_r($members, true));
     }
 }

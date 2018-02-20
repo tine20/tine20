@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -314,7 +314,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         foreach ($removeGroupMemberships as $groupId) {
             $this->removeGroupMemberFromSqlBackend($groupId, $userId);
         }
-        
+
+        // useless event, its not used anywhere!
         $event = new Tinebase_Group_Event_SetGroupMemberships(array(
             'user'               => $_userId,
             'addedMemberships'   => $addGroupMemberships,
@@ -844,6 +845,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 $record = new Tinebase_Model_Group($diff->diff);
+                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                 $this->addGroup($record);
                 break;
@@ -852,16 +854,25 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 if (isset($diff->diff['members']) && is_array($diff->diff['members'])) {
                     $this->setGroupMembers($modification->record_id, $diff->diff['members']);
+                    $record = $this->getGroupById($modification->record_id);
+                    $record->members = $this->getGroupMembers($record->getId());
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                 } else {
                     $record = $this->getGroupById($modification->record_id);
                     $currentRecord = clone $record;
                     $record->applyDiff($diff);
+                    $record->members = $this->getGroupMembers($record->getId());
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                     Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
                     $this->updateGroup($record);
                 }
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
+                $record = $this->getGroupById($modification->record_id);
+                if (!empty($record->list_id)) {
+                    Addressbook_Controller_List::getInstance()->delete($record->list_id);
+                }
                 $this->deleteGroups($modification->record_id);
                 break;
 
@@ -878,6 +889,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         if (Tinebase_Timemachine_ModificationLog::CREATED === $modification->change_type) {
             if (!$dryRun) {
+                $record = $this->getGroupById($modification->record_id);
+                if (!empty($record->list_id)) {
+                    Addressbook_Controller_List::getInstance()->delete($record->list_id);
+                }
                 $this->deleteGroups($modification->record_id);
             }
         } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modification->change_type) {
@@ -886,6 +901,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             /** @var Tinebase_Model_Group $record */
             $record = new $model($diff->oldData, true);
             if (!$dryRun) {
+                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                 $createdGroup = $this->create($record);
                 if (is_array($record->members) && !empty($record->members)) {
                     $this->setGroupMembers($createdGroup->getId(), $record->members);
@@ -902,11 +918,217 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $record->undo($diff);
 
             if (! $dryRun) {
-                $this->updateGroup($record);
                 if (isset($diff->diff['members']) && is_array($diff->diff['members']) && is_array($record->members)) {
                     $this->setGroupMembers($record->getId(), $record->members);
+                } else {
+                    $record->members = $this->getGroupMembers($record->getId());
                 }
+                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
+                $this->updateGroup($record);
             }
         }
+    }
+
+    public function sanitizeGroupListSync()
+    {
+        // TODO this needs to deal with group visibility! it does not currenty! really?
+        // TODO maybe review this again
+        
+        // find duplicate list references
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $listIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName],
+                ['list_id', new Zend_Db_Expr('count(' . $this->_db->quoteIdentifier('list_id') . ') AS '
+                    . $this->_db->quoteIdentifier('c'))])
+                ->where($this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' IS NOT NULL')
+                ->having($this->_db->quoteIdentifier('c') . ' > 1')
+                ->group('list_id')->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+            if (count($listIds) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' found duplicate list references ' . join(', ', $listIds));
+
+                $this->_db->update(SQL_TABLE_PREFIX . $this->_tableName, ['list_id' => null],
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('list_id') . ' = (?)', $listIds));
+
+                echo PHP_EOL . 'found ' . count($listIds) . ' duplicate list references (fixed)' . PHP_EOL;
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        // find groups which are deleted but lists are not
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $groupIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName], ['id'])
+                ->join(
+                    ['addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'],
+                    $this->_db->quoteIdentifier('addressbook_lists.id') . ' = '
+                    . $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' AND '
+                    . $this->_db->quoteIdentifier('addressbook_lists.is_deleted') . ' = 0',
+                    []
+                )->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 1')
+                ->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+            if (count($groupIds) > 0) {
+                $msg = 'found ' . count($groupIds) . ' groups which are deleted and linked to undeleted lists: '
+                    . join(', ', $groupIds);
+                echo PHP_EOL . $msg . PHP_EOL . '(not fixed!)' . PHP_EOL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . $msg);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        // find groups with deleted lists
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $groupIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName], ['id'])
+                ->join(
+                    ['addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'],
+                    $this->_db->quoteIdentifier('addressbook_lists.id') . ' = '
+                    . $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' AND '
+                    . $this->_db->quoteIdentifier('addressbook_lists.is_deleted') . ' = 1',
+                    []
+                )->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0')
+                ->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+            if (count($groupIds) > 0) {
+                $msg = 'found ' . count($groupIds) . ' groups which are linked to deleted lists: '
+                    . join(', ', $groupIds);
+                echo PHP_EOL . $msg . PHP_EOL . '(not fixed!)' . PHP_EOL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . $msg);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+
+        // find groups with lists of wrong type
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $listIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName], [])
+                ->join(
+                    ['addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'],
+                    $this->_db->quoteIdentifier('addressbook_lists.id') . ' = '
+                    . $this->_db->quoteIdentifier($this->_tableName . '.list_id'),
+                    ['id']
+                )->where($this->_db->quoteIdentifier('addressbook_lists.type') . ' <> \'' .
+                    Addressbook_Model_List::LISTTYPE_GROUP . '\'')
+                ->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+            if (count($listIds) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' found lists linked to groups of the wrong type ' . join(', ', $listIds));
+                Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple($listIds,
+                    ['type' => Addressbook_Model_List::LISTTYPE_GROUP]);
+
+                echo PHP_EOL . 'found ' . count($listIds) . ' lists linked to groups of the wrong type (fixed)'
+                    . PHP_EOL;
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        // find groups without lists
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $groupIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName], ['id'])
+                ->joinLeft(
+                    ['addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'],
+                    $this->_db->quoteIdentifier('addressbook_lists.id') . ' = '
+                    . $this->_db->quoteIdentifier($this->_tableName . '.list_id'),
+                    []
+                )->where($this->_db->quoteIdentifier('addressbook_lists.id') . ' IS NULL')
+                ->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+            if (count($groupIds) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' found groups not having a list ' . join(', ', $groupIds));
+
+                /** @var Tinebase_Model_Group $group */
+                foreach ($this->getMultiple($groupIds) as $group) {
+                    if (!empty($group->list_id)) {
+                        $group->list_id = null;
+                    }
+                    $group->members = $this->getGroupMembers($group);
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+                    $this->updateGroupInSqlBackend($group);
+                }
+
+                echo PHP_EOL . 'found ' . count($groupIds) . ' groups not having a list (fixed)' . PHP_EOL;
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        // addressbook lists of type group without a group
+        // make them type list and report them
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $ids = [];
+            $names = [];
+            foreach ($this->_db->select()->from(['addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'],
+                ['id', 'name'])
+                         ->joinLeft(
+                             [$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName],
+                             $this->_db->quoteIdentifier('addressbook_lists.id') . ' = '
+                             . $this->_db->quoteIdentifier($this->_tableName . '.list_id'),
+                             [])
+                         ->where($this->_db->quoteIdentifier('addressbook_lists.type') . ' = \''
+                             . Addressbook_Model_List::LISTTYPE_GROUP . '\' AND '
+                             . $this->_db->quoteIdentifier($this->_tableName . '.id') . ' IS NULL')
+                         ->query()->fetchAll() as $row) {
+                $ids[] = $row['id'];
+                $names[] = $row['name'];
+            }
+
+            if (count($ids) > 0) {
+                Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple($ids,
+                    ['type' => Addressbook_Model_List::LISTTYPE_LIST]);
+
+                $msg = 'changed the following lists from type group to type list:' . PHP_EOL
+                    . join(', ', $names);
+                echo $msg . PHP_EOL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' ' . $msg . ' ' . join(', ', $ids));
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        // TODO check members?
     }
 }
