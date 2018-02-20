@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -322,7 +322,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     * @var string
     */
     const PASSWORD_CHANGE = 'changepw';
-    
+
+    /**
+     * USER_PASSWORD_POLICY
+     *
+     * @var string
+     */
+    const USER_PASSWORD_POLICY= 'userPwPolicy';
+
+    /**
+     * DOWNLOAD_PASSWORD_POLICY
+     *
+     * @var string
+     */
+    const DOWNLOAD_PASSWORD_POLICY= 'downloadPwPolicy';
+
     /**
      * PASSWORD_POLICY_ACTIVE
      *
@@ -590,6 +604,102 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const TINE20_URL = 'tine20URL';
 
+    /**
+     * password policy configuration
+     */
+    const PW_POLICY = [
+        self::PASSWORD_POLICY_ACTIVE => array(
+            //_('Enable password policy')
+            'label'                 => 'Enable password policy',
+            //_('Enable password policy')
+            'description'           => 'Enable password policy',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_ONLYASCII => array(
+            //_('Only ASCII')
+            'label'                 => 'Only ASCII',
+            //_('Only ASCII characters are allowed in passwords.')
+            'description'           => 'Only ASCII characters are allowed in passwords.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_LENGTH => array(
+            //_('Minimum length')
+            'label'                 => 'Minimum length',
+            //_('Minimum password length')
+            'description'           => 'Minimum password length.',
+            'type'                  => 'int',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_WORD_CHARS => array(
+            //_('Minimum word chars')
+            'label'                 => 'Minimum word chars',
+            //_('Minimum word chars in password')
+            'description'           => 'Minimum word chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => array(
+            //_('Minimum uppercase chars')
+            'label'                 => 'Minimum uppercase chars',
+            //_('Minimum uppercase chars in password')
+            'description'           => 'Minimum uppercase chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_SPECIAL_CHARS => array(
+            //_('Minimum special chars')
+            'label'                 => 'Minimum special chars',
+            //_('Minimum special chars in password')
+            'description'           => 'Minimum special chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_NUMBERS => array(
+            //_('Minimum numbers')
+            'label'                 => 'Minimum numbers',
+            //_('Minimum numbers in password')
+            'description'           => 'Minimum numbers in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_FORBID_USERNAME => array(
+            //_('Forbid part of username')
+            'label'                 => 'Forbid part of username',
+            //_('Forbid part of username in password')
+            'description'           => 'Forbid part of username in password',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_CHANGE_AFTER => array(
+            //_('Change Password After ... Days')
+            'label'                 => 'Change Password After ... Days',
+            //_('Users need to change their passwords after defined number of days')
+            'description'           => 'Users need to change their passwords after defined number of days',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 0,
+        ),
+    ];
 
     /**
      * (non-PHPdoc)
@@ -1295,101 +1405,34 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
             'default'               => TRUE
         ),
-        self::PASSWORD_POLICY_ACTIVE => array(
-        //_('Enable password policy')
-            'label'                 => 'Enable password policy',
-        //_('Enable password policy')
-            'description'           => 'Enable password policy',
-            'type'                  => 'bool',
+        self::USER_PASSWORD_POLICY => array(
+            //_('User password policy')
+            'label'                 => 'User password policy',
+            //_('User password policy settings.')
+            'description'           => 'User password policy settings.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            'setBySetupModule'      => true,
+            'content'               => self::PW_POLICY,
         ),
-        self::PASSWORD_POLICY_ONLYASCII => array(
-        //_('Only ASCII')
-            'label'                 => 'Only ASCII',
-        //_('Only ASCII characters are allowed in passwords.')
-            'description'           => 'Only ASCII characters are allowed in passwords.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_MIN_LENGTH => array(
-        //_('Minimum length')
-            'label'                 => 'Minimum length',
-        //_('Minimum password length')
-            'description'           => 'Minimum password length.',
-            'type'                  => 'int',
+        self::DOWNLOAD_PASSWORD_POLICY => array(
+            //_('Download password policy')
+            'label'                 => 'Download password policy',
+            //_('Download password policy settings.')
+            'description'           => 'Download password policy settings.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_MIN_WORD_CHARS => array(
-        //_('Minimum word chars')
-            'label'                 => 'Minimum word chars',
-        //_('Minimum word chars in password')
-            'description'           => 'Minimum word chars in password',
-            'type'                  => 'int',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => array(
-        //_('Minimum uppercase chars')
-            'label'                 => 'Minimum uppercase chars',
-        //_('Minimum uppercase chars in password')
-            'description'           => 'Minimum uppercase chars in password',
-            'type'                  => 'int',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_MIN_SPECIAL_CHARS => array(
-        //_('Minimum special chars')
-            'label'                 => 'Minimum special chars',
-        //_('Minimum special chars in password')
-            'description'           => 'Minimum special chars in password',
-            'type'                  => 'int',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_MIN_NUMBERS => array(
-        //_('Minimum numbers')
-            'label'                 => 'Minimum numbers',
-        //_('Minimum numbers in password')
-            'description'           => 'Minimum numbers in password',
-            'type'                  => 'int',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_FORBID_USERNAME => array(
-        //_('Forbid part of username')
-            'label'                 => 'Forbid part of username',
-        //_('Forbid part of username in password')
-            'description'           => 'Forbid part of username in password',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
-        self::PASSWORD_POLICY_CHANGE_AFTER => array(
-        //_('Change Password After ... Days')
-            'label'                 => 'Change Password After ... Days',
-        //_('Users need to change their passwords after defined number of days')
-            'description'           => 'Users need to change their passwords after defined number of days',
-            'type'                  => 'integer',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => 0,
+            'setBySetupModule'      => true,
+            'content'               => self::PW_POLICY,
         ),
         self::AUTOMATIC_BUGREPORTS => array(
-                                   //_('Automatic bugreports')
+            //_('Automatic bugreports')
             'label'                 => 'Automatic bugreports',
-                                   //_('Always send bugreports, even on timeouts and other exceptions / failures.')
+            //_('Always send bugreports, even on timeouts and other exceptions / failures.')
             'description'           => 'Always send bugreports, even on timeouts and other exceptions / failures.',
             'type'                  => 'bool',
             'clientRegistryInclude' => TRUE,
@@ -1397,9 +1440,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         self::LAST_SESSIONS_CLEANUP_RUN => array(
-                                   //_('Last sessions cleanup run')
+            //_('Last sessions cleanup run')
             'label'                 => 'Last sessions cleanup run',
-                                   //_('Stores the timestamp of the last sessions cleanup task run.')
+            //_('Stores the timestamp of the last sessions cleanup task run.')
             'description'           => 'Stores the timestamp of the last sessions cleanup task run.',
             'type'                  => self::TYPE_DATETIME,
             'clientRegistryInclude' => FALSE,

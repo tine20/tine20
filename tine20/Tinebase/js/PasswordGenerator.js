@@ -15,13 +15,11 @@ Ext.ns('Tine.Tinebase');
  * @constructor
  */
 Tine.Tinebase.PasswordGenerator = function (config) {
-    Ext.applyIf(this, config || {
-        minLength: 12,
-        minWordChars: 5,
-        minUppercaseChars: 1,
-        minSpecialChars: 1,
-        minNumericalChars: 1
-    });
+    this.minLength = config.minLength || 12;
+    this.minWordChars = config.minWordChars || 5;
+    this.minUppercaseChars = config.minUppercaseChars || 1;
+    this.minSpecialChars = config.minSpecialChars || 1;
+    this.minNumericalChars = config.minNumericalChars || 0;
 };
 
 Tine.Tinebase.PasswordGenerator.prototype = {

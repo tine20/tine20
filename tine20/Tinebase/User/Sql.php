@@ -542,7 +542,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function checkPasswordPolicy($password, Tinebase_Model_FullUser $user)
     {
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_ACTIVE, false)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{Tinebase_Config::PASSWORD_POLICY_ACTIVE}) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' No password policy enabled');
             return;
@@ -551,7 +551,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $failedTests = array();
         
         $policy = array(
-            Tinebase_Config::PASSWORD_POLICY_ONLYASCII             => '/[^\x00-\x7F]/',
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => null,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
@@ -559,11 +559,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => '/[^0-9]*/',
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME        => $user->accountLoginName,
         );
-        
+
+        $configDefinition = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::USER_PASSWORD_POLICY);
         foreach ($policy as $key => $regex) {
             $test = $this->_testPolicy($password, $key, $regex);
+            $config = $configDefinition['content'][$key];
             if ($test !== true) {
-                $config = Tinebase_Config::getInstance()->getDefinition($key);
                 $failedTests[$config['label']] = $test;
             }
         }
@@ -589,10 +590,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     protected function _testPolicy($password, $configKey, $regex = null)
     {
         $result = true;
-        
+
+        $configValue = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$configKey};
         switch ($configKey) {
             case Tinebase_Config::PASSWORD_POLICY_ONLYASCII:
-                if (Tinebase_Config::getInstance()->get($configKey, 0) && $regex !== null) {
+                if ($configValue && $regex !== null) {
                     $nonAsciiFound = preg_match($regex, $password, $matches);
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -604,7 +606,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 break;
                 
             case Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME:
-                if (Tinebase_Config::getInstance()->get($configKey, 0)) {
+                if ($configValue) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                         __METHOD__ . '::' . __LINE__ . ' Testing if password is part of username "' . $regex . '"');
                     
@@ -617,7 +619,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 
             default:
                 // check min length restriction
-                $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
+                $minLength = $configValue;
                 if ($minLength > 0) {
                     $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
                     $charCount = strlen(utf8_decode($reduced));
