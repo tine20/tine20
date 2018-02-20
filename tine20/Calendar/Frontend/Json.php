@@ -621,10 +621,14 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $allFb->sort(function (Calendar_Model_FreeBusy $a, Calendar_Model_FreeBusy $b) {
             return $a->dtstart->compare($b->dtstart);
         });
+        $userTimeZone = Tinebase_Core::getUserTimezone();
+        $allFb->setTimezone($userTimeZone);
 
         foreach ($periods as $eventId => $eventPeriods) {
             $seekTo = 0;
             foreach ($eventPeriods as $period) {
+                $period['from']->setTimezone($userTimeZone);
+                $period['until']->setTimezone($userTimeZone);
                 if ($period['from']->compare($allFb->getLastRecord()->dtend) !== -1) {
                     break;
                 }
