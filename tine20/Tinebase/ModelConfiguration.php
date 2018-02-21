@@ -942,11 +942,11 @@ class Tinebase_ModelConfiguration {
         );
 
         if ($this->_hasCustomFields) {
-            $this->_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['customfields'] = array('label' => 'Custom Fields', 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
 
         if ($this->_hasRelations) {
-            $this->_fields['relations'] = array('label' => NULL, 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['relations'] = array('label' => 'Relations', 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
 
         if ($this->_containerProperty) {

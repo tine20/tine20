@@ -182,7 +182,7 @@ class Tinebase_Export_XlsxTest extends TestCase
             'count of fields + customfields - "customfields property" - systemfields does not equal amount of headline columns ' . print_r($filteredHeadLine, true));
         
         // test the relations
-        $relationsField = $export->getTranslate()->_('relations');
+        $relationsField = $export->getTranslate()->_('Relations');
         static::assertTrue(false !== ($relationsKey = array_search($relationsField, $arrayData[0])),
             'couldn\'t find field ' . $relationsField . ' in ' . $printRdata0);
 
@@ -190,5 +190,53 @@ class Tinebase_Export_XlsxTest extends TestCase
         static::assertEquals($modelTranslated . ' type2 ' . $jmcblackContact->getTitle() . ', ' . $modelTranslated .
             ' type1 ' . $scleverContact->getTitle(),
             $arrayData[1][$relationsKey], $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
+    }
+
+    /**
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Reader_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    public function testTranslatedHeadline()
+    {
+        Tinebase_Core::setupUserLocale('de');
+
+        $testContact = new Addressbook_Model_Contact([]);
+
+        $testContact->n_given = 'Test Contact Name 123';
+        $testContact->n_family = 'Test Name';
+
+        $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
+
+        $filter = new Addressbook_Model_ContactFilter([
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => $testContact->n_given]
+        ]);
+        $export = new Addressbook_Export_Xls($filter, null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => 'Addressbook_Model_Contact',
+                    'name' => 'adb_xls'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $xls = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->write($xls);
+
+        $reader = PHPExcel_IOFactory::createReader('Excel2007');
+        $doc = $reader->load($xls);
+        // CZ is enough for contact, but to allow growth DZ is on the safe side
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A3:DZ4');
+        $flippedArrayData = array_flip(array_filter($arrayData[0]));
+
+        $msg = print_r($flippedArrayData, true);
+        static::assertArrayHasKey('Verknüpfungen', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Tags', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Telefon', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Raum', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Beschreibung', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Vorname', $flippedArrayData, $msg);
     }
 }
