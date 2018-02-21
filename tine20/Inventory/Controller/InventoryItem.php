@@ -28,10 +28,10 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
         $this->_applicationName = 'Inventory';
         $this->_backend = new Inventory_Backend_InventoryItem();
         $this->_modelName = 'Inventory_Model_InventoryItem';
-        $this->_purgeRecords = FALSE;
+        $this->_purgeRecords = false;
         // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
-        $this->_resolveCustomFields = TRUE;
+        $this->_doContainerACLChecks = true;
+        $this->_resolveCustomFields = true;
     }
     
     /**

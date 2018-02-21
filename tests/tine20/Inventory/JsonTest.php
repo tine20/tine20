@@ -179,7 +179,7 @@ class Inventory_JsonTest extends Inventory_TestCase
 
             $searchResult = $this->_json->searchInventoryItems($filter, array());
             $this->assertEquals(1, $searchResult['totalcount'], 'not found: ' . print_r($searchResult, true));
-            $this->assertEquals($filter, $searchResult['filter']);
+            $this->assertEquals($filter[0], $searchResult['filter'][0], print_r($searchResult['filter'], true));
         } finally {
             if (null !== $returnedRecord && isset($returnedRecord['id'])) {
                 $this->_json->delete([$returnedRecord['id']]);
