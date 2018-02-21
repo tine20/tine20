@@ -777,4 +777,19 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
         $this->_areaLocksToInvalidate[] = $config['area'];
     }
+    
+    /**
+     * @param $docx
+     * @return string
+     * @throws Tinebase_Exception
+     */
+    protected function getPlainTextFromDocx($docx) {
+        $zip = new ZipArchive();
+
+        if ($zip->open($docx, ZipArchive::CREATE) !== true) {
+            throw new Tinebase_Exception('Cannot open docx file.');
+        }
+
+        return strip_tags($zip->getFromName('word/document.xml'));
+    }
 }

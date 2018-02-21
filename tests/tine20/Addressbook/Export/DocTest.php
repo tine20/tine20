@@ -235,19 +235,4 @@ class Addressbook_Export_DocTest extends TestCase
 
         static::assertContains($contactRelated->getTitle(), $plain);
     }
-    
-    /**
-     * @param $docx
-     * @return string
-     * @throws Tinebase_Exception
-     */
-    protected function getPlainTextFromDocx($docx) {
-        $zip = new ZipArchive();
-
-        if ($zip->open($docx, ZipArchive::CREATE) !== true) {
-            throw new Tinebase_Exception('Cannot open docx file.');
-        }
-        
-        return strip_tags($zip->getFromName('word/document.xml'));
-    }
 }
