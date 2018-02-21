@@ -203,7 +203,7 @@ class Tinebase_Group_SqlTest extends TestCase
     public function testCleanUpEmptyRun()
     {
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         static::assertTrue(empty($str = ob_get_clean()), 'sanitizeGroupListSync echoed: ' . $str);
     }
 
@@ -216,7 +216,7 @@ class Tinebase_Group_SqlTest extends TestCase
         ]));
 
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         $result = ob_get_clean();
 
         static::assertFalse(empty($result), 'sanitizeGroupListSync should find the duplicate list reference');
@@ -240,7 +240,7 @@ class Tinebase_Group_SqlTest extends TestCase
             . ' = ?', $defaultGroup->getId()));
 
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         $result = ob_get_clean();
 
         static::assertEquals('found 1 groups which are deleted and linked to undeleted lists: ' . $defaultGroup->getId()
@@ -254,7 +254,7 @@ class Tinebase_Group_SqlTest extends TestCase
             ['is_deleted' => 1]);
 
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         $result = ob_get_clean();
 
         static::assertEquals('found 1 groups which are linked to deleted lists: ' . $defaultGroup->getId()
@@ -268,7 +268,7 @@ class Tinebase_Group_SqlTest extends TestCase
             ['type' => Addressbook_Model_List::LISTTYPE_LIST]);
 
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         $result = ob_get_clean();
 
         static::assertEquals('found 1 lists linked to groups of the wrong type (fixed)', trim($result));
@@ -285,7 +285,7 @@ class Tinebase_Group_SqlTest extends TestCase
             ['type' => Addressbook_Model_List::LISTTYPE_GROUP]);
 
         ob_start();
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
         $result = ob_get_clean();
 
         static::assertEquals('changed the following lists from type group to type list:' . PHP_EOL
