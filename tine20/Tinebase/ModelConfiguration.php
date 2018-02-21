@@ -428,6 +428,9 @@ class Tinebase_ModelConfiguration {
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
      * user                      User                string                                 Tinebase_Model_Filter_User
+     * keyfield                  ?                   varchar(40) ?                          string(?)         Tinebase_Model_Filter_Text(?)
+     * (keyfield must have a 'name' => Addressbook_Config::CONTACT_SALUTATION field definition, optionally an 'application' => 'Calendar' to refer to other applications keyfields)
+     *
      * virtual:
      * 
      * Field Type "virtual" has a config property which holds the field configuration.
@@ -1067,6 +1070,12 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
+                if (!isset($fieldDef['name']) || ! Tinebase_Config::getAppConfig(
+                        isset($fieldDef['config']['application']) ? $fieldDef['config']['application'] :
+                            $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
+                        $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                }
             } elseif ($fieldDef['type'] == 'virtual') {
                 $virtualField = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $virtualField['key'] = $fieldKey;

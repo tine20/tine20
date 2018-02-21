@@ -366,7 +366,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->keyFields) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->keyFields, 'keyField')
                      as $keyField) {
-                $this->_keyFields[$keyField->propertyName] = $keyField->name;
+                $this->_keyFields[$keyField->propertyName] = [
+                    'name' => $keyField->name,
+                    'application' => $keyField->application ? $keyField->application : $this->_applicationName
+                ];
             }
         }
 
@@ -963,14 +966,22 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_modelConfig->resolveRecords($_records);
             $this->_keyFields = [];
             foreach ($this->_modelConfig->keyfieldFields as $property) {
-                $this->_keyFields[$property] = $this->_modelConfig->getFields()[$property]['name'];
+                $this->_keyFields[$property] = [
+                    'application' => isset($this->_modelConfig->getFields()[$property]['application']) ?
+                        $this->_modelConfig->getFields()[$property]['application'] : $this->_applicationName,
+                    'name' => $this->_modelConfig->getFields()[$property]['name'],
+                ];
             }
         }
 
-        foreach ((array)$this->_keyFields as $name => $keyField) {
+        foreach ((array)$this->_keyFields as $property => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
-            $keyField = $appConfig->{$keyField};
-            $record->{$name} = $keyField->getTranslatedValue($record->{$name});
+            if ($keyField['application'] === $this->_applicationName) {
+                $keyField = $appConfig->{$keyField['name']};
+            } else {
+                $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
+            }
+            $record->{$property} = $keyField->getTranslatedValue($record->{$property});
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
