@@ -584,6 +584,36 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 'help'   => 'Delete multiple ' . $simpleModelName . 's',
                 'plural' => true,
             ),
+            /**
+             * @param string $tempFileId to import
+             * @param string $importDefinitionId
+             * @param array $options additional import options
+             * @param array $clientRecordData
+             */
+            'import' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'string',
+                        'name' => 'tempFileId',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'string',
+                        'name' => 'importDefinitionId',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'options',
+                        'optional' => true,
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'clientRecordData',
+                        'optional' => true,
+                    )),
+                ),
+                'help'   => 'Import ' . $simpleModelName . 's',
+                'plural' => true,
+            ),
         );
 
         return $commonJsonApiMethods;

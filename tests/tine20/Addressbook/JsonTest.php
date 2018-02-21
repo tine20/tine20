@@ -1658,7 +1658,9 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportDefinitionsInRegistry()
     {
-        $registryData = $this->_uit->getRegistryData();
+        $tfj = new Tinebase_Frontend_Json();
+        $allRegistryData = $tfj->getAllRegistryData();
+        $registryData = $allRegistryData['Addressbook'];
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results']));

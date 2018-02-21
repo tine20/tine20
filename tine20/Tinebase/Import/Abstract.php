@@ -305,7 +305,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $result = array();
         
-        foreach ($_clientRecordData as $data) {
+        foreach ((array) $_clientRecordData as $data) {
             if (isset($data['index'])) {
                 $result[$data['index']] = $data;
             }

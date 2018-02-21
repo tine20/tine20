@@ -527,13 +527,24 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * fetch import definition data
      *
+     * @param Tinebase_Record_RecordSet $definitions
+     * @param Tinebase_Model_Application $application
      * @return array
      */
-    protected function _getImportDefinitionRegistryData()
+    protected function _getImportDefinitionRegistryData(Tinebase_Record_RecordSet $definitions = null, Tinebase_Model_Application $application = null)
     {
+        if (! $application) {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        }
+        if (! $definitions) {
+            $definitions = $this->_getImportDefinitions($application);
+        }
         $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
-        $importDefinitions = $this->_getImportDefinitions();
-        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
+        $importDefinitions = $definitions->filter('application_id', $application->getId());
+        if (count($importDefinitions) === 0) {
+            return [];
+        }
+        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions, $application);
 
         try {
             $defaultDefinitionArray = $definitionConverter->fromTine20Model($defaultDefinition);
@@ -563,49 +574,51 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * get application import definitions
      *
+     * @param Tinebase_Model_Application $application
      * @return Tinebase_Record_RecordSet
-     *
-     * @todo move to Tinebase_Frontend_Json and fetch all import definitions in one query
      */
-    protected function _getImportDefinitions()
+    protected function _getImportDefinitions(Tinebase_Model_Application $application = null)
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array(
+        $filterData = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => 'import'
+        ]];
+        if ($application) {
+            $filterData[] = [
                 'field' => 'application_id',
                 'operator' => 'equals',
-                'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
-            ),
-            array(
-                'field' => 'type',
-                'operator' => 'equals',
-                'value' => 'import'
-            ),
-        ));
+                'value' => $application->getId()
+            ];
+        }
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter($filterData);
 
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
-
-        return $importDefinitions;
+        return Tinebase_ImportExportDefinition::getInstance()->search($filter);
     }
 
     /**
      * get default definition
      *
      * @param Tinebase_Record_RecordSet $_importDefinitions
+     * @param Tinebase_Model_Application $application
      * @return Tinebase_Model_ImportExportDefinition
      */
-    protected function _getDefaultImportDefinition($_importDefinitions)
+    protected function _getDefaultImportDefinition($_importDefinitions, Tinebase_Model_Application $application = null)
     {
+        if (! $application) {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        }
         try {
             $defaultName = $this->_defaultImportDefinitionName
                 ? $this->_defaultImportDefinitionName
-                : strtolower($this->_applicationName . '_tine_import_csv');
+                : strtolower($application->name . '_tine_import_csv');
             $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName($defaultName);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (count($_importDefinitions) > 0) {
                 $defaultDefinition = $_importDefinitions->getFirstRecord();
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                    ' No import definitions found for ' . $this->_applicationName);
+                    ' No import definitions found for ' . $application->name);
                 $defaultDefinition = NULL;
             }
         }
@@ -645,13 +658,14 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param string $method
      * @param array  $args
+     * @return mixed
      */
     public function __call($method, array $args)
     {
         // provides api for default application methods
-        if (preg_match('/^(get|save|search|delete)([a-z0-9]+)/i', $method, $matches)) {
+        if (preg_match('/^(get|save|search|delete|import)([a-z0-9]+)/i', $method, $matches)) {
             $apiMethod = $matches[1];
-            $model = in_array($apiMethod, array('search', 'delete')) ? substr($matches[2],0,-1) : $matches[2];
+            $model = in_array($apiMethod, array('search', 'delete', 'import')) ? substr($matches[2],0,-1) : $matches[2];
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
@@ -668,6 +682,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                     break;
                 case 'delete':
                     return $this->_delete($args[0], $modelController);
+                    break;
+                case 'import':
+                    // model controller is not needed - but we fetch it for checking if model exists and user has run right
+                    // $tempFileId, $definitionId, $importOptions, $clientRecordData
+                    return $this->_import($args[0], $args[1], $args[2], $args[3]);
                     break;
             }
         }

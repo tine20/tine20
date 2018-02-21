@@ -929,56 +929,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $this->logout();
                 throw new Tinebase_Exception_AccessDenied('User has no permissions to run Tinebase');
             }
+
+            $allImportDefinitions = $this->_getImportDefinitions();
             
             foreach ($userApplications as $application) {
-                $appRegistry = array();
-                try {
-                    $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
-                } catch (Tinebase_Exception $te) {
-                    // no rights -> continue + skip app
-                    Tinebase_Exception::log($te);
-                    continue;
-                }
-                $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
-                $appRegistry['config'] = isset($clientConfig[$application->name])
-                    ? $clientConfig[$application->name]->toArray()
-                    : array();
-
-                // @todo do we need this for all apps?
-                $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
-                $appRegistry['exportDefinitions'] = array(
-                    'results'               => $exportDefinitions->toArray(),
-                    'totalcount'            => count($exportDefinitions),
-                );
-
-                $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
-                Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
-                $appRegistry['customfields'] = $customfields->toArray();
-
-                // add preferences for app
-                try {
-                    $prefRegistry = $this->_getAppPreferencesForRegistry($application);
-                    $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    // do not add prefs if user has no run right
-                }
-
-                $customAppRegistry = $this->_getCustomAppRegistry($application);
-                if (empty($customAppRegistry)) {
-                    // TODO always get this from app controller (and remove from _getCustomAppRegistry)
-                    try {
-                        $appController = Tinebase_Core::getApplicationInstance($application->name);
-                        $models = $appController->getModels();
-                        $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                        $appRegistry['defaultModel'] = $appController->getDefaultModel();
-                    } catch (Tinebase_Exception_AccessDenied $tead) {
-                        // do not add prefs if user has no run right
-                    }
-
-                } else {
-                    $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
-                }
-
+                $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
                 $registryData[$application->name] = $appRegistry;
             }
         } else {
@@ -986,6 +941,69 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $registryData;
+    }
+
+    /**
+     * @param Tinebase_Model_Application $application
+     * @param Tinebase_Config_Struct $clientConfig
+     * @param Tinebase_Record_RecordSet $allImportDefinitions
+     * @return array
+     */
+    protected function _getAppRegistry($application, $clientConfig, $allImportDefinitions)
+    {
+        $appRegistry = array();
+        try {
+            $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+        } catch (Tinebase_Exception $te) {
+            // no rights -> continue + skip app
+            Tinebase_Exception::log($te);
+            return [];
+        }
+        $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
+        $appRegistry['config'] = isset($clientConfig[$application->name])
+            ? $clientConfig[$application->name]->toArray()
+            : array();
+
+        // @todo do this for all apps at once (see import definitions)
+        $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+        $appRegistry['exportDefinitions'] = array(
+            'results'               => $exportDefinitions->toArray(),
+            'totalcount'            => count($exportDefinitions),
+        );
+
+        $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+        Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
+        $appRegistry['customfields'] = $customfields->toArray();
+
+        // add preferences for app
+        try {
+            $prefRegistry = $this->_getAppPreferencesForRegistry($application);
+            $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            // do not add prefs if user has no run right
+        }
+
+        $customAppRegistry = $this->_getCustomAppRegistry($application);
+        if (empty($customAppRegistry)) {
+            // TODO always get this from app controller (and remove from _getCustomAppRegistry)
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($application->name);
+                $models = $appController->getModels();
+                $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
+                $appRegistry['defaultModel'] = $appController->getDefaultModel();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // do not add prefs if user has no run right
+            }
+
+        } else {
+            $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
+        }
+
+        if (! isset($appRegistry['importDefinitions'])) {
+            $appRegistry = array_merge($appRegistry, $this->_getImportDefinitionRegistryData($allImportDefinitions, $application));
+        }
+
+        return $appRegistry;
     }
 
     /**

@@ -127,8 +127,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContainer' => $this->getDefaultContainer(),
         );
 
-        $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
-        
         return $registryData;
     }
     
@@ -159,19 +157,5 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Crm_Controller::getInstance()->saveConfigSettings($settings)->toArray();
 
         return $result;
-    }
-
-    /**
-     * import leads
-     *
-     * @param string $tempFileId to import
-     * @param string $definitionId
-     * @param array $importOptions
-     * @param array $clientRecordData
-     * @return array
-     */
-    public function importLeads($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
-    {
-        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
     }
 }
