@@ -1575,13 +1575,25 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return $actionQueue->getQueueSize();
     }
 
-    public function sanitizeGroupListSync()
+    /**
+     * default is dryRun, to make changes use "-- dryRun=[0|false]
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function sanitizeGroupListSync(Zend_Console_Getopt $opts)
     {
         if (! $this->_checkAdminRight()) {
             return -1;
         }
 
-        Tinebase_Group::getInstance()->sanitizeGroupListSync();
+        $data = $this->_parseArgs($opts);
+        if (isset($data['dryRun']) && ($data['dryRun'] === '0' || $data['dryRun'] === 'false')) {
+            $dryRun = false;
+        } else {
+            $dryRun = true;
+        }
+
+        Tinebase_Group::getInstance()->sanitizeGroupListSync($dryRun);
 
         return 0;
     }
