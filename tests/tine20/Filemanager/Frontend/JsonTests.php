@@ -509,6 +509,38 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $createdNode;
     }
 
+    public function testCreateFileNodeInShared()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in /shared/ folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/test.file',
+            Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFileNodeInOwnPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in own personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()
+                ->accountLoginName . '/test.file', Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFileNodeInForeignPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in a foreign personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/test.file',
+            Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFolderNodeInForeignPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in a foreign personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/testFolder',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+    }
+
     /**
      * testCreateFileNodes
      *
