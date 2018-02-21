@@ -113,6 +113,9 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     public function unlock($area, $password, $identity = null)
     {
         $areaConfig = $this->getAreaConfig($area);
+        if (! $areaConfig) {
+            throw new Tinebase_Exception_AreaUnlockFailed('Config for area lock not found');
+        }
         $authProvider = $this->_getAuthProvider($areaConfig);
 
         if (! $identity) {
@@ -174,9 +177,6 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         $areaConfig = $areaConfigs && $areaConfigs->records
             ? $areaConfigs->records->filter('area', $area)->getFirstRecord()
             : null;
-        if (!$areaConfig) {
-            throw new Tinebase_Exception_NotFound('config for area ' . $area . ' not found');
-        }
 
         return $areaConfig;
     }
@@ -190,14 +190,13 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         if (in_array($area, $this->_hasLocks)) {
             return true;
         }
-        try {
-            $this->getAreaConfig($area);
+
+        if ($this->getAreaConfig($area)) {
             $this->_hasLocks[] = $area;
-        } catch (Tinebase_Exception_NotFound $tenf) {
+            return true;
+        } else {
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -288,6 +287,11 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     protected function _hasValidAuth($area)
     {
         $config = $this->getAreaConfig($area);
+        if (! $config) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                . __LINE__ . ' Config not found for area ' . $area);
+            return false;
+        }
         $alBackend = $this->_getBackend($config);
         return $alBackend ? $alBackend->hasValidAuth($area) : false;
     }
@@ -299,6 +303,11 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     protected function _getAuthValidity($area)
     {
         $config = $this->getAreaConfig($area);
+        if (! $config) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                . __LINE__ . ' Config not found for area ' . $area);
+            return false;
+        }
         $alBackend = $this->_getBackend($config);
         return $alBackend ? $alBackend->getAuthValidity($area) : false;
     }
@@ -312,9 +321,11 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         $this->_hasLocks = [];
 
         $config = $this->getAreaConfig($area);
-        $alBackend = $this->_getBackend($config);
-        if ($alBackend) {
-            $alBackend->resetValidAuth($area);
+        if ($config) {
+            $alBackend = $this->_getBackend($config);
+            if ($alBackend) {
+                $alBackend->resetValidAuth($area);
+            }
         }
     }
 }
