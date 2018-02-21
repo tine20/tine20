@@ -36,6 +36,12 @@ class Tinebase_AreaLockTest extends TestCase
         $this->_uit = Tinebase_AreaLock::getInstance();
     }
 
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_AreaLock::destroyInstance();
+    }
+
     public function testGetState()
     {
         $this->_createAreaLockConfig();
