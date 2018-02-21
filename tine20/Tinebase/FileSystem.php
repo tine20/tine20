@@ -2572,6 +2572,10 @@ class Tinebase_FileSystem implements
                 // if is toplevel path and action is add, allow manage_shared_folders right
                 // if it is toplevel path and action is get allow
                 // else just do normal ACL node check
+                if ($_path->isToplevelPath() && $_action !== 'get' && !$_topLevelAllowed) {
+                    $hasPermission = false;
+                    break;
+                }
                 if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
