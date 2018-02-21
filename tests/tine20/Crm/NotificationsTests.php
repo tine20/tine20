@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -27,7 +27,8 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     public function setUp()
     {
         parent::setUp();
-        
+
+        Tinebase_Config::getInstance()->clearCache();
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');

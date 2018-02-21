@@ -536,6 +536,7 @@ EOT;
         static::resetMailer();
 
         try {
+            Tinebase_Notification::destroyInstance();
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
             static::flushMailer();
@@ -574,6 +575,7 @@ EOT;
         static::resetMailer();
 
         try {
+            Tinebase_Notification::destroyInstance();
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
             static::flushMailer();
@@ -590,6 +592,7 @@ EOT;
 //                echo "\n -- \n\n";
 //            }
 
+            static::assertTrue(isset($messages[1]), 'excepted message is not available');
             $message = $messages[1];
             $text = $message->getBodyText()->getContent();
 //            $html = $message->getBodyHtml()->getContent();

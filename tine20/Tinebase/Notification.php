@@ -54,6 +54,11 @@ class Tinebase_Notification
         
         return self::$_instance;
     }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
     
     /**
      * send notifications to a list a recipients
