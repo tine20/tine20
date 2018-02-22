@@ -52,7 +52,7 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
     canonicalName: '',
 
     cls: 'tw-editdialog',
-    bodyStyle:'padding:5px',
+    
     layout: 'fit',
     border: false,
 

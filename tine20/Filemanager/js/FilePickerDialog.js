@@ -12,19 +12,12 @@ Ext.ns('Tine.Filemanager');
  *
  * @namespace   Tine.Filemanager
  * @class       Tine.Filemanager.FilePickerDialog
- * @extends     Ext.Panel
+ * @extends     Tine.Tinebase.dialog.Dialog
  * @constructor
  * @param       {Object} config The configuration options.
  */
-Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
+Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     layout: 'fit',
-    border: false,
-    frame: false,
-
-    /**
-     * ok button action held here
-     */
-    okAction: null,
 
     /**
      * Dialog window
@@ -32,24 +25,9 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
     window: null,
 
     /**
-     * Window title
-     */
-    title: null,
-
-    /**
-     * Hide panel header by default
-     */
-    header: false,
-
-    /**
-     * The validated and choosen node
+     * The validated and chosen node
      */
     nodes: null,
-
-    /**
-     * @todo: maybe remove
-     */
-    windowNamePrefix: 'test',
 
     /**
      * Allow to select one or more node
@@ -68,7 +46,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      */
     constraint: null,
 
-    cls: 'tw-editdialog',
+    windowNamePrefix: 'FilePickerDialog_',
 
     /**
      * Constructor.
@@ -89,30 +67,11 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
             ]
         }];
 
-        var me = this;
-        this.okAction = new Ext.Action({
-            disabled: true,
-            text: 'Ok',
-            iconCls: 'action_saveAndClose',
-            minWidth: 70,
-            handler: this.onOk.createDelegate(me),
-            scope: this
-        });
-
-        this.fbar = [
-            '->',
-            this.okAction
-        ];
-
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
 
-    /**
-     * button handler
-     */
-    onOk: function () {
-        this.fireEvent('selected', this.nodes);
-        this.window.close();
+    getEventData: function () {
+        return this.nodes;
     },
 
     /**
@@ -133,18 +92,23 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
 
     /**
      * If a node was selected
-     * @param node
+     * @param nodes
      */
     onNodesSelected: function (nodes) {
         this.nodes = nodes;
-        this.okAction.setDisabled(false);
+        this.buttonApply.setDisabled(false);
     },
 
+    afterRender: function () {
+        Tine.Filemanager.FilePickerDialog.superclass.afterRender.apply(this, arguments);
+        this.buttonApply.setDisabled(true);
+    },
+    
     /**
      * If an invalid node was selected
      */
     onInvalidNodesSelected: function () {
-        this.okAction.setDisabled(true);
+        this.buttonApply.setDisabled(true);
     },
 
     /**
@@ -154,15 +118,13 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Ext.Panel, {
      */
     openWindow: function () {
         this.window = Tine.WindowFactory.getWindow({
-            title: this.title,
+            title: this.windowTitle,
             closeAction: 'close',
             modal: true,
             width: 550,
             height: 500,
             layout: 'fit',
             plain: true,
-            bodyStyle: 'padding:5px;',
-
             items: [
                 this
             ]

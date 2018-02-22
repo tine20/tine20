@@ -259,13 +259,12 @@ Tine.Filemanager.nodeActions.Move = {
             records = this.initialConfig.selections;
 
         var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-            title: app.i18n._('Move Items'),
+            windowTitle: app.i18n._('Move Items'),
             singleSelect: true,
             constraint: 'folder'
         });
 
-        filePickerDialog.on('selected', function(nodes) {
-            var node = nodes[0];
+        filePickerDialog.on('apply', function(node) {
             Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
         });
 
