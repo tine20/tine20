@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -313,6 +313,17 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
         $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
         $this->assertTrue(fread($node->get(), 10000) == file_get_contents($filename), 'content not saved');
+
+        $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared')->clearInstanceCache();
+        $this->_getWebDAVTree()->markDirty('/webdav/Filemanager/shared/unittestdirectory');
+        $updatedParent = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
+        $props = $updatedParent->getProperties(['{DAV:}quota-available-bytes', '{DAV:}quota-used-bytes']);
+        static::assertTrue(isset($props['{DAV:}quota-used-bytes']), 'property {DAV:}quota-used-bytes not available');
+        static::assertGreaterThanOrEqual($node->getSize(), $props['{DAV:}quota-used-bytes']);
+
+        static::assertTrue(isset($props['{DAV:}quota-available-bytes']),
+            'property {DAV:}quota-available-bytes not available');
+        static::assertGreaterThan(0, $props['{DAV:}quota-available-bytes']);
         
         return $node;
     }

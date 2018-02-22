@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -1044,5 +1044,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         self::$_classCache[__FUNCTION__][$classCacheId] = $user;
 
         return $user;
+    }
+
+    public function clearInstanceCache()
+    {
+        $this->_instanceCache = [];
     }
 }
