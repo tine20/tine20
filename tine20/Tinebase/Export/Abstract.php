@@ -1269,8 +1269,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                             break;
                         case 'recordlist':
                             $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
-                            $_value = $this->_convertToString(
-                                new Tinebase_Record_RecordSet($model, $_value->value, true));
+                            $rs = new Tinebase_Record_RecordSet($model, $_value->value, true);
+                            $rs->sort(function(Tinebase_Record_Abstract $a, Tinebase_Record_Abstract $b) {
+                                return strcmp($a->getTitle(), $b->getTitle());
+                            }, null, 'function');
+                            $_value = $this->_convertToString($rs);
                             break;
                         case 'keyfield':
                             $keyfield = Tinebase_Config_KeyField::create($_value->definition->keyFieldConfig->value
