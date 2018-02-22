@@ -275,7 +275,6 @@ class Tinebase_ModelConfiguration {
     /**
      * If this is true, multiple edit of records of this model is possible.
      *
-     * @todo add this to a "frontend configuration / uiConfig"
      *
      * @var boolean
      */
@@ -748,7 +747,7 @@ class Tinebase_ModelConfiguration {
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms', 'idProperty', 'splitButton',
-        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group',
+        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group', 'multipleEdit', 'multipleEditRequiredRight'
     );
 
     /**
