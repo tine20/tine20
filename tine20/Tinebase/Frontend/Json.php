@@ -835,13 +835,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getSecondFactorConfig()
     {
-        try {
-            $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-        } catch (Tinebase_Exception $te) {
-            return null;
-        }
-
-        return $config->toArray();
+        $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        return $config ? $config->toArray() : null;
     }
     
     /**
