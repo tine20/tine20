@@ -240,6 +240,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_noRecordResolving = false;
 
     /**
+     * @var array
+     */
+    protected $_customFieldsNameLocalLabelMapping = [];
+
+    /**
      * the constructor
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -316,6 +321,29 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
+        if (!isset($this->_sortInfo['sort']) && !empty($this->_modelName)) {
+            /** @var Tinebase_Record_Abstract $mc */
+            $mc = $this->_modelName;
+            if (null !== ($mc = $mc::getConfiguration())) {
+                /** @var Tinebase_ModelConfiguration $mc */
+                $titleProp = $mc->titleProperty;
+                if (is_array($titleProp)) {
+                    $titleProp = $titleProp[1];
+                } else {
+                    $titleProp = [$titleProp];
+                }
+                $sort = [];
+                foreach ($titleProp as $prop) {
+                    if ($mc->hasField($prop)) {
+                        $sort[] = $prop;
+                    }
+                }
+                if (count($sort) > 0) {
+                    $this->_sortInfo['sort'] =  $sort;
+                }
+            }
+        }
+
         if (isset($_additionalOptions['recordData'])) {
             if (isset($_additionalOptions['recordData']['container_id']) && is_array($_additionalOptions['recordData']['container_id'])) {
                 $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
@@ -360,6 +388,23 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
+        $customFieldConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+            $this->_applicationName, $this->_modelName);
+
+        /** @var Tinebase_Model_CustomField_Config $cfConfig */
+        foreach ($customFieldConfigs as $cfConfig) {
+            $label = empty($cfConfig->definition->label) ? $cfConfig->name : $cfConfig->definition->label;
+            $name = $this->_translate->_($label);
+
+            if (empty($name) || $name === $label) {
+                $name = $this->_tinebaseTranslate->_($label);
+                if (empty($name)) {
+                    $name = $label;
+                }
+            }
+            $this->_customFieldsNameLocalLabelMapping[$cfConfig->name] = $name;
+        }
+
         if ($this->_config->rawData) {
             $this->_rawData = true;
         }
@@ -367,11 +412,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $disallowedKeys = Tinebase_Helper_ZendConfig::getChildrenStrings($this->_config->customfieldBlackList,
                 'name');
 
-            $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_applicationName,
-                $this->_modelName);
-
             /** @var Tinebase_Model_CustomField_Config $cfConfig */
-            foreach ($cfConfigs as $cfConfig) {
+            foreach ($customFieldConfigs as $cfConfig) {
                 if (isset($disallowedKeys[$cfConfig->name])) {
                     continue;
                 }
@@ -834,6 +876,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($record->has('customfields')) {
             $_records->customfields = array();
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+
+            $validators = null;
+            $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
             if (!empty($this->_expandCustomFields)) {
                 $validators = $_records->getFirstRecord()->getValidators();
                 foreach ($this->_expandCustomFields as $field => $label) {
@@ -841,12 +886,23 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                         $validators[$field] = [];
                     }
                 }
-                /** @var Tinebase_Record_Abstract $record */
-                foreach ($_records as $record) {
+            }
+
+            /** @var Tinebase_Record_Abstract $record */
+            foreach ($_records as $record) {
+                $cfs = $record->customfields;
+                if (empty($cfs)) {
+                    continue;
+                }
+                uksort($cfs, function($a, $b) use($cfNameLabelMap) {
+                    return strcmp($cfNameLabelMap[$a], $cfNameLabelMap[$b]);
+                });
+                $record->customfields = $cfs;
+                if (null !== $validators) {
                     $record->setValidators($validators);
                     foreach ($this->_expandCustomFields as $field => $label) {
-                        if (isset($record->customfields[$field])) {
-                            $record->{$field} = $record->customfields[$field];
+                        if (isset($cfs[$field])) {
+                            $record->{$field} = $cfs[$field];
                         }
                     }
                 }
@@ -865,6 +921,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             foreach ($_records as $idx => $record) {
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
+                    $record->relations->sort(function(Tinebase_Model_Relation $a, Tinebase_Model_Relation $b) {
+                        return strcmp($a->related_record->getTitle(), $b->related_record->getTitle());
+                    }, null, 'function');
                 }
             }
         }

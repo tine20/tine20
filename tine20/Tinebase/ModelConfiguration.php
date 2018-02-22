@@ -1797,4 +1797,8 @@ class Tinebase_ModelConfiguration {
     public function getVirtualFields() {
         return $this->_virtualFields;
     }
+
+    public function hasField($_field) {
+        return isset($this->_fields[$_field]);
+    }
 }

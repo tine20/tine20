@@ -167,11 +167,8 @@ class Tinebase_Export_XlsxTest extends TestCase
         $recordListCFfield = $export->getTranslate()->_($recordListCF->definition->label);
         static::assertTrue(false !== ($recordListCFKey = array_search($recordListCFfield, $arrayData[0])),
             'couldn\'t find field ' . $recordListCFfield . ' in ' . $printRdata0);
-
-        $names = explode( ', ', $arrayData[1][$recordListCFKey]);
-        sort($names);
-        static::assertEquals([$jmcblackContact->getTitle(), $scleverContact->getTitle()],
-            $names, $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
+        static::assertEquals($jmcblackContact->getTitle() . ', ' . $scleverContact->getTitle(),
+            $arrayData[1][$recordListCFKey], $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
         
         $systemFieldCount = 0;
         foreach(Addressbook_Model_Contact::getConfiguration()->getFields() as $field) {
@@ -190,11 +187,8 @@ class Tinebase_Export_XlsxTest extends TestCase
             'couldn\'t find field ' . $relationsField . ' in ' . $printRdata0);
 
         $modelTranslated = $export->getTranslate()->_('Contact');
-        $relations = explode( ', ', $arrayData[1][$relationsKey]);
-        sort($relations);
-        static::assertEquals([
-            $modelTranslated .' type1 ' . $scleverContact->getTitle(),
-            $modelTranslated . ' type2 ' . $jmcblackContact->getTitle()
-        ], $relations, $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
+        static::assertEquals($modelTranslated . ' type2 ' . $jmcblackContact->getTitle() . ', ' . $modelTranslated .
+            ' type1 ' . $scleverContact->getTitle(),
+            $arrayData[1][$relationsKey], $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
     }
 }
