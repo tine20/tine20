@@ -418,6 +418,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     {
         $val = trim($telNumber);
 
+        if (empty($val)) {
+            return $val;
+        }
+
         // replace leading + with 00
         if ($val[0] === '+') {
             $val = '00' . mb_substr($val, 1);
