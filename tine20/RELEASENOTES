@@ -8,6 +8,8 @@ TINE 2.0 RELEASENOTES
 GENERAL CHANGES
 ---
 
+* PHP 7.2 Support
+
 * AreaLocks
 It is possible to define protection for certain areas of Tine 2.0. For example, it might be required to give a PIN if you
  want to access the Sales application.

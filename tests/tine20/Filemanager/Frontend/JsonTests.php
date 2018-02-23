@@ -2022,7 +2022,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         self::assertEquals(2, count($nodeArray['grants']));
         self::assertTrue(is_array($nodeArray['grants'][0]['account_name']), 'account_name is not resolved');
-        self::assertEquals(true, count($nodeArray['account_grants']['adminGrant']));
+        self::assertEquals(true, $nodeArray['account_grants']['adminGrant']);
     }
 
     public function testSetNodeAcl()
@@ -2096,10 +2096,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         );
         $result = $this->_getUit()->saveNode($node);
         self::assertEquals(2, count($result['grants']));
-        self::assertEquals(1, count($result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+        self::assertEquals(true, $result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]);
 
         $savedNode = $this->_getUit()->getNode($result['id']);
-        self::assertEquals(1, count($savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+        self::assertEquals(true, $savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]);
 
         // switch to sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);

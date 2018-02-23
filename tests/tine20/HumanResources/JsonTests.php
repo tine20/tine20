@@ -150,7 +150,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         // if the property is set to an empty array, all dependent records will be removed
         $employee['costcenters'] = array();
         $employee = $this->_json->saveEmployee($employee);
-        $this->assertEquals(0, count($employee['costcenters']));
+        $this->assertEmpty($employee['costcenters']);
     }
     
     /**

@@ -59,21 +59,23 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
         
         return self::$_instance;
     }
-    
+
     /**
-     * update one phone
+     * update one record
      *
-     * @param Voipmanager_Model_Snom_Phone $_phone
-     * @return Voipmanager_Model_Snom_Phone
-     * @throws Voipmanager_Exception_Validation
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Voipmanager_Exception_Validation
      *
      * @todo do not overwrite update() -> use inspectBefore/After functions
      */
-    public function update(Tinebase_Record_Interface $_phone)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
-        $oldRecord = $this->get($_phone->getId());
+        $oldRecord = $this->get($_record->getId());
         
-        $rights = $this->_backend->getPhoneRights($_phone->getId());
+        $rights = $this->_backend->getPhoneRights($_record->getId());
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $hasRight = false;
         
@@ -91,16 +93,16 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
         }
         
         // user is not allowed to add or remove lines
-        $diff = $oldRecord->lines->diff($_phone->lines);
+        $diff = $oldRecord->lines->diff($_record->lines);
         if (count($diff->added) > 0 || count($diff->removed) > 0) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to add or remove lines of this phone!');
         }
 
         // user may just edit the lines and settings of the phone
-        $oldRecord->lines    = $_phone->lines;
-        $oldRecord->settings = $_phone->settings;
+        $oldRecord->lines    = $_record->lines;
+        $oldRecord->settings = $_record->settings;
         
-        return parent::update($oldRecord);
+        return parent::update($oldRecord, $_duplicateCheck);
     }
     
     /**

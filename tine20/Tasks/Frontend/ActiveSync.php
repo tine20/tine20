@@ -116,11 +116,11 @@ class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
         $syncrotonTask = new Syncroton_Model_Task();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            // skip empty values
-            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
+            if ($this->_isEmptyValue($entry->$tine20Property)) {
+                // skip empty values
                 continue;
             }
-        
+
             switch($tine20Property) {
                 case 'completed':
                     continue;

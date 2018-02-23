@@ -402,10 +402,11 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         $syncrotonEmail = new Syncroton_Model_Email();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
+            if ($this->_isEmptyValue($entry->$tine20Property)) {
+                // skip empty values
                 continue;
             }
-        
+
             switch($tine20Property) {
                 case 'from_email':
                     $syncrotonEmail->$syncrotonProperty = $this->_createEmailAddress($entry->from_name, $entry->from_email);

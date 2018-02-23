@@ -70,27 +70,31 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
     }
     
     /**************** overriden methods ***************************/
-    
+
     /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         return $this->_customfieldController->addCustomField($_record);
     }
-    
+
     /**
      * get by id
      *
      * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         return $this->_customfieldController->getCustomField($_id);
     }

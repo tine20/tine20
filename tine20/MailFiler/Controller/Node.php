@@ -32,7 +32,7 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
     protected $_modelName = 'MailFiler_Model_Node';
 
     /**
-     * holds the instance of the singleton
+     * holds the instance of the singletonget
      *
      * @var MailFiler_Controller_Node
      */
@@ -116,9 +116,9 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
-        $result = parent::get($_id, $_containerId);
+        $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         return $this->_convertToMailFilerModelNodeRecordSet(array($result))->getFirstRecord();
     }
 
