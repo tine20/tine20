@@ -796,9 +796,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 self::syncUser($user, $options);
             } catch (Exception $e) {
                 $result = false;
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
-                    . $e->getMessage() . PHP_EOL
-                    . $e->getTraceAsString());
+                Tinebase_Exception::log($e, null, $user->toArray());
             }
         }
 
