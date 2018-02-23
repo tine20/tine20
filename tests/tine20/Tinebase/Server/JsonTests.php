@@ -28,6 +28,7 @@ class Tinebase_Server_JsonTests extends TestCase
             'Inventory.saveInventoryItem',
             'Inventory.deleteInventoryItems',
             'Inventory.getInventoryItem',
+            'Inventory.importInventoryItems',
         );
 
         foreach ($expectedFunctions as $function) {
@@ -89,6 +90,40 @@ class Tinebase_Server_JsonTests extends TestCase
             ),
             'returns' => 'array'
         ), $smdArray['services']['Inventory.searchInventoryItems']);
+
+        self::assertEquals(array
+        (
+            'envelope' => 'JSON-RPC-2.0',
+            'transport' => 'POST',
+            'parameters' => array
+            (
+                array
+                (
+                    'type' => 'string',
+                    'optional' => false,
+                    'name' => 'tempFileId'
+                ),
+                array
+                (
+                    'type' => 'string',
+                    'optional' => false,
+                    'name' => 'definitionId'
+                ),
+                array
+                (
+                    'type' => 'array',
+                    'optional' => true,
+                    'name' => 'importOptions'
+                ),
+                array
+                (
+                    'type' => 'array',
+                    'optional' => true,
+                    'name' => 'clientRecordData'
+                ),
+            ),
+            'returns' => 'array'
+        ), $smdArray['services']['Inventory.importInventoryItems']);
     }
 
     /**

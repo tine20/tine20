@@ -598,11 +598,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     )),
                     new Zend_Server_Method_Parameter(array(
                         'type' => 'string',
-                        'name' => 'importDefinitionId',
+                        'name' => 'definitionId',
                     )),
                     new Zend_Server_Method_Parameter(array(
                         'type' => 'array',
-                        'name' => 'options',
+                        'name' => 'importOptions',
                         'optional' => true,
                     )),
                     new Zend_Server_Method_Parameter(array(
