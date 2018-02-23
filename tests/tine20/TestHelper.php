@@ -23,4 +23,6 @@ if (! Tinebase_Core::isRegistered('frameworkInitialized') || Tinebase_Core::get(
 
     // speed up tests by disabling calendar notifications
     Calendar_Controller_Event::getInstance()->sendNotifications(false);
+
+    Tinebase_ActionQueue::$waitForTransactionManager = false;
 }
