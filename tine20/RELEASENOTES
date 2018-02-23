@@ -25,6 +25,13 @@ It is possible to define protection for certain areas of Tine 2.0. For example, 
          ]
      ],
 
+* Sentry.io integration
+If you have a sentry.io server which collects your errors, you can just add it to Tine 2.0 by setting this config:
+
+    'sentryUri' => 'https://USER:PW@sentry.my.domain/2', // note: no double slashes in uri except after "https:"
+
+see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
+
 FILEMANAGER
 ---
 * PIN Protection / Data safe
