@@ -618,7 +618,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getViewRowClass: function(record, index, rowParams, store) {
         var className = Tine.Filemanager.NodeGridPanel.superclass.getViewRowClass.apply(this, arguments);
 
-        if (this.dataSafeEnabled && +record.get('pin_protected')) {
+        if (this.dataSafeEnabled && !!record.get('pin_protected_node')) {
             className += ' x-type-data-safe'
         }
 
