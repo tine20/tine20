@@ -196,11 +196,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * clears state
      *
      * @param  string $name
-     * @return void
+     * @return array
      */
     public function clearState($name)
     {
         Tinebase_State::getInstance()->clearState($name);
+        
+        return ['success' => true];
     }
     
     /**
@@ -218,12 +220,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  string $name
      * @param  string $value
-     * @return void
+     * @return array
      */
     public function setState($name, $value)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
+        
+        return ['success' => true];
     }
     
     /**
