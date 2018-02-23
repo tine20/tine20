@@ -1742,10 +1742,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     public function testRruleModLogUndo()
     {
-        if (PHP_VERSION_ID >= 70200) {
-            static::markTestSkipped('FIXME fix for php 7.2+');
-        }
-
         if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             static::markTestSkipped('pgsql will be dropped, roll back of data not supported on pgsql');
         }
@@ -1943,7 +1939,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
         )));
         $undidEvent = $this->_controller->get($updatedEvent->getId());
-        static::assertEquals(0, empty($undidEvent->exdate));
+        static::assertEmpty($undidEvent->exdate);
         try {
             $this->_controller->get($updatedException->getId());
             static::fail('delete did not work');
