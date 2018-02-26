@@ -270,17 +270,19 @@ class Admin_JsonTest extends TestCase
      */
     public function testUpdateUserWithoutContainerACL()
     {
-        self::markTestSkipped('FIXME 0013338: repair some failing email tests ');
-
         $account = $this->testSaveAccount();
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
-        
+        $account = $this->_json->getUser($account['accountId']);
+
+        self::assertTrue(isset($account['groups']['results']), 'account got no groups: ' . print_r($account, true));
         $account['groups'] = array(Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(), $account['groups']['results'][0]['id']);
         $account['container_id'] = $internalContainer->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account = $this->_json->saveUser($account);
-        
-        $this->assertEquals(2, $account['groups']['totalcount']);
+
+        self::assertTrue(isset($account['groups']['results']), 'account got no groups: ' . print_r($account, true));
+        self::assertEquals(2, $account['groups']['totalcount']);
     }
     
     /**
@@ -290,8 +292,6 @@ class Admin_JsonTest extends TestCase
      */
     public function testUpdateUserRemoveGroup()
     {
-        self::markTestSkipped('FIXME 0013338: repair some failing email tests ');
-
         $account = $this->testSaveAccount();
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
@@ -317,7 +317,9 @@ class Admin_JsonTest extends TestCase
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);
         $this->assertTrue(isset($account['last_modified_by']), 'modlog fields missing from account: ' . print_r($account, true));
-        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by'], print_r($account, true));
+        // TODO replace with this in 2017.11-develop:
+        //$this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by']['accountId'], print_r($account, true));
     }
 
     /**
