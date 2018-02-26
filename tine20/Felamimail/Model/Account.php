@@ -398,13 +398,17 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     $credentials->password .= $imapConfig['pwsuffix'];
                 }
 
-                $credentials->username = $this->_appendDomainOrInstance($credentials->username, $imapConfig);
+                if (isset($imapConfig['useEmailAsUsername']) && $imapConfig['useEmailAsUsername']) {
+                    $credentials->username = $this->email;
+                } else {
+                    $credentials->username = $this->_appendDomainOrInstance($credentials->username, $imapConfig);
+                }
             }
-            
+
             if (! $this->{$userField}) {
                 $this->{$userField} = $credentials->username;
             }
-            
+
             $this->{$passwordField} = $credentials->password;
         }
         

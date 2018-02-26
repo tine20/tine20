@@ -151,8 +151,6 @@ class Tinebase_AuthTest extends TestCase
      */
     public function testImapAuth()
     {
-        self::markTestSkipped('FIXME 0013338: repair some failing email tests ');
-
         // use imap config for the auth config
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         
@@ -164,7 +162,7 @@ class Tinebase_AuthTest extends TestCase
             'host'      => $imapConfig['host'],
             'port'      => $imapConfig['port'],
             'ssl'       => $imapConfig['ssl'],
-            'domain'    => $imapConfig['domain'],
+            'domain'    => $imapConfig['instanceName'], // this is appended to the username when authenticating
         );
         Tinebase_Auth::setBackendType(Tinebase_Auth::IMAP);
         Tinebase_Auth::setBackendConfiguration($authConfig);
@@ -176,14 +174,14 @@ class Tinebase_AuthTest extends TestCase
         $testCredentials = TestServer::getInstance()->getTestCredentials();
         
         // valid authentication
-        $authResult = Tinebase_Auth::getInstance()->authenticate($testCredentials['username'], $testCredentials['password']);
+        $username = Tinebase_Core::getUser()->getId();
+        $authResult = Tinebase_Auth::getInstance()->authenticate($username, $testCredentials['password']);
         $this->assertTrue($authResult->isValid(), 'could not authenticate with imap');
         
         // invalid authentication
-        $authResult = Tinebase_Auth::getInstance()->authenticate($testCredentials['username'], 'some pw');
+        $authResult = Tinebase_Auth::getInstance()->authenticate($username, 'some pw');
         $this->assertFalse($authResult->isValid());
         $this->assertEquals(Tinebase_Auth::FAILURE_CREDENTIAL_INVALID, $authResult->getCode());
-        $this->assertEquals(array('Invalid credentials for user ' . $this->_getEmailAddress(), ''), $authResult->getMessages());
     }
     
     /**
