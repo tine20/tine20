@@ -1,0 +1,28 @@
+language: php
+php:
+    - '7.1'
+
+services:
+  - mysql
+
+env:
+    - DB=mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+    
+before_script:
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" -uroot; fi
+  - cd tine20
+  - composer install
+  - cp config.inc.travis.php config.inc.php
+  - cp install.properties.travis install.properties
+  - vendor/bin/phing tine-install
+
+script:
+  - cd ../tests/tine20
+  - ../../tine20/vendor/bin/phpunit --color TravisTests.php
