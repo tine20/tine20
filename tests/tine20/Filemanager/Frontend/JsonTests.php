@@ -488,7 +488,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $result = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
+        $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
     }
 
     /**
@@ -507,6 +507,22 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals($testPath, $createdNode['path']);
         
         return $createdNode;
+    }
+
+    /**
+     * @see 0013778: creator should have admin grant for new toplevel shared folder node
+     */
+    public function testSharedContainerAcl()
+    {
+        $createdNode = $this->testCreateContainerNodeInSharedFolder();
+        $userGrants = array_filter($createdNode['grants'], function($item) {
+            return $item['account_type'] === 'user' && $item['account_id'] === Tinebase_Core::getUser()->getId();
+        });
+        self::assertEquals(1, count($userGrants), 'user grant should be found: '
+            . print_r($createdNode['grants'], true));
+        $userGrant = array_pop($userGrants);
+        self::assertTrue(isset($userGrant[Tinebase_Model_Grants::GRANT_ADMIN]) && $userGrant[Tinebase_Model_Grants::GRANT_ADMIN],
+            'user should have admin: ' . print_r($userGrant, true));
     }
 
     public function testCreateFileNodeInShared()
@@ -2020,7 +2036,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _assertGrantsInNode($nodeArray)
     {
-        self::assertEquals(2, count($nodeArray['grants']));
+        self::assertGreaterThanOrEqual(2, count($nodeArray['grants']));
         self::assertTrue(is_array($nodeArray['grants'][0]['account_name']), 'account_name is not resolved');
         self::assertEquals(true, $nodeArray['account_grants']['adminGrant']);
     }
@@ -2064,7 +2080,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $child['acl_node'] = '';
         $childWithoutPersonalGrants = $this->_getUit()->saveNode($child);
 
-        self::assertEquals(2, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
+        self::assertEquals(3, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
             . print_r($childWithoutPersonalGrants['grants'], true));
     }
 
