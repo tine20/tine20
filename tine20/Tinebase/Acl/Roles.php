@@ -277,9 +277,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false)
     {
-        return $this->_getRolesBackend()->getMultiple($_ids);
+        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL);
     }
     
     /**
