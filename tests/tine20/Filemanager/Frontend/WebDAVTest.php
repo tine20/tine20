@@ -213,7 +213,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $createdNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
 
         $acl = $createdNode->getAcl();
-        self::assertEquals(6, count($acl));
+        self::assertEquals(11, count($acl));
 
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sClever */

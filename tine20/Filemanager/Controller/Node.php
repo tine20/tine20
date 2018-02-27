@@ -732,6 +732,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Filemanager_Exception_NodeExists
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _createNode($_path, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
