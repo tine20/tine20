@@ -317,9 +317,7 @@ class Admin_JsonTest extends TestCase
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);
         $this->assertTrue(isset($account['last_modified_by']), 'modlog fields missing from account: ' . print_r($account, true));
-        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by'], print_r($account, true));
-        // TODO replace with this in 2017.11-develop:
-        //$this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by']['accountId'], print_r($account, true));
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by']['accountId'], print_r($account, true));
     }
 
     /**
