@@ -180,6 +180,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_twigTemplate = null;
 
     protected $_twigMapping = array();
+    
+    protected $_twigExtensions = [];
 
     /**
      * @var string
@@ -668,6 +670,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         ];
 
         $this->_twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
+        foreach ($this->_twigExtensions as $extension) {
+            $this->_twig->addExtension($extension);
+        }
 
         $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
     }
@@ -1286,10 +1291,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                             }, null, 'function');
                             $_value = $this->_convertToString($rs);
                             break;
-                        case 'keyfield':
+                        case 'keyField':
                             $keyfield = Tinebase_Config_KeyField::create($_value->definition->keyFieldConfig->value
                                 ->toArray());
-                            $_value = $keyfield->getValue($_value->value);
+                            $_value = $keyfield->getTranslatedValue($_value->value);
                             break;
                         default:
                             $_value = $this->_convertToString($_value->value);
@@ -1342,5 +1347,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     public function getTranslate()
     {
         return $this->_translate;
+    }
+
+    public function registerTwigExtension(Twig_ExtensionInterface $twigExtension)
+    {
+        $this->_twigExtensions[] = $twigExtension;
     }
 }
