@@ -154,7 +154,10 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     {
         parent::_appendGrantsFilter($select, $backend, $user);
 
-        if (!$this->_ignorePinProtection && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
+        if (! $this->_ignorePinProtection
+            && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+            && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+        ) {
             $db = $backend->getAdapter();
             $uniqueId = uniqid('pinProtected');
             $select->joinLeft(array(
@@ -162,7 +165,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
                 /* on     */ "{$db->quoteIdentifier($uniqueId . '.id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
                 /* select */ array()
             );
-            $select->where("{$db->quoteIdentifier($uniqueId . '.pin_protected')} = 0 OR {$db->quoteIdentifier($uniqueId . '.pin_protected')} IS NULL");
+            $select->where("{$db->quoteIdentifier($uniqueId . '.pin_protected_node')} IS NULL");
         }
 
         // TODO do something when acl_node = NULL?

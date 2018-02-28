@@ -139,7 +139,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
             // set period!
         } else if (next) {
-            this.setStartDate(this.value.until.add(Date.DAY, 1));
+            this.setStartDate(this.value.until.add(Date.SECOND, this.periodIncludesUntil ? 1 : 0));
         } else if (prev) {
             this.setStartDate(this.value.from.add(Date.DAY, -1));
         } else if (period) {

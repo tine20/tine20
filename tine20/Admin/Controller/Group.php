@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        make it possible to change default groups
  * @todo        extend abstract record controller
@@ -170,27 +170,16 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         // avoid forging group id, get's created in backend
         unset($_group->id);
-        $group = null;
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $list = $this->createOrUpdateList($_group);
-                $_group->list_id = $list->getId();
+                $this->createOrUpdateList($_group);
             }
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
 
-            try {
-                $group = Tinebase_Group::getInstance()->addGroup($_group);
-            } catch (Exception $e) {
-                // remove list again, if group creation fails
-                if (isset($list)) {
-                    $listsBackend = new Addressbook_Backend_List();
-                    $listsBackend->delete($list);
-                }
-                throw $e;
-            }
+            $group = Tinebase_Group::getInstance()->addGroup($_group);
 
             if (!empty($_group['members'])) {
                 Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
@@ -238,8 +227,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
 
             if (true === $_updateList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                 $_group->list_id = $oldGroup->list_id;
-                $list = $this->createOrUpdateList($_group);
-                $_group->list_id = $list->getId();
+                $this->createOrUpdateList($_group);
             }
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);

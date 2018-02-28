@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -192,6 +192,15 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         return $node;
     }
 
+    public function testCreateFileInFilemanagerShared()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+
+        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
+            'it should not be possible to create a file in /webdav/Filemanager/shared folder');
+        $node->createFile('test.file');
+    }
+
     /**
      * testSharedACLs of shared node
      */
@@ -204,7 +213,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $createdNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
 
         $acl = $createdNode->getAcl();
-        self::assertEquals(6, count($acl));
+        self::assertEquals(11, count($acl));
 
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sClever */
@@ -304,6 +313,17 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
         $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
         $this->assertTrue(fread($node->get(), 10000) == file_get_contents($filename), 'content not saved');
+
+        $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared')->clearInstanceCache();
+        $this->_getWebDAVTree()->markDirty('/webdav/Filemanager/shared/unittestdirectory');
+        $updatedParent = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
+        $props = $updatedParent->getProperties(['{DAV:}quota-available-bytes', '{DAV:}quota-used-bytes']);
+        static::assertTrue(isset($props['{DAV:}quota-used-bytes']), 'property {DAV:}quota-used-bytes not available');
+        static::assertGreaterThanOrEqual($node->getSize(), $props['{DAV:}quota-used-bytes']);
+
+        static::assertTrue(isset($props['{DAV:}quota-available-bytes']),
+            'property {DAV:}quota-available-bytes not available');
+        static::assertGreaterThan(0, $props['{DAV:}quota-available-bytes']);
         
         return $node;
     }
@@ -357,6 +377,37 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
     
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
+    }
+
+    public function testCreateFileInFilemanagerOwnPersonalFolder()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/'
+            . Tinebase_Core::getUser()->accountLoginName);
+
+        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
+            'it should not be possible to create a file in own /webdav/Filemanager/personal folder');
+        $node->createFile('test.file');
+    }
+
+    public function testCreateFileInFilemanagerForeignPersonalFolder()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
+
+        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
+            'it should not be possible to create a file in foreign /webdav/Filemanager/personal folder');
+        $node->createFile('test.file');
+    }
+
+    public function testCreateFolderInFilemanagerForeignPersonalFolder()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
+
+        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
+            'it should not be possible to create a folder in foreign /webdav/Filemanager/personal folder');
+        $node->createDirectory('testFolder');
     }
 
     /**

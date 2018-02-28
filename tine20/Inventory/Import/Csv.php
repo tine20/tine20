@@ -29,20 +29,6 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
     );
     
     /**
-     * creates a new importer from an importexport definition
-     *
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_options
-     * @return Inventory_Import_Csv
-     *
-     * @todo move this to abstract when we no longer need to be php 5.2 compatible
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
-    {
-        return new Inventory_Import_Csv(self::getOptionsArrayFromDefinition($_definition, $_options));
-    }
-    
-    /**
      * constructs a new importer from given config
      *
      * @param array $_options

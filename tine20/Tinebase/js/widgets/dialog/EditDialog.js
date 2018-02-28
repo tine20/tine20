@@ -892,13 +892,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * executed after record got updated from proxy
      */
     onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
+        var _ = window.lodash;
+        
         Tine.log.debug('Tine.widgets.dialog.EditDialog::onRecordLoad() - Loading of the following record completed:');
         Tine.log.debug(this.record);
+
+
+        if (!this.record.id || !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+        }
         
         if (this.copyRecord) {
             this.doCopyRecord();
@@ -1124,7 +1127,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             // NOTE: We update the form also when window should be closed,
                             //       cause sometimes security restrictions might prevent
                             //       closing of native windows
-                            me.onRecordLoad();
+                            me.afterIsRendered().then(me.onRecordLoad.bind(me));
                         }
                         var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
                             wrapTicket = ticketFn();
@@ -1136,7 +1139,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     timeout: 300000 // 5 minutes
                 }, me.getAdditionalSaveParams(me));
             } else {
-                me.onRecordLoad();
+                me.afterIsRendered().then(me.onRecordLoad.bind(me));
                 var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
                     wrapTicket = ticketFn();
 

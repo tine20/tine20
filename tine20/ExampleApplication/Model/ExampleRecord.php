@@ -105,8 +105,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
             'number_str' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'       => 'Number', // _('Number')
-                // TODO reactivate when fixed in query filter
-                //'queryFilter' => TRUE,
+                'queryFilter' => TRUE,
                 'type' => 'numberableStr',
                 'config' => array(
                     Tinebase_Numberable::STEPSIZE          => 1,
@@ -127,12 +126,12 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
             'number_int' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'       => 'Number', // _('Number')
-                // TODO reactivate when fixed in query filter
-                //'queryFilter' => TRUE,
+                'queryFilter' => TRUE,
                 'type' => 'numberableInt',
                 'config' => array(
-                    Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable::BUCKETKEY          => 'ExampleApplication_Model_ExampleRecord#number_int',
+                    Tinebase_Numberable::STEPSIZE => 1,
+                    Tinebase_Numberable::BUCKETKEY => 'ExampleApplication_Model_ExampleRecord#number_int',
+                    Tinebase_Numberable::CONFIG_OVERRIDE => 'Tinebase_Container::getNumberableConfig',
                 )
             ),
         )

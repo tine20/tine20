@@ -61,6 +61,7 @@
  * @property    string $title                      special title of the contact
  * @property    string $type                       type of contact
  * @property    string $url                        url of the contact
+ * @property    string $salutation                 Salutation
  * @property    string $url_home                   private url of the contact
  * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
  */
@@ -449,11 +450,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'salutation'                    => [
-                'type'                          => 'keyField',
+                'type'                          => 'keyfield',
                 'label'                         => 'Salutation', // _('Salutation')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                // TODO maybe not in this change, but that keyfield should be configured, no?
-                // TODO \Addressbook_Config::CONTACT_SALUTATION
+                'name'                          => Addressbook_Config::CONTACT_SALUTATION,
             ],
             'syncBackendIds'                => [
                 'label'                         => 'syncBackendIds', // _('syncBackendIds')
@@ -738,6 +738,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     public static function normalizeTelephoneNoCountry($telNumber)
     {
         $val = trim($telNumber);
+
+        if (empty($val)) {
+            return $val;
+        }
 
         // replace leading + with 00
         if ($val[0] === '+') {

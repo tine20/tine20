@@ -101,7 +101,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::update()
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         // be careful, don't put $_record in here, like that parent_id might be spoofed! It must be only the id!
         $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -159,7 +159,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        return parent::update($_record);
+        return parent::update($_record, $_duplicateCheck);
     }
     
     /**
@@ -173,7 +173,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected'))) {
+            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'))) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
@@ -181,7 +181,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (!Tinebase_Core::getUser()->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
             $_record->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $_oldRecord->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
             $_record->quota = $_oldRecord->quota;
-            $_record->pin_protected = $_oldRecord->pin_protected;
+            $_record->pin_protected_node = $_oldRecord->pin_protected_node;
         }
 
         $aclNode = $this->_updateNodeAcl($_record, $_oldRecord);
@@ -250,9 +250,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @return  Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false)
     {
-        foreach (($results = $this->_backend->getMultipleTreeNodes($_ids)) as $node) {
+        foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
                 $this->_backend->getPathOfNode($node->getId(), true));
             if (! $this->_backend->checkPathACL($path, 'get', true, false)) {
@@ -289,10 +289,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
         /** @var Tinebase_Model_Tree_Node $record */
-        $record = parent::get($_id);
+        $record = parent::get($_id, $_getRelatedData, $_getDeleted);
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
         $this->_backend->checkPathACL($nodePath, 'get');
@@ -732,6 +732,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Filemanager_Exception_NodeExists
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _createNode($_path, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {

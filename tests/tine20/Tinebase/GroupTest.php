@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -249,10 +249,6 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testSyncLists()
     {
-        if (Tinebase_Group::getInstance() instanceof Tinebase_Group_Ldap) {
-            $this->markTestSkipped('@todo make this work for LDAP accounts backend');
-        }
-        
         $testGroup = $this->testAddGroup();
         
         // don't use any existing persona here => will break other tests
@@ -290,7 +286,8 @@ class Tinebase_GroupTest extends TestCase
         // sync again -> should not change anything
         Tinebase_Group::syncListsOfUserContact(array($group->getId()), $testUser->contact_id);
         $listAgain = Addressbook_Controller_List::getInstance()->get($group->list_id);
-        $this->assertEquals($list->toArray(), $listAgain->toArray());
+        $this->assertTrue(($diff = $list->diff($listAgain, ['last_modified_by', 'last_modified_time', 'seq']))
+            ->isEmpty(), print_r($diff->toArray(), true));
         
         // change list id -> should get list by (group) name
         $group->list_id = NULL;

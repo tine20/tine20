@@ -464,29 +464,30 @@ class Tinebase_Translation
             $po = $po . "\n".'msgid "' . $plurals[1][$i] . '"' . "\n" . 'msgstr "' . $plurals[2][$i] . '"' . "\n";
         }
         $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
-        $po = preg_replace_callback('/msg(\S+) /', create_function('$matches','
-            global $first, $plural;
-            switch ($matches[1]) {
-                case "id":
-                    if ($first) {
-                        $first = false;
-                        return "";
-                    }
-                    if ($plural) {
-                        $plural = false;
-                        return "]\n, ";
-                    }
-                    return ", ";
-                case "str":
-                    return ": ";
-                case "str[0]":
-                    $plural = true;
-                    return ": [\n  ";
-                default:
-                    return " ,";
-            }
-        '), $po);
-        $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
+        $po = preg_replace_callback(
+            '/msg(\S+) /', function($matches) {
+                global $first, $plural;
+                switch ($matches[1]) {
+                    case "id":
+                        if ($first) {
+                            $first = false;
+                            return "";
+                        }
+                        if ($plural) {
+                            $plural = false;
+                            return "]\n, ";
+                        }
+                        return ", ";
+                    case "str":
+                        return ": ";
+                    case "str[0]":
+                        $plural = true;
+                        return ": [\n  ";
+                    default:
+                        return " ,";
+                }
+            }, $po);
+                $po = "({\n" . (string)$po . ($plural ? "]\n})" : "\n})");
         return $po;
     }
     

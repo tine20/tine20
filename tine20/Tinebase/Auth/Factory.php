@@ -21,10 +21,11 @@ class Tinebase_Auth_Factory
      * factory function to return a selected authentication backend class
      *
      * @param   string $_type
+     * @param   array $_options
      * @return  Tinebase_Auth_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    static public function factory($_type)
+    static public function factory($_type, $_options = null)
     {
         switch($_type) {
             case Tinebase_Auth::LDAP:
@@ -41,6 +42,15 @@ class Tinebase_Auth_Factory
                     'MD5(?)'
                 );
                 break;
+
+            case Tinebase_Auth::PIN:
+                $instance = new Tinebase_Auth_Sql(
+                    Tinebase_Core::getDb(),
+                    SQL_TABLE_PREFIX . 'accounts',
+                    'login_name',
+                    'pin'
+                );
+                break;
                 
             case Tinebase_Auth::IMAP:
                 $instance = new Tinebase_Auth_Imap(
@@ -55,7 +65,13 @@ class Tinebase_Auth_Factory
                 break;
                 
             default:
-                throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend');
+                // check if we have a Tinebase_Auth_$_type backend
+                $authProviderClass = 'Tinebase_Auth_' . $_type;
+                if (class_exists($authProviderClass)) {
+                    $instance = new $authProviderClass($_options);
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend');
+                }
                 break;
         }
         

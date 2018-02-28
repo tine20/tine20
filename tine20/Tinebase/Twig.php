@@ -6,7 +6,7 @@
  * @subpackage  Twig
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -136,6 +136,10 @@ class Tinebase_Twig
                 return (is_scalar($str) && strlen($str) > 0) ? $str . "\n" : $str;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
+            if (!($date instanceof DateTime)) {
+                $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
+            }
+            
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
@@ -153,5 +157,10 @@ class Tinebase_Twig
             $translation = Tinebase_Translation::getTranslation($appName, $locale);
             return $keyFieldRecord ? $translation->translate($keyFieldRecord->value) : $key;
         }));
+    }
+
+    public function addExtension(Twig_ExtensionInterface $extension)
+    {
+        $this->_twigEnvironment->addExtension($extension);
     }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -24,21 +24,41 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
     protected $_mapping = [];
 
     /**
-     * creates a new importer from an importexport definition
-     *
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array $_config
-     * @return Tinebase_Import_Abstract
+     * @var array
      */
-    public static function createFromDefinition(
-        Tinebase_Model_ImportExportDefinition $_definition,
-        array $_config = []
-    ) {
-        return new Tinebase_Import_Xls_Generic(self::getOptionsArrayFromDefinition($_definition, $_config));
+    protected $_indexMapping = [];
+
+    /**
+     * @var bool
+     */
+    protected $_disableMappingAutoresolving = false;
+
+    /**
+     * @var bool
+     */
+    protected $_retrieveContainerFromData = false;
+
+    /**
+     * Tinebase_Import_Xls_Generic constructor.
+     * @param array $_options
+     */
+    public function __construct(array $_options = [])
+    {
+        parent::__construct($_options);
+
+        if (isset($_options['retrieveContainerFromData']) && $retrieveContainerFromData = $_options['retrieveContainerFromData']) {
+            $this->_retrieveContainerFromData = filter_var($retrieveContainerFromData, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if (isset($_options['disableMappingAutoresolving']) && $disableMappingAutoresolving = $_options['disableMappingAutoresolving']) {
+            $this->_disableMappingAutoresolving = filter_var($disableMappingAutoresolving, FILTER_VALIDATE_BOOLEAN);
+        }
     }
+
 
     /**
      * @param  $_resource
+     * @throws \InvalidArgumentException
      */
     protected function _beforeImport($_resource = null)
     {
@@ -53,8 +73,111 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
             $this->_options['endColumn']) as $cell) {
 
             /* @var $cell \PhpOffice\PhpSpreadsheet\Cell */
-            $this->_mapping[] = $cell->getValue();
+            $this->_indexMapping[] = $cell->getValue();
         }
+
+        if ($this->_disableMappingAutoresolving === false) {
+            $this->_autoResolveLocalisedMapping();
+        } else {
+            $this->_mapping = $this->_indexMapping;
+        }
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    protected function _autoResolveLocalisedMapping()
+    {
+        /* @var $modelConfig Tinebase_ModelConfiguration */
+        $modelConfig = $this->_options['model']::getConfiguration();
+
+        if (!$modelConfig) {
+            throw new InvalidArgumentException(__CLASS__ . ' can only import models with a valid Tinebase_ModelConfiguration.');
+        }
+
+        $fields = $modelConfig->getFields();
+        $messages = array_merge(Tinebase_Translation::getTranslation('Tinebase')->getMessages(),
+            Tinebase_Translation::getTranslation($modelConfig->getAppName())->getMessages());
+
+        foreach ($this->_indexMapping as $index => $mapping) {
+            if ($mapping === null) {
+                continue;
+            }
+
+            $englishMessage = array_keys(array_filter($messages, function ($v) use ($mapping) {
+                return $v === $mapping || (is_array($v) && in_array($mapping, $v, true));
+            }, ARRAY_FILTER_USE_BOTH));
+
+            $englishString = array_shift($englishMessage);
+
+            // In case string couldn't be found in translations
+            if ($englishString === null) {
+                continue;
+            }
+
+            foreach ($fields as $field) {
+                if ($field['label'] === $englishString) {
+                    $this->_indexMapping[$index] = $englishString;
+                    $this->_mapping[$englishString] = $field['fieldName'];
+                    continue 2;
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_Abstract $_record
+     * @param null $_resolveStrategy
+     * @param array $_recordData
+     * @return Tinebase_Record_Abstract
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _importRecord($_record, $_resolveStrategy = null, $_recordData = array())
+    {
+        // can resolve the container the record is supposed to be imported into, therefore a file can container multiple records for multiple containers
+        if ($this->_retrieveContainerFromData && $containerName = $_record->{$_record::getConfiguration()->containerProperty}) {
+            $container = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter([
+                'name' => $containerName,
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId()
+            ]))->getFirstRecord();
+
+            if ($container) {
+                $_record->container_id = $container->getId();
+            }
+        }
+
+        return parent::_importRecord($_record, $_resolveStrategy, $_recordData);
+    }
+
+
+    /**
+     * @param array $_data
+     * @return array
+     * @throws Exception
+     */
+    protected function _doMappingConversion($_data)
+    {
+        $converted = parent::_doMappingConversion($_data);
+
+        foreach ($this->_options['mapping']['field'] as $index => $field) {
+            if (!(isset($field['destination']) || array_key_exists('destination',
+                        $field)) || $field['destination'] == '' || !isset($_data[$field['destination']])) {
+                continue;
+            }
+
+            $key = $field['destination'];
+
+            // Convert excel dates to datetime objects
+            if (isset($field['excelDate']) && filter_var($field['excelDate'], FILTER_VALIDATE_BOOLEAN) === true) {
+                $_data[$key] = Date::excelToDateTimeObject($_data[$key],
+                    Tinebase_Core::getUserTimezone())->format(DateTime::ATOM);
+            }
+        }
+
+        return $converted;
     }
 
     /**
@@ -62,25 +185,37 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
      *
      * @param array $_data
      * @return array
+     * @throws Exception
      */
     protected function _doMapping($_data)
     {
         $mappedData = [];
 
+        $fields = array_column($this->_options['mapping']['field'], 'destination');
+        
         foreach ($_data as $index => $data) {
-            $mappedFieldName = $data;
+            $key = null;
 
-            foreach($this->_options['mapping']['field'] as $field) {
-                if ($field['source'] === $this->_mapping[$index]) {
-                    $mappedFieldName = $field['destination'];
-
-                    if (isset($field['excelDate']) && (bool)$field['excelDate'] === true) {
-                        $data = Date::excelToDateTimeObject($data, Tinebase_Core::getUserTimezone())->format(DateTime::ATOM);
-                    }
+            // Automatically resolved mapping
+            if ($this->_disableMappingAutoresolving === false && array_key_exists($this->_indexMapping[$index],
+                    $this->_mapping)) {
+                $key = $this->_mapping[$this->_indexMapping[$index]];
+            }
+            
+            // Traditional mapping with configuration of source and destination
+            foreach ($this->_options['mapping']['field'] as $field) {
+                if (!isset($field['destination'], $field['source']) || $field['source'] !== $this->_indexMapping[$index]) {
+                    continue;
                 }
+
+                $key = $field['destination'];
             }
 
-            $mappedData[$mappedFieldName] = $data;
+            if (!$key || !in_array($key, $fields, true)) {
+                continue;
+            }
+
+            $mappedData[$key] = $data;
         }
 
         return $mappedData;
@@ -88,7 +223,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
 
     protected function _getMappedFieldBy($name)
     {
-        foreach($this->_options['mapping']['field'] as $field) {
+        foreach ($this->_options['mapping']['field'] as $field) {
             if ($field['source'] === $name) {
                 return $field['destination'];
             }

@@ -6,7 +6,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -36,6 +36,16 @@
       * @var Tinebase_ActionQueue_Backend_Interface
       */
      protected $_queue = NULL;
+
+     /**
+      * @var array
+      */
+     protected $_messageCache = [];
+
+     /**
+      * @var bool
+      */
+     public static $waitForTransactionManager = true;
      
     /**
      * holds the instance of the singleton
@@ -219,9 +229,38 @@
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " Queueing action: '{$action}'");
-        
-        return $this->_queue->send($message);
+
+        if (true === static::$waitForTransactionManager && Tinebase_TransactionManager::getInstance()
+                ->hasOpenTransactions()) {
+            if (count($this->_messageCache) === 0) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'transactionCommit']);
+                Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback([$this, 'transactionRollback']);
+            }
+            $this->_messageCache[] = $message;
+            return null;
+        } else {
+            return $this->_queue->send($message);
+        }
     }
+
+     /**
+      * sends the outstanding messages to the queue once the transaction manager commits
+      */
+    public function transactionCommit()
+    {
+        foreach ($this->_messageCache as $message) {
+            $this->_queue->send($message);
+        }
+        $this->_messageCache = [];
+    }
+
+     /**
+      * in case of a rollback, all cached messages are dropped
+      */
+     public function transactionRollback()
+     {
+         $this->_messageCache = [];
+     }
     
     /**
      * resume processing of events

@@ -83,7 +83,9 @@ class TestServer
      */
     public function setWhiteAndBlacklists()
     {
-        if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
+        if ($this->isPhpunitVersionGreaterOrEquals("4.0.0")) {
+            // TODO make this work for newer phpunit versions
+        } else if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
             // TODO not sure if this is working - we need to validate that
             $filter = new PHP_CodeCoverage_Filter();
             $filter->addDirectoryToBlacklist(PATH_TO_TEST_DIR);

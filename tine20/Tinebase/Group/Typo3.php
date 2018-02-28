@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -132,9 +132,14 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
             try {
+                $list = null;
+                $list = Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($groupObject);
                 parent::addGroup($groupObject);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Could not add group: ' . $groupObject->name . ' Error message: ' . $e->getMessage());
+                if ($list !== null) {
+                    Addressbook_Controller_List::getInstance()->getBackend()->delete($list->getId());
+                }
             }
         }
     }
@@ -186,6 +191,9 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
         foreach($groupMap as $groupId => $groupMembers) {
             try {
                 $sqlGroupBackend->setGroupMembers($groupId, $groupMembers);
+                $group = $sqlGroupBackend->getGroupById($groupId);
+                $group->members = $groupMembers;
+                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
             } catch (Exception $e) {
                 // ignore errors
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' could not set groupmembers: ' . $e->getMessage());

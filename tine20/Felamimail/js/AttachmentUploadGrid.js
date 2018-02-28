@@ -47,7 +47,6 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         this.initActions();
     },
 
-
     /**
      * initActions
      */
@@ -70,13 +69,8 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         this.actionUpdater.addActions([this.action_download, this.action_preview]);
         this.getTopToolbar().addItem(this.action_download);
         this.contextMenu.addItem(this.action_download);
-
-        // this.on('rowdblclick', this.onRowDbClick.createDelegate(this), this);
     },
-
-    onDownload: Tine.widgets.grid.FileUploadGrid.prototype.onDownload,
-    onRowDbClick: Tine.widgets.dialog.AttachmentsGridPanel.prototype.onRowDbClick,
-
+    
     onBeforeEdit: function (e) {
         var record = e.record;
         this.currentRecord = record;

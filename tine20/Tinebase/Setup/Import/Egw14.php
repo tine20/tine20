@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -158,9 +158,14 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             
             $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
             try {
+                $list = null;
+                $list = Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($groupObject);
                 Tinebase_Group::getInstance()->addGroup($groupObject);
             } catch (Exception $e) {
                 $this->_log->WARN(__METHOD__ . '::' . __LINE__ .' Could not add group: ' . $groupObject->name . ' Error message: ' . $e->getMessage());
+                if ($list !== null) {
+                    Addressbook_Controller_List::getInstance()->getBackend()->delete($list->getId());
+                }
             }
         }
         
@@ -180,11 +185,19 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('acl.acl_appname') . ' = ?', 'phpgw_group'));
         
         $groupMembers = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_OBJ);
-        
+
+        $groupIds = [];
         foreach($groupMembers as $member) {
             $groupId = abs($member->acl_location);
-            
+
+            $groupIds[$groupId] = true;
             Tinebase_Group::getInstance()->addGroupMember($groupId, $member->acl_account);
+        }
+
+        foreach (array_keys($groupIds) as $groupId) {
+            $group = Tinebase_Group::getInstance()->getGroupById($groupId);
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+            Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
         }
         
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' imported all group memberships from egw');

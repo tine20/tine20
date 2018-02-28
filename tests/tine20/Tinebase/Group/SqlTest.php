@@ -199,4 +199,98 @@ class Tinebase_Group_SqlTest extends TestCase
         
         $this->_backend->deleteGroups(array($groupId1, $groupId2));
     }
+
+    public function testCleanUpEmptyRun()
+    {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        static::assertTrue(empty($str = ob_get_clean()), 'sanitizeGroupListSync echoed: ' . $str);
+    }
+
+    public function testCleanUpDuplicateListReference()
+    {
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
+            'name'      => 'unittestgroup',
+            'list_id'   => $defaultGroup->list_id,
+        ]));
+
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        $result = ob_get_clean();
+
+        static::assertFalse(empty($result), 'sanitizeGroupListSync should find the duplicate list reference');
+        static::assertEquals('found 1 duplicate list references (fixed)' . PHP_EOL . PHP_EOL
+            . 'found 2 groups not having a list (fixed)', trim($result));
+
+        $changedDefaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        static::assertEquals($defaultGroup->list_id, $changedDefaultGroup->list_id,
+            'default groups list_id should not change');
+
+        static::assertNotEquals($group->list_id, Tinebase_Group::getInstance()->getGroupById($group->id)->list_id,
+            'groups list_id should have changed');
+    }
+
+    public function testCleanUpDeletedGroups()
+    {
+        $groupController = Tinebase_Group::getInstance();
+        $defaultGroup = $groupController->getDefaultGroup();
+        $db = Tinebase_Core::getDb();
+        $db->update(SQL_TABLE_PREFIX . 'groups', ['is_deleted' => 1], $db->quoteInto($db->quoteIdentifier('id')
+            . ' = ?', $defaultGroup->getId()));
+
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        $result = ob_get_clean();
+
+        static::assertEquals('found 1 groups which are deleted and linked to undeleted lists: ' . $defaultGroup->getId()
+                . PHP_EOL . '(not fixed!)', trim($result));
+    }
+
+    public function testCleanUpDeletedLists()
+    {
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple([$defaultGroup->list_id],
+            ['is_deleted' => 1]);
+
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        $result = ob_get_clean();
+
+        static::assertEquals('found 1 groups which are linked to deleted lists: ' . $defaultGroup->getId()
+            . PHP_EOL . '(not fixed!)', trim($result));
+    }
+
+    public function testCleanUpWrongListType()
+    {
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple([$defaultGroup->list_id],
+            ['type' => Addressbook_Model_List::LISTTYPE_LIST]);
+
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        $result = ob_get_clean();
+
+        static::assertEquals('found 1 lists linked to groups of the wrong type (fixed)', trim($result));
+
+        $list = Addressbook_Controller_List::getInstance()->getBackend()->get($defaultGroup->list_id);
+        static::assertEquals(Addressbook_Model_List::LISTTYPE_GROUP, $list->type);
+    }
+
+    public function testCleanUpListWithoutGroup()
+    {
+        $listController = Addressbook_Controller_List::getInstance();
+        $list = $listController->create(new Addressbook_Model_List(['name' => 'unittestlist']));
+        $listController->getBackend()->updateMultiple([$list->getId()],
+            ['type' => Addressbook_Model_List::LISTTYPE_GROUP]);
+
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        $result = ob_get_clean();
+
+        static::assertEquals('changed the following lists from type group to type list:' . PHP_EOL
+            . $list->name, trim($result));
+        static::assertEquals(Addressbook_Model_List::LISTTYPE_LIST, $listController->getBackend()
+            ->get($list->getId())->type);
+    }
 }

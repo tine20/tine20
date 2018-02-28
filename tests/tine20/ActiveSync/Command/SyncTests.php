@@ -104,7 +104,8 @@ class ActiveSync_Command_SyncTests extends TestCase
             $sync = $this->_sync($container);
             $syncDoc = $sync->getResponse();
         }
-        
+
+        self::assertNotNull($syncDoc);
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);
@@ -361,6 +362,8 @@ class ActiveSync_Command_SyncTests extends TestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
+
+        self::assertNotNull($syncDoc);
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);

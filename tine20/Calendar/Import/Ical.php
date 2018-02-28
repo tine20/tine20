@@ -25,18 +25,6 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
     protected $_cc = null;
 
     /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_options
-     * @return Calendar_Import_Ical
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
-    {
-        return new Calendar_Import_Ical(self::getOptionsArrayFromDefinition($_definition, $_options));
-    }
-
-    /**
      * get import events
      *
      * @param mixed $_resource

@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -164,6 +164,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function repairGroups()
     {
+        echo 'use Tinebase.sanitizeGroupListSync instead';
+        /*
         $count = 0;
         $be = new Tinebase_Group_Sql();
         $listBackend = new Addressbook_Backend_List();
@@ -192,7 +194,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             }
         }
-        echo $count . " groups repaired!\n";
+        echo $count . " groups repaired!\n";*/
     }
     
     /**

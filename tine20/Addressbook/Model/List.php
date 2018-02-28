@@ -250,7 +250,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
             $memberRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
             foreach($memberRoles as $memberRole) {
-                $pathController->addToRebuildQueue(array($memberRole));
+                $pathController->addToRebuildQueue($memberRole);
                 $members[] = $memberRole;
             }
 

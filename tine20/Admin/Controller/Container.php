@@ -65,15 +65,18 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
+
     /**
      * get by id
      *
      * @param string $_id
      * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $this->_checkRight('get');
         
@@ -82,14 +85,16 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         
         return $container;
     }
-    
+
     /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_checkRight('create');
         
@@ -125,6 +130,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
+     *
+     * @todo use CONTEXT instead of $_additionalArguments
      */
     public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
     {

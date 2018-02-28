@@ -44,5 +44,7 @@ class Tinebase_Model_ImportExportDefinitionFilter extends Tinebase_Model_Filter_
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'plugin'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'label'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'format'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

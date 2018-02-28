@@ -109,7 +109,9 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
         options = options || {};
         options.params = options.params || {};
         options.params.filter = options.params.filter ? options.params.filter : [];
-        
+
+        this.lastStoreTransactionId = options.transactionId;
+
         var value = this.getValue();
         if (value && Ext.isArray(options.params.filter)) {
             value = Ext.isArray(value) ? value : [value];
@@ -122,7 +124,12 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     /**
      * called after store data loaded
      */
-    onLoad: function(store, options) {
+    onLoad: function(store, records, options) {
+        if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
+            Tine.log.debug('FilterPlugin::onLoad - do not set non recent filter data');
+            return;
+        }
+
         if (Ext.isArray(store.proxy.jsonReader.jsonData.filter)) {
             
             // filter plugin has to 'pick' its records

@@ -493,6 +493,10 @@ html, body {
     background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
 }
 
+.action-clipboard {
+    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+}
+
 /* ----- login dialog --------------------------------------------------------*/
 .tb-login-panel form {
     padding: 20px 10px 20px 20px;
@@ -1168,4 +1172,11 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .x-item-disabled.rangeslider-component .rangeslider-component-slider,
 .x-item-disabled.rangeslider-component .rangeslider-component-slider-label {
     visibility: hidden !important;
+}
+
+.ext-el-mask-msg.tb-arealocks-msg,
+.ext-el-mask-msg.tb-arealocks-msg div{
+    border: none;
+    background: none;
+    cursor: pointer;
 }

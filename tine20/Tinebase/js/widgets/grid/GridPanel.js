@@ -1456,7 +1456,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
         var view =  new viewClass({
-            getRowClass: this.getViewRowClass,
+            getRowClass: this.getViewRowClass.bind(this),
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -54,7 +54,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_secondFactorValidated = false;
+    protected $_areaLockValidated = false;
 
     /**
      * use notes - can be enabled/disabled by useNotes
@@ -745,6 +745,8 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * get record numberable value for given field
+     *
      * @param $_record
      * @param $className
      * @param $fieldName
@@ -753,6 +755,15 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
     {
+        if (isset($fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
+            list($objectClass, $method) = explode('::', $fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
+            $object = call_user_func($objectClass . '::getInstance');
+            if (method_exists($object, $method)) {
+                $configOverride = call_user_func_array([$object, $method], [$_record]);
+                $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
+            }
+        }
+
         return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
@@ -2035,7 +2046,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_SecondFactorRequired
+     * @throws Tinebase_Exception_AreaLocked
      */
     protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
                                     $_action)
@@ -2044,31 +2055,42 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-        $this->_checkSecondFactor();
+        $this->_checkAreaLock();
     }
 
     /**
-     * check second factor
+     * check area lock
      *
-     * @throws Tinebase_Exception_SecondFactorRequired
+     * @throws Tinebase_Exception_AreaLocked
+     *
+     * TODO only check with json frontend? maybe we should enable this only from json frontends
      */
-    protected function _checkSecondFactor()
+    protected function _checkAreaLock()
     {
-        if ($this->_secondFactorValidated) {
+        if ($this->_areaLockValidated) {
             return;
         }
 
-        // TODO only check with json frontend? maybe we should enable this only from json frontends
-
-        $protectedApps = Tinebase_Config::getInstance()->get(Tinebase_Config::SECONDFACTORPROTECTEDAPPS, array());
-        if (in_array($this->_applicationName, $protectedApps)) {
-            if (! Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-                throw new Tinebase_Exception_SecondFactorRequired('Second Factor required for application '
+        if (Tinebase_AreaLock::getInstance()->hasLock($this->_applicationName)) {
+            if (Tinebase_AreaLock::getInstance()->isLocked($this->_applicationName)) {
+                $teal = new Tinebase_Exception_AreaLocked('Application is locked: '
                     . $this->_applicationName);
+                $teal->setArea($this->_applicationName);
+                throw $teal;
             } else {
-                $this->_secondFactorValidated = true;
+                $this->_areaLockValidated = true;
             }
+        } else {
+            $this->_areaLockValidated = true;
         }
+    }
+
+    /**
+     * reset area lock validation
+     */
+    public function resetValidatedAreaLock()
+    {
+        $this->_areaLockValidated = false;
     }
 
     /**

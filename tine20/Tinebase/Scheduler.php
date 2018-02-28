@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -23,7 +23,8 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Tinebase';
         $this->_backend = new Tinebase_Backend_Scheduler();
         $this->_modelName = 'Tinebase_Model_SchedulerTask';
@@ -67,16 +68,12 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
      * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_SecondFactorRequired
      */
     protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */$_action)
     {
         if (! $this->_doRightChecks) {
             return;
         }
-
-        //second factor? No, not really please, CLI job...
-        //parent::_checkRight($_action);
 
         $this->checkRight(Tinebase_Acl_Rights::ADMIN);
     }

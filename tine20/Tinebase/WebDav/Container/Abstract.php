@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -380,6 +380,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         $properties = array();
         
         $response = array();
+
+        $quotaData = null;
         
         foreach ($requestedProperties as $prop) {
             switch($prop) {
@@ -397,7 +399,31 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
                     break;
-                    
+
+                case '{DAV:}quota-available-bytes':
+                    if ($this->_container instanceof Tinebase_Model_Tree_Node) {
+                        if (null === $quotaData) {
+                            $quotaData = Tinebase_FileSystem::getInstance()
+                                ->getEffectiveAndLocalQuota($this->_container);
+                        }
+                        // 200 GB limit in case no quota provided
+                        $response[$prop] = $quotaData['localQuota'] === null ? 200 * 1024 * 1024 * 1024 :
+                            $quotaData['localFree'];
+                    } elseif (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+
+                case '{DAV:}quota-used-bytes':
+                    if ($this->_container instanceof Tinebase_Model_Tree_Node) {
+                        if (Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}
+                                ->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                            $size = $this->_container->size;
+                        } else {
+                            $size = $this->_container->revision_size;
+                        }
+                        $response[$prop] = $size;
+                    } elseif (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+
                 default:
                     if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
                     break;

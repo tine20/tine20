@@ -116,8 +116,12 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
         return headlineItems;
     },
 
+    /**
+     * @returns {Array.<*>}
+     */
     getBodyItems: function() {
         var modelConfig = this.recordClass.getModelConfiguration(),
+            typesToExclude = ['records'], // most likely never fetch from backend in any grid view!
             fieldsToExclude = ['alarms', 'tags', 'notes', 'attachments', 'relations', 'customfields',
                 this.recordClass.getMeta('idProperty'),
                 this.recordClass.getMeta('titleProperty'),
@@ -125,7 +129,17 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             ],
             fieldNames = this.recordClass.getFieldNames(),
             displayFields = [],
-            displayAreas = [];
+            displayAreas = [],
+            textDisplayAreas = [],
+            fieldDisplayArea = {
+                flex: 1,
+                layout: 'ux.display',
+                labelWidth: 150,
+                autoScroll: true,
+                layoutConfig: {
+                    background: 'solid'
+                }
+            };
 
         Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
 
@@ -137,6 +151,10 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                     name: fieldDefinition.fieldName,
                     fieldLabel: this.app.i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName)
                 };
+            
+            if (typesToExclude.indexOf(fieldDefinition.type) !== -1) {
+                return;
+            }
 
             if (fieldType === 'virtual') {
                 field.fieldLabel = this.app.i18n._hidden(fieldDefinition.config.label);
@@ -144,15 +162,38 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             }
 
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {
-                if (fieldType == 'text') {
+                if (fieldType === 'text') {
                     Ext.apply(field, {
                         flex: 1,
                         cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea'
                     });
-                    displayAreas.push(field);
+                    textDisplayAreas.push(field);
+                } else if (fieldType === 'image') {
+                    // should be the first area
+                    displayAreas.unshift({
+                        width: 90,
+                        layout: 'ux.display',
+                        layoutConfig: {
+                            background: 'solid'
+                        },
+                        items: [{
+                            xtype: 'ux.displayfield',
+                            name: fieldDefinition.fieldName,
+                            cls: 'preview-panel-image',
+                            anchor: '100% 100%',
+                            hideLabel: true,
+                            htmlEncode: false,
+                            // TODO move image renderer to Tinebase
+                            //renderer: Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
+                            // fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)
+                            renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact',
+                                fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)
+                        }]
+                    });
                 } else {
-                    var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName, fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
+                    var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
+                        fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
                     if (renderer) {
                         field.renderer = renderer;
                     }
@@ -164,36 +205,14 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
         // auto height
         this.defaultHeight = 25 +  displayFields.length * 18;
 
-        return [{
-            flex: 1,
-            layout: 'ux.display',
-            labelWidth: 150,
-            autoScroll: true,
-            layoutConfig: {
-                background: 'solid'
-            },
-            items: [displayFields]
-        }].concat(displayAreas);
+        fieldDisplayArea.items = displayFields;
+        displayAreas.push(fieldDisplayArea);
+        return displayAreas.concat(textDisplayAreas);
     },
 
     loadRecord: function(record) {
         this.record = record;
-        
-        this.fields.each(function (field) {
-            var renderedValue,
-                data = record.get(field.name) ? record.get(field.name) : '',
-                _ = window.lodash;
-
-            renderedValue = _.isFunction(field.renderer) ? field.renderer(data) : data;
-
-            if (renderedValue === '' || renderedValue === undefined || (_.isString(renderedValue) && renderedValue.startsWith('[Object'))) {
-                field.hide();
-                return;
-            }
-            
-            field.show();
-            field.setValue(data);
-        });
+        this.supr().loadRecord.apply(this, arguments);
     },
 
     titleRenderer: function(title) {

@@ -672,14 +672,23 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * set PIN
      *
      * @param  string  $_userId
-     * @param  string  $_pin
+     * @param  string  $_pin (only numbers are allowed)
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      *
      * TODO move to Tinebase_User_sql and replace with abstract fn here
      * TODO replicate PIN?
      */
     public function setPin($_userId, $_pin)
     {
+        if (preg_match('/[^0-9]+/', (string) $_pin)) {
+            throw new Tinebase_Exception_SystemGeneric('Only numbers are allowed for PINs'); // _('Only numbers are allowed for PINs')
+        }
+
+        if (strlen((string) $_pin) < Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PIN_MIN_LENGTH)) {
+            throw new Tinebase_Exception_SystemGeneric('PIN too short'); // _('PIN too short')
+        }
+
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         return $this->_updatePasswordProperty($userId, $_pin, 'pin');
     }

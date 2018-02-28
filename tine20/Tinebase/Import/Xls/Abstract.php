@@ -50,12 +50,12 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     /**
      * @var Spreadsheet
      */
-    protected $_spreadsheet = null;
+    protected $_spreadsheet;
 
     /**
      * @var Worksheet
      */
-    protected $_worksheet = null;
+    protected $_worksheet;
 
     /**
      * Set controller, wasn't brave enough to do it in the abstract :(
@@ -66,7 +66,6 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     public function __construct(array $_options = [])
     {
         parent::__construct($_options);
-
         $this->_setController();
     }
 
@@ -119,6 +118,14 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         return $rowArray;
     }
 
+    /**
+     * @param string $_filename
+     * @param array $_clientRecordData
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function importFile($_filename, $_clientRecordData = [])
     {
         if (!file_exists($_filename)) {
@@ -156,16 +163,25 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
 
         return $this->_importResult;
     }
-
+    
     /**
      * Import from given data
      *
      * @param string $_data
      * @param array $_clientRecordData
      * @return array|void
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function importData($_data, $_clientRecordData = [])
     {
         throw new Tinebase_Exception_NotImplemented('importData is not yet implemented.');
+    }
+    
+    /**
+     * @return array
+     */
+    public function getMapping()
+    {
+        return $this->_mapping;
     }
 }

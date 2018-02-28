@@ -26,22 +26,24 @@ msgstr ""
 msgid "Defines which action should be executed on double click by default?"
 msgstr ""
 
-#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:150
-#: js/NotificationGridPanel.js:117 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:111
+#: js/FilePicker.js:275 js/NodeGridPanel.js:233 js/NodeEditDialog.js:134
+#: js/NotificationGridPanel.js:111 Frontend/Download.php:196
+#: Frontend/Download.php:223 js/NodeGridPanel.js:237
 msgid "Name"
 msgstr "Nimi"
 
 #: js/FilePicker.js:282 js/NodeGridPanel.js:240 js/UsagePanel.js:39
+#: Frontend/Download.php:197 Frontend/Download.php:224 js/NodeGridPanel.js:244
 msgid "Size"
 msgstr "Suurus"
 
 #: js/FilePicker.js:289 js/NodeGridPanel.js:247 js/Model.js:605
+#: js/NodeGridPanel.js:251
 msgid "Contenttype"
 msgstr "Sisutüüp"
 
-#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:70
-#: js/Model.js:26 js/NodeEditDialog.js:61
+#: js/FilePicker.js:297 js/NodeGridPanel.js:255 js/NodeEditDialog.js:61
+#: js/Model.js:26 Frontend/Download.php:200 js/NodeGridPanel.js:259
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -92,12 +94,12 @@ msgid "Deleting Download Link..."
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:270
-#: js/NodeEditDialog.js:189 js/NodeEditDialog.js:173
+#: js/NodeEditDialog.js:173 js/NodeGridPanel.js:274
 msgid "Created By"
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:263
-#: js/NodeEditDialog.js:192 js/Model.js:606 js/NodeEditDialog.js:176
+#: js/NodeEditDialog.js:176 js/Model.js:606 js/NodeGridPanel.js:267
 msgid "Creation Time"
 msgstr "Loomise aeg"
 
@@ -110,10 +112,12 @@ msgid "Access Count"
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:277
+#: js/NodeGridPanel.js:281
 msgid "Last Modified Time"
 msgstr "Viimase muutmise aeg"
 
 #: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:284
+#: js/NodeGridPanel.js:288
 msgid "Last Modified By"
 msgstr "Viimane muutja"
 
@@ -137,40 +141,42 @@ msgstr ""
 msgid "Hold-back in months"
 msgstr ""
 
-#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:785 js/NodeGridPanel.js:786
+#: js/NodeTreePanel.js:518 js/NodeGridPanel.js:786 js/NodeTreePanel.js:560
+#: js/NodeGridPanel.js:868
 msgid "Upload Failed"
 msgstr "Üleslaadimine ebaõnnestus"
 
-#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:786 js/NodeGridPanel.js:787
+#: js/NodeTreePanel.js:519 js/NodeGridPanel.js:787 js/NodeTreePanel.js:561
+#: js/NodeGridPanel.js:869
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
-#: js/NodeGridPanel.js:225
+#: js/NodeGridPanel.js:225 js/NodeGridPanel.js:229
 msgid "Tags"
 msgstr ""
 
-#: js/NodeGridPanel.js:295 js/UsagePanel.js:84
+#: js/NodeGridPanel.js:295 js/UsagePanel.js:84 js/NodeGridPanel.js:299
 msgid "Revision Size"
 msgstr ""
 
-#: js/NodeGridPanel.js:296
+#: js/NodeGridPanel.js:296 js/NodeGridPanel.js:300
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:170 js/Model.js:612
-#: js/NodeEditDialog.js:154
+#: js/NodeGridPanel.js:308 js/NodeEditDialog.js:154 js/Model.js:612
+#: js/NodeGridPanel.js:312
 msgid "Indexed"
 msgstr ""
 
-#: js/NodeGridPanel.js:309
+#: js/NodeGridPanel.js:309 js/NodeGridPanel.js:313
 msgid "File contents is part of the search index"
 msgstr ""
 
-#: js/NodeGridPanel.js:421
+#: js/NodeGridPanel.js:421 js/NodeGridPanel.js:425
 msgid "Upload"
 msgstr "Lae üles"
 
-#: js/NodeGridPanel.js:483
+#: js/NodeGridPanel.js:483 js/NodeGridPanel.js:508
 msgid "Folder Up"
 msgstr "Kaust üles"
 
@@ -178,49 +184,49 @@ msgstr "Kaust üles"
 msgid "Filemanager"
 msgstr "Failihaldur"
 
-#: js/Filemanager.js:74 js/NodeEditDialog.js:51 js/nodeActions.js:284
+#: js/Filemanager.js:74 js/nodeActions.js:284
 msgid "Save locally"
 msgstr ""
 
-#: js/NodeEditDialog.js:68 js/NodeEditDialog.js:59
+#: js/NodeEditDialog.js:59
 msgid "Edit folder"
 msgstr ""
 
-#: js/NodeEditDialog.js:68 js/NodeEditDialog.js:59
+#: js/NodeEditDialog.js:59
 msgid "edit file"
 msgstr ""
 
-#: js/NodeEditDialog.js:70 js/Model.js:23 js/NodeEditDialog.js:61
+#: js/NodeEditDialog.js:61 js/Model.js:23 Frontend/Download.php:226
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/NodeEditDialog.js:112 js/NodeEditDialog.js:96
+#: js/NodeEditDialog.js:96
 msgid "Public Links"
 msgstr ""
 
-#: js/NodeEditDialog.js:158 js/Model.js:604 js/NodeEditDialog.js:142
+#: js/NodeEditDialog.js:142 js/Model.js:604
 msgid "Type"
 msgstr "Tüüp"
 
-#: js/NodeEditDialog.js:170 js/NodeEditDialog.js:154
+#: js/NodeEditDialog.js:154
 msgid "Not yet indexed"
 msgstr ""
 
-#: js/NodeEditDialog.js:201 js/NodeEditDialog.js:185
+#: js/NodeEditDialog.js:185
 msgid "Modified By"
 msgstr ""
 
-#: js/NodeEditDialog.js:204 js/NodeEditDialog.js:188
+#: js/NodeEditDialog.js:188 Frontend/Download.php:198 Frontend/Download.php:225
 msgid "Last Modified"
 msgstr ""
 
-#: js/NodeEditDialog.js:225 js/Model.js:607 js/NodeEditDialog.js:209
+#: js/NodeEditDialog.js:209 js/Model.js:607 Frontend/Download.php:199
 msgid "Description"
 msgstr ""
 
-#: js/NodeEditDialog.js:239 js/NodeEditDialog.js:223
+#: js/NodeEditDialog.js:223
 msgid "Enter description"
 msgstr ""
 
@@ -259,12 +265,12 @@ msgstr "Selle nimega kirje on juba olemas!"
 msgid "Whole Filemanager"
 msgstr ""
 
-#: js/RecursiveFilter.js:49 js/RecursiveFilter.js:59
-msgid "Search"
+#: js/RecursiveFilter.js:48
+msgid "This Folder"
 msgstr ""
 
-#: js/RecursiveFilter.js:51 js/RecursiveFilter.js:48
-msgid "This Folder"
+#: js/RecursiveFilter.js:59
+msgid "Search"
 msgstr ""
 
 #: js/Model.js:251 js/Model.js:266
@@ -303,7 +309,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: js/DocumentPreview.js:119
+#: js/DocumentPreview.js:119 js/DocumentPreview.js:141
 msgid "No preview available."
 msgstr ""
 
@@ -328,11 +334,14 @@ msgid "Summary"
 msgstr ""
 
 #: js/NotificationGridPanel.js:73
-msgid "Day"
-msgstr ""
+#, python-brace-format
+msgid "Once a Day"
+msgid_plural "Every {0} Days"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/NotificationGridPanel.js:77
-msgid "Days"
+#: js/NotificationGridPanel.js:74
+msgid "No"
 msgstr ""
 
 #: js/NotificationGridPanel.js:145
@@ -379,7 +388,7 @@ msgstr ""
 msgid "The grant to download files"
 msgstr ""
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:334 js/nodeActions.js:337
+#: js/GrantsPanel.js:57 js/nodeActions.js:337 js/nodeActions.js:338
 msgid "Publish"
 msgstr ""
 
@@ -431,6 +440,10 @@ msgstr ""
 
 #: js/UsagePanel.js:161
 msgid "unknown"
+msgstr ""
+
+#: js/nodeActions.js:22
+msgid "Reload"
 msgstr ""
 
 #: js/nodeActions.js:39
@@ -502,20 +515,16 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: js/nodeActions.js:308 js/nodeActions.js:311
+#: js/nodeActions.js:311
 msgid "Preview"
 msgstr ""
 
-#: js/nodeActions.js:365 js/nodeActions.js:368
+#: js/nodeActions.js:368 js/nodeActions.js:371
 msgid "Folder has been published successfully"
 msgstr ""
 
-#: js/nodeActions.js:365 js/nodeActions.js:368
+#: js/nodeActions.js:368 js/nodeActions.js:371
 msgid "File has been published successfully"
-msgstr ""
-
-#: js/nodeActions.js:22
-msgid "Reload),"
 msgstr ""
 
 #: Config.php:26
@@ -528,47 +537,47 @@ msgid ""
 "rewrite rules."
 msgstr ""
 
-#: Controller/Node.php:474 Controller/Node.php:507
+#: Controller/Node.php:507 Controller/Node.php:518
 msgid "My folders"
 msgstr "Minu kaustad"
 
-#: Controller/Node.php:481 Controller/Node.php:514
+#: Controller/Node.php:514 Controller/Node.php:525
 msgid "Shared folders"
 msgstr "Jagatud kaustad"
 
-#: Controller/Node.php:488 Controller/Node.php:521
+#: Controller/Node.php:521 Controller/Node.php:532
 msgid "Other users folders"
 msgstr "Muud kasutajate kaustad"
 
-#: Controller/Node.php:1433 Controller/Node.php:1475
+#: Controller/Node.php:1475 Controller/Node.php:1486
 msgid "Received"
 msgstr ""
 
-#: Controller/Node.php:1434 Controller/Node.php:1476
+#: Controller/Node.php:1476 Controller/Node.php:1487
 msgid "To"
 msgstr ""
 
-#: Controller/Node.php:1435 Controller/Node.php:1477
+#: Controller/Node.php:1477 Controller/Node.php:1488
 msgid "Cc"
 msgstr ""
 
-#: Controller/Node.php:1436 Controller/Node.php:1478
+#: Controller/Node.php:1478 Controller/Node.php:1489
 msgid "Bcc"
 msgstr ""
 
-#: Controller/Node.php:1437 Controller/Node.php:1479
+#: Controller/Node.php:1479 Controller/Node.php:1490
 msgid "From (E-Mail)"
 msgstr ""
 
-#: Controller/Node.php:1438 Controller/Node.php:1480
+#: Controller/Node.php:1480 Controller/Node.php:1491
 msgid "From (Name)"
 msgstr ""
 
-#: Controller/Node.php:1439 Controller/Node.php:1481
+#: Controller/Node.php:1481 Controller/Node.php:1492
 msgid "Body"
 msgstr ""
 
-#: Controller/Node.php:1440 Controller/Node.php:1482
+#: Controller/Node.php:1482 Controller/Node.php:1493
 msgid "Attachments"
 msgstr ""
 
@@ -608,17 +617,44 @@ msgstr ""
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""
 
-#: js/NotificationGridPanel.js:73
-#, python-brace-format
-msgid "Once a Day"
-msgid_plural "Every {0} Days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/NotificationGridPanel.js:74
-msgid "No"
+#: Frontend/Download.php:109
+msgid "Password for download required"
 msgstr ""
 
-#: js/nodeActions.js:22
-msgid "Reload"
+#: Frontend/Download.php:111
+msgid "Submit"
+msgstr ""
+
+#: Frontend/Download.php:125
+msgid "File not found!"
+msgstr ""
+
+#: js/NodeGridPanel.js:486 js/NodeGridPanel.js:610
+msgid "Open Data Safe"
+msgstr ""
+
+#: js/NodeGridPanel.js:610
+msgid "Close Data Safe"
+msgstr ""
+
+#: js/GrantsPanel.js:49
+msgid "This folder is part of the data safe"
+msgstr ""
+
+#: js/GrantsPanel.js:52
+msgid ""
+"If data safe protection is enabled, this folder and all it's contents is "
+"only shown if the data safe is opened."
+msgstr ""
+
+#: js/nodeActions.js:354
+msgid ""
+"Public download links can be password protected. If left blank anyone who "
+"knows the link can download the selected files."
+msgstr ""
+
+#: Config.php:28
+msgid ""
+"Serve anonymous downloads from a different URL. Make sure to setup proper "
+"rewrite rules."
 msgstr ""

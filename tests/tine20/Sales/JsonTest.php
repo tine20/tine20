@@ -260,6 +260,8 @@ class Sales_JsonTest extends TestCase
      */
     public function testSearchContracts()
     {
+        Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+
         // create
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
@@ -270,8 +272,9 @@ class Sales_JsonTest extends TestCase
 
         // search & check
         $search = $this->_instance->searchContracts($this->_getFilter(), $this->_getPaging());
-        $this->assertEquals($contract->title, $search['results'][0]['title']);
-        $this->assertEquals(1, $search['totalcount']);
+        self::assertGreaterThan(0, $search['totalcount']);
+        self::assertEquals($contract->title, $search['results'][0]['title']);
+        self::assertEquals(1, $search['totalcount']);
     }
 
     /**
@@ -315,6 +318,8 @@ class Sales_JsonTest extends TestCase
 
     public function testSearchEmptyDateTimeFilter()
     {
+        Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+
         // create
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
@@ -808,6 +813,8 @@ class Sales_JsonTest extends TestCase
      */
     public function testAdvancedContractsSearch()
     {
+        Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
         $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
         list($contact1) = $this->_createContacts(1);

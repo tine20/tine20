@@ -79,15 +79,16 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
         return self::$_instance;
     }
-    
+
     /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         // create a calendar for this resource
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(

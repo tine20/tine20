@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -23,6 +23,7 @@ class Tinebase_Event
      * @var array
      */
     static public $events = array();
+    static protected $history = [];
     
     /**
      * calls the handleEvent function in the controller of all enabled applications 
@@ -32,6 +33,8 @@ class Tinebase_Event
     static public function fireEvent(Tinebase_Event_Abstract $_eventObject)
     {
         self::$events[get_class($_eventObject)][$_eventObject->getId()] = $_eventObject;
+        $historyOffset = count(static::$history);
+        static::$history[$historyOffset] = ['event' => $_eventObject];
         
         if (self::isDuplicateEvent($_eventObject)) {
             // do nothing
@@ -48,6 +51,7 @@ class Tinebase_Event
             if ($controller instanceof Tinebase_Event_Interface) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
                     . __LINE__ . ' calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
+                static::$history[$historyOffset][$application->getId()] = true;
                 try {
                     $controller->handleEvent($_eventObject);
                 } catch (Exception $e) {
@@ -87,5 +91,38 @@ class Tinebase_Event
     static public function isDuplicateEvent(Tinebase_Event_Abstract $_eventObject)
     {
         return false;
+    }
+
+    static public function reFireForNewApplications()
+    {
+        foreach (static::$history as $data) {
+            $event = $data['event'];
+            foreach (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
+                try {
+                    $controller = Tinebase_Core::getApplicationInstance($application, NULL, TRUE);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    // application has no controller or is not useable at all
+                    continue;
+                }
+                if (isset($data[$application->getId()])) {
+                    continue;
+                }
+                if ($controller instanceof Tinebase_Event_Interface) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
+                        . __LINE__ . ' calling eventhandler for event ' . get_class($event) . ' of application ' . (string) $application);
+
+                    try {
+                        $controller->handleEvent($event);
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
+                            . __LINE__ . ' ' . (string) $application . ' threw an exception: '
+                            . $e->getMessage()
+                        );
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
+                            . __LINE__ . ' ' . $e->getTraceAsString());
+                    }
+                }
+            }
+        }
     }
 }

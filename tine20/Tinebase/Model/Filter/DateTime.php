@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  */
@@ -68,10 +68,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
             if (! is_array($_value)) {
                 // get beginning / end date and add 00:00:00 / 23:59:59
                 date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && !empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
-                $value = parent::_getDateValues(
-                    $_operator,
-                    $_value
-                );
+                $value = parent::_getDateValues($_operator, $_value);
                 $value[0] .= ' 00:00:00';
                 $value[1] .= ' 23:59:59';
                 date_default_timezone_set('UTC');
@@ -91,6 +88,13 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
             $value[0] = $this->_convertStringToUTC($value[0]);
             $value[1] = $this->_convertStringToUTC($value[1]);
 
+        } elseif ($_operator === 'inweek') {
+            // get beginning / end date and add 00:00:00 / 23:59:59
+            date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && !empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
+            $value = parent::_getDateValues($_operator, $_value);
+            $value[0] .= ' 00:00:00';
+            $value[1] .= ' 23:59:59';
+            date_default_timezone_set('UTC');
         } else {
             $value = ($_value instanceof DateTime) ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_value;
         }
