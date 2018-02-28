@@ -7,9 +7,9 @@
  */
 
 /* global Ext,Tine,i18n,postal */
-import UserPasswordProvider from './AreaLocks/UserPasswordProvider.es6'
-import PinProvider from './AreaLocks/PinProvider.es6'
-import TokenProvider from './AreaLocks/TokenProvider.es6'
+import UserPasswordProvider from 'AreaLocks/UserPasswordProvider'
+import PinProvider from 'AreaLocks/PinProvider'
+import TokenProvider from 'AreaLocks/TokenProvider'
 
 let providers = {
   UserPassword: UserPasswordProvider,

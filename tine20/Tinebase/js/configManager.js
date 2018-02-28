@@ -22,7 +22,7 @@ Tine.Tinebase.configManager = function(){
         },
         set: function(name, value, appName) {
             var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,
-                config = registry ? registry.get('config') : false,
+                config = (registry ? registry.get('config') : false) || {},
                 pathParts = String(name).split('.'),
                 path = pathParts.join('.value.') + (pathParts.length == 1 ? '.value' : '');
 
