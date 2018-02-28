@@ -1291,7 +1291,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                             }, null, 'function');
                             $_value = $this->_convertToString($rs);
                             break;
-                        case 'keyField':
+                        case 'keyfield':
                             $keyfield = Tinebase_Config_KeyField::create($_value->definition->keyFieldConfig->value
                                 ->toArray());
                             $_value = $keyfield->getTranslatedValue($_value->value);
