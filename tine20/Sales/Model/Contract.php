@@ -222,7 +222,8 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ),
             
             'fulltext' => array(
-                'type' => 'string'
+                'sortable' => false,
+                'type' => 'string',
             ),
             
             'merge_invoices' => array(
