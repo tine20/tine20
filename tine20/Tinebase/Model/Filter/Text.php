@@ -115,13 +115,6 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             $value = explode(' ', $value);
         }
         
-        // this is a text filter, so all items in the filter must be of type text (needed in pgsql)
-        if (in_array($this->_operator, array('in', 'notin')) && is_array($value)) {
-            foreach($value as &$item) {
-                $item = (string) $item;
-            }
-        }
-        
         $db = Tinebase_Core::getDb();
                 
         if (is_array($value) && empty($value)) {
@@ -134,8 +127,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
                 foreach($value as $key => $v){
                     $value[$key] = preg_replace('/(\s+|\-)/', '%', $v);
                 }
-            }
-            else {
+            } else {
                 $value = preg_replace('/(\s+|\-)/', '%', $value);
             }  
         }

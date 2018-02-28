@@ -375,8 +375,8 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * replaces wildcards
      *
-     * @param  string $value
-     * @return string
+     * @param  string|array $value
+     * @return string|array
      */
     protected function _replaceWildcards($value)
     {
@@ -402,15 +402,18 @@ abstract class Tinebase_Model_Filter_Abstract
     {
         $action = $this->_opSqlMap[$this->_operator];
 
+        // escape backslashes first
+        $returnValue = addcslashes($value, '\\');
+
         // replace wildcards from user ()
-        $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $value);
+        $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
 
         // add wildcard to value according to operator
         if (isset($action['wildcards'])) {
             $returnValue = str_replace('?', $returnValue, $action['wildcards']);
         }
 
-        return $returnValue;
+        return (string) $returnValue;
     }
 
     /**
