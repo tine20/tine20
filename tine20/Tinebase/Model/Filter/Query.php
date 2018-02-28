@@ -84,40 +84,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                 case 'startswith':
                 case 'endswith':
                     foreach ($queries as $query) {
-                        /** @var Tinebase_Model_Filter_FilterGroup $subGroup */
-                        $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
-                        foreach ($this->_options['fields'] as $field) {
-                            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $query);
-                            if (in_array($this->_operator, $filter->getOperators())
-                                || $filter instanceof Tinebase_Model_Filter_ForeignRecord)
-                            {
-                                $subGroup->addFilter($filter);
-                            } else {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                        ' field: ' . $field . ' => filter: ' . get_class($filter)
-                                        . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
-                                }
-                            }
-                        }
+                        $subGroup = $this->_getSubfilterGroup($parentFilterGroup, $query, $condition);
                         $innerGroup->addFilterGroup($subGroup);
                     }
                     break;
-
                 case 'notin':
                 case 'in':
-                    foreach ($this->_options['fields'] as $field) {
-                        $filter = $parentFilterGroup->createFilter($field, $this->_operator, $queries);
-                        if (in_array($this->_operator, $filter->getOperators())) {
-                            $innerGroup->addFilter($filter);
-                        } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                                    ' field: ' . $field . ' => filter: ' . get_class($filter)
-                                    . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
-                            }
-                        }
-                    }
+                    $this->_addFilterToInnerGroup($parentFilterGroup, $queries, $innerGroup);
                     break;
                 default:
                     throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
@@ -131,6 +104,66 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                 if (null !== $relationFilter) {
                     $this->addFilter($relationFilter);
                 }
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $parentFilterGroup
+     * @param string $query
+     * @param $condition
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getSubfilterGroup(Tinebase_Model_Filter_FilterGroup $parentFilterGroup, $query, $condition)
+    {
+        $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
+        foreach ($this->_options['fields'] as $field) {
+            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $query);
+            $this->_addFilterToGroup($subGroup, $filter);
+        }
+
+
+        return $subGroup;
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $parentFilterGroup
+     * @param array $queries
+     * @param Tinebase_Model_Filter_FilterGroup $innerGroup
+     */
+    protected function _addFilterToInnerGroup(
+        Tinebase_Model_Filter_FilterGroup $parentFilterGroup,
+        $queries,
+        Tinebase_Model_Filter_FilterGroup $innerGroup)
+    {
+        foreach ($this->_options['fields'] as $field) {
+            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $queries);
+            $this->_addFilterToGroup($innerGroup, $filter);
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $group
+     * @param Tinebase_Model_Filter_Abstract $filter
+     */
+    protected function _addFilterToGroup(Tinebase_Model_Filter_FilterGroup $group, Tinebase_Model_Filter_Abstract $filter)
+    {
+        if (in_array($this->_operator, $filter->getOperators())
+            || $filter instanceof Tinebase_Model_Filter_ForeignRecord
+        ) {
+            if ($filter instanceof Tinebase_Model_Filter_FullText) {
+                if (! Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER}) {
+                    // fulltext query filter disabled
+                    return;
+                }
+            }
+
+            $group->addFilter($filter);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' field: ' . $field . ' => filter: ' . get_class($filter)
+                    . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
             }
         }
     }

@@ -2,141 +2,49 @@
 TINE 2.0 RELEASENOTES
 ===
                     
-  Release:     Caroline (2017.11)
-  Last change: 2017-11-08
+  Release:     Nele (2018.11)
+  Last change: 2018-02-01
 
 GENERAL CHANGES
 ---
 
-* Replication
+* PHP 7.2 Support
 
-Master-Slave setup, changes are replicated from master to any number of slaves
+* AreaLocks
+It is possible to define protection for certain areas of Tine 2.0. For example, it might be required to give a PIN if you
+ want to access the Sales application.
 
-* Modification Logs / Undo
+ Example configuration of a Sales app AreaLock with PIN:
 
-Almost all records now have modification logs with the ability to undo changes and undelete records 
+     'userPin' => true,
+     'areaLocks' => [
+         'records' => [
+             [
+                 'area' => 'Sales',
+                 'provider' => 'Pin',
+                 'validity' => 'session', // it is only required to give the pin once per session
+             ]
+         ]
+     ],
 
-* System-Links to files, folders and applications
+* Sentry.io integration
+If you have a sentry.io server which collects your errors, you can just add it to Tine 2.0 by setting this config:
 
-Use a system-link to quickly access files, folders and applications within Tine 2.0
+    'sentryUri' => 'https://USER:PW@sentry.my.domain/2', // note: no double slashes in uri except after "https:"
 
-To make system links work in Calendar alarm mails, you have to set the tine20URL config setting (config.inc.php example):
-
-    'tine20URL' => 'https://my.tine20.tld',
-
-* Tablet-Usability
-
-We greatly improved the usability of Tine 2.0 with a touchscreen
-
-* Export improvements
-
-Exports have been streamlined and export templates can now use the twig template language
-
-* Automatic Logout
-
-If configured, a user is automatically logged out if inactive for a defined time
-
-* Second Factor PIN
-
-A new second factor has been introduced: user pin
-
-* Second Factor to protect applications
-
-2F can be used to protected certain Tine 2.0 applications
-
-* Currency configuration
-
-The displayed currency can now be configured
-
-* Printing
-
-Printing has been improved all over Tine 2.0 and lots of single record dialogs have gotten a print button
-
-* Scheduler
-
-The LDAP-User/Group-Synchronisation has been added as a Tine 2.0 scheduler job. It is no longer required
- to add a custom cronjob for this.
+see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
 
 FILEMANAGER
 ---
-
-* Separate ACL on all folder nodes
-
-Subfolders can have different grants
-
-* Fulltext search with tika
-
-If a tika.jar is installed on the webserver, documents can be indexed and searched 
-
-* Preview service
-
-Use a preview service to create previews for lots of document types
-
-* Versions
-
-Tine 2.0 is keeping track of multiple versions of a file and you can download older versions
-
-* Usage
-
-Tine 2.0 now shows the file-usage by user and filetype in a folder and its subfolders 
-
-* New grants "publish" and "download"
-
-For better management of access to files
-
-* Password creation for download links
-
-Generates a random password
-
-* Notifications
-
-Users can get notifications if files or folders change
+* PIN Protection / Data safe
+Folders can be PIN protected: its contents are only visibly if user provides a valid second factor / PIN.
+ - use an AreaLock with area 'Tinebase.datasafe' to activate pin protection
 
 ADDRESSBOOK
 ---
 
-* Groups improvements
-
-For example, the contact's groups are now shown in the edit dialog
-
-* Serial Letters
-
-It is now possible to export multiple contacts in a docx template to send serial letters
-
 CALENDAR
 ---
 
-* Improved Attendee-Search
-
-Search now finds all possible attendees, you no longer have to switch the type.
-Attendee search directly shows the availability of the attender with a red or green ball
-
-* Timeline view
-
-Timeline view has been added
-
-* Calendar resources improvements
-
-Grants have been streamlined, maximum number of people can be set
-
-* dynamic recurrence exceptions
-
-for example during holidays, tine automatically creates recurrence exceptions for recurring events
-
-* automatic event search
-
-Find a timeslot for a given set of attendee for a new event
-
 EMAIL
 ---
-
-* Attach files as system-link or anonymous download link
-
-This is great for sending big files
-
-* Notifications for emails
-
-The SIEVE notification API is now integrated in Tine 2.0 to send notifications to a configured e-mail address if mails arrive in the INBOX
-
-* E-Mails can be archived in the Filemanager module
-

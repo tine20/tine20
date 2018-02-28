@@ -177,17 +177,20 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
     },
 
     onGroupAdd: function(idx, groupStore, groupName) {
-        var attendee = this.groupingMetadataCache[groupName],
-            name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), false, attendee);
+        var _ = window.lodash,
+            attendee = this.groupingMetadataCache[groupName],
+            name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), false, attendee),
+            type = attendee.get('user_type');
 
         var label = new Tine.Calendar.TimelineLabel({
             groupName: groupName,
             label: name,
-            iconCls: attendee.getIconCls()
+            iconCls: attendee.getIconCls(),
+            groupSortOrder: Tine.Calendar.Model.Attender.getSortOrder(type)
         });
 
         this.labels.push(label);
-        this.labels.sort();
+        this.labels = _.sortBy(this.labels, ['groupSortOrder', 'label']);
 
         var idx = this.labels.indexOf(label);
 

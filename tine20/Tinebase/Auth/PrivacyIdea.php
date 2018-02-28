@@ -5,25 +5,29 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-class Tinebase_Auth_SecondFactor_PrivacyIdea extends Tinebase_Auth_SecondFactor_Abstract
+class Tinebase_Auth_PrivacyIdea extends Tinebase_Auth_Adapter_Abstract
 {
     /**
-     * validate second factor
+     * Performs an authentication attempt
      *
-     * @param string $username
-     * @param string $password
-     * @param boolean $allowEmpty
-     * @return integer (Tinebase_Auth::FAILURE|Tinebase_Auth::SUCCESS)
+     * @throws Zend_Auth_Adapter_Exception If authentication cannot be performed
+     * @return Zend_Auth_Result
      */
-    public function validate($username, $password, $allowEmpty = false)
+    public function authenticate()
     {
+        $allowEmpty = isset($this->_options['allowEmpty']) ? $this->_options['allowEmpty'] : true;
+        $password = $this->_credential;
+        $username = $this->_identity;
+
         if (! $allowEmpty && empty($password)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Empty password given');
-            return Tinebase_Auth::FAILURE;
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                $username,
+                ['Empty password given']
+            );
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -68,15 +72,25 @@ class Tinebase_Auth_SecondFactor_PrivacyIdea extends Tinebase_Auth_SecondFactor_
             __METHOD__ . '::' . __LINE__ . ' Response: ' . $body);
 
         if ($response->getStatus() !== 200) {
-            return Tinebase_Auth::FAILURE;
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE,
+                $username,
+                ['PrivacyIdea returned ' . $response->getStatus() . ' status']
+            );
         }
 
         $result = Tinebase_Helper::jsonDecode($body);
 
         if (isset($result['result']) && $result['result']['status'] === true && $result['result']['value'] === true) {
-            return Tinebase_Auth::SUCCESS;
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::SUCCESS,
+                $username
+            );
         } else {
-            return Tinebase_Auth::FAILURE;
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                $username
+            );
         }
     }
 }

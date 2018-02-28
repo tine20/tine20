@@ -545,6 +545,23 @@ class Tinebase_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * checks if confidential provider config isn't sent to clients
+     */
+    public function testAreaLockProviderConfigRemovedFromRegistryData()
+    {
+        $this->_createAreaLockConfig([
+            'provider_config' => [
+                'confidential' => 'secret!'
+            ],
+        ]);
+        $registryData = $this->_instance->getAllRegistryData();
+        $registryConfigValue = $registryData['Tinebase']['config'][Tinebase_Config::AREA_LOCKS]['value'];
+        self::assertTrue(isset($registryConfigValue['records'][0]));
+        self::assertFalse(isset($registryConfigValue['records'][0]['provider_config']),
+            'confidental data should be removed: ' . print_r($registryConfigValue, true));
+    }
+
+    /**
      * test get all registry data with persistent filters
      * 
      * @return void

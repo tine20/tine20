@@ -275,7 +275,6 @@ class Tinebase_ModelConfiguration {
     /**
      * If this is true, multiple edit of records of this model is possible.
      *
-     * @todo add this to a "frontend configuration / uiConfig"
      *
      * @var boolean
      */
@@ -429,6 +428,9 @@ class Tinebase_ModelConfiguration {
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
      * user                      User                string                                 Tinebase_Model_Filter_User
+     * keyfield                  ?                   varchar(40) ?                          string(?)         Tinebase_Model_Filter_Text(?)
+     * (keyfield must have a 'name' => Addressbook_Config::CONTACT_SALUTATION field definition, optionally an 'application' => 'Calendar' to refer to other applications keyfields)
+     *
      * virtual:
      * 
      * Field Type "virtual" has a config property which holds the field configuration.
@@ -748,7 +750,7 @@ class Tinebase_ModelConfiguration {
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms', 'idProperty', 'splitButton',
-        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group',
+        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group', 'multipleEdit', 'multipleEditRequiredRight'
     );
 
     /**
@@ -943,11 +945,11 @@ class Tinebase_ModelConfiguration {
         );
 
         if ($this->_hasCustomFields) {
-            $this->_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['customfields'] = array('label' => 'Custom Fields', 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
 
         if ($this->_hasRelations) {
-            $this->_fields['relations'] = array('label' => NULL, 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['relations'] = array('label' => 'Relations', 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
 
         if ($this->_containerProperty) {
@@ -1068,6 +1070,12 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
+                if (!isset($fieldDef['name']) || ! Tinebase_Config::getAppConfig(
+                        isset($fieldDef['config']['application']) ? $fieldDef['config']['application'] :
+                            $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
+                        $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                }
             } elseif ($fieldDef['type'] == 'virtual') {
                 $virtualField = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $virtualField['key'] = $fieldKey;
@@ -1797,5 +1805,9 @@ class Tinebase_ModelConfiguration {
      */
     public function getVirtualFields() {
         return $this->_virtualFields;
+    }
+
+    public function hasField($_field) {
+        return isset($this->_fields[$_field]);
     }
 }

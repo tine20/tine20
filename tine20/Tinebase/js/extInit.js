@@ -145,30 +145,14 @@ Date.prototype.toJSON = function(key) {
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
     money: function (v) {
-        if (Ext.isEmpty(v) || v == null) {
-            v = 0;
+        var _ = window.lodash,
+            currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
+        
+        if (!_.isNumber(v)) {
+            v = Number(v);
         }
-        v.toString().replace(/,/, '.');
-
-        var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
-        var currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
-
-        v = (Math.round(parseFloat(v) * 100)) / 100;
-
-        v = (v == Math.floor(v)) ? v + ".00" : ((v * 10 == Math.floor(v * 10)) ? v + "0" : v);
-        v = String(v);
-        var ps = v.split('.');
-        var whole = ps[0];
-        var sub = ps[1] ? decimalSeparator + ps[1] : decimalSeparator + '00';
-        var r = /(\d+)(\d{3})/;
-        while (r.test(whole)) {
-            whole = whole.replace(r, '$1' + '.' + '$2');
-        }
-        v = whole + sub;
-        if (v.charAt(0) == '-') {
-            return '- ' + v.substr(1) + ' ' + currencySymbol;
-        }
-        return v + " " + currencySymbol;
+        
+        return v.toLocaleString(Tine.Tinebase.registry.get('locale').locale) + " " + currencySymbol;
     },
     percentage: function(v){
         if(v === null) {

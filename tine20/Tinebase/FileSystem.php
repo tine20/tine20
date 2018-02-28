@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -102,7 +102,7 @@ class Tinebase_FileSystem implements
      *
      * @var array
      */
-    protected $_secondFactorCache = array();
+    protected $_areaLockCache = array();
 
     /**
      * class cache to remember all members of the notification role
@@ -1238,6 +1238,14 @@ class Tinebase_FileSystem implements
                         $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
                     }
                 }
+                if ($node->pin_protected_node === $oldParent->pin_protected_node
+                        && $newParent->pin_protected_node !== $node->pin_protected_node) {
+                    $node->pin_protected_node = $newParent->pin_protected_node;
+                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                        $this->_recursiveInheritPropertyUpdate($node, 'pin_protected_node',
+                            $newParent->pin_protected_node, $oldParent->pin_protected_node);
+                    }
+                }
 
                 if ($node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) == $oldParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) &&
                     $node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION) != $newParent->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION)
@@ -1758,6 +1766,8 @@ class Tinebase_FileSystem implements
                     'object_id' => $directoryObject->getId(),
                     'parent_id' => $parentId,
                     'acl_node' => $parentNode && !empty($parentNode->acl_node) ? $parentNode->acl_node : null,
+                    'pin_protected_node' => $parentNode && !empty($parentNode->pin_protected_node) ?
+                        $parentNode->pin_protected_node : null,
                     Tinebase_Model_Tree_Node::XPROPS_REVISION => $parentNode &&
                         !empty($parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION}) ?
                         $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
@@ -1840,6 +1850,8 @@ class Tinebase_FileSystem implements
                     'object_id' => $fileObject->getId(),
                     'parent_id' => $parentId,
                     'acl_node' => $parentNode && empty($parentNode->acl_node) ? null : $parentNode->acl_node,
+                    'pin_protected_node' => $parentNode && empty($parentNode->pin_protected_node) ? null :
+                        $parentNode->pin_protected_node,
                 ));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
@@ -2064,6 +2076,11 @@ class Tinebase_FileSystem implements
                 // update acl_node of subtree if changed
                 $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
             }
+            if ($currentNodeObject->pin_protected_node !== $_node->pin_protected_node) {
+                // update pin_protected_node of subtree if changed
+                $this->_recursiveInheritPropertyUpdate($_node, 'pin_protected_node', $_node->pin_protected_node,
+                    $currentNodeObject->pin_protected_node);
+            }
 
             $oldValue = $currentNodeObject->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
             $newValue = $_node->xprops(Tinebase_Model_Tree_Node::XPROPS_REVISION);
@@ -2240,17 +2257,17 @@ class Tinebase_FileSystem implements
     public function clearDeletedFiles()
     {
         $this->clearDeletedFilesFromFilesystem();
-        $this->clearDeletedFilesFromDatabase();
-
         return true;
     }
 
     /**
      * removes deleted files that no longer exist in the database from the filesystem
+     *
+     * @param bool $_sleep
      * @return int number of deleted files
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function clearDeletedFilesFromFilesystem()
+    public function clearDeletedFilesFromFilesystem($_sleep = true)
     {
         try {
             $dirIterator = new DirectoryIterator($this->_basePath);
@@ -2262,6 +2279,8 @@ class Tinebase_FileSystem implements
             . ' Scanning ' . $this->_basePath . ' for deleted files ...');
         
         $deleteCount = 0;
+        $hashesToDelete = [];
+
         /** @var DirectoryIterator $item */
         foreach ($dirIterator as $item) {
             if (!$item->isDir()) {
@@ -2282,15 +2301,24 @@ class Tinebase_FileSystem implements
                 }
             }
             $existingHashes = $this->_fileObjectBackend->checkRevisions($hashsToCheck);
-            $hashesToDelete = array_diff($hashsToCheck, $existingHashes);
-            // remove from filesystem if not existing any more
-            foreach ($hashesToDelete as $hashToDelete) {
-                $filename = $this->_basePath . '/' . $subDir . '/' . substr($hashToDelete, 3);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Deleting ' . $filename);
-                unlink($filename);
-                $deleteCount++;
-            }
+            $hashesToDelete = array_merge($hashesToDelete, array_diff($hashsToCheck, $existingHashes));
+        }
+
+        // to avoid concurrency problems we just sleep a second to give concurrent write processes time to make their
+        // update query. As we are not in a transaction, we should read uncommited(?). Any suggestions how to improve?
+        if ($_sleep) {
+            sleep(1);
+        }
+
+        $existingHashes = $this->_fileObjectBackend->checkRevisions($hashesToDelete);
+        $hashesToDelete = array_diff($hashesToDelete, $existingHashes);
+        // remove from filesystem if not existing any more
+        foreach ($hashesToDelete as $hashToDelete) {
+            $filename = $this->_basePath . '/' . substr($hashToDelete, 0, 3) . '/' . substr($hashToDelete, 3);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Deleting ' . $filename);
+            unlink($filename);
+            $deleteCount++;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -2301,49 +2329,80 @@ class Tinebase_FileSystem implements
     
     /**
      * removes deleted files that no longer exist in the filesystem from the database
-     * 
+     *
+     * @param bool $dryRun
      * @return integer number of deleted files
      */
-    public function clearDeletedFilesFromDatabase()
+    public function clearDeletedFilesFromDatabase($dryRun = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Scanning database for deleted files ...');
 
-        // get all file objects from db and check filesystem existance
-        $filter = new Tinebase_Model_Tree_FileObjectFilter();
+        // get all file objects (thus, no folders) from db and check filesystem existence
+        $filter = new Tinebase_Model_Tree_FileObjectFilter([
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
+        ]);
         $start = 0;
         $limit = 500;
-        $toDeleteIds = array();
+        $hashesToDelete = [];
+        $baseDir = Tinebase_Core::getConfig()->filesdir;
 
         do {
-            $pagination = new Tinebase_Model_Pagination(array(
+            $pagination = new Tinebase_Model_Pagination([
                 'start' => $start,
                 'limit' => $limit,
                 'sort' => 'id',
-            ));
+            ]);
 
-            /** @var Tinebase_Record_RecordSet $fileObjects */
-            $fileObjects = $this->_fileObjectBackend->search($filter, $pagination);
-            /** @var Tinebase_Model_Tree_FileObject $fileObject */
-            foreach ($fileObjects as $fileObject) {
-                if (($fileObject->type === Tinebase_Model_Tree_FileObject::TYPE_FILE || $fileObject->type === Tinebase_Model_Tree_FileObject::TYPE_PREVIEW)
-                        && $fileObject->hash && !file_exists($fileObject->getFilesystemPath())) {
-                    $toDeleteIds[] = $fileObject->getId();
+            $fileObjectIds = $this->_fileObjectBackend->search($filter, $pagination, true);
+            foreach ($this->_fileObjectBackend->getHashes($fileObjectIds) as $hash) {
+                if (!file_exists($baseDir . DIRECTORY_SEPARATOR . substr($hash, 0, 3) . DIRECTORY_SEPARATOR .
+                        substr($hash, 3))) {
+                    $hashesToDelete[] = $hash;
                 }
             }
 
             $start += $limit;
-        } while ($fileObjects->count() >= $limit);
+        } while (count($fileObjectIds) >= $limit);
 
-        if (count($toDeleteIds) === 0) {
+        if (($count = count($hashesToDelete)) === 0) {
             return 0;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            . ' deleting these hashes: ' . join(', ', $hashesToDelete));
+
+        if (true === $dryRun) {
+            return $count;
+        }
+
+        if (true === $this->_previewActive) {
+            Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
+        }
+
+        // first delete all old revisions
+        foreach ($this->_fileObjectBackend->getRevisionForHashes($hashesToDelete) as $fileObjectId => $revisions) {
+            $this->_fileObjectBackend->deleteRevisions($fileObjectId, $revisions);
+        }
+
+        // now find hashes that have not been deleted (because they are the current revision)
+        // then delete those file objects completely
+        $existingHashes = $this->_fileObjectBackend->checkRevisions($hashesToDelete);
+
+        if (count($existingHashes) === 0) {
+            return $count;
+        }
+
+        $fileObjectIds = array_keys($this->_fileObjectBackend->getRevisionForHashes($existingHashes));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            . ' deleting these file objects: ' . join(', ', $fileObjectIds));
 
         $nodeIdsToDelete = $this->_getTreeNodeBackend()->search(
             new Tinebase_Model_Tree_Node_Filter(array(array(
                 'field'     => 'object_id',
                 'operator'  => 'in',
-                'value'     => $toDeleteIds
+                'value'     => $fileObjectIds
             )), /* $_condition = */ '',
                 /* $_options */ array(
                     'ignoreAcl' => true,
@@ -2358,25 +2417,13 @@ class Tinebase_FileSystem implements
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
 
-        if (true === $this->_previewActive) {
-            $hashes = $this->_fileObjectBackend->getHashes($toDeleteIds);
-        } else {
-            $hashes = array();
-        }
-
         // hard delete is ok here
-        $this->_fileObjectBackend->delete($toDeleteIds);
+        $this->_fileObjectBackend->delete($fileObjectIds);
         if (true === $this->_indexingActive) {
-            Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($toDeleteIds);
+            Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
         }
 
-        if (true === $this->_previewActive && count($hashes) > 0) {
-            $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
-            $hashesToDelete = array_diff($hashes, $existingHashes);
-            Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
-        }
-
-        return $deleteCount;
+        return $count;
     }
 
     /**
@@ -2545,6 +2592,10 @@ class Tinebase_FileSystem implements
                 // if is toplevel path and action is add, allow manage_shared_folders right
                 // if it is toplevel path and action is get allow
                 // else just do normal ACL node check
+                if ($_path->isToplevelPath() && $_action !== 'get' && !$_topLevelAllowed) {
+                    $hasPermission = false;
+                    break;
+                }
                 if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
@@ -2644,20 +2695,16 @@ class Tinebase_FileSystem implements
      */
     public function hasGrant($_accountId, $_containerId, $_grant)
     {
-        // always refetch node to have current acl_node value
+        // always refetch node to have current acl_node & pin_protected_node value
         $node = $this->get($_containerId);
-        if (!isset($this->_secondFactorCache[$node->getId()]) &&
-            null !== $node->acl_node && !Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-            if ($node->getId() !== $node->acl_node) {
-                $acl_node = $this->get($node->acl_node);
-            } else {
-                $acl_node = $node;
-            }
-            if ($acl_node->pin_protected) {
-                return false;
-            }
+        if (!isset($this->_areaLockCache[$node->getId()])
+            && null !== $node->pin_protected_node
+            && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+            && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+        ) {
+            return false;
         }
-        $this->_secondFactorCache[$node->getId()] = true;
+        $this->_areaLockCache[$node->getId()] = true;
         /** @noinspection PhpUndefinedMethodInspection */
         $account = $_accountId instanceof Tinebase_Model_FullUser
             ? $_accountId

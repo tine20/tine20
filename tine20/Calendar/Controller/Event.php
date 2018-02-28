@@ -176,7 +176,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
+        if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || empty($_event->attendee)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Skipping free/busy check because event is transparent or has no attendee");
             return;
@@ -815,7 +815,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         }
 
                         if ($busyStart > ($constraintEnd - $durationSec)) {
-                            $lastBusyEnd = $busyEnd;
                             break;
                         }
 

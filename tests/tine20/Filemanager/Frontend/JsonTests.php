@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -118,7 +118,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         Tinebase_FileSystem::getInstance()->resetBackends();
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         
         $this->_personalContainer  = null;
         $this->_sharedContainer    = null;
@@ -488,11 +488,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $result = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
+        $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
     }
 
     /**
-     * create container in shared folder
+     * create node in shared folder
      *
      * @param string $_name
      * @return array created node
@@ -507,6 +507,54 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals($testPath, $createdNode['path']);
         
         return $createdNode;
+    }
+
+    /**
+     * @see 0013778: creator should have admin grant for new toplevel shared folder node
+     */
+    public function testSharedContainerAcl()
+    {
+        $createdNode = $this->testCreateContainerNodeInSharedFolder();
+        $userGrants = array_filter($createdNode['grants'], function($item) {
+            return $item['account_type'] === 'user' && $item['account_id'] === Tinebase_Core::getUser()->getId();
+        });
+        self::assertEquals(1, count($userGrants), 'user grant should be found: '
+            . print_r($createdNode['grants'], true));
+        $userGrant = array_pop($userGrants);
+        self::assertTrue(isset($userGrant[Tinebase_Model_Grants::GRANT_ADMIN]) && $userGrant[Tinebase_Model_Grants::GRANT_ADMIN],
+            'user should have admin: ' . print_r($userGrant, true));
+    }
+
+    public function testCreateFileNodeInShared()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in /shared/ folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/test.file',
+            Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFileNodeInOwnPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in own personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()
+                ->accountLoginName . '/test.file', Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFileNodeInForeignPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in a foreign personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/test.file',
+            Tinebase_Model_Tree_FileObject::TYPE_FILE);
+    }
+
+    public function testCreateFolderNodeInForeignPersonalFolder()
+    {
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
+            'it should not be possible to create a file in a foreign personal folder');
+        $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/testFolder',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
     }
 
     /**
@@ -1400,6 +1448,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testDeletedFileCleanupFromDatabase()
     {
+        // initial clean up
+        static::assertEquals(0, Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false),
+            'VFS is not clean, DB contains hashes that have been deleted in the FS');
+
         $fileNode = $this->testCreateFileNodeWithTempfile();
         
         // get "real" filesystem path + unlink
@@ -1407,18 +1459,19 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $fileObject = $fileObjectBackend->get($fileNode['object_id']);
         unlink($fileObject->getFilesystemPath());
         
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
-        $this->assertEquals(1, $result, 'should cleanup one file');
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false);
+        static::assertEquals(1, $result, 'should cleanup one file');
 
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
-        $this->assertEquals(0, $result, 'should cleanup no file');
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase(false);
+        static::assertEquals(0, $result, 'should cleanup no file');
         
         // node should no longer be found
         try {
             $this->_getUit()->getNode($fileNode['id']);
-            $this->fail('tree node still exists: ' . print_r($fileNode, true));
+            static::fail('tree node still exists: ' . print_r($fileNode, true));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!', $tenf->getMessage());
+            static::assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!',
+                $tenf->getMessage());
         }
     }
     
@@ -1634,7 +1687,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // why here?
         //$this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
         $this->tearDown();
         
@@ -1642,7 +1695,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
         $this->_fsController->resetBackends();
         $this->testDeleteFileNodes(true);
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(1, $result, 'should cleanup one file');
     }
     
@@ -1983,9 +2036,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _assertGrantsInNode($nodeArray)
     {
-        self::assertEquals(2, count($nodeArray['grants']));
+        self::assertGreaterThanOrEqual(2, count($nodeArray['grants']));
         self::assertTrue(is_array($nodeArray['grants'][0]['account_name']), 'account_name is not resolved');
-        self::assertEquals(true, count($nodeArray['account_grants']['adminGrant']));
+        self::assertEquals(true, $nodeArray['account_grants']['adminGrant']);
     }
 
     public function testSetNodeAcl()
@@ -2027,7 +2080,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $child['acl_node'] = '';
         $childWithoutPersonalGrants = $this->_getUit()->saveNode($child);
 
-        self::assertEquals(2, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
+        self::assertEquals(3, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
             . print_r($childWithoutPersonalGrants['grants'], true));
     }
 
@@ -2059,10 +2112,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         );
         $result = $this->_getUit()->saveNode($node);
         self::assertEquals(2, count($result['grants']));
-        self::assertEquals(1, count($result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+        self::assertEquals(true, $result['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]);
 
         $savedNode = $this->_getUit()->getNode($result['id']);
-        self::assertEquals(1, count($savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]));
+        self::assertEquals(true, $savedNode['grants'][0][Tinebase_Model_Grants::GRANT_DOWNLOAD]);
 
         // switch to sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
@@ -2078,6 +2131,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     public function testRecursiveFilter()
     {
+        Tinebase_Core::getConfig()->clearCache();
         // check for tika installation
         if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
             self::markTestSkipped('no tika.jar found');
@@ -2325,6 +2379,80 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+    }
 
+    /**
+     * testPinProtection with area lock
+     */
+    public function testPinProtection()
+    {
+        $this->_createAreaLockConfig([
+            'area' => Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
+        ]);
+        $folder = $this->testCreateContainerNodeInSharedFolder('protected');
+
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+        ), array(
+            'field'    => 'type',
+            'operator' => 'equals',
+            'value'    => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+        ));
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $nodes = array_filter($result['results'], function($item) {
+            return $item['name'] === 'protected';
+        });
+        self::assertEquals(1, count($nodes), 'unprotected node should be found: '
+            . print_r($result, true));
+
+        // add subfolders and files
+        $testPath = $folder['path'] . '/subdir';
+        $this->_getUit()->createNode($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $filepaths = array(
+            $folder['path'] . '/file1',
+            $folder['path'] . '/file2',
+        );
+        $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE);
+
+        // protect
+        $folder['pin_protected_node'] = $folder['id'];
+        $this->_getUit()->saveNode($folder);
+
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
+        });
+        self::assertEquals(0, count($protectedNodes), 'protected nodes should not be found: '
+            . print_r($protectedNodes, true));
+        self::assertEquals(1, $result['pinProtectedData']);
+
+        // unlock
+        $user = Tinebase_Core::getUser();
+        Tinebase_User::getInstance()->setPin($user, 1234);
+        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE, 1234);
+
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
+        });
+//        self::assertEquals(1, count($protectedNodes), 'protected node should be found '
+//            . print_r($result, true));
+        self::assertGreaterThanOrEqual(1, count($protectedNodes), 'protected node should be found '
+            . print_r($result, true));
+
+        // check if subfolders have pin_protected_node prop, too
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => $folder['path'],
+        ));
+        $result = $this->_getUit()->searchNodes($filter, array());
+        $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
+            return $item['pin_protected_node'] === $folder['id'];
+        });
+        self::assertEquals(3, count($protectedNodes), 'should find 3 protected nodes (2 files, 1 folder)'
+            . print_r($result, true));
     }
 }

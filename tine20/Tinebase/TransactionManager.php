@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  TransactionManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -41,6 +41,11 @@ class Tinebase_TransactionManager
      * @var array list of callbacks to call just before really committing
      */
     protected $_onCommitCallbacks = array();
+
+    /**
+     * @var array list of callbacks to call just after really committing
+     */
+    protected $_afterCommitCallbacks = array();
 
     /**
      * @var array list of callbacks to call just before rollback
@@ -128,8 +133,10 @@ class Tinebase_TransactionManager
 
              // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
              $callbacks = $this->_onCommitCallbacks;
+             $afterCallbacks = $this->_afterCommitCallbacks;
              $this->_onCommitCallbacks = array();
              $this->_onRollbackCallbacks = array();
+             $this->_afterCommitCallbacks = array();
 
              foreach($callbacks as $callable) {
                  call_user_func_array($callable[0], $callable[1]);
@@ -140,6 +147,11 @@ class Tinebase_TransactionManager
                      $transactionable->commit();
                  }
              }
+
+             foreach($afterCallbacks as $callable) {
+                 call_user_func_array($callable[0], $callable[1]);
+             }
+
              $this->_openTransactionables = array();
              $this->_openTransactions = array();
          } else {
@@ -159,6 +171,7 @@ class Tinebase_TransactionManager
         // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
         $callbacks = $this->_onRollbackCallbacks;
         $this->_onCommitCallbacks = array();
+        $this->_afterCommitCallbacks = array();
         $this->_onRollbackCallbacks = array();
         foreach ($callbacks as $callable) {
             call_user_func_array($callable[0], $callable[1]);
@@ -186,6 +199,17 @@ class Tinebase_TransactionManager
     }
 
     /**
+     * register a callable to call just after the real commit happens
+     *
+     * @param array $callable
+     * @param array $param
+     */
+    public function registerAfterCommitCallback(array $callable, array $param = array())
+    {
+        $this->_afterCommitCallbacks[] = array($callable, $param);
+    }
+
+    /**
      * register a callable to call just before the rollback happens
      *
      * @param array $callable
@@ -194,5 +218,15 @@ class Tinebase_TransactionManager
     public function registerOnRollbackCallback(array $callable, array $param = array())
     {
         $this->_onRollbackCallbacks[] = array($callable, $param);
+    }
+
+    /**
+     * returns true if there are transactions started
+     *
+     * @return bool
+     */
+    public function hasOpenTransactions()
+    {
+        return count($this->_openTransactions) > 0;
     }
 }

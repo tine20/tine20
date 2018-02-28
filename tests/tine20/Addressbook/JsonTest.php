@@ -1505,7 +1505,7 @@ class Addressbook_JsonTest extends TestCase
 
         $result = $this->_uit->searchContacts($filter, $paging);
 
-        $this->assertEquals(6, $result['totalcount']);
+        $this->assertGreaterThanOrEqual(6, $result['totalcount']);
     }
 
     /**
@@ -1658,7 +1658,9 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportDefinitionsInRegistry()
     {
-        $registryData = $this->_uit->getRegistryData();
+        $tfj = new Tinebase_Frontend_Json();
+        $allRegistryData = $tfj->getAllRegistryData();
+        $registryData = $allRegistryData['Addressbook'];
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results']));
@@ -1698,7 +1700,7 @@ class Addressbook_JsonTest extends TestCase
         ));
         $allContactsWithoutTheTag = $this->_uit->searchContacts($filter, array());
 
-        $this->assertTrue(count($allContactsWithoutTheTag['totalcount']) > 0);
+        $this->assertTrue($allContactsWithoutTheTag['totalcount'] > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
 
         $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
@@ -1760,7 +1762,7 @@ Fax: +49 (0)40 343244-222";
         $this->assertTrue(is_array($result['contact']));
         $this->assertTrue((isset($result['unrecognizedTokens']) || array_key_exists('unrecognizedTokens', $result)));
         $this->assertTrue(count($result['unrecognizedTokens']) > 10 && count($result['unrecognizedTokens']) < 13,
-            'unrecognizedTokens number mismatch: ' . count('unrecognizedTokens'));
+            'unrecognizedTokens number mismatch: ' . count($result['unrecognizedTokens']));
         $this->assertEquals('p.schuele@metaways.de', $result['contact']['email']);
         $this->assertEquals('Pickhuben 2', $result['contact']['adr_one_street']);
         $this->assertEquals('Hamburg', $result['contact']['adr_one_locality']);
@@ -2139,6 +2141,9 @@ Steuernummer 33/111/32212";
             $this->markTestSkipped('Path feature not actiavted');
         }
 
+        Tinebase_Core::getCache()->clean();
+        Tinebase_Group::getInstance()->resetClassCache();
+        
         $filter = array(
             array(
                 'field'    => 'query',

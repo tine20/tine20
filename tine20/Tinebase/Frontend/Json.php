@@ -205,28 +205,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * validate second factor
-     *
-     * @param $password
-     * @return array
-     * @throws Tinebase_Exception_Backend
-     */
-    public function validateSecondFactor($password)
-    {
-        $user = Tinebase_Core::getUser();
-        $result = Tinebase_Auth::validateSecondFactor($user->accountLoginName, $password);
-        $success = Tinebase_Auth::SUCCESS === $result;
-
-        if ($success) {
-            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
-        }
-
-        return array(
-            'success' => $success
-        );
-    }
-
-    /**
      * change pin of user
      *
      * @param  string $oldPassword the old password
@@ -242,11 +220,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * clears state
      *
      * @param  string $name
-     * @return void
+     * @return array
      */
     public function clearState($name)
     {
         Tinebase_State::getInstance()->clearState($name);
+        
+        return ['success' => true];
     }
     
     /**
@@ -264,12 +244,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  string $name
      * @param  string $value
-     * @return void
+     * @return array
      */
     public function setState($name, $value)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
+        
+        return ['success' => true];
     }
     
     /**
@@ -802,7 +784,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-        $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
         try {
             $filesHash = Tinebase_Frontend_Http::getAssetHash();
         } catch (Exception $e) {
@@ -813,14 +794,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
             // secondfactor config
-            // TODO pass sf config as array (but don't send everything to client)
-            'secondFactor' => $secondFactorConfig && $secondFactorConfig->active,
-            'secondFactorLogin' => $secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login,
-            'secondFactorSessionLifetime' => $secondFactorConfig && $secondFactorConfig->sessionLifetime
-                ? $secondFactorConfig->sessionLifetime
-                : 15,
-            'secondFactorPinChangeAllowed' => $secondFactorConfig
-                && $secondFactorConfig->active && $secondFactorConfig->provider && $secondFactorConfig->provider === 'Tine20',
+            'secondFactor' => $this->_getSecondFactorConfig(),
 
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
@@ -859,6 +833,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $registryData;
     }
+
+    /**
+     * @return array|null
+     */
+    protected function _getSecondFactorConfig()
+    {
+        $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        return $config ? $config->toArray() : null;
+    }
     
     /**
      * get user registry
@@ -892,12 +875,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
-
+        
         $userRegistryData = array(
+            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
+            'areaLocks'          => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
             'timeZone'           => Tinebase_Core::getUserTimezone(),
             'currentAccount'     => $user->toArray(),
             'userContact'        => $userContactArray,
-            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
             'jsonKey'            => Tinebase_Core::get('jsonKey'),
             'userApplications'   => $user->getApplications()->toArray(),
             'NoteTypes'          => $this->getNoteTypes(),
@@ -923,6 +907,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      *
      * @return mixed array 'variable name' => 'data'
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function getAllRegistryData()
     {
@@ -943,56 +928,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $this->logout();
                 throw new Tinebase_Exception_AccessDenied('User has no permissions to run Tinebase');
             }
+
+            $allImportDefinitions = $this->_getImportDefinitions();
             
             foreach ($userApplications as $application) {
-                $appRegistry = array();
-                try {
-                    $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
-                } catch (Tinebase_Exception $te) {
-                    // no rights -> continue + skip app
-                    Tinebase_Exception::log($te);
-                    continue;
-                }
-                $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
-                $appRegistry['config'] = isset($clientConfig[$application->name])
-                    ? $clientConfig[$application->name]->toArray()
-                    : array();
-
-                // @todo do we need this for all apps?
-                $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
-                $appRegistry['exportDefinitions'] = array(
-                    'results'               => $exportDefinitions->toArray(),
-                    'totalcount'            => count($exportDefinitions),
-                );
-
-                $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
-                Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
-                $appRegistry['customfields'] = $customfields->toArray();
-
-                // add preferences for app
-                try {
-                    $prefRegistry = $this->_getAppPreferencesForRegistry($application);
-                    $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    // do not add prefs if user has no run right
-                }
-
-                $customAppRegistry = $this->_getCustomAppRegistry($application);
-                if (empty($customAppRegistry)) {
-                    // TODO always get this from app controller (and remove from _getCustomAppRegistry)
-                    try {
-                        $appController = Tinebase_Core::getApplicationInstance($application->name);
-                        $models = $appController->getModels();
-                        $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                        $appRegistry['defaultModel'] = $appController->getDefaultModel();
-                    } catch (Tinebase_Exception_AccessDenied $tead) {
-                        // do not add prefs if user has no run right
-                    }
-
-                } else {
-                    $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
-                }
-
+                $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
                 $registryData[$application->name] = $appRegistry;
             }
         } else {
@@ -1000,6 +940,69 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $registryData;
+    }
+
+    /**
+     * @param Tinebase_Model_Application $application
+     * @param Tinebase_Config_Struct $clientConfig
+     * @param Tinebase_Record_RecordSet $allImportDefinitions
+     * @return array
+     */
+    protected function _getAppRegistry($application, $clientConfig, $allImportDefinitions)
+    {
+        $appRegistry = array();
+        try {
+            $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+        } catch (Tinebase_Exception $te) {
+            // no rights -> continue + skip app
+            Tinebase_Exception::log($te);
+            return [];
+        }
+        $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
+        $appRegistry['config'] = isset($clientConfig[$application->name])
+            ? $clientConfig[$application->name]->toArray()
+            : array();
+
+        // @todo do this for all apps at once (see import definitions)
+        $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+        $appRegistry['exportDefinitions'] = array(
+            'results'               => $exportDefinitions->toArray(),
+            'totalcount'            => count($exportDefinitions),
+        );
+
+        $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+        Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
+        $appRegistry['customfields'] = $customfields->toArray();
+
+        // add preferences for app
+        try {
+            $prefRegistry = $this->_getAppPreferencesForRegistry($application);
+            $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            // do not add prefs if user has no run right
+        }
+
+        $customAppRegistry = $this->_getCustomAppRegistry($application);
+        if (empty($customAppRegistry)) {
+            // TODO always get this from app controller (and remove from _getCustomAppRegistry)
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($application->name);
+                $models = $appController->getModels();
+                $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
+                $appRegistry['defaultModel'] = $appController->getDefaultModel();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // do not add prefs if user has no run right
+            }
+
+        } else {
+            $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
+        }
+
+        if (! isset($appRegistry['importDefinitions'])) {
+            $appRegistry = array_merge($appRegistry, $this->_getImportDefinitionRegistryData($allImportDefinitions, $application));
+        }
+
+        return $appRegistry;
     }
 
     /**
@@ -1443,8 +1446,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $modelName
      * @param string $property
      * @param string $startswith
-     * 
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function autoComplete($appName, $modelName, $property, $startswith)
     {
@@ -1523,6 +1526,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $hash
      * @return array
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
      */
     public function getBlob($hash)
     {
@@ -1548,22 +1553,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param string $lastPresence
      * @return array
-     * @throws Exception
-     * @throws Zend_Session_Exception
      */
-    public function reportPresence($lastPresence)
+    public function reportPresence()
     {
-        if (Tinebase_Auth_SecondFactor_Abstract::hasValidSecondFactor()) {
-            Tinebase_Auth_SecondFactor_Abstract::saveValidSecondFactor();
-            $result = true;
-        } else {
-            $result = false;
-        }
+        Tinebase_Presence::getInstance()->reportPresence();
 
         return array(
-            'success' => $result
+            'success' => true
         );
     }
 

@@ -4,7 +4,7 @@
  *
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -524,11 +524,19 @@ EOT;
 
     public function testPublicApiAddAttenderNotification()
     {
+        // if mailing is not installed, as with pgsql
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
+        if (empty($smtpConfig->primarydomain)) {
+            $smtpConfig->primarydomain = 'unittest.test';
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+        }
+
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
 
         try {
+            Tinebase_Notification::destroyInstance();
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
             static::flushMailer();
@@ -555,11 +563,19 @@ EOT;
 
     public function testDefiniteEventNotification()
     {
+        // if mailing is not installed, as with pgsql
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
+        if (empty($smtpConfig->primarydomain)) {
+            $smtpConfig->primarydomain = 'unittest.test';
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+        }
+
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
 
         try {
+            Tinebase_Notification::destroyInstance();
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
             static::flushMailer();
@@ -576,6 +592,7 @@ EOT;
 //                echo "\n -- \n\n";
 //            }
 
+            static::assertTrue(isset($messages[1]), 'excepted message is not available');
             $message = $messages[1];
             $text = $message->getBodyText()->getContent();
 //            $html = $message->getBodyHtml()->getContent();

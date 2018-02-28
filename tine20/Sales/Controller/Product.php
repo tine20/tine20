@@ -71,14 +71,16 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
         
         return self::$_instance;
     }
-    
+
     /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
-     * @return  Sales_Model_Contract
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         if (Sales_Config::getInstance()->get(Sales_Config::PRODUCT_NUMBER_GENERATION) == 'auto') {
             // add number if configured auto
@@ -90,7 +92,7 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
         // check type
         $this->_checkNumberType($_record);
         
-        return parent::create($_record);
+        return parent::create($_record, $_duplicateCheck);
     }
     
     /**

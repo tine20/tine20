@@ -147,7 +147,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             handler: this.onDownload,
             iconCls: 'action_download',
             scope: this,
-            disabled:true,
+            disabled: true,
             hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
         });
 
@@ -191,7 +191,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed && rowRecord.data.type == 'file' && !this.readOnly) {
+        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed && !this.readOnly) {
             this.onDownload();
         } else if (Tine.Tinebase.configManager.get('filesystem').createPreviews && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
             this.action_preview.execute();
@@ -276,36 +276,5 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }, this);
 
         return attachments;
-    },
-    
-    /**
-     * download file
-     * 
-     * @param {} button
-     * @param {} event
-     */
-    onDownload: function(button, event) {
-        var selectedRows = this.getSelectionModel().getSelections(),
-            fileRow = selectedRows[0],
-            recordId = this.record.id;
-        
-        // TODO should be done by action updater
-        if (! recordId || Ext.isObject(fileRow.get('tempFile'))) {
-            Tine.log.debug('Tine.widgets.dialog.AttachmentsGridPanel::onDownload - file not yet available for download');
-            return;
-        }
-        
-        Tine.log.debug('Tine.widgets.dialog.AttachmentsGridPanel::onDownload - selected file:');
-        Tine.log.debug(fileRow);
-        
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Tinebase.downloadRecordAttachment',
-                requestType: 'HTTP',
-                nodeId: fileRow.id,
-                recordId: recordId,
-                modelName: this.app.name + '_Model_' + this.editDialog.modelName
-            }
-        }).start();
     }
 });

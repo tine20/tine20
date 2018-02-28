@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,20 +25,6 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
     protected $_userRecords = NULL;
     
     /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_options
-     * @return Calendar_Import_Ical
-     * 
-     * @todo move this to abstract when we no longer need to be php 5.2 compatible
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
-    {
-        return new static(self::getOptionsArrayFromDefinition($_definition, $_options));
-    }
-    
-    /**
      * import single record (create password if in data)
      *
      * @param Tinebase_Record_Abstract $_record
@@ -46,6 +32,7 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
      * @param array $_recordData
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_Record_Validation
+     * @deprecated this needs rework, it better should not be used
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
@@ -71,8 +58,7 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
             $this->_handleGroupMemberShip($group, $members);
         } else {
             $group = Admin_Controller_Group::getInstance()->get($_record->getId());
-            $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
-            $group->list_id = $list->getId();
+            /*$list = */Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
             $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
             
             $be->updateGroupInSqlBackend($group);

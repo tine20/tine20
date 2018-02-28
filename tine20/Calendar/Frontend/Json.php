@@ -38,6 +38,14 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_relatableModels = array(
         'Calendar_Model_Resource'
     );
+
+    /**
+     * default import name
+     *
+     * @var string
+     */
+    protected $_defaultImportDefinitionName = 'cal_import_ical';
+
     /**
      * creates an exception instance of a recurring event
      *
@@ -135,15 +143,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultCalendarArray = array();
         }
         
-        $importDefinitions = $this->_getImportDefinitions();
         $allCalendarResources = Calendar_Controller_Resource::getInstance()->getAll()->toArray();
         
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
-            'defaultImportDefinition'   => $importDefinitions['default'],
-            'importDefinitions'         => $importDefinitions,
             'calendarResources'         => $allCalendarResources
         );
+        $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
         
         return $registryData;
     }
@@ -211,69 +217,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return $result;
     }
-    
-    /**
-     * get addressbook import definitions
-     * 
-     * @return array
-     * 
-     * @todo generalize this
-     */
-    protected function _getImportDefinitions()
-    {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
-            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
-        ));
-        
-        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
-        
-        try {
-            $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
-            $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
-            $result = array(
-                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
-                'totalcount'            => count($importDefinitions),
-                'default'               => ($defaultDefinition) ? $definitionConverter->fromTine20Model($defaultDefinition) : array(),
-            );
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            $result = array(
-                array(
-                    'results'               => array(),
-                    'totalcount'            => 0,
-                    'default'               => array(),
-                )
-            );
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * get default definition
-     * 
-     * @param Tinebase_Record_RecordSet $_importDefinitions
-     * @return Tinebase_Model_ImportExportDefinition
-     * 
-     * @todo generalize this
-     */
-    protected function _getDefaultImportDefinition($_importDefinitions)
-    {
-        try {
-            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('cal_import_ical');
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (count($_importDefinitions) > 0) {
-                $defaultDefinition = $_importDefinitions->getFirstRecord();
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Calendar');
-                $defaultDefinition = NULL;
-            }
-        }
-        
-        return $defaultDefinition;
-    }
-    
+
     /**
      * Return a single resouece
      *
@@ -621,10 +565,14 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $allFb->sort(function (Calendar_Model_FreeBusy $a, Calendar_Model_FreeBusy $b) {
             return $a->dtstart->compare($b->dtstart);
         });
+        $userTimeZone = Tinebase_Core::getUserTimezone();
+        $allFb->setTimezone($userTimeZone);
 
         foreach ($periods as $eventId => $eventPeriods) {
             $seekTo = 0;
             foreach ($eventPeriods as $period) {
+                $period['from']->setTimezone($userTimeZone);
+                $period['until']->setTimezone($userTimeZone);
                 if ($period['from']->compare($allFb->getLastRecord()->dtend) !== -1) {
                     break;
                 }

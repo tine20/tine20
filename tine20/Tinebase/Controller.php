@@ -416,8 +416,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param string $_oldPassword
      * @param string $_newPassword
-     * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_InvalidArgument
+     * @param string $_pwType
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function changePassword($_oldPassword, $_newPassword, $_pwType = 'password')
     {
@@ -436,17 +438,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
             Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
         } else {
-            $validateOldPin = Tinebase_Auth::validateSecondFactor(
-                $loginName,
-                $_oldPassword,
-                array(
-                    'active' => true,
-                    'provider' => 'Tine20',
-                ),
-                /* $allowEmpty */ true
-            );
-            if ($validateOldPin !== Tinebase_Auth::SUCCESS) {
-                throw new Tinebase_Exception_InvalidArgument('Old pin is wrong.');
+            $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
+            $pinAuth->setIdentity($loginName)->setCredential($_oldPassword);
+            $authResult = $pinAuth->authenticate();
+            if (! $authResult->isValid()) {
+                throw new Tinebase_Exception_SystemGeneric('Old pin is wrong.'); // _('Old pin is wrong.')
             }
             Tinebase_User::getInstance()->setPin($user, $_newPassword);
         }
@@ -739,32 +735,51 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
-            
             return false;
         }
 
-        // 2nd factor
-        $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
-
-        if ($secondFactorConfig && $secondFactorConfig->active && $secondFactorConfig->login && $accessLog->clienttype === 'JSON-RPC') {
-            $context = $this->getRequestContext();
-            if (Tinebase_Auth::validateSecondFactor($user->accountLoginName,
-                $context['otp'],
-                $secondFactorConfig->toArray()
-            ) !== Tinebase_Auth::SUCCESS) {
-                $authResult = new Zend_Auth_Result(
-                    Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                    $user->accountLoginName,
-                    array('Second factor authentication failed.')
-                );
-                $accessLog->result = Tinebase_Auth::FAILURE;
-                $this->_loginFailed($authResult, $accessLog);
-
-                return false;
-            }
+        if (! $this->_validateSecondFactor($accessLog, $user)) {
+            $authResult = new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                $user->accountLoginName,
+                array('Second factor authentication failed.')
+            );
+            $accessLog->result = Tinebase_Auth::FAILURE;
+            $this->_loginFailed($authResult, $accessLog);
+            return false;
         }
-        
+
         return $user;
+    }
+
+    /**
+     * @param Tinebase_Model_AccessLog $accessLog
+     * @param Tinebase_Model_FullUser $user
+     * @return bool
+     */
+    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user)
+    {
+        if (! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
+            || $accessLog->clienttype !== 'JSON-RPC'
+        ) {
+            // no login lock or non json access
+            return true;
+        }
+
+        $context = $this->getRequestContext();
+        $password = $context['otp'];
+        try {
+            Tinebase_AreaLock::getInstance()->unlock(
+                Tinebase_Model_AreaLockConfig::AREA_LOGIN,
+                $password,
+                $user->accountLoginName
+            );
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            return false;
+        }
+
+        return true;
     }
 
     /**

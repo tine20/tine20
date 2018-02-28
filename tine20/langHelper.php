@@ -6,7 +6,7 @@
  * @package     HelperScripts
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add filter for applications
  */
@@ -261,12 +261,45 @@ function generatePOTFiles($_verbose)
             echo "Creating $appName template \n";
         }
         $appPath = "$translationPath/../";
+        $tempExportExtractDir = $appPath . 'tempExportExtract';
         
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
-        
-        `cd "$appPath" 
-        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -or -iname "*.twig" | grep -v node_modules | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
-        
+
+        chdir($appPath);
+        if (file_exists($appPath . 'Export/templates')) {
+            if (!file_exists($tempExportExtractDir)) {
+                mkdir($tempExportExtractDir);
+                extractTemplates($appPath . 'Export/templates', $tempExportExtractDir . '/');
+            }
+        }
+
+        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -or -iname "*.twig" | grep -v node_modules | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+
+        if (file_exists($tempExportExtractDir)) {
+            `rm -rf "$tempExportExtractDir"`;
+        }
+    }
+}
+
+function extractTemplates($path, $target)
+{
+    /** @var DirectoryIterator $di */
+    foreach (new DirectoryIterator($path) as $di) {
+        if ($di->isDot()) {
+            continue;
+        }
+        if ($di->isDir()) {
+            extractTemplates($di->getRealPath() . DIRECTORY_SEPARATOR . $di->getFilename(), $target);
+        } else {
+            if (in_array($di->getFileInfo()->getExtension(), ['docx', 'xlsx', 'doc', 'xls'])) {
+                $file = $di->getRealPath();
+                $trgt = $target . hash_file('md5', $file);
+                if (!file_exists($trgt)) {
+                    mkdir($trgt);
+                }
+                `unzip -o "$file" -d "$trgt"`;
+            }
+        }
     }
 }
 

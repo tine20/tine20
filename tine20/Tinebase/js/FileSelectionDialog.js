@@ -12,19 +12,12 @@ Ext.ns('Tine.Tinebase');
  *
  * @namespace   Tine.Tinebase
  * @class       Tine.Tinebase.FileSelectionDialog
- * @extends     Ext.Panel
+ * @extends     Tine.Tinebase.dialog.Dialog
  * @constructor
  * @param       {Object} config The configuration options.
  */
-Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
+Tine.Tinebase.FileSelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     layout: 'fit',
-    border: false,
-    frame: false,
-
-    /**
-     * ok button action held here
-     */
-    okAction: null,
 
     /**
      * Dialog window
@@ -69,15 +62,6 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
             items: []
         };
 
-        var me = this;
-        this.okAction = new Ext.Action({
-            disabled: true,
-            text: 'Ok',
-            iconCls: 'action_saveAndClose',
-            minWidth: 70,
-            handler: this.onOk.createDelegate(me),
-            scope: this
-        });
 
         this.fbar = [
             '->',
@@ -108,6 +92,15 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
         });
     },
 
+    getEventData: function () {
+        return this.nodes;
+    },
+    
+    afterRender: function () {
+        Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.afterRender.call(this);
+        this.buttonApply.setDisabled(true);
+    },
+
     initFileupload: function () {
         this.fileSelectionArea = new Tine.widgets.form.FileSelectionArea({
             text: i18n._('Select or drop file to upload'),
@@ -130,15 +123,7 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
         this.handler(selector, e);
         this.window.close();
     },
-
-    /**
-     * button handler
-     */
-    onOk: function () {
-        this.fireEvent('selected', this.nodes);
-        this.handler(this.nodes);
-        this.window.close();
-    },
+    
 
     /**
      * Create a new filepicker and register listener
@@ -164,39 +149,45 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Ext.Panel, {
      */
     onNodesSelected: function (nodes) {
         this.nodes = nodes;
-        this.okAction.setDisabled(false);
+        this.buttonApply.setDisabled(false);
     },
 
     /**
      * If an invalid node was selected
      */
     onInvalidNodesSelected: function () {
-        this.okAction.setDisabled(true);
+        this.buttonApply.setDisabled(true);
     },
 
+    onButtonApply: function() {
+        this.handler(this.nodes);
+        Tine.Tinebase.FileSelectionDialog.superclass.onButtonApply.apply(this, arguments);
+    },
+    
     /**
      * Creates a new pop up dialog/window (acc. configuration)
      *
      * @returns {null}
      */
-    openWindow: function () {
+    openWindow: function (config) {
         if (this.window) {
             return this.window;
         }
 
-        this.window = Tine.WindowFactory.getWindow({
-            title: this.title,
+        config = config || {};
+
+        this.window = Tine.WindowFactory.getWindow(Ext.apply({
+            title: this.windowTitle,
             closeAction: 'close',
             modal: true,
             width: 550,
             height: 500,
-            layout: 'fit',
             plain: true,
-
+            layout: 'fit',
             items: [
                 this
             ]
-        });
+        }, config));
 
         return this.window;
     }

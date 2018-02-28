@@ -122,7 +122,7 @@ class Tinebase_Smtp
     /**
      * returns default transport
      * 
-     * @return Zend_Mail_Transport_Abstract
+     * @return null|Zend_Mail_Transport_Abstract
      */
     public static function getDefaultTransport()
     {
@@ -140,8 +140,11 @@ class Tinebase_Smtp
     {
         $transport = $_transport instanceof Zend_Mail_Transport_Abstract ? $_transport : self::getDefaultTransport();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Send Message using SMTP transport: ' . get_class($_transport));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $transport) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Send Message using SMTP transport: '
+                . get_class($transport));
+        }
         
         if (! $_mail->getMessageId()) {
             $_mail->setMessageId();

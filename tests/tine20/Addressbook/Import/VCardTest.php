@@ -146,14 +146,14 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * import helper for HerrFalkMünchen.vcf
+     * import helper for HerrFalkMuenchen.vcf
      * 
      * @param Tinebase_Model_ImportExportDefinition $definition
      */
     protected function _importFalk(Tinebase_Model_ImportExportDefinition $definition)
     {
         // file is iso-8859-1 encoded
-        $this->_filename = dirname(__FILE__) . '/files/HerrFalkMünchen.vcf';
+        $this->_filename = __DIR__ . '/files/HerrFalkMuenchen.vcf';
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
         
         $result = $this->_instance->importFile($this->_filename);

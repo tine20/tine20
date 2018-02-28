@@ -26,6 +26,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Addressbook';
 
+    /**
+     * @var string
+     */
     protected $_defaultImportDefinitionName = 'adb_tine_import_csv';
 
     /**
@@ -325,21 +328,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
     }
-    
-    /**
-     * import contacts
-     * 
-     * @param string $tempFileId to import
-     * @param string $definitionId
-     * @param array $importOptions
-     * @param array $clientRecordData
-     * @return array
-     */
-    public function importContacts($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
-    {
-        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
-    }
-    
+
     /**
     * get contact information from string by parsing it using predefined rules
     *

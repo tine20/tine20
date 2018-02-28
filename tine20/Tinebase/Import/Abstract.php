@@ -83,7 +83,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Creating importer with following config: ' . print_r($this->_options, TRUE));
     }
-    
+
+    /**
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param array $_config
+     * @return Tinebase_Import_Abstract|static
+     */
+    public static function createFromDefinition(
+        Tinebase_Model_ImportExportDefinition $_definition,
+        array $_config = []
+    ) {
+        // Static not self!
+        return new static(static::getOptionsArrayFromDefinition($_definition, $_config));
+    }
+
     /**
      * import given filename
      * 
@@ -292,7 +305,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $result = array();
         
-        foreach ($_clientRecordData as $data) {
+        foreach ((array) $_clientRecordData as $data) {
             if (isset($data['index'])) {
                 $result[$data['index']] = $data;
             }
@@ -1087,7 +1100,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Record to import: ' . print_r($record->toArray(), TRUE));
                 
-                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
+                if ($record->getId() !== null && $this->_controller->has([$record->getId()])) {
+                    $record->seq = $this->_controller->get($record->getId())->seq + 1;
+                    $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
+                    $this->_importResult['updatecount']++;
+                } else {
+                    $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);   
+                }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 

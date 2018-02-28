@@ -45,11 +45,11 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             disabled: true,
-            hidden: ! Tine.Tinebase.registry.get('secondFactor'),
-            boxLabel: this.app.i18n._('Data safe: needs PIN to unlock')
+            hidden: ! Tine.Tinebase.areaLocks.hasLock('Tinebase.datasafe'),
+            boxLabel: this.app.i18n._('This folder is part of the data safe')
         });
         this.pinProtectionDescription = new Ext.form.Label({
-            text: this.app.i18n._("If PIN protection is enabled, users have to authenticate with their PIN before they can access the folder contents.")
+            text: this.app.i18n._("If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             downloadGrantTitle: 'Download', // i18n._('Download')
@@ -103,7 +103,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
-        this.pinProtectionCheckbox.setValue(record.get('pin_protected'));
+        this.pinProtectionCheckbox.setValue(record.get('pin_protected_node'));
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
@@ -121,13 +121,13 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
     onRecordUpdate: function(editDialog, record) {
         var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : '',
             grants = [],
-            pin_protected = this.pinProtectionCheckbox.getValue() ? true : false;
+            pin_protected_node = this.pinProtectionCheckbox.getValue() ? true : false;
 
         this.grantsGrid.getStore().each(function(r) {grants.push(r.data)});
 
         record.set('acl_node', acl_node);
         record.set('grants', '');
         record.set('grants', grants);
-        record.set('pin_protected', pin_protected);
+        record.set('pin_protected_node', pin_protected_node);
     }
 });

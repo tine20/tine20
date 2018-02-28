@@ -20,18 +20,6 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
     protected $_calDAVClient = null;
 
     /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_options
-     * @return Calendar_Import_CalDAV
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
-    {
-        return new Calendar_Import_CalDAV(self::getOptionsArrayFromDefinition($_definition, $_options));
-    }
-
-    /**
      * Splits Uri into protocol + host, path
      *
      * @param $uri

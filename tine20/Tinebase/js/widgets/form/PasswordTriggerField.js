@@ -16,25 +16,57 @@ Ext.ns('Tine.Tinebase.widgets.form');
  * @class       Tine.Tinebase.widgets.form.PasswordTriggerField
  * @extends     Ext.form.TriggerField
  */
-Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TriggerField, {
+Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTriggerField, {
+    /**
+     * @cfg {Boolean} locked: true,
+     */
+    locked: true,
+    /**
+     * @cfg {Boolean} locked: true,
+     */
+    clipboard: true,
+
     itemCls: 'tw-passwordTriggerField',
     enableKeyEvents: true,
 
-    defaultAutoCreate: {tag: "input", type: "password", size: "16", autocomplete: "off"},
+    initComponent: function() {
+        // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
+        this.defaultAutoCreate = {tag: "input", type: "password", size: "16", autocomplete: "off"};
+
+        this.defaultAutoCreate.type = this.locked ? 'password' : 'text';
+        Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initComponent.apply(this, arguments);
+    },
 
     initTrigger: function () {
         Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initTrigger.apply(this, arguments);
-        this.trigger.addClass('locked');
+        this.triggers[0].set({'ext:qtip': i18n._('Cleartext/Hidden')});
+        this.triggers[1].set({'ext:qtip': i18n._('Copy to Clipboard')});
+        if (this.locked) {
+            this.triggers[0].addClass('locked');
+        }
+        if (! this.clipboard) {
+            this.triggers[1].hide();
+        }
     },
 
-    onTriggerClick: function () {
+    onTrigger1Click: function () {
         if (this.el.dom.type === 'text') {
             this.el.dom.type = 'password';
-            this.trigger.addClass('locked');
+            this.triggers[0].addClass('locked');
         } else {
             this.el.dom.type = 'text';
-            this.trigger.removeClass('locked');
+            this.triggers[0].removeClass('locked');
         }
+    },
+
+    onTrigger2Click: function () {
+        // NOTE: password fields can not be copied
+        var type = this.el.dom.type;
+        this.el.dom.type = 'text';
+        this.el.dom.select();
+        document.execCommand("copy");
+        this.el.dom.type = type;
+        this.selectText(String(this.getValue()).length);
     }
 });
 

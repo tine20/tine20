@@ -259,13 +259,12 @@ Tine.Filemanager.nodeActions.Move = {
             records = this.initialConfig.selections;
 
         var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-            title: app.i18n._('Move Items'),
+            windowTitle: app.i18n._('Move Items'),
             singleSelect: true,
             constraint: 'folder'
         });
 
-        filePickerDialog.on('selected', function(nodes) {
-            var node = nodes[0];
+        filePickerDialog.on('apply', function(node) {
             Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
         });
 
@@ -349,11 +348,13 @@ Tine.Filemanager.nodeActions.Publish = {
         }
 
         var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-            allowEmptyPassword: true
+            allowEmptyPassword: true,
+            locked: false,
+            questionText: i18n._('Public download links can be password protected. If left blank anyone who knows the link can download the selected files.')
         });
         passwordDialog.openWindow();
 
-        passwordDialog.on('passwordEntered', function (password) {
+        passwordDialog.on('apply', function (password) {
             var date = new Date();
             date.setDate(date.getDate() + 30);
 

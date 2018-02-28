@@ -50,7 +50,7 @@ Tine.Tinebase.widgets.dialog.SecondFactorDialog = Ext.extend(Tine.Tinebase.widge
                         if (! Tine.Tinebase.widgets.dialog.SecondFactorDialog.presenceObserver) {
                             var secondFactorLifetime = Tine.Tinebase.registry.get('secondFactorSessionLifetime') || 15;
                             Tine.Tinebase.widgets.dialog.SecondFactorDialog.presenceObserver = new Tine.Tinebase.PresenceObserver({
-                                maxAbsenseTime: secondFactorLifetime / 3, // ping server each secondFactorLifetime / 3 minutes
+                                maxAbsenceTime: secondFactorLifetime / 3, // ping server each secondFactorLifetime / 3 minutes
                                 absenceCallback: function (lastPresence, po) {
                                     window.postal.publish({
                                         channel: "messagebus",

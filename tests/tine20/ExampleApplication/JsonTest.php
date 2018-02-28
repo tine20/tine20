@@ -5,7 +5,7 @@
  * @package     ExampleApplication
  * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -50,7 +50,34 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 
         parent::tearDown();
     }
-    
+
+    /**
+     * @see 0013754: get numbearable config from container xprops
+     */
+    public function testNumberableConfigByContainer()
+    {
+        $container = $this->_getTestContainer('ExampleApplication', 'ExampleApplication_Model_ExampleRecord');
+        // add xprops to container
+        $container->xprops()[Tinebase_Numberable::CONFIG_XPROPS] = [
+            Tinebase_Numberable::STEPSIZE => 10,
+            // TODO create this automatically?
+            Tinebase_Numberable::BUCKETKEY => 'ExampleApplication_Model_ExampleRecord#number_int#' . $container->getId(),
+            Tinebase_Numberable::START => 100,
+        ];
+        $updatedContainer = Tinebase_Container::getInstance()->update($container);
+        self::assertTrue(isset($updatedContainer->xprops()[Tinebase_Numberable::CONFIG_XPROPS]), 'xprops not set'
+            . print_r($updatedContainer->xprops(), true));
+        $exampleRecord = $this->_getExampleRecord();
+        $exampleRecord->container_id = $container->getId();
+        $savedExampleRecord = $this->_json->saveExampleRecord($exampleRecord->toArray());
+        self::assertGreaterThanOrEqual(100, $savedExampleRecord['number_int'], 'number_int should be greater than 100'
+            . print_r($savedExampleRecord, true));
+
+        // create another record to test STEPSIZE inc
+        $savedExampleRecord2 = $this->_json->saveExampleRecord($exampleRecord->toArray());
+        self::assertEquals($savedExampleRecord['number_int'] + 10, $savedExampleRecord2['number_int']);
+    }
+
     /**
      * tests if model gets created properly
      */
@@ -192,5 +219,27 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 
         $record = $this->_json->getExampleRecord($exampleRecord['id']);
         self::assertEquals($exampleRecord['customfields']['YomiName'], $record['customfields']['YomiName']);
+    }
+
+    /**
+     * testNumberableQuerySearch
+     */
+    public function testNumberableQuerySearch()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsl doesnt support query filter on integer numberables');
+        }
+        $exRecord = $this->testCreateExampleRecord();
+        $filter = [[
+            'field' => 'query',
+            'operator' => 'contains',
+            'value' => $exRecord['number_str']
+        ]];
+        $result = $this->_json->searchExampleRecords($filter, []);
+        self::assertGreaterThanOrEqual(1, $result['totalcount']);
+
+        $filter[0]['value'] = $exRecord['number_int'];
+        $result = $this->_json->searchExampleRecords($filter, []);
+        self::assertGreaterThanOrEqual(1, $result['totalcount']);
     }
 }

@@ -144,7 +144,9 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         );
         
         if (sha1($data['data']) != $data['sha1']) {
-            throw new RuntimeException('sha1 checksum mismatch');
+            $e = new RuntimeException('sha1 checksum mismatch');
+            Tinebase_Exception::log($e, null, $data);
+            throw $e;
         }
         
         if ($data['retry'] >= $this->_options['maxRetry']) {

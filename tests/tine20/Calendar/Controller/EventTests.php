@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -21,7 +21,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     protected $_controller;
 
     protected $_oldFileSystemConfig = null;
-    
+
     /**
      * (non-PHPdoc)
      * @see Calendar_TestCase::setUp()
@@ -441,6 +441,71 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
         ));
+
+        $tmp = clone $event;
+        $this->_controller->create($tmp);
+
+        $tmp = clone $event;
+        $tmp->dtstart->setHour(8);
+        $tmp->dtend->setHour(8);
+        $tmp->attendee->removeFirst();
+        $this->_controller->create($tmp);
+
+        $tmp = clone $event;
+        $tmp->dtstart->addDay(1);
+        $tmp->dtend->addDay(1);
+        $tmp->attendee->removeRecord($tmp->attendee->getByIndex(1));
+        $this->_controller->create($tmp);
+
+        $tmp = clone $event;
+        $tmp->dtstart->addDay(2);
+        $tmp->dtend->addDay(2);
+        $tmp->attendee->removeRecord($tmp->attendee->getByIndex(1));
+        $this->_controller->create($tmp);
+
+        $options = array(
+            'from'        => $event->dtstart->getClone()->setHour(6),
+            'constraints' => array(array(
+                'dtstart'   => $event->dtstart->getClone()->setHour(6),
+                'dtend'     => $event->dtstart->getClone()->setHour(22),
+                'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR'
+            )),
+        );
+
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        static::assertEquals($options['from'], $result->getFirstRecord()->dtstart);
+
+        $options['from'] = $event->dtstart->getClone()->setHour(8);
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        static::assertEquals($options['from']->addMinute(30), $result->getFirstRecord()->dtstart);
+
+        $options['from'] = $event->dtstart->getClone()->addDay(1);
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        static::assertEquals($options['from']->addMinute(30), $result->getFirstRecord()->dtstart);
+
+        $options['from'] = $event->dtstart->getClone()->addDay(2);
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        static::assertEquals($options['from']->addMinute(30), $result->getFirstRecord()->dtstart);
+
+        $options['from'] = $event->dtstart->getClone()->addDay(2)->addHour(1);
+        $result = $this->_controller->searchFreeTime($event, $options);
+        static::assertEquals(1, $result->count());
+        static::assertEquals($options['from'], $result->getFirstRecord()->dtstart);
+    }
+
+    public function testSearchFreeTimeRule()
+    {
+        static::markTestSkipped('rrules are disabled for search free time');
+
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId(), 'user_type' => Calendar_Model_Attender::USERTYPE_USER)
+        ));
         $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,FR';
 
         $options = array(
@@ -797,7 +862,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
 
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
-        Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+        /*$defaultUserGroup->members = $defaultUserGroupMembers;
+        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($defaultUserGroup);*/
         
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
@@ -808,7 +875,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_controller->create($event);
-        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+
         // user as attender + group + all members
         $expectedAttendeeCount = 1 + 1 + count($defaultUserGroupMembers);
         if (in_array(Tinebase_Core::getUser()->getId(), $defaultUserGroupMembers)) {
@@ -1872,7 +1939,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
         )));
         $undidEvent = $this->_controller->get($updatedEvent->getId());
-        static::assertEquals(0, count($undidEvent->exdate));
+        static::assertEmpty($undidEvent->exdate);
         try {
             $this->_controller->get($updatedException->getId());
             static::fail('delete did not work');

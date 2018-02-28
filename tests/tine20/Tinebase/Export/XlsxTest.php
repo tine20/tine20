@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -167,11 +167,8 @@ class Tinebase_Export_XlsxTest extends TestCase
         $recordListCFfield = $export->getTranslate()->_($recordListCF->definition->label);
         static::assertTrue(false !== ($recordListCFKey = array_search($recordListCFfield, $arrayData[0])),
             'couldn\'t find field ' . $recordListCFfield . ' in ' . $printRdata0);
-
-        $names = explode( ', ', $arrayData[1][$recordListCFKey]);
-        sort($names);
-        static::assertEquals([$jmcblackContact->getTitle(), $scleverContact->getTitle()],
-            $names, $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
+        static::assertEquals($jmcblackContact->getTitle() . ', ' . $scleverContact->getTitle(),
+            $arrayData[1][$recordListCFKey], $recordListCFfield . ' not as expected: ' . print_r($arrayData[1], true));
         
         $systemFieldCount = 0;
         foreach(Addressbook_Model_Contact::getConfiguration()->getFields() as $field) {
@@ -185,16 +182,61 @@ class Tinebase_Export_XlsxTest extends TestCase
             'count of fields + customfields - "customfields property" - systemfields does not equal amount of headline columns ' . print_r($filteredHeadLine, true));
         
         // test the relations
-        $relationsField = $export->getTranslate()->_('relations');
+        $relationsField = $export->getTranslate()->_('Relations');
         static::assertTrue(false !== ($relationsKey = array_search($relationsField, $arrayData[0])),
             'couldn\'t find field ' . $relationsField . ' in ' . $printRdata0);
 
         $modelTranslated = $export->getTranslate()->_('Contact');
-        $relations = explode( ', ', $arrayData[1][$relationsKey]);
-        sort($relations);
-        static::assertEquals([
-            $modelTranslated .' type1 ' . $scleverContact->getTitle(),
-            $modelTranslated . ' type2 ' . $jmcblackContact->getTitle()
-        ], $relations, $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
+        static::assertEquals($modelTranslated . ' type2 ' . $jmcblackContact->getTitle() . ', ' . $modelTranslated .
+            ' type1 ' . $scleverContact->getTitle(),
+            $arrayData[1][$relationsKey], $relationsField . ' not as expected: ' . print_r($arrayData[1], true));
+    }
+
+    /**
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Reader_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    public function testTranslatedHeadline()
+    {
+        Tinebase_Core::setupUserLocale('de');
+
+        $testContact = new Addressbook_Model_Contact([]);
+
+        $testContact->n_given = 'Test Contact Name 123';
+        $testContact->n_family = 'Test Name';
+
+        $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
+
+        $filter = new Addressbook_Model_ContactFilter([
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => $testContact->n_given]
+        ]);
+        $export = new Addressbook_Export_Xls($filter, null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => 'Addressbook_Model_Contact',
+                    'name' => 'adb_xls'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $xls = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->write($xls);
+
+        $reader = PHPExcel_IOFactory::createReader('Excel2007');
+        $doc = $reader->load($xls);
+        // CZ is enough for contact, but to allow growth DZ is on the safe side
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A3:DZ4');
+        $flippedArrayData = array_flip(array_filter($arrayData[0]));
+
+        $msg = print_r($flippedArrayData, true);
+        static::assertArrayHasKey('Verknüpfungen', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Tags', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Telefon', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Raum', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Beschreibung', $flippedArrayData, $msg);
+        static::assertArrayHasKey('Vorname', $flippedArrayData, $msg);
     }
 }

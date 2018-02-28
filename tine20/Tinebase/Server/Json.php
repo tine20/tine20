@@ -462,6 +462,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (self::userIsRegistered()) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
+            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             foreach ($userApplications as $application) {
@@ -581,6 +582,36 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     )),
                 ),
                 'help'   => 'Delete multiple ' . $simpleModelName . 's',
+                'plural' => true,
+            ),
+            /**
+             * @param string $tempFileId to import
+             * @param string $importDefinitionId
+             * @param array $options additional import options
+             * @param array $clientRecordData
+             */
+            'import' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'string',
+                        'name' => 'tempFileId',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'string',
+                        'name' => 'definitionId',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'importOptions',
+                        'optional' => true,
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'clientRecordData',
+                        'optional' => true,
+                    )),
+                ),
+                'help'   => 'Import ' . $simpleModelName . 's',
                 'plural' => true,
             ),
         );

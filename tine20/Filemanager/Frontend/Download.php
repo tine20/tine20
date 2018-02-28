@@ -98,17 +98,32 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         }
     }
 
+    /**
+     * renderPasswordForm
+     */
     protected function _renderPasswordForm()
     {
         $view = $this->_getView();
+        $locale = new Zend_Locale();
+        $translation = Tinebase_Translation::getTranslation('Filemanager', $locale);
+        $view->pwtext = $translation->_('Password for download required');
+        $view->title = $view->pwtext;
+        $view->submittext = $translation->_('Submit');
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('password.phtml'));
     }
 
+    /**
+     * renderNotFoundPage
+     */
     protected function _renderNotFoundPage()
     {
         header('HTTP/1.0 404 Not found');
         $view = $this->_getView();
+        $locale = new Zend_Locale();
+        $translation = Tinebase_Translation::getTranslation('Filemanager', $locale);
+        $view->notfound = $translation->_('File not found!');
+        $view->title = $view->notfound;
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('notfound.phtml'));
     }
@@ -176,6 +191,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $view = $this->_getView($path, $node);
         $view->files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
 
+        $locale = new Zend_Locale();
+        $translation = Tinebase_Translation::getTranslation('Filemanager', $locale);
+        $view->name = $translation->_('Name');
+        $view->size = $translation->_('Size');
+        $view->lastmodified = $translation->_('Last Modified');
+        $view->description = $translation->_('Description');
+        $view->title = $translation->_('Folder');
+
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('folder.phtml'));
     }
@@ -193,6 +216,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
 
         $view->file = $node;
         $view->file->path = $download->getDownloadUrl('get') . '/' . implode('/', $path);
+
+        // <tr><th>Name</th><th>letzte Änderung</th><th>Größe</th></tr>
+        $locale = new Zend_Locale();
+        $translation = Tinebase_Translation::getTranslation('Filemanager', $locale);
+        $view->name = $translation->_('Name');
+        $view->size = $translation->_('Size');
+        $view->lastmodified = $translation->_('Last Modified');
+        $view->title = $translation->_('File');
         
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('file.phtml'));
