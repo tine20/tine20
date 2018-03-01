@@ -2138,6 +2138,23 @@ Steuernummer 33/111/32212";
         $this->assertEquals(0, $result['totalcount']);
     }
 
+    /**
+     * @see 0013780: fix backslash in text filter
+     */
+    public function testBackslashInFilter()
+    {
+        $contact = $this->_getContactData();
+        $contact['org_name'] = 'my org with \\backslash';
+        $this->_uit->saveContact($contact);
+        $filter = array(array(
+            'field'    => 'org_name',
+            'operator' => 'equals',
+            'value'    => 'my org with \\backslash'
+        ));
+        $result = $this->_uit->searchContacts($filter, '');
+        $this->assertEquals(1, $result['totalcount'], 'contact not found ' . print_r($result, true));
+    }
+
     public function testSearchListWithPathFilter()
     {
         if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
@@ -2146,7 +2163,7 @@ Steuernummer 33/111/32212";
 
         Tinebase_Core::getCache()->clean();
         Tinebase_Group::getInstance()->resetClassCache();
-        
+
         $filter = array(
             array(
                 'field'    => 'query',
