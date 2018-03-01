@@ -367,9 +367,9 @@
       */
     public static function getNotificationPreferences(Calendar_Model_Attender $attendee, Calendar_Model_Event $event)
     {
-        $organizer = $event->resolveOrganizer();
-        $organizerAccountId = $organizer->account_id;
         $attendeeAccountId = $attendee->getUserAccountId();
+        $organizer = $event->resolveOrganizer();
+        $organizerAccountId = ($organizer instanceof Addressbook_Model_Contact) ? $organizer->account_id : null;
 
         $prefUserId = $attendeeAccountId ? $attendeeAccountId :
             ($organizerAccountId ? $organizerAccountId :
