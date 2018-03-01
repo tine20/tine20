@@ -1980,7 +1980,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "6ac5e71a091f792b58a446c3d6b415dce2286eb6"
+                "reference": "e8880afdfd69fe23ae17918ee6a7e65d4bfd1d36"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2004,7 +2004,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2017-10-09T06:13:07+00:00"
+            "time": "2018-03-01T15:59:58+00:00"
         },
         {
             "name": "tine20/composerapploader",
