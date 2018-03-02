@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -111,7 +111,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             
             $memberships = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
             
-            Tinebase_Core::getCache()->save($memberships, $cacheId);
+            Tinebase_Core::getCache()->save($memberships, $cacheId, [__CLASS__], 300);
         }
         
         $this->_classCache[__FUNCTION__][$classCacheId] = $memberships;
@@ -144,7 +144,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 $members[] = $member->account_id;
             }
 
-            Tinebase_Core::getCache()->save($members, $cacheId);
+            Tinebase_Core::getCache()->save($members, $cacheId, [__CLASS__], 300);
         }
 
         return $members;
@@ -214,13 +214,24 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected function _clearCache($cacheIds = array())
     {
         $cache = Tinebase_Core::getCache();
-        
-        foreach ($cacheIds as $type => $id) {
-            $cacheId = Tinebase_Helper::convertCacheId($type . $id);
-            $cache->remove($cacheId);
+
+        if (empty($cacheIds)) {
+            $this->resetClassCache();
+        } else {
+            foreach ($cacheIds as $type => $id) {
+                $cacheId = Tinebase_Helper::convertCacheId($type . $id);
+                $cache->remove($cacheId);
+                $this->resetClassCache($type);
+            }
         }
-        
-        $this->resetClassCache();
+    }
+
+    public function resetClassCache($key = null)
+    {
+        if (null === $key) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [__CLASS__]);
+        }
+        return parent::resetClassCache($key);
     }
     
     /**
