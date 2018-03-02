@@ -4,10 +4,9 @@
  * 
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        add relations tests
  */
 
 /**
@@ -18,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Projects_JsonTest extends PHPUnit_Framework_TestCase
+class Projects_JsonTest extends TestCase
 {
     /**
      * @var Projects_Frontend_Json
@@ -33,18 +32,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     protected $_department = NULL;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Projects Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -52,21 +39,10 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         $this->_json = new Projects_Frontend_Json();
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
     /**
      * try to add a Project
      */
@@ -344,20 +320,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
             ),     
         );
     }
-    
-    /**
-     * get contact data
-     * 
-     * @return array
-     */
-    protected function _getContactData()
-    {
-        return array(
-            'n_family'          => 'PHPUNIT',
-            'org_name'          => Tinebase_Record_Abstract::generateUID(),
-            'tel_cell_private'  => '+49TELCELLPRIVATE',
-        );
-    }
 
     /**
      * createProjectWithContactRelation
@@ -367,7 +329,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     protected function _createProjectWithContactRelation()
     {
         $project = $this->_getProjectData();
-        $contact = $this->_getContactData();
         $project['relations'] = array(
             array(
                 'own_model'              => 'Projects_Model_Project',
@@ -397,5 +358,21 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $containerJson = new Tinebase_Frontend_Json_Container();
         $personalContainers = $containerJson->getContainer('Projects', 'personal', Tinebase_Core::getUser()->getId());
         $this->assertEquals(1, count($personalContainers), 'this should only return 1 personal container: ' . print_r($personalContainers, TRUE));
+    }
+
+    /**
+     * testAddRecordAttachments
+     */
+    public function testAddRecordAttachments()
+    {
+        $project = new Projects_Model_Project($this->_getProjectData(), true);
+        $this->_addRecordAttachment($project);
+        $newproject1 = $this->_json->saveProject($project->toArray());
+        self::assertEquals(1, count($newproject1['attachments']));
+
+        $project = new Projects_Model_Project($this->_getProjectData(), true);
+        $this->_addRecordAttachment($project);
+        $newproject2 = $this->_json->saveProject($project->toArray());
+        self::assertEquals(1, count($newproject2['attachments']));
     }
 }

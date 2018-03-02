@@ -620,11 +620,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * create directory
      * 
      * @param string $path
+     * @return Tinebase_Model_Tree_Node
      */
     public function mkdir($path)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating directory ' . $path);
+            . ' Creating path ' . $path);
         
         $currentPath = array();
         $parentNode  = null;
@@ -637,6 +638,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             try {
                 $node = $this->stat('/' . implode('/', $currentPath));
             } catch (Tinebase_Exception_NotFound $tenf) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Creating directory ' . $pathPart);
+
                 $node = $this->createDirectoryTreeNode($parentNode, $pathPart);
                 
                 $this->_addStatCache($currentPath, $node);

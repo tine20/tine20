@@ -101,6 +101,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param  string|Tinebase_Model_Tree_Node  $parentId   the id of the parent node
      * @param  string|Tinebase_Model_Tree_Node  $childName  the name of the child node
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
      */
     public function getChild($parentId, $childName)
     {
