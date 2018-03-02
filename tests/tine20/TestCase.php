@@ -569,6 +569,23 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
     /**
+     * add an attachment to a record
+     *
+     * @param $record
+     */
+    protected function _addRecordAttachment($record)
+    {
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'testAttachementData');
+        $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
+            array(
+                'name'      => 'testAttachementData.txt',
+                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+            )
+        ), true);
+    }
+
+    /**
      * test record json api
      *
      * @param string $modelName
