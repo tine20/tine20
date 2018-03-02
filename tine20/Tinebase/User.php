@@ -747,6 +747,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * import users from sync backend
      * 
      * @param array $options
+     * @return bool
      */
     public static function syncUsers($options = array())
     {
@@ -769,7 +770,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (! Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
-            return;
+            return true;
         }
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
@@ -777,13 +778,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to sync ' . count($users) . ' users from sync backend ...');
 
+        $result = true;
         foreach ($users as $user) {
             try {
                 self::syncUser($user, $options);
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
-                    . $e->getMessage() . PHP_EOL
-                    . $e->getTraceAsString());
+                $result = false;
+                Tinebase_Exception::log($e, null, $user->toArray());
             }
         }
 
@@ -795,6 +796,15 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
+
+        // clear cache after successful user sync
+        // TODO make this dependent on group membership change OR only invalidate group memberships
+        // @see 0013632: LDAP user backend: groups are not synced
+        if ($result) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        }
+
+        return $result;
     }
 
     /**
