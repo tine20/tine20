@@ -790,6 +790,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
             self::_syncDeletedUsers($users);
         }
+
+        Tinebase_Group::getInstance()->resetClassCache();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
