@@ -622,14 +622,7 @@ class Addressbook_ControllerTest extends TestCase
             'type'              => 'foo'
         ));
         $contact->tags = array(array('name' => 'testtag1'));
-        $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'testAttachementData');
-        $contact->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
-            array(
-                'name'      => 'testAttachementData.txt',
-                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
-            )
-        ), true);
+        $this->_addRecordAttachment($contact);
         $contact->customfields = array(
             $cField1->name => 'test field1'
         );
