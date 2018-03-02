@@ -1323,13 +1323,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $customFields = array();
         
         foreach($_data as $key => $value) {
-            if(stristr($key, '#')) $customFields[substr($key,1)] = $value;
-            else $myFields[$key] = $value;
+            if(stristr($key, '#')) {
+                $customFields[substr($key,1)] = $value;
+            } else {
+                $myFields[$key] = $value;
+            }
         }
         
         // handle CustomFields
         
-        if(count($customFields)) {
+        if (count($customFields)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' CustomFields found.');
             Tinebase_CustomField::getInstance()->saveMultipleCustomFields($this->_modelName, $_ids, $customFields);
@@ -1337,7 +1340,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // handle StdFields
         
-        if(!count($myFields)) { return 0; } 
+        if (!count($myFields)) {
+            return 0;
+        }
 
         $identifier = $this->_getRecordIdentifier();
         
@@ -1349,8 +1354,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $_ids),
         );
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
+
+        if (empty($recordArray)) {
+            throw new Tinebase_Exception_UnexpectedValue(
+                'Nothing to update - maybe you tried to update fields that are not in the schema?'
+            );
+        }
         
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
     }
