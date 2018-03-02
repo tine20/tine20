@@ -273,7 +273,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
         Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
     }
-    
+
     /**
      * returns columns to fetch in first query and if an id/value pair is requested 
      * 
@@ -410,7 +410,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
         return $_result;
     }
-    
+
     /**
      * @param  string  $path
      * @return Tinebase_Model_Tree_Node

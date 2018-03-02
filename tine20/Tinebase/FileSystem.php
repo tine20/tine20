@@ -110,7 +110,7 @@ class Tinebase_FileSystem implements
      * @var array
      */
     protected $_quotaNotificationRoleMembers = array();
-    
+
     /**
      * holds the instance of the singleton
      *
@@ -1307,14 +1307,14 @@ class Tinebase_FileSystem implements
     /**
      * create directory
      * needs to be /appid/folders/...asYouLikeFromHereOn
-     * 
+     *
      * @param string $path
      * @return Tinebase_Model_Tree_Node
      */
     public function mkdir($path)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating directory ' . $path);
+            . ' Creating path ' . $path);
         
         $currentPath = array();
         $parentNode  = null;
@@ -1323,25 +1323,24 @@ class Tinebase_FileSystem implements
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
-            foreach ($pathParts as $pathPart) {
-                $pathPart = trim($pathPart);
-                $currentPath[] = $pathPart;
+        foreach ($pathParts as $pathPart) {
+            $pathPart = trim($pathPart);
+            $currentPath[]= $pathPart;
 
-                try {
-                    $node = $this->stat('/' . implode('/', $currentPath));
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
+            try {
+                $node = $this->stat('/' . implode('/', $currentPath));
+            } catch (Tinebase_Exception_NotFound $tenf) {
+if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Creating directory ' . $pathPart);                $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
 
-                    $this->_addStatCache($currentPath, $node);
-                }
-
-                $parentNode = $node;
+                $this->_addStatCache($currentPath, $node);
             }
 
-            // update hash of all parent folders
-            $this->_updateDirectoryNodesHash($path);
+            $parentNode = $node;
+        }
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        // update hash of all parent folders
+        $this->_updateDirectoryNodesHash($path);Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
             if (null !== $transactionId) {
@@ -1704,7 +1703,7 @@ class Tinebase_FileSystem implements
     /**
      * create directory
      * needs to be /appid/folders/...asYouLikeFromHereOn
-     * 
+     *
      * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $name
      * @return Tinebase_Model_Tree_Node
