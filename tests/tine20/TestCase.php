@@ -313,6 +313,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param string $applicationName
      * @param string $model
+     * @return Tinebase_Model_Container
      */
     protected function _getTestContainer($applicationName, $model = null)
     {
@@ -485,7 +486,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param integer $containerId
      * @param string $persona
-     * @param string $adminGrant
+     * @param boolean $personaAdminGrant
+     * @param boolean $userAdminGrant
      */
     protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true)
     {

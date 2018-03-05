@@ -184,7 +184,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     }
                     
 
-                    if(!$manageRight && !Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::ADMIN)) {
+                    if (!$manageRight && !Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::ADMIN)) {
                         throw new Tinebase_Exception_AccessDenied('Permission to add shared container denied.');
                     }
                     break;
