@@ -797,13 +797,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
 
-        // clear cache after successful user sync
-        // TODO make this dependent on group membership change OR only invalidate group memberships
-        // @see 0013632: LDAP user backend: groups are not synced
-        if ($result) {
-            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
-        }
-
         return $result;
     }
 
