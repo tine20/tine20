@@ -360,12 +360,17 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         // get all personal containers of all users
         $filter = [
             ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL],
-            ['field' => 'model', 'operator' => 'equals', 'value' => 'Calendar_Model_Event'],
+            ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+            ['field' => 'application_id', 'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()],
         ];
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
         $containers = Tinebase_Container::getInstance()->search(
             new Tinebase_Model_ContainerFilter($filter),
             new Tinebase_Model_Pagination(['sort' => 'owner_id'])
         );
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
         $resultArray = [];
         $users = [];
         $groups = [];

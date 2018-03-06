@@ -52,7 +52,7 @@ class Calendar_Frontend_CliTest extends TestCase
         $expectedStrings = [
             '{"' . Tinebase_Core::getUser()->accountLoginName . '":{',
             '{"PHPUnit Calendar_Model_Event container":',
-            '{"readGrant":true,"addGrant":true,"editGrant":true,"deleteGrant":true,"privateGrant":false,"exportGrant":false,"syncGrant":false,"adminGrant":false,"freebusyGrant":false,"account_type":"user"',
+            '{"readGrant":true,"addGrant":true,"editGrant":true,"deleteGrant":true,"privateGrant":false,"exportGrant":false,"syncGrant":false,"adminGrant":false,"freebusyGrant":false',
             '"account_id":"' . $this->_personas['sclever']->getId(),
             '"accountName":"sclever"'
         ];
