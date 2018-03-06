@@ -584,7 +584,7 @@
           return false
         }
 
-        if (this.poll.locked === '1' && this.poll.config.is_anonymous) {
+        if (this.poll.locked === '1' && !this.activeAttendee.id) {
           return false
         }
 
