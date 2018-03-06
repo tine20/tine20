@@ -1,13 +1,13 @@
 let path = require('path')
+let basePath = path.resolve(__dirname, "../../../tests/js/unit")
 
 module.exports = function (config) {
     config.set({
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: path.resolve(__dirname, "../../../tests/js/unit"),
+        basePath: basePath,
 
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha', 'chai', 'chai-as-promised', 'sinon'],
-        // plugins: ['karma-mocha', 'karma-chai-as-promised', 'karma-chai', 'karma-sinon', 'karma-webpack'],
 
         // list of files / patterns to load in the browser
         files: [
@@ -41,12 +41,22 @@ module.exports = function (config) {
         },
 
         // test results reporter to use
-        // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec', 'coverage-istanbul'],
+        reporters: ['spec', 'coverage-istanbul', 'junit' /*, 'dots' */],
 
         coverageIstanbulReporter: {
-            reports: ['text', 'text-summary']
+            dir: basePath + '/artefacts/coverage',
+            reports: ['html', 'text', 'text-summary', 'clover'],
+            'report-config': {
+                html: {
+                    subdir: 'html'
+                }
+            }
+        },
+
+        junitReporter: {
+            outputDir: 'artefacts',
+            outputFile: 'test-results.xml'
         },
 
         // web server port
@@ -66,8 +76,6 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         // browsers: ['PhantomJS', 'Chrome', 'ChromeWithoutSecurity', 'Firefox', 'Safari', 'IE'],
         browsers: ['PhantomJS'],
-        // browsers: ['PhantomJS'],
-        // browsers: ['ChromeWithoutSecurity'],
         customLaunchers: {
             ChromeWithoutSecurity: {
                 base: 'Chrome',

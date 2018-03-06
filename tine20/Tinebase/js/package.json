@@ -5,8 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack-dev-server --progress --config webpack.prod.js",
-    "unittest": "NODE_ENV=unittest karma start karma.unittest.conf.js --single-run",
-    "unittest:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js"
+    "test": "NODE_ENV=unittest karma start karma.unittest.conf.js --single-run",
+    "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -68,6 +68,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage-istanbul-reporter": "^1.4.1",
     "karma-eslint": "^2.2.0",
+    "karma-junit-reporter": "^1.2.0",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-safari-launcher": "^1.0.0",
