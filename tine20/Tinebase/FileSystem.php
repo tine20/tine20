@@ -3031,6 +3031,15 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         return $this->_nodeAclController->getGrantsForRecord($record);
     }
 
+    public function clearFileObjects()
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' starting to clear file objects');
+
+        $this->_fileObjectBackend->deletedUnusedObjects();
+
+        return true;
+    }
     /**
      * remove file revisions based on settings:
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS

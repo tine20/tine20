@@ -440,6 +440,28 @@ class Tinebase_Scheduler_Task
     }
 
     /**
+     * add file objects cleanup task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addFileObjectsCleanupTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystem::clearFileObjects')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_FileSystem::clearFileObjects', self::TASK_TYPE_DAILY, [[
+            self::CONTROLLER    => 'Tinebase_FileSystem',
+            self::METHOD_NAME   => 'clearFileObjects',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::clearFileObjects in scheduler.');
+    }
+
+    /**
      * add file system index checking task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler

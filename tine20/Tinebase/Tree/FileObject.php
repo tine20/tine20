@@ -707,4 +707,42 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $this->_allowSetRevision = $_value;
         return $oldValue;
     }
+
+    /**
+     * deletes fileObjects which are not referenced by any tree nodes
+     * returns number of deleted file objects
+     *
+     * @return int
+     */
+    public function deletedUnusedObjects()
+    {
+        $result = 0;
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $ids = $this->_db->select()->from([$this->_tableName => $this->_tablePrefix . $this->_tableName],
+                [$this->_tableName . '.id'])->joinLeft(
+                    ['tree_nodes' => $this->_tablePrefix . 'tree_nodes'],
+                    $this->_db->quoteIdentifier('tree_nodes.object_id') . ' = ' . $this->_db->quoteIdentifier(
+                        $this->_tableName . '.id'),
+                    [$this->_tableName . '.id']
+            )->where($this->_db->quoteIdentifier('tree_nodes.object_id') . ' IS NULL')
+                ->query()->fetchAll(Zend_Db::FETCH_COLUMN);
+
+            if (!empty($ids)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' deleting ' . count($ids) . ' unused file objects: ' . print_r($ids, true));
+                $result = $this->_db->delete($this->_tablePrefix . $this->_tableName, $this->_db->quoteInto(
+                    $this->_db->quoteIdentifier('id') . ' IN (?)', $ids));
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        return $result;
+    }
 }
