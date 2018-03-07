@@ -58,8 +58,8 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
      * @param {Object} value {from: Date, until: Date}
      */
     setValue: function(value) {
-        value.from = Ext.isDate(value.from) ? value.from : new Date(value.from);
-        value.until = Ext.isDate(value.until) ? value.until : new Date(value.until);
+        value.from = Ext.isDate(value.from) ? value.from : Date.parseDate(value.from, Date.patterns.ISO8601Long);
+        value.until = Ext.isDate(value.until) ? value.until : Date.parseDate(value.until, Date.patterns.ISO8601Long);
 
         this.range = Ext.ux.form.PeriodPicker.getRange(value);
         this.value = Ext.ux.form.PeriodPicker.getPeriod(value.from, this.range);

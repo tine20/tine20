@@ -219,11 +219,11 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                             _ = window.lodash;
 
                         if (_.isString(start)) {
-                            start = new Date(start);
+                            start = Date.parseDate(start, Date.patterns.ISO8601Long);
                         }
 
                         if (_.isString(end)) {
-                            end = new Date(end);
+                            end = Date.parseDate(end, Date.patterns.ISO8601Long);
                         }
 
                         var duration = values.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') :

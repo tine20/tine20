@@ -173,10 +173,10 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
 
         var _ = window.lodash,
             timing = _.get(result, 'results[0]'),
-            dtStart = new Date(timing.dtstart),
+            dtStart = Date.parseDate(timing.dtstart, Date.patterns.ISO8601Long),
             from = dtStart.clearTime(true).add(Date.DAY, -1 * dtStart.getDay())
                 .add(Date.DAY, Ext.DatePicker.prototype.startDay - (dtStart.getDay() == 0 ? 7 : 0)),
-            dtEnd = new Date(timing.dtend),
+            dtEnd = Date.parseDate(timing.dtend, Date.patterns.ISO8601Long),
             until = from.add(Date.DAY, 7),
             period = {from: from, until: until},
             filterHash = Ext.encode(this.store.baseParams.filter);
@@ -212,7 +212,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
 
     onFreeTimeSearchTimeout: function(result) {
         var _ = window.lodash,
-            dtStopped = new Date(_.get(result, 'timeSearchStopped')),
+            dtStopped = Date.parseDate(_.get(result, 'timeSearchStopped'), Date.patterns.ISO8601Long),
             stoppedString = Tine.Tinebase.common.dateRenderer(dtStopped);
 
         Tine.widgets.dialog.MultiOptionsDialog.openWindow({
@@ -231,7 +231,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
                         this.onButtonCancel();
                         break;
                     case 'continue':
-                        this.doFreeTimeSearch(new Date(dtStopped));
+                        this.doFreeTimeSearch(Date.parseDate(dtStopped, Date.patterns.ISO8601Long));
                         break;
                 }
             }
