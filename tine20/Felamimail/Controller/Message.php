@@ -640,21 +640,28 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAndDecodeMessageBody(Felamimail_Model_Message $_message, $_partId, $_contentType, $_account = NULL)
     {
+        $messageBody = '';
+
         $structure = $_message->getPartStructure($_partId);
         if (empty($structure)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Empty structure, could not find body parts of message ' . $_message->subject);
-            return '';
+            return $messageBody;
         }
         
         $bodyParts = $_message->getBodyParts($structure, $_contentType);
         if (empty($bodyParts)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Could not find body parts of message ' . $_message->subject);
-            return '';
+            return $messageBody;
         }
-        
-        $messageBody = '';
+
+        if (count($bodyParts) === 1 && isset($bodyParts[$_partId]['contentType'])
+            && $bodyParts[$_partId]['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            && isset($structure['messageStructure']['type']) && $structure['messageStructure']['type'] === 'multipart') {
+            // fetch first sub-part of rfc822 message if it is a multipart message
+            return $this->_getAndDecodeMessageBody($_message, $_partId . '.1', $_contentType, $_account);
+        }
 
         foreach ($bodyParts as $partId => $partStructure) {
             $bodyPart = $this->getMessagePart($_message, $partId, TRUE, $partStructure);
