@@ -887,6 +887,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
             $validators = null;
             $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
+            $instance = $this;
+            $stringifyCallBack = function($val) use ($instance) {
+                return $instance->_convertToString($val);
+            };
             if (!empty($this->_expandCustomFields)) {
                 $validators = $_records->getFirstRecord()->getValidators();
                 foreach ($this->_expandCustomFields as $field => $label) {
@@ -902,6 +906,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 if (empty($cfs)) {
                     continue;
                 }
+                array_walk($cfs, function(Tinebase_Model_CustomField_Config $val, $key)
+                        use($cfNameLabelMap, $stringifyCallBack) {
+                    $val->label = $cfNameLabelMap[$key];
+                    $val->value = new Tinebase_CustomField_Value($val->value, $val->definition, $stringifyCallBack);
+                });
                 uksort($cfs, function($a, $b) use($cfNameLabelMap) {
                     return strcmp($cfNameLabelMap[$a], $cfNameLabelMap[$b]);
                 });
@@ -1276,29 +1285,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 if ($_value instanceof DateTime) {
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
                         $this->_config->datetimeformat);
-                } elseif ($_value instanceof Tinebase_Model_CustomField_Config) {
-                    $type = strtolower($_value->definition['type']);
-                    switch ($type) {
-                        case 'record':
-                            $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
-                            $_value = $this->_convertToString(new $model($_value->value, true));
-                            break;
-                        case 'recordlist':
-                            $model = Tinebase_CustomField::getModelNameFromDefinition($_value->definition);
-                            $rs = new Tinebase_Record_RecordSet($model, $_value->value, true);
-                            $rs->sort(function(Tinebase_Record_Abstract $a, Tinebase_Record_Abstract $b) {
-                                return strcmp($a->getTitle(), $b->getTitle());
-                            }, null, 'function');
-                            $_value = $this->_convertToString($rs);
-                            break;
-                        case 'keyfield':
-                            $keyfield = Tinebase_Config_KeyField::create($_value->definition->keyFieldConfig->value
-                                ->toArray());
-                            $_value = $keyfield->getTranslatedValue($_value->value);
-                            break;
-                        default:
-                            $_value = $this->_convertToString($_value->value);
-                    }
+                } elseif($_value instanceof Tinebase_Model_CustomField_Config) {
+                    $_value = $_value->value->__toString();
                 } elseif ($_value instanceof Tinebase_Record_Abstract) {
                     $_value = $_value->getTitle();
                 } elseif ($_value instanceof Tinebase_Record_RecordSet) {
