@@ -129,7 +129,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             autoSave: false,
             getByDate: function(date) {
                 if (!Ext.isDate(date)) {
-                    date = new Date(date);
+                    date = Date.parseDate(date, Date.patterns.ISO8601Long);
                 }
                 var index = this.findBy(function(record) {
                     if(record.get(picker.dateProperty).toString() == date.toString()) {
