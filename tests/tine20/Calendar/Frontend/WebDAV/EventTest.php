@@ -72,6 +72,40 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         return $event;
     }
+
+    /**
+     * test create event for different users from same file (same id) in their personal folder (no grants for the other user)
+     *
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateEventForDifferentUsers()
+    {
+      
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+       
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/gotomeeting.ics');
+        
+        //Import event for sclever
+        $sclever = $this->_personas['sclever'];
+        $personalContainer = $this->_getPersonalContainer('Calendar', $sclever->accountId);
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+        $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
+
+        $record = $event->getRecord();
+
+        $this->assertEquals('Meeting', $record->summary);
+
+        //Import same file for pwulf
+        $pwulf = $this->_personas['pwulf'];
+        $personalContainer = $this->_getPersonalContainer('Calendar', $pwulf->accountId);
+        Tinebase_Core::set(Tinebase_Core::USER, $pwulf);
+        $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
+
+        $record = $event->getRecord();
+
+        $this->assertEquals('Meeting', $record->summary);
+    }
     
     /**
      * test create event with internal organizer

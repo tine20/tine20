@@ -175,14 +175,27 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
                 throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
             }
+            $retry = false;
             try {
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
+                $retry = true;
                 Tinebase_Exception::log($zdse, true);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                $retry = true;
+                Tinebase_Exception::log($tead, true);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+            }
+
+            if ($retry) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Might be a duplicate exception, try with new id');
-                
+
                 unset($event->id);
                 try {
                     $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
@@ -192,12 +205,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
                     throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
                 }
-                
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
             }
             
             $vevent = new self($container, $event);
