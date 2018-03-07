@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -2424,5 +2424,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(! empty($searchResultData['results']) && 1 === count($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         $this->assertEquals($createdEvent->getId(), $resultEventData['id']);
+    }
+
+    public function testSearchAttenderTypeAny()
+    {
+        $event = $this->_getEvent();
+        Calendar_Controller_Event::getInstance()->create($event);
+
+        $filter = $this->_getEventFilterArray();
+        $filter[] = [
+            'field' => 'attender', 'operator' => 'in', 'value' => [
+                [
+                    'user_type' => 'any',
+                    'role' => 'REQ',
+                    'quantity' => 1,
+                    'status' => 'CONFIRMED',
+                    'user_id' => $this->_getTestUserContact()->getId(),
+                    'id' => NULL,
+                ]
+            ]
+        ];
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        self::assertEquals(1, $searchResultData['totalcount']);
     }
 }
