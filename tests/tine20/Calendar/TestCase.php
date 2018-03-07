@@ -197,7 +197,7 @@ abstract class Calendar_TestCase extends TestCase
     /**
      * returns the test users contact
      * 
-     * @return
+     * @return Addressbook_Model_Contact
      */
     protected function _getTestUserContact()
     {
