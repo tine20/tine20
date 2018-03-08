@@ -2375,6 +2375,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 returned: '
                         . $result);
                 throw new Tinebase_Exception_Backend('upgradeMysql564 returned: ' . $result);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 returned: '
+                        . $result);
             }
         }
 
