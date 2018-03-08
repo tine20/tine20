@@ -99,11 +99,10 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $isExcept = strpos($this->_operator, 'Except') !== false;
         $sign = $isExcept ? '<>' : '=';
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($this->_value, true));
         foreach ($this->_value as $attenderValue) {
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
                 
-                // @todo user_id might contain filter in the future -> get userids from adressbook controller with contact filter
+                // @todo user_id might contain filter in the future -> get userids from addressbook controller with contact filter
                 
                 // transform CURRENTCONTACT
                 $attenderValue['user_id'] = $attenderValue['user_id'] == Addressbook_Model_Contact::CURRENTCONTACT ? 
@@ -151,6 +150,11 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                         'user_type' => $attenderValue->user_type,
                         'user_id'   => $attenderValue->user_id->getId()
                     );
+                } else if ($attenderValue->user_type === Calendar_Model_Attender::USERTYPE_ANY && $attenderValue->user_id) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'Unsupported user type ANY given - switching to USER');
+                    // TODO support other types as well, we could check for existing user_id in contact/list/resource/.. backends
+                    $attenderValue->user_type = Calendar_Model_Attender::USERTYPE_USER;
                 }
                 $attendee = array($attenderValue);
             }

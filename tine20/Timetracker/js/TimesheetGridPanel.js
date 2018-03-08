@@ -44,7 +44,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     copyEditAction: true,
     multipleEdit: true,
-    multipleEditRequiredRight: 'manage_timeaccounts',
 
     /**
      * @private

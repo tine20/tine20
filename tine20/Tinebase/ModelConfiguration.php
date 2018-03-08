@@ -1077,9 +1077,9 @@ class Tinebase_ModelConfiguration {
                         $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
                 }
             } elseif ($fieldDef['type'] == 'virtual') {
-                $virtualField = isset($fieldDef['config']) ? $fieldDef['config'] : array();
+                $fieldDef['config']['sortable'] = isset($virtualField['config']['sortable']) ? $virtualField['config']['sortable'] : false;
+                $virtualField = $fieldDef['config'];
                 $virtualField['key'] = $fieldKey;
-                $virtualField['sortable'] = FALSE;
                 if ((isset($virtualField['default']))) {
                     // @todo: better handling of virtualfields
                     $this->_defaultData[$fieldKey] = $virtualField['default'];
@@ -1172,7 +1172,6 @@ class Tinebase_ModelConfiguration {
             }
             
             $this->_populateProperties($fieldKey, $fieldDef);
-            
         }
         
         // set some default filters

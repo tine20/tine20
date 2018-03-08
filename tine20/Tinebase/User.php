@@ -803,14 +803,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
             self::_syncDeletedUsers($users);
         }
+
+        Tinebase_Group::getInstance()->resetClassCache();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
-
-        // clear cache after user sync
-        // TODO make this dependent on group membership change OR only invalidate group memberships
-        // @see 0013632: LDAP user backend: groups are not synced
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
         return $result;
     }

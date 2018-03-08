@@ -74,10 +74,10 @@ Tine.Tinebase.PresenceObserver.prototype = {
         var now = new Date(),
             nowTS = now.getTime(),
             lastPresence = this.getLastPresence(),
-            state = lastPresence + this.maxAbsenceTime * 60000 < nowTS ? 'absence' : 'presence';
+            state = lastPresence + this.maxAbsenceTime * 60000 <= nowTS ? 'absence' : 'presence';
 
         Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence checking presece now ' + now);
-        Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence last presence detected at ' + new Date(lastPresence));
+        Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence state: "' + state + '" as last presence detected at ' + new Date(lastPresence));
 
         if (state == 'absence') {
             Tine.log.info('Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenceTime + ' minutes');

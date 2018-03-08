@@ -99,7 +99,10 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         
         // try to get description from in-memory cache & persistent cache
         try {
-            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            $result = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            if (is_array($result) && count($result) > 0) {
+                return $result;
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             // do nothing
         }

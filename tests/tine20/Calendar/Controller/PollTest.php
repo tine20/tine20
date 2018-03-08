@@ -20,6 +20,21 @@ class Calendar_Controller_PollTest extends TestCase
      */
     protected $_uit = null;
 
+    /**
+     * @var Calendar_Frontend_Json_PollTest
+     */
+    protected $jt = null;
+
+    /**
+     * @var \Zend\Http\Request
+     */
+    protected $_oldRequest = null;
+
+    /**
+     * @var Tinebase_Model_FullUser
+     *
+     * TODO replace with $_originalTestUser
+     */
     protected $_origUser = null;
 
     /**
@@ -561,6 +576,11 @@ EOT;
         }
     }
 
+    /**
+     * testDefiniteEventNotification
+     *
+     * TODO add test case(s) for list/group/resource attendee
+     */
     public function testDefiniteEventNotification()
     {
         // if mailing is not installed, as with pgsql

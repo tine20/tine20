@@ -322,10 +322,6 @@
           "path": "js/ux/"
         },
         {
-          "text": "DatepickerRange.js",
-          "path": "js/ux/"
-        },
-        {
           "text": "CheckboxSelectionModel.js",
           "path": "js/ux/tree/"
         },

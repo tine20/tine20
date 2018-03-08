@@ -332,4 +332,18 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.18');
     }
+
+    /**
+     * update to 11.19
+     *
+     * add fileobject clean up task
+     */
+    public function update_18()
+    {
+
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '11.19');
+    }
 }

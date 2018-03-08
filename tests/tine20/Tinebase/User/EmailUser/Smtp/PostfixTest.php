@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_PostfixTest
  */
-class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
 {
     /**
      * user backend
@@ -46,6 +46,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_backend = Tinebase_User::getInstance();
         
         if (   ! array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())
@@ -76,6 +78,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         foreach ($this->objects['users'] as $user) {
             $this->_backend->deleteUser($user);
         }
+
+        parent::tearDown();
     }
     
     /**
@@ -134,24 +138,16 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     
     /**
      * try to enable an account
-     *
      */
     public function testSetStatus()
     {
         $user = $this->testAddUser();
-
-        
         $this->_backend->setStatus($user, Tinebase_User::STATUS_DISABLED);
-        
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
-        
         $this->assertEquals(Tinebase_User::STATUS_DISABLED, $testUser->accountStatus);
 
-        
         $this->_backend->setStatus($user, Tinebase_User::STATUS_ENABLED);
-        
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
-        
         $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
     }
     
@@ -250,5 +246,28 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $testUser = Tinebase_User::getInstance()->getUserById($testUser->getId(), 'Tinebase_Model_FullUser');
         $this->assertEquals(100, count($testUser->smtpUser->emailAliases));
         $this->assertEquals(100, count($testUser->smtpUser->emailForwards));
+    }
+
+    /**
+     * testAliasEqualsDefaultMail
+     */
+    public function testAliasEqualsDefaultMail()
+    {
+        $user = $this->testAddUser();
+        $aliases = $user->emailUser->emailAliases;
+        $aliases[] = $user->accountEmailAddress;
+        $user->smtpUser->emailAliases = $aliases;
+        try {
+            $updatedUser = $this->_backend->updateUser($user);
+            self::fail('alias should not be allowed to equal email address' . print_r($updatedUser->toArray(), true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+
+        $user->accountEmailAddress = $user->emailUser->emailAliases[0];
+        try {
+            $updatedUser = $this->_backend->updateUser($user);
+            self::fail('alias should not be allowed to equal email address' . print_r($updatedUser->toArray(), true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
     }
 }

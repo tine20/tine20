@@ -842,8 +842,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 throw new Tinebase_Exception_NotFound();
             }
 
-            // what to send now? - we don't have a generic poll notification yet
-
+            // TODO what to send now? - we don't have a generic poll notification yet
 //            Calendar_Controller_EventNotifications::getInstance()->sendNotificationToAttender($currentAttendee)
 
             $response = new \Zend\Diactoros\Response();
@@ -880,7 +879,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         $twig = new Tinebase_Twig($locale, $translate);
 
-        $htmlTemplate = $twig->load('Calendar/views/pollConfirmationMail.html.twig');
+        // TODO what about the html template?
+        //$htmlTemplate = $twig->load('Calendar/views/pollConfirmationMail.html.twig');
         $textTemplate = $twig->load('Calendar/views/pollConfirmationMail.text.twig');
 
         $renderContext = [
@@ -905,16 +905,24 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         $organiser = $definiteEvent->resolveOrganizer();
 
         /** @var Calendar_Model_Attender $attendee */
-        foreach($definiteEvent->attendee as $attendee) {
+        foreach ($definiteEvent->attendee as $attendee) {
             list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) =
                 Calendar_Controller_EventNotifications::getNotificationPreferences($attendee, $definiteEvent);
+
+            if ($attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUP || $attendee->user_type === Calendar_Model_Attender::USERTYPE_LIST) {
+                // list members are separate attendee - skip this
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping group/list attender notification');
+                continue;
+            }
 
             /** @var Addressbook_Model_Contact $contact */
             $contact = $attendee->getResolvedUser();
 
             $twig = new Tinebase_Twig($locale, $translate);
 
-            $htmlTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.html.twig');
+            // TODO what about the html template?
+            //$htmlTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.html.twig');
             $textTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.text.twig');
 
             $renderContext = [
@@ -931,7 +939,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
                 $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
-
         }
     }
 }

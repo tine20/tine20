@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -32,6 +32,7 @@ class Calendar_Frontend_AllTests
         $suite->addTestSuite(Calendar_Frontend_iMIPTest::class);
         $suite->addTestSuite(Calendar_Frontend_Json_PollTest::class);
         $suite->addTestSuite(Calendar_Frontend_PollRoutingTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CliTest::class);
 
         return $suite;
     }

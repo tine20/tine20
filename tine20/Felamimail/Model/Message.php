@@ -587,7 +587,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         } else {
             foreach ($_structure['parts'] as $part) {
                 /** @noinspection OpAssignShortSyntaxInspection */
-                $result = $result + $this->getBodyParts($part, $_preferedMimeType);
+                if ($part['contentType'] !== self::CONTENT_TYPE_MESSAGE_RFC822) {
+                    $result = $result + $this->getBodyParts($part, $_preferedMimeType);
+                }
             }
         }
         

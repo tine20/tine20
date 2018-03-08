@@ -1,3 +1,12 @@
+<!--
+/*
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Jan Evers <j.evers@metaways.de>
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+-->
 <template>
   <div id="root">
     <div class="container">
@@ -34,13 +43,13 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates"><span class="date">{{date.dtstart | dateFormat}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{date.dtstart | dateFormat}}</span></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="attendee in poll.attendee_status" :class="{'row-active': activeAttendee.id === attendee.key}">
+                <tr v-for="attendee in poll.attendee_status" :key="attendee.key" :class="{'row-active': activeAttendee.id === attendee.key}">
                   <td :class="activeAttendee.id === attendee.key ? 'table-info' : 'table-light'">{{attendee.name}}</td>
-                  <td v-for="datestatus in attendee.status" class="icon-cell"
+                  <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus"
                     :class="[{'editable': datestatus.status_authkey !== null}, statusList[datestatus.status].cellclass]"
                     @click="nextStatus(datestatus, attendee.key)"
                     :title="$gettext(datestatus.status)"
@@ -62,7 +71,7 @@
                     <input type="text" v-model="activeAttendee.name" :placeholder="$gettext('First name, ĺast name')" class="form-control name-field" />
                     <input type="text" v-model="activeAttendee.email" :placeholder="$gettext('Email address')" class="form-control email-field" />
                   </td>
-                  <td v-for="date in poll.alternative_dates" class="status-cell icon-cell"
+                  <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
@@ -75,7 +84,7 @@
                 </tr>
                 <tr v-if="activeAttendee.id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
                   <td class="table-info">{{activeAttendee.name}}</td>
-                  <td v-for="date in poll.alternative_dates" class="status-cell icon-cell"
+                  <td v-for="date in poll.alternative_dates" class="status-cell icon-cell" :key="date.id"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
@@ -158,573 +167,573 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import bModal from 'bootstrap-vue/es/components/modal/modal'
-  import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-  import bBtn from 'bootstrap-vue/es/components/button/button'
-  import bBtnGrp from 'bootstrap-vue/es/components/button-group/button-group'
-  import bAlert from 'bootstrap-vue/es/components/alert/alert'
-  import Spinner from 'vue-simple-spinner'
-  import _ from 'lodash'
-  import moment from 'moment'
+import axios from 'axios'
+import bModal from 'bootstrap-vue/es/components/modal/modal'
+import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
+import bBtn from 'bootstrap-vue/es/components/button/button'
+import bBtnGrp from 'bootstrap-vue/es/components/button-group/button-group'
+import bAlert from 'bootstrap-vue/es/components/alert/alert'
+import Spinner from 'vue-simple-spinner'
+import _ from 'lodash'
+import moment from 'moment'
 
-  export default {
-    data () {
-      return {
-        baseUrl: '',
-        globalError: '',
-        transferingPoll: true,
-        showPoll: true,
-        poll: {},
-        activeAttendee: {name: '', email: '', id: null},
-        forceNewAttendee: false,
-        showGtc: false,
-        gtcText: '',
-        hidegtcmessage: true,
-        askPassword: false,
-        password: '',
-        wrongPassword: false,
-        statusList: [],
-        defaultStatus: 'NEEDS-ACTION',
-        askTineLogin: false,
-        wrongLogin: false,
-        login: {user: '', password: ''},
-        loginErrorMessage: '',
-        newAccountContact: false,
-        showCalendarModal: false,
-        calendarUrl: '',
-        usePersonalLink: false,
-        publicUrl: ''
-      }
-    },
+export default {
+  data () {
+    return {
+      baseUrl: '',
+      globalError: '',
+      transferingPoll: true,
+      showPoll: true,
+      poll: {},
+      activeAttendee: {name: '', email: '', id: null},
+      forceNewAttendee: false,
+      showGtc: false,
+      gtcText: '',
+      hidegtcmessage: true,
+      askPassword: false,
+      password: '',
+      wrongPassword: false,
+      statusList: [],
+      defaultStatus: 'NEEDS-ACTION',
+      askTineLogin: false,
+      wrongLogin: false,
+      login: {user: '', password: ''},
+      loginErrorMessage: '',
+      newAccountContact: false,
+      showCalendarModal: false,
+      calendarUrl: '',
+      usePersonalLink: false,
+      publicUrl: ''
+    }
+  },
 
-    watch: {
-      poll () {
-        if (this.activeAttendee.id === null || this.newAccountContact === true) {
-          _.each(this.poll.alternative_dates, (date) => {
-            this.activeAttendee[date.id] = {status: this.defaultStatus}
-          })
-        } else {
-          _.each(this.poll.attendee_status, (attendee) => {
-            if (attendee.key === this.activeAttendee.id) {
-              this.activeAttendee.status = attendee.status
-              this.activeAttendee.name = attendee.name
-              this.activeAttendee.user_type = attendee.user_type
-              this.activeAttendee.user_id = attendee.user_id
-            }
-          })
-        }
-      }
-    },
-
-    components: {
-      'b-modal': bModal,
-      'b-btn': bBtn,
-      'b-button-group': bBtnGrp,
-      Spinner,
-      'b-alert': bAlert
-    },
-
-    directives: {
-      'b-modal': bModalDirective
-    },
-
-    mounted () {
-      this.loadPoll()
-      moment.locale(this.$language.current)
-
-      let urlParams = window.location.href.substring(window.location.href.indexOf('poll/') + 5).split('/')
-
-      if (urlParams.length > 1) {
-        this.activeAttendee.id = urlParams[1]
-      }
-
-      this.baseUrl = window.location.href.substr(0, window.location.href.indexOf('/Calendar') + 1)
-    },
-
-    methods: {
-      onApplyChanges () {
-        this.transferingPoll = true
-        let action = 'post'
-        if (this.activeAttendee.id === null) {
-          _.each(this.activeAttendee.status, (date) => {
-            date.status = this.activeAttendee[date.id].status
-          })
-        }
-
-        let needUpdate = false
-
-        let payload = {status: []}
-        if (this.activeAttendee.id === null || this.newAccountContact) {
-          action = 'put'
-          needUpdate = true
-
-          payload.name = this.activeAttendee.name
-          payload.email = this.activeAttendee.email
-
-          _.each(this.poll.alternative_dates, (date) => {
-            payload.status.push({
-              cal_event_id: date.id,
-              status: this.activeAttendee[date.id].status
-            })
-          })
-        } else {
-          _.each(this.poll.attendee_status, (attendee) => {
-            _.each(attendee.status, (status) => {
-              if (status.status_authkey === null || status.status === status.initial) {
-                return
-              }
-
-              needUpdate = true
-              let datePayload = {
-                cal_event_id: status.cal_event_id,
-                status: status.status,
-                user_type: status.user_type,
-                user_id: status.user_id,
-                status_authkey: status.status_authkey
-              }
-              payload.status.push(datePayload)
-            })
-          })
-        }
-
-        if (!needUpdate) {
-          this.transferingPoll = false
-          return
-        }
-
-        let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
-
-        let options = {auth: {password: this.password}}
-
-        axios[action](url, payload, options).then((response) => {
-          if (action === 'put' && this.activeAttendee.id === null) {
-            let first = _.head(response.data)
-
-            if (typeof first === 'undefined') {
-              this.transferingPoll = false
-              this.loadPoll()
-            }
-
-            let target = window.location.href +
-              '/' + first.user_type + '-' + first.user_id +
-              '/' + first.status_authkey
-
-            window.location.replace(target)
+  watch: {
+    poll () {
+      if (this.activeAttendee.id === null || this.newAccountContact === true) {
+        _.each(this.poll.alternative_dates, (date) => {
+          this.activeAttendee[date.id] = {status: this.defaultStatus}
+        })
+      } else {
+        _.each(this.poll.attendee_status, (attendee) => {
+          if (attendee.key === this.activeAttendee.id) {
+            this.activeAttendee.status = attendee.status
+            this.activeAttendee.name = attendee.name
+            this.activeAttendee.user_type = attendee.user_type
+            this.activeAttendee.user_id = attendee.user_id
           }
+        })
+      }
+    }
+  },
 
-          this.transferingPoll = false
-          this.loadPoll()
-        }).catch(error => {
-          if (error.response.status === 401) {
-            if (typeof error.response.data === 'undefined') {
+  components: {
+    'b-modal': bModal,
+    'b-btn': bBtn,
+    'b-button-group': bBtnGrp,
+    Spinner,
+    'b-alert': bAlert
+  },
+
+  directives: {
+    'b-modal': bModalDirective
+  },
+
+  mounted () {
+    this.loadPoll()
+    moment.locale(this.$language.current)
+
+    let urlParams = window.location.href.substring(window.location.href.indexOf('poll/') + 5).split('/')
+
+    if (urlParams.length > 1) {
+      this.activeAttendee.id = urlParams[1]
+    }
+
+    this.baseUrl = window.location.href.substr(0, window.location.href.indexOf('/Calendar') + 1)
+  },
+
+  methods: {
+    onApplyChanges () {
+      this.transferingPoll = true
+      let action = 'post'
+      if (this.activeAttendee.id === null) {
+        _.each(this.activeAttendee.status, (date) => {
+          date.status = this.activeAttendee[date.id].status
+        })
+      }
+
+      let needUpdate = false
+
+      let payload = {status: []}
+      if (this.activeAttendee.id === null || this.newAccountContact) {
+        action = 'put'
+        needUpdate = true
+
+        payload.name = this.activeAttendee.name
+        payload.email = this.activeAttendee.email
+
+        _.each(this.poll.alternative_dates, (date) => {
+          payload.status.push({
+            cal_event_id: date.id,
+            status: this.activeAttendee[date.id].status
+          })
+        })
+      } else {
+        _.each(this.poll.attendee_status, (attendee) => {
+          _.each(attendee.status, (status) => {
+            if (status.status_authkey === null || status.status === status.initial) {
               return
             }
 
-            if (error.response.data.indexOf('poll is locked') > -1) {
-              this.poll.locked = 1
-              this.askTineLogin = false
+            needUpdate = true
+            let datePayload = {
+              cal_event_id: status.cal_event_id,
+              status: status.status,
+              user_type: status.user_type,
+              user_id: status.user_id,
+              status_authkey: status.status_authkey
             }
-
-            if (error.response.data.indexOf('please log in') > -1) {
-              if (this.askTineLogin) {
-                this.wrongLogin = true
-              }
-              this.askTineLogin = true
-            }
-
-            if (error.response.data.indexOf('use personal link') > -1) {
-              this.askTineLogin = false
-              this.usePersonalLink = true
-            }
-          } else {
-            console.log(error)
-            console.log(arguments)
-          }
-        })
-      },
-      onCancelChanges () {
-        this.loadPoll()
-      },
-      loadPoll () {
-        this.transferingPoll = true
-        let url = window.location.href.replace(/\/view\//, '/')
-        axios.get(url, {
-          auth: {
-            password: this.password
-          }
-        }).then(response => {
-          if (typeof response.data === 'string') {
-            this.globalError = 'An unexpected error occurred.'
-            this.transferingPoll = false
-            this.showPoll = false
-            return
-          }
-
-          this.poll = response.data
-
-          if (this.poll.config.has_gtc === true) {
-            this.hidegtcmessage = false
-            this.retrieveGTC()
-          }
-
-          this.askPassword = false
-          if (this.poll.password !== null && this.password !== this.poll.password) {
-            this.askPassword = true
-          }
-
-          let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
-
-          if (!this.forceNewAttendee &&
-            typeof this.poll.config.current_contact !== 'undefined' &&
-            (urlParams.length <= 5 || !this.poll.config.is_anonymous)
-          ) {
-            if (this.poll.config.is_anonymous) {
-              this.activeAttendee.id = null
-              this.forceNewAttendee = true
-            } else {
-              this.activeAttendee.id = this.poll.config.current_contact.type + '-' + this.poll.config.current_contact.id
-              this.activeAttendee.name = this.poll.config.current_contact.n_fn
-              this.activeAttendee.email = this.poll.config.current_contact.email
-            }
-          }
-
-          this.newAccountContact = true
-          if (this.activeAttendee.id === null) {
-            this.newAccountContact = false
-          } else {
-            _.each(this.poll.attendee_status, (attendee) => {
-              if (attendee.key === this.activeAttendee.id) {
-                this.newAccountContact = false
-              }
-            })
-          }
-
-          this.defaultStatus = this.poll.config.status_available.default
-
-          if (typeof this.poll.config.jsonKey !== 'undefined') {
-            this.$tine20.setJsonKey(this.poll.config.jsonKey)
-          }
-
-          let previous = null
-          let first = null
-          for (var i = 0; i < this.poll.config.status_available.records.length; i++) {
-            var status = this.poll.config.status_available.records[i]
-
-            var cellclass = 'table-light'
-            switch (status.id) {
-              case 'ACCEPTED':
-                cellclass = 'table-success'
-                break
-              case 'DECLINED':
-                cellclass = 'table-danger'
-                break
-              case 'TENTATIVE':
-                cellclass = 'table-warning'
-                break
-            }
-
-            this.statusList[status.id] = {
-              icon: status.icon,
-              cellclass: cellclass
-            }
-
-            if (first === null) {
-              first = status.id
-            }
-
-            if (previous !== null) {
-              this.statusList[previous].next = status.id
-            }
-
-            previous = status.id
-          }
-          this.statusList[previous].next = first
-
-          _.each(this.poll.attendee_status, (attendee) => {
-            _.each(attendee.status, (status) => {
-              status.initial = status.status
-            })
+            payload.status.push(datePayload)
           })
-
-          this.transferingPoll = false
-        }).catch(error => {
-          if (error.response.status === 401) {
-            if (error.response.data.indexOf('authkey mismatch') > -1) {
-              this.askPassword = false
-              this.globalError = 'Bitte verwenden Sie Ihre persönliche URL.'
-              this.publicUrl = window.location.pathname.replace(/\/$/, '').split('/').slice(0, 5).join('/')
-              this.showPoll = false
-              this.transferingPoll = false
-            } else {
-              if (this.askPassword) {
-                this.wrongPassword = true
-              }
-              this.askPassword = true
-            }
-          } else {
-            console.log(error)
-            console.log(arguments)
-          }
         })
-      },
-      getAttendeeId (attendee) {
-        return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
-      },
-      nextStatus (attendee, id) {
-        if (attendee.status_authkey === null && id !== null) {
-          return
-        }
-        if (!this.showChangeButtons()) {
-          return
-        }
+      }
 
-        attendee.status = this.statusList[attendee.status].next
-        this.$forceUpdate()
-      },
-      onOtherUser () {
-        let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
+      if (!needUpdate) {
+        this.transferingPoll = false
+        return
+      }
 
-        if (urlParams.length > 5) {
-          let target = urlParams.slice(0, -2).join('/')
+      let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
+
+      let options = {auth: {password: this.password}}
+
+      axios[action](url, payload, options).then((response) => {
+        if (action === 'put' && this.activeAttendee.id === null) {
+          let first = _.head(response.data)
+
+          if (typeof first === 'undefined') {
+            this.transferingPoll = false
+            this.loadPoll()
+          }
+
+          let target = window.location.href +
+            '/' + first.user_type + '-' + first.user_id +
+            '/' + first.status_authkey
+
           window.location.replace(target)
         }
 
-        this.newAccountContact = false
-        this.forceNewAttendee = true
-        this.activeAttendee = {
-          id: null,
-          name: '',
-          email: '',
-          status: []
-        }
-
-        this.$tine20.request('Tinebase.logout', {}).then(() => {
-        }).catch(error => {
-          console.log(error)
-        }).then(() => {
-          this.loadPoll()
-        })
-      },
-      submitPassword () {
-        this.wrongPassword = false
+        this.transferingPoll = false
         this.loadPoll()
-      },
-      submitTineLogin () {
-        let params = {
-          username: this.login.user,
-          password: this.login.password
+      }).catch(error => {
+        if (error.response.status === 401) {
+          if (typeof error.response.data === 'undefined') {
+            return
+          }
+
+          if (error.response.data.indexOf('poll is locked') > -1) {
+            this.poll.locked = 1
+            this.askTineLogin = false
+          }
+
+          if (error.response.data.indexOf('please log in') > -1) {
+            if (this.askTineLogin) {
+              this.wrongLogin = true
+            }
+            this.askTineLogin = true
+          }
+
+          if (error.response.data.indexOf('use personal link') > -1) {
+            this.askTineLogin = false
+            this.usePersonalLink = true
+          }
+        } else {
+          console.log(error)
+          console.log(arguments)
         }
-
-        this.$tine20.request('Tinebase.login', params).then(response => {
-          let account = response.result.account
-          this.activeAttendee.id = 'user-' + account.contact_id
-          this.activeAttendee.name = account.accountDisplayName
-          this.activeAttendee.email = account.accountEmailAddress
-
-          this.wrongLogin = false
-          this.askTineLogin = false
-
-          // replace with onApplyChanges()
-          this.loadPoll()
-        }).catch(error => {
-          this.wrongLogin = true
-          this.loginErrorMessage = error.result.errorMessage
-        })
-      },
-      retrieveGTC () {
-        if (this.gtcText.length > 0) {
+      })
+    },
+    onCancelChanges () {
+      this.loadPoll()
+    },
+    loadPoll () {
+      this.transferingPoll = true
+      let url = window.location.href.replace(/\/view\//, '/')
+      axios.get(url, {
+        auth: {
+          password: this.password
+        }
+      }).then(response => {
+        if (typeof response.data === 'string') {
+          this.globalError = 'An unexpected error occurred.'
+          this.transferingPoll = false
+          this.showPoll = false
           return
         }
 
-        let url = window.location.href.substring(0, window.location.href.indexOf('/poll/')) + '/pollagb'
-        axios.get(url).then(response => {
-          this.gtcText = response.data
-          if (this.gtcText.length === 0) {
-            this.hidegtcmessage = true
+        this.poll = response.data
+
+        if (this.poll.config.has_gtc === true) {
+          this.hidegtcmessage = false
+          this.retrieveGTC()
+        }
+
+        this.askPassword = false
+        if (this.poll.password !== null && this.password !== this.poll.password) {
+          this.askPassword = true
+        }
+
+        let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
+
+        if (!this.forceNewAttendee &&
+          typeof this.poll.config.current_contact !== 'undefined' &&
+          (urlParams.length <= 5 || !this.poll.config.is_anonymous)
+        ) {
+          if (this.poll.config.is_anonymous) {
+            this.activeAttendee.id = null
+            this.forceNewAttendee = true
+          } else {
+            this.activeAttendee.id = this.poll.config.current_contact.type + '-' + this.poll.config.current_contact.id
+            this.activeAttendee.name = this.poll.config.current_contact.n_fn
+            this.activeAttendee.email = this.poll.config.current_contact.email
           }
-        }).catch(error => {
+        }
+
+        this.newAccountContact = true
+        if (this.activeAttendee.id === null) {
+          this.newAccountContact = false
+        } else {
+          _.each(this.poll.attendee_status, (attendee) => {
+            if (attendee.key === this.activeAttendee.id) {
+              this.newAccountContact = false
+            }
+          })
+        }
+
+        this.defaultStatus = this.poll.config.status_available.default
+
+        if (typeof this.poll.config.jsonKey !== 'undefined') {
+          this.$tine20.setJsonKey(this.poll.config.jsonKey)
+        }
+
+        let previous = null
+        let first = null
+        for (var i = 0; i < this.poll.config.status_available.records.length; i++) {
+          var status = this.poll.config.status_available.records[i]
+
+          var cellclass = 'table-light'
+          switch (status.id) {
+            case 'ACCEPTED':
+              cellclass = 'table-success'
+              break
+            case 'DECLINED':
+              cellclass = 'table-danger'
+              break
+            case 'TENTATIVE':
+              cellclass = 'table-warning'
+              break
+          }
+
+          this.statusList[status.id] = {
+            icon: status.icon,
+            cellclass: cellclass
+          }
+
+          if (first === null) {
+            first = status.id
+          }
+
+          if (previous !== null) {
+            this.statusList[previous].next = status.id
+          }
+
+          previous = status.id
+        }
+        this.statusList[previous].next = first
+
+        _.each(this.poll.attendee_status, (attendee) => {
+          _.each(attendee.status, (status) => {
+            status.initial = status.status
+          })
+        })
+
+        this.transferingPoll = false
+      }).catch(error => {
+        if (error.response.status === 401) {
+          if (error.response.data.indexOf('authkey mismatch') > -1) {
+            this.askPassword = false
+            this.globalError = 'Bitte verwenden Sie Ihre persönliche URL.'
+            this.publicUrl = window.location.pathname.replace(/\/$/, '').split('/').slice(0, 5).join('/')
+            this.showPoll = false
+            this.transferingPoll = false
+          } else {
+            if (this.askPassword) {
+              this.wrongPassword = true
+            }
+            this.askPassword = true
+          }
+        } else {
           console.log(error)
           console.log(arguments)
-        })
-      },
-      showCalendar (date) {
-        let calendarUrl = _.get(date, 'info_url', null)
-
-        if (calendarUrl !== null) {
-          this.calendarUrl = calendarUrl
-          this.showCalendarModal = true
         }
-      },
-      getStatusIcon (statusId) {
-        let iconUrl
-        _.each(this.poll.config.status_available.records, (status) => {
-          if (status.id === statusId) {
-            iconUrl = this.baseUrl + status.icon
-          }
-        })
-        return iconUrl
-      },
-      getCalendarIcon (date) {
-        let start = null
-        _.each(this.poll.alternative_dates, (pollDate) => {
-          if (date.cal_event_id === pollDate.id) {
-            start = pollDate.dtstart
-          }
-        })
+      })
+    },
+    getAttendeeId (attendee) {
+      return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
+    },
+    nextStatus (attendee, id) {
+      if (attendee.status_authkey === null && id !== null) {
+        return
+      }
+      if (!this.showChangeButtons()) {
+        return
+      }
 
-        return this.baseUrl + 'images/view-calendar-day-' + moment(start).format('D') + '.png'
-      },
-      showChangeButtons () {
-        if (_.isEmpty(this.poll)) {
-          return false
+      attendee.status = this.statusList[attendee.status].next
+      this.$forceUpdate()
+    },
+    onOtherUser () {
+      let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
+
+      if (urlParams.length > 5) {
+        let target = urlParams.slice(0, -2).join('/')
+        window.location.replace(target)
+      }
+
+      this.newAccountContact = false
+      this.forceNewAttendee = true
+      this.activeAttendee = {
+        id: null,
+        name: '',
+        email: '',
+        status: []
+      }
+
+      this.$tine20.request('Tinebase.logout', {}).then(() => {
+      }).catch(error => {
+        console.log(error)
+      }).then(() => {
+        this.loadPoll()
+      })
+    },
+    submitPassword () {
+      this.wrongPassword = false
+      this.loadPoll()
+    },
+    submitTineLogin () {
+      let params = {
+        username: this.login.user,
+        password: this.login.password
+      }
+
+      this.$tine20.request('Tinebase.login', params).then(response => {
+        let account = response.result.account
+        this.activeAttendee.id = 'user-' + account.contact_id
+        this.activeAttendee.name = account.accountDisplayName
+        this.activeAttendee.email = account.accountEmailAddress
+
+        this.wrongLogin = false
+        this.askTineLogin = false
+
+        // replace with onApplyChanges()
+        this.loadPoll()
+      }).catch(error => {
+        this.wrongLogin = true
+        this.loginErrorMessage = error.result.errorMessage
+      })
+    },
+    retrieveGTC () {
+      if (this.gtcText.length > 0) {
+        return
+      }
+
+      let url = window.location.href.substring(0, window.location.href.indexOf('/poll/')) + '/pollagb'
+      axios.get(url).then(response => {
+        this.gtcText = response.data
+        if (this.gtcText.length === 0) {
+          this.hidegtcmessage = true
         }
+      }).catch(error => {
+        console.log(error)
+        console.log(arguments)
+      })
+    },
+    showCalendar (date) {
+      let calendarUrl = _.get(date, 'info_url', null)
 
-        if (this.poll.closed === '1') {
-          return false
-        }
-
-        if (this.poll.locked === '1' && this.poll.config.is_anonymous) {
-          return false
-        }
-
-        return true
+      if (calendarUrl !== null) {
+        this.calendarUrl = calendarUrl
+        this.showCalendarModal = true
       }
     },
+    getStatusIcon (statusId) {
+      let iconUrl
+      _.each(this.poll.config.status_available.records, (status) => {
+        if (status.id === statusId) {
+          iconUrl = this.baseUrl + status.icon
+        }
+      })
+      return iconUrl
+    },
+    getCalendarIcon (date) {
+      let start = null
+      _.each(this.poll.alternative_dates, (pollDate) => {
+        if (date.cal_event_id === pollDate.id) {
+          start = pollDate.dtstart
+        }
+      })
 
-    filters: {
-      dateFormat (value) {
-        return moment(value).format('lll')
+      return this.baseUrl + 'images/view-calendar-day-' + moment(start).format('D') + '.png'
+    },
+    showChangeButtons () {
+      if (_.isEmpty(this.poll)) {
+        return false
       }
+
+      if (this.poll.closed === '1') {
+        return false
+      }
+
+      if (this.poll.locked === '1' && !this.activeAttendee.id) {
+        return false
+      }
+
+      return true
+    }
+  },
+
+  filters: {
+    dateFormat (value) {
+      return moment(value).format('lll')
     }
   }
+}
 </script>
 
 <style scoped>
-  #root {
-    padding: 10px;
-    color: #555;
-  }
+#root {
+  padding: 10px;
+  color: #555;
+}
 
-  h1 {
-    font-size: 2rem;
-    color: #000;
-  }
+h1 {
+  font-size: 2rem;
+  color: #000;
+}
 
-  h2 {
-    font-size: 1.5rem;
-    color: #222;
-  }
+h2 {
+  font-size: 1.5rem;
+  color: #222;
+}
 
-  button {
-    background-color: #DCE8F5;
-    color: #222;
-    border: 1px solid #008CC9;
-  }
+button {
+  background-color: #DCE8F5;
+  color: #222;
+  border: 1px solid #008CC9;
+}
 
-  button:hover {
-    background-color: #FFF;
-    color: #222;
-    border: 1px solid #008CC9;
-  }
+button:hover {
+  background-color: #FFF;
+  color: #222;
+  border: 1px solid #008CC9;
+}
 
-  button:active {
-    background-color: #DCE8F5;
-    color: #222;
-    border: 2px solid #008CC9;
-  }
+button:active {
+  background-color: #DCE8F5;
+  color: #222;
+  border: 2px solid #008CC9;
+}
 
-  .greetings {
-    margin-top: 10px;
-    margin-bottom: 25px;
-  }
+.greetings {
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
 
-  .greetings-text {
-    position: relative;
-  }
+.greetings-text {
+  position: relative;
+}
 
-  .greetings-text p {
-    position: absolute;
-    bottom: 0;
-    display: inline-block;
-    margin-bottom: 0;
-  }
+.greetings-text p {
+  position: absolute;
+  bottom: 0;
+  display: inline-block;
+  margin-bottom: 0;
+}
 
-  td.table-info {
-    background-color: #DCE8F5;
-  }
+td.table-info {
+  background-color: #DCE8F5;
+}
 
-  td.icon-cell {
-    text-align: center;
-    vertical-align: middle;
-  }
+td.icon-cell {
+  text-align: center;
+  vertical-align: middle;
+}
 
-  tr.row-active td.icon-cell {
-    filter: brightness(0.9);
-  }
+tr.row-active td.icon-cell {
+  filter: brightness(0.9);
+}
 
-  tr.row-active td {
-    font-weight: bold;
-  }
+tr.row-active td {
+  font-weight: bold;
+}
 
-  td.name-field {
-    padding: 5px 5px 5px 5px;
-  }
+td.name-field {
+  padding: 5px 5px 5px 5px;
+}
 
-  td.editable {
-    cursor: pointer;
-    user-select: none;
-  }
+td.editable {
+  cursor: pointer;
+  user-select: none;
+}
 
-  input.name-field {
-    border-radius: 0px;
-    margin-bottom: 5px;
-    float: left;
-    padding: 2px 5px 2px 5px;
-  }
+input.name-field {
+  border-radius: 0px;
+  margin-bottom: 5px;
+  float: left;
+  padding: 2px 5px 2px 5px;
+}
 
-  input.email-field {
-    border-radius: 0px;
-    padding: 2px 5px 2px 5px;
-  }
+input.email-field {
+  border-radius: 0px;
+  padding: 2px 5px 2px 5px;
+}
 
-  .footer {
-    margin-top: 100px;
-    padding: 5px;
-  }
+.footer {
+  margin-top: 100px;
+  padding: 5px;
+}
 
-  th {
-    font-weight: normal;
-    text-align: center;
-  }
+th {
+  font-weight: normal;
+  text-align: center;
+}
 
-  div.modified-marker {
-    display: block;
-    position: relative;
-    float: left;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 8px 8px 0 0;
-    border-color: #ff0000 transparent transparent transparent;
-    margin: -0.75rem 0 0 -0.75rem;
-  }
+div.modified-marker {
+  display: block;
+  position: relative;
+  float: left;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 0 0;
+  border-color: #ff0000 transparent transparent transparent;
+  margin: -0.75rem 0 0 -0.75rem;
+}
 
-  .login-error {
-    margin-top: 10px;
-  }
+.login-error {
+  margin-top: 10px;
+}
 
-  span.calendar-symbol {
-    display: absolute;
-    float: left;
-    margin-right: -21px;
-    margin-left: 5px;
-  }
+span.calendar-symbol {
+  display: absolute;
+  float: left;
+  margin-right: -21px;
+  margin-left: 5px;
+}
 
-  iframe.calendar {
-    width: 100%;
-    border: none;
-  }
+iframe.calendar {
+  width: 100%;
+  border: none;
+}
 
 @media (min-height: 700px) {
   iframe.calendar {
