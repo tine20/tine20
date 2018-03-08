@@ -197,11 +197,12 @@ Tine.Tinebase.ApplicationStarter = {
                     gridRenderer = Ext.util.Format.money;
                     break;
                 case 'relation':
+                    var cc = config.config;
                     gridRenderer = new Tine.widgets.relation.GridRenderer({
                         appName: appName,
-                        type: config.type,
-                        foreignApp: config.appName,
-                        foreignModel: config.modelName
+                        type: cc.type,
+                        foreignApp: cc.appName,
+                        foreignModel: cc.modelName
                         });
                     break;
                 default:
