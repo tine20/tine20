@@ -98,11 +98,12 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
      * @param string $principal
      * @return array
      */
-    public function getPrincipalMembership($mainPrincipal) {
-
+    public function getPrincipalMembership($mainPrincipal)
+    {
+        $cacheId = $mainPrincipal .'::' . Tinebase_WebDav_PrincipalBackend::showHiddenGroups();
         // First check our cache
-        if (isset($this->principalMembershipCache[$mainPrincipal])) {
-            return $this->principalMembershipCache[$mainPrincipal];
+        if (isset($this->principalMembershipCache[$cacheId])) {
+            return $this->principalMembershipCache[$cacheId];
         }
 
         $check = array($mainPrincipal);
@@ -134,7 +135,7 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
         }
 
         // Store the result in the cache
-        $this->principalMembershipCache[$mainPrincipal] = $principals;
+        $this->principalMembershipCache[$cacheId] = $principals;
 
         return $principals;
 
