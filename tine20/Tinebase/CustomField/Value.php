@@ -20,12 +20,14 @@ class Tinebase_CustomField_Value
     protected $_value;
     protected $_definition;
     protected $_callback;
+    protected $_application_id;
 
-    public function __construct($value, $_definition, $callback)
+    public function __construct($value, $_definition, $callback, $application_id)
     {
         $this->_value = $value;
         $this->_definition = $_definition;
         $this->_callback = $callback;
+        $this->_application_id = $application_id;
     }
 
     public function getValue()
@@ -50,7 +52,8 @@ class Tinebase_CustomField_Value
                 break;
             case 'keyfield':
                 $keyfield = Tinebase_Config_KeyField::create($this->_definition->keyFieldConfig->value
-                    ->toArray());
+                    ->toArray(), ['appName' => Tinebase_Application::getInstance()
+                    ->getApplicationById($this->_application_id)->name]);
                 $value = $keyfield->getTranslatedValue($this->_value);
                 break;
             default:
