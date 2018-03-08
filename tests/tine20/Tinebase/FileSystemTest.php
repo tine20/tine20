@@ -926,4 +926,39 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertEquals($this->_controller->getPathOfNode($node, true) . ' exceeded quota', $message->getBodyText()
             ->getRawContent());
     }
+
+    public function testAclAdjustDuringMove()
+    {
+        /** @var Tinebase_Model_Tree_Node $aclSharedFolder */
+        $aclSharedFolder = Filemanager_Controller_Node::getInstance()->createNodes(['/shared/testAcl'],
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        static::assertEquals($aclSharedFolder->getId(), $aclSharedFolder->acl_node,
+            'expected that new folder gets default acls');
+        /** @var Tinebase_Model_Tree_Node $aclPersonalFolder */
+        $aclPersonalFolder = Filemanager_Controller_Node::getInstance()->createNodes(
+            ['/personal/' . Tinebase_Core::getUser()->getId() . '/testAcl'],
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        static::assertEquals($aclPersonalFolder->getId(), $aclPersonalFolder->acl_node,
+            'expected that new folder gets default acls');
+
+        $noAclSharedFolder = $this->_controller->createFileTreeNode($aclSharedFolder->parent_id, 'testNoAcl',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(null, $noAclSharedFolder->acl_node, 'new folder should have no acls');
+        $noAclPersonalFolder = $this->_controller->createFileTreeNode($aclPersonalFolder->parent_id, 'testNoAcl',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(null, $noAclPersonalFolder->acl_node, 'new folder should have no acls');
+
+        $sharedPath = dirname($this->_controller->getPathOfNode($noAclSharedFolder, true));
+        $personalPath = dirname($this->_controller->getPathOfNode($noAclPersonalFolder, true));
+
+        $this->_controller->rename($sharedPath . '/testNoAcl', $personalPath . '/movedTest');
+        $this->_controller->rename($personalPath . '/testNoAcl', $sharedPath . '/movedTest');
+
+        $noAclSharedFolder = $this->_controller->get($noAclSharedFolder->getId());
+        static::assertEquals($noAclSharedFolder->getId(), $noAclSharedFolder->acl_node,
+            'expected that moved folder gets default acls');
+        $noAclPersonalFolder = $this->_controller->get($noAclPersonalFolder->getId());
+        static::assertEquals($noAclPersonalFolder->getId(), $noAclPersonalFolder->acl_node,
+            'expected that moved folder gets default acls');
+    }
 }
