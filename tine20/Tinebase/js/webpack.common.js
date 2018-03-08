@@ -47,11 +47,10 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 });
 
 // additional 'real' entry points
-entry['Tinebase/js/postal.xwindow.js'] = baseDir + '/Tinebase/js/postal.xwindow.js';
+entry['Tinebase/js/postal-xwindow-client.js'] = baseDir + '/Tinebase/js/postal-xwindow-client.js';
 
 module.exports = {
     entry: entry,
-    //devtool: 'source-map', // use -d option if you need sourcemaps
     output: {
         path: baseDir + '/',
         // avoid public path, see #13430.
@@ -82,10 +81,9 @@ module.exports = {
                 test: /\.es6\.js$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                // include: /\/(src|test)\//,
                 options: {
                     presets: [
-                        ["@babel/env"]
+                        ["@babel/env"/*, { "modules": false }*/]
                     ]
                 }
             },
@@ -113,11 +111,13 @@ module.exports = {
         modules: [path.resolve(__dirname, "node_modules")]
     },
     resolve: {
-        modules: [path.resolve(__dirname , 'node_modules')],
-
+        extensions: [".js", ".es6.js"],
         // add browserify which is used by some libs (e.g. director)
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too
-        modules: [path.resolve(__dirname, "node_modules")],
+        modules: [
+            __dirname,
+            path.resolve(__dirname, "node_modules")
+        ],
     }
 };

@@ -926,4 +926,16 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertEquals($this->_controller->getPathOfNode($node, true) . ' exceeded quota', $message->getBodyText()
             ->getRawContent());
     }
+
+    public function testFileObjectsCleanup()
+    {
+        $foBackend = Tinebase_FileSystem::getInstance()->getFileObjectBackend();
+        $result = $foBackend->deletedUnusedObjects();
+        static::assertEquals(0, $result, 'there should not be any orphant file objects');
+
+        $foBackend->create(new Tinebase_Model_Tree_FileObject(['type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER]));
+
+        $result = $foBackend->deletedUnusedObjects();
+        static::assertEquals(1, $result, 'there should be one orphant file objects');
+    }
 }

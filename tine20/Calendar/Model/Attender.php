@@ -27,7 +27,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const USERTYPE_GROUPMEMBER = 'groupmember';
     const USERTYPE_RESOURCE    = 'resource';
     const USERTYPE_LIST        = 'list';
-    
+    const USERTYPE_ANY         = 'any';
+
     /**
      * supported roles
      */

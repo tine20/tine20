@@ -344,6 +344,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * set aliases
      * 
      * @param array $_smtpSettings
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _createAliasDestinations($_smtpSettings)
     {
@@ -357,9 +358,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $userId = $_smtpSettings[$this->_propertyMapping['emailUserId']];
             
         foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
+            if ($aliasAddress === $_smtpSettings['email']) {
+                throw new Tinebase_Exception_SystemGeneric('It is not allowed to set an alias equal to the main email address');
+            }
+
             // check if in primary or secondary domains
             if (! empty($aliasAddress) && $this->_checkDomain($aliasAddress)) {
-                
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
                     // create alias -> email
                     $this->_addDestination(array(

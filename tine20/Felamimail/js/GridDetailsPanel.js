@@ -314,17 +314,18 @@ Ext.ns('Tine.Felamimail');
                             height = 500;
                         }
 
+                        // TODO fix linkify? this destroys the textarea
+                        /*
                         Tine.Tinebase.common.linkifyText(body, function(linkified) {
                             var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
                             Ext.fly(bodyEl).update(linkified);
                         }, this.panel);
+                        */
 
                         body = '<textarea ' +
                             'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                             body + '</textarea>';
-                    } else if (messageData.body_content_type != 'text/html') {
-                        body = Ext.util.Format.nl2br(body);
                     }
                 }
                 return body;

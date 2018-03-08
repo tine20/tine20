@@ -162,7 +162,7 @@ class Tinebase_Export_XlsxTest extends TestCase
             'couldn\'t find field ' . $recordCFfield . ' in ' . $printRdata0);
         
         static::assertEquals($scleverContact->getTitle(), $arrayData[1][$recordCFKey],
-            $recordCFfield . ' not as expected: ' . print_r($arrayData[1], true));
+            $recordCFfield . ' not as expected: ' . print_r($arrayData[1], true) . PHP_EOL . $recordCFKey);
 
         $recordListCFfield = $export->getTranslate()->_($recordListCF->definition->label);
         static::assertTrue(false !== ($recordListCFKey = array_search($recordListCFfield, $arrayData[0])),

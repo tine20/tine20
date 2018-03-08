@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_ModelConfiguration, using the test class from hr
  */
-class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
+class Tinebase_ModelConfigurationTest extends TestCase
 {
     /**
      * tests if the modelconfiguration gets created for the traditional models
@@ -44,5 +44,21 @@ class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $mcFields = $timesheet->getConfiguration()->getFields();
         $this->assertEquals('string', $mcFields['invoice_id']['type']);
         $this->assertEquals(null, $mcFields['invoice_id']['label']);
+    }
+
+    /**
+     * testSortableVirtualFields
+     */
+    public function testSortableVirtualFields()
+    {
+        $customer = new Sales_Model_Customer([], true);
+        $cObj = $customer->getConfiguration();
+        $fields = $cObj->getFields();
+        foreach ($fields as $field) {
+            if ($field['type'] === 'virtual') {
+                self::assertTrue(isset($field['config']['sortable']), print_r($field, true));
+                self::assertFalse($field['config']['sortable'], 'field should not be sortable: ', print_r($field, true));
+            }
+        }
     }
 }

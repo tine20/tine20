@@ -1369,15 +1369,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentEvent = $this->_controller->create($event);
         $alarmTime = clone $persistentEvent->dtstart;
         $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
-        
-        
+        $firstAlarm = $persistentEvent->alarms->getFirstRecord();
+        self::assertTrue(is_object($firstAlarm), 'did not find any alarm');
+        self::assertTrue($alarmTime->equals($firstAlarm->alarm_time), 'initial alarm is not at expected time');
+
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
         $updatedEvent = $this->_controller->update($persistentEvent);
         $alarmTime = clone $updatedEvent->dtstart;
         $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'alarm of updated event is not adjusted');
+        self::assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'alarm of updated event is not adjusted');
     }
     
     /**

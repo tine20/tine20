@@ -160,7 +160,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
 
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
-            $result = $imap->getFolders(Felamimail_Model_Folder::encodeFolderName($_folderName) . $this->_delimiter, '%');
+            $result = $imap->getFolders(Felamimail_Model_Folder::encodeFolderName($_folderName) . addslashes($this->_delimiter), '%');
             
             // remove folder if self
             if (in_array($_folderName, array_keys($result))) {

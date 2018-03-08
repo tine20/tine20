@@ -1542,6 +1542,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
+    public function cleanFileObjects()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_FileSystem::getInstance()->clearFileObjects();
+    }
+
     public function clearCache()
     {
         if (! $this->_checkAdminRight()) {

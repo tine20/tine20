@@ -344,7 +344,80 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
     }
-    
+
+    /**
+     * report of shared calendars
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return integer
+     *
+     * @todo generalize for other apps?
+     */
+    public function sharedCalendarReport(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        // get all personal containers of all users
+        $filter = [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL],
+            ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+            ['field' => 'application_id', 'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()],
+        ];
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+        $containers = Tinebase_Container::getInstance()->search(
+            new Tinebase_Model_ContainerFilter($filter),
+            new Tinebase_Model_Pagination(['sort' => 'owner_id'])
+        );
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
+        $resultArray = [];
+        $users = [];
+        $groups = [];
+        foreach ($containers as $container) {
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
+            $readGrants = $grants->filter('readGrant', true);
+            foreach ($readGrants as $readGrant) {
+                // remove all containers with only personal grants
+                if ($readGrant->account_id === $container->owner_id) {
+                    continue;
+                }
+                if (! isset($users[$container->owner_id])) {
+                    $users[$container->owner_id] = Tinebase_User::getInstance()->getFullUserById($container->owner_id)->accountLoginName;
+                }
+
+                $grantArray = $readGrant->toArray();
+                unset($grantArray['id']);
+                //unset($grantArray['account_id']);
+                switch ($readGrant->account_type) {
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                        if (! isset($users[$readGrant->account_id])) {
+                            $users[$readGrant->account_id] = Tinebase_User::getInstance()->getFullUserById($readGrant->account_id)->accountLoginName;
+                        }
+                        $accountName = $users[$readGrant->account_id];
+                        break;
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                        if (! isset($groups[$readGrant->account_id])) {
+                            $groups[$readGrant->account_id] = Tinebase_Group::getInstance()->getGroupById($readGrant->account_id);
+                        }
+                        $accountName = $groups[$readGrant->account_id];
+                        break;
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
+                        $accountName = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+                        break;
+                }
+                $grantArray['accountName'] = $accountName;
+                $resultArray[$users[$container->owner_id]][$container->name][] = $grantArray;
+            }
+        }
+        echo Zend_Json::encode($resultArray);
+
+        return 1;
+    }
+
+    /**
+     * @param $event
+     */
     protected function _printShortEvent($event)
     {
         echo "Event '" . substr($event->summary, 0, 30) . "' (" . $event->dtstart->toString() . ' - ' . $event->dtend->toString() .")\n";

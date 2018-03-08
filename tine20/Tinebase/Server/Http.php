@@ -49,7 +49,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 try {
                     Tinebase_Core::startCoreSession();
                 } catch (Zend_Session_Exception $zse) {
-                    // expire session cookie for client
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage() . ' - expire session cookie for client');
                     Tinebase_Session::expireSessionCookie();
                 }
             }
