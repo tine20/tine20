@@ -945,11 +945,23 @@ class Tinebase_ModelConfiguration {
         );
 
         if ($this->_hasCustomFields) {
-            $this->_fields['customfields'] = array('label' => 'Custom Fields', 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['customfields'] = [
+                'label' => 'Custom Fields',
+                'shy' => true,
+                'sortable' => false,
+                'type' => 'custom',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
+            ];
         }
 
         if ($this->_hasRelations) {
-            $this->_fields['relations'] = array('label' => 'Relations', 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['relations'] = [
+                'label' => 'Relations',
+                'shy' => true,
+                'sortable' => false,
+                'type' => 'relation',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
+            ];
         }
 
         if ($this->_containerProperty) {
