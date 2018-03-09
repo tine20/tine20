@@ -661,6 +661,9 @@ class Tinebase_Relations
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not find controller for model: ' . $modelName . '! you have broken relations: ' . join(',', $relations->id));
                     $_relations->removeRecords($relations);
+                } catch (Tinebase_Exception_AreaLocked $teal) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' AreaLocked for model: ' . $modelName);
+                    $_relations->removeRecords($relations);
                 }
             }
 
