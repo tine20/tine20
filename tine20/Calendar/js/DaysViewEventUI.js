@@ -37,12 +37,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 
         if(event.get('is_all_day_event')) {
             var dayWidth = Ext.fly(view.wholeDayArea).getWidth() / view.numOfDays;
-            rzInfo.diff = Math.round((width - rz.originalWidth) / dayWidth);
+            rzInfo.diff = Math.ceil((width - rz.originalWidth) / dayWidth);
 
         } else {
             rzInfo.diff = view.getHeightMinutes(height - rz.originalHeight);
             // neglegt diffs due to borders etc.
-            rzInfo.diff = Math.round(rzInfo.diff/view.timeIncrement) * view.timeIncrement;
+            rzInfo.diff = Math.ceil(rzInfo.diff/view.timeIncrement) * view.timeIncrement;
         }
         rzInfo.duration = originalDuration + rzInfo.diff;
 
