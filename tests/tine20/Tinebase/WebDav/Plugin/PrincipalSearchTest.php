@@ -38,7 +38,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
         
         $plugin = new Sabre\DAV\Auth\Plugin($mockBackend,'realm');
         $this->server->addPlugin($plugin);
-        
+
         $aclPlugin = new \Sabre\DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
@@ -87,6 +87,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
         ));
         $request->setBody($body);
 
+        $this->server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin());
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
