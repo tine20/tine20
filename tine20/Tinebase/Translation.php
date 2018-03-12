@@ -47,8 +47,8 @@ class Tinebase_Translation
         // look for po files in Tinebase 
         $officialTranslationsDir = dirname(__FILE__) . "/../$appName/translations";
         foreach(scandir($officialTranslationsDir) as $poFile) {
-            list ($localestring, $suffix) = explode('.', $poFile);
-            if ($suffix == 'po') {
+            if (substr($poFile, -3) == '.po') {
+                list ($localestring, $suffix) = explode('.', $poFile);
                 $availableTranslations[$localestring] = array(
                     'path' => "$officialTranslationsDir/$poFile" 
                 );

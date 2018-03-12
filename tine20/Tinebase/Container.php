@@ -944,7 +944,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
             ->where("{$this->_db->quoteIdentifier('container.owner_id')} != ?", $accountId)
-            ->where("{$this->_db->quoteIdentifier('accounts.status')} = ?", 'enabled');
+            ->where("{$this->_db->quoteIdentifier('accounts.status')} IN (?)",
+                [Tinebase_Model_FullUser::ACCOUNT_STATUS_BLOCKED, Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED]);
 
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
 
