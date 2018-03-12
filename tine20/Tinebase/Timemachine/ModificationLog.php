@@ -1310,55 +1310,65 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' trying to connect to master host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
-
-        $tine20Service = new Zend_Service_Tine20($tine20Url);
-
-        $authResponse = null;
         try {
-            $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' trying to connect to master host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
+            }
+
+            $tine20Service = new Zend_Service_Tine20($tine20Url);
+
+            $authResponse = null;
+            try {
+                $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+            if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+                throw new Tinebase_Exception_AccessDenied('login failed');
+            }
+            unset($authResponse);
+
+            //get replication state:
+            $state = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->state;
+            if (!is_array($state) || !isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
+                $masterReplicationId = 0;
+            } else {
+                $masterReplicationId = $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID];
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' master replication id: ' . $masterReplicationId);
+            }
+
+            $tinebaseProxy = $tine20Service->getProxy('Tinebase');
+
+            try {
+                /** @noinspection PhpUndefinedMethodInspection */
+                $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
+                /* TODO make the amount above configurable  */
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' received ' . count($result['results']) . ' modification logs');
+            }
+
+            // memory cleanup
+            unset($tinebaseProxy);
+            unset($tine20Service);
+
+            $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $result['results']);
+            unset($result);
+
+            return $this->applyReplicationModLogs($modifications);
+        } finally {
+            Tinebase_Core::releaseMultiServerLock(__METHOD__);
         }
-        if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
-            throw new Tinebase_Exception_AccessDenied('login failed');
-        }
-        unset($authResponse);
-
-        //get replication state:
-        $state = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->state;
-        if (!is_array($state) || !isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
-            $masterReplicationId = 0;
-        } else {
-            $masterReplicationId = $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID];
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' master replication id: ' . $masterReplicationId);
-
-        $tinebaseProxy = $tine20Service->getProxy('Tinebase');
-
-        try {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
-            /* TODO make the amount above configurable  */
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' received ' . count($result['results']) . ' modification logs');
-
-        // memory cleanup
-        unset($tinebaseProxy);
-        unset($tine20Service);
-
-        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $result['results']);
-        unset($result);
-
-        return $this->applyReplicationModLogs($modifications);
     }
 
     /**
