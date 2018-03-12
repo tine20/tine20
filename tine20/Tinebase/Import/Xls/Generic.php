@@ -116,7 +116,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
             }
 
             foreach ($fields as $field) {
-                if ($field['label'] === $englishString) {
+                if (isset($field['label']) && $field['label'] === $englishString) {
                     $this->_indexMapping[$index] = $englishString;
                     $this->_mapping[$englishString] = $field['fieldName'];
                     continue 2;
