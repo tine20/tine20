@@ -8,6 +8,9 @@
  *
  */
 Ext.ns('Tine.widgets.relation');
+
+require('widgets/grid/PickerGridPanel');
+
 /**
  * @namespace   Tine.widgets.relation
  * @class       Tine.widgets.relation.GenericPickerGridPanel
@@ -154,8 +157,6 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.title = this.i18nTitle = i18n.ngettext('Relation', 'Relations', 50);
         
-        //Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
-
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         
         this.on('beforecontextmenu', this.onBeforeContextMenu.createDelegate(this), this);
@@ -605,6 +606,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {String}
      */
     relatedRecordRenderer: function (recData, meta, relRec) {
+        if (recData === undefined) {
+            // record has been removed by acl/area lock/...
+            return i18n._('Record unavailable');
+        }
         var relm = relRec.get('related_model');
         if (! relm) {
             return '';
@@ -1331,10 +1336,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         store = store ? store : this.store;
         var relations = [];
         store.each(function(record) {
-            record.data.related_record.relations = null;
-            record.data.related_record.relation = null;
-            delete record.data.related_record.relations;
-            delete record.data.related_record.relation;
+            if (record.data.related_record) {
+                record.data.related_record.relations = null;
+                record.data.related_record.relation = null;
+                delete record.data.related_record.relations;
+                delete record.data.related_record.relation;
+            }
             relations.push(record.data);
         }, this);
 

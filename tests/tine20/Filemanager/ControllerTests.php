@@ -250,7 +250,8 @@ class Filemanager_ControllerTests extends TestCase
         try {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['jmcblack']);
             $jmcbContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
-            static::assertEquals(0, $jmcbContact->relations->count());
+            static::assertEquals(1, $jmcbContact->relations->count());
+            static::assertTrue(! isset($jmcbContact->relations->getFirstRecord()->related_record));
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }

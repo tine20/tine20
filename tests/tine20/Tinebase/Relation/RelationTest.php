@@ -145,9 +145,9 @@ class Tinebase_Relation_RelationTest extends TestCase
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         
         $this->assertTrue($relations instanceof Tinebase_Record_RecordSet, 'relations are not a RecordSet');
-        // NOTE: one of the related tasks in our testdata is not persistent, so we only get 2 relations back, 
-        // as this missing task looks like a 'ACL not sufficient' task
-        $this->assertEquals(3-1, count($relations));
+        // NOTE: one of the related tasks in our testdata is not persistent, but we still get 2 relations back
+        // as this missing task looks like a 'ACL not sufficient' task (without related_record)
+        $this->assertEquals(3, count($relations));
         
         foreach ($relations as $relation) {
             // check each relation got an id
@@ -204,11 +204,11 @@ class Tinebase_Relation_RelationTest extends TestCase
         $relatedContacts->sort('related_model', 'ASC');
         $relatedContacts[0]->related_record->note = "Testing to update from relation set";
         
-        // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
+        // NOTE: At the moment we need to set timezone to users timezone, as related records come as arrays and don't get
         // their dates converted in the JSON frontends
         foreach ($relations as $relation) {
             $relation->setTimezone(Tinebase_Core::getUserTimezone());
-            $relation->related_record = $relation->related_record->toArray();
+            $relation->related_record = isset($relation->related_record) ? $relation->related_record->toArray() : [];
         }        
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray(), FALSE, TRUE);
         

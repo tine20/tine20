@@ -176,7 +176,7 @@ class Tinebase_Relations
             $update = $relations->getById($relationId);
             
             // update related records if explicitly needed
-            if ($_inspectRelated) {
+            if ($_inspectRelated && isset($current->related_record) && isset($update->related_record)) {
                 // @todo do we need to omit so many fields?
                 if (! $current->related_record->isEqual(
                     $update->related_record, 
@@ -633,7 +633,9 @@ class Tinebase_Relations
             }
             
             $getMultipleMethod = 'getMultiple';
-            
+
+            $records = null;
+            $removeReason = Tinebase_Model_Relation::REMOVED_BY_OTHER;
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
@@ -656,37 +658,33 @@ class Tinebase_Relations
                 } catch (Tinebase_Exception_AccessDenied $tea) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                         . ' Removing relations from result. Got exception: ' . $tea->getMessage());
-                    $_relations->removeRecords($relations);
-                    continue;
+                    $removeReason = Tinebase_Model_Relation::REMOVED_BY_ACL;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not find controller for model: ' . $modelName . '! you have broken relations: ' . join(',', $relations->id));
                     $_relations->removeRecords($relations);
+                    continue;
                 } catch (Tinebase_Exception_AreaLocked $teal) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' AreaLocked for model: ' . $modelName);
-                    $_relations->removeRecords($relations);
+                    $removeReason = Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' AreaLocked for model: ' . $modelName);
                 }
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Resolving " . count($relations) . " relations");
 
-            if (! $records instanceof Tinebase_Record_RecordSet) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                    " No recordset found");
-                return;
-            }
-
             /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {
-                $recordIndex    = $records->getIndexById($relation->related_id);
-                $relationIndex  = $_relations->getIndexById($relation->getId());
+                $recordIndex    = $records instanceof Tinebase_Record_RecordSet
+                    ? $records->getIndexById($relation->related_id)
+                    : false;
+                $relationIndex = $_relations->getIndexById($relation->getId());
                 if ($recordIndex !== false) {
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
                 } else if (isset($_relations[$relationIndex])) {
-                    // delete relation from set, as READ ACL is obviously not granted 
+                    $_relations[$relationIndex]->record_removed_reason = $removeReason;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
-                    unset($_relations[$relationIndex]);
+                        " don't show related record in set, as READ ACL is obviously not granted $relation->related_model $relation->related_backend $relation->related_id");
                 }
             }
         }
