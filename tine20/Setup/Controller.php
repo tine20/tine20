@@ -1368,9 +1368,9 @@ class Setup_Controller
         $tinebaseInstalled = $this->isInstalled('Tinebase');
         foreach ($configs as $config => $default) {
             if ($tinebaseInstalled) {
-                $result[$config] = $config === Tinebase_Config::PASSWORD_CHANGE
+                $result[$config] = ($config === Tinebase_Config::PASSWORD_CHANGE)
                     ? Tinebase_Config::getInstance()->get($config)
-                    : Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY, $default)->{$config};
+                    : Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$config};
             } else {
                 $result[$config] = $default;
             }
