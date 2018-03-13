@@ -337,6 +337,12 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
     },
 
+    beforeDragDrop: function() {
+        if (this.readOnly) {
+            return false;
+        }
+    },
+    
     onBeforeEdit: function(o) {
         if (this.readOnly) {
             o.cancel = true;
