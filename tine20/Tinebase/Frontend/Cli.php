@@ -1606,4 +1606,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * re-adds all scheduler tasks (if they are missing)
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function resetSchedulerTasks(Zend_Console_Getopt $opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        Tinebase_Setup_Initialize::addSchedulerTasks();
+
+        return 0;
+    }
 }
