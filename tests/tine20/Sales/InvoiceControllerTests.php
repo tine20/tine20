@@ -267,7 +267,67 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->_invoiceController->update($invoice);
     }
-    
+
+    public function testTimeAccountBudget()
+    {
+        $this->_createFullFixtures();
+
+        $ta1 = $this->_timeaccountController->create(new Timetracker_Model_Timeaccount(array(
+            'title'         => 'TA-for-budget1',
+            'description'   => 'blabla',
+            'is_open'       => 1,
+            'status'        => Timetracker_Model_Timeaccount::STATUS_TO_BILL,
+            'budget' => 100
+        )));
+        $ta2 = $this->_timeaccountController->create(new Timetracker_Model_Timeaccount(array(
+            'title'         => 'TA-for-budget2',
+            'description'   => 'blabla',
+            'is_open'       => 1,
+            'status'        => Timetracker_Model_Timeaccount::STATUS_NOT_YET_BILLED,
+            'budget' => 100
+        )));
+        $contract = $this->_contractRecords->getFirstRecord();
+        $contract->relations = array_merge($contract->relations->toArray(), [[
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Timetracker_Model_Timeaccount',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_id'             => $ta1->getId(),
+            'type'                   => 'TIME_ACCOUNT'
+        ],[
+        'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Timetracker_Model_Timeaccount',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_id'             => $ta2->getId(),
+            'type'                   => 'TIME_ACCOUNT'
+        ]]);
+        $this->_contractController->update($contract);
+
+        $date = clone $this->_referenceDate;
+        $date->addMonth(1);
+
+        $this->_invoiceController->createAutoInvoices($date);
+
+        $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
+        $this->assertEquals(2, $allInvoices->count(), print_r($allInvoices->toArray(), true));
+        $invoice = $allInvoices->filter('description', $contract->title . ' (' .
+            $this->_referenceDate->format('Y-m-d H:i:s') . ')');
+        static::assertEquals(1, $invoice->count(), 'did not find contracts invoice');
+        $invoice = $invoice->getFirstRecord();
+
+        $ip = Sales_Controller_InvoicePosition::getInstance()->search(new Sales_Model_InvoicePositionFilter([
+            ['field' => 'invoice_id', 'operator' => 'AND', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
+            ]]
+        ]));
+        static::assertEquals(2, $ip->count(), 'invoice should have only two positions');
+        static::assertEquals(0, $ip->filter('accountable_id', $ta2->getId())->count());
+        static::assertEquals(1, $ip->filter('accountable_id', $ta1->getId())->count());
+        $updatedTa1 = $this->_timeaccountController->get($ta1->getId());
+        $updatedTa2 = $this->_timeaccountController->get($ta2->getId());
+        static::assertEquals($ta2->seq, $updatedTa2->seq);
+        static::assertNotEquals($ta1->seq, $updatedTa1->seq);
+    }
+
     public function testDeleteInvoice()
     {
         $this->_createFullFixtures();
