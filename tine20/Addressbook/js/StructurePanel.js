@@ -395,6 +395,7 @@ Tine.Addressbook.StructurePanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         }), 'data.recordData', recordData);
                     })
                 })
+                .catch(function(error) {})
             );
         });
 
