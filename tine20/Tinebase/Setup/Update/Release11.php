@@ -376,4 +376,18 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.20');
     }
+
+    /**
+     * update to 11.21
+     *
+     * fix pin_protected_node
+     */
+    public function update_20()
+    {
+        $quotedField = $this->_db->quoteIdentifier('pin_protected_node');
+        $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['pin_protected_node' => null],
+            $quotedField . ' IS NOT NULL AND char_length(' . $quotedField . ') < 2');
+        
+        $this->setApplicationVersion('Tinebase', '11.21');
+    }
 }
