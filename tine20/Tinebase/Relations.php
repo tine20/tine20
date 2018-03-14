@@ -682,7 +682,7 @@ class Tinebase_Relations
                 $relationIndex  = $_relations->getIndexById($relation->getId());
                 if ($recordIndex !== false) {
                     $_relations[$relationIndex]->related_record = $records[$recordIndex];
-                } else {
+                } else if (isset($_relations[$relationIndex])) {
                     // delete relation from set, as READ ACL is obviously not granted 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         " removing $relation->related_model $relation->related_backend $relation->related_id (ACL)");
