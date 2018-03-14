@@ -377,29 +377,37 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 if ($readGrant->account_id === $container->owner_id) {
                     continue;
                 }
-                if (! isset($users[$container->owner_id])) {
-                    $users[$container->owner_id] = Tinebase_User::getInstance()->getFullUserById($container->owner_id)->accountLoginName;
-                }
+                try {
+                    if (! isset($users[$container->owner_id])) {
+                        $users[$container->owner_id] = Tinebase_User::getInstance()->getFullUserById($container->owner_id)->accountLoginName;
+                    }
 
-                $grantArray = $readGrant->toArray();
-                unset($grantArray['id']);
-                //unset($grantArray['account_id']);
-                switch ($readGrant->account_type) {
-                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                        if (! isset($users[$readGrant->account_id])) {
-                            $users[$readGrant->account_id] = Tinebase_User::getInstance()->getFullUserById($readGrant->account_id)->accountLoginName;
-                        }
-                        $accountName = $users[$readGrant->account_id];
-                        break;
-                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                        if (! isset($groups[$readGrant->account_id])) {
-                            $groups[$readGrant->account_id] = Tinebase_Group::getInstance()->getGroupById($readGrant->account_id);
-                        }
-                        $accountName = $groups[$readGrant->account_id];
-                        break;
-                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                        $accountName = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
-                        break;
+                    $grantArray = $readGrant->toArray();
+                    unset($grantArray['id']);
+
+                    switch ($readGrant->account_type) {
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                            if (!isset($users[$readGrant->account_id])) {
+                                $users[$readGrant->account_id] = Tinebase_User::getInstance()->getFullUserById($readGrant->account_id)->accountLoginName;
+                            }
+                            $accountName = $users[$readGrant->account_id];
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                            if (!isset($groups[$readGrant->account_id])) {
+                                $groups[$readGrant->account_id] = Tinebase_Group::getInstance()->getGroupById($readGrant->account_id);
+                            }
+                            $accountName = $groups[$readGrant->account_id];
+                            break;
+                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
+                            $accountName = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+                            break;
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Exception::log($tenf);
+                    continue;
+                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                    Tinebase_Exception::log($ternd);
+                    continue;
                 }
                 $grantArray['accountName'] = $accountName;
                 $resultArray[$users[$container->owner_id]][$container->name][] = $grantArray;
