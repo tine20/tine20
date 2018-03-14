@@ -935,3 +935,15 @@ Ext.override(Ext.form.CheckboxGroup, {
         return out;
     }
 });
+
+Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLayout.createSequence(function() {
+    if (! this.vboxfix) {
+        this.container.on('resize', function (c) {
+            var w = c.getWidth();
+            c.items.each(function (i) {
+                i.setWidth(w);
+            })
+        }, this);
+        this.vboxfix = true;
+    }
+});
