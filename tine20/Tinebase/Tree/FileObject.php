@@ -320,7 +320,6 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
     {
         $this->_writeModLog($_newRecord, null);
-        Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
     }
 
     /**
@@ -340,6 +339,20 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $currentMods = $this->_writeModLog($newRecord, $oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0) {
+            /** @var Tinebase_Model_ModificationLog $mod */
+            foreach ($currentMods->getClone(true) as $mod) {
+                $diff = new Tinebase_Record_Diff(json_decode($mod->new_value, true));
+                if (isset($diff->diff['hash'])) {
+                    $a = $diff->diff;
+                    unset($a['hash']);
+                    $diff->diff = $a;
+                    if (count($a) === 0) {
+                        $currentMods->removeRecord($mod);
+                    } else {
+                        $mod->new_value = json_encode($diff->toArray());
+                    }
+                }
+            }
             foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
                     $node) {
                 Tinebase_Notes::getInstance()->addSystemNote($node->getId(), Tinebase_Core::getUser(),
