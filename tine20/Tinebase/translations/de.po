@@ -698,7 +698,15 @@ msgstr "Größe"
 msgid "Revision"
 msgstr "Revision"
 
-#: js/Models.js:495
+#: js/Models.js:502
+msgid "Grants"
+msgstr "Berechtigungen"
+
+#: js/Models.js:503
+msgid "Grants Folder"
+msgstr "Berechtigungs-Ordner"
+
+#: js/Models.js:497
 msgid "Available Revision"
 msgstr "Verfügbare Revisionen"
 
