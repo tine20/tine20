@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bea71c98850aea3e6c4feaf9df05436e",
+    "content-hash": "3b78e9bd12b26388f01304cdd9b95c6f",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -738,7 +738,7 @@
             "version": "1.1",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/opendocument",
+                "url": "https://git.tine20.org/git/opendocument",
                 "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
@@ -770,7 +770,7 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/timezoneconvert",
+                "url": "https://git.tine20.org/git/timezoneconvert",
                 "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
@@ -1980,8 +1980,8 @@
             "version": "1.4.2",
             "source": {
                 "type": "git",
-                "url": "http://git.syncroton.org/Syncroton",
-                "reference": "7798add1dd34aa1f22d783020dc27d2fb78a795e"
+                "url": "https://git.syncroton.org/Syncroton",
+                "reference": "6ac5e71a091f792b58a446c3d6b415dce2286eb6"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2012,7 +2012,7 @@
             "version": "1.0.5",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/composerapploader",
+                "url": "https://git.tine20.org/git/composerapploader",
                 "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
@@ -2619,8 +2619,8 @@
             "version": "1.12.20pl21",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "08c9217fd1267ddc505462543f1bcbfa87898221"
+                "url": "https://git.tine20.org/git/zendframework1",
+                "reference": "22a37f3360b8f7f2f47f5bb90b0aaef5ac9a26c1"
             },
             "require": {
                 "php": ">=5.3.0"
