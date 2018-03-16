@@ -933,6 +933,16 @@ Ext.override(Ext.form.CheckboxGroup, {
             });
         }
         return out;
+    },
+
+    onBeforeEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
     }
 });
 
@@ -945,5 +955,36 @@ Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLay
             })
         }, this);
         this.vboxfix = true;
+    }
+});
+
+Ext.override(Ext.grid.EditorGridPanel, {
+    initEvents : function(){
+        Ext.grid.EditorGridPanel.superclass.initEvents.call(this);
+
+        this.on('beforeedit', this.onBeforeEdit, this);
+
+        this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
+        this.on('columnresize', this.stopEditing, this, [true]);
+
+        if(this.clicksToEdit == 1){
+            this.on("cellclick", this.onCellDblClick, this);
+        }else {
+            var view = this.getView();
+            if(this.clicksToEdit == 'auto' && view.mainBody){
+                view.mainBody.on('mousedown', this.onAutoEditClick, this);
+            }
+            this.on('celldblclick', this.onCellDblClick, this);
+        }
+    },
+    
+    onBeforeEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
     }
 });
