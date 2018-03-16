@@ -36,6 +36,7 @@ Tine.Tinebase.data.RecordStore = function(c){
     c.modelName = c.recordClass.getMeta('modelName');
 
     if (! c.sortInfo) {
+        // TODO we might want to use $defaultSortInfo of the model here (see Tine.widgets.grid.GridPanel.initStore)
         var titleProperty = c.recordClass.getMeta('titleProperty'),
             defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty,
             defaultSortInfo = c.recordClass.hasField(titleProperty) ? {

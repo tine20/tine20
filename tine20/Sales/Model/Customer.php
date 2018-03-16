@@ -52,6 +52,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'accounting' => 'Accounting',    // _('Accounting')
             'misc'       => 'Miscellaneous',    // _('Miscellaneous')
         ),
+
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'fields'            => array(
             'number' => array(
