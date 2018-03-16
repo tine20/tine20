@@ -1112,7 +1112,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return boolean
      */
     validateLoginName: function (value) {
-        return value.match(/^[a-z\d._-]+$/) !== null;
+        return value.match(/^[a-z\d._-]+$/i) !== null;
     }
 });
 

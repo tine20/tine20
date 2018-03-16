@@ -42,6 +42,7 @@ describe('UserEditDialog', () => {
   it('validates valid username', () => {
     expect(uit.validateLoginName('abcder.adgef917')).to.be.true
     expect(uit.validateLoginName('abcder_adgef917')).to.be.true
+    expect(uit.validateLoginName('Abcder_Adgef917')).to.be.true
   })
 
   it('validates invalid username', () => {
