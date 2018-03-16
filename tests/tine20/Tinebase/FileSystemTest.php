@@ -383,6 +383,16 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals(12, $node->revision_size);
         $this->assertEquals(array(1,2), $node->available_revisions);
         $this->assertEquals(2, $node->revision);
+        $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
+            ['field' => 'record_id', 'operator' => 'equals', 'value' => $node->getId()],
+            ['field' => 'record_model', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_Node::class],
+        ]));
+        static::assertEquals(1, $records->filter('note', '/revision \(0 -> 1\)/', true)->count(),
+            'did not find "revision (0 -> 1)" in the notes');
+        static::assertEquals(1, $records->filter('note', '/revision \(1 -> 2\)/', true)->count(),
+            'did not find "revision (1 -> 2)" in the notes');
+        static::assertEquals(0, $records->filter('note', '/hash \(/', true)->count(),
+            'shouldn\'t find hash in the notes');
 
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
