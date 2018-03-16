@@ -60,19 +60,20 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         }
         return self::$_instance;
     }
-    
+
     /**
      * get definition by name
-     * 
+     *
      * @param string $_name
      * @return Tinebase_Model_ImportExportDefinition
-     * 
+     *
      * @todo replace this with search function
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getByName($_name)
+    public function getByName($_name, $_getDeleted = false)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->_backend->getByProperty($_name);
+        return $this->_backend->getByProperty($_name, 'name', $_getDeleted);
     }
     
     /**
@@ -177,7 +178,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,
                 'format'                      => $format,
-                'order'                       => intval($config->order),
+                'order'                       => (int)$config->order,
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
                 'postMappingHook'             => $config->postMappingHook
@@ -251,7 +252,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         
         // try to get definition and update if it exists
         try {
-            $existing = $this->getByName($definition->name);
+            // also update deleted
+            $existing = $this->getByName($definition->name, true);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $result = $this->_backend->update($definition);
