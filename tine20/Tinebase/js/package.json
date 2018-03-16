@@ -6,7 +6,8 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack-dev-server --progress --config webpack.prod.js",
     "test": "NODE_ENV=unittest karma start karma.unittest.conf.js --single-run",
-    "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js"
+    "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js",
+    "test:watchnoreports": "NODE_ENV=unittest karma start karma.unittest.noreports.conf.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

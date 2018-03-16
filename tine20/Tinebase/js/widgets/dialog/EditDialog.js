@@ -838,16 +838,28 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * Copy record and returns "new record with same settings"
      *
-     * @param record
+     * @param {Tine.Tinebase.data.Record} record
      */
     doCopyRecordToReturn: function(record) {
+        var recordData = this.getCopyRecordData(record, this.recordClass, this.omitCopyTitle);
+        return new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
+    },
+
+    /**
+     * get data to copy record
+     *
+     * @param {Tine.Tinebase.data.Record} record
+     * @param recordClass
+     * @param {Boolean} omitCopyTitle
+     */
+    getCopyRecordData: function (record, recordClass, omitCopyTitle) {
         var _ = window.lodash,
-            titleProperty = this.recordClass.getMeta('titleProperty'),
-            omitFields = _.concat(this.recordClass.getMeta('copyOmitFields') || [],
-                // 2017-12-21 - cweiss - why where relations omitted? if you know please document here!
+            titleProperty = recordClass.getMeta('titleProperty'),
+            omitFields = _.concat(recordClass.getMeta('copyOmitFields') || [],
                 // 2017-12-21 - cweiss - why where attachments omitted? if you know please document here!
-                ['id', 'notes' /*, 'attachments'*/ /*, 'relations'*/]),
-            fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
+                ['id', 'notes' /*, 'attachments'*/]),
+            fields = recordClass.getFieldNames(),
+            fieldsToCopy = fields.diff(omitFields),
             recordData = Ext.copyTo({}, record.data, fieldsToCopy),
             resetProperties = {
                 alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
@@ -881,11 +893,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
 
-        if (! this.omitCopyTitle) {
+        if (! omitCopyTitle) {
             recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
         }
 
-        return new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
+        return recordData;
     },
 
     /**

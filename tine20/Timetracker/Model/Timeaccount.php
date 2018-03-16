@@ -53,6 +53,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'recordName'        => 'Timeaccount',
         'recordsName'       => 'Timeaccounts', // ngettext('Timeaccount', 'Timeaccounts', n)
         'hasRelations'      => TRUE,
+        'copyRelations'     => FALSE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,

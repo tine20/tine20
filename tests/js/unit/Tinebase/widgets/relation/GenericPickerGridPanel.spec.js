@@ -6,8 +6,6 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-// TODO move to subdir widgets/relation/ ?
-
 import * as global from 'globalFakes'
 
 // TODO generic bootstrap
@@ -37,14 +35,14 @@ describe('GenericPickerGridPanel', () => {
   })
 
   it('renders a missing related_record', () => {
-    require('../../../../tine20/Projects/js/Model')
+    require('../../../../../../tine20/Projects/js/Model')
     var result = uit.relatedRecordRenderer(undefined,
       null, new Tine.Tinebase.Model.Relation({'related_model': 'Projects_Model_Project'}))
     expect(result).to.equal('Record unavailable')
   })
 
   it('renders a related_record', () => {
-    require('../../../../tine20/Projects/js/Model')
+    require('../../../../../../tine20/Projects/js/Model')
     var result = uit.relatedRecordRenderer({
       number: '1223',
       status: 'IN-PROCESS',

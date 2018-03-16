@@ -61,4 +61,30 @@ class Tinebase_ModelConfigurationTest extends TestCase
             }
         }
     }
+
+    /**
+     * testRelationCopyOmit
+     */
+    public function testRelationCopyOmit()
+    {
+        $customer = new Timetracker_Model_Timeaccount([], true);
+        $cObj = $customer->getConfiguration();
+        $fields = $cObj->getFields();
+        foreach ($fields as $name => $fieldconfig) {
+            if ($name === 'relations') {
+                self::assertTrue($fieldconfig['copyOmit'],
+                    'TA relations should be omitted on copy: ' . print_r($fieldconfig, true));
+            }
+        }
+
+        $customer = new Addressbook_Model_Contact([], true);
+        $cObj = $customer->getConfiguration();
+        $fields = $cObj->getFields();
+        foreach ($fields as $name => $fieldconfig) {
+            if ($name === 'relations') {
+                self::assertFalse($fieldconfig['copyOmit'],
+                    'Contact relations should not be omitted on copy: ' . print_r($fieldconfig, true));
+            }
+        }
+    }
 }
