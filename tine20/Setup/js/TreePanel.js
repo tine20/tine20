@@ -118,10 +118,13 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
             }
         }
 
-        activeType.select();
-        this.app.getMainScreen().setActiveContentType(activeType.id);
+        // NOTE: do not interfere with standard mainscreen rendering
+        (function() {
+            activeType.select();
+            this.app.getMainScreen().setActiveContentType(activeType.id);
 
-        Tine.Setup.registry.on('replace', this.applyRegistryState, this);
+            Tine.Setup.registry.on('replace', this.applyRegistryState, this);
+        }).defer(100, this);
     },
     
     /**
