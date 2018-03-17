@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-02-19 12:21+0100\n"
+"PO-Revision-Date: 2018-03-27 15:09+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -36,7 +36,7 @@ msgstr "Datei nicht gefunden!"
 
 #: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:275
 #: js/NodeGridPanel.js:237 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:111
+#: js/NotificationGridPanel.js:126
 msgid "Name"
 msgstr "Name"
 
@@ -106,7 +106,7 @@ msgstr "Herunterladen"
 msgid "Create Public Link"
 msgstr "Öffentlichen Link erstellen"
 
-#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:215
+#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:230
 msgid "Remove record"
 msgstr "Eintrag entfernen"
 
@@ -216,7 +216,7 @@ msgstr "Datentresor schließen"
 msgid "Filemanager"
 msgstr "Dateimanager"
 
-#: js/Filemanager.js:74 js/nodeActions.js:284
+#: js/Filemanager.js:74 js/nodeActions.js:283
 msgid "Save locally"
 msgstr "Lokal speichern"
 
@@ -360,19 +360,43 @@ msgstr[1] "Alle {0} Tage"
 msgid "No"
 msgstr "Nein"
 
-#: js/NotificationGridPanel.js:145
+#: js/NotificationGridPanel.js:86
+msgid "Don't summarize"
+msgstr "Nicht zusammenfassen"
+
+#: js/NotificationGridPanel.js:87
+msgid "Once a day"
+msgstr "Einmal täglich"
+
+#: js/NotificationGridPanel.js:88
+msgid "Every 3 days"
+msgstr "Alle 3 Tage"
+
+#: js/NotificationGridPanel.js:89
+msgid "Once a week"
+msgstr "Einmal die Woche"
+
+#: js/NotificationGridPanel.js:90
+msgid "Once a month"
+msgstr "Einmal pro Monat"
+
+#: js/NotificationGridPanel.js:91
+msgid "Once a year"
+msgstr "Einmal pro Jahr"
+
+#: js/NotificationGridPanel.js:160
 msgid "Search for users ..."
 msgstr "Suche nach Benutzern ..."
 
-#: js/NotificationGridPanel.js:185
+#: js/NotificationGridPanel.js:200
 msgid "No permission"
 msgstr "Keine Berechtigung"
 
-#: js/NotificationGridPanel.js:196
+#: js/NotificationGridPanel.js:211
 msgid "all"
 msgstr "alle"
 
-#: js/NotificationGridPanel.js:283
+#: js/NotificationGridPanel.js:298
 msgid "Search for groups ..."
 msgstr "Suche nach Gruppen ..."
 
@@ -400,7 +424,7 @@ msgstr "Wenn der Datentresor Schutz aktiviert ist, kann auf diesen Ordner und se
 msgid "The grant to download files"
 msgstr "Das Recht Datein zu downloaden"
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:338
+#: js/GrantsPanel.js:57 js/nodeActions.js:337
 msgid "Publish"
 msgstr "Veröffentlichen"
 
@@ -525,19 +549,19 @@ msgstr "Verschieben"
 msgid "Move Items"
 msgstr "Einträge verschieben"
 
-#: js/nodeActions.js:311
+#: js/nodeActions.js:310
 msgid "Preview"
 msgstr "Vorschau"
 
-#: js/nodeActions.js:354
+#: js/nodeActions.js:353
 msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
 msgstr "Anonyme Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
 
-#: js/nodeActions.js:371
+#: js/nodeActions.js:370
 msgid "Folder has been published successfully"
 msgstr "Ordner wurde erfolgreich veröffentlicht"
 
-#: js/nodeActions.js:371
+#: js/nodeActions.js:370
 msgid "File has been published successfully"
 msgstr "Datei wurde erfolgreich veröffentlicht"
 
@@ -549,47 +573,47 @@ msgstr "Öffentliche Download URL"
 msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
 msgstr "Anonyme Downloads von einer anderen URL ausliefern. Stellen sie sicher dass die rewrite Regeln entsprechend angepasst sind."
 
-#: Controller/Node.php:518
+#: Controller/Node.php:526
 msgid "My folders"
 msgstr "Meine Ordner"
 
-#: Controller/Node.php:525
+#: Controller/Node.php:533
 msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
-#: Controller/Node.php:532
+#: Controller/Node.php:540
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
 
-#: Controller/Node.php:1486
+#: Controller/Node.php:1497
 msgid "Received"
 msgstr "Erhalten"
 
-#: Controller/Node.php:1487
+#: Controller/Node.php:1498
 msgid "To"
 msgstr "An"
 
-#: Controller/Node.php:1488
+#: Controller/Node.php:1499
 msgid "Cc"
 msgstr "Cc"
 
-#: Controller/Node.php:1489
+#: Controller/Node.php:1500
 msgid "Bcc"
 msgstr "Bcc"
 
-#: Controller/Node.php:1490
+#: Controller/Node.php:1501
 msgid "From (E-Mail)"
 msgstr "Von (E-Mail)"
 
-#: Controller/Node.php:1491
+#: Controller/Node.php:1502
 msgid "From (Name)"
 msgstr "Von (Name)"
 
-#: Controller/Node.php:1492
+#: Controller/Node.php:1503
 msgid "Body"
 msgstr "Inhalt"
 
-#: Controller/Node.php:1493
+#: Controller/Node.php:1504
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -624,6 +648,12 @@ msgstr "Anonyme Download Links verwalten"
 #: Acl/Rights.php:109
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
+
+#~ msgid "Once all 3 days"
+#~ msgstr "Alle 3 Tage"
+
+#~ msgid "Once per 7 days"
+#~ msgstr "Alle 7 Tage"
 
 #~ msgid "Reload),"
 #~ msgstr "Neu laden"
