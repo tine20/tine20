@@ -740,6 +740,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             if (is_object($_rawData) && $_rawData instanceof $definition['class']) {
                 return $_rawData;
             }
+            if (isset($definition['content']) && isset($definition['default']) && is_array($definition['default'])) {
+                foreach ($definition['default'] as $key => $default) {
+                    if (isset($definition['content'][$key]) && !isset($definition['content'][$key]['default'])) {
+                        $definition['content'][$key]['default'] = $default;
+                    }
+                }
+            }
             return new $definition['class'](is_array($_rawData) ? $_rawData : array(), $parent, $parentKey,
                 isset($definition['content']) ? $definition['content'] : null, $appName);
         }
