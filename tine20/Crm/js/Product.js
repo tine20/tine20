@@ -225,8 +225,8 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         // check if already in?
                         if (! this.productsStore.getById(record.id)) {
                             var newRecord = new Ext.data.Record({
-                                price: record.data.price,
-                                remark_price: record.data.price,
+                                salesprice: record.data.salesprice,
+                                remark_price: record.data.salesprice,
                                 remark_quantity: 1,
                                 name: record.data.name,
                                 relation_type: 'product',
