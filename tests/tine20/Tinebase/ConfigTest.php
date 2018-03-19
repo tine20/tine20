@@ -290,4 +290,34 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         $imapStruct->shooo;
     }
+
+    public function testDbMerge()
+    {
+        try {
+            $db = Tinebase_Core::getDb();
+            Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+            $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
+            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+
+            $db->delete(SQL_TABLE_PREFIX . 'config', $db->quoteIdentifier('application_id') . $db->quoteInto(' = ?',
+                Tinebase_Core::getTinebaseId()) . ' AND ' . $db->quoteIdentifier('name') . $db->quoteInto(' = ?',
+                    Tinebase_Config::ENABLED_FEATURES));
+            $db->insert(SQL_TABLE_PREFIX . 'config', [
+                'id'                => Tinebase_Record_Abstract::generateUID(),
+                'application_id'    => Tinebase_Core::getTinebaseId(),
+                'name'              => Tinebase_Config::ENABLED_FEATURES,
+                'value'             => json_encode([Tinebase_Config::FEATURE_SEARCH_PATH => false])
+            ]);
+
+            Tinebase_Config::getInstance()->clearCache();
+
+            $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
+            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+        }
+    }
 }
