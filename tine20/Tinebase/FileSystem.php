@@ -3188,15 +3188,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     $treeNodeBackend->setRevision($revision);
                     try {
                         $actualNode = $treeNodeBackend->get($id);
-                        $treeNodeBackend->setRevision(null);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         continue;
+                    } finally {
+                        $treeNodeBackend->setRevision(null);
                     }
                 } else {
                     $actualNode = $node;
                 }
 
-                if (empty($actualNode->hash)) {
+                if (!$previewController->canNodeHavePreviews($actualNode)) {
                     continue;
                 }
 

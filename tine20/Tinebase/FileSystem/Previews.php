@@ -159,19 +159,31 @@ class Tinebase_FileSystem_Previews
     /**
      * @param Tinebase_Model_Tree_Node $node
      * @return bool
+     */
+    public function canNodeHavePreviews(Tinebase_Model_Tree_Node $node)
+    {
+        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0) {
+            return false;
+        }
+        $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
+
+        return $this->isSupportedFileExtension($fileExtension);
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $node
+     * @return bool
      * @throws Tinebase_Exception
      */
     public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
     {
-        $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
-
-        if (true !== $this->isSupportedFileExtension($fileExtension)) {
+        if (!$this->canNodeHavePreviews($node)) {
             return true;
         }
 
         $fileSystem = Tinebase_FileSystem::getInstance();
         $path = $fileSystem->getRealPathForHash($node->hash);
-        $tempPath = Tinebase_TempFile::getTempPath() . '.' . $fileExtension;
+        $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
         if (!is_file($path)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' file ' . $node->getId() . ' ' . $node->name . ' is not present in filesystem: ' . $path);
