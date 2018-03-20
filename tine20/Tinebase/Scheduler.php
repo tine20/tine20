@@ -102,10 +102,13 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
             if (!isset($tasks[$dueTask->getId()])) {
                 $tasks[$dueTask->getId()] = 1;
             } else {
-                if (++$tasks[$dueTask->getId()] > 5) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
-                        . __LINE__ . ' task ' . $dueTask->name . ' already passed by 5 times, aborting now');
+                if (++$tasks[$dueTask->getId()] > 3) {
+                    // same task for the third time, we abort now
                     return false;
+                }
+                if (++$tasks[$dueTask->getId()] > 2) {
+                    // lets try one more time, maybe there are other tasks to work on
+                    continue;
                 }
             }
 
