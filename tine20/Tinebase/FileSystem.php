@@ -1390,7 +1390,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         try {
             $node = $this->stat($path);
 
-            $children = $this->getTreeNodeChildren($node);
+            // if modlog is not active, we want to hard delete all soft deleted childs if there are any
+            $children = $this->getTreeNodeChildren($node, !$this->_modLogActive);
 
             // check if child entries exists and delete if $_recursive is true
             if (count($children) > 0) {
@@ -1929,7 +1930,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      *
      * TODO always ignore acl here?
      */
-    public function getTreeNodeChildren($nodeId)
+    public function getTreeNodeChildren($nodeId, $getDeleted = false)
     {
         if ($nodeId instanceof Tinebase_Model_Tree_Node) {
             $nodeId = $nodeId->getId();
@@ -1940,14 +1941,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         } else {
             $operator = 'equals';
         }
-        
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => $operator,
-                'value'     => $nodeId
-            )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+
+        $filter = [
+            ['field' => 'parent_id', 'operator' => $operator, 'value' => $nodeId]
+        ];
+        if ($getDeleted) {
+            $filter[] = ['field' => 'is_deleted', 'operator' => 'equals',
+                'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET];
+        }
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter($filter, Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+            array('ignoreAcl' => true));
         $children = $this->searchNodes($searchFilter);
         
         return $children;
