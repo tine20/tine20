@@ -909,7 +909,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 array_walk($cfs, function(Tinebase_Model_CustomField_Config $val, $key)
                         use($cfNameLabelMap, $stringifyCallBack) {
                     $val->label = $cfNameLabelMap[$key];
-                    $val->value = new Tinebase_CustomField_Value($val->value, $val->definition, $stringifyCallBack);
+                    $val->value = new Tinebase_CustomField_Value($val->value, $val->definition, $stringifyCallBack,
+                        $val->application_id);
                 });
                 uksort($cfs, function($a, $b) use($cfNameLabelMap) {
                     return strcmp($cfNameLabelMap[$a], $cfNameLabelMap[$b]);

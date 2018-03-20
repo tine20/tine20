@@ -108,8 +108,8 @@ EOS
         
         ob_end_clean();
 
-        print_r($request->getHeader('HTTP_AUTHORIZATION'));
-        print_r($request->getHeaders());
+        //print_r($request->getHeader('HTTP_AUTHORIZATION'));
+        //print_r($request->getHeaders());
         
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
     }

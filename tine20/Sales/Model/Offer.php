@@ -42,6 +42,8 @@ class Sales_Model_Offer extends Tinebase_Record_Abstract
     
         'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
 
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
+        
         'appName'           => 'Sales',
         'modelName'         => 'Offer',
         'filterModel' => array(

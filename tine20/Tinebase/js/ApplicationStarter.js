@@ -9,6 +9,17 @@
  */
 Ext.namespace('Tine.Tinebase');
 
+require('AppManager');
+require('Locale');
+require('Locale/Gettext');
+require('widgets/MainScreen');
+require('widgets/tree/Loader');
+require('widgets/persistentfilter/PickerPanel');
+require('widgets/dialog/EditDialog');
+require('widgets/grid/GridPanel');
+require('data/Record');
+require('data/RecordProxy');
+
 /**
  * Tinebase Application Starter
  * 

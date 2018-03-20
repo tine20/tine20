@@ -524,12 +524,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 'invoice_id',
                 'status',
                 'cleared_at',
+                'relations',
             );
         } else {
             $copyOmitFields = array(
                 'billed_in',
                 'status',
                 'cleared_at',
+                'relations',
             );
         }
 

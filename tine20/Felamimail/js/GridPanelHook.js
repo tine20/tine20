@@ -242,7 +242,9 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     onComposeEmail: function(btn,to) {
         if (this.getGridPanel().grid) {
             var sm = this.getGridPanel().grid.getSelectionModel(),
-                mailAddresses = sm.isFilterSelect ? null : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
+                mailAddresses = sm.isFilterSelect
+                    ? null
+                    : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
         } else {
             var sm = null,
                 mailAddresses = this.mailAddresses;
@@ -262,7 +264,10 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             record.set('to', mailAddresses);
         }
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
-            selectionFilter: sm && sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
+            selectionFilter: sm && sm.isFilterSelect ? Ext.encode({
+                to: to,
+                filter: sm.getSelectionFilter()
+            }) : null,
             record: record
         });
     },

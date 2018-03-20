@@ -27,7 +27,7 @@
  * @property string                     $related_id
  * @property Tinebase_Record_Interface  $related_record
  * @property string                     $type
-
+ * @property string                     $record_removed_reason
  */
 class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 {
@@ -45,7 +45,22 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      * degree sibling
      */
     const DEGREE_SIBLING = 'sibling';
-    
+
+    /**
+     * related record removed by acl
+     */
+    const REMOVED_BY_ACL = 'removedByAcl';
+
+    /**
+     * related record removed by acl
+     */
+    const REMOVED_BY_AREA_LOCK = 'removedByAreaLock';
+
+    /**
+     * related record removed by another reason
+     */
+    const REMOVED_BY_OTHER = 'removedByOther';
+
     /**
      * manually created relation
      */
@@ -92,6 +107,12 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'related_id'             => array('presence' => 'required', 'allowEmpty' => false),
         'type'                   => array('presence' => 'required', 'allowEmpty' => true),
         'remark'                 => array('allowEmpty' => true          ), // freeform field for manual relations
+        // "virtual" column - gives the reason why the related_record is not set
+        'record_removed_reason'  => array('allowEmpty' => true, [ 'InArray', [
+            self::REMOVED_BY_AREA_LOCK,
+            self::REMOVED_BY_ACL,
+            self::REMOVED_BY_OTHER,
+        ]]),
         'related_record'         => array('allowEmpty' => true          ), // property to store 'resolved' relation record
         'created_by'             => array('allowEmpty' => true,         ),
         'creation_time'          => array('allowEmpty' => true          ),
@@ -151,8 +172,10 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 
         $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
         $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+        // TODO allow empty titles?
+        $title = isset($this->related_record) ? $this->related_record->getTitle() : null;
 
-        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($this->related_record->getTitle())), 0, 1024) . $childType;
+        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($title)), 0, 1024) . $childType;
     }
 
     /**
@@ -177,7 +200,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
         $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
 
-        return $parentType . '/{' . get_class($this->related_record) . '}' . $this->related_record->getId() . $childType;
+        return $parentType . '/{' . $this->related_model . '}' . $this->related_id . $childType;
     }
 
     /**

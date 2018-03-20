@@ -35,6 +35,7 @@
  * @property string     $containerName Human readable name of the container
  * @property string     $containersName Human readable name of multiple containers
  * @property boolean    $hasRelations If this is true, the record has relations
+ * @property boolean    $copyRelations If this is true, the record relations are copied
  * @property boolean    $hasCustomFields If this is true, the record has customfields
  * @property boolean    $hasNotes If this is true, the record has notes
  * @property boolean    $hasTags If this is true, the record has tags
@@ -222,6 +223,13 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_hasRelations = NULL;
+
+    /**
+     * relations are copied by default
+     *
+     * @var bool
+     */
+    protected $_copyRelations = true;
 
     /**
      * If this is true, the record has customfields
@@ -945,11 +953,24 @@ class Tinebase_ModelConfiguration {
         );
 
         if ($this->_hasCustomFields) {
-            $this->_fields['customfields'] = array('label' => 'Custom Fields', 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['customfields'] = [
+                'label' => 'Custom Fields',
+                'shy' => true,
+                'sortable' => false,
+                'type' => 'custom',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
+            ];
         }
 
         if ($this->_hasRelations) {
-            $this->_fields['relations'] = array('label' => 'Relations', 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['relations'] = [
+                'label' => 'Relations',
+                'shy' => true,
+                'sortable' => false,
+                'type' => 'relation',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'copyOmit' => ! $this->_copyRelations
+            ];
         }
 
         if ($this->_containerProperty) {

@@ -117,13 +117,20 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
 
         foreach ($queryResult as $task) {
             if (true === Tinebase_Core::acquireMultiServerLock($task['lock_id'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                    __LINE__ . ' cleaning up zombie scheduler task: ' . print_r($task, true));
-                if (1 !== $this->_db->update($this->_tablePrefix . $this->_tableName, array('lock_id' => null),
-                        $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $task['id'])) &&
-                        Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                    __LINE__ . ' update zombie scheduler task failed');
-                Tinebase_Core::releaseMultiServerLock($task['lock_id']);
+                try {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                            __LINE__ . ' cleaning up zombie scheduler task: ' . print_r($task, true));
+                    }
+                    if (1 !== $this->_db->update($this->_tablePrefix . $this->_tableName, array('lock_id' => null),
+                            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $task['id'])) &&
+                        Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                            __LINE__ . ' update zombie scheduler task failed');
+                    }
+                } finally {
+                    Tinebase_Core::releaseMultiServerLock($task['lock_id']);
+                }
             }
         }
 

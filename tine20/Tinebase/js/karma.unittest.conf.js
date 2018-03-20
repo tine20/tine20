@@ -11,7 +11,6 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            path.resolve(__dirname, 'node_modules/babel-polyfill/dist/polyfill.js'),
             path.resolve(__dirname, "../../library/ExtJS/adapter/ext/ext-base-debug.js"),
             path.resolve(__dirname, "../../library/ExtJS/ext-all-debug.js"),
             '**/*.spec.js'

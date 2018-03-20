@@ -970,14 +970,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         if (this.recordProxy) {
-            if (! this.defaultSortInfo.field && this.recordClass) {
-                var titleProperty = this.recordClass.getMeta('titleProperty'),
-                    defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
-
-                this.defaultSortInfo = this.recordClass.hasField(titleProperty) ? {
-                    field: defaultSortField,
-                    order: 'DESC'
-                }: null;
+            if (! this.defaultSortInfo.field) {
+                if (this.modelConfig && this.modelConfig.defaultSortInfo) {
+                    this.defaultSortInfo = this.modelConfig.defaultSortInfo;
+                } else if (this.recordClass) {
+                    var titleProperty = this.recordClass.getMeta('titleProperty'),
+                        defaultSortField = Ext.isArray(titleProperty) ? titleProperty[1][0] : titleProperty;
+                    this.defaultSortInfo = this.recordClass.hasField(titleProperty) ? {
+                        field: defaultSortField,
+                        order: 'DESC'
+                    } : null;
+                }
             }
 
             var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;

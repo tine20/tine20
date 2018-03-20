@@ -98,17 +98,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     mailAddresses: null,
     /**
-     * json-encoded selection filter
+     * json-encoded selection filter and to
      * @type {String} selectionFilter
      */
     selectionFilter: null,
-    
+
     /**
      * holds default values for the record
      * @type {Object}
      */
     recordDefaults: null,
 
+    /**
+     * @type {String}
+     */
     quotedPGPMessage: null,
 
     /**
@@ -260,7 +263,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.mailAddresses) {
             this.recordDefaults.to = Ext.decode(this.mailAddresses);
         } else if (this.selectionFilter) {
-            this.on('load', this.fetchRecordsOnLoad, this);
+            // put filter into to, cc or bcc of record and the loading be handled by resolveRecipientFilter
+            var filterAndTo = Ext.decode(this.selectionFilter);
+            this.record.set(filterAndTo.to.toLowerCase(), filterAndTo.filter);
         }
         
         if (! this.record) {
@@ -659,7 +664,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {String} field to/cc/bcc
      */
     resolveRecipientFilter: function(field) {
-        if (! Ext.isEmpty(this.record.get(field)) && Ext.isObject(this.record.get(field)[0]) &&  this.record.get(field)[0].operator) {
+        if (! Ext.isEmpty(this.record.get(field))
+            && Ext.isObject(this.record.get(field)[0])
+            && (this.record.get(field)[0].operator || this.record.get(field)[0].condition)
+        ) {
             // found a filter
             var filter = this.record.get(field);
             this.record.set(field, []);
@@ -1405,33 +1413,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getValidationErrorMessage: function() {
         return this.validationErrorMessage;
-    },
-    
-    /**
-     * fills the recipient grid with the records gotten from this.fetchRecordsOnLoad
-     * @param {Array} contacts
-     */
-    fillRecipientGrid: function(contacts) {
-        this.recipientGrid.addRecordsToStore(contacts, 'to');
-        this.recipientGrid.setFixedHeight(true);
-    },
-    
-    /**
-     * fetches records to send an email to
-     */
-    fetchRecordsOnLoad: function(dialog, record, ticketFn) {
-        var interceptor = ticketFn(),
-            sf = Ext.decode(this.selectionFilter);
-            
-        Tine.log.debug('Fetching additional records...');
-        Tine.Addressbook.contactBackend.searchRecords(sf, null, {
-            scope: this,
-            success: function(result) {
-                this.fillRecipientGrid(result.records);
-                interceptor();
-            }
-        });
-        this.addressesLoaded = true;
     }
 });
 

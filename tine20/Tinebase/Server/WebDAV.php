@@ -23,7 +23,13 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     * @var \Sabre\DAV\Server
     */
     protected static $_server;
-    
+
+    public function __construct()
+    {
+        $this->_supportsSessions = true;
+        parent::__construct();
+    }
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
@@ -61,23 +67,71 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     }
                 }
             }
-            try {
-                list($loginName, $password) = $this->_getAuthData($this->_request);
 
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                header('HTTP/1.1 401 Unauthorized');
+            $hasIdentity = false;
 
-                return;
+            if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'],
+                        'Microsoft-WebDAV-MiniRedir') === 0)) {
+                try {
+                    Tinebase_Core::startCoreSession();
+                    Tinebase_Core::initFramework();
+
+                    if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
+                        $hasIdentity = true;
+                    }
+                } catch (Zend_Session_Exception $zse) {
+                    // expire session cookie for client
+                    Tinebase_Session::expireSessionCookie();
+
+                    // session error, we just need to start over
+                    // but we don't know where we failed, so better initFramework
+                    Tinebase_Core::initFramework();
+                    if (Tinebase_Auth_NtlmV2::isEnabled()) {
+                        (new Tinebase_Auth_NtlmV2())->sendHeaderForAuthPase();
+                        return;
+                    }
+                }
+
+                if (!$hasIdentity && Tinebase_Auth_NtlmV2::isEnabled()) {
+                    $ntlm = new Tinebase_Auth_NtlmV2();
+                    $ntlmAuthStatus = $ntlm->authorize();
+
+                    if (Tinebase_Auth_NtlmV2::AUTH_SUCCESS === $ntlmAuthStatus) {
+                        try {
+                            Tinebase_Controller::getInstance()->loginUser($ntlm->getUser(), $this->_request,
+                                self::REQUEST_TYPE);
+                        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+                            header('HTTP/1.1 503 Service Unavailable');
+                            return;
+                        }
+                        $hasIdentity = true;
+                    } else {
+                        $ntlm->sendHeaderForAuthPase($ntlmAuthStatus);
+                        return;
+                    }
+                }
             }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)){
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
-        }
-        Tinebase_Core::initFramework();
+            if (!$hasIdentity) {
+                try {
+                    list($loginName, $password) = $this->_getAuthData($this->_request);
+                    Tinebase_Core::startCoreSession();
+                    Tinebase_Core::initFramework();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
+                    header('HTTP/1.1 401 Unauthorized');
 
-            if (null !== ($denyList = Tinebase_Config::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) &&
-                is_array($denyList)) {
+                    return;
+                }
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' is CalDav, CardDAV or WebDAV request.');
+            }
+
+
+            if (!$hasIdentity && null !== ($denyList = Tinebase_Config::getInstance()->get(
+                    Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) && is_array($denyList)) {
                 foreach ($denyList as $deny) {
                     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
                         header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
@@ -87,7 +141,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             try {
-                if (Tinebase_Controller::getInstance()->login(
+                if (!$hasIdentity && Tinebase_Controller::getInstance()->login(
                         $loginName,
                         $password,
                         $this->_request,
@@ -95,6 +149,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     ) !== true) {
                     header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
                     header('HTTP/1.1 401 Unauthorized');
+
                     return;
                 }
             } catch (Tinebase_Exception_MaintenanceMode $temm) {
@@ -212,7 +267,25 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             @header('HTTP/1.1 500 Internal Server Error');
         }
     }
-    
+
+    /**
+     * Set an odd parity bit for a given byte, in least-significant position.
+     *
+     * @link https://github.com/jclulow/node-smbhash/blob/edc48e2b/lib/common.js
+     *   Implementation basis.
+     * @param int $byte An 8-bit byte value.
+     * @return int An 8-bit byte value.
+     */
+    private static function setParityBit($byte)
+    {
+        $parity = 1;
+        for ($i = 1; $i < 8; $i++) {
+            $parity = ($parity + (($byte >> $i) & 1)) %2;
+        }
+        $byte = $byte | ($parity & 1);
+        return $byte;
+    }
+
    /**
     * helper to return request
     *

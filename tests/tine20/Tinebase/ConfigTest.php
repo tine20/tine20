@@ -214,21 +214,29 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testComposeConfigDir()
     {
-        $this->markTestSkipped('FIXME: should be reactivated');
-
-        $confdfolder = Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER);
-        if (empty($confdfolder) || !is_readable($confdfolder)) {
-            $this->markTestSkipped('no confdfolder configured/readable');
+        $confdfolder = rtrim(Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER), '/');
+        if (empty($confdfolder) || !is_dir($confdfolder) || !is_writable($confdfolder)) {
+            static::markTestSkipped('confd folder not defined or not a writeable folder');
         }
 
-        $configValues = array('config1' => 'value1', 'config2' => 'value2');
-        foreach ($configValues as $configName => $expectedValue) {
-            $configValue = Tinebase_Config::getInstance()->get($configName);
-            $this->assertEquals($expectedValue, $configValue);
-        }
+        try {
+            static::assertTrue(copy(__DIR__ . '/files/conf.d/config1.inc.php', $confdfolder . '/config1.inc.php'));
+            static::assertTrue(copy(__DIR__ . '/files/conf.d/config2.inc.php', $confdfolder . '/config2.inc.php'));
+            Tinebase_Config::getInstance()->clearCache();
 
-        $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
-        $this->assertTrue(file_exists($cachedConfigFilename), 'cached config file does not exist: ' . $cachedConfigFilename);
+            $configValues = array('config1' => 'value1', 'config2' => 'value2');
+            foreach ($configValues as $configName => $expectedValue) {
+                $configValue = Tinebase_Config::getInstance()->get($configName);
+                $this->assertEquals($expectedValue, $configValue);
+            }
+
+            $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+            $this->assertTrue(file_exists($cachedConfigFilename),
+                'cached config file does not exist: ' . $cachedConfigFilename);
+        } finally {
+            unlink($confdfolder . '/config1.inc.php');
+            unlink($confdfolder . '/config2.inc.php');
+        }
     }
 
     /**
@@ -289,5 +297,35 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         $imapStruct->shooo;
+    }
+
+    public function testDbMerge()
+    {
+        try {
+            $db = Tinebase_Core::getDb();
+            Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+            $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
+            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+
+            $db->delete(SQL_TABLE_PREFIX . 'config', $db->quoteIdentifier('application_id') . $db->quoteInto(' = ?',
+                Tinebase_Core::getTinebaseId()) . ' AND ' . $db->quoteIdentifier('name') . $db->quoteInto(' = ?',
+                    Tinebase_Config::ENABLED_FEATURES));
+            $db->insert(SQL_TABLE_PREFIX . 'config', [
+                'id'                => Tinebase_Record_Abstract::generateUID(),
+                'application_id'    => Tinebase_Core::getTinebaseId(),
+                'name'              => Tinebase_Config::ENABLED_FEATURES,
+                'value'             => json_encode([Tinebase_Config::FEATURE_SEARCH_PATH => false])
+            ]);
+
+            Tinebase_Config::getInstance()->clearCache();
+
+            $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
+            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+        }
     }
 }

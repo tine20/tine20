@@ -207,6 +207,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]);
             }
         }
+
+        if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featurePreventSpecialCharInLoginName')) {
+            if (! this.validateLoginName(this.getForm().findField('accountLoginName').getValue())) {
+                result = false;
+                this.getForm().markInvalid([{
+                    id: 'accountLoginName',
+                    msg: this.app.i18n._("Special characters are not allowed in login name.")
+                }]);
+            }
+        }
         
         return result;
     },
@@ -301,7 +311,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return new Ext.grid.ColumnModel({
                     defaults: { sortable: true },
                     columns:  [
-                        {id: 'name', header: i18n._('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
+                        {id: 'name', header: self.app.i18n._('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
                             return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + self.app.i18n.gettext('Primary group') + ')<span>') : record.data.name;
                         }}
                     ]
@@ -337,7 +347,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             autoExpandColumn: 'name',
             store: this.storeRoles,
             recordClass: Tine.Tinebase.Model.Role,
-            columns: [{id: 'name', header: i18n.gettext('Name'), sortable: true, dataIndex: 'name'}],
+            columns: [{id: 'name', header: this.app.i18n.gettext('Name'), sortable: true, dataIndex: 'name'}],
             initActionsAndToolbars: function () {
                 // for now removed abillity to edit role membership
 //                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
@@ -673,7 +683,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
-                    header: this.app.i18n.gettext('Email Alias'), 
+                    header: this.app.i18n.gettext('Email Alias'),
                     dataIndex: 'email', 
                     width: 300, 
                     hideable: false, 
@@ -707,7 +717,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
-                    header: this.app.i18n.gettext('Email Forward'), 
+                    header: this.app.i18n.gettext('Email Forward'),
                     dataIndex: 'email', 
                     width: 300, 
                     hideable: false, 
@@ -762,7 +772,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     inputType: 'password',
                     id: 'passwordRepeat',
-                    fieldLabel: this.app.i18n.gettext('Repeat password'), 
+                    fieldLabel: this.app.i18n.gettext('Repeat password'),
                     name: 'passwordRepeat',
                     validator: this.onPasswordConfirm.createDelegate(this),
                     listeners: {
@@ -1095,6 +1105,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         };
         return config;
+    },
+
+    /**
+     * @param value
+     * @return boolean
+     */
+    validateLoginName: function (value) {
+        return value.match(/^[a-z\d._-]+$/i) !== null;
     }
 });
 

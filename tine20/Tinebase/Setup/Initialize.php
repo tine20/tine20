@@ -155,6 +155,11 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeSchedulerTasks()
     {
+        self::addSchedulerTasks();
+    }
+
+    public static function addSchedulerTasks()
+    {
         $scheduler = Tinebase_Core::getScheduler();
         $oldRightValue = $scheduler->doRightChecks(false);
 
@@ -169,8 +174,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Scheduler_Task::addImportTask($scheduler);
             Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
             Tinebase_Scheduler_Task::addReplicationTask($scheduler);
-            Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
             Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);

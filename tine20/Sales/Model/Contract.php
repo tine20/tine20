@@ -55,6 +55,8 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'containerName'    => 'Contracts',
         'containersName'    => 'Contracts',
         'containerUsesFilter' => FALSE,
+
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'titleProperty'     => 'fulltext',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',

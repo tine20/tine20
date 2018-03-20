@@ -40,6 +40,8 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
 
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
+        
         'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'OrderConfirmation',

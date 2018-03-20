@@ -7,15 +7,6 @@ module.exports = merge(common, {
     devtool: 'inline-source-map',
     module: {
         rules: [
-            // {
-            //     test: /\.js$/,
-            //     loader: 'eslint-loader',
-            //     enforce: "pre",
-            //     exclude: /node_modules/,
-            //     options: {
-            //         formatter: require('eslint-friendly-formatter')
-            //     }
-            // },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
@@ -24,7 +15,7 @@ module.exports = merge(common, {
                     '/!(chai-as-promised)/'
                 ],
                 options: {
-                    // plugins: ['transform-runtime'],
+                    plugins: ['@babel/plugin-transform-runtime'],
                     presets: [
                         ["@babel/env"/*, { "modules": false }*/]
 

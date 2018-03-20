@@ -137,17 +137,15 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
      * Generate pw
      */
     onPWGen: function () {
-        var config = null;
+        var policyConfig = Tine.Tinebase.configManager.get('downloadPwPolicy');
 
-        if (Tine.Tinebase.configManager.get('pwPolicyActive')) {
-            config = {
-                minLength: Tine.Tinebase.configManager.get('pwPolicyMinLength'),
-                minWordChars: Tine.Tinebase.configManager.get('pwPolicyMinWordChars'),
-                minUppercaseChars: Tine.Tinebase.configManager.get('pwPolicyMinUppercaseChars'),
-                minSpecialChars: Tine.Tinebase.configManager.get('pwPolicyMinSpecialChars'),
-                minNumericalChars: Tine.Tinebase.configManager.get('pwPolicyMinNumbers')
-            }
-        }
+        config = {
+            minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,
+            minWordChars: policyConfig ? policyConfig.pwPolicyMinWordChars : 5,
+            minUppercaseChars: policyConfig ? policyConfig.pwPolicyMinUppercaseChars : 1,
+            minSpecialChars: policyConfig ? policyConfig.pwPolicyMinSpecialChars : 1,
+            minNumericalChars: policyConfig ? policyConfig.pwPolicyMinNumbers : 1
+        };
 
         var gen = new Tine.Tinebase.PasswordGenerator(config);
 

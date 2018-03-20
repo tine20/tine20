@@ -64,7 +64,7 @@ class Hash_Password
                 break;
                 
             default:
-                throw new InvalidArgumentException('Unsupported algo provided: ' . $algo);
+                throw new InvalidArgumentException('Unsupported algo provided: ' . $hashType);
                 break;
         }
         

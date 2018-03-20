@@ -83,17 +83,46 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
-        
-        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
-        
+
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
+            $clientIdString);
+
         $user = $this->_validateAuthResult($authResult, $accessLog);
-        
+
         if (!($user instanceof Tinebase_Model_FullUser)) {
             return false;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
+
+        $this->_loginUser($user, $accessLog, $password);
+
+        return true;
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @param \Zend\Http\Request $request
+     * @param string|null $clientIdString
+     * @throws Tinebase_Exception_MaintenanceMode
+     */
+    public function loginUser(Tinebase_Model_FullUser $user, \Zend\Http\Request $request, $clientIdString = null)
+    {
+        $loginName = $user->accountLoginName;
+        $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $loginName);
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
+            $clientIdString);
+        $this->_loginUser($user, $accessLog);
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @param Tinebase_Model_AccessLog $accessLog
+     * @param string|null $password
+     * @throws Tinebase_Exception_MaintenanceMode
+     */
+    protected function _loginUser(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog $accessLog, $password = null)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
 
         if (Tinebase_Core::inMaintenanceMode()) {
             if (! $user->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
@@ -102,14 +131,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         Tinebase_AccessLog::getInstance()->setSessionId($accessLog);
-        
+
         $this->initUser($user);
-        
-        $this->_updateCredentialCache($user->accountLoginName, $password);
-        
+
+        if (null !== $password) {
+            $this->_updateCredentialCache($user->accountLoginName, $password);
+        }
+
         $this->_updateAccessLog($user, $accessLog);
-        
-        return true;
     }
     
     /**

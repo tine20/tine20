@@ -383,6 +383,16 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals(12, $node->revision_size);
         $this->assertEquals(array(1,2), $node->available_revisions);
         $this->assertEquals(2, $node->revision);
+        $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
+            ['field' => 'record_id', 'operator' => 'equals', 'value' => $node->getId()],
+            ['field' => 'record_model', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_Node::class],
+        ]));
+        static::assertEquals(1, $records->filter('note', '/revision \(0 -> 1\)/', true)->count(),
+            'did not find "revision (0 -> 1)" in the notes');
+        static::assertEquals(1, $records->filter('note', '/revision \(1 -> 2\)/', true)->count(),
+            'did not find "revision (1 -> 2)" in the notes');
+        static::assertEquals(0, $records->filter('note', '/hash \(/', true)->count(),
+            'shouldn\'t find hash in the notes');
 
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
@@ -937,5 +947,40 @@ class Tinebase_FileSystemTest extends TestCase
 
         $result = $foBackend->deletedUnusedObjects();
         static::assertEquals(1, $result, 'there should be one orphant file objects');
+    }
+
+    public function testAclAdjustDuringMove()
+    {
+        /** @var Tinebase_Model_Tree_Node $aclSharedFolder */
+        $aclSharedFolder = Filemanager_Controller_Node::getInstance()->createNodes(['/shared/testAcl'],
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        static::assertEquals($aclSharedFolder->getId(), $aclSharedFolder->acl_node,
+            'expected that new folder gets default acls');
+        /** @var Tinebase_Model_Tree_Node $aclPersonalFolder */
+        $aclPersonalFolder = Filemanager_Controller_Node::getInstance()->createNodes(
+            ['/personal/' . Tinebase_Core::getUser()->getId() . '/testAcl'],
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        static::assertEquals($aclPersonalFolder->getId(), $aclPersonalFolder->acl_node,
+            'expected that new folder gets default acls');
+
+        $noAclSharedFolder = $this->_controller->createFileTreeNode($aclSharedFolder->parent_id, 'testNoAcl',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(null, $noAclSharedFolder->acl_node, 'new folder should have no acls');
+        $noAclPersonalFolder = $this->_controller->createFileTreeNode($aclPersonalFolder->parent_id, 'testNoAcl',
+            Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        static::assertEquals(null, $noAclPersonalFolder->acl_node, 'new folder should have no acls');
+
+        $sharedPath = dirname($this->_controller->getPathOfNode($noAclSharedFolder, true));
+        $personalPath = dirname($this->_controller->getPathOfNode($noAclPersonalFolder, true));
+
+        $this->_controller->rename($sharedPath . '/testNoAcl', $personalPath . '/movedTest');
+        $this->_controller->rename($personalPath . '/testNoAcl', $sharedPath . '/movedTest');
+
+        $noAclSharedFolder = $this->_controller->get($noAclSharedFolder->getId());
+        static::assertEquals($noAclSharedFolder->getId(), $noAclSharedFolder->acl_node,
+            'expected that moved folder gets default acls');
+        $noAclPersonalFolder = $this->_controller->get($noAclPersonalFolder->getId());
+        static::assertEquals($noAclPersonalFolder->getId(), $noAclPersonalFolder->acl_node,
+            'expected that moved folder gets default acls');
     }
 }
