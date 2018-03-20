@@ -23,7 +23,14 @@ class Admin_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_IMAP_USER_SETTINGS = 'defaultImapUserSettings';
-    
+
+    /**
+     * FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME
+     *
+     * @var string
+     */
+    const FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME = 'featurePreventSpecialCharInLoginName';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -39,6 +46,25 @@ class Admin_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label' => 'Enabled Features',
+            //_('Enabled Features in Admin Application.')
+            'description' => 'Enabled Features in Admin Application.',
+            'type' => 'object',
+            'class' => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'content' => array(
+                self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => array(
+                    'label' => 'Prevent special chars in login name',
+                    //_('Prevent special chars in login name')
+                    'description' => 'Prevent special chars in login name',
+                ),
+            ),
+            'default' => array(
+                self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
+            ),
         ),
     );
     

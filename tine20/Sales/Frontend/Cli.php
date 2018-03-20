@@ -61,82 +61,92 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 .' Job already running - ' . __CLASS__ . '::' . __FUNCTION__);
             return false;
         }
-        
-        $date = NULL;
-        $args = $this->_parseArgs($_opts, array());
-        
-        // if day argument is given, validate
-        if (array_key_exists('day', $args)) {
-            $split = explode('-', $args['day']);
-            if (! count($split == 3)) {
-                // failure
-            } else {
-                if ((strlen($split[0]) != 4) || (strlen($split[1]) != 2) || (strlen($split[2]) != 2)) {
-                    // failure
-                } elseif ((intval($split[1]) == 0) || (intval($split[2]) == 0)) {
+
+        try {
+            $date = null;
+            $args = $this->_parseArgs($_opts, array());
+
+            // if day argument is given, validate
+            if (array_key_exists('day', $args)) {
+                $split = explode('-', $args['day']);
+                if (!count($split == 3)) {
                     // failure
                 } else {
-                    // other errors are caught by datetime
-                    try {
-                        
-                        $date = new Tinebase_DateTime();
-                        // use usertimezone
-                        $date->setTimezone(Tinebase_Core::getUserTimezone());
-                        // if a date is given, set hour to 3
-                        $date->setDate($split[0], $split[1], $split[2])->setTime(3,0,0);
-                    } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
+                    if ((strlen($split[0]) != 4) || (strlen($split[1]) != 2) || (strlen($split[2]) != 2)) {
+                        // failure
+                    } elseif ((intval($split[1]) == 0) || (intval($split[2]) == 0)) {
+                        // failure
+                    } else {
+                        // other errors are caught by datetime
+                        try {
+
+                            $date = new Tinebase_DateTime();
+                            // use usertimezone
+                            $date->setTimezone(Tinebase_Core::getUserTimezone());
+                            // if a date is given, set hour to 3
+                            $date->setDate($split[0], $split[1], $split[2])->setTime(3, 0, 0);
+                        } catch (Exception $e) {
+                            Tinebase_Exception::log($e);
+                        }
+                    }
+                }
+                if (!$date) {
+                    die('The day must have the following format: YYYY-MM-DD!' . PHP_EOL);
+                }
+            }
+
+            if (!$date) {
+                $date = Tinebase_DateTime::now();
+                $date->setTimezone(Tinebase_Core::getUserTimezone());
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $date->toString());
+            }
+
+            $contract = null;
+
+            if (array_key_exists('contract', $args)) {
+                try {
+                    $contract = Sales_Controller_Contract::getInstance()->get($args['contract']);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    $filter = new Sales_Model_ContractFilter(array(
+                        array(
+                            'field' => 'number',
+                            'operator' => 'equals',
+                            'value' => $args['contract']
+                        )
+                    ));
+                    $contract = Sales_Controller_Contract::getInstance()->search($filter, null, true);
+                    if ($contract->count() == 1) {
+                        $contract = $contract->getFirstRecord();
+                    } elseif ($contract->count() > 1) {
+                        die('The number you have given is not unique! Please use the ID instead!' . PHP_EOL);
+                    } else {
+                        die('A contract could not be found!' . PHP_EOL);
                     }
                 }
             }
-            if (! $date) {
-                die('The day must have the following format: YYYY-MM-DD!' . PHP_EOL);
-            }
-        }
-        
-        if (! $date) {
-            $date = Tinebase_DateTime::now();
-            $date->setTimezone(Tinebase_Core::getUserTimezone());
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $date->toString());
-        }
-        
-        $contract = NULL;
-        
-        if (array_key_exists('contract', $args)) {
-            try {
-                $contract = Sales_Controller_Contract::getInstance()->get($args['contract']);
-            } catch (Tinebase_Exception_NotFound $e) {
-                $filter = new Sales_Model_ContractFilter(array(array('field' => 'number', 'operator' => 'equals', 'value' => $args['contract'])));
-                $contract = Sales_Controller_Contract::getInstance()->search($filter, NULL, TRUE);
-                if ($contract->count() == 1) {
-                    $contract = $contract->getFirstRecord();
-                } elseif ($contract->count() > 1) {
-                    die('The number you have given is not unique! Please use the ID instead!' . PHP_EOL);
-                } else {
-                    die('A contract could not be found!' . PHP_EOL);
-                }
-            }
-        }
-        
-        if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
-            $this->removeUnbilledAutoInvoices($contract);
-        }
 
-        if (array_key_exists('check_updates', $args) && $args['check_updates'] == 1) {
-            Sales_Controller_Invoice::getInstance()->checkForContractOrInvoiceUpdates($contract);
+            if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
+                $this->removeUnbilledAutoInvoices($contract);
+            }
+
+            if (array_key_exists('check_updates', $args) && $args['check_updates'] == 1) {
+                Sales_Controller_Invoice::getInstance()->checkForContractOrInvoiceUpdates($contract);
+            }
+
+            $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                unset($result['created']);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+            }
+
+            Tinebase_Core::setExecutionLifeTime($executionLifeTime);
+        } finally {
+            Tinebase_Core::releaseMultiServerLock(__METHOD__);
         }
-        
-        $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            unset($result['created']);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
-        }
-        
-        Tinebase_Core::setExecutionLifeTime($executionLifeTime);
 
         return true;
     }

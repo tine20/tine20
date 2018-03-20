@@ -515,13 +515,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param array $billableAccountables
      * @return array
      */
-    protected function _findInvoicePositionsAndInvoiceInterval($billableAccountables)
+    protected function _findInvoicePositionsAndInvoiceInterval(&$billableAccountables)
     {
         // put each position into
         $invoicePositions = new Tinebase_Record_RecordSet('Sales_Model_InvoicePosition');
         $earliestStartDate = $latestEndDate = NULL;
         
-        foreach ($billableAccountables as $ba) {
+        foreach ($billableAccountables as &$ba) {
+            $ba['partOfInvoice'] = false;
             if (! $ba['ac']->isBillable($this->_currentMonthToBill, $this->_currentBillingContract, $ba['pa'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' isBillable failed for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
@@ -540,6 +541,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' billables: ' . count($billables, true) . ' found for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
             }
+
+            $ba['partOfInvoice'] = true;
         
             $invoicePositions = $invoicePositions->merge($this->_getInvoicePositionsFromBillables($billables, $ba['ac']));
         
@@ -766,7 +769,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                 }
                 // add a new invoice position
-                if (false===$found) {
+                if (!$found) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding invoice position with model: ' . $position->model . ' and accountable_id: ' . $position->accountable_id . ' in month: ' . $position->month . ' for invoice: ' . $id);
                     }
@@ -776,10 +779,18 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if (null === $relations) {
                         $relations = $invoice->relations->toArray();
                     }
-                    $relations[] = array_merge(array(
-                                'related_model'  => $position->model,
-                                'related_id'     => $position->accountable_id,
-                            ), $this->_getRelationDefaults());
+                    foreach ($relations as $relation) {
+                        if ($relation['related_id'] === $position->accountable_id) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $relations[] = array_merge([
+                            'related_model' => $position->model,
+                            'related_id'    => $position->accountable_id,
+                        ], $this->_getRelationDefaults());
+                    }
                 }
             }
 
@@ -791,7 +802,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             // mark the invoiced accountables as accounted / invoiced
             foreach($billableAccountables as $ba) {
-                $ba['ac']->conjunctInvoiceWithBillables($invoice);
+                if ($ba['partOfInvoice']) {
+                    $ba['ac']->conjunctInvoiceWithBillables($invoice);
+                }
             }
 
         } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
@@ -1059,7 +1072,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // if there are no positions, no more bills need to be created,
             // but the last_autobill info is set, if the current date is later
             if ($invoicePositions->count() > 0 ) {
-                
+                // clean up relations
+                foreach ($billableAccountables as $ba) {
+                    if (!$ba['partOfInvoice']) {
+                        foreach ($relations as $key => $relation) {
+                            if ($relation['related_id'] === $ba['ac']->getId()) {
+                                unset($relations[$key]);
+                                break;
+                            }
+                        }
+                    }
+                }
                 // prepare invoice
                 $invoice = new Sales_Model_Invoice(array(
                     'is_auto'       => TRUE,
@@ -1089,9 +1112,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 // conjunct billables with invoice, find out which productaggregates to update
                 foreach($billableAccountables as $ba) {
-                    $ba['ac']->conjunctInvoiceWithBillables($invoice);
-                    if ($ba['pa']->getId()) {
-                        $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+                    if ($ba['partOfInvoice']) {
+                        $ba['ac']->conjunctInvoiceWithBillables($invoice);
+                        if ($ba['pa']->getId()) {
+                            $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+                        }
                     }
                 }
                 

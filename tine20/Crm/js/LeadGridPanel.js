@@ -44,6 +44,11 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: true,
 
     /**
+     * ids of lead states that end a lead (needed to determine grid row class)
+     */
+    endingLeadStateIds: [],
+
+    /**
      * grid specific
      * @private
      */
@@ -64,7 +69,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var className = Tine.Crm.LeadGridPanel.superclass.getViewRowClass(record, index, rowParams, store);
 
         var now = new Date();
-        if (this.endingLeadStateIds.indexOf(record.get('leadstate_id')) == -1) {
+        if (this.endingLeadStateIds && this.endingLeadStateIds.indexOf(record.get('leadstate_id')) == -1) {
             var rsd = record.get('resubmission_date');
             var esd = record.get('end_scheduled');
             if (((esd && (esd < now)) || (rsd && (rsd < now)))) {
@@ -92,7 +97,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Crm.LeadGridPanel.superclass.initComponent.call(this);
 
-        this.grid.view.endingLeadStateIds = Tine.Crm.getEndedLeadStateIds();
+        this.endingLeadStateIds = Tine.Crm.getEndedLeadStateIds();
     },
 
     /**

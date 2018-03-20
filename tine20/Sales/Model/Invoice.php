@@ -46,6 +46,8 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
 
         'appName'           => 'Sales',
         'modelName'         => 'Invoice',
+
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'filterModel' => array(
             'contract' => array(

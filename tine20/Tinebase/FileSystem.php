@@ -319,21 +319,7 @@ class Tinebase_FileSystem implements
             $node = $this->mkdir($pathRecord->statpath);
 
             if (null === $grants) {
-                switch ($pathRecord->containerType) {
-                    case self::FOLDER_TYPE_PERSONAL:
-                        $node->grants = Tinebase_Model_Grants::getPersonalGrants($pathRecord->getUser(), array(
-                            Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
-                            Tinebase_Model_Grants::GRANT_PUBLISH => true,
-                        ));
-                        break;
-                    case self::FOLDER_TYPE_SHARED:
-                        $node->grants = Tinebase_Model_Grants::getDefaultGrants(array(
-                            Tinebase_Model_Grants::GRANT_DOWNLOAD => true
-                        ), array(
-                            Tinebase_Model_Grants::GRANT_PUBLISH => true
-                        ));
-                        break;
-                }
+                $node->grants = $this->getDefaultGrantsForContainerType($pathRecord);
             } else {
                 $node->grants = $grants;
             }
@@ -354,6 +340,30 @@ class Tinebase_FileSystem implements
         }
 
         return $node;
+    }
+
+    /**
+     * returns the default grants for the container type of the given path
+     *
+     * @param Tinebase_Model_Tree_Node_Path $pathRecord
+     * @return null|Tinebase_Record_RecordSet
+     */
+    protected function getDefaultGrantsForContainerType(Tinebase_Model_Tree_Node_Path $pathRecord)
+    {
+        switch ($pathRecord->containerType) {
+            case self::FOLDER_TYPE_PERSONAL:
+                return Tinebase_Model_Grants::getPersonalGrants($pathRecord->getUser(), array(
+                    Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
+                    Tinebase_Model_Grants::GRANT_PUBLISH => true,
+                ));
+            case self::FOLDER_TYPE_SHARED:
+                return Tinebase_Model_Grants::getDefaultGrants(array(
+                    Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                ), array(
+                    Tinebase_Model_Grants::GRANT_PUBLISH => true
+                ));
+        }
+        return null;
     }
 
     /**
@@ -1232,9 +1242,20 @@ class Tinebase_FileSystem implements
                     return false;
                 }
 
-                if ($node->acl_node === $oldParent->acl_node && $newParent->acl_node !== $node->acl_node) {
+                if (null === $node->acl_node || ($node->acl_node === $oldParent->acl_node &&
+                        $newParent->acl_node !== $node->acl_node)) {
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                        if (null === $node->acl_node) {
+                            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath);
+                            switch ($pathRecord->containerType) {
+                                case self::FOLDER_TYPE_PERSONAL:
+                                case self::FOLDER_TYPE_SHARED:
+                                    $node->grants = $this->getDefaultGrantsForContainerType($pathRecord);
+                                    $this->_nodeAclController->setGrants($node);
+                                    $node->acl_node = $node->getId();
+                            }
+                        }
                         $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
                     }
                 }

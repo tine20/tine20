@@ -353,7 +353,6 @@ class Addressbook_JsonTest extends TestCase
     public function testUpdateMultipleRecords()
     {
         $companies = array('Janes', 'Johns', 'Bobs');
-        $contacts = array();
 
         $createdCustomField = $this->_createCustomfield();
         $changes = array(
@@ -1254,6 +1253,8 @@ class Addressbook_JsonTest extends TestCase
     
     /**
      * test project relation filter
+     *
+     * @return array
      */
     public function testProjectRelationFilter()
     {
@@ -1270,6 +1271,8 @@ class Addressbook_JsonTest extends TestCase
         $this->_testProjectRelationFilter($contact, 'definedBy', $newProject);
         $this->_testProjectRelationFilter($contact, 'in', $newProject);
         $this->_testProjectRelationFilter($contact, 'equals', $newProject);
+
+        return $contact;
     }
 
     /**
@@ -2197,5 +2200,40 @@ Steuernummer 33/111/32212";
         static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
             'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
                 true));
+    }
+
+    /**
+     * testSaveContactWithAreaLockedRelation
+     */
+    public function testSaveContactWithAreaLockedRelation()
+    {
+        // create contact with project relation
+        $contact = $this->testProjectRelationFilter();
+
+        // lock projects
+        $this->_createAreaLockConfig([
+            'area' => 'Projects'
+        ]);
+        Projects_Controller_Project::getInstance()->resetValidatedAreaLock();
+
+        // fetch & save contact again
+        $contactWithLockedProject = $this->_uit->getContact($contact['id']);
+        self::assertEquals(1, count($contactWithLockedProject['relations']));
+        self::assertFalse(isset($contactWithLockedProject['relations'][0]['related_record']));
+        self::assertEquals(Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK,
+            $contactWithLockedProject['relations'][0]['record_removed_reason']);
+        $contactWithLockedProjectSaved = $this->_uit->saveContact($contactWithLockedProject);
+        self::assertEquals(1, count($contactWithLockedProjectSaved['relations']));
+
+        // unlock projects
+        $user = Tinebase_Core::getUser();
+        Tinebase_User::getInstance()->setPin($user, '1234');
+        Tinebase_AreaLock::getInstance()->unlock('Projects', '1234');
+
+        // save contact again
+        $contactWithUnlockedProjectSaved = $this->_uit->saveContact($contactWithLockedProjectSaved);
+        self::assertEquals(1, count($contactWithUnlockedProjectSaved['relations']),'project relation should not be removed!');
+        self::assertTrue(isset($contactWithUnlockedProjectSaved['relations'][0]['related_record']));
+        self::assertEquals('blabla', $contactWithUnlockedProjectSaved['relations'][0]['related_record']['description']);
     }
 }

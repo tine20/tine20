@@ -476,7 +476,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
         if ($this->_isReadOnlyBackend) {
-            return;
+            return $_groupMembers;
         }
 
         $groupMetaData = $this->_getMetaData($_groupId);

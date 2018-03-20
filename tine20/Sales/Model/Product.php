@@ -39,6 +39,8 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
         
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
+        
         'titleProperty'     => 'name',
         'appName'           => 'Sales',
         'modelName'         => 'Product',

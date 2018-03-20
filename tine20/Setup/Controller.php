@@ -1270,7 +1270,7 @@ class Setup_Controller
         }
     }
 
-        /**
+    /**
      * update pw settings
      * 
      * @param array $data
@@ -1278,7 +1278,7 @@ class Setup_Controller
     protected function _updatePasswordSettings($data)
     {
         foreach ($data as $config => $value) {
-            Tinebase_Config::getInstance()->set($config, $value);
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$config} = $value;
         }
     }
     
@@ -1361,12 +1361,19 @@ class Setup_Controller
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
             Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER        => 0,
+            Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME     => 0,
         );
 
         $result = array();
         $tinebaseInstalled = $this->isInstalled('Tinebase');
         foreach ($configs as $config => $default) {
-            $result[$config] = ($tinebaseInstalled) ? Tinebase_Config::getInstance()->get($config, $default) : $default;
+            if ($tinebaseInstalled) {
+                $result[$config] = ($config === Tinebase_Config::PASSWORD_CHANGE)
+                    ? Tinebase_Config::getInstance()->get($config)
+                    : Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$config};
+            } else {
+                $result[$config] = $default;
+            }
         }
         
         return $result;

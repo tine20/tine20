@@ -56,6 +56,20 @@ class Tinebase_TransactionManager
      * @var Tinebase_TransactionManager
      */
     private static $_instance = NULL;
+
+    /**
+     * @var bool
+     */
+    private static $_insideCallBack = false;
+
+    /**
+     * this is a state flag for the callbacks to be used internally only, do not implement a getter for it!
+     * after rollback callbacks for example could reset the flag ... and why use it? code that issues a rollback
+     * should always throw an exception!
+     * 
+     * @var bool
+     */
+    private static $_rollBackOccurred = false;
     
     /**
      * don't clone. Use the singleton.
@@ -126,7 +140,13 @@ class Tinebase_TransactionManager
          if ($transactionIdx !== false) {
              unset($this->_openTransactions[$transactionIdx]);
          }
-         
+
+         // inside a pre commit callback we don't want to really commit, as this will happen after and outside
+         // the callback
+         if (static::$_insideCallBack) {
+             return;
+         }
+
          $numOpenTransactions = count($this->_openTransactions);
          if ($numOpenTransactions === 0) {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
@@ -135,25 +155,44 @@ class Tinebase_TransactionManager
              $callbacks = $this->_onCommitCallbacks;
              $afterCallbacks = $this->_afterCommitCallbacks;
              $this->_onCommitCallbacks = array();
-             $this->_onRollbackCallbacks = array();
              $this->_afterCommitCallbacks = array();
 
-             foreach($callbacks as $callable) {
-                 call_user_func_array($callable[0], $callable[1]);
+             static::$_rollBackOccurred = false;
+             try {
+                 static::$_insideCallBack = true;
+                 foreach ($callbacks as $callable) {
+                     call_user_func_array($callable[0], $callable[1]);
+                     // if a rollback happened we don't want to continue (the rollback method cleanup already)
+                     // it would be better if the code issuing a rollback throws an exception anyway
+                     if (static::$_rollBackOccurred) {
+                         return;
+                     }
+                 }
+             } finally {
+                 static::$_insideCallBack = false;
              }
 
-             foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
+             foreach ($this->_openTransactionables as $transactionable) {
                  if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                      $transactionable->commit();
                  }
              }
+             // prevent call back issues. The callback may start and commit/rollback more transactions
+             $this->_openTransactionables = array();
+             $this->_onRollbackCallbacks = array();
 
              foreach($afterCallbacks as $callable) {
-                 call_user_func_array($callable[0], $callable[1]);
+                 try {
+                     call_user_func_array($callable[0], $callable[1]);
+                 } catch (Exception $e) {
+                     // we don't want to fail after we commited. Otherwise a rollback maybe triggered outside which
+                     // actually can't rollback anything anymore as we already commited.
+                     // So afterCommitCallbacks will fail "silently", they only log and go to sentry
+                     Tinebase_Exception::log($e, false);
+                 }
              }
 
-             $this->_openTransactionables = array();
-             $this->_openTransactions = array();
+
          } else {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
          }
@@ -168,23 +207,35 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
 
-        // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
-        $callbacks = $this->_onRollbackCallbacks;
-        $this->_onCommitCallbacks = array();
-        $this->_afterCommitCallbacks = array();
-        $this->_onRollbackCallbacks = array();
-        foreach ($callbacks as $callable) {
-            call_user_func_array($callable[0], $callable[1]);
-        }
+        // if we are inside a precommit callback we need to break this as we are doing a rollback now
+        // the rollbacks post callback may start new transactions, so we need to reset the flag
+        static::$_insideCallBack = false;
 
-        foreach ($this->_openTransactionables as $transactionable) {
-            if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
-                $transactionable->rollBack();
+        try {
+            foreach ($this->_openTransactionables as $transactionable) {
+                if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
+                    $transactionable->rollBack();
+                }
             }
-        }
 
-        $this->_openTransactionables = array();
-        $this->_openTransactions = array();
+            // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+            $callbacks = $this->_onRollbackCallbacks;
+            $this->_onCommitCallbacks = array();
+            $this->_afterCommitCallbacks = array();
+            $this->_onRollbackCallbacks = array();
+            $this->_openTransactionables = array();
+            $this->_openTransactions = array();
+
+            foreach ($callbacks as $callable) {
+                call_user_func_array($callable[0], $callable[1]);
+            }
+
+            // don't mess with this finally, the ->rollBack() may throw. The callback may start / commit => reset the
+            // flag. The finally is well thought of. Be aware that the callback has the flag not yet set... but why
+            // would the callback need it, it is the "onRollBack" callback anyway right?
+        } finally {
+            static::$_rollBackOccurred = true;
+        }
     }
 
     /**

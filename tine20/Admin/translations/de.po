@@ -1196,6 +1196,9 @@ msgstr "Serverinformationen ansehen"
 msgid "view quota usage"
 msgstr "Quota Nutzung ansehen"
 
+msgid "Special characters are not allowed in login name."
+msgstr "Der Benutzername darf keine Sonderzeichen enthalten."
+
 #~ msgid "IMAP Quota (MB)"
 #~ msgstr "IMAP Kontingent (MB)"
 

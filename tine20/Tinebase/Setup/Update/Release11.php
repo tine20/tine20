@@ -346,4 +346,72 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.19');
     }
+
+    /**
+     * update to 11.20
+     *
+     * move user pw policy to sub-struct
+     */
+    public function update_19()
+    {
+        // fetch current pw policy config and save it in new struct
+        $configs = array(
+            Tinebase_Config::PASSWORD_POLICY_ACTIVE              => 0,
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII           => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH          => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS      => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
+            Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER        => 0,
+        );
+
+        foreach ($configs as $config => $default) {
+            $value = Tinebase_Config::getInstance()->get($config);
+            if ($value !== $default) {
+                Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$config} = $value;
+                Tinebase_Config::getInstance()->delete($config);
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.20');
+    }
+
+    /**
+     * update to 11.21
+     *
+     * fix pin_protected_node
+     */
+    public function update_20()
+    {
+        $quotedField = $this->_db->quoteIdentifier('pin_protected_node');
+        $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['pin_protected_node' => null],
+            $quotedField . ' IS NOT NULL AND char_length(' . $quotedField . ') < 2');
+        
+        $this->setApplicationVersion('Tinebase', '11.21');
+    }
+
+    /**
+     * update to 11.22
+     *
+     * fix pin_protected_node
+     */
+    public function update_21()
+    {
+        if (! $this->_backend->columnExists('ntlmv2hash', 'accounts')) {
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>ntlmv2hash</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('accounts') == 14) {
+            $this->setTableVersion('accounts', 15);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.22');
+    }
 }

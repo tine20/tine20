@@ -182,6 +182,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $_record->{Tinebase_Model_Tree_Node::XPROPS_REVISION} = $_oldRecord->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
             $_record->quota = $_oldRecord->quota;
             $_record->pin_protected_node = $_oldRecord->pin_protected_node;
+        } elseif ($_record->pin_protected_node !== $_oldRecord->pin_protected_node) {
+            if ($_record->pin_protected_node !== $_record->getId() && !empty($_record->pin_protected_node)) {
+                throw new Tinebase_Exception_InvalidArgument(
+                    'pin_protected_node may only be set to its own node id or to null');
+            }
+            if (empty($_record->pin_protected_node)) {
+                $_record->pin_protected_node = null;
+            }
         }
 
         $aclNode = $this->_updateNodeAcl($_record, $_oldRecord);

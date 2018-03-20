@@ -132,33 +132,42 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                 $transactionManager->rollBack();
                 return false;
             }
-            $transactionManager->commitTransaction($transactionId);
-
-            // then run the task
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' run task ' . $task->name);
-            try {
-                if (true === $task->config->run()) {
-                    $task->config->markSuccess($task);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
-                        __LINE__ . ' task ' . $task->name . ' succeeded');
-                } else {
-                    $task->config->markFailed($task);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                        __LINE__ . ' task ' . $task->name . ' failed gracefully');
-                }
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' task ' . $task->name .
-                    ' failed with exception');
-                Tinebase_Exception::log($e);
-                $task->config->markFailed($task);
-            }
-
-            // clean up again
             $lockId = $task->lock_id;
-            $task->lock_id = null;
-            $this->_backend->update($task);
-            Tinebase_Core::releaseMultiServerLock($lockId);
+            try {
+                $transactionManager->commitTransaction($transactionId);
+
+                // then run the task
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' run task ' . $task->name);
+                }
+                try {
+                    if (true === $task->config->run()) {
+                        $task->config->markSuccess($task);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                                __LINE__ . ' task ' . $task->name . ' succeeded');
+                        }
+                    } else {
+                        $task->config->markFailed($task);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                                __LINE__ . ' task ' . $task->name . ' failed gracefully');
+                        }
+                    }
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' task ' . $task->name .
+                        ' failed with exception');
+                    Tinebase_Exception::log($e);
+                    $task->config->markFailed($task);
+                }
+
+                // clean up again
+                $task->lock_id = null;
+                $this->_backend->update($task);
+            } finally {
+                Tinebase_Core::releaseMultiServerLock($lockId);
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' running task ' . $task->name . ' finished');
 

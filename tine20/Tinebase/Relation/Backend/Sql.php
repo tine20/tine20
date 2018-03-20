@@ -125,7 +125,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $data['rel_id'] = $data['id'];
         unset($data['id']);
         unset($data['related_record']);
-        
+        unset($data['record_removed_reason']);
+
         if (isset($data['remark']) && is_array($data['remark'])) {
             $data['remark'] = Zend_Json::encode($data['remark']);
         }

@@ -52,8 +52,21 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         'syncbackends' => array(
             'description'   => 'Syncs all contacts to the sync backends',
             'params'        => array(),
+        ),
+        'resetAllSyncBackends' => array(
+            'description'   => 'resets the syncbackendids property of all contacts. This does NOT delete the contacts in the syncbackend. Only the sync state will be reset. Be aware of side effects when resyncing!',
+            'params'        => array(),
         )
     );
+
+    public function resetAllSyncBackends()
+    {
+        if (!$this->_checkAdminRight()) {
+            return -1;
+        }
+
+        (new Addressbook_Backend_Sql())->resetAllSyncBackendIds();
+    }
 
     public function syncbackends($_opts)
     {

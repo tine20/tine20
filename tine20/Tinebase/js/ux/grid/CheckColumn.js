@@ -83,7 +83,7 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
      * @return {boolean}
      */
     onBeforeCheck: function(checkbox, record) {
-        return true;
+        return !this.grid.readOnly;
     },
 
     onMouseDown : function(e, t){

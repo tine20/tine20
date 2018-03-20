@@ -44,6 +44,8 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'titleProperty'     => 'description',
         'appName'           => 'Sales',
         'modelName'         => 'PurchaseInvoice',
+
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'filterModel' => array(
             'supplier' => array(

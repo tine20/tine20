@@ -6,7 +6,7 @@
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -242,20 +242,14 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     }
 
     /**
-     * encrypts username and password into cache
-     *
-     * reference implementation: https://github.com/ioncube/php-openssl-cryptor
-     *
-     * @param  Tinebase_Model_CredentialCache $_cache
+     * @param string $_data
+     * @param string $_key
+     * @return string
+     * @throws Exception
      * @throws Tinebase_Exception
      */
-    protected function _encrypt($_cache)
+    public static function encryptData($_data, $_key)
     {
-        $data = Zend_Json::encode(array_merge($_cache->toArray(), array(
-            'username' => $_cache->username,
-            'password' => $_cache->password,
-        )));
-
         // there was a bug with openssl_random_pseudo_bytes but its fixed in all major PHP versions, so we use it. People have to update their PHP versions
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_ALGORITHM), $secure);
         if (!$secure) {
@@ -271,13 +265,55 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
             }
         }
 
-        $hash = openssl_digest($_cache->key, self::HASH_ALGORITHM, true);
+        $hash = openssl_digest($_key, self::HASH_ALGORITHM, true);
 
-        if (false === ($encrypted = openssl_encrypt($data, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))) {
+        if (false === ($encrypted = openssl_encrypt($_data, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))) {
             throw new Tinebase_Exception('encryption failed: ' . openssl_error_string());
         }
 
-        $_cache->cache = base64_encode($iv . $encrypted);
+        return base64_encode($iv . $encrypted);
+    }
+
+    /**
+     * @param $_data
+     * @param $_key
+     * @return bool|string
+     */
+    public static function decryptData($_data, $_key)
+    {
+        if (false === ($encryptedData = base64_decode($_data))) {
+            return false;
+        }
+        $ivLength = openssl_cipher_iv_length(self::CIPHER_ALGORITHM);
+
+        if (strlen($encryptedData) < $ivLength)
+        {
+            return false;
+        }
+
+        $iv = substr($encryptedData, 0, $ivLength);
+        $encryptedData = substr($encryptedData, $ivLength);
+        $hash = openssl_digest($_key, self::HASH_ALGORITHM, true);
+
+        return openssl_decrypt($encryptedData, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv);
+    }
+
+    /**
+     * encrypts username and password into cache
+     *
+     * reference implementation: https://github.com/ioncube/php-openssl-cryptor
+     *
+     * @param  Tinebase_Model_CredentialCache $_cache
+     * @throws Tinebase_Exception
+     */
+    protected function _encrypt($_cache)
+    {
+        $data = Zend_Json::encode(array_merge($_cache->toArray(), array(
+            'username' => $_cache->username,
+            'password' => $_cache->password,
+        )));
+
+        $_cache->cache = static::encryptData($data, $_cache->key);
     }
 
     /**
@@ -288,20 +324,9 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     protected function _decrypt($_cache)
     {
-        $encryptedData = base64_decode($_cache->cache);
-        $ivLength = openssl_cipher_iv_length(self::CIPHER_ALGORITHM);
-
-        if (strlen($encryptedData) < $ivLength)
-        {
-            throw new Tinebase_Exception('encrypted data is less');
-        }
-
-        $iv = substr($encryptedData, 0, $ivLength);
-        $encryptedData = substr($encryptedData, $ivLength);
-        $hash = openssl_digest($_cache->key, self::HASH_ALGORITHM, true);
         $persistAgain = false;
 
-        if (false === ($jsonEncodedData = openssl_decrypt($encryptedData, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))
+        if (false === ($jsonEncodedData = static::decryptData($_cache->cache, $_cache->key))
             || ! Tinebase_Helper::is_json(trim($jsonEncodedData)))
         {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(

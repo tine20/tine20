@@ -5,14 +5,14 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
 
 /**
  * Test class for Tinebase_User_Abstract
  */
-class Tinebase_UserTest extends PHPUnit_Framework_TestCase
+class Tinebase_UserTest extends TestCase
 {
     /**
      * @var array test objects
@@ -20,18 +20,6 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     protected $_objects = array();
     protected $_originalBackendConfiguration = null;
     protected $_originalBackendType = null;
-
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -44,7 +32,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->_originalBackendConfiguration = Tinebase_User::getBackendConfiguration();
         $this->_originalBackendType = Tinebase_User::getConfiguredBackend();
         
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
     }
 
     /**
@@ -55,7 +43,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         Tinebase_Config::getInstance()->clearCache();
         
         // needs to be reverted because we use Tinebase_User as a singleton
@@ -198,7 +186,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $policies[Tinebase_Config::PASSWORD_POLICY_ACTIVE] = TRUE;
         foreach ($policies as $key => $value) {
-            Tinebase_Config::getInstance()->set($key, $value);
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$key} = $value;
         }
     }
     

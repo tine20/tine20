@@ -233,4 +233,11 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             'syncBackendIds'         => $_syncBackendIds
         ), $where);
     }
+
+    public function resetAllSyncBackendIds()
+    {
+        $this->_db->update($this->_tablePrefix . 'addressbook', array(
+            'syncBackendIds'         => null
+        ));
+    }
 }

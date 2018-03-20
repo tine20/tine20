@@ -101,7 +101,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         self::ENABLED_FEATURES => array(
             //_('Enabled Features')
             'label' => 'Enabled Features',
-            //_('Enabled Features in Calendar Application.')
+            //_('Enabled Features in Addressbook Application.')
             'description' => 'Enabled Features in Addressbook Application.',
             'type' => 'object',
             'class' => 'Tinebase_Config_Struct',
