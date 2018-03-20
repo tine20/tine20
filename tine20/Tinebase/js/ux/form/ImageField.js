@@ -87,7 +87,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt
         });
-        
+
+        this.el.on('contextmenu', this.onContextMenu, this);
+
         Ext.ux.form.ImageField.superclass.afterRender.apply(this, arguments);
     },
     
@@ -219,7 +221,6 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         if (this.ctxMenu) {
             this.ctxMenu.destroy();
         }
-        this.browsePlugin.hideLayer();
         var upload = new Ext.menu.Item({
             text: i18n._('Change Image'),
             iconCls: 'action_uploadImage',
