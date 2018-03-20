@@ -902,6 +902,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testCreateFileCountTempDir()
     {
+        // skip this for previews, they will create more tempfiles
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+                {Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
+            static::markTestSkipped('doesn\'t work with previews on');
+        }
         $tmp = Tinebase_Core::getTempDir();
         $filecountInTmpBefore = count(scandir($tmp));
         
