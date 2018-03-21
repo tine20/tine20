@@ -106,7 +106,9 @@ class Tinebase_Role extends Tinebase_Acl_Roles
                             }
                         }
                         if ($changed) {
-                            $diff->diff['rights'] = $rsDiff->toArray(true);
+                            $diffArray = $diff->diff;
+                            $diffArray['rights'] = $rsDiff->toArray(true);
+                            $diff->diff = $diffArray;
                             $_modification->new_value = json_encode($diff->toArray());
                         }
                     }
