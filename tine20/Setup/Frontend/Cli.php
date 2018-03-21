@@ -433,7 +433,7 @@ class Setup_Frontend_Cli
         echo "Successfully truncated state table.\n";
         
         //Get Demodata
-        $cli->createAllDemoData();
+        $cli->createAllDemoData($_opts);
         
         //clear Cache
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);

@@ -415,11 +415,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         // get all active accounts
         $filter = new Addressbook_Model_ContactFilter(array(
                 array('field' => 'type', 'operator' => 'equals', 'value' => 'user'),
-                array('field' => 'is_deleted', 'operator' => 'equals', 'value' => FALSE)
+                array('field' => 'is_deleted', 'operator' => 'equals', 'value' => FALSE),
+                array('field' => 'showDisabled', 'operator' => 'equals', 'value' => 1),
             ), 'AND'
         );
         
-        $filter->addFilter(new Addressbook_Model_ContactHiddenFilter(1));
         $accounts = Addressbook_Controller_Contact::getInstance()->search($filter);
         $nextNumber = $lastNumber + 1;
         
