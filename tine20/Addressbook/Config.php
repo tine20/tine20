@@ -59,6 +59,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
 
     /**
+     * FEATURE_CONTACT_EVENT_LIST
+     *
+     * @var string
+     */
+    const FEATURE_CONTACT_EVENT_LIST = 'featureContactEventList';
+
+    /**
      * FEATURE_LIST_VIEW
      *
      * @var string
@@ -100,6 +107,12 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'class' => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => true,
             'content' => array(
+                self::FEATURE_CONTACT_EVENT_LIST => array(
+                    'label' => 'Addressbook Contact Event List',
+                    //_('Addressbook Contact Event List')
+                    'description' => 'Shows contact events in edit dialog tab panel',
+                    //_('Shows contact events in edit dialog tab panel')
+                ),
                 self::FEATURE_LIST_VIEW => array(
                     'label' => 'Addressbook List View',
                     //_('Addressbook List View')
@@ -116,6 +129,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 )
             ),
             'default' => array(
+                self::FEATURE_CONTACT_EVENT_LIST => true,
                 self::FEATURE_LIST_VIEW => false,
                 self::FEATURE_INDUSTRY => true,
                 self::FEATURE_RESOURCES => false
