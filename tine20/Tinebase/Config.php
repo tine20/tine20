@@ -415,6 +415,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
 
     /**
+     * PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN
+     *
+     * @var string
+     */
+    const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
+
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -1327,6 +1334,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Support NTLM V2 authentication',
             //_('Support NTLM V2 authentication and store account password as ntlm v2 hash')
             'description'           => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false
+        ),
+        self::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN => array(
+            //_('Update NTLM V2 password has on login')
+            'label'                 => 'Update NTLM V2 password has on login',
+            //_('Update NTLM V2 password has on login')
+            'description'           => 'Update NTLM V2 password has on login',
             'type'                  => 'bool',
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,

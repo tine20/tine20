@@ -518,6 +518,27 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $accountData;
     }
 
+    public function updateNtlmV2Hash($_userId, $_password)
+    {
+        if (Tinebase_Auth_NtlmV2::isEnabled()) {
+            $accountData = ['ntlmv2hash' => Tinebase_Auth_CredentialCache::encryptData(
+                Tinebase_Auth_NtlmV2::getPwdHash($_password),
+                Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY})];
+
+            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
+            $where = array(
+                $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $_userId)
+            );
+
+            $result = $accountsTable->update($accountData, $where);
+
+            if ($result != 1) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                    . __LINE__ . ' update did not work!');
+            }
+        }
+    }
+
     /**
      * set password in plugins
      * 

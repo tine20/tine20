@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,10 +24,26 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     */
     protected static $_server;
 
+    /**
+     * @var Tinebase_Auth_NtlmV2
+     */
+    protected $_ntlmV2 = null;
+
     public function __construct()
     {
         $this->_supportsSessions = true;
         parent::__construct();
+    }
+
+    /**
+     * @return Tinebase_Auth_NtlmV2
+     */
+    public function getNtlmV2()
+    {
+        if (null === $this->_ntlmV2) {
+            $this->_ntlmV2 = new Tinebase_Auth_NtlmV2();
+        }
+        return $this->_ntlmV2;
     }
 
     /**
@@ -89,18 +105,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     // but we don't know where we failed, so better initFramework
                     Tinebase_Core::initFramework();
                     if (Tinebase_Auth_NtlmV2::isEnabled()) {
-                        (new Tinebase_Auth_NtlmV2())->sendHeaderForAuthPase();
+                        $this->getNtlmV2()->sendHeaderForAuthPase();
                         return;
                     }
                 }
 
                 if (!$hasIdentity && Tinebase_Auth_NtlmV2::isEnabled()) {
-                    $ntlm = new Tinebase_Auth_NtlmV2();
-                    $ntlmAuthStatus = $ntlm->authorize();
+                    $ntlmAuthStatus = $this->getNtlmV2()->authorize($this->_request);
 
                     if (Tinebase_Auth_NtlmV2::AUTH_SUCCESS === $ntlmAuthStatus) {
                         try {
-                            Tinebase_Controller::getInstance()->loginUser($ntlm->getUser(), $this->_request,
+                            Tinebase_Controller::getInstance()->loginUser($this->_ntlmV2->getUser(), $this->_request,
                                 self::REQUEST_TYPE);
                         } catch (Tinebase_Exception_MaintenanceMode $temm) {
                             header('HTTP/1.1 503 Service Unavailable');
@@ -108,7 +123,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                         }
                         $hasIdentity = true;
                     } else {
-                        $ntlm->sendHeaderForAuthPase($ntlmAuthStatus);
+                        $this->_ntlmV2->sendHeaderForAuthPase($ntlmAuthStatus);
                         return;
                     }
                 }

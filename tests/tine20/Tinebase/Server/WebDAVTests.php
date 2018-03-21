@@ -69,7 +69,93 @@ EOS
         $_SERVER['HTTP_USER_AGENT'] = 'deniedClient';
         static::assertTrue(empty($this->testServer(true)));
     }
-    
+
+    public function testServerWithNtlmV2Client()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_SUPPORT_NTLMV2, true);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY, 'abcdefgh');
+        $credentials = $this->getTestCredentials();
+        $user = Tinebase_User::getInstance()->getUserByLoginName($credentials['username']);
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
+            Tinebase_User::getInstance()->setPassword($user->getId(), $credentials['password']);
+        } finally {
+            Tinebase_Core::unsetUser();
+        }
+
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r\n"
+            . "Host: localhost\r\n"
+            . "Depth: 0\r\n"
+            . "User-Agent: Microsoft-WebDAV-MiniRedir\r\n"
+            //. "Authorization: Basic $hash\r\n"
+        );
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Microsoft-WebDAV-MiniRedir';
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+
+        $request->getServer()->set('REMOTE_ADDR', 'localhost');
+
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
+        rewind($body);
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request, $body);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        static::assertTrue(empty($result), 'empty response body expected: ' . print_r($result, true));
+        static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_PHASE_NOT_STARTED, $server->getNtlmV2()->getLastAuthStatus());
+
+        $domain = iconv('UTF-8', 'UTF-16LE', 'shoo');
+        $msg = "NTLMSSP\x00\x01" .
+            "\x00\x00\x00\x00\x00\x00\x00" . // 16
+            pack('vvv', strlen($domain), strlen($domain), 22) . $domain;
+        $request->getHeaders()->addHeaderLine('Authorization', 'NTLM ' . base64_encode($msg));
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request, $body);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        static::assertTrue(empty($result), 'empty response body expected: ' . print_r($result, true));
+        static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_PHASE_ONE, $server->getNtlmV2()->getLastAuthStatus());
+        static::assertNotEmpty($server->getNtlmV2()->getLastResponse());
+
+
+        $clientblob = "\x01\x01\x00\x00\x00\x00\x00\x00" . Tinebase_Auth_NtlmV2::ntlm_get_random_bytes(8);
+        $md4hash = Tinebase_Auth_NtlmV2::getPwdHash($credentials['password']);
+        $ntlmv2hash = Tinebase_Auth_NtlmV2::ntlm_hmac_md5($md4hash, iconv('UTF-8', 'UTF-16LE', strtoupper($credentials['username']) . 'shoo'));
+        $blobhash = Tinebase_Auth_NtlmV2::ntlm_hmac_md5($ntlmv2hash, $server->getNtlmV2()->getServerNounce() . $clientblob);
+        $ntlmresponse = $blobhash . $clientblob;
+        $username = iconv('UTF-8', 'UTF-16LE', $credentials['username']);
+        $msg = "NTLMSSP\x00\x03" .
+            "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00" . // 20
+            pack('vvv', strlen($ntlmresponse), strlen($ntlmresponse), 42 + strlen($username) + strlen($domain)) . // 26
+            "\x00\x00" . // 28
+            pack('vvv', strlen($domain), strlen($domain), 42 + strlen($username)) . // 34
+            "\x00\x00"  . // 36
+            pack('vvv', strlen($username), strlen($username), 42) /* 42 */. $username . $domain . $ntlmresponse;
+
+
+        $request->getHeaders()->removeHeader($request->getHeaders('Authorization'));
+        $request->getHeaders()->addHeaderLine('Authorization', 'NTLM ' . base64_encode($msg));
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request, $body);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_SUCCESS, $server->getNtlmV2()->getLastAuthStatus());
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
+    }
+
     /**
      * test general functionality of Tinebase_Server_WebDAV
      * @group ServerTests
