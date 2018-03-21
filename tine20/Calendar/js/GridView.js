@@ -179,6 +179,7 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             id: 'container_id',
             header: Tine.Calendar.Model.Event.getContainerName(),
             width: 150,
+            dataIndex: 'container_id',
             renderer: Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id')
         }, {
             id: 'class',
