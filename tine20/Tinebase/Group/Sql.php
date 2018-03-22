@@ -945,12 +945,25 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         // find duplicate list references
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
         try {
-            $listIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName],
-                ['list_id', new Zend_Db_Expr('count(' . $this->_db->quoteIdentifier('list_id') . ') AS '
-                    . $this->_db->quoteIdentifier('c'))])
-                ->where($this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' IS NOT NULL')
-                ->having($this->_db->quoteIdentifier('c') . ' > 1')
-                ->group('list_id')->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $listIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName],
+                    [
+                        'list_id'
+                    ])
+                    ->where($this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' IS NOT NULL')
+                    ->having(new Zend_Db_Expr('count(' . $this->_db->quoteIdentifier('list_id') . ') > 1'))
+                    ->group('list_id')->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            } else {
+                $listIds = $this->_db->select()->from([$this->_tableName => SQL_TABLE_PREFIX . $this->_tableName],
+                    [
+                        'list_id',
+                        new Zend_Db_Expr('count(' . $this->_db->quoteIdentifier('list_id') . ') AS '
+                            . $this->_db->quoteIdentifier('c'))
+                    ])
+                    ->where($this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' IS NOT NULL')
+                    ->having($this->_db->quoteIdentifier('c') . ' > 1')
+                    ->group('list_id')->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            }
 
             if (count($listIds) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
