@@ -674,7 +674,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_twig->addExtension($extension);
         }
 
+        $this->_extendTwigSetup();
+
         $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+    }
+
+    protected function _extendTwigSetup()
+    {
+        // the concrete class may do stuff to the twig environment here before we load the template
+        // example:
+        // $this->_twig->getEnvironment()->addFunction(new Twig_SimpleFunction(...));
     }
 
     /**
