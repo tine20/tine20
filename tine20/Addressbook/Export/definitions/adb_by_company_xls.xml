@@ -3,7 +3,7 @@
     <model>Addressbook_Model_Contact</model>
     <name>adb_by_company_xls</name>
     <type>export</type>
-    <plugin>Addressbook_Export_Xls</plugin>
+    <plugin>Addressbook_Export_XlsDeprecated</plugin>
     <!-- _('Excel phone list') -->
     <label>Excel phone list</label>
     <!-- _('Excel phone list grouped by company') -->
