@@ -1468,6 +1468,14 @@ class Tinebase_Core
         
         return self::get(self::LOGGER);
     }
+
+    /**
+     * unset the logger
+     */
+    public static function unsetLogger()
+    {
+        self::set(self::LOGGER, null);
+    }
     
     /**
      * get cache from the registry
