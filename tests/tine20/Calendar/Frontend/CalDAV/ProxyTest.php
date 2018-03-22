@@ -228,4 +228,189 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesWithHiddenBlockedUser()
+    {
+        /** @var Tinebase_Model_FullUser $sclever */
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $sclever->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
+        Tinebase_User::getInstance()->setLastLoginFailure('sclever');
+        Tinebase_User::getInstance()->setLastLoginFailure('sclever');
+        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        static::assertEquals($sclever->visibility, $updatedUser->visibility);
+        static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+            <A:expand-property xmlns:A="DAV:">
+                <A:property name="calendar-proxy-read-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+                <A:property name="calendar-proxy-write-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+            </A:expand-property>';
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'REPORT',
+            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
+        ));
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        //var_dump($this->response->body);
+
+        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($this->response->body);
+        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-read-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-write-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/shared/"]');
+        $this->assertEquals(1, $nodes->length, "shared principal is missing in \n" . $responseDoc->saveXML());
+
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/'. $sclever->contact_id .'/"]');
+        $this->assertEquals(1, $nodes->length, "sclevers principal is missing in \n" .$responseDoc->saveXML());
+    }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesWithDisabledUser()
+    {
+        /** @var Tinebase_Model_FullUser $sclever */
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED;
+        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+            <A:expand-property xmlns:A="DAV:">
+                <A:property name="calendar-proxy-read-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+                <A:property name="calendar-proxy-write-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+            </A:expand-property>';
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'REPORT',
+            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
+        ));
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        //var_dump($this->response->body);
+
+        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($this->response->body);
+        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-read-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-write-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/shared/"]');
+        $this->assertEquals(1, $nodes->length, "shared principal is missing in \n" . $responseDoc->saveXML());
+
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/'. $sclever->contact_id .'/"]');
+        $this->assertEquals(0, $nodes->length, "sclevers principal wrongly returned in \n" .$responseDoc->saveXML());
+    }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesWithExpiredUser()
+    {
+        /** @var Tinebase_Model_FullUser $sclever */
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_EXPIRED;
+        $sclever->accountExpires = new Tinebase_DateTime('2000-01-01 00:00:00');
+        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        static::assertEquals($sclever->accountExpires, $updatedUser->accountExpires);
+        static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+            <A:expand-property xmlns:A="DAV:">
+                <A:property name="calendar-proxy-read-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+                <A:property name="calendar-proxy-write-for" namespace="http://calendarserver.org/ns/">
+                    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+                    <A:property name="displayname" namespace="DAV:"/>
+                    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+                </A:property>
+            </A:expand-property>';
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'REPORT',
+            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
+        ));
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        //var_dump($this->response->body);
+
+        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($this->response->body);
+        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-read-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-write-for');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/shared/"]');
+        $this->assertEquals(1, $nodes->length, "shared principal is missing in \n" . $responseDoc->saveXML());
+
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        $nodes = $xpath->query('///d:response/d:href[text()="/principals/users/'. $sclever->contact_id .'/"]');
+        $this->assertEquals(0, $nodes->length, "sclevers principal wrongly returned in \n" .$responseDoc->saveXML());
+    }
 }
