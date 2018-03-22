@@ -239,7 +239,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_modelConfig = null;
 
-    protected $_noRecordResolving = false;
+    protected $_FEDataRecordResolving = false;
 
     /**
      * @var array
@@ -350,9 +350,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (isset($_additionalOptions['recordData']['container_id']) && is_array($_additionalOptions['recordData']['container_id'])) {
                 $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
             }
-            $this->_noRecordResolving = true;
-            $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
-                array(new $this->_modelName($_additionalOptions['recordData'])));
+            $this->_FEDataRecordResolving = true;
+            /** @var Tinebase_Record_Abstract $record */
+            $record = new $this->_modelName([], true);
+            $record->setFromJsonInUsersTimezone($_additionalOptions['recordData']);
+            $this->_records = new Tinebase_Record_RecordSet($this->_modelName, [$record]);
         }
 
         if (isset($_additionalOptions['additionalRecords'])) {
@@ -846,9 +848,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        if ($this->_noRecordResolving) {
-            return;
-        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolving export records...');
         if ($_records->count() === 0) {
             return;
@@ -858,7 +857,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // TODO fix ALL this!
         // this is code present in the abstract controller, getRelatedData... why is it here?
 
-        // get field types/identifiers from config
+        // get field types/identifiers from config, this is sort of dead code?
         $identifiers = [];
         $types = [];
         if ($this->_config->columns) {
@@ -872,27 +871,36 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $types = $this->_resolvedFields;
         }*/
 
-        // resolve users
+        // resolve users, also for FE Data!
+        $userFields = [];
         foreach ($this->_userFields as $field) {
             if (empty($types) || in_array($field, $types) || in_array($field, $identifiers)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
-                Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, true);
+                $userFields[] = $field;
             }
         }
+        if (count($userFields) > 0) {
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $userFields, true);
+        }
 
-        // add notes
-        if (in_array('notes', $types)) {
+        // add notes, this is dead code?
+        if (in_array('notes', $types) && !$this->_FEDataRecordResolving) {
             Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, 'notes', 'Sql', false);
         }
 
-        // add container
-        if (in_array('container_id', $types)) {
+        // add container, this is dead code?
+        if (in_array('container_id', $types) && !$this->_FEDataRecordResolving) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
 
         if ($record->has('customfields')) {
-            $_records->customfields = array();
-            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+            $customFieldConfigs = null;
+            if (!$this->_FEDataRecordResolving) {
+                $_records->customfields = array();
+                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+            } else {
+                $customFieldConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                    $this->_applicationName, $this->_modelName);
+            }
 
             $validators = null;
             $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
@@ -912,6 +920,21 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $record) {
                 $cfs = $record->customfields;
+                if (empty($cfs)) {
+                    continue;
+                }
+                if (null !== $customFieldConfigs) {
+                    foreach ($cfs as $name => &$val) {
+                        if (null === ($cfg = $customFieldConfigs->filter('name', $name)->getFirstRecord())) {
+                            unset($cfs[$name]);
+                            continue;
+                        }
+                        /** @var Tinebase_Model_CustomField_Config $cfg */
+                        $cfg = clone $cfg;
+                        $cfg->value = $cfs[$name];
+                        $val = $cfg;
+                    }
+                }
                 if (empty($cfs)) {
                     continue;
                 }
@@ -940,8 +963,28 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $modelName = $_records->getRecordClassName();
 
         if ($record->has('relations')) {
-            $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
-                $_records->getArrayOfIds());
+            if (!$this->_FEDataRecordResolving) {
+                $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
+                    $_records->getArrayOfIds());
+            } else {
+                $relations = [];
+                foreach ($_records as $idx => $record) {
+                    $rels = $record->relations;
+                    if (empty($rels)) {
+                        continue;
+                    }
+                    if (is_array($rels)) {
+                        $rels = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $rels);
+                        /** @var Tinebase_Model_Relation $rel */
+                        foreach ($rels as $rel) {
+                            if (is_array($rel->related_record)) {
+                                $rel->related_record = new $rel->related_model($rel->related_record, true);
+                            }
+                        }
+                    }
+                    $relations[$idx] = $rels;
+                }
+            }
             $this->_resolveRelationsType($relations);
 
             /** @var Tinebase_Record_Abstract $record */
@@ -961,6 +1004,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (null === $this->_modelConfig && $_records->getRecordClassName() === $this->_modelName) {
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
+                // TODO what about this? I guess that is ok?
                 foreach ($this->_virtualFields as $name => $virtualField) {
                     $value = null;
                     if (!empty($record->relations)) {
@@ -978,6 +1022,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $record->{$name} = $value;
                 }
 
+                // TODO what about this?
                 foreach ($this->_foreignIdFields as $name => $controller) {
                     if (!empty($record->{$name})) {
                         /** @var Tinebase_Controller_Record_Abstract $controller */
@@ -987,6 +1032,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
         } elseif ($this->_modelConfig) {
+            // TODO what about this!
             $this->_modelConfig->resolveRecords($_records);
             $this->_keyFields = [];
             foreach ($this->_modelConfig->keyfieldFields as $property) {
@@ -998,6 +1044,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
+        // TODO what about this?
         foreach ((array)$this->_keyFields as $property => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
             if ($keyField['application'] === $this->_applicationName) {
