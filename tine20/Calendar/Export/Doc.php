@@ -41,6 +41,15 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
         $this->init($_filter, $_controller, $_additionalOptions);
     }
 
+    public function _processRecord(Tinebase_Record_Interface $record)
+    {
+        if ($record instanceof Calendar_Model_Event) {
+            $record->resolveOrganizer();
+        }
+
+        return parent::_processRecord($record);
+    }
+
     /**
      * @param array $context
      * @return array
@@ -53,5 +62,19 @@ class Calendar_Export_Doc extends Tinebase_Export_Doc
                 'until'         => $this->_until,
             )
         ));
+    }
+
+    protected function _extendTwigSetup()
+    {
+        $this->_twig->getEnvironment()->addFunction(new Twig_SimpleFunction('attendeeType', function ($attendee, $locale = null) {
+            if ($locale !== null) {
+                $locale = Tinebase_Translation::getLocale($locale);
+            }
+
+            if ($attendee instanceof Calendar_Model_Attender) {
+                return $attendee->getType($locale);
+            }
+        }));
+
     }
 }

@@ -253,7 +253,31 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 break;
         }
     }
-    
+
+    /**
+     * get translated type of attender
+     *
+     * @return string
+     */
+    public function getType($locale = null)
+    {
+        $translation = Tinebase_Translation::getTranslation('Calendar', $locale);
+        switch ($this->user_type) {
+            case self::USERTYPE_USER:
+                return $translation->translate('User');
+            case self::USERTYPE_GROUPMEMBER:
+                return $translation->translate('Member of group');
+            case self::USERTYPE_LIST:
+            case self::USERTYPE_GROUP:
+                return $translation->translate('Group');
+            case self::USERTYPE_RESOURCE:
+                return $translation->translate('Resource');
+            default:
+                return '';
+        }
+
+    }
+
     /**
      * returns the resolved user_id
      * 
