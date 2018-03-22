@@ -405,12 +405,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _doCreateCachedConfig($cachedConfigData)
     {
-        return (
-               false === $cachedConfigData
-            || (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE == 'DEVELOPMENT')
-            || (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE == 'DEBUG')
-            || $cachedConfigData['ttlstamp'] < time()
-        );
+        return
+            false === $cachedConfigData ||
+            !isset($cachedConfigData['ttlstamp']) ||
+            $cachedConfigData['ttlstamp'] < time() ||
+            (defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG'));
     }
     
     /**
@@ -452,6 +451,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             }
         }
         closedir($dh);
+
+        // reset logger as the new available config from conf.d mail contain different logger configuration
+        Tinebase_Core::unsetLogger();
 
         $ttl = 60;
         if (isset(self::$_configFileData['composeConfigTTL'])) {
