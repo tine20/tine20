@@ -335,6 +335,7 @@ Tine.Tinebase.common = {
      * TODO use/invent renderer registry to show more information on relations
      */
     relationsRenderer: function(relations, metaData) {
+        // _('No Access') - we need this string in other apps if relation is not shown e.g. record_removed_reason
         var result = '';
         if (relations) {
             for (var i = 0; i < relations.length; i += 1) {
