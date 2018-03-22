@@ -367,15 +367,14 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         $this->_resolveRecords($_records);
         
         $lastGroup = NULL;
-        $woString = $this->_translate->_('Without company assigned');
-        
+
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
-            if ($this->_groupBy !== NULL && $lastGroup !== $record->{$this->_groupBy} 
-                && (! (empty($record->{$this->_groupBy}) && $record->{$this->_groupBy} == $woString))) 
+            if ($this->_groupBy !== NULL && ($lastGroup === null ||
+                    (!empty($record->{$this->_groupBy}) && $lastGroup !== $record->{$this->_groupBy})))
             {
-                $lastGroup = empty($record->{$this->_groupBy}) ? $woString : $record->{$this->_groupBy};
+                $lastGroup = empty($record->{$this->_groupBy}) ? '' : $record->{$this->_groupBy};
                 $this->_addGroupHeader($lastGroup);
             }
             
