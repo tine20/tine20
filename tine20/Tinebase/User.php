@@ -558,6 +558,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 Tinebase_Event::fireEvent($event);
 
                 // the addressbook is registered as a plugin and will take care of the create
+                // see \Addressbook_Controller_Contact::inspectUpdateUser
                 $userBackend->addPluginUser($syncedUser, $user);
 
                 $contactId = $syncedUser->contact_id;
