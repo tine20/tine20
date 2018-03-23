@@ -90,7 +90,8 @@ class Setup_CliTest extends TestCase
     public function testCompare()
     {
         $this->testSetConfig();
-        $result = $this->_cliHelper('compare', array('--compare','--','otherdb=tine20'));
+        $result = $this->_cliHelper('compare', array('--compare','--','otherdb='
+            . Tinebase_Config::getInstance()->get('database')->dbname));
         $this->assertContains("Array
 (
 )", $result);
