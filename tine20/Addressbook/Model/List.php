@@ -136,7 +136,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 ),
             ),
             'list_type'         => array(
-                'label'             => null, // TODO fill this?
+                'label'             => 'List type', //_('List type')
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
@@ -162,6 +162,24 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
         ),
     );
+
+    /**
+     * get translated list type
+     *
+     * @return string
+     */
+    public function getType($locale = null)
+    {
+        $translation = Tinebase_Translation::getTranslation('Addressbook', $locale);
+        switch ($this->type) {
+            case self::LISTTYPE_LIST:
+                return $translation->translate('Group');
+            case self::LISTTYPE_GROUP:
+                return $translation->translate('System Group');
+            default:
+                return '';
+        }
+    }
 
     /**
      * if foreign Id fields should be resolved on search and get from json
