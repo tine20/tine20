@@ -131,6 +131,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * checks the start_date and end_date
      * 
      * @param Tinebase_Record_Interface $_record
+     * @throws HumanResources_Exception_ContractDates
      */
     protected function _checkDates(Tinebase_Record_Interface $_record)
     {
@@ -186,8 +187,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         if ($contracts->count()) {
             $contract = $contracts->getFirstRecord();
             $endDate = clone $_createdRecord->start_date;
-            $endDate->subDay(1);
-            $contract->end_date = $endDate;
+            $contract->end_date = $endDate->addSecond(1);
             $this->update($contract);
         }
     }

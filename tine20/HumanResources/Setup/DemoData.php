@@ -213,7 +213,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'employment_begin' => $sdate
             );
             
-        foreach($employees as $employee) {
+        foreach ($employees as $employee) {
             
             if (! $employee->account_id) {
                 echo '=== SKIPPING ===' . PHP_EOL;
@@ -221,15 +221,20 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 echo print_r($employee->toArray(), 1);
                 echo 'This employee won\'t have costcenters, contracts, etc.' . PHP_EOL;
                 echo '=== SKIPPING ===' . PHP_EOL;
+                continue;
             }
             
             $user = Tinebase_User::getInstance()->getUserByProperty('accountId', $employee->account_id, 'Tinebase_Model_FullUser');
 
-            foreach(array_merge($defaultData, $this->_dataMapping[$user->accountLoginName]) as $key => $data) {
+            if (! isset($this->_dataMapping[$user->accountLoginName])) {
+                continue;
+            }
+
+            foreach (array_merge($defaultData, $this->_dataMapping[$user->accountLoginName]) as $key => $data) {
                 $employee->{$key} = $data;
                 $employee->employment_begin = $this->_startDate;
             }
-            
+
             // add costcenter
             $scs = $this->_costCenters->getByIndex(0);
             

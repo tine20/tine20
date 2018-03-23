@@ -97,7 +97,7 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $lineId = $this->_phone->lines[0]['id'];
         $phoneId = $this->_phone->getId();
         
-        $d1 = Tinebase_DateTime::now()->subDay()->setTime(12,00,00);
+        $d1 = Tinebase_DateTime::now()->subDay(1)->setTime(12,00,00);
         $d2 = clone $d1;
         $d2->addSecond(10);
         $d3 = clone $d2;
