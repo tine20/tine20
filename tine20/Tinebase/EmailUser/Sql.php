@@ -581,4 +581,38 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             }
         }
     }
+
+    /**
+     * copy email user records from another instance / usable with master/slave setup after install_dump from master
+     *
+     * @param $fromInstance
+     * @todo make it work for smtp?
+     */
+    public function copyFromInstance($fromInstance)
+    {
+        $select = $this->_db->select()
+            ->from(array($this->_userTable))
+            ->where('instancename = ?', $fromInstance);
+        $data = $select->query()->fetchAll();
+        $count = 0;
+        foreach ($data as $recordData) {
+            // adjust instancename + domain and save record
+            $recordData['instancename'] = $this->_config['instanceName'];
+            $recordData['domain'] = empty($this->_config['domain']) ? $recordData['instancename'] : $this->_config['domain'];
+            try {
+                $this->_db->insert($this->_userTable, $recordData);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Copied email record ' . print_r($recordData, true));
+                $count++;
+
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . $zdse->getMessage());
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Copied ' . $count
+            . ' email records from instance' . $fromInstance . ' to ' .  $this->_config['instanceName']);
+    }
 }
