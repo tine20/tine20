@@ -248,4 +248,57 @@ class Tinebase_ControllerTest extends TestCase
         static::setExpectedException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus();
     }
+
+    public function testGetFaviconLegacy()
+    {
+        $icon = './images/favicon.png';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::BRANDING_FAVICON, $icon);
+        $response = Tinebase_Controller::getInstance()->getFavicon();
+
+        $this->assertEquals('image/png', $response->getHeader('Content-Type')[0]);
+        $image = Tinebase_ImageHelper::getImageInfoFromBlob($response->getBody());
+        $this->assertEquals(16, $image['width']);
+        $this->assertEquals(16, $image['height']);
+    }
+
+    public function testGetFaviconSingleResize()
+    {
+        $icon = './images/favicon300.png';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::BRANDING_FAVICON, $icon);
+        $response = Tinebase_Controller::getInstance()->getFavicon();
+
+        $this->assertEquals('image/png', $response->getHeader('Content-Type')[0]);
+        $image = Tinebase_ImageHelper::getImageInfoFromBlob($response->getBody());
+        $this->assertEquals(16, $image['width']);
+        $this->assertEquals(16, $image['height']);
+    }
+
+    public function testGetFaviconMulti()
+    {
+        $icons = [
+             16 => './images/favicon.png',
+            180 => './images/favicon300.png',
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::BRANDING_FAVICON, $icons);
+
+        // test exact match
+        $response = Tinebase_Controller::getInstance()->getFavicon();
+        $this->assertEquals('image/png', $response->getHeader('Content-Type')[0]);
+        $image = Tinebase_ImageHelper::getImageInfoFromBlob($response->getBody());
+        $this->assertEquals(16, $image['width']);
+        $this->assertEquals(16, $image['height']);
+
+        // test resize nearest
+        $response = Tinebase_Controller::getInstance()->getFavicon(160);
+        $this->assertEquals('image/png', $response->getHeader('Content-Type')[0]);
+        $image = Tinebase_ImageHelper::getImageInfoFromBlob($response->getBody());
+        $this->assertEquals(160, $image['width']);
+        $this->assertEquals(160, $image['height']);
+    }
+
+    public function testGetFaviconSVG()
+    {
+        $response = Tinebase_Controller::getInstance()->getFavicon('svg');
+        $this->assertEquals('image/svg+xml', $response->getHeader('Content-Type')[0]);
+    }
 }

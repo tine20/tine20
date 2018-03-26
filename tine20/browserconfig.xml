@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Windows Metro config -->
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square70x70logo src="favicon/70"/>
+            <square150x150logo src="favicon/270"/>
+            <square310x310logo src="favicon/310"/>
+            <!-- no logo yet -->
+            <wide310x150logo src="favicon/150"/>
+            <TileColor>#b79513</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig>

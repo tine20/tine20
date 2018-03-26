@@ -529,6 +529,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const BRANDING_LOGO = 'branding_logo';
     const BRANDING_FAVICON = 'branding_favicon';
+    const BRANDING_FAVICON_SVG = 'branding_favicon_svg';
+    const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
     const BRANDING_TITLE = 'branding_title';
     const BRANDING_WEBURL = 'branding_weburl';
     const BRANDING_DESCRIPTION = 'branding_description';
@@ -1804,15 +1806,41 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_FAVICON => array(
-                //_('custom favicon path')
-                'label'                 => 'custom favicon path',
-                //_('Path to custom favicon.')
-                'description'           => 'Path to custom favicon.',
-                'type'                  => 'string',
-                'default'               => './images/favicon.ico',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+            //_('custom favicon paths')
+            'label'                 => 'custom favicon paths',
+            //_('Paths to custom favicons.')
+            'description'           => 'Paths to custom favicons.',
+            'type'                  => 'array',
+            'default'               => [
+                 16 => './images/favicon.png',
+                 30 => './images/favicon30.png',
+                300 => './images/favicon300.png',
+            ],
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_FAVICON_SVG => array(
+            //_('custom svg favicon paths')
+            'label'                 => 'custom svg favicon paths',
+            //_('Paths to custom svg favicon.')
+            'description'           => 'Paths to custom svg favicon.',
+            'type'                  => 'string',
+            'default'               => './images/favicon.svg',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_MASKICON_COLOR => array(
+            //_('Mask Icon Color')
+            'label'                 => 'Mask Icon Color',
+            //_('Background color of mask icon (safari pinned tab).')
+            'description'           => 'Background color of mask icon (safari pinned tab).',
+            'type'                  => 'string',
+            'default'               => '#9b7f14',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::USE_LOGINNAME_AS_FOLDERNAME => array(
         //_('Use login name instead of full name')

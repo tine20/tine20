@@ -169,7 +169,7 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
 
     public function testGetDataUrl()
     {
-        $dataUrl = Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_FAVICON});
+        $dataUrl = Tinebase_ImageHelper::getDataUrl('./images/favicon.png');
 
         $this->assertTrue(strlen($dataUrl) > 100);
     }
