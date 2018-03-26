@@ -555,6 +555,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             Ext.each(this.modelConfig.fieldKeys, function(key) {
                 var config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
+                
+                // @todo thats just a hotfix!
+                if (['relations', 'customfields'].indexOf(key) !== -1) {
+                    return;
+                }
+                
                 if (config) {
                     columns.push(config);
                 }
