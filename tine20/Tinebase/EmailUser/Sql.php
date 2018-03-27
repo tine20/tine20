@@ -599,6 +599,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             // adjust instancename + domain and save record
             $recordData['instancename'] = $this->_config['instanceName'];
             $recordData['domain'] = empty($this->_config['domain']) ? $recordData['instancename'] : $this->_config['domain'];
+            $recordData['username'] = str_replace($fromInstance, $recordData['instancename'], $recordData['username']);
             try {
                 $this->_db->insert($this->_userTable, $recordData);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(

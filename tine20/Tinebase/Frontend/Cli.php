@@ -1517,7 +1517,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * create/update email users with current account
-     *  USAGE: TODO add
+     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
      *
      * @param Zend_Console_Getopt $opts
      * @return int
@@ -1529,14 +1529,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $data = $this->_parseArgs($opts);
-
-        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
         if (isset($data['fromInstance'])) {
             // fetch all accounts from fromInstance and write to configured instance
             $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $imap->copyFromInstance($data['fromInstance']);
         }
 
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
         $userController = Tinebase_User::getInstance();
         $emailUser = Tinebase_EmailUser::getInstance();
         /** @var Tinebase_Model_FullUser $user */
