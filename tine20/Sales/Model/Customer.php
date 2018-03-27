@@ -252,10 +252,12 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'shy'           => TRUE
                 ),           
             ),
-            // TODO should be marked as virtual as it's missing from the db schema
             'fulltext' => array(
-                'sortable' => false,
-                'type' => 'string',
+                'type'   => 'virtual',
+                'config' => array(
+                    'sortable' => false,
+                    'type'   => 'string'
+                )
             ),
         )
     );
