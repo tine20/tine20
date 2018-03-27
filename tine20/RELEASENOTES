@@ -127,6 +127,12 @@ for example during holidays, tine automatically creates recurrence exceptions fo
 
 Find a timeslot for a given set of attendee for a new event
 
+* Link to event in event notification mails
+
+To have the correct URL, you need to set this config:
+
+    'tine20URL' => 'https://my.tine20.domain',
+
 EMAIL
 ---
 
