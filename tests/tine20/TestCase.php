@@ -488,8 +488,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $persona
      * @param boolean $personaAdminGrant
      * @param boolean $userAdminGrant
+     * @param array $additionalGrants
      */
-    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true)
+    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
     {
         $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas[$persona]->getId(),
@@ -508,7 +509,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => $userAdminGrant,
         )));
-        
+
+        foreach ($additionalGrants as $grant) {
+            $grants->addRecord($grant);
+        }
+
         Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);
     }
 
