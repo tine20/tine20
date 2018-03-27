@@ -739,17 +739,13 @@ class Tinebase_FileSystem implements
 
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $tinebaseState = $tinebaseApplication->xprops('state');
 
-        $totalUsage = 0;
         if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
-            }
+            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
         } else {
-            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-            }
+            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE));
         }
         $effectiveUsage = $totalUsage;
 
@@ -830,43 +826,46 @@ class Tinebase_FileSystem implements
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = &$tinebaseApplication->xprops('state');
-        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+        if (null === ($rootSize = $applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE))) {
+            $rootSize = 0;
         }
-        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+        if (null === ($rootRevisionSize = $applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE))) {
+            $rootRevisionSize = 0;
         }
 
-        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] += $_sizeDiff;
-        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] += $_revisionSizeDiff;
+        $rootSize += $_sizeDiff;
+        $rootRevisionSize += $_revisionSizeDiff;
 
-        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] < 0) {
+        if ($rootSize < 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' root size should not become smaller than 0: ' .
-                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE]);
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+                . ' root size should not become smaller than 0: ' . $rootSize);
+            $rootSize = 0;
         }
-        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] < 0) {
+        if ($rootRevisionSize < 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' root revision size should not become smaller than 0: ' .
-                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE]);
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+                . ' root revision size should not become smaller than 0: ' . $rootRevisionSize);
+            $rootRevisionSize = 0;
         }
 
         if (true === $sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
             $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] > $total) {
+                if ($rootRevisionSize > $total) {
                     throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
                 }
             } else {
-                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] > $total) {
+                if ($rootSize > $total) {
                     throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
                 }
             }
         }
-        $applicationController->updateApplication($tinebaseApplication);
+
+        $applicationController->setApplicationState($tinebaseApplication,
+            Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
+        $applicationController->setApplicationState($tinebaseApplication,
+            Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $rootRevisionSize);
 
         $folderNodes = $this->_getTreeNodeBackend()->getAllFolderNodes($_nodes);
         if ($folderNodes->count() > 0) {
@@ -3535,17 +3534,13 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         if ($total > 0) {
             /** @var Tinebase_Model_Application $tinebaseApplication */
             $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-            $tinebaseState = $tinebaseApplication->xprops('state');
 
-            $totalUsage = 0;
             if ($quotaIncludesRevisions) {
-                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
-                }
+                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                    Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
             } else {
-                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-                }
+                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                    Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE));
             }
 
             if ($totalUsage >= ($total * 0.99)) {

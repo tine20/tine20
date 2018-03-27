@@ -21,6 +21,8 @@
  * @property    string  $version
  * @property    array   $tables
  * @property    string  $order
+ *
+ * TODO remove this state property in Release12 and obviously don't use it anymore
  * @property    array   $state
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
@@ -95,6 +97,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
             ),
+            // TODO remove in Release 12. Do not use it anymore
             'state'             => array(
                 'label'             => 'State', //_('State')
                 'type'              => 'json',

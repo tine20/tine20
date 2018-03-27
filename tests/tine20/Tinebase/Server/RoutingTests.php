@@ -27,7 +27,7 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationPublicTestRoute()
     {
-        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Application::getInstance()
+        Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
         $emitter = new Tinebase_Server_UnittestEmitter();
@@ -65,7 +65,7 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationAuthTestRoute()
     {
-        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Application::getInstance()
+        Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
         $emitter = new Tinebase_Server_UnittestEmitter();

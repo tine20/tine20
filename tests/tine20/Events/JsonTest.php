@@ -32,7 +32,7 @@ class Events_JsonTest extends Events_TestCase
     public function setUp()
     {
         // enable Events app
-        Tinebase_Application::getInstance()->setApplicationState(array(
+        Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('Events')->getId()
         ), Tinebase_Application::ENABLED);
 

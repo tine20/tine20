@@ -672,13 +672,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = &$tinebaseApplication->xprops('state');
-        $orgSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-        $orgRevisionSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+
         try {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 10000000;
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 10000000;
-            $applicationController->updateApplication($tinebaseApplication);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1;
 
             $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
@@ -713,11 +712,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         } finally {
             Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $orgQuotaConfig;
-            $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-            $tinebaseState = &$tinebaseApplication->xprops('state');
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = $orgSize;
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = $orgRevisionSize;
-            $applicationController->updateApplication($tinebaseApplication);
         }
     }
 
