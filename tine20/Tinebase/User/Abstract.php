@@ -512,7 +512,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Records of class ' . get_class($_records->getFirstRecord()) . ' does not have property ' . $property);
             }
         }
-        
+
+        $userIds = array_filter($userIds, function ($val) { return is_string($val); });
         $userIds = array_unique($userIds);
         foreach ($userIds as $index => $userId) {
             if (empty($userId)) {

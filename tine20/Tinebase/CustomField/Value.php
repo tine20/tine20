@@ -41,11 +41,23 @@ class Tinebase_CustomField_Value
         switch ($type) {
             case 'record':
                 $model = Tinebase_CustomField::getModelNameFromDefinition($this->_definition);
-                $value = new $model($this->_value, true);
+                if (is_array($this->_value)) {
+                    $value = new $model($this->_value, true);
+                } else {
+                    $controller = Tinebase_Core::getApplicationInstance($model);
+                    $value = $controller->get($this->_value, null, false);
+                }
                 break;
             case 'recordlist':
                 $model = Tinebase_CustomField::getModelNameFromDefinition($this->_definition);
-                $value = new Tinebase_Record_RecordSet($model, $this->_value, true);
+                if (is_array($this->_value) && (empty($this->_value) || is_array(current($this->_value)))) {
+                    $value = new Tinebase_Record_RecordSet($model, $this->_value, true);
+                } else {
+                    $controller = Tinebase_Core::getApplicationInstance($model);
+                    // TODO test this! does the FE send a json encoded list here?!? it got decoded earlier already?
+                    // TODO probably the decode can be removed?
+                    $value = $controller->getMultiple(Tinebase_Helper::jsonDecode($this->_value));
+                }
                 $value->sort(function(Tinebase_Record_Abstract $a, Tinebase_Record_Abstract $b) {
                     return strcmp($a->getTitle(), $b->getTitle());
                 }, null, 'function');

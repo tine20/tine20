@@ -880,6 +880,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
         if (count($userFields) > 0) {
             Tinebase_User::getInstance()->resolveMultipleUsers($_records, $userFields, true);
+            if ($this->_FEDataRecordResolving) {
+                foreach ($userFields as $field) {
+                    foreach ($_records->{$field} as $idx => $value) {
+                        if (is_array($value)) {
+                            $_records->getByIndex($idx)->{$field} = new Tinebase_Model_FullUser($value);
+                        }
+                    }
+                }
+            }
         }
 
         // add notes, this is dead code?
