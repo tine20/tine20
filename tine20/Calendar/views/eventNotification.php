@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 ?>
-<?php if (count($this->updates) > 0): ?>
+<?php if (count((array)$this->updates) > 0): ?>
 <?php echo $this->translate->_('Updates') ?>:
 <?php 
 foreach ($this->updates as $field => $update) {
