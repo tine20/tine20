@@ -141,8 +141,10 @@ if header :contains "Return-Path" "<>" {
     if header :matches "From" "*" {
         set "from" "${1}";
     }
+    set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
+    
     notify :message "TRANSLATE_SUBJECT${from}: ${subject}"
-              "mailto:USER_EXTERNAL_EMAIL";
+              "mailto:USER_EXTERNAL_EMAIL?body=${message}";
 }
 sieveFile
             );
