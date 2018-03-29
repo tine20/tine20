@@ -1061,7 +1061,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } else {
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
-            $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+            foreach ($_records as $record) {
+                $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+            }
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
