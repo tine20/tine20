@@ -901,16 +901,25 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
 
-        if ($record->has('customfields')) {
-            $customFieldConfigs = null;
+        while ($record->has('customfields')) {
+            $customFieldConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                $this->_applicationName, $this->_modelName);
+            if (empty($customFieldConfigs)) {
+                $_records->customfields = array();
+                break;
+            }
+
             if (!$this->_FEDataRecordResolving) {
                 $_records->customfields = array();
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
-            } else {
-                $customFieldConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
-                    $this->_applicationName, $this->_modelName);
             }
 
+            $availableCFNames = [];
+            /** @var Tinebase_Model_CustomField_Config $cfc */
+            foreach ($customFieldConfigs as $cfc) {
+                $cfc->value = null;
+                $availableCFNames[$cfc->name] = $cfc;
+            }
             $validators = null;
             $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
             $instance = $this;
@@ -930,23 +939,24 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             foreach ($_records as $record) {
                 $cfs = $record->customfields;
                 if (empty($cfs)) {
-                    continue;
+                    $cfs = [];
                 }
-                if (null !== $customFieldConfigs) {
+                if ($this->_FEDataRecordResolving) {
                     foreach ($cfs as $name => &$val) {
-                        if (null === ($cfg = $customFieldConfigs->filter('name', $name)->getFirstRecord())) {
+                        if (!isset($availableCFNames[$name])) {
                             unset($cfs[$name]);
                             continue;
                         }
-                        /** @var Tinebase_Model_CustomField_Config $cfg */
-                        $cfg = clone $cfg;
-                        $cfg->value = $cfs[$name];
-                        $val = $cfg;
+                        /** @var Tinebase_Model_CustomField_Config $cfc */
+                        $cfc = clone $availableCFNames[$name];
+                        $cfc->value = $cfs[$name];
+                        $val = $cfc;
                     }
                 }
-                if (empty($cfs)) {
-                    continue;
+                foreach (array_diff_key($availableCFNames, $cfs) as $name => $cfc) {
+                    $cfs[$name] = clone $cfc;
                 }
+
                 array_walk($cfs, function(Tinebase_Model_CustomField_Config $val, $key)
                         use($cfNameLabelMap, $stringifyCallBack) {
                     $val->label = $cfNameLabelMap[$key];
@@ -966,6 +976,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 }
             }
+            break;
         }
 
         /** @var Tinebase_Record_Abstract $modelName */
