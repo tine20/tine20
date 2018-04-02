@@ -606,7 +606,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } else {
             $this->assertEquals(1, $result[0]['isIndexed']);
         }
-        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
         // either no data or the same data, both produce the same hash
         static::assertEquals($result[0]['hash'], $result[1]['hash'], 'hash should be the same');
         static::assertNotEquals($result[0]['object_id'], $result[1]['object_id'], 'object_ids should not be the same');
