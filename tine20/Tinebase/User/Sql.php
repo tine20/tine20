@@ -1507,7 +1507,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if (empty($user->accountEmailAddress) || strpos($user->accountEmailAddress, '@') === false) {
             return;
         }
-        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        if (empty($config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray()) ||
+                !isset($config['primarydomain'])) {
+            return;
+        }
         list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
         $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
     }

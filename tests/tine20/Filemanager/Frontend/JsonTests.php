@@ -1713,9 +1713,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_fsController->resetBackends();
 
         // remove all files with size 0 first
-        // better here than below?
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
+
+        // create files with size 0
         $this->testDeleteFileNodes();
 
+        // then delete them
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE),
             array('field' => 'size', 'operator' => 'equals', 'value' => 0)
@@ -1724,15 +1727,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
             Tinebase_FileSystem::getInstance()->deleteFileNode($node);
         }
 
-        // why here?
-        //$this->testDeleteFileNodes();
+        // do the test:
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
+
+        // reset the test environment
         $this->tearDown();
-        
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->setUp();
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
         $this->_fsController->resetBackends();
+
+        // now create files with data and test again
         $this->testDeleteFileNodes(true);
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(1, $result, 'should cleanup one file');

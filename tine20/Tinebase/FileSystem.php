@@ -1397,7 +1397,15 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
-            $node = $this->stat($path);
+            try {
+                $node = $this->stat($path);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // we don't want a roll back here, we didn't do anything, nothing went really wrong
+                // if the TENF is catched outside gracefully, a roll back in here would kill it!
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                throw $tenf;
+            }
 
             // if modlog is not active, we want to hard delete all soft deleted childs if there are any
             $children = $this->getTreeNodeChildren($node, !$this->_modLogActive);
@@ -1607,9 +1615,6 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $this->clearStatCache($path);
 
-            // update hash of all parent folders
-            $this->_updateDirectoryNodesHash(dirname($path));
-
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
@@ -1701,24 +1706,20 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $this->_getTreeNodeBackend()->softDelete($node->getId());
 
-            // delete object only, if no one uses it anymore
-            // we can use treeNodeBackend property because getTreeNodeBackend was called just above
-            if ($this->_treeNodeBackend->getObjectCount($node->object_id) === 0) {
-                if (false === $this->_modLogActive && true === $this->_previewActive) {
-                    $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
-                } else {
-                    $hashes = array();
+            if (false === $this->_modLogActive && true === $this->_previewActive) {
+                $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
+            } else {
+                $hashes = array();
+            }
+            $this->_fileObjectBackend->softDelete($node->object_id);
+            if (false === $this->_modLogActive ) {
+                if (true === $this->_indexingActive) {
+                    Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
                 }
-                $this->_fileObjectBackend->softDelete($node->object_id);
-                if (false === $this->_modLogActive ) {
-                    if (true === $this->_indexingActive) {
-                        Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
-                    }
-                    if (true === $this->_previewActive) {
-                        $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
-                        $hashesToDelete = array_diff($hashes, $existingHashes);
-                        Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
-                    }
+                if (true === $this->_previewActive) {
+                    $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
+                    $hashesToDelete = array_diff($hashes, $existingHashes);
+                    Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
                 }
             }
 

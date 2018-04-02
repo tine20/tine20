@@ -320,9 +320,8 @@ class Tinebase_FileSystem_Previews
         foreach($_hashes as $hash) {
             try {
                 $fileSystem->rmdir($basePath . '/' . substr($hash, 0, 3) . '/' . substr($hash, 3), true);
-            } catch(Tinebase_Exception_NotFound $tenf) {
-
-            }
+                // these hashes are unchecked, there may not be previews for them! => catch, no logging (debug at most)
+            } catch(Tinebase_Exception_NotFound $tenf) {}
         }
     }
 
