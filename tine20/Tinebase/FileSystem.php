@@ -250,13 +250,14 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if ($sourcePathParts == $destinationPathParts) {
             throw new Tinebase_Exception_UnexpectedValue("Source path and destination path must be different.");
         }
-        
-        // set new node properties
-        $destinationNode->setId(null);
-        $destinationNode->parent_id = $parentNode->getId();
-        $destinationNode->name      = $destinationNodeName;
-        
-        $createdNode = $this->_treeNodeBackend->create($destinationNode);
+
+        if ($destinationNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
+            $this->_updateFileObject($createdNode->object_id, $destinationNode->hash);
+            $createdNode = $this->get($createdNode->getId());
+        } else {
+            $createdNode = $this->createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
+        }
         
         // update hash of all parent folders
         $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
@@ -1326,5 +1327,18 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         $this->fclose($handle);
+    }
+
+    public function _getTreeNodeBackend()
+    {
+        return $this->_treeNodeBackend;
+    }
+
+    /**
+     * @return Tinebase_Tree_FileObject
+     */
+    public function getFileObjectBackend()
+    {
+        return $this->_fileObjectBackend;
     }
 }

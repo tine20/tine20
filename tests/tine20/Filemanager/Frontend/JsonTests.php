@@ -13,6 +13,8 @@
  * Test class for Filemanager_Frontend_Json
  * 
  * @package     Filemanager
+ *
+ * @method Filemanager_Frontend_Json _getUit()
  */
 class Filemanager_Frontend_JsonTests extends TestCase
 {
@@ -399,11 +401,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
-    public function testCreateFileNodesWithData()
-    {
-        $this->testCreateFileNodes(true);
-    }
-
     /**
     * testCreateFileNodeWithUTF8Filenames
     * 
@@ -630,20 +627,39 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * 
      * @return array target node
      */
-    public function testCopyFileNodesToFolder()
+    public function testCopyFileNodesToFolder($_createNodesWithData = false)
     {
-        $filesToCopy = $this->testCreateFileNodes();
+        $filesToCopy = $this->testCreateFileNodes($_createNodesWithData);
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         
         $result = $this->_json->copyNodes($filesToCopy, $targetNode['path'], FALSE);
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
-        static::assertEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
+        static::assertNotEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
             'object_id shouldn\'t change');
-        static::assertEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
+        static::assertNotEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
             'object_id shouldn\'t change');
-        
+
         return $targetNode;
+    }
+
+    public function testCopyAndChange()
+    {
+        $targetNode = $this->testCopyFileNodesToFolder(true);
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+        file_put_contents($tempPath, 'otherData');
+
+        $changedResult = $this->_getUit()->createNode($targetNode['path'] . '/file1',
+            Tinebase_Model_Tree_Node::TYPE_FILE, $tempFileId->getId(), true);
+
+        static::assertNotEquals($changedResult['object_id'], $this->_createdNodesJson[0]['object_id']);
+        static::assertNotEquals($changedResult['hash'], $this->_createdNodesJson[0]['hash']);
+
+        $originalNode = $this->_getUit()->getNode($this->_createdNodesJson[0]['id']);
+        static::assertNotEquals($changedResult['object_id'], $originalNode['object_id']);
+        static::assertNotEquals($changedResult['hash'], $originalNode['hash']);
     }
 
     /**
