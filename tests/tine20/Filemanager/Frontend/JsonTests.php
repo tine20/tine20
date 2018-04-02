@@ -71,6 +71,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected $_rmDir = array();
 
     protected $_oldModLog = null;
+
+    protected $_createdNodesJson = null;
+
     
     /**
      * Sets up the fixture.
@@ -91,6 +94,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // make sure account root node exists
         $this->_getPersonalFilemanagerContainer();
+
+        Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+
+        $this->_createdNodesJson = null;
     }
     
     /**
@@ -579,6 +586,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
 
         $result = $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, false);
+        $this->_createdNodesJson = $result;
+
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
@@ -592,10 +601,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } else {
             $this->assertEquals(1, $result[0]['isIndexed']);
         }
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
+        // either no data or the same data, both produce the same hash
+        static::assertEquals($result[0]['hash'], $result[1]['hash'], 'hash should be the same');
+        static::assertNotEquals($result[0]['object_id'], $result[1]['object_id'], 'object_ids should not be the same');
         
         return $filepaths;
     }
-
 
     /**
      * testCreateFileNodeInPersonalRoot
@@ -999,6 +1011,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->copyNodes($filesToCopy, $targetNode['path'], false);
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+        static::assertEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
+            'object_id shouldn\'t change');
+        static::assertEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
+            'object_id shouldn\'t change');
         
         return $targetNode;
     }
