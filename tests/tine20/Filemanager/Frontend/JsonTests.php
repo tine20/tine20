@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -62,6 +62,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @var Tinebase_Model_Container
      */
     protected $_otherUserContainer;
+
+    protected $_createdNodesJson = null;
     
     /**
      * Sets up the fixture.
@@ -77,6 +79,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
         Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+
+        $this->_createdNodesJson = null;
     }
     
     /**
@@ -361,7 +365,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * 
      * @return array file paths
      */
-    public function testCreateFileNodes()
+    public function testCreateFileNodes($_addData = false)
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
@@ -371,15 +375,33 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $sharedContainerNode['path'] . '/file1',
             $sharedContainerNode['path'] . '/file2',
         );
-        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+        $tempFileIds = array();
+        if (true === $_addData) {
+            for ($i = 0; $i < 2; ++$i) {
+                $tempPath = Tinebase_TempFile::getTempPath();
+                $tempFileIds[] = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+                file_put_contents($tempPath, 'someData');
+            }
+        }
+
+        $result = $this->_json->createNodes($filepaths, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFileIds, FALSE);
+        $this->_createdNodesJson = $result;
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
         $this->assertEquals('file2', $result[1]['name']);
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
+        // either no data or the same data, both produce the same hash
+        static::assertEquals($result[0]['hash'], $result[1]['hash'], 'hash should be the same');
+        static::assertNotEquals($result[0]['object_id'], $result[1]['object_id'], 'object_ids should not be the same');
         
         return $filepaths;
+    }
+
+    public function testCreateFileNodesWithData()
+    {
+        $this->testCreateFileNodes(true);
     }
 
     /**
@@ -616,6 +638,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->copyNodes($filesToCopy, $targetNode['path'], FALSE);
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+        static::assertEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
+            'object_id shouldn\'t change');
+        static::assertEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
+            'object_id shouldn\'t change');
         
         return $targetNode;
     }
