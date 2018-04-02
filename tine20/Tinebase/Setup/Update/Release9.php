@@ -497,11 +497,46 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * Update to 9.16
+     *
+     * make file objects unique
+     */
+    public function update_15()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $treeNode = $fs->_getTreeNodeBackend();
+        $fileObject = $fs->getFileObjectBackend();
+
+        foreach ($treeNode->search(new Tinebase_Model_Tree_Node_Filter(), null, ['object_id']) as
+                 $object_id => $id) {
+            if ($treeNode->getObjectCount($object_id) > 1) {
+                $obj = $fileObject->get($object_id);
+                $obj->setId(null);
+                $obj = $fileObject->create($obj);
+                $node = $treeNode->get($id);
+                $node->object_id = $obj->getId();
+                $treeNode->update($node);
+            }
+        }
+        
+        $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>object_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>object_id</name>
+                    </field>
+                </index>'));
+        $this->setTableVersion('tree_nodes', 2);
+        
+        $this->setApplicationVersion('Tinebase', '9.16');
+    }
+
+    /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_15()
+    public function update_16()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }

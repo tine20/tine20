@@ -414,4 +414,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.22');
     }
+
+    /**
+     * update to 11.23
+     *
+     * make file objects unique
+     */
+    public function update_22()
+    {
+        $update = new Tinebase_Setup_Update_Release9($this->_backend);
+        $update->update_15();
+
+        $this->setApplicationVersion('Tinebase', '11.23');
+    }
 }
