@@ -440,7 +440,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if (isset($billedRelations[$relation->id])) {
+            if (isset($billedRelations[$relation->id]) ||
+                    !$relation->related_record instanceof Tinebase_Record_Abstract) {
                 continue;
             }
             // use productaggregate definition, if it has been found
