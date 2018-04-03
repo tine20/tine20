@@ -508,7 +508,7 @@ class Tinebase_FileSystem implements
                 $this->_updateDeletedNodeName($deletedNode);
             }
 
-            if ($destinationNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            if ($destinationNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
                 $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
                 $this->_updateFileObject($createdNode->object_id, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
