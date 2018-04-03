@@ -986,6 +986,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (!$this->_FEDataRecordResolving) {
                 $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
                     $_records->getArrayOfIds());
+                /** @var Tinebase_Record_RecordSet $rels */
+                foreach ($relations as $rels) {
+                    $rels->removeRecords($rels->filter('related_record'));
+                }
             } else {
                 $relations = [];
                 foreach ($_records as $idx => $record) {
