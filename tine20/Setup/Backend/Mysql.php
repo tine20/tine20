@@ -161,6 +161,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
           
         $stmt = $select->query();
         $tableInfo = $stmt->fetchObject();
+        $stmt->closeCursor();
         
         //$existingTable = new Setup_Backend_Schema_Table($tableInfo);
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Mysql', $tableInfo);
@@ -171,6 +172,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         $stmt = $select->query();
         $tableColumns = $stmt->fetchAll();
+        $stmt->closeCursor();
 
         foreach ($tableColumns as $tableColumn) {
             $field = Setup_Backend_Schema_Field_Factory::factory('Mysql', $tableColumn);
@@ -187,6 +189,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
                 $stmt = $select->query();
                 $keyUsage = $stmt->fetchAll();
+                $stmt->closeCursor();
 
                 foreach ($keyUsage as $keyUse) {
                     if ($keyUse['REFERENCED_TABLE_NAME'] != NULL) {
