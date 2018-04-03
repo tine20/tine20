@@ -510,13 +510,11 @@ class Tinebase_FileSystem implements
 
             if ($destinationNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
                 $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
-                $this->_updateFileObject($createdNode->object_id, $destinationNode->hash);
+                $this->_updateFileObject($parentNode, $createdNode->object_id, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
             } else {
-                $createdNode = $this->createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
+                $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
             }
-
-            $createdNode = $this->_getTreeNodeBackend()->create($destinationNode);
 
             // update hash of all parent folders
             $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
