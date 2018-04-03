@@ -693,6 +693,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         // iterate relations, look for accountables
         foreach ($this->_currentBillingContract->relations as $relation) {
+            if (empty($relation->related_record)) {
+                continue;
+            }
             // use productaggregate definition, if it has been found
             if (isset($modelsToBill[$relation->related_model])) {
                 $billableAccountables[] = array(
