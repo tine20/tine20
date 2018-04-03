@@ -589,7 +589,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not get contract with id: ' . $contractId);
                 continue;
             }
-            $this->checkForRecreation($ids, $tmpContract);
+            try {
+                $this->checkForRecreation($ids, $tmpContract);
+            } catch (Exception $e) {
+                $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                $this->_autoInvoiceIterationFailures[] = $failure;
+                Tinebase_Exception::log($e, FALSE);
+                continue;
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' checkForRecreation result: ' . print_r($this->_autoInvoiceIterationResults, 1));
             }
@@ -631,7 +638,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach($invoices as $id)
         {
             if (!isset($excludeIds[$id])) {
-                $result = array_merge($result, $this->checkForUpdate($id));
+                try {
+                    $result = array_merge($result, $this->checkForUpdate($id));
+                } catch (Exception $e) {
+                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                    $this->_autoInvoiceIterationFailures[] = $failure;
+                    Tinebase_Exception::log($e, FALSE);
+                    continue;
+                }
             }
         }
 
