@@ -514,14 +514,27 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             }
         }
 
-        $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>object_id</name>
-                    <unique>true</unique>
-                    <field>
+        $found = false;
+        /** @var Setup_Backend_Schema_Index_Mysql $index */
+        foreach ($this->_backend->getExistingSchema('tree_nodes')->indices as $index) {
+            if ($index->unique && 'object_id' === $index->name) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
                         <name>object_id</name>
-                    </field>
-                </index>'));
-        $this->setTableVersion('tree_nodes', 2);
+                        <unique>true</unique>
+                        <field>
+                            <name>object_id</name>
+                        </field>
+                    </index>'));
+        }
+
+        if ($this->getTableVersion('tree_nodes') < 2) {
+            $this->setTableVersion('tree_nodes', 2);
+        }
         
         $this->setApplicationVersion('Tinebase', '9.16');
     }
