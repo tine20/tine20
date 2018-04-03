@@ -1180,3 +1180,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background: none;
     cursor: pointer;
 }
+
+.tine-tinebase-recorddisplaypanel-displayfield .x-form-display-field {
+    display: inline-block;
+}
