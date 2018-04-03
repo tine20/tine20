@@ -1140,7 +1140,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         file_put_contents($tempPath, 'otherData');
 
         $changedResult = $this->_getUit()->createNode($targetNode['path'] . '/file1',
-            Tinebase_Model_Tree_Node::TYPE_FILE, $tempFileId->getId(), true);
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileId->getId(), true);
 
         static::assertNotEquals($changedResult['object_id'], $this->_createdNodesJson[0]['object_id']);
         static::assertNotEquals($changedResult['hash'], $this->_createdNodesJson[0]['hash']);
