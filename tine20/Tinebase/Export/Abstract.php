@@ -1028,7 +1028,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (null === $this->_modelConfig && $_records->getRecordClassName() === $this->_modelName) {
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
-                // TODO what about this? I guess that is ok?
+                // TODO FE data resolving: what about this? I guess that is ok?
                 foreach ($this->_virtualFields as $name => $virtualField) {
                     $value = null;
                     if (!empty($record->relations)) {
@@ -1046,17 +1046,33 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $record->{$name} = $value;
                 }
 
-                // TODO what about this?
-                foreach ($this->_foreignIdFields as $name => $controller) {
-                    if (!empty($record->{$name})) {
-                        /** @var Tinebase_Controller_Record_Abstract $controller */
-                        $controller = $controller::getInstance();
-                        $record->{$name} = $controller->get($record->{$name});
+                if (!$this->_FEDataRecordResolving) {
+                    foreach ($this->_foreignIdFields as $name => $controller) {
+                        if (!empty($record->{$name})) {
+                            /** @var Tinebase_Controller_Record_Abstract $controller */
+                            $controller = $controller::getInstance();
+                            $record->{$name} = $controller->get($record->{$name});
+                        }
                     }
                 }
             }
         } elseif ($this->_modelConfig) {
-            // TODO what about this!
+            // TODO FE data resolving: what about this!
+            $backupFields = [];
+            if ($this->_FEDataRecordResolving) {
+                /** @var Tinebase_Record_Abstract $recordsClass */
+                $recordsClass = $_records->getRecordClassName();
+                foreach ($recordsClass::getResolveForeignIdFields() as $key => $value) {
+                    if ($key === 'recursive') {
+                        $value = array_keys($value);
+                    }
+                    foreach ($value as $field) {
+                        $backupFields[$field] = $_records->{$field};
+                        $_records->{$field} = null;
+                    }
+                }
+            }
+
             $this->_modelConfig->resolveRecords($_records);
             $this->_keyFields = [];
             foreach ($this->_modelConfig->keyfieldFields as $property) {
@@ -1066,9 +1082,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     'name' => $this->_modelConfig->getFields()[$property]['name'],
                 ];
             }
+
+            foreach ($backupFields as $field => $data) {
+                foreach ($data as $idx => $value) {
+                    $_records->getByIndex($idx)->{$field} = $value;
+                }
+            }
         }
 
-        // TODO what about this?
+        // TODO FE data resolving: what about this?
         foreach ((array)$this->_keyFields as $property => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
             if ($keyField['application'] === $this->_applicationName) {
