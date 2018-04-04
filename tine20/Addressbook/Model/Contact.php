@@ -128,6 +128,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'recordName'        => 'Contact',
         'recordsName'       => 'Contacts', // ngettext('Contact', 'Contacts', n)
         'hasRelations'      => true,
+        'copyRelations'     => false,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,

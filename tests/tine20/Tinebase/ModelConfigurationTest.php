@@ -77,13 +77,13 @@ class Tinebase_ModelConfigurationTest extends TestCase
             }
         }
 
-        $customer = new Addressbook_Model_Contact([], true);
+        $customer = new Tasks_Model_Task([], true);
         $cObj = $customer->getConfiguration();
         $fields = $cObj->getFields();
         foreach ($fields as $name => $fieldconfig) {
             if ($name === 'relations') {
                 self::assertFalse($fieldconfig['copyOmit'],
-                    'Contact relations should not be omitted on copy: ' . print_r($fieldconfig, true));
+                    'Tasks_Model_Task relations should not be omitted on copy: ' . print_r($fieldconfig, true));
             }
         }
     }
