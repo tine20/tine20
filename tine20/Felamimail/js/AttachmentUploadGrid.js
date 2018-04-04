@@ -167,7 +167,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
                     return null;
                 }
 
-                return record.get('name');
+                return Tine.Tinebase.common.cellEditorHintRenderer(record.get('name'));
             },
             editor: combo
         }, {
