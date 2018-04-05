@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>11.0</version>
+    <version>11.1</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -444,7 +444,7 @@
         </table>
         <table>
             <name>sales_customers</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -463,6 +463,11 @@
                     <name>name</name>
                     <type>text</type>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name_shorthand</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>url</name>

@@ -243,7 +243,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 
         'fields'            => [
             'account_id'                    => [
-                'label'                         => 'Description', // _('Description')
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => null

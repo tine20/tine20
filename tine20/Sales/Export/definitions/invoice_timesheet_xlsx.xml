@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Tine 2.0
+  ~
+  ~ @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
+  ~ @author       Michael Spahn <m.spahn@metaways.de>
+  ~ @copyright    Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+  ~
+  -->
+
+<config>
+    <model>Sales_Model_Invoice</model>
+    <name>invoice_timesheet_xlsx</name>
+    <type>export</type>
+    <!-- _('Invoice Timesheet') -->
+    <label>Invoice Timesheet</label>
+    <plugin>Sales_Export_Timesheet</plugin>
+    <template>tine20:///Tinebase/folders/shared/export/templates/Sales/sales_invoice_timesheet.xlsx</template>
+    <icon_class>action_exportAsPdf</icon_class>
+    <favorite>true</favorite>
+    <order>500</order>
+    <scope>hidden</scope>
+</config>
