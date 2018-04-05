@@ -643,6 +643,11 @@ class Tinebase_Application
         
         return $this->_backend;
     }
+
+    public function resetBackend()
+    {
+        $this->_backend = null;
+    }
     
     /**
      * 

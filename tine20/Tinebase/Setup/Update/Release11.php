@@ -491,6 +491,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             $this->setTableVersion('applications', 5);
         }
 
+        Tinebase_Db_Table::clearTableDescriptionInCache('applications');
+        Tinebase_Application::getInstance()->resetBackend();
+
         $this->setApplicationVersion('Tinebase', '11.24');
     }
 }
