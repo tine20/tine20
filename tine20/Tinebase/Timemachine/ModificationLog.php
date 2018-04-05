@@ -598,6 +598,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             } elseif (! isset($newRecord[$key])) {
                 if (!is_object($value)) {
                     if ($newRecord->has($key)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Merge current value into update data, as it was empty/not set in update data.');
+                        }
+
                         $newRecord->{$key} = $value;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
