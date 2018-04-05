@@ -16,8 +16,9 @@
  * @subpackage  Export
  */
 
-class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
+class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface, Tinebase_Export_Convertible
 {
+    use Tinebase_Export_Convertible_PreviewServicePdf;
 
     /**
      * the document
@@ -842,5 +843,25 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         }
 
         return $this->_templateVariables;
+    }
+
+    /**
+     * @param $to
+     * @param null $from
+     * @throws Tinebase_Exception_NotFound
+     */
+    function convert($to, $from = null)
+    {
+        if (!$from) {
+            $from = Tinebase_TempFile::getTempPath();
+            $this->save($from);
+        }
+
+        switch($to) {
+            case Tinebase_Export_Convertible::PDF:
+                return $this->convertToPdf($from);
+            default:
+                return null;
+        }
     }
 }

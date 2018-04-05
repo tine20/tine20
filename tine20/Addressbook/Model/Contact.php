@@ -376,9 +376,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 // this must not be of type 'text' => crlf filter must not be applied
                 // => default type = string
                 // TODO the SQL field is of course not varchar(255)... so...
-                'label'                         => 'Description', // _('Description')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'modlogOmit'                    => true,
+                'system'                        => true
             ],
             'note'                          => [
                 'type'                          => 'fulltext',
@@ -440,7 +440,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 'inputFilters'                  => [Zend_Filter_Empty::class => 0],
             ],
             'pubkey'                        => [
-                'label'                         => 'Description', // _('Description')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'role'                          => [
@@ -460,9 +459,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             'syncBackendIds'                => [
                 'label'                         => 'syncBackendIds', // _('syncBackendIds')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'system'                        => true
             ],
             'tel_assistent'                 => [
-                'label'                         => 'Description', // _('Description')
+                'system'                        => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_car'                       => [
