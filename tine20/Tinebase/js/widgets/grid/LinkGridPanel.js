@@ -236,8 +236,7 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
 
         // TODO perhaps we should filter all that do not match the model
 
-        this.setReadOnly(hasRequiredGrant);
-
+        this.setReadOnly(!hasRequiredGrant);
     },
     
     /**
