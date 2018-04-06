@@ -14,8 +14,29 @@
  *
  * @package     Sales
  * @subpackage  Model
+ * 
+ * @property $number
+ * @property $description
+ * @property $address_id
+ * @property $fixed_address
+ * @property $date
+ * @property Tinebase_DateTime $start_date
+ * @property $end_date
+ * @property $credit_term
+ * @property $costcenter_id
+ * @property $cleared
+ * @property $type
+ * @property $is_auto
+ * @property $price_net
+ * @property $price_tax
+ * @property $price_gross
+ * @property $sales_tax
+ * @property $inventory_change
+ * @property $positions
+ * @property $contract
+ * @property $customer
+ * @property $fulltext
  */
-
 class Sales_Model_Invoice extends Tinebase_Record_Abstract
 {
     /**
@@ -219,7 +240,11 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 )
             ),
             'fulltext' => array(
-                'type' => 'string',
+                'type'   => 'virtual',
+                'config' => array(
+                    'sortable' => false,
+                    'type'   => 'string'
+                )
             )
         )
     );

@@ -519,15 +519,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             this.onLoad.defer(100, this);
         }
 
-        // scrollTo initial position
-        this.isScrolling = true;
-
-        try {
-            this.scrollTo.defer(500, this, [this.defaultStart]);
-        } catch (e) {
-            this.scrollTo();
-        }
-
         this.rendered = true;
     },
     
@@ -1283,6 +1274,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
 
             this.cropper.setStyle('height', cropHeightPx + 'px');
             this.cropper.dom.scrollTop = cropStartPx;
+        }
+
+        if (! this.initialScrolled) {
+            // scrollTo initial position
+            this.isScrolling = true;
+
+            this.scrollTo(this.defaultStart);
+            this.initialScrolled = true;
         }
 
         // force positioning on scroll hints

@@ -222,10 +222,13 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE
                 ),
             ),
-            
+
             'fulltext' => array(
-                'sortable' => false,
-                'type' => 'string',
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'string',
+                    'sortable' => false
+                )            
             ),
             
             'merge_invoices' => array(

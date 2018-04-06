@@ -508,12 +508,13 @@ class Tinebase_FileSystem implements
                 $this->_updateDeletedNodeName($deletedNode);
             }
 
-            // set new node properties
-            $destinationNode->setId(null);
-            $destinationNode->parent_id = $parentNode->getId();
-            $destinationNode->name = $destinationNodeName;
-
-            $createdNode = $this->_getTreeNodeBackend()->create($destinationNode);
+            if ($destinationNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
+                $this->_updateFileObject($parentNode, $createdNode->object_id, $destinationNode->hash);
+                $createdNode = $this->get($createdNode->getId());
+            } else {
+                $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
+            }
 
             // update hash of all parent folders
             $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
@@ -738,17 +739,13 @@ class Tinebase_FileSystem implements
 
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $tinebaseState = $tinebaseApplication->xprops('state');
 
-        $totalUsage = 0;
         if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
-            }
+            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
         } else {
-            if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-                $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-            }
+            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE));
         }
         $effectiveUsage = $totalUsage;
 
@@ -829,43 +826,46 @@ class Tinebase_FileSystem implements
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = &$tinebaseApplication->xprops('state');
-        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+        if (null === ($rootSize = $applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE))) {
+            $rootSize = 0;
         }
-        if (!isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+        if (null === ($rootRevisionSize = $applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE))) {
+            $rootRevisionSize = 0;
         }
 
-        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] += $_sizeDiff;
-        $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] += $_revisionSizeDiff;
+        $rootSize += $_sizeDiff;
+        $rootRevisionSize += $_revisionSizeDiff;
 
-        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] < 0) {
+        if ($rootSize < 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' root size should not become smaller than 0: ' .
-                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE]);
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 0;
+                . ' root size should not become smaller than 0: ' . $rootSize);
+            $rootSize = 0;
         }
-        if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] < 0) {
+        if ($rootRevisionSize < 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' root revision size should not become smaller than 0: ' .
-                $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE]);
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 0;
+                . ' root revision size should not become smaller than 0: ' . $rootRevisionSize);
+            $rootRevisionSize = 0;
         }
 
         if (true === $sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
             $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] > $total) {
+                if ($rootRevisionSize > $total) {
                     throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
                 }
             } else {
-                if ($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] > $total) {
+                if ($rootSize > $total) {
                     throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
                 }
             }
         }
-        $applicationController->updateApplication($tinebaseApplication);
+
+        $applicationController->setApplicationState($tinebaseApplication,
+            Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
+        $applicationController->setApplicationState($tinebaseApplication,
+            Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $rootRevisionSize);
 
         $folderNodes = $this->_getTreeNodeBackend()->getAllFolderNodes($_nodes);
         if ($folderNodes->count() > 0) {
@@ -1396,9 +1396,18 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
-            $node = $this->stat($path);
+            try {
+                $node = $this->stat($path);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // we don't want a roll back here, we didn't do anything, nothing went really wrong
+                // if the TENF is catched outside gracefully, a roll back in here would kill it!
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                throw $tenf;
+            }
 
-            $children = $this->getTreeNodeChildren($node);
+            // if modlog is not active, we want to hard delete all soft deleted childs if there are any
+            $children = $this->getTreeNodeChildren($node, !$this->_modLogActive);
 
             // check if child entries exists and delete if $_recursive is true
             if (count($children) > 0) {
@@ -1605,9 +1614,6 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $this->clearStatCache($path);
 
-            // update hash of all parent folders
-            $this->_updateDirectoryNodesHash(dirname($path));
-
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
@@ -1699,24 +1705,20 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $this->_getTreeNodeBackend()->softDelete($node->getId());
 
-            // delete object only, if no one uses it anymore
-            // we can use treeNodeBackend property because getTreeNodeBackend was called just above
-            if ($this->_treeNodeBackend->getObjectCount($node->object_id) === 0) {
-                if (false === $this->_modLogActive && true === $this->_previewActive) {
-                    $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
-                } else {
-                    $hashes = array();
+            if (false === $this->_modLogActive && true === $this->_previewActive) {
+                $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
+            } else {
+                $hashes = array();
+            }
+            $this->_fileObjectBackend->softDelete($node->object_id);
+            if (false === $this->_modLogActive ) {
+                if (true === $this->_indexingActive) {
+                    Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
                 }
-                $this->_fileObjectBackend->softDelete($node->object_id);
-                if (false === $this->_modLogActive ) {
-                    if (true === $this->_indexingActive) {
-                        Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
-                    }
-                    if (true === $this->_previewActive) {
-                        $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
-                        $hashesToDelete = array_diff($hashes, $existingHashes);
-                        Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
-                    }
+                if (true === $this->_previewActive) {
+                    $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
+                    $hashesToDelete = array_diff($hashes, $existingHashes);
+                    Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
                 }
             }
 
@@ -1941,7 +1943,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      *
      * TODO always ignore acl here?
      */
-    public function getTreeNodeChildren($nodeId)
+    public function getTreeNodeChildren($nodeId, $getDeleted = false)
     {
         if ($nodeId instanceof Tinebase_Model_Tree_Node) {
             $nodeId = $nodeId->getId();
@@ -1952,14 +1954,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         } else {
             $operator = 'equals';
         }
-        
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => $operator,
-                'value'     => $nodeId
-            )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+
+        $filter = [
+            ['field' => 'parent_id', 'operator' => $operator, 'value' => $nodeId]
+        ];
+        if ($getDeleted) {
+            $filter[] = ['field' => 'is_deleted', 'operator' => 'equals',
+                'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET];
+        }
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter($filter, Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+            array('ignoreAcl' => true));
         $children = $this->searchNodes($searchFilter);
         
         return $children;
@@ -3185,15 +3189,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     $treeNodeBackend->setRevision($revision);
                     try {
                         $actualNode = $treeNodeBackend->get($id);
-                        $treeNodeBackend->setRevision(null);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         continue;
+                    } finally {
+                        $treeNodeBackend->setRevision(null);
                     }
                 } else {
                     $actualNode = $node;
                 }
 
-                if (empty($actualNode->hash)) {
+                if (!$previewController->canNodeHavePreviews($actualNode)) {
                     continue;
                 }
 
@@ -3529,17 +3534,13 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         if ($total > 0) {
             /** @var Tinebase_Model_Application $tinebaseApplication */
             $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-            $tinebaseState = $tinebaseApplication->xprops('state');
 
-            $totalUsage = 0;
             if ($quotaIncludesRevisions) {
-                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE])) {
-                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
-                }
+                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                    Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
             } else {
-                if (isset($tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE])) {
-                    $totalUsage = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-                }
+                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
+                    Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE));
             }
 
             if ($totalUsage >= ($total * 0.99)) {

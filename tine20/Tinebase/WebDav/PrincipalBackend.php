@@ -217,11 +217,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      */
     protected function _getContactFilterForUserContact($id = null)
     {
-        $filterData = array(array(
-            'field'     => 'type',
-            'operator'  => 'equals',
-            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-        ));
+        $filterData = array(
+            array('field'=> 'type', 'operator'=> 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER),
+            array('field'=> 'showDisabled', 'operator'=> 'equals', 'value' =>
+                Addressbook_Model_ContactHiddenFilter::SHOW_HIDDEN_ACTIVE),
+        );
         
         if ($id !== null) {
             $filterData[] = array(
@@ -461,8 +461,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
                         // return users only, if they have the sync AND read grant set
                         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
+                        /** @var Tinebase_Model_FullUser $u */
                         foreach ($otherUsers as $u) {
-                            if ($u->contact_id && $u->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+                            if ($u->contact_id) {
                                 $result[] = self::PREFIX_USERS . '/' . $u->contact_id . '/calendar-proxy-write';
                             }
                         }

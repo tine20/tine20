@@ -2387,9 +2387,22 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.55
+     *
+     * make file objects unique
      */
     public function update_54()
+    {
+        $update = new Tinebase_Setup_Update_Release9($this->_backend);
+        $update->update_15();
+
+        $this->setApplicationVersion('Tinebase', '10.55');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_55()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

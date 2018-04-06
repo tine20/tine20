@@ -483,7 +483,7 @@ class Setup_Update_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ .
                 ' No doctrine ORM available -> disabling app ' . $appName);
 
-            Tinebase_Application::getInstance()->setApplicationState(
+            Tinebase_Application::getInstance()->setApplicationStatus(
                 array(Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()),
                 Tinebase_Application::DISABLED
             );

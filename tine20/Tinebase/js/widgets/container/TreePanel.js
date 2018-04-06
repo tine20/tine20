@@ -271,7 +271,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }
         }
 
-        this.onFilterChange();
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            this.onFilterChange();
+        }
+        
         this.resumeEvents();
     },
 

@@ -32,12 +32,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * @cfg {String} loginMethod server side login method
      */
     loginMethod: 'Tinebase.login',
-    
-    /**
-     * @cfg {String} loginLogo logo to show
-     */
-    loginLogo: null,
-    
+
     /**
      * @cfg {String} onLogin callback after successfull login
      */
@@ -65,8 +60,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         //Do we have a custom Logo for branding?
         var modSsl = Tine.Tinebase.registry.get('modSsl'),
             secondFactor = Tine.Tinebase.registry.get('secondFactor'),
-            logo = this.loginLogo ? this.loginLogo : Tine.logo;
-        
+            logo = Tine.installLogo;
+
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
@@ -78,7 +73,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     xtype: 'container',
                     cls: 'tb-login-lobobox',
                     border: false,
-                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + logo + '" /></a>'
+                    html: '<a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
@@ -217,7 +212,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
 
         return this.versionPanel;
     },
-     
+
     getCommunityPanel: function () {
         if (! this.communityPanel) {
             var translationPanel = [],
@@ -227,7 +222,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 // TODO make stats work again (currently displays 100% for all langs)
                 //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
                 percentageCompleted = undefined;
-                
+
             this.communityPanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-tinepanel',
@@ -242,9 +237,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label-spacer',
                     html: '&nbsp;'
                 }, {
-                    html: '<ul>' + 
-                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(i18n._('{0} Forum'), Tine.title) + '</a></li>' +
+                    html: '<ul>' +
+                    '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
+                    '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(i18n._('{0} Forum'), Tine.title) + '</a></li>' +
                     '</ul><br/>'
                 }, {
                     cls: 'tb-login-big-label',
@@ -255,16 +250,16 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     html: '<p>' + String.format(i18n._('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="http://wiki.tine20.org/Contributors/Howtos/Translations" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
+                    '<li><a target="_blank" href="http://wiki.tine20.org/Contributors/Howtos/Translations" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
+                    '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
             });
         }
-        
+
         return this.communityPanel;
     },
-    
+
     getPoweredByPanel: function () {
         if (! this.poweredByPanel) {
             this.poweredByPanel = new Ext.Container({

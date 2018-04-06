@@ -11,7 +11,7 @@ Ext.ux.Printer.FieldRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         return '' +
         '<div class="rp-print-single-details-row">' +
             '<span class="rp-print-single-label">' + label + '</span>' +
-            '<span class="rp-print-single-value">' + field.getValue() + '</span>' +
+            '<span class="rp-print-single-value">' + field.getRawValue() + '</span>' +
         '</div>';
 
     }

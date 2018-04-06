@@ -102,7 +102,11 @@ class Sales_Model_Offer extends Tinebase_Record_Abstract
                 )
             ),
             'fulltext' => array(
-                'type' => 'string',
+                'type'   => 'virtual',
+                'config' => array(
+                    'sortable' => false,
+                    'type'   => 'string'
+                )            
             )
         )
     );

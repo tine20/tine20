@@ -239,7 +239,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_modelConfig = null;
 
-    protected $_noRecordResolving = false;
+    protected $_FEDataRecordResolving = false;
 
     /**
      * @var array
@@ -350,9 +350,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (isset($_additionalOptions['recordData']['container_id']) && is_array($_additionalOptions['recordData']['container_id'])) {
                 $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
             }
-            $this->_noRecordResolving = true;
-            $this->_records = new Tinebase_Record_RecordSet($this->_modelName,
-                array(new $this->_modelName($_additionalOptions['recordData'])));
+            $this->_FEDataRecordResolving = true;
+            /** @var Tinebase_Record_Abstract $record */
+            $record = new $this->_modelName([], true);
+            $record->setFromJsonInUsersTimezone($_additionalOptions['recordData']);
+            $this->_records = new Tinebase_Record_RecordSet($this->_modelName, [$record]);
         }
 
         if (isset($_additionalOptions['additionalRecords'])) {
@@ -674,7 +676,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_twig->addExtension($extension);
         }
 
+        $this->_extendTwigSetup();
+
         $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+    }
+
+    protected function _extendTwigSetup()
+    {
+        // the concrete class may do stuff to the twig environment here before we load the template
+        // example:
+        // $this->_twig->getEnvironment()->addFunction(new Twig_SimpleFunction(...));
     }
 
     /**
@@ -837,9 +848,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        if ($this->_noRecordResolving) {
-            return;
-        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolving export records...');
         if ($_records->count() === 0) {
             return;
@@ -849,7 +857,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         // TODO fix ALL this!
         // this is code present in the abstract controller, getRelatedData... why is it here?
 
-        // get field types/identifiers from config
+        // get field types/identifiers from config, this is sort of dead code?
         $identifiers = [];
         $types = [];
         if ($this->_config->columns) {
@@ -863,28 +871,55 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $types = $this->_resolvedFields;
         }*/
 
-        // resolve users
+        // resolve users, also for FE Data!
+        $userFields = [];
         foreach ($this->_userFields as $field) {
             if (empty($types) || in_array($field, $types) || in_array($field, $identifiers)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
-                Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, true);
+                $userFields[] = $field;
+            }
+        }
+        if (count($userFields) > 0) {
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $userFields, true);
+            if ($this->_FEDataRecordResolving) {
+                foreach ($userFields as $field) {
+                    foreach ($_records->{$field} as $idx => $value) {
+                        if (is_array($value)) {
+                            $_records->getByIndex($idx)->{$field} = new Tinebase_Model_FullUser($value);
+                        }
+                    }
+                }
             }
         }
 
-        // add notes
-        if (in_array('notes', $types)) {
+        // add notes, this is dead code?
+        if (in_array('notes', $types) && !$this->_FEDataRecordResolving) {
             Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, 'notes', 'Sql', false);
         }
 
-        // add container
-        if (in_array('container_id', $types)) {
+        // add container, this is dead code?
+        if (in_array('container_id', $types) && !$this->_FEDataRecordResolving) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
 
-        if ($record->has('customfields')) {
-            $_records->customfields = array();
-            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+        while ($record->has('customfields')) {
+            $customFieldConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                $this->_applicationName, $this->_modelName);
+            if (empty($customFieldConfigs)) {
+                $_records->customfields = array();
+                break;
+            }
 
+            if (!$this->_FEDataRecordResolving) {
+                $_records->customfields = array();
+                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+            }
+
+            $availableCFNames = [];
+            /** @var Tinebase_Model_CustomField_Config $cfc */
+            foreach ($customFieldConfigs as $cfc) {
+                $cfc->value = null;
+                $availableCFNames[$cfc->name] = $cfc;
+            }
             $validators = null;
             $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
             $instance = $this;
@@ -904,8 +939,24 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             foreach ($_records as $record) {
                 $cfs = $record->customfields;
                 if (empty($cfs)) {
-                    continue;
+                    $cfs = [];
                 }
+                if ($this->_FEDataRecordResolving) {
+                    foreach ($cfs as $name => &$val) {
+                        if (!isset($availableCFNames[$name])) {
+                            unset($cfs[$name]);
+                            continue;
+                        }
+                        /** @var Tinebase_Model_CustomField_Config $cfc */
+                        $cfc = clone $availableCFNames[$name];
+                        $cfc->value = $cfs[$name];
+                        $val = $cfc;
+                    }
+                }
+                foreach (array_diff_key($availableCFNames, $cfs) as $name => $cfc) {
+                    $cfs[$name] = clone $cfc;
+                }
+
                 array_walk($cfs, function(Tinebase_Model_CustomField_Config $val, $key)
                         use($cfNameLabelMap, $stringifyCallBack) {
                     $val->label = $cfNameLabelMap[$key];
@@ -925,14 +976,39 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 }
             }
+            break;
         }
 
         /** @var Tinebase_Record_Abstract $modelName */
         $modelName = $_records->getRecordClassName();
 
         if ($record->has('relations')) {
-            $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
-                $_records->getArrayOfIds());
+            if (!$this->_FEDataRecordResolving) {
+                $relations = Tinebase_Relations::getInstance()->getMultipleRelations($modelName, 'Sql',
+                    $_records->getArrayOfIds());
+                /** @var Tinebase_Record_RecordSet $rels */
+                foreach ($relations as $rels) {
+                    $rels->removeRecords($rels->filter('related_record'));
+                }
+            } else {
+                $relations = [];
+                foreach ($_records as $idx => $record) {
+                    $rels = $record->relations;
+                    if (empty($rels)) {
+                        continue;
+                    }
+                    if (is_array($rels)) {
+                        $rels = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $rels);
+                        /** @var Tinebase_Model_Relation $rel */
+                        foreach ($rels as $rel) {
+                            if (is_array($rel->related_record)) {
+                                $rel->related_record = new $rel->related_model($rel->related_record, true);
+                            }
+                        }
+                    }
+                    $relations[$idx] = $rels;
+                }
+            }
             $this->_resolveRelationsType($relations);
 
             /** @var Tinebase_Record_Abstract $record */
@@ -952,6 +1028,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (null === $this->_modelConfig && $_records->getRecordClassName() === $this->_modelName) {
             /** @var Tinebase_Record_Abstract $record */
             foreach ($_records as $idx => $record) {
+                // TODO FE data resolving: what about this? I guess that is ok?
                 foreach ($this->_virtualFields as $name => $virtualField) {
                     $value = null;
                     if (!empty($record->relations)) {
@@ -969,15 +1046,33 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $record->{$name} = $value;
                 }
 
-                foreach ($this->_foreignIdFields as $name => $controller) {
-                    if (!empty($record->{$name})) {
-                        /** @var Tinebase_Controller_Record_Abstract $controller */
-                        $controller = $controller::getInstance();
-                        $record->{$name} = $controller->get($record->{$name});
+                if (!$this->_FEDataRecordResolving) {
+                    foreach ($this->_foreignIdFields as $name => $controller) {
+                        if (!empty($record->{$name})) {
+                            /** @var Tinebase_Controller_Record_Abstract $controller */
+                            $controller = $controller::getInstance();
+                            $record->{$name} = $controller->get($record->{$name});
+                        }
                     }
                 }
             }
         } elseif ($this->_modelConfig) {
+            // TODO FE data resolving: what about this!
+            $backupFields = [];
+            if ($this->_FEDataRecordResolving) {
+                /** @var Tinebase_Record_Abstract $recordsClass */
+                $recordsClass = $_records->getRecordClassName();
+                foreach ($recordsClass::getResolveForeignIdFields() as $key => $value) {
+                    if ($key === 'recursive') {
+                        $value = array_keys($value);
+                    }
+                    foreach ($value as $field) {
+                        $backupFields[$field] = $_records->{$field};
+                        $_records->{$field} = null;
+                    }
+                }
+            }
+
             $this->_modelConfig->resolveRecords($_records);
             $this->_keyFields = [];
             foreach ($this->_modelConfig->keyfieldFields as $property) {
@@ -987,8 +1082,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     'name' => $this->_modelConfig->getFields()[$property]['name'],
                 ];
             }
+
+            foreach ($backupFields as $field => $data) {
+                foreach ($data as $idx => $value) {
+                    $_records->getByIndex($idx)->{$field} = $value;
+                }
+            }
         }
 
+        // TODO FE data resolving: what about this?
         foreach ((array)$this->_keyFields as $property => $keyField) {
             /** @var Tinebase_Config_KeyField $keyField */
             if ($keyField['application'] === $this->_applicationName) {
@@ -996,7 +1098,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } else {
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
-            $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+            foreach ($_records as $record) {
+                $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+            }
         }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
@@ -1230,7 +1334,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _getTwigContext(array $context)
     {
         if (null === $this->_logoPath) {
-            $this->_logoPath = Tinebase_Helper::getFilename(Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO}, false);
+            $this->_logoPath = Tinebase_Core::getInstallLogo();
         }
 
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());

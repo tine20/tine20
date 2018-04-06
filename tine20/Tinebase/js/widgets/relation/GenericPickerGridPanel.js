@@ -301,7 +301,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     onEditInNewWindow: function() {
         var _ = window.lodash,
             record = this.getRelatedRecord(this.getSelectionModel().getSelected()),
-            openMethod = _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow');
+            openMethod = record ? _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow') : null;
+
+        if (! record) {
+            return;
+        }
 
         if (openMethod) {
             openMethod({
@@ -329,7 +333,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             recordClass = Tine.Tinebase.data.RecordMgr.get(modelName),
             recordData = relationRecord.get('related_record');
 
-        return Ext.isString(recordData) ? null : Tine.Tinebase.data.Record.setFromJson(recordData, recordClass);
+        if (recordData) {
+            return Ext.isFunction(window.lodash.get(recordData, 'beginEdit')) ?
+                recordData :
+                Tine.Tinebase.data.Record.setFromJson(recordData, recordClass);
+        }
+
+        return null;
     },
 
     /**
@@ -608,7 +618,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     relatedRecordRenderer: function (recData, meta, relRec) {
         if (recData === undefined) {
             // record has been removed by acl/area lock/...
-            return i18n._('Record unavailable');
+            meta.css = 'x-form-empty-field';
+            return i18n._('No Access');
         }
         var relm = relRec.get('related_model');
         if (! relm) {
@@ -1195,7 +1206,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     onAdd: function(store, records) {
         Ext.each(records, function(record) {
             Ext.each(this.editDialog.relationPickers, function(picker) {
-                if(picker.relationType == record.get('type') && record.get('related_id') != picker.getValue() && picker.fullModelName == record.get('related_model')) {
+                if(record.get('related_record') && picker.relationType == record.get('type') && record.get('related_id') != picker.getValue() && picker.fullModelName == record.get('related_model')) {
                     var split = picker.fullModelName.split('_Model_');
                     picker.combo.selectedRecord = new Tine[split[0]].Model[split[1]](record.get('related_record'));
                     picker.combo.startRecord = new Tine[split[0]].Model[split[1]](record.get('related_record'));

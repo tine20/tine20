@@ -36,15 +36,15 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             var headings = me.headerTpl.apply(columns);
             var body = me.bodyTpl.apply(columns);
 
-            var brandingLogoImg = Tine.Tinebase.common.getUrl('full') && Tine.Tinebase.registry.get('brandingLogo') ? '<img src="' + Tine.Tinebase.common.getUrl('full') + Tine.Tinebase.registry.get('brandingLogo') + '" />' : null;
+            var installLogoImg = Tine.Tinebase.common.getUrl('full') && Tine.Tinebase.registry.get('installLogo') ? '<img src="' + Tine.Tinebase.registry.get('installLogo') + '" />' : null;
 
             var header = me.headlineTpl.apply({
                 header_title: Tine.Tinebase.registry.get('brandingTitle'),
-                header_logo: brandingLogoImg
+                header_logo: installLogoImg
             });
 
             if (grid.title) {
-                header += '<div class="gridpanelrenderer_header_gridtitle">' + grid.title + '</div>';
+                header += '<div class="rp-print-single-block-heading">' + grid.title + '</div>';
             }
 
             fulfill(new Ext.XTemplate(String.format('{0}<table>{1}<tpl for=".">{2}</tpl></table>', header, headings, body)).apply(data));

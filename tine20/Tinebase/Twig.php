@@ -98,6 +98,14 @@ class Tinebase_Twig
     }
 
     /**
+     * @return Twig_Environment
+     */
+    public function getEnvironment()
+    {
+        return $this->_twigEnvironment;
+    }
+
+    /**
      * adds twig function to the twig environment to be used in the templates
      */
     protected function _addTwigFunctions()

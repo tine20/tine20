@@ -600,6 +600,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $iterator->next();
                 }
                 $seekTo = $i;
+                if ($seekTo >= $allFb->count()) {
+                    break;
+                }
             }
         }
 

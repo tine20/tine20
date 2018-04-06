@@ -673,6 +673,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     'jsonKey'           => Tinebase_Core::get('jsonKey'),
                     'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
                     'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+                    'installLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
                     'brandingFavicon'   => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON)),
                     'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
                 ]

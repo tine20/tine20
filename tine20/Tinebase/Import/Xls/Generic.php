@@ -160,7 +160,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
      */
     protected function _doMappingConversion($_data)
     {
-        $converted = parent::_doMappingConversion($_data);
+        $_data = parent::_doMappingConversion($_data);
 
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (!(isset($field['destination']) || array_key_exists('destination',
@@ -177,7 +177,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
             }
         }
 
-        return $converted;
+        return $_data;
     }
 
     /**

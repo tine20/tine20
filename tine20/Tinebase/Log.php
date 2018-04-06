@@ -153,7 +153,7 @@ class Tinebase_Log extends Zend_Log
      */
     public static function getMaxLogLevel($loggerConfig)
     {
-        $logLevel = $loggerConfig && $loggerConfig->priority ? (int)$loggerConfig->priority : Zend_Log::EMERG;
+        $logLevel = $loggerConfig && $loggerConfig->priority ? (int)$loggerConfig->priority : Zend_Log::WARN;
         if ($loggerConfig && $loggerConfig->additionalWriters) {
             foreach ($loggerConfig->additionalWriters as $writerConfig) {
                 $writerConfig = ($writerConfig instanceof Tinebase_Config_Struct || $writerConfig instanceof Zend_Config)

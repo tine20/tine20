@@ -1139,8 +1139,18 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 . ' Records are identical, no need to update');
             return null;
         } else {
+            // empty values in $updateRecord are replaced in concurrentUpdate of controller - we skip those and keep the current record value here, too
+            // TODO: improve that - this should use the same code as \Tinebase_Timemachine_ModificationLog::_resolveDiff
+            if ($diff->onlyEmptyValuesInOldData()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Only empty values have been overwritten, no need to update');
+                return null;
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Got diff: ' . print_r($diff->diff, TRUE));
+            // increase seq to make sure record data is overwritten
+            $updateRecord->seq = $mergeRecord->seq++;
         }
         
         return $updateRecord->merge($mergeRecord, $diff);
@@ -1225,6 +1235,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     if ($duplicateRecord->diff($ted->getClientRecord(), array('id', 'creation_time', 'seq'))->isEmpty()) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . " Records are already the same. Nothing to do here.");
+                        $this->_importResult['duplicatecount']++;
                     } else {
                         $updatedRecord = $this->_importAndResolveConflict($duplicateRecord, $resolveStrategy, $ted->getClientRecord());
                         $this->_importResult['results']->addRecord($updatedRecord);

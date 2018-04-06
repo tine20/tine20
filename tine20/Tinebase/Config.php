@@ -415,6 +415,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
 
     /**
+     * PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN
+     *
+     * @var string
+     */
+    const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
+
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -509,7 +516,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
-    
+
+    const INSTALL_LOGO = 'install_logo';
+    const WEBSITE_URL = 'website_url';
+
     const BRANDING_LOGO = 'branding_logo';
     const BRANDING_FAVICON = 'branding_favicon';
     const BRANDING_TITLE = 'branding_title';
@@ -1333,6 +1343,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => false
         ),
+        self::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN => array(
+            //_('Update NTLM V2 password has on login')
+            'label'                 => 'Update NTLM V2 password has on login',
+            //_('Update NTLM V2 password has on login')
+            'description'           => 'Update NTLM V2 password has on login',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false
+        ),
         self::PASSWORD_NTLMV2_ENCRYPTION_KEY => array(
             //_('NTLM V2 password hash encryption key')
             'label'                 => 'NTLM V2 password hash encryption key',
@@ -1697,6 +1718,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO => array(
+            //_('Installation logo')
+            'label'                 => 'Installation logo',
+            //_('Path to custom installation logo.')
+            'description'           => 'Path to custom installation logo.',
+            'type'                  => 'string',
+            'default'               => false,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
         self::BRANDING_DESCRIPTION => array(
                 //_('custom description')
                 'label'                 => 'custom description',
@@ -1717,7 +1750,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'default'               => '',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+                'setBySetupModule'      => FALSE
+        ),
+        self::WEBSITE_URL => array(
+            //_('custom website url')
+            'label'                 => 'custom website url',
+            //_('Custom url used for logo on login page.')
+            'description'           => 'Custom url used for logo on login page.',
+            'type'                  => 'string',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_TITLE => array(
                 //_('custom title')

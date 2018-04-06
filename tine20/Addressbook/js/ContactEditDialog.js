@@ -58,7 +58,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             });
         }
 
-
         this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
             checked: this.record.get('preferred_address') === "0",
             hideLabel: false,
@@ -88,6 +87,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 scope: this
             }
         });
+
+        if (Tine.Tinebase.common.hasRight('run', 'Calendar', null) && Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureContactEventList')) {
+            this.contactEventPanel = new Tine.Calendar.ContactEventsGridPanel({
+                editDialog: this,
+                hasFavoritesPanel: false
+            });
+        } else {
+            this.contactEventPanel = null;
+        }
 
         return {
             xtype: 'tabpanel',
@@ -436,11 +444,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     ]
                 }]
             }, this.mapPanel,
-            new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })
+                new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
+                    record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                }),
+                this.contactEventPanel
             ]
         };
     },

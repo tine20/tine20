@@ -28,13 +28,14 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showContainerSelector: true,
     multipleEdit: true,
     displayNotes: true,
+    enablePrinting: true,
 
     /**
      * init component
      */
     initComponent: function () {
         this.on('load', this.resolveMemberData, this);
-        this.initToolbar();
+        this.printer = Tine.Addressbook.Printer.ListRenderer;
 
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
             region: "center",
@@ -48,18 +49,6 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             height: 150
         });
         this.supr().initComponent.apply(this, arguments);
-    },
-
-    initToolbar: function() {
-        this.printButton = new Ext.Action({
-            text: String.format(Tine.Tinebase.appMgr.get('Addressbook').i18n._('Print {0}'), this.recordClass.getRecordName()),
-            handler: this.onPrint,
-            iconCls:'action_print',
-            disabled: false,
-            scope: this
-        });
-
-        this.tbarItems = [this.printButton];
     },
 
     getFormItems: function () {
@@ -207,13 +196,6 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Addressbook.ListEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.record.set("members", this.memberGridPanel.getMembers());
         this.record.set("memberroles", this.memberGridPanel.getMemberRoles());
-    },
-
-    onPrint: function(printMode) {
-        this.onRecordUpdate();
-
-        var renderer = new Tine.Addressbook.Printer.ListRenderer();
-        renderer.print(this);
     }
 });
 

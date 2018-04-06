@@ -762,11 +762,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $registryData;
     }
-    
+
     /**
      * get anonymous registry
-     * 
+     *
      * @return array
+     * @throws Tinebase_Exception
+     * @throws Exception
      */
     protected function _getAnonymousRegistryData()
     {
@@ -822,12 +824,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
+            'websiteUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+            'installLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
             'brandingFavicon'   => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON)),
             'brandingTitle'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
         );
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Anonymous registry: ' . print_r($registryData, TRUE));
         
@@ -845,8 +849,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * get user registry
-     * 
+     *
      * @return array
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getUserRegistryData()
     {
@@ -1060,7 +1067,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Exception::log($e);
             if (! $e instanceof Tinebase_Exception_AccessDenied && ! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
-                Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
+                Tinebase_Application::getInstance()->setApplicationStatus(array($application->getId()), Tinebase_Application::DISABLED);
             }
             return array();
         }
@@ -1500,7 +1507,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * returns the replication modification logs
-     * 
+     *
      * @param $sequence
      * @param int $limit
      * @return array
@@ -1516,7 +1523,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'   => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($sequence, $limit)->toArray(),
         );
         $result['totalcount'] = count($result['results']);
-        
+
         return $result;
     }
 

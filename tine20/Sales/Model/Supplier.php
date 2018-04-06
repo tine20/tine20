@@ -221,7 +221,11 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 ),
             ),
             'fulltext' => array(
-                'type' => 'string'
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'string',
+                    'sortable' => false
+                )           
             ),
         )
     );

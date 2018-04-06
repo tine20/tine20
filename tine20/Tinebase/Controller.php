@@ -95,6 +95,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $this->_loginUser($user, $accessLog, $password);
 
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN}) {
+            $userController = Tinebase_User::getInstance();
+            if ($userController instanceof Tinebase_User_Sql) {
+                $userController->updateNtlmV2Hash($user->getId(), $password);
+            }
+        }
+
         return true;
     }
 

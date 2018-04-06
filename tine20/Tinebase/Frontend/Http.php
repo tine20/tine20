@@ -716,12 +716,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
-        
-        $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
 
-        if (is_array($image)) {
+        try {
+            $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            Tinebase_Exception::log($teuv);
+            header('HTTP/1.1 404 Not Found');
+            return;
         }
-        
+
         $serverETag = sha1($image->blob . $width . $height . $ratiomode);
         
         // cache for 3600 seconds

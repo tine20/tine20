@@ -440,7 +440,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if (isset($billedRelations[$relation->id])) {
+            if (isset($billedRelations[$relation->id]) ||
+                    !$relation->related_record instanceof Tinebase_Record_Abstract) {
                 continue;
             }
             // use productaggregate definition, if it has been found
@@ -588,7 +589,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not get contract with id: ' . $contractId);
                 continue;
             }
-            $this->checkForRecreation($ids, $tmpContract);
+            try {
+                $this->checkForRecreation($ids, $tmpContract);
+            } catch (Exception $e) {
+                $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                $this->_autoInvoiceIterationFailures[] = $failure;
+                Tinebase_Exception::log($e, FALSE);
+                continue;
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' checkForRecreation result: ' . print_r($this->_autoInvoiceIterationResults, 1));
             }
@@ -630,7 +638,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach($invoices as $id)
         {
             if (!isset($excludeIds[$id])) {
-                $result = array_merge($result, $this->checkForUpdate($id));
+                try {
+                    $result = array_merge($result, $this->checkForUpdate($id));
+                } catch (Exception $e) {
+                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                    $this->_autoInvoiceIterationFailures[] = $failure;
+                    Tinebase_Exception::log($e, FALSE);
+                    continue;
+                }
             }
         }
 
@@ -692,6 +707,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         // iterate relations, look for accountables
         foreach ($this->_currentBillingContract->relations as $relation) {
+            if (empty($relation->related_record)) {
+                continue;
+            }
             // use productaggregate definition, if it has been found
             if (isset($modelsToBill[$relation->related_model])) {
                 $billableAccountables[] = array(

@@ -134,6 +134,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'modlogActive'      => true,
         'hasAttachments'    => true,
         'createModule'      => true,
+        'exposeHttpApi'     => true,
+        'exposeJsonApi'     => true,
         'containerProperty' => 'container_id',
         'multipleEdit'      => true,
 

@@ -46,5 +46,11 @@ ADDRESSBOOK
 CALENDAR
 ---
 
+* Link to event in event notification mails
+
+To have the correct URL, you need to set this config:
+
+    'tine20URL' => 'https://my.tine20.domain',
+
 EMAIL
 ---

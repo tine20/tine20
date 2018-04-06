@@ -937,9 +937,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
         if ($allFollowing) {
-            $until = $recurSet[1]->dtstart->getClone()
-                ->subSecond(1)
-                ->subSecond('UTC');
+            $until = $recurSet[1]->dtstart->getClone()->subSecond(1);
 
             $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $until->toString(), (string) $baseEvent->rrule, 'rrule mismatch');
             $this->assertEquals(1, count($baseEvent->alarms));

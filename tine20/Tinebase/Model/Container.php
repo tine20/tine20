@@ -158,6 +158,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         // null will be string casted to empty string
         if ($_containerId instanceof Tinebase_Model_Container) {
             $id = (string)$_containerId->getId();
+        } elseif(is_array($_containerId)) {
+            if (isset($_containerId['id'])) {
+                $id = $_containerId['id'];
+            } else {
+                $id = null;
+            }
         } else {
             $id = (string)$_containerId;
         }
