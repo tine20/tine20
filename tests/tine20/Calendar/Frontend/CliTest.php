@@ -41,7 +41,18 @@ class Calendar_Frontend_CliTest extends TestCase
     public function testSharedCalendarReport()
     {
         $calendar = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
-        $this->_setPersonaGrantsForTestContainer($calendar->getId(), 'sclever');
+        $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $this->_setPersonaGrantsForTestContainer($calendar->getId(), 'sclever', false, true, [
+            new Tinebase_Model_Grants([
+                'account_id'    => $userGroup->getId(),
+                'account_type'  => 'group',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+                Tinebase_Model_Grants::GRANT_ADD      => true,
+                Tinebase_Model_Grants::GRANT_EDIT     => true,
+                Tinebase_Model_Grants::GRANT_DELETE   => false,
+                Tinebase_Model_Grants::GRANT_ADMIN    => false,
+            ])
+        ]);
 
         $opts = new Zend_Console_Getopt('abp:');
 
@@ -50,14 +61,16 @@ class Calendar_Frontend_CliTest extends TestCase
         $out = ob_get_clean();
 
         $expectedStrings = [
-            '{"' . Tinebase_Core::getUser()->accountLoginName . '":{',
-            '{"PHPUnit Calendar_Model_Event container":',
-            '{"readGrant":true,"addGrant":true,"editGrant":true,"deleteGrant":true,"privateGrant":false,"exportGrant":false,"syncGrant":false,"adminGrant":false,"freebusyGrant":false',
-            '"account_id":"' . $this->_personas['sclever']->getId(),
-            '"accountName":"sclever"'
+            '{"' . Tinebase_Core::getUser()->accountLoginName . '":{' => '',
+            '{"PHPUnit Calendar_Model_Event container":' => 'container expected',
+            '{"readGrant":true,"addGrant":true,"editGrant":true,"deleteGrant":true,"privateGrant":false,"exportGrant":false,"syncGrant":false,"adminGrant":false,"freebusyGrant":false' => '',
+            '"account_id":"' . $this->_personas['sclever']->getId() => '',
+            '"accountName":"sclever"' => '',
+            ',"accountName":{"name":"' . $userGroup->name . '"' => 'user group name expected',
+            ',"members":["' => 'member names expected'
         ];
-        foreach ($expectedStrings as $expected) {
-            self::assertContains($expected, $out);
+        foreach ($expectedStrings as $expected => $failMessage) {
+            self::assertContains($expected, $out, $failMessage);
         }
     }
 }
