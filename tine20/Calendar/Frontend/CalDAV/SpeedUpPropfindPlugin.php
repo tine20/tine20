@@ -126,6 +126,10 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
         }
 
         $body = $this->server->httpRequest->getBody(true);
+        if (! $body) {
+            return true;
+        }
+        
         rewind($this->server->httpRequest->getBody());
         $dom = Sabre\DAV\XMLUtil::loadDOMDocument($body);
 
