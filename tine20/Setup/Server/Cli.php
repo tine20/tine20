@@ -65,6 +65,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'compare'                   => 'compare schemas with another database
                         Examples:
                            setup.php --compare -- otherdb=tine20other',
+                'pgsqlMigration'            => 'migrate from pgsql to mysql
+                        Examples:
+                            setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -89,7 +92,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&
-            empty($opts->getconfig)))
+            empty($opts->getconfig) &&
+            empty($opts->pgsqlMigration)))
         {
             echo $opts->getUsageMessage();
             exit;

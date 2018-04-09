@@ -619,6 +619,11 @@ abstract class Tinebase_Config_Abstract
         
         return self::$_backend;
     }
+
+    protected static function _destroyBackend()
+    {
+        self::$_backend = null;
+    }
     
     /**
      * converts raw data to config values of defined type

@@ -20,6 +20,13 @@ use \Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
  */
 class Setup_SchemaTool
 {
+    protected static $_dbParams = null;
+
+    public static function setDBParams(array $dbParams)
+    {
+        static::$_dbParams = $dbParams;
+    }
+
     /**
      * convert tine20config to dbal config
      *
@@ -27,11 +34,15 @@ class Setup_SchemaTool
      */
     public static function getDBParams()
     {
-        $dbParams = Tinebase_Config::getInstance()->get('database')->toArray();
-        $dbParams['driver'] = $dbParams['adapter'];
-        $dbParams['user'] = $dbParams['username'];
+        if (null === static::$_dbParams) {
+            $dbParams = Tinebase_Config::getInstance()->get('database')->toArray();
+            $dbParams['driver'] = $dbParams['adapter'];
+            $dbParams['user'] = $dbParams['username'];
 
-        return $dbParams;
+            static::$_dbParams = $dbParams;
+        }
+
+        return static::$_dbParams;
     }
 
     /**
