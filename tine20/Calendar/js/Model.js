@@ -391,6 +391,30 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app},
         {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventStatus',
+            defaultAll: true
+        },
+        {
+            label: app.i18n._('Blocking'),
+            field: 'transp',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventTransparencies',
+            defaultAll: true
+        },
+        {
+            label: app.i18n._('Classification'),
+            field: 'class',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventClasses',
+            defaultAll: true
+        },
+        {
             filtertype: 'calendar.rrule',
             app: app
         }
