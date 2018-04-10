@@ -332,6 +332,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 9);
         }
 
+        Tinebase_FileSystem::getInstance()->resetBackends();
+        Tinebase_Db_Table::clearTableDescriptionInCache(SQL_TABLE_PREFIX . 'tree_nodes');
+
         $this->setApplicationVersion('Tinebase', '11.18');
     }
 
@@ -395,7 +398,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.22
      *
-     * fix pin_protected_node
+     * add ntlmv2hash column
      */
     public function update_21()
     {
