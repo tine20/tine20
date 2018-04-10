@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Tinebase_Backend_Redis_Proxy as Redis;
+use Zend_RedisProxy as Redis;
 
 /**
  * @package     Tinebase

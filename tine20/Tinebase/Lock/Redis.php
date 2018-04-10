@@ -9,7 +9,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use Tinebase_Backend_Redis_Proxy as Redis;
+use Zend_RedisProxy as Redis;
 
 /**
  * Redis lock implementation

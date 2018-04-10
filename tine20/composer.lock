@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b78e9bd12b26388f01304cdd9b95c6f",
+    "content-hash": "4397ab4c397832e928ef3dd298e165a1",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -49,7 +49,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
                 "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
-                "shasum": ""
+                "shasum": "25184da38936332e6018bcca89e6f03755150232"
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -117,7 +117,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "shasum": ""
+                "shasum": "113e4179be5a0e63d3352f06f2dfa89f4fe4e1b8"
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -187,7 +187,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": ""
+                "shasum": "1fc91d2b068164946a139474f624c1b4deec5891"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -253,7 +253,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/common/zipball/a579557bc689580c19fee4e27487a67fe60defc0",
                 "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
-                "shasum": ""
+                "shasum": "ee5ae6e3f73df4633537c380bba5e4479973adb6"
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -326,7 +326,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/dbal/zipball/9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
                 "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
-                "shasum": ""
+                "shasum": "19ce915d0a38b50507adb5a27231990031b23496"
             },
             "require": {
                 "doctrine/common": ">=2.4,<2.7-dev",
@@ -397,7 +397,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": ""
+                "shasum": "8f23f8307581787e6a58fd30fe3e61f5e9403c03"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -464,7 +464,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": ""
+                "shasum": "b3b141d7ddda491e068e11c5324187e9b8eebb50"
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -518,7 +518,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": ""
+                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -572,7 +572,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
                 "reference": "73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
-                "shasum": ""
+                "shasum": "067cef101786f33d291f888f647f618b94a92e43"
             },
             "require": {
                 "doctrine/cache": "~1.4",
@@ -648,7 +648,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
+                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
             },
             "require": {
                 "php": ">=5.2"
@@ -670,8 +670,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -739,7 +738,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.tine20.org/git/opendocument",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -771,7 +770,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.tine20.org/git/timezoneconvert",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -899,7 +898,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ivanlanin/pclzip/zipball/19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
                 "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
-                "shasum": ""
+                "shasum": "32c8b855dbc0715f6dabbe882c60c6f38cb21224"
             },
             "type": "library",
             "autoload": {
@@ -936,7 +935,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/Common/zipball/c9be70c80637c28c728be78e66aad4878a34f8dd",
                 "reference": "c9be70c80637c28c728be78e66aad4878a34f8dd",
-                "shasum": ""
+                "shasum": "f6b4e3b21321f5d34cb69642b8540fde13392f3a"
             },
             "require": {
                 "pclzip/pclzip": "^2.8",
@@ -991,7 +990,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
                 "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
-                "shasum": ""
+                "shasum": "d98c9cebdb3faa6e798bdca7341d96db8a27617f"
             },
             "require": {
                 "ext-xml": "*",
@@ -1367,7 +1366,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
                 "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
-                "shasum": ""
+                "shasum": "e0a7a33f0f25a93574dcb75f9b17c963729a788b"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1415,7 +1414,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": ""
+                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
             },
             "require": {
                 "ext-ctype": "*",
@@ -1490,7 +1489,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/vobject/zipball/129d80533a9ec0d9cacfb50b51180c34edb6874c",
                 "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c",
-                "shasum": ""
+                "shasum": "c5692defcb3616042c047fdf553105276abfc70e"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -2013,7 +2012,13 @@
             "source": {
                 "type": "git",
                 "url": "https://git.tine20.org/git/composerapploader",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://79.99.84.34/dist1/tine20-composerapploader-1.0.5-ca8596.zip",
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686",
+                "shasum": "87260253a63a89f2283398344cc488e7f6b4ac9a"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -2044,7 +2049,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twigphp/Twig/zipball/dd6ca96227917e1e85b41c7c3cc6507b411e0927",
                 "reference": "dd6ca96227917e1e85b41c7c3cc6507b411e0927",
-                "shasum": ""
+                "shasum": "60f3f37de13b8e5a295d317962c20ec127115952"
             },
             "require": {
                 "php": ">=5.2.7"
@@ -2616,11 +2621,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl21",
+            "version": "1.12.20pl23",
             "source": {
                 "type": "git",
                 "url": "https://git.tine20.org/git/zendframework1",
-                "reference": "22a37f3360b8f7f2f47f5bb90b0aaef5ac9a26c1"
+                "reference": "578f8679769f0c7e9472458fc07e73633c12e46a"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2637,7 +2642,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-02-16T09:09:16+00:00"
+            "time": "2018-04-11T14:28:45+00:00"
         }
     ],
     "packages-dev": [
@@ -3899,7 +3904,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch21",
+            "version": "1.12.20.0-patch23",
             "package": "zendframework/zendframework1"
         },
         {
