@@ -101,6 +101,8 @@ class Setup_Frontend_Cli
             $this->_compare($_opts);
         } elseif(isset($_opts->setpassword)) {
             $this->_setPassword($_opts);
+        } elseif(isset($_opts->pgsqlMigration)) {
+            $this->_pgsqlMigration($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -155,6 +157,135 @@ class Setup_Frontend_Cli
         
         echo "Successfully installed " . count($applications) . " applications.\n";
         return 0;
+    }
+
+    protected function _pgsqlMigration(Zend_Console_Getopt $_opts)
+    {
+        // TODO ask for cleanup? make cleanup?
+        // TODO check maintenance mode, its needs to be on!
+        // TODO check action queue is empty
+        // TODO check admin right
+        // known issues:
+        // fulltext! path!
+        // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
+
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (!isset($options['mysqlConfigFile'])) {
+            echo 'option mysqlConfigFile is mandatory';
+            return;
+        }
+
+        // get pgsql DB:
+        if (!($pgsqlDb = Setup_Core::getDb()) instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            echo 'pgsql migration only works for pgsql installations';
+            return;
+        }
+
+        // reset DB:
+        $mysqlConfigFile = $options['mysqlConfigFile'];
+        if (!is_file($mysqlConfigFile)) {
+            echo $mysqlConfigFile . ' is not a readable file (--mysqlConfigFile option)';
+            return;
+        }
+        if (!($dbConfig = include $mysqlConfigFile) || !is_array($dbConfig)) {
+            echo 'bad mysql config file: ' . $mysqlConfigFile;
+            return;
+        }
+
+        if (isset($dbConfig['password']) && !empty($dbConfig['password'])) {
+            Setup_Core::getLogger()->getFormatter()->addReplacement($dbConfig['password']);
+        }
+        if (!($mysqlDB = Tinebase_Core::createAndConfigureDbAdapter($dbConfig)) instanceof  Zend_Db_Adapter_Pdo_Mysql) {
+            $dbConfig['password'] = '*****';
+            echo 'provided database config is not a working mysql config: ' . print_r($dbConfig, true);
+            return;
+        }
+        // place table prefix into the concrete adapter
+        $mysqlDB->table_prefix = $pgsqlDb->table_prefix;
+
+        // set the mysql DB as our current DB
+        Zend_Db_Table_Abstract::setDefaultAdapter($mysqlDB);
+        Setup_Core::set(Setup_Core::DB, $mysqlDB);
+
+        // some cache busting
+        Setup_Core::set(Setup_Core::CONFIG, null);
+        Tinebase_Config::destroyInstance();
+        Tinebase_Application::getInstance()->clearCache();
+        Tinebase_Application::destroyInstance();
+        $dbConfig['driver'] = 'pdo_mysql';
+        $dbConfig['user']   = $dbConfig['username'];
+        Setup_SchemaTool::setDBParams($dbConfig);
+        $newOpts = new Zend_Console_Getopt(['install' => []], [
+            '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
+        ]);
+//        $this->_install($newOpts);
+
+        $blackListedTables = [];
+        $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        // set foreign key checks off
+        $mysqlDB->query('SET foreign_key_checks = 0');
+        $mysqlDB->query('SET unique_checks = 0');
+        $mysqlDB->query('SET autocommit = 0');
+
+        // truncate
+        foreach ($mysqlTables as $table) {
+            $mysqlDB->query('TRUNCATE TABLE ' . $mysqlDB->quoteIdentifier($table));
+        }
+
+        $mysqlDB->query('COMMIT');
+        // set foreign key checks off
+        $mysqlDB->query('SET foreign_key_checks = 0');
+        $mysqlDB->query('SET unique_checks = 0');
+        $mysqlDB->query('SET autocommit = 0');
+
+        //$dataTypes = [];
+        foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
+            if (strpos($table, 'cache') !== false) {
+                continue;
+            }
+            $start = 0;
+            $limit = 50;
+            $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
+            $primaries = [];
+            $columns = [];
+            foreach ($tableDscr as $col => $desc) {
+                //$dataTypes[$desc['DATA_TYPE']] = true;
+                if ($desc['PRIMARY']) {
+                    $primaries[] = $col;
+                }
+                $columns[] = $mysqlDB->quoteIdentifier($col);
+            }
+            $insertQuery = 'INSERT INTO ' . $mysqlDB->quoteIdentifier($table) . ' (' . join(', ', $columns) .
+                ') VALUES ';
+            $select = $pgsqlDb->select()->from($table)->order($primaries);
+
+            while (true) {
+                $select->limit($limit, $start);
+                if (empty($data = $select->query()->fetchAll(Zend_Db::FETCH_NUM))) {
+                    break;
+                }
+                $start += $limit;
+                $first = true;
+                $query = $insertQuery;
+                foreach ($data as $idx => $row) {
+                    $query .= ($first === true ? '' : '), ') . '(';
+                    $firstRow = true;
+                    foreach ($row as $value) {
+                        $query .= ($firstRow === true ? '' : ', ') .
+                            (null === $value ? 'null' : $mysqlDB->quote($value));
+                        $firstRow = false;
+                    }
+                    $first = false;
+                }
+
+                $mysqlDB->query($query . ')');
+            }
+        }
+
+        $mysqlDB->query('COMMIT');
+        $mysqlDB->query('SET foreign_key_checks = 1');
+        $mysqlDB->query('SET unique_checks = 1');
     }
 
     /**

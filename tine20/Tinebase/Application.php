@@ -88,6 +88,11 @@ class Tinebase_Application
         
         return self::$instance;
     }
+
+    public static function destroyInstance()
+    {
+        self::$instance = null;
+    }
     
     /**
      * returns one application identified by id
@@ -188,6 +193,11 @@ class Tinebase_Application
         }
         
         return $result;
+    }
+
+    public function clearCache()
+    {
+        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getApplications', 'allApplications');
     }
     
     /**
