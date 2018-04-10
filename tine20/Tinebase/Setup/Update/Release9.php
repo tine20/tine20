@@ -438,22 +438,36 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             }
         }
 
-        $found = false;
-        /** @var Setup_Backend_Schema_Index_Mysql $index */
-        foreach ($this->_backend->getExistingSchema('tree_nodes')->indices as $index) {
-            if ($index->unique && 'object_id' === $index->name) {
-                $found = true;
-                break;
+        if ($this->_backend instanceof Setup_Backend_Mysql) {
+            $found = false;
+            /** @var Setup_Backend_Schema_Index_Mysql $index */
+            foreach ($this->_backend->getExistingSchema('tree_nodes')->indices as $index) {
+                if ($index->unique && 'object_id' === $index->name) {
+                    $found = true;
+                    break;
+                }
             }
-        }
-        if (!$found) {
-            $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
-                        <name>object_id</name>
-                        <unique>true</unique>
-                        <field>
+            if (!$found) {
+                $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
                             <name>object_id</name>
-                        </field>
-                    </index>'));
+                            <unique>true</unique>
+                            <field>
+                                <name>object_id</name>
+                            </field>
+                        </index>'));
+            }
+        } else {
+            try {
+                $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                            <name>object_id</name>
+                            <unique>true</unique>
+                            <field>
+                                <name>object_id</name>
+                            </field>
+                        </index>'));
+            } catch(Exception $e) {
+                // that's why we drop pgsql
+            }
         }
 
         if ($this->getTableVersion('tree_nodes') < 2) {
