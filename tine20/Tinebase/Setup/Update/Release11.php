@@ -54,7 +54,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_3()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.4');
     }
 
@@ -81,7 +81,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_5()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.6');
     }
 
@@ -291,7 +291,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_15()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_14();
+        $update->update_12();
 
         $this->setApplicationVersion('Tinebase', '11.16');
     }
@@ -424,7 +424,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_22()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_15();
+        $update->update_13();
 
         $this->setApplicationVersion('Tinebase', '11.23');
     }
