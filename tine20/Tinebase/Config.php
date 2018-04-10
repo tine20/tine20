@@ -21,6 +21,13 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     /**
+     * access log rotation in days
+     *
+     * @var string
+     */
+    const ACCESS_LOG_ROTATION_DAYS = 'accessLogRotationDays';
+
+    /**
      * authentication backend config
      *
      * @var string
@@ -573,6 +580,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::ACCESS_LOG_ROTATION_DAYS => [
+            //_('Accesslog rotation in days')
+            'label'                 => 'Accesslog rotation in days',
+            //_('Accesslog rotation in days')
+            'description'           => 'Accesslog rotation in days',
+            'type'                  => self::TYPE_INT,
+            'default'               => 7,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ],
         /**
          * possible values:
          *
@@ -1201,7 +1219,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Sync user: delete after X months',
             //_('Removed users should be deleted after X months')
             'description'           => 'Removed users should be deleted after X months',
-            'type'                  => 'integer',
+            'type'                  => self::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
