@@ -132,7 +132,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_9()
     {
         // file updates! need to have application state change first
-        $this->update_22();
+        $this->update_23();
 
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_50();
