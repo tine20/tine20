@@ -884,26 +884,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         var panel = this.getCalendarPanel(this.activeView),
-            store = event.store,
-            view = panel.getView();
+            store = panel.getStore();
         
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
                 if (createdEvent.isRecurBase() || createdEvent.hasPoll()) {
-                    if (store) {
-                        store.load({refresh: true});
-                    } else {
-                        this.refresh();
-                    }
+                    store.load({refresh: true});
                 } else {
-                    // store may be lost on conflict or else
-                    if (store) {
-                        store.replaceRecord(event, createdEvent);
-                        this.setLoading(false);
-                    } else {
-                        this.refresh();
-                    }
+                    this.congruenceFilterCheck(event, createdEvent);
                 }
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
@@ -1036,27 +1025,31 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Tine.Calendar.Model.Event} updatedEvent
      */
     congruenceFilterCheck: function(event, updatedEvent) {
-        if (! (event.ui && event.ui.rendered)) {
-            event.store.replaceRecord(event, updatedEvent);
-            this.setLoading(false);
-            return;
-        }
-        
         var filterData = this.getAllFilterData(),
-            store = event.store;
-        
-        if (! store) {
-            store = this.getStore();
+            panel = this.getCalendarPanel(this.activeView),
+            store = panel.getStore(),
+            view = panel.getView(),
+            me = this;
+
+        if (! updatedEvent.inPeriod(view.getPeriod())) {
+            view.updatePeriod({from: updatedEvent.get('dtstart')});
+            return store.promiseLoad({}).then(function() {
+                me.congruenceFilterCheck(event, updatedEvent);
+            });
         }
-        
+
+        this.setLoading(true);
+        store.replaceRecord(event, updatedEvent);
         filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
         
         Tine.Calendar.searchEvents(filterData, {}, function(r) {
             if(r.totalcount == 0) {
-                updatedEvent.outOfFilter = true;
+                var renderedEvent = store.getById(updatedEvent.id);
+                if (renderedEvent && renderedEvent.ui) {
+                    renderedEvent.ui.markOutOfFilter();
+                }
             }
-            
-            store.replaceRecord(event, updatedEvent);
+
             this.setLoading(false);
         }, this);
     },

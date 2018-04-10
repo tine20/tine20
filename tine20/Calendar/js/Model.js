@@ -83,13 +83,6 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     allowBlankContainer: false,
     
     /**
-     * mark record out of current filter
-     * 
-     * @type Boolean
-     */
-    outOfFilter: false,
-
-    /**
      * default duration for new events
      */
     defaultEventDuration: 60,
@@ -172,6 +165,11 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         // NOTE: for transistent events id is not part of data but we need the transistent id e.g. for freeBusy info
         schedulingData.id = this.id;
         return schedulingData;
+    },
+
+    inPeriod: function(period) {
+        return this.get('dtstart').between(period.from, period.until) ||
+            this.get('dtend').between(period.from, period.until);
     },
 
     hasPoll: function() {
