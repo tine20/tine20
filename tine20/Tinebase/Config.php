@@ -2088,6 +2088,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         
         return self::$_instance;
     }
+
+    public static function destroyInstance()
+    {
+        static::_destroyBackend();
+        self::$_instance = null;
+    }
     
     /**
      * (non-PHPdoc)
