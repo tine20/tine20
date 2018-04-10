@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
@@ -312,85 +312,9 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     /**
      * update to 9.12
      *
-     * @see xxx: add numberables
-     */
-    public function update_11()
-    {
-        if ($this->getTableVersion('numberable') === 0) {
-            $declaration = new Setup_Backend_Schema_Table_Xml('<table>
-                <name>numberable</name>
-                <version>1</version>
-                <declaration>
-                    <field>
-                        <name>id</name>
-                        <type>integer</type>
-                        <notnull>true</notnull>
-                        <autoincrement>true</autoincrement>
-                    </field>
-                    <field>
-                        <name>bucket</name>
-                        <type>text</type>
-                        <length>255</length>
-                        <notnull>false</notnull>
-                    </field>
-                    <field>
-                        <name>number</name>
-                        <type>integer</type>
-                        <notnull>true</notnull>
-                    </field>
-                    <index>
-                        <name>id</name>
-                        <primary>true</primary>
-                        <field>
-                            <name>id</name>
-                        </field>
-                    </index>
-                    <index>
-                        <name>bucket_number</name>
-                        <unique>true</unique>
-                        <field>
-                            <name>bucket</name>
-                        </field>
-                        <field>
-                            <name>number</name>
-                        </field>
-                    </index>
-                </declaration>
-            </table>');
-
-            $this->createTable('numberable', $declaration);
-        }
-        $this->setApplicationVersion('Tinebase', '9.12');
-    }
-
-    /**
-     * update to 9.13
-     *
-     * @see 0012162: create new MailFiler application
-     */
-    public function update_12()
-    {
-        if ($this->getTableVersion('tree_fileobjects') < 3) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <notnull>false</notnull>
-                </field>
-            ');
-            $this->_backend->alterCol('tree_fileobjects', $declaration);
-            $this->setTableVersion('tree_fileobjects', '3');
-        }
-
-        $this->setApplicationVersion('Tinebase', '9.13');
-    }
-
-    /**
-     * update to 9.14
-     *
      * fix pgsql index creation issue
      */
-    public function update_13()
+    public function update_11()
     {
         if (version_compare($this->getApplicationVersion('Tinebase'), '10.45') < 0) {
             return;
@@ -398,7 +322,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $db = Tinebase_Core::getDb();
         if (!$db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $this->setApplicationVersion('Tinebase', '9.14');
+            $this->setApplicationVersion('Tinebase', '9.13');
             return;
         }
 
@@ -470,16 +394,16 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Created the following indices: ' . PHP_EOL . join(PHP_EOL, $successes));
         
-        $this->setApplicationVersion('Tinebase', '9.14');
+        $this->setApplicationVersion('Tinebase', '9.12');
     }
 
 
     /**
-     * Update to 9.15
+     * Update to 9.13
      * 
      * make sure setup user is in admin group
      */
-    public function update_14()
+    public function update_12()
     {
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         if (null !== ($setupUser = static::getSetupFromConfigOrCreateOnTheFly())) {
@@ -488,15 +412,15 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
                 Tinebase_Group::getInstance()->addGroupMember($adminGroup->getId(), $setupUser->getId());
             }
         }
-        $this->setApplicationVersion('Tinebase', '9.15');
+        $this->setApplicationVersion('Tinebase', '9.13');
     }
 
     /**
-     * Update to 9.16
+     * Update to 9.14
      *
      * make file objects unique
      */
-    public function update_15()
+    public function update_13()
     {
         $fs = Tinebase_FileSystem::getInstance();
         $treeNode = $fs->_getTreeNodeBackend();
@@ -536,7 +460,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 2);
         }
         
-        $this->setApplicationVersion('Tinebase', '9.16');
+        $this->setApplicationVersion('Tinebase', '9.14');
     }
 
     /**
@@ -544,7 +468,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      *
      * @return void
      */
-    public function update_16()
+    public function update_14()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }
