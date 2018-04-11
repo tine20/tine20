@@ -325,6 +325,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($oldTinebaseId, $tinebaseId);
         $this->assertGreaterThan(40, Tinebase_Application::getInstance()->getApplicationTables($tinebaseId));
 
+        $this->_uit->updateApplications();
+
         $this->_uninstallAllApplications();
     }
 
