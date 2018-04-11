@@ -258,7 +258,8 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      */
     public function clearTable($date = NULL)
     {
-        $date = ($date instanceof Tinebase_DateTime) ? $date : Tinebase_DateTime::now()->subDay(60);
+        $date = ($date instanceof Tinebase_DateTime) ? $date : Tinebase_DateTime::now()->subDay(
+            Tinebase_Config::getInstance()->{Tinebase_Config::ACCESS_LOG_ROTATION_DAYS});
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removing all access log entries before ' . $date->toString());
