@@ -689,10 +689,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             return Tine.Calendar.setDefinitePollEvent(event.data);
                         })
                         .then(function() {
-                            var panel = me.getCalendarPanel(me.activeView),
-                                store = panel.getStore();
-
-                            store.load({refresh: true});
+                            me.getStore().load({refresh: true});
                         })
                         .catch(function(error) {
                             me.loadMask.hide();
@@ -825,7 +822,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 try {
                                     var panel = this.getCalendarPanel(this.activeView);
                                     if(panel) {
-                                        var store = panel.getStore(),
+                                        var store = this.getStore(),
                                             view = panel.getView();
                                     }
                                 } catch(e) {
@@ -884,16 +881,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         var panel = this.getCalendarPanel(this.activeView),
-            store = panel.getStore();
+            store = this.getStore();
         
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
-                if (createdEvent.isRecurBase() || createdEvent.hasPoll()) {
-                    store.load({refresh: true});
-                } else {
-                    this.congruenceFilterCheck(event, createdEvent);
-                }
+                this.congruenceFilterCheck(event, createdEvent);
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
         }, {
@@ -933,11 +926,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 scope: this,
                 options: options,
                 handler: function(option) {
-                    var store = event.store;
-
-                    if (! store) {
-                        store = this.getStore();
-                    }
+                    var store = this.getStore();
                     
                     switch (option) {
                         case 'series':
@@ -947,8 +936,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             
                             var options = {
                                 scope: this,
-                                success: function() {
-                                    store.load({refresh: true});
+                                success: function(updatedEvent) {
+                                    this.congruenceFilterCheck(event, updatedEvent);
                                 }
                             };
                             options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.updateRecurSeries.createDelegate(Tine.Calendar.backend, [event, false, options])], true);
@@ -965,9 +954,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             var options = {
                                 scope: this,
                                 success: function(updatedEvent) {
-                                    // NOTE: we also need to refresh for 'this' as otherwise
-                                    //       baseevent is not refreshed -> concurrency failures
-                                    store.load({refresh: true});
+                                    this.congruenceFilterCheck(event, updatedEvent);
                                 },
                                 failure: this.onProxyFail.createDelegate(this, [event], true)
                             };
@@ -1000,17 +987,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onUpdateEventAction: function(event) {
         var panel = this.getCalendarPanel(this.activeView),
-            store = panel.getStore(),
+            store = this.getStore(),
             view = panel.getView();
             
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(updatedEvent) {
-                if (updatedEvent.isRecurBase() || updatedEvent.hasPoll()) {
-                    store.load({refresh: true});
-                } else {
-                    this.congruenceFilterCheck(event, updatedEvent);
-                }
+                this.congruenceFilterCheck(event, updatedEvent);
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
         }, {
@@ -1027,31 +1010,50 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     congruenceFilterCheck: function(event, updatedEvent) {
         var filterData = this.getAllFilterData(),
             panel = this.getCalendarPanel(this.activeView),
-            store = panel.getStore(),
+            store = this.getStore(),
             view = panel.getView(),
-            me = this;
+            me = this,
+            promise = Promise.resolve();
+
+        updatedEvent.markDirty();
+        store.replaceRecord(event, updatedEvent);
 
         if (! updatedEvent.inPeriod(view.getPeriod())) {
             view.updatePeriod({from: updatedEvent.get('dtstart')});
-            return store.promiseLoad({}).then(function() {
-                me.congruenceFilterCheck(event, updatedEvent);
-            });
+            promise = store.promiseLoad({});
+        } else if (event.isRecurBase()
+            || updatedEvent.isRecurBase()
+            || updatedEvent.isRecurException() // NOTE: we also need to refresh for 'this' as otherwise baseevent is not refreshed -> concurrency failures
+            || event.hasPoll()
+            || updatedEvent.hasPoll()) {
+            promise = store.promiseLoad({refresh: true});
         }
 
-        this.setLoading(true);
-        store.replaceRecord(event, updatedEvent);
-        filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
-        
-        Tine.Calendar.searchEvents(filterData, {}, function(r) {
-            if(r.totalcount == 0) {
-                var renderedEvent = store.getById(updatedEvent.id);
-                if (renderedEvent && renderedEvent.ui) {
-                    renderedEvent.ui.markOutOfFilter();
-                }
-            }
+        promise.then(function() {
+            me.setLoading(true);
 
-            this.setLoading(false);
-        }, this);
+            filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
+            filterData.push({field: 'period', operator: 'within', value: me.getCalendarPanel(me.activeView).getView().getPeriod()});
+
+            Tine.Calendar.searchEvents(filterData, {}, function(r) {
+                if (updatedEvent.ui) {
+                    updatedEvent.ui.clearDirty();
+                }
+                if(r.totalcount == 0) {
+                    var renderedEvent = me.getStore().getById(updatedEvent.id);
+                    if (! renderedEvent) {
+                        me.getStore().add(updatedEvent);
+                        renderedEvent = updatedEvent;
+                    }
+                    if (renderedEvent.ui) {
+                        renderedEvent.ui.markOutOfFilter();
+                        renderedEvent.ui.clearDirty();
+                    }
+                }
+
+                me.setLoading(false);
+            }, me);
+        });
     },
     
     onDeleteRecords: function () {
@@ -1570,7 +1572,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this,
             handler: function (option) {
                 var panel = this.getCalendarPanel(this.activeView),
-                    store = panel.getStore();
+                    store = this.getStore();
 
                 switch (option) {
                     case 'ignore':
@@ -1663,7 +1665,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             event.modified = {};
             
             var panel = this.getCalendarPanel(this.activeView);
-            var store = panel.getStore();
+            var store = this.getStore();
             
             store.replaceRecord(event, event);
             
