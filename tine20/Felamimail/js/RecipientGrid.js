@@ -182,7 +182,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         // init recipients (on reply/reply to all)
         this.syncRecipientsToStore(['to', 'cc', 'bcc']);
         
-        this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+        this.store.add(new Ext.data.Record({type: 'to', 'address': '', 'contact_type': 'contact'}));
         
         this.store.on('update', this.onUpdateStore, this);
         this.store.on('add', this.onAddStore, this);
@@ -336,6 +336,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
         
         var value = combo.getValue();
+        
         if (combo.getValueIsList()) {
             var emails = value.split(",");
             emails.sort();
@@ -413,49 +414,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         this.setFixedHeight(true);
-        
-        this.initDropTarget();
     },
-    
-    /**
-     * init drop target with notifyDrop fn 
-     * - adds new records from drag data to the recipient store
-     */
-    initDropTarget: function() {
-        var dropTargetEl = this.getView().scroller.dom;
-        var dropTarget = new Ext.dd.DropTarget(dropTargetEl, {
-            ddGroup    : 'recipientDDGroup',
-            notifyDrop : function(ddSource, e, data) {
-                this.grid.addRecordsToStore(ddSource.dragData.selections);
-                return true;
-            },
-            grid: this
-        });
-    },
-    
-    /**
-     * add records to recipient store
-     * 
-     * @param {Array} records
-     * @param {String} type
-     */
-    addRecordsToStore: function(records, type) {
-        if (! type) {
-            var emptyRecord = this.store.getAt(this.store.findExact('address', '')),
-                type = (emptyRecord) ? emptyRecord.get('type') : 'to';
-        }
-        
-        var hasEmail = false,
-            added = false;
-        
-        Ext.each(records, function(record) {
-            if (record.hasEmail()) {
-                this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
-                added = true;
-            }
-        }, this);
-    },
-    
+
     /**
      * set grid to fixed height if it has more than X records
      *  

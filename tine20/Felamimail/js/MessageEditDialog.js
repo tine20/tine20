@@ -1280,6 +1280,51 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return me.validateRecipients();
         });
     },
+
+    /**
+     * 
+     * @return {Promise}
+     */
+    validateSystemlinkRecipients: function () {
+        var me = this;
+        
+        return new Promise(function (fulfill, reject) {
+            var recipients = [],
+                resolvePromise = fulfill;
+            
+            me.recipientGrid.getStore().each(function(recipient) {
+                var address = recipient.get('address');
+                    
+                if (!address) {
+                    return;
+                }
+                
+                recipients.push(me.extractMailFromString(address));
+            });
+
+            me.attachmentGrid.getStore().each(function(attachment) {
+                if (attachment.get('attachment_type') === 'systemlink_fm') {
+                    Tine.Felamimail.doMailsBelongToAccount(recipients).then(function (res) {
+                        resolvePromise(Object.values(res))
+                    });
+                    return false;
+                }
+            });
+        });
+    },
+    
+    extractMailFromString: function (string) {
+        if (Ext.form.VTypes.email(string)) {
+            return string;
+        }
+        
+        var angleBracketExtraction = string.match(/<([^>;]+)>/i)[1];
+        if (null !== angleBracketExtraction && Ext.form.VTypes.email(angleBracketExtraction)) {
+            return angleBracketExtraction;
+        }
+        
+        return string;
+    },
     
     /**
      * generic apply changes handler
@@ -1291,13 +1336,53 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * TODO add note editing textfield here
      */
-    onApplyChanges: function(closeWindow, emptySubject, passwordSet) {
-        var me = this;
+    onApplyChanges: function(closeWindow, emptySubject, passwordSet, nonSystemAccountRecipients) {
+        var me = this,
+            _ = window.lodash;
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
         
         this.loadMask.show();
+    
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
+            this.validateSystemlinkRecipients().then(function(mails) {
+                me.onApplyChanges(closeWindow, emptySubject, passwordSet, mails)
+            });
+            return;
+        } else if (_.isArray(nonSystemAccountRecipients) && nonSystemAccountRecipients.length > 0) {
+            let records = _.filter(me.recipientGrid.getStore().data.items, function (rec) {
+                let match = false;
+                _.each(nonSystemAccountRecipients, function (mail) {
+                    if (null !== rec.get('address').match(new RegExp(mail))) {
+                        match = true;
+                    }
+                });
+                
+                return match;
+            }.bind({'nonSystemAccountRecipients': nonSystemAccountRecipients}));
+            
+            _.each(records, function (rec) {
+                var index = me.recipientGrid.getStore().indexOf(rec),
+                    row = me.recipientGrid.view.getRow(index);
 
+                row.classList.add('felamimail-is-external-recipient');
+            });
+            
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Warning'),
+                this.app.i18n._('Some attachments are of type "systemlinks" whereas some of the recipients (marked yellow), couldn\'t be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments.'),
+                function (button) {
+                    if (button == 'yes') {
+                        me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
+                    } else {
+                        this.loadMask.hide();
+                    }
+                },
+                this
+            );
+            return;
+        }
+        
         // If filemanager attachments are possible check if passwords are required to enter
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && passwordSet !== true) {
             var attachmentStore = this.attachmentGrid.getStore();
@@ -1314,7 +1399,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }
                     });
 
-                    me.onApplyChanges(closeWindow, emptySubject, true);
+                    me.onApplyChanges(closeWindow, emptySubject, true, validateSystemlinks);
                 });
                 
                 // user presses cancel in dialog => allow to submit again or edit mail and so on!
@@ -1333,7 +1418,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 function (button) {
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - button: ' + button);
                     if (button == 'yes') {
-                        this.onApplyChanges(closeWindow, true, true);
+                        this.onApplyChanges(closeWindow, true, true, validateSystemlinks);
                     } else {
                         this.loadMask.hide();
                     }
