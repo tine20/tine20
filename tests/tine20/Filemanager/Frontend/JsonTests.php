@@ -2167,6 +2167,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals($result['status'], 'success');
     }
 
+    /**
+     * testRecursiveFilter with fulltext
+     */
     public function testRecursiveFilter()
     {
         Tinebase_Core::getConfig()->clearCache();
@@ -2174,6 +2177,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
             self::markTestSkipped('no tika.jar found');
         }
+
+        // deactivate fulltext queryFilter - filtering should still happen for external fulltext
+        Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = false;
 
         $folders = $this->testCreateDirectoryNodesInPersonal();
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
@@ -2197,18 +2203,18 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        $result = $this->_getUit()->searchNodes(array(
-            array(
+        $filter = [
+            [
                 'field'    => 'recursive',
                 'operator' => 'equals',
                 'value'    => 'true'
-            ),
-            array(
+            ], [
                 'field'    => 'query',
                 'operator' => 'contains',
                 'value'    => 'RecursiveTe'
-            ),
-        ), null);
+            ],
+        ];
+        $result = $this->_getUit()->searchNodes($filter, null);
 
         $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files (is tika.jar installed?): ' . print_r($result, true));
         foreach($result['results'] as $result) {

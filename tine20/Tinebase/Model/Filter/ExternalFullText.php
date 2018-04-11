@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,6 +24,7 @@ class Tinebase_Model_Filter_ExternalFullText extends Tinebase_Model_Filter_FullT
      * set options
      *
      * @param array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _setOptions(array $_options)
     {
@@ -38,7 +39,7 @@ class Tinebase_Model_Filter_ExternalFullText extends Tinebase_Model_Filter_FullT
      *
      * @param  Zend_Db_Select                $_select
      * @param  Tinebase_Backend_Sql_Abstract $_backend
-     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function appendFilterSql($_select, $_backend)
     {
@@ -73,5 +74,14 @@ class Tinebase_Model_Filter_ExternalFullText extends Tinebase_Model_Filter_FullT
         }
 
         $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($ids) ? new Zend_Db_Expr('NULL') : $ids);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isQueryFilterEnabled()
+    {
+        // external fulltext is always enabled in query filter
+        return true;
     }
 }
