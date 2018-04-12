@@ -275,8 +275,10 @@ switch ($type) {
                 } else if (is_array($result['value']['value'])) {
                     //  this is very bad - @refactor
                     foreach ($result['value']['value'] as $key => $subfilter) {
-                        if (isset($result['value']['value'][$key]['value']) && is_string($result['value']['value'][$key]['value']))
-                        $result['value']['value'][$key]['value'] = $controller->get($result['value']['value'][$key]['value'])->toArray();
+                        if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
+                                is_string($subfilter['value'])) {
+                            $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                        }
                     }
 
                 } else {
@@ -284,6 +286,7 @@ switch ($type) {
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                Tinebase_Exception::log($e);
             }
         }
         
