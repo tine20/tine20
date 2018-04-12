@@ -224,15 +224,19 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     function assertTransparency($dst_image,$src_image)
     {
         $transparencyIndex = imagecolortransparent($src_image);
-        $transparencyColor = array('red' => 255, 'green' => 255, 'blue' => 255);
-
         if ($transparencyIndex >= 0) {
-            $transparencyColor = imagecolorsforindex($src_image, $transparencyIndex);
+            // src was gif with transparent color set
+            imagefill($dst_image, 0, 0, $transparencyIndex);
+            imagecolortransparent($dst_image, $transparencyIndex);
+        } else {
+            // NOTE: this converts white to transparent
+//            $transparencyIndex = imagecolorallocate($dst_image, 255, 255, 255);
+//            imagefill($dst_image, 0, 0, $transparencyIndex);
+//            imagecolortransparent($dst_image, $transparencyIndex);
         }
 
-        $transparencyIndex = imagecolorallocate($dst_image, $transparencyColor['red'], $transparencyColor['green'], $transparencyColor['blue']);
-        imagefill($dst_image, 0, 0, $transparencyIndex);
-        imagecolortransparent($dst_image, $transparencyIndex);
+        imagealphablending($dst_image, false);
+        imagesavealpha($dst_image, true);
     }
 
     /**
