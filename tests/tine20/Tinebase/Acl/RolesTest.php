@@ -71,7 +71,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         
         // cleanup for testHasRight/test disabled app
         if (Tinebase_Application::getInstance()->getApplicationById($this->objects['application']->getId())->status == Tinebase_Application::DISABLED) {
-            Tinebase_Application::getInstance()->setApplicationState($this->objects['application'], Tinebase_Application::ENABLED);
+            Tinebase_Application::getInstance()->setApplicationStatus($this->objects['application'], Tinebase_Application::ENABLED);
         }
         parent::tearDown();
     }
@@ -245,7 +245,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         $this->assertFalse($result, 'user has admin right for not installed application');
         
         // test for disabled application
-        Tinebase_Application::getInstance()->setApplicationState($this->objects['application'], Tinebase_Application::DISABLED);
+        Tinebase_Application::getInstance()->setApplicationStatus($this->objects['application'], Tinebase_Application::DISABLED);
         
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
             $this->objects['application'],

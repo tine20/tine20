@@ -7,26 +7,26 @@
     "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
     "repositories": [{
       "type": "git",
-      "url": "http://git.tine20.org/git/composerapploader"
+      "url": "https://git.tine20.org/git/composerapploader"
     }, {
         "type": "git",
-        "url": "http://git.tine20.org/git/zendframework1"
+        "url": "https://git.tine20.org/git/zendframework1"
     },{
         "type": "git",
-        "url": "http://git.tine20.org/git/opendocument"
+        "url": "https://git.tine20.org/git/opendocument"
     }, {
         "type": "git",
-        "url": "http://git.tine20.org/git/timezoneconvert"
+        "url": "https://git.tine20.org/git/timezoneconvert"
     }, {
         "type": "git",
-        "url": "http://git.syncroton.org/Syncroton"
+        "url": "https://git.syncroton.org/Syncroton"
     }, {
         "type": "git",
         "url": "https://github.com/paulmhh/PHPWord"
     }],
     "require": {
         "php": "^5.6 | ^7.0",
-        "zendframework/zendframework1": "1.12.20pl21 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl23 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "dev-master",
         "ezyang/htmlpurifier": "v4.6.0",

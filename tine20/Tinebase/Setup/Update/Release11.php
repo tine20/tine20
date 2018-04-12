@@ -54,7 +54,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_3()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.4');
     }
 
@@ -81,7 +81,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_5()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.6');
     }
 
@@ -131,6 +131,11 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_9()
     {
+        // file updates! need to have application state change first
+        $this->update_23();
+        // and the structure updates
+        $this->update_17();
+
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_50();
         $this->setApplicationVersion('Tinebase', '11.10');
@@ -288,7 +293,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_15()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_14();
+        $update->update_12();
 
         $this->setApplicationVersion('Tinebase', '11.16');
     }
@@ -312,7 +317,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_17()
     {
-
         if ($this->_backend->columnExists('pin_protected', 'tree_nodes')) {
             $this->_backend->dropCol('tree_nodes', 'pin_protected');
         }
@@ -330,6 +334,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             $this->setTableVersion('tree_nodes', 9);
         }
 
+        Tinebase_FileSystem::getInstance()->resetBackends();
+        Tinebase_Db_Table::clearTableDescriptionInCache(SQL_TABLE_PREFIX . 'tree_nodes');
+
         $this->setApplicationVersion('Tinebase', '11.18');
     }
 
@@ -340,7 +347,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_18()
     {
-
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);
 
@@ -394,7 +400,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.22
      *
-     * fix pin_protected_node
+     * add ntlmv2hash column
      */
     public function update_21()
     {
@@ -413,5 +419,86 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '11.22');
+    }
+
+    /**
+     * update to 11.23
+     *
+     * make file objects unique
+     */
+    public function update_22()
+    {
+        $update = new Tinebase_Setup_Update_Release9($this->_backend);
+        $update->update_13();
+
+        $this->setApplicationVersion('Tinebase', '11.23');
+    }
+
+    /**
+     * update to 11.24
+     *
+     * create application_states table
+     * fill it with data from applications.state
+     * drop applications.state
+     */
+    public function update_23()
+    {
+        if (! $this->_backend->tableExists('application_states')) {
+            $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
+                <name>application_states</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>100</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>state</name>
+                        <type>text</type>
+                        <length>65535</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id-name</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                        <field>
+                            <name>name</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>'), 'Tinebase', 'application_states');
+
+            $appController = Tinebase_Application::getInstance();
+            /** @var Tinebase_Model_Application $application */
+            foreach ($appController->getApplications() as $application) {
+                foreach ($application->xprops('state') as $name => $value) {
+                    $appController->setApplicationState($application, $name, $value);
+                }
+            }
+        }
+
+        if ($this->_backend->columnExists('state', 'applications')) {
+            $this->_backend->dropCol('applications', 'state');
+        }
+
+        if ($this->getTableVersion('applications') == 4) {
+            $this->setTableVersion('applications', 5);
+        }
+
+        Tinebase_Db_Table::clearTableDescriptionInCache('applications');
+        Tinebase_Application::getInstance()->resetBackend();
+
+        $this->setApplicationVersion('Tinebase', '11.24');
     }
 }

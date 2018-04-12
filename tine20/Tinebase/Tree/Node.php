@@ -266,8 +266,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        $fileExtension = pathinfo($_newRecord->name, PATHINFO_EXTENSION);
-        if (false === Tinebase_FileSystem_Previews::getInstance()->isSupportedFileExtension($fileExtension)) {
+        if (false === Tinebase_FileSystem_Previews::getInstance()->canNodeHavePreviews($_newRecord)) {
             return;
         }
 

@@ -21,6 +21,13 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     /**
+     * access log rotation in days
+     *
+     * @var string
+     */
+    const ACCESS_LOG_ROTATION_DAYS = 'accessLogRotationDays';
+
+    /**
      * area locks
      *
      * @var string
@@ -415,6 +422,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
 
     /**
+     * PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN
+     *
+     * @var string
+     */
+    const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
+
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -509,9 +523,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
-    
+
+    const INSTALL_LOGO = 'install_logo';
+    const WEBSITE_URL = 'website_url';
+
     const BRANDING_LOGO = 'branding_logo';
     const BRANDING_FAVICON = 'branding_favicon';
+    const BRANDING_FAVICON_SVG = 'branding_favicon_svg';
+    const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
     const BRANDING_TITLE = 'branding_title';
     const BRANDING_WEBURL = 'branding_weburl';
     const BRANDING_DESCRIPTION = 'branding_description';
@@ -623,6 +642,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::ACCESS_LOG_ROTATION_DAYS => [
+            //_('Accesslog rotation in days')
+            'label'                 => 'Accesslog rotation in days',
+            //_('Accesslog rotation in days')
+            'description'           => 'Accesslog rotation in days',
+            'type'                  => self::TYPE_INT,
+            'default'               => 7,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ],
         /**
          * possible values:
          *
@@ -1264,7 +1294,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Sync user: delete after X months',
             //_('Removed users should be deleted after X months')
             'description'           => 'Removed users should be deleted after X months',
-            'type'                  => 'integer',
+            'type'                  => self::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
@@ -1327,6 +1357,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Support NTLM V2 authentication',
             //_('Support NTLM V2 authentication and store account password as ntlm v2 hash')
             'description'           => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false
+        ),
+        self::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN => array(
+            //_('Update NTLM V2 password has on login')
+            'label'                 => 'Update NTLM V2 password has on login',
+            //_('Update NTLM V2 password has on login')
+            'description'           => 'Update NTLM V2 password has on login',
             'type'                  => 'bool',
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
@@ -1697,6 +1738,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO => array(
+            //_('Installation logo')
+            'label'                 => 'Installation logo',
+            //_('Path to custom installation logo.')
+            'description'           => 'Path to custom installation logo.',
+            'type'                  => 'string',
+            'default'               => false,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
         self::BRANDING_DESCRIPTION => array(
                 //_('custom description')
                 'label'                 => 'custom description',
@@ -1717,7 +1770,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'default'               => '',
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+                'setBySetupModule'      => FALSE
+        ),
+        self::WEBSITE_URL => array(
+            //_('custom website url')
+            'label'                 => 'custom website url',
+            //_('Custom url used for logo on login page.')
+            'description'           => 'Custom url used for logo on login page.',
+            'type'                  => 'string',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_TITLE => array(
                 //_('custom title')
@@ -1742,15 +1806,41 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_FAVICON => array(
-                //_('custom favicon path')
-                'label'                 => 'custom favicon path',
-                //_('Path to custom favicon.')
-                'description'           => 'Path to custom favicon.',
-                'type'                  => 'string',
-                'default'               => './images/favicon.ico',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+            //_('custom favicon paths')
+            'label'                 => 'custom favicon paths',
+            //_('Paths to custom favicons.')
+            'description'           => 'Paths to custom favicons.',
+            'type'                  => 'array',
+            'default'               => [
+                 16 => './images/favicon.png',
+                 30 => './images/favicon30.png',
+                300 => './images/favicon300.png',
+            ],
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_FAVICON_SVG => array(
+            //_('custom svg favicon paths')
+            'label'                 => 'custom svg favicon paths',
+            //_('Paths to custom svg favicon.')
+            'description'           => 'Paths to custom svg favicon.',
+            'type'                  => 'string',
+            'default'               => './images/favicon.svg',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_MASKICON_COLOR => array(
+            //_('Mask Icon Color')
+            'label'                 => 'Mask Icon Color',
+            //_('Background color of mask icon (safari pinned tab).')
+            'description'           => 'Background color of mask icon (safari pinned tab).',
+            'type'                  => 'string',
+            'default'               => '#9b7f14',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::USE_LOGINNAME_AS_FOLDERNAME => array(
         //_('Use login name instead of full name')
@@ -2043,6 +2133,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        static::_destroyBackend();
+        self::$_instance = null;
     }
     
     /**

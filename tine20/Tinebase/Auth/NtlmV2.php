@@ -32,8 +32,9 @@ class Tinebase_Auth_NtlmV2
     protected $_dnsDomain = 'testdomain.local';
     protected $_dnsComputer = 'mycomputer.local';
     protected $_msg;
-    protected $_response;
+    protected $_response = null;
     protected $_error = [];
+    protected $_lastAuthStatus = null;
 
     /**
      * @var null|Tinebase_Model_FullUser
@@ -45,9 +46,17 @@ class Tinebase_Auth_NtlmV2
         /** @var Zend_Session_Namespace $session */
         $session = Tinebase_Core::get(Tinebase_Core::SESSION);
         if (!isset($session->ntlmv2ServerNounce)) {
-            $session->ntlmv2ServerNounce = $this->_ntlm_get_random_bytes(8);
+            $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
         }
         $this->_serverNounce = $session->ntlmv2ServerNounce;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServerNounce()
+    {
+        return $this->_serverNounce;
     }
 
     /**
@@ -64,6 +73,22 @@ class Tinebase_Auth_NtlmV2
     public function getErrors()
     {
         return join(PHP_EOL, $this->_error);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLastResponse()
+    {
+        return $this->_response;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getLastAuthStatus()
+    {
+        return $this->_lastAuthStatus;
     }
 
     /**
@@ -93,14 +118,23 @@ class Tinebase_Auth_NtlmV2
     /**
      * @return int
      */
-    public function authorize()
+    public function authorize(\Zend\Http\PhpEnvironment\Request $request)
     {
-        $headers = apache_request_headers();
-        if (!isset($headers['Authorization'])) {
+        $this->_lastAuthStatus = $this->_authorize($request);
+        return $this->_lastAuthStatus;
+    }
+
+    /**
+     * @return int
+     */
+    protected function _authorize(\Zend\Http\PhpEnvironment\Request $request)
+    {
+        if (empty($auth = $request->getHeaders('Authorization')) &&
+                empty($auth = $request->getServer('HTTP_AUTHORIZATION'))) {
             return self::AUTH_PHASE_NOT_STARTED;
         }
 
-        $auth = $headers['Authorization'];
+        $auth = $auth->getFieldValue();
         if (substr($auth, 0, 5) !== 'NTLM ') {
             return self::AUTH_NOT_NTLM;
         }
@@ -188,7 +222,7 @@ class Tinebase_Auth_NtlmV2
      * @param string $msg
      * @return string
      */
-    protected function _ntlm_hmac_md5($key, $msg)
+    public static function ntlm_hmac_md5($key, $msg)
     {
         $blocksize = 64;
         if (strlen($key) > $blocksize)
@@ -204,7 +238,7 @@ class Tinebase_Auth_NtlmV2
      * @param int $length
      * @return string
      */
-    protected function _ntlm_get_random_bytes($length)
+    public static function ntlm_get_random_bytes($length)
     {
         if (function_exists('random_bytes')) {
             try {
@@ -265,8 +299,8 @@ class Tinebase_Auth_NtlmV2
         if (false === $md4hash) {
             return false;
         }
-        $ntlmv2hash = $this->_ntlm_hmac_md5($md4hash, static::_ntlm_utf8_to_utf16le(strtoupper($user) . $domain));
-        $blobhash = $this->_ntlm_hmac_md5($ntlmv2hash, $this->_serverNounce . $clientblob);
+        $ntlmv2hash = static::ntlm_hmac_md5($md4hash, static::_ntlm_utf8_to_utf16le(strtoupper($user) . $domain));
+        $blobhash = static::ntlm_hmac_md5($ntlmv2hash, $this->_serverNounce . $clientblob);
 
         return ($blobhash === $clientblobhash);
     }

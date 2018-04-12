@@ -24,6 +24,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
     attachmentTypeStore: null,
     app: null,
 
+    clicksToEdit: 1,
     currentRecord: null,
 
     initComponent: function () {
@@ -167,7 +168,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
                     return null;
                 }
 
-                return record.get('name');
+                return Tine.Tinebase.common.cellEditorHintRenderer(record.get('name'));
             },
             editor: combo
         }, {

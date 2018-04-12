@@ -98,10 +98,15 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         // require('./GrantsPanel');
+        
         var grantsPanel = new Tine.Filemanager.GrantsPanel({
             app: this.app,
             editDialog: this
         });
+
+        if (this.record.data.type !== 'folder') {
+            grantsPanel.setDisabled(true);
+        }
 
         var revisionPanel = {};
 
@@ -242,7 +247,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             grantsPanel
         ];
 
-        if (_.get(fsConfig, 'enableNotifications', false)) {
+        if (_.get(fsConfig, 'enableNotifications', false) && this.record.data.type === 'folder') {
             var notificationPanel = new Tine.Filemanager.NotificationPanel({
                 app: this.app,
                 editDialog: this

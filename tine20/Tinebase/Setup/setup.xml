@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.22</version>
+    <version>11.24</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
             <name>applications</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -38,12 +38,6 @@
                     <length>20</length>
                     <notnull>true</notnull>
                 </field>
-                <field>
-                    <name>state</name>
-                    <type>text</type>
-                    <length>65535</length>
-                    <notnull>false</notnull>
-                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -62,6 +56,41 @@
                     <name>status</name>
                     <field>
                         <name>status</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+
+        <table>
+            <name>application_states</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>state</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id-name</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
                     </field>
                 </index>
             </declaration>
@@ -3503,6 +3532,13 @@
                     </field>
                     <field>
                         <name>deleted_time</name>
+                    </field>
+                </index>
+                <index>
+                    <name>object_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>object_id</name>
                     </field>
                 </index>
                 <index>

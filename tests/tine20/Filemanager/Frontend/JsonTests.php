@@ -71,6 +71,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected $_rmDir = array();
 
     protected $_oldModLog = null;
+
+    protected $_createdNodesJson = null;
+
     
     /**
      * Sets up the fixture.
@@ -91,6 +94,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // make sure account root node exists
         $this->_getPersonalFilemanagerContainer();
+
+        Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+
+        $this->_createdNodesJson = null;
     }
     
     /**
@@ -584,6 +591,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
 
         $result = $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, false);
+        $this->_createdNodesJson = $result;
+
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
@@ -597,6 +606,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } else {
             $this->assertEquals(1, $result[0]['isIndexed']);
         }
+        // either no data or the same data, both produce the same hash
+        static::assertEquals($result[0]['hash'], $result[1]['hash'], 'hash should be the same');
+        static::assertNotEquals($result[0]['object_id'], $result[1]['object_id'], 'object_ids should not be the same');
         
         return $filepaths;
     }
@@ -660,13 +672,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-        $tinebaseState = &$tinebaseApplication->xprops('state');
-        $orgSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE];
-        $orgRevisionSize = $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE];
+
         try {
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = 10000000;
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = 10000000;
-            $applicationController->updateApplication($tinebaseApplication);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1;
 
             $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
@@ -701,14 +712,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         } finally {
             Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $orgQuotaConfig;
-            $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
-            $tinebaseState = &$tinebaseApplication->xprops('state');
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE] = $orgSize;
-            $tinebaseState[Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE] = $orgRevisionSize;
-            $applicationController->updateApplication($tinebaseApplication);
         }
     }
-
 
     /**
      * testCreateFileNodeInPersonalRoot
@@ -902,6 +907,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testCreateFileCountTempDir()
     {
+        // skip this for previews, they will create more tempfiles
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+                {Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
+            static::markTestSkipped('doesn\'t work with previews on');
+        }
         $tmp = Tinebase_Core::getTempDir();
         $filecountInTmpBefore = count(scandir($tmp));
         
@@ -1099,16 +1109,39 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * 
      * @return array target node
      */
-    public function testCopyFileNodesToFolder()
+    public function testCopyFileNodesToFolder($_createNodesWithData = false)
     {
-        $filesToCopy = $this->testCreateFileNodes();
+        $filesToCopy = $this->testCreateFileNodes($_createNodesWithData);
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         
         $result = $this->_getUit()->copyNodes($filesToCopy, $targetNode['path'], false);
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
-        
+        static::assertNotEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
+            'object_id should change');
+        static::assertNotEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
+            'object_id should change');
+
         return $targetNode;
+    }
+
+    public function testCopyAndChange()
+    {
+        $targetNode = $this->testCopyFileNodesToFolder(true);
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
+        file_put_contents($tempPath, 'otherData');
+
+        $changedResult = $this->_getUit()->createNode($targetNode['path'] . '/file1',
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileId->getId(), true);
+
+        static::assertNotEquals($changedResult['object_id'], $this->_createdNodesJson[0]['object_id']);
+        static::assertNotEquals($changedResult['hash'], $this->_createdNodesJson[0]['hash']);
+
+        $originalNode = $this->_getUit()->getNode($this->_createdNodesJson[0]['id']);
+        static::assertNotEquals($changedResult['object_id'], $originalNode['object_id']);
+        static::assertNotEquals($changedResult['hash'], $originalNode['hash']);
     }
 
     /**
@@ -1674,9 +1707,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_fsController->resetBackends();
 
         // remove all files with size 0 first
-        // better here than below?
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
+
+        // create files with size 0
         $this->testDeleteFileNodes();
 
+        // then delete them
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE),
             array('field' => 'size', 'operator' => 'equals', 'value' => 0)
@@ -1685,15 +1721,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
             Tinebase_FileSystem::getInstance()->deleteFileNode($node);
         }
 
-        // why here?
-        //$this->testDeleteFileNodes();
+        // do the test:
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(0, $result, 'should not clean up anything as files with size 0 are not written to disk');
+
+        // reset the test environment
         $this->tearDown();
-        
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->setUp();
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
         $this->_fsController->resetBackends();
+
+        // now create files with data and test again
         $this->testDeleteFileNodes(true);
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
         $this->assertEquals(1, $result, 'should cleanup one file');
@@ -2129,6 +2167,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals($result['status'], 'success');
     }
 
+    /**
+     * testRecursiveFilter with fulltext
+     */
     public function testRecursiveFilter()
     {
         Tinebase_Core::getConfig()->clearCache();
@@ -2136,6 +2177,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
             self::markTestSkipped('no tika.jar found');
         }
+
+        // deactivate fulltext queryFilter - filtering should still happen for external fulltext
+        Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = false;
 
         $folders = $this->testCreateDirectoryNodesInPersonal();
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
@@ -2159,18 +2203,18 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        $result = $this->_getUit()->searchNodes(array(
-            array(
+        $filter = [
+            [
                 'field'    => 'recursive',
                 'operator' => 'equals',
                 'value'    => 'true'
-            ),
-            array(
+            ], [
                 'field'    => 'query',
                 'operator' => 'contains',
                 'value'    => 'RecursiveTe'
-            ),
-        ), null);
+            ],
+        ];
+        $result = $this->_getUit()->searchNodes($filter, null);
 
         $this->assertEquals(2, $result['totalcount'], 'did not find expected 2 files (is tika.jar installed?): ' . print_r($result, true));
         foreach($result['results'] as $result) {

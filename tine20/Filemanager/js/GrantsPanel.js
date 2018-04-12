@@ -103,7 +103,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') != 'folder');
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
-        this.pinProtectionCheckbox.setValue(record.get('pin_protected_node'));
+        this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData(record.data);
@@ -119,15 +119,14 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordUpdate: function(editDialog, record) {
-        var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : '',
+        var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : null,
             grants = [],
             pin_protected_node = this.pinProtectionCheckbox.getValue() ? true : false;
 
         this.grantsGrid.getStore().each(function(r) {grants.push(r.data)});
 
         record.set('acl_node', acl_node);
-        record.set('grants', '');
         record.set('grants', grants);
-        record.set('pin_protected_node', pin_protected_node);
+        record.set('pin_protected_node', pin_protected_node ? acl_node : null);
     }
 });

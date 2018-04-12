@@ -98,4 +98,17 @@ class Tinebase_Record_Diff extends Tinebase_Record_Abstract
         
         return (count($diff) === 0 ? count(array_diff(array_keys($this->oldData), $toOmit)) === 0 : false);
     }
+
+    /**
+     * only empty values have been replaced
+     *
+     * @return boolean
+     */
+    public function onlyEmptyValuesInOldData()
+    {
+        $nonEmptyValues = array_filter($this->oldData, function($v) {
+            return ! empty($v);
+        });
+        return count($nonEmptyValues) === 0;
+    }
 }

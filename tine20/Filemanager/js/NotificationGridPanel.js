@@ -73,9 +73,25 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                         String.format(me.app.i18n.ngettext('Once a Day', 'Every {0} Days', value), value) :
                         me.app.i18n._('No');
                 },
-                editor: {
-                    xtype: 'numberfield'
-                }
+                editor: new Ext.form.ComboBox({
+                    triggerAction: 'all',
+                    lazyRender: false,
+                    editable: false,
+                    mode: 'local',
+                    forceSelection: true,
+                    allowBlank: false,
+                    expandOnFocus: true,
+                    blurOnSelect: true,
+                    autoSelect: true,
+                    store: [
+                        [0, me.app.i18n._('Don\'t summarize')],
+                        [1, me.app.i18n._('Once a day')],
+                        [3, me.app.i18n._('Every 3 days')],
+                        [7, me.app.i18n._('Once a week')],
+                        [30, me.app.i18n._('Once a month')], // somehow once a month
+                        [365, me.app.i18n._('Once a year')] // somehow once a year
+                    ]
+                })
             }
         ];
     },

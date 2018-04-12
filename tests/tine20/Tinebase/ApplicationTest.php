@@ -168,7 +168,7 @@ class Tinebase_ApplicationTest extends TestCase
         $this->assertContains($application->id, $applications->id);
         
         
-        Tinebase_Application::getInstance()->setApplicationState($application, Tinebase_Application::DISABLED);
+        Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::DISABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application->id, $applications->id);
         
@@ -183,7 +183,7 @@ class Tinebase_ApplicationTest extends TestCase
         $this->assertNotContains($application2->id, $applications->id);
         
         
-        Tinebase_Application::getInstance()->setApplicationState($application, Tinebase_Application::ENABLED);
+        Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::ENABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertContains($application->id, $applications->id);
     }

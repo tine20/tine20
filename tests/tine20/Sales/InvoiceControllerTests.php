@@ -1616,4 +1616,136 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->assertEquals(1, $invoicePositions->count());
     }
+
+    /**
+     *
+     * @throws Exception
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function testGenerateTimesheet()
+    {
+        $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if (!$fsConfig || !$fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
+            $this->markTestSkipped('PreviewService not configured.');
+        }
+        
+        if ($this->_addressRecords === null) {
+            $this->_createCustomers(1);
+        }
+        
+        $costcenter = new Sales_Model_CostCenter();
+        $costcenter->number = 1337;
+        $costcenter->remark = 'Foobar Costcenter';
+        $costcenter = Sales_Controller_CostCenter::getInstance()->create($costcenter);
+        
+        $invoice = new Sales_Model_Invoice();
+        $invoice->description = 'Foobar Rechnung';
+        $invoice->start_date = (new Tinebase_DateTime())->subMonth(1);
+        $invoice->end_date = new Tinebase_DateTime();
+        $invoice->costcenter_id = $costcenter->getId();
+        $invoice->address_id = $this->_addressRecords->getFirstRecord()->getId();
+        
+        /* @var $invoice Sales_Model_Invoice */
+        $invoice = Sales_Controller_Invoice::getInstance()->create($invoice);
+
+        $customer = new Sales_Model_Customer();
+        $customer->name = 'Test Customer';
+        $customer = Sales_Controller_Customer::getInstance()->create($customer);
+        
+        Tinebase_Relations::getInstance()->setRelations(
+            Sales_Model_Invoice::class,
+            'Sql',
+            $invoice->getId(),
+            [
+                [
+                    'related_degree' => 'sibling',
+                    'related_model' => Sales_Model_Customer::class,
+                    'related_backend' => 'Sql',
+                    'related_record' => $customer->toArray(),
+                    'type' => 'CUSTOMER'
+                ]
+            ]
+        );
+        
+        $timeaccount1 = new Timetracker_Model_Timeaccount();
+        $timeaccount1->title = 'Foobar 1';
+        $timeaccount1->is_billable = true;
+        $timeaccount1 = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount1);
+        
+        $timeaccount2 = new Timetracker_Model_Timeaccount();
+        $timeaccount2->title = 'Foobar 2';      
+        $timeaccount2->is_billable = true;
+        $timeaccount2 = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount2);
+
+        $bereitschaftTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'Bereitschaft',
+            'description' => 'Bereitschaft für Admins',
+            'color' => '#009B31',
+        ));
+        $bereitschaftTag = Tinebase_Tags::getInstance()->createTag($bereitschaftTag);
+
+        $right = new Tinebase_Model_TagRight([
+            'tag_id'        => $bereitschaftTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true
+        ]);
+        Tinebase_Tags::getInstance()->setRights($right);
+        
+        $timesheets = [];
+        
+        for($i = 0; $i < 16; $i++) {
+            $timesheet = new Timetracker_Model_Timesheet();
+            $timesheet->timeaccount_id = ($i % 2) ? $timeaccount1->getId() : $timeaccount2->getId();
+            $timesheet->is_billable = true;
+            $timesheet->description = $i . ' Test Task';
+            $timesheet->account_id = Tinebase_Core::getUser()->getId();
+            $timesheet->start_date = (clone $invoice->start_date)->addDay($i);
+            $timesheet->duration = 30;
+            
+            // @FIXME: not sure about this one??? when is it filled in real world data
+            $timesheet->invoice_id = $invoice->getId();
+            
+            $timesheet = Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
+            $timesheets[] = $timesheet;
+
+            if ($i % 5) {
+                $filter = new Timetracker_Model_TimesheetFilter([
+                    ['field' => 'id', 'operator' => 'in', 'value' => [$timesheet->getId()]]
+                ]);
+                Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
+            }
+        }
+     
+        $productAggregateTimeaccount1 = new Sales_Model_InvoicePosition();
+        $productAggregateTimeaccount1->model = Timetracker_Model_Timeaccount::class;
+        $productAggregateTimeaccount1->invoice_id = $invoice->getId();
+        $productAggregateTimeaccount1->accountable_id = $timeaccount1->getId();
+        $productAggregateTimeaccount1->title = $timeaccount1->title;
+        $productAggregateTimeaccount1->unit = 'hour';
+        $productAggregateTimeaccount1->month = '';
+        $productAggregateTimeaccount1 = Sales_Controller_InvoicePosition::getInstance()->create($productAggregateTimeaccount1);
+
+        $productAggregateTimeaccount2 = new Sales_Model_InvoicePosition();
+        $productAggregateTimeaccount2->model = Timetracker_Model_Timeaccount::class;
+        $productAggregateTimeaccount2->invoice_id = $invoice->getId();
+        $productAggregateTimeaccount2->accountable_id = $timeaccount2->getId();
+        $productAggregateTimeaccount2->title = $timeaccount2->title;
+        $productAggregateTimeaccount2->unit = 'hour';
+        $productAggregateTimeaccount2->month = '';
+        $productAggregateTimeaccount2 = Sales_Controller_InvoicePosition::getInstance()->create($productAggregateTimeaccount2);
+        
+        // watch out, this call requires that ghostscript is installed on the machine and available in path through "gs"!
+        $invoice = Sales_Controller_Invoice::getInstance()->createTimesheetFor($invoice->getId());
+     
+        static::assertInstanceOf(Sales_Model_Invoice::class, $invoice);
+        static::assertEquals(3, Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice)->count());
+    }
 }

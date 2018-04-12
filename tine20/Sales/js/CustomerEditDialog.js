@@ -292,6 +292,9 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }),
                                 decimalPrecision: 1,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                            }, {
+                                name: 'name_shorthand',
+                                fieldLabel: this.app.i18n._('Name shorthand')
                             }
                         ]]
                     }]

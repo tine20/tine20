@@ -83,13 +83,6 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     allowBlankContainer: false,
     
     /**
-     * mark record out of current filter
-     * 
-     * @type Boolean
-     */
-    outOfFilter: false,
-
-    /**
      * default duration for new events
      */
     defaultEventDuration: 60,
@@ -172,6 +165,11 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         // NOTE: for transistent events id is not part of data but we need the transistent id e.g. for freeBusy info
         schedulingData.id = this.id;
         return schedulingData;
+    },
+
+    inPeriod: function(period) {
+        return this.get('dtstart').between(period.from, period.until) ||
+            this.get('dtend').between(period.from, period.until);
     },
 
     hasPoll: function() {
@@ -390,6 +388,30 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app},
+        {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventStatus',
+            defaultAll: true
+        },
+        {
+            label: app.i18n._('Blocking'),
+            field: 'transp',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventTransparencies',
+            defaultAll: true
+        },
+        {
+            label: app.i18n._('Classification'),
+            field: 'class',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: { name: 'Calendar' },
+            keyfieldName: 'eventClasses',
+            defaultAll: true
+        },
         {
             filtertype: 'calendar.rrule',
             app: app

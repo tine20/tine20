@@ -28,7 +28,7 @@ msgstr "File not found!"
 
 #: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:275
 #: js/NodeGridPanel.js:237 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:111
+#: js/NotificationGridPanel.js:126
 msgid "Name"
 msgstr "Name"
 
@@ -98,7 +98,7 @@ msgstr "Download"
 msgid "Create Public Link"
 msgstr "Create Public Link"
 
-#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:215
+#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:230
 msgid "Remove record"
 msgstr "Remove record"
 
@@ -208,7 +208,7 @@ msgstr "Close Data Safe"
 msgid "Filemanager"
 msgstr "Filemanager"
 
-#: js/Filemanager.js:74 js/nodeActions.js:284
+#: js/Filemanager.js:74 js/nodeActions.js:283
 msgid "Save locally"
 msgstr "Save locally"
 
@@ -352,19 +352,43 @@ msgstr[1] "Every {0} Days"
 msgid "No"
 msgstr "No"
 
-#: js/NotificationGridPanel.js:145
+#: js/NotificationGridPanel.js:86
+msgid "Don't summarize"
+msgstr "Don't summarize"
+
+#: js/NotificationGridPanel.js:87
+msgid "Once a day"
+msgstr "Once a day"
+
+#: js/NotificationGridPanel.js:88
+msgid "Every 3 days"
+msgstr "Every 3 days"
+
+#: js/NotificationGridPanel.js:89
+msgid "Once a week"
+msgstr "Once a week"
+
+#: js/NotificationGridPanel.js:90
+msgid "Once a month"
+msgstr "Once a month"
+
+#: js/NotificationGridPanel.js:91
+msgid "Once a year"
+msgstr "Once a year"
+
+#: js/NotificationGridPanel.js:160
 msgid "Search for users ..."
 msgstr "Search for users ..."
 
-#: js/NotificationGridPanel.js:185
+#: js/NotificationGridPanel.js:200
 msgid "No permission"
 msgstr "No permission"
 
-#: js/NotificationGridPanel.js:196
+#: js/NotificationGridPanel.js:211
 msgid "all"
 msgstr "all"
 
-#: js/NotificationGridPanel.js:283
+#: js/NotificationGridPanel.js:298
 msgid "Search for groups ..."
 msgstr "Search for groups ..."
 
@@ -392,7 +416,7 @@ msgstr "If data safe protection is enabled, this folder and all it's contents is
 msgid "The grant to download files"
 msgstr "The grant to download files"
 
-#: js/GrantsPanel.js:57 js/nodeActions.js:338
+#: js/GrantsPanel.js:57 js/nodeActions.js:337
 msgid "Publish"
 msgstr "Publish"
 
@@ -517,19 +541,19 @@ msgstr "Move"
 msgid "Move Items"
 msgstr "Move Items"
 
-#: js/nodeActions.js:311
+#: js/nodeActions.js:310
 msgid "Preview"
 msgstr "Preview"
 
-#: js/nodeActions.js:354
+#: js/nodeActions.js:353
 msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
 msgstr "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
 
-#: js/nodeActions.js:371
+#: js/nodeActions.js:370
 msgid "Folder has been published successfully"
 msgstr "Folder has been published successfully"
 
-#: js/nodeActions.js:371
+#: js/nodeActions.js:370
 msgid "File has been published successfully"
 msgstr "File has been published successfully"
 
@@ -541,47 +565,47 @@ msgstr "Public Download URL"
 msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
 msgstr "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
 
-#: Controller/Node.php:518
+#: Controller/Node.php:526
 msgid "My folders"
 msgstr "My folders"
 
-#: Controller/Node.php:525
+#: Controller/Node.php:533
 msgid "Shared folders"
 msgstr "Shared folders"
 
-#: Controller/Node.php:532
+#: Controller/Node.php:540
 msgid "Other users folders"
 msgstr "Other users folders"
 
-#: Controller/Node.php:1486
+#: Controller/Node.php:1497
 msgid "Received"
 msgstr "Received"
 
-#: Controller/Node.php:1487
+#: Controller/Node.php:1498
 msgid "To"
 msgstr "To"
 
-#: Controller/Node.php:1488
+#: Controller/Node.php:1499
 msgid "Cc"
 msgstr "Cc"
 
-#: Controller/Node.php:1489
+#: Controller/Node.php:1500
 msgid "Bcc"
 msgstr "Bcc"
 
-#: Controller/Node.php:1490
+#: Controller/Node.php:1501
 msgid "From (E-Mail)"
 msgstr "From (E-Mail)"
 
-#: Controller/Node.php:1491
+#: Controller/Node.php:1502
 msgid "From (Name)"
 msgstr "From (Name)"
 
-#: Controller/Node.php:1492
+#: Controller/Node.php:1503
 msgid "Body"
 msgstr "Body"
 
-#: Controller/Node.php:1493
+#: Controller/Node.php:1504
 msgid "Attachments"
 msgstr "Attachments"
 

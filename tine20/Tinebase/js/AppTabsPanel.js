@@ -167,10 +167,6 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         
         // remove plain style
         this.header.removeClass('x-tab-panel-header-plain');
-        
-        if (Tine.favicon) {
-            Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url('+ Tine.favicon + ')');
-        }
     },
     
     /**

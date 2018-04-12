@@ -37,7 +37,6 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
                     '{[this.fieldRenderer(values.description, "Description")]}',
                     '</div>',
                     '</br>',
-                    '<div class="rp-print-single-block-heading">', i18n._('Members'), '</div>',
                     memberHtml,
                     '</br>',
                     '{[this.customFieldRenderer(values.customfields)]}',
@@ -64,7 +63,7 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
 
                             relations = Tine.widgets.relation.Renderer.renderAll(values);
                             if (relations) {
-                                return '<div class="rp-print-single-block-heading">' + i18n._('Related to') + '</div></div>' + relations  + '</br>';
+                                return '<div class="rp-print-single-block-heading">' + i18n._('Related to') + '</div>' + relations  + '</br>';
                             }
                         }
                     }).apply(data));

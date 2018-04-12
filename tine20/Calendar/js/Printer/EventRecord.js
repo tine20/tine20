@@ -8,7 +8,7 @@ Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.EditDialogRender
             var bodyTpl = new Ext.XTemplate(
                 '<div class="cal-print-single">',
                     '<div class="cal-print-single-logo">',
-                        '<img src="' + Tine.logo + '">',
+                        '<img src="' + Tine.installLogo + '">',
                     '</div>',
                     '<div class="cal-print-single-summary">',
                         '<span class="cal-print-single-label">', i18n._('Summary'), '</span>',

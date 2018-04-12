@@ -97,7 +97,12 @@ class Tinebase_Application
     {
         $this->_omitModLog = (bool)$boolean;
     }
-    
+
+    public static function destroyInstance()
+    {
+        self::$instance = null;
+    }
+
     /**
      * returns one application identified by id
      *
@@ -199,7 +204,12 @@ class Tinebase_Application
         
         return $result;
     }
-    
+
+    public function clearCache()
+    {
+        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getApplications', 'allApplications');
+    }
+
     /**
      * get enabled or disabled applications
      *
@@ -294,7 +304,7 @@ class Tinebase_Application
      * @param   string  $state the new state
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setApplicationState($_applicationIds, $state)
+    public function setApplicationStatus($_applicationIds, $state)
     {
         if (!in_array($state, array(Tinebase_Application::ENABLED, Tinebase_Application::DISABLED))) {
             throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
@@ -484,7 +494,54 @@ class Tinebase_Application
         
         $this->_getDb()->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
     }
-    
+
+    /**
+     * gets the current application state
+     * we better do a select for update always
+     *
+     * @param $_applicationId
+     * @param $_stateName
+     * @return null|string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getApplicationState($_applicationId, $_stateName)
+    {
+        $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        $db = $this->_getDb();
+        $result = $db->select()->forUpdate(true)->from(SQL_TABLE_PREFIX . 'application_states', 'state')->where(
+            $db->quoteIdentifier('id') . $db->quoteInto(' = ? AND ', $id) .
+            $db->quoteIdentifier('name') . $db->quoteInto(' = ?', $_stateName))->query()
+                ->fetchColumn(0);
+        if (false === $result) {
+            return null;
+        }
+        return $result;
+    }
+
+    /**
+     * @param $_applicationId
+     * @param $_stateName
+     * @param $_state
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function setApplicationState($_applicationId, $_stateName, $_state)
+    {
+        $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        $db = $this->_getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'application_states',
+            $db->quoteIdentifier('id') . $db->quoteInto(' = ? AND ', $id) .
+            $db->quoteIdentifier('name') . $db->quoteInto(' = ?', $_stateName));
+        $db->insert(SQL_TABLE_PREFIX . 'application_states',
+            [
+                'id'    => $id,
+                'name'  => $_stateName,
+                'state' => $_state
+            ]);
+    }
+
     /**
      * update application
      * 
@@ -596,7 +653,12 @@ class Tinebase_Application
         
         return $this->_backend;
     }
-    
+
+    public function resetBackend()
+    {
+        $this->_backend = null;
+    }
+
     /**
      * 
      * @return Zend_Db_Adapter_Abstract

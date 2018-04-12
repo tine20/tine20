@@ -770,7 +770,7 @@ class Setup_Controller
             $setupXml = $this->getSetupXml($_application->name);
         } catch (Setup_Exception_NotFound $senf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $senf->getMessage() . ' Disabling application "' . $_application->name . '".');
-            Tinebase_Application::getInstance()->setApplicationState(array($_application->getId()), Tinebase_Application::DISABLED);
+            Tinebase_Application::getInstance()->setApplicationStatus(array($_application->getId()), Tinebase_Application::DISABLED);
             return false;
         }
         
@@ -1661,17 +1661,13 @@ class Setup_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        $this->updateApplications();
+
         // set the replication master id
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $state = $tinebase->state;
-        if (!is_array($state)) {
-            $state = array();
-        }
-        $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
-        $tinebase->state = $state;
-        Tinebase_Application::getInstance()->updateApplication($tinebase);
-
-        $this->updateApplications();
+        Tinebase_Application::getInstance()->setApplicationState($tinebase,
+            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID,
+            Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq());
 
         return true;
     }

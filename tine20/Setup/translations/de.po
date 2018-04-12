@@ -669,7 +669,7 @@ msgstr "Systemkonto benutzen"
 
 #: js/EmailPanel.js:217
 msgid "Use email address as login name"
-msgstr ""
+msgstr "E-Mail als Benutzername verwenden"
 
 #: js/EmailPanel.js:263
 msgid "Cyrus Admin"

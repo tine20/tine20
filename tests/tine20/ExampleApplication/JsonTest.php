@@ -23,7 +23,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 
     public function setUp()
     {
-        Tinebase_Application::getInstance()->setApplicationState(array(
+        Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId()
         ), Tinebase_Application::ENABLED);
         

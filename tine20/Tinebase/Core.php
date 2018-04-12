@@ -563,7 +563,20 @@ class Tinebase_Core
     {
         if (! Tinebase_Session::isStarted()) {
             Tinebase_Session::setSessionBackend();
-            Zend_Session::start();
+            $tries = 0;
+            while (true) {
+                try {
+                    Zend_Session::start();
+                    break;
+                } catch (RedisException $re) {
+                    if (++$tries < 5) {
+                        // wait 100ms on the redis
+                        usleep(100000);
+                    } else {
+                        throw $re;
+                    }
+                }
+            }
         }
 
         $coreSession = Tinebase_Session::getSessionNamespace();
@@ -1468,6 +1481,14 @@ class Tinebase_Core
         
         return self::get(self::LOGGER);
     }
+
+    /**
+     * unset the logger
+     */
+    public static function unsetLogger()
+    {
+        self::set(self::LOGGER, null);
+    }
     
     /**
      * get cache from the registry
@@ -2112,5 +2133,21 @@ class Tinebase_Core
     {
         $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
         return $sentryClient;
+    }
+
+    /**
+     * Returns path to install logo, if no install logo is set use branding logo
+     * 
+     * @return null|string
+     * @throws FileNotFoundException
+     */
+    public static function getInstallLogo() {
+        $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
+        
+        if (!$logo) {
+            $logo =Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO};
+        }
+        
+        return Tinebase_Helper::getFilename($logo, false);
     }
 }

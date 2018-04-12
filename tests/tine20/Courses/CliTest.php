@@ -62,7 +62,7 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // enable courses app
-        Tinebase_Application::getInstance()->setApplicationState(array(
+        Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('Courses')->getId()
         ), Tinebase_Application::ENABLED);
         

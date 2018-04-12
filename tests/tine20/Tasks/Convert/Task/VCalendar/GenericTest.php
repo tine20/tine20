@@ -103,7 +103,6 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
      */
     public function testConvertToTine20ModelWithStatus()
     {
-        #$this->markTestSkipped();
         $vcalendar = Tasks_Frontend_WebDAV_TaskTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC);
         

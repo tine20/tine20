@@ -198,3 +198,14 @@ cal-monthview-wkcell-header {
     overflow-x: hidden;
     z-index: 5000;
 }
+
+/* Calendar */
+.cal-monthview-daycell-valid {
+    background: #FFF;
+}
+.cal-monthview-daycell-invalid {
+    background: #F9F9F9;
+}
+.cal-monthview-daycell-today {
+    background: #EBF3FD;
+}

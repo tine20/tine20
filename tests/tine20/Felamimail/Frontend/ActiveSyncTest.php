@@ -575,8 +575,8 @@ dGVzdAo=&#13;
         
         // check duplicate headers
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertEquals(1, count($completeMessage->headers['mime-version']));
-        $this->assertEquals(1, count($completeMessage->headers['content-type']));
+        $this->assertEquals(1, count((array)$completeMessage->headers['mime-version']));
+        $this->assertEquals(1, count((array)$completeMessage->headers['content-type']));
         
         // check forward flag
         $originalMessage = Felamimail_Controller_Message::getInstance()->get($originalMessage->getId());

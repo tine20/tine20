@@ -152,8 +152,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
             || $filter instanceof Tinebase_Model_Filter_ForeignRecord
         ) {
             if ($filter instanceof Tinebase_Model_Filter_FullText) {
-                if (! Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER}) {
-                    // fulltext query filter disabled
+                if (! $filter->isQueryFilterEnabled()) {
                     return;
                 }
             }

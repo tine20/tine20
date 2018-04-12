@@ -119,7 +119,19 @@ class Tinebase_Scheduler_Task
     {
         $task->last_failure = $task->server_time;
         $task->failure_count = $task->failure_count + 1;
-        // TODO check what we should do with next_run!
+
+        // if the next run is more than 1 hour away, set it to one hour
+        // if the next run is less than 5 minutes away, set it to 5 minutes
+        // otherwise accept the next run time
+        $nextRun = $this->_cronObject->getNextRunDate($task->server_time->format('Y-m-d H:i:s'));
+        $interval = $nextRun->diff($task->server_time);
+        if ($interval->h > 0 || $interval->d > 0 || $interval->m > 0 || $interval->y > 0) {
+            $task->next_run = clone $task->server_time->getClone()->addHour(1);
+        } elseif ($interval->i < 5) {
+            $task->next_run = clone $task->server_time->getClone()->addMinute(5);
+        } else {
+            $task->next_run = $nextRun->format('Y-m-d H:i:s');
+        }
     }
 
     /**

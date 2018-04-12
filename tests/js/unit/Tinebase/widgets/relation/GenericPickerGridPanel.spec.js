@@ -37,8 +37,8 @@ describe('GenericPickerGridPanel', () => {
   it('renders a missing related_record', () => {
     require('../../../../../../tine20/Projects/js/Model')
     var result = uit.relatedRecordRenderer(undefined,
-      null, new Tine.Tinebase.Model.Relation({'related_model': 'Projects_Model_Project'}))
-    expect(result).to.equal('Record unavailable')
+      {}, new Tine.Tinebase.Model.Relation({'related_model': 'Projects_Model_Project'}))
+    expect(result).to.equal('No Access')
   })
 
   it('renders a related_record', () => {

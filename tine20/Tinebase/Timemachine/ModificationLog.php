@@ -605,6 +605,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             } elseif (! isset($newRecord[$key])) {
                 if (!is_object($value)) {
                     if ($newRecord->has($key)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Merge current value into update data, as it was empty/not set in update data.');
+                        }
+
                         $newRecord->{$key} = $value;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
@@ -1422,9 +1427,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' Update replication master id to ' . $modification->instance_seq);
-                $tinebaseApplication->xprops('state')[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] =
-                    $modification->instance_seq;
-                $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
+                $applicationController->setApplicationState($tinebaseApplication,
+                    Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, $modification->instance_seq);
 
                 if (null !== $lock && !$lock->isLocked()) {
                     throw new Tinebase_Exception_Backend('lock of type ' . get_class($lock) . ' lost lock');
@@ -1510,13 +1514,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $applicationController = Tinebase_Application::getInstance();
         $tinebase = $applicationController->getApplicationByName('Tinebase');
 
-        $state = &$tinebase->xprops('state');
-        if (!isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
-            $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = 0;
-        }
-
-        $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] += intval($count);
-
-        $applicationController->updateApplication($tinebase);
+        $applicationController->setApplicationState($tinebase,
+            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, intval($applicationController->getApplicationState(
+                $tinebase, Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID)) + intval($count));
     }
 }

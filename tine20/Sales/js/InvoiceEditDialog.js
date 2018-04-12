@@ -62,17 +62,50 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     displayNotes: true,
     
     initComponent: function() {
+        if (!this.app) {
+            this.app = Tine.Tinebase.appMgr.get('Sales');
+        }
+
+        this.createTimesheetAction = new Ext.Action({
+            requiredGrant: 'exportGrant',
+            text: this.app.i18n._('Create timesheet'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onCreateTimesheet,
+            actionUpdater: function (action, grants, records, isFilterSelect) {
+                if (action.initialConfig.requiredGrant) {
+                    if (grants[action.initialConfig.requiredGrant] === false) {
+                        action.setDisabled(true);
+                        return;
+                    }
+                }
+
+                // only persistent records can do this
+                action.setDisabled(!this.record.id);
+            },
+            iconCls: 'action_next'
+        });
+        
+        this.tbarItems = this.tbarItems || [];
+        this.tbarItems.push(this.createTimesheetAction);
+
         Tine.Sales.InvoiceEditDialog.superclass.initComponent.call(this);
     },
-    
-    /**
-     * is form valid?
-     * 
-     * @return {Boolean}
-     */
-    isValid: function() {
-        var isValid = Tine.Sales.InvoiceEditDialog.superclass.isValid.call(this);
-        return isValid;
+
+    onCreateTimesheet: function () {
+        var me = this;
+
+        me.loadMask.show();
+
+        Tine.Sales.createTimesheetForInvoice(me.record.id).then(function (res) {
+            me.recordFromJson = true;
+            me.record = JSON.stringify(res);
+            me.initRecord();
+        }).then(function () {
+            me.loadMask.hide();
+        }).catch(function () {
+            me.loadMask.hide();
+        });
     },
     
     /**
@@ -138,7 +171,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.createReversal) {
             this.window.setTitle(this.app.i18n._('Create Reversal Invoice'));
             this.doCopyRecord();
-            
         } else if (this.copyRecord) {
             this.doCopyRecord();
             this.window.setTitle(this.app.i18n._('Copy Invoice'));

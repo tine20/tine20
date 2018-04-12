@@ -118,4 +118,13 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         
         return $result;
     }
+
+    public static function clearTableDescriptionInCache($tableName)
+    {
+        $db = Tinebase_Core::getDb();
+        $dbConfig = $db->getConfig();
+        $cacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
+        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getTableDescriptionFromCache',
+            $cacheId);
+    }
 }

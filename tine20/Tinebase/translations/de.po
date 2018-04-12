@@ -1006,6 +1006,10 @@ msgstr "Persönlich"
 msgid "No Information"
 msgstr "Keine Information"
 
+#: js/common.js:338
+msgid "No Access"
+msgstr "Kein Zugriff"
+
 #: js/common.js:371
 #, python-brace-format
 msgid "{0} minute"

@@ -781,7 +781,8 @@ html, body {
 }
 
 .tine-favicon {
-    background-image:url(../../images/favicon.png) !important;
+    /* NOTE: favicon is configured at runtime! */
+    background-image:url(../../library/ExtJS/resources/images/default/s.gif) !important;
     background-size: 16px 16px;
 }
 
@@ -1020,7 +1021,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     }
     
 .tinebase-editmultipledialog-clearer {
-    background: transparent url("../../themes/tine20/resources/images/tine20/form/clear-trigger.gif") -16px top no-repeat;
+    background: transparent url("../../library/ExtJS/resources/images/default/form/clear-trigger.gif") -16px top no-repeat;
     border-bottom:1px solid #7eadd9; 
     height:18px;
     width:18px;
@@ -1179,4 +1180,8 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     border: none;
     background: none;
     cursor: pointer;
+}
+
+.tine-tinebase-recorddisplaypanel-displayfield .x-form-display-field {
+    display: inline-block;
 }

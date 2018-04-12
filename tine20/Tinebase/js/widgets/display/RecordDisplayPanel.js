@@ -149,6 +149,8 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                 field = {
                     xtype: 'ux.displayfield',
                     name: fieldDefinition.fieldName,
+                    htmlEncode: false,
+                    ctCls: 'tine-tinebase-recorddisplaypanel-displayfield',
                     fieldLabel: this.app.i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName)
                 };
             
@@ -195,7 +197,16 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                     var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
                         fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
                     if (renderer) {
-                        field.renderer = renderer;
+                        // in case a rendered value contains newlines, we convert them into <br />
+                        field.renderer = function() {
+                            let rendererValue = this.renderer.apply(this.me, arguments);
+                            if (rendererValue && window.lodash.isString(rendererValue) && rendererValue.includes("\n")) {
+                                return Ext.util.Format.nl2br(rendererValue);
+                            } else {
+                                return rendererValue;
+                            }
+                        }.bind({me: this, renderer: renderer})
+                        
                     }
                     displayFields.push(field);
                 }

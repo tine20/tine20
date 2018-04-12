@@ -9,6 +9,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Zend_RedisProxy as Redis;
+
 /**
  * Redis lock implementation
  *
@@ -51,7 +53,9 @@ class Tinebase_Lock_Redis extends Tinebase_Lock_Abstract
             throw new Tinebase_Exception_Backend('trying to release an unlocked lock');
         }
 
-        // TODO this Redis "Lock" is a lease! not a lock. So maybe we lost our lease to a time out here...
+        // this Redis "Lock" is a lease! not a lock. So maybe we lost our lease to a time out here
+        // first clear the error, execute eval, if that returns 0, but no errors occurred, it's a time out
+        static::$_redis->clearLastError();
         if (static::$_redis->eval('if redis.call("get",KEYS[1]) == KEYS[2]
                 then
                     return redis.call("del",KEYS[1])
@@ -60,6 +64,14 @@ class Tinebase_Lock_Redis extends Tinebase_Lock_Abstract
                 end', [$this->_lockId, $this->_lockUUID], 2)) {
             $this->_isLocked = false;
             return true;
+        }
+        if (null === static::$_redis->getLastError()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                . __LINE__ .' releasing an expired lock');
+            $this->_isLocked = false;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                . __LINE__ .' lock release failed: ' . static::$_redis->getLastError());
         }
         return false;
     }

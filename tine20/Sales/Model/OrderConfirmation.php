@@ -89,7 +89,11 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
                 )
             ),
             'fulltext' => array(
-                'type' => 'string',
+                'type'   => 'virtual',
+                'config' => array(
+                    'sortable' => false,
+                    'type'   => 'string'
+                )
             )
         )
     );
