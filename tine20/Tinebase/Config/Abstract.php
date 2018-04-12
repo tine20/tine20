@@ -454,6 +454,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         // reset logger as the new available config from conf.d mail contain different logger configuration
         Tinebase_Core::unsetLogger();
+        $this->_mergedConfigCache = [];
 
         $ttl = 60;
         if (isset(self::$_configFileData['composeConfigTTL'])) {
