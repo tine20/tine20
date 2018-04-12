@@ -566,10 +566,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (attender.get('user_type') == 'resource') {
                 Tine.log.debug('Adding resource hook for attender');
                 var resourceId = attender.get('user_id').id,
-                    resource = new Tine.Calendar.Model.Resource(attender.get('user_id'), resourceId);
+                    resource = new Tine.Calendar.Model.Resource(attender.get('user_id'), resourceId),
+                    grants = lodash.get(resource, 'data.container_id.account_grants', {});
 
                 items = items.concat(new Ext.Action({
-                    text: this.app.i18n._('Edit Resource'),
+                    text: grants.adminGrant ?
+                        this.app.i18n._('Edit Resource') :
+                        this.app.i18n._('View Resource'),
                     iconCls: 'cal-resource',
                     scope: this,
                     handler: function() {

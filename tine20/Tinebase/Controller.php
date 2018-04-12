@@ -948,12 +948,21 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
     ) {
+
+        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/favicon[/{size}[/{ext}]]', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getFavicon', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
+
     }
 
     /**
@@ -977,5 +986,67 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         ];
         $response = new \Zend\Diactoros\Response\JsonResponse($data);
         return $response;
+    }
+
+    /**
+     * @param int $size
+     * @param string $ext
+     * @return \Zend\Diactoros\Response
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Cache_Exception
+     */
+    public function getFavicon($size = 16, $ext = 'png')
+    {
+        if ($size == 'svg') {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
+
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write(Tinebase_Helper::getFileOrUriContents($config));
+
+            return $response
+                ->withAddedHeader('Content-Type', 'image/svg+xml');
+        }
+        $mime = Tinebase_ImageHelper::getMime($ext);
+        if (! in_array($mime, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+            throw new Tinebase_Exception_UnexpectedValue('image format not supported');
+        }
+
+        $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
+        $imageBlob = Tinebase_Core::getCache()->load($cacheId);
+
+        if (! $imageBlob) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON);
+
+            if (!is_array($config)) {
+                $config = [16 => $config];
+            }
+
+            // find nearest icon
+            if (array_key_exists($size, $config)) {
+                $icon = $config[$size];
+            } else {
+                foreach($config as $s => $i) {
+                    if (! is_numeric($s)) continue;
+                    $diffs[$s] = abs($size - $s);
+                }
+                $nearest = array_search(min($diffs), $diffs);
+
+                $icon = $config[$nearest];
+            }
+
+            $blob = Tinebase_Helper::getFileOrUriContents($icon);
+            $image = Tinebase_Model_Image::getImageFromBlob($blob);
+            Tinebase_ImageHelper::resize($image, $size, $size, Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+            $imageBlob = $image->getBlob($mime);
+            Tinebase_Core::getCache()->save($imageBlob, $cacheId);
+
+        }
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write($imageBlob);
+
+        return $response
+            ->withAddedHeader('Content-Type', $mime);
     }
 }

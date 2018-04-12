@@ -824,11 +824,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'websiteUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
+            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
-            'installLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
-            'brandingFavicon'   => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON)),
-            'brandingTitle'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
         );
 

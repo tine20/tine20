@@ -60,6 +60,13 @@ Ext.override(Ext.data.Store, {
                 }
             }
         });
+    },
+
+    nextLoad: function() {
+        var me = this;
+        return new Promise(function (resolve) {
+            me.on('load', resolve, me, { single: true });
+        });
     }
 });
 

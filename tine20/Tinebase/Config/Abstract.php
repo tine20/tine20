@@ -715,6 +715,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         return static::rawToConfig($_rawData, $this, $_name, self::getDefinition($_name), $this->_appName);
     }
 
+
+    protected static function _destroyBackend()
+    {
+        self::$_backend = null;
+    }
+
     /**
      * converts raw data to config values of defined type
      * 

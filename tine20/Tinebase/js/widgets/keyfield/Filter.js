@@ -33,7 +33,13 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     initComponent: function() {
         this.operators = ['in', 'notin'];
-        
+
+        if (this.defaultAll) {
+            this.defaultValue = [];
+            Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).each(function(keyFieldRecord) {
+                this.defaultValue.push(keyFieldRecord.get('id'));
+            }, this)
+        }
         Tine.Tinebase.widgets.keyfield.Filter.superclass.initComponent.call(this);
     },
     

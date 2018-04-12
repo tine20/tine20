@@ -230,6 +230,21 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         } 
     }
+
+    /**
+     * @param Sales_Model_Invoice $invoice
+     *
+     * @return NULL|Sales_Model_Customer
+     */
+    protected function _getCustomerFromInvoiceRelations(Sales_Model_Invoice $invoice) {
+       if (null === $invoice->relations) {
+           return null;
+       }
+
+       $customers = $invoice->relations->filter('type', 'CUSTOMER');
+       
+       return count($customers) > 0 ? $customers->getFirstRecord()->related_record : null;
+    }
     
     /**
      * validates $this->_currentContract and sets $this->_current...
@@ -1404,7 +1419,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
     }
-    
+
     /**
      * inspects delete action
      *
@@ -1561,12 +1576,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         return $_ids;
     }
-    
+
     /**
      * inspect update of one record (before update)
      *
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @param   Tinebase_Record_Interface $_record the update record
+     * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @return  void
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -1603,13 +1618,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         $this->_checkCleared($_record, $_oldRecord);
     }
-    
+
     /**
      * check if user has the right to manage invoices
      *
      * @param string $_action {get|create|update|delete}
      * @return void
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
      */
     protected function _checkRight($_action)
     {
@@ -1635,5 +1651,145 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     public function getAutoInvoiceRecreationResults()
     {
         return $this->_autoInvoiceRecreationResults;
+    }
+
+    /**
+     * @param Sales_Model_Invoice $invoice
+     * @return array|Tinebase_Record_RecordSet
+     */
+    protected function _getTimeaccountPositionsForInvoice(Sales_Model_Invoice $invoice) {
+        return Sales_Controller_InvoicePosition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_InvoicePosition::class,
+            [
+                [
+                    'field' => 'invoice_id',
+                    'operator' => 'AND',
+                    'value' => [
+                        [
+                            'field' => ':id',
+                            'operator' => 'equals',
+                            'value' => $invoice->getId()
+                        ]
+                    ]
+                ],
+                ['field' => 'model', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::class]
+            ])
+        );
+    }
+    
+    /**
+     * @param $invoiceId Invoice ID
+     * @return bool|Sales_Model_Invoice|Tinebase_Record_Interface
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
+     */
+    public function createTimesheetFor($invoiceId)
+    {
+        try {
+            /* @var $invoice Sales_Model_Invoice */
+            $invoice = $this->get($invoiceId);
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            return false;
+        }
+
+        $customer = $this->_getCustomerFromInvoiceRelations($invoice);
+        
+        $timeaccountPositions = $this->_getTimeaccountPositionsForInvoice($invoice);
+
+        // no timeaccounts, no fun
+        if ($timeaccountPositions->count() === 0) {
+            return false;
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Invoice:: class,
+            ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
+        );
+
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+            'model' => Sales_Model_Invoice::class,
+            'name' => 'invoice_timesheet_xlsx'
+        ]))->getFirstRecord()->getId();
+
+
+        $pdfFiles = [];
+        $xlsxFiles = [];
+        
+        /* @var $timeaccountPositions Sales_Model_InvoicePosition[] */
+        foreach($timeaccountPositions as $timeaccountPosition) {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountPosition->accountable_id);
+            $export = new Sales_Export_TimesheetTimeaccount($filter, null,
+                [
+                    'definitionId' => $definition,
+                    'timeaccount' => $timeaccount,
+                    'invoice' => $invoice
+                ]
+            );
+            
+            // @todo caching breaks it all, we should fix caching instead of busting it
+            $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
+                Tinebase_Record_Abstract::generateUID()));
+
+            $export->generate();
+            
+            $xlsx = Tinebase_TempFile::getTempPath();
+            $export->save($xlsx);
+            
+            $xlsxFiles[$timeaccount->getTitle()] = $xlsx;
+            $pdfFiles[] = $export->convert(Tinebase_Export_Convertible::PDF, $xlsx);
+        }
+        
+        foreach ($xlsxFiles as $account => $file) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment(
+                $invoice,
+                sprintf(
+                    '%s_%s_%s_timesheet_%s.xlsx',
+                    $customer->name_shorthand,
+                    $account,
+                    $invoice->number,
+                    (new Tinebase_DateTime())->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d_H:i')
+                ),
+                fopen($file, 'rb')
+            );
+        }
+
+        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment(
+            $invoice,
+            sprintf(
+                '%s_%s_timesheet_%s.pdf',
+                $customer->name_shorthand,
+                $invoice->number,
+                (new Tinebase_DateTime())->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d_H:i')
+            ),
+            fopen($this->_mergePdfFiles($pdfFiles), 'rb')
+        );
+
+        return $invoice;
+    }
+    
+
+    /**
+     * @param $files
+     * @return string
+     * @throws Tinebase_Exception
+     */
+    protected function _mergePdfFiles($files) {
+        $mergedPdf = Tinebase_TempFile::getTempPath();
+
+        $cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$mergedPdf ";
+        foreach ($files as $file) {
+            $cmd .= $file . ' ';
+        }
+        $result = shell_exec($cmd);
+
+        if ($result === null) {
+            throw new Tinebase_Exception('ghostscript failed or is not installed');
+        }
+        
+        return $mergedPdf;
     }
 }

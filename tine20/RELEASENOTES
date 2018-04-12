@@ -34,6 +34,11 @@ If you have a sentry.io server which collects your errors, you can just add it t
 
 see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
 
+* Access Log Cleanup
+
+Access Log Entries are not removed if older than 7 days be default. You can use the config option
+ 'accessLogRotationDays' to define a custom rotation.
+
 FILEMANAGER
 ---
 * PIN Protection / Data safe

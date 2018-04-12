@@ -94,10 +94,6 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             this.onSelectedChange(true);
         }
 
-        if (this.event.outOfFilter) {
-            this.markOutOfFilter();
-        }
-
         this.rendered = true;
     },
 

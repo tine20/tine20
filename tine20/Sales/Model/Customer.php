@@ -14,6 +14,8 @@
  *
  * @package     Sales
  * @subpackage  Model
+ *
+ * @property String name_shorthand    
  */
 
 class Sales_Model_Customer extends Tinebase_Record_Abstract
@@ -69,6 +71,13 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'type'        => 'text',
                 'duplicateCheckGroup' => 'name',
                 'group'       => 'core',
+                'queryFilter' => TRUE,
+            ),
+            'name_shorthand' => array(
+                'label'       => 'Name shorthand', // _('Name shorthand')
+                'type'        => 'text',
+                'duplicateCheckGroup' => 'name',
+                'group'       => 'accounting',
                 'queryFilter' => TRUE,
             ),
             'url' => array(

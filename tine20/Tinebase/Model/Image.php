@@ -177,10 +177,12 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                 if($src_ratio - $dst_ratio >= 0) {
                     // crop width
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    $this->assertTransparency($dst_image, $src_image);
                     imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->height * $dst_ratio, $this->height);
                 } else {
                     // crop heights
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                    $this->assertTransparency($dst_image, $src_image);
                     imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->width / $dst_ratio);
                 }
                 break;
@@ -197,6 +199,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                 // recalculate dst_ratio
                 $dst_ratio = $dst_width/$dst_height;
                 $dst_image = imagecreatetruecolor($dst_width, $dst_height);
+                $this->assertTransparency($dst_image, $src_image);
                 imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->height);
                 break;
             default: 
@@ -211,7 +214,27 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         unlink($tmpPath);
         return;
     }
-    
+
+    /**
+     * assert transparency
+     * 
+     * @param $new_image
+     * @param $dst_image
+     */
+    function assertTransparency($dst_image,$src_image)
+    {
+        $transparencyIndex = imagecolortransparent($src_image);
+        $transparencyColor = array('red' => 255, 'green' => 255, 'blue' => 255);
+
+        if ($transparencyIndex >= 0) {
+            $transparencyColor = imagecolorsforindex($src_image, $transparencyIndex);
+        }
+
+        $transparencyIndex = imagecolorallocate($dst_image, $transparencyColor['red'], $transparencyColor['green'], $transparencyColor['blue']);
+        imagefill($dst_image, 0, 0, $transparencyIndex);
+        imagecolortransparent($dst_image, $transparencyIndex);
+    }
+
     /**
      * returns binary string in given format
      *

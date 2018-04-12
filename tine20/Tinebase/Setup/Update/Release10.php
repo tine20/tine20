@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -21,6 +21,16 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
         $release9->update_9();
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>description</name>
+                <type>text</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('tree_fileobjects', $declaration);
+
         $this->setApplicationVersion('Tinebase', '10.1');
     }
 
@@ -59,8 +69,50 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_3()
     {
-        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_11();
+        if ($this->getTableVersion('numberable') === 0) {
+            $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+                <name>numberable</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <autoincrement>true</autoincrement>
+                    </field>
+                    <field>
+                        <name>bucket</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>number</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>bucket_number</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>bucket</name>
+                        </field>
+                        <field>
+                            <name>number</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>');
+
+            $this->createTable('numberable', $declaration);
+        }
         $this->setApplicationVersion('Tinebase', '10.4');
     }
 
@@ -2201,7 +2253,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_45()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '10.46');
     }
 
@@ -2354,7 +2406,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_52()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_14();
+        $update->update_12();
 
         $this->setApplicationVersion('Tinebase', '10.53');
     }
@@ -2394,7 +2446,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_54()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_15();
+        $update->update_13();
 
         $this->setApplicationVersion('Tinebase', '10.55');
     }

@@ -333,7 +333,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var nodeData = Ext.copyTo({}, attr, this.recordClass.getFieldNames());
         attr.nodeRecord = new this.recordClass(nodeData);
 
-        if(this.dataSafeEnabled && +attr.nodeRecord.get('pin_protected_node')) {
+        if(this.dataSafeEnabled && !!attr.nodeRecord.get('pin_protected_node')) {
             attr.cls = 'x-type-data-safe';
         }
     },

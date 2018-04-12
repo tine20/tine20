@@ -54,7 +54,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_3()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.4');
     }
 
@@ -81,7 +81,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_5()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_13();
+        $release9->update_11();
         $this->setApplicationVersion('Tinebase', '11.6');
     }
 
@@ -132,7 +132,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_9()
     {
         // file updates! need to have application state change first
-        $this->update_22();
+        $this->update_23();
+        // and the structure updates
+        $this->update_17();
 
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_50();
@@ -291,7 +293,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_15()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_14();
+        $update->update_12();
 
         $this->setApplicationVersion('Tinebase', '11.16');
     }
@@ -331,6 +333,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         if ($this->getTableVersion('tree_nodes') == 8) {
             $this->setTableVersion('tree_nodes', 9);
         }
+
+        Tinebase_FileSystem::getInstance()->resetBackends();
+        Tinebase_Db_Table::clearTableDescriptionInCache(SQL_TABLE_PREFIX . 'tree_nodes');
 
         $this->setApplicationVersion('Tinebase', '11.18');
     }
@@ -395,7 +400,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.22
      *
-     * fix pin_protected_node
+     * add ntlmv2hash column
      */
     public function update_21()
     {
@@ -424,7 +429,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_22()
     {
         $update = new Tinebase_Setup_Update_Release9($this->_backend);
-        $update->update_15();
+        $update->update_13();
 
         $this->setApplicationVersion('Tinebase', '11.23');
     }

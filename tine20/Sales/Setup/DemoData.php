@@ -194,17 +194,20 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array(
                 'name' => 'ELKO Elektronik und Söhne',
                 'url' => 'www.elko-elektronik.de',
-                'discount' => 0
+                'discount' => 0,
+                'name_shorthand' => 'ELKO'
             ), 
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
                 'url' => 'www.platt-reifen.de',
-                'discount' => 0
+                'discount' => 0,
+                'name_shorthand' => 'PLATT'
             ), 
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
                 'url' => 'www.frische-fische-hamburg.de',
-                'discount' => 15.2
+                'discount' => 15.2,
+                'name_shorthand' => 'FrischeFische'
             ),
         );
         
@@ -329,7 +332,15 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $customersCount = $customers->count();
         $ccIndex = 0;
-        
+
+
+        $timeaccoountProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product([
+            'name' => 'Timetracker Product',
+            'description' => 'this is a generic timetracker used in demo data',
+            'price' => 100,
+            'accountable' => 'TimetrackerTimeaccount'
+        ]));
+
         while ($i < $customersCount) {
             $costcenter = $ccs[$i%2];
             $i++;
@@ -353,6 +364,25 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'billing_address_id' => $addressId
             ));
             
+            $timeaccount = new Timetracker_Model_Timeaccount();
+            $timeaccount->title = 'Test Timeaccount ' . $i;
+            $timeaccount->number = $i;
+            $timeaccount->is_billable = true;
+            $timeaccount->status = 'to bill';
+            $timeaccount->price = 120;
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount);
+
+            for($ts = 0; $ts < 6; $ts++) {
+                $timesheet = new Timetracker_Model_Timesheet();
+                $timesheet->timeaccount_id = $timeaccount->getId();
+                $timesheet->is_billable = true;
+                $timesheet->description = $ts . ' - ' . $i . ' Test Task';
+                $timesheet->account_id = Tinebase_Core::getUser()->getId();
+                $timesheet->start_date = (clone $this->_referenceDate)->addDay($i);
+                $timesheet->duration = 30;
+                Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
+            }
+            
             $relations = array(
                 array(
                     'own_model'              => 'Sales_Model_Contract',
@@ -373,6 +403,16 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
+                ),
+                array(
+                    'own_model'              => Sales_Model_Contract::class,
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => Timetracker_Model_Timeaccount::class,
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $timeaccount->getId(),
+                    'type'                   => 'TIME_ACCOUNT'
                 )
             );
             
@@ -383,11 +423,17 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     :
                     array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'price' => 100)
             ));
-            
-            $contract->products = array(array(
-                'product_id' => $genericProduct->getId(),
-                'quantity' => 1
-            ));
+
+            $contract->products = [
+                [
+                    'product_id' => $genericProduct->getId(),
+                    'quantity' => 1
+                ],
+                [
+                    'product_id' => $timeaccoountProduct->getId(),
+                    'quantity' => 1
+                ]
+            ];
             
             $contract->relations = $relations;
             

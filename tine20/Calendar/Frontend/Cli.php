@@ -399,7 +399,18 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             break;
                         case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                             if (!isset($groups[$readGrant->account_id])) {
-                                $groups[$readGrant->account_id] = Tinebase_Group::getInstance()->getGroupById($readGrant->account_id);
+                                $members = Tinebase_Group::getInstance()->getGroupMembers($readGrant->account_id);
+                                $membernames = [];
+                                foreach ($members as $member) {
+                                    if (! isset($users[$member])) {
+                                        $users[$member] = Tinebase_User::getInstance()->getFullUserById($member)->accountLoginName;
+                                    }
+                                    $membernames[] = $users[$member];
+                                }
+                                $groups[$readGrant->account_id] = [
+                                    'name' => Tinebase_Group::getInstance()->getGroupById($readGrant->account_id)->name,
+                                    'members' => $membernames
+                                ];
                             }
                             $accountName = $groups[$readGrant->account_id];
                             break;

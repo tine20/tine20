@@ -97,7 +97,12 @@ class Tinebase_Application
     {
         $this->_omitModLog = (bool)$boolean;
     }
-    
+
+    public static function destroyInstance()
+    {
+        self::$instance = null;
+    }
+
     /**
      * returns one application identified by id
      *
@@ -199,7 +204,12 @@ class Tinebase_Application
         
         return $result;
     }
-    
+
+    public function clearCache()
+    {
+        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getApplications', 'allApplications');
+    }
+
     /**
      * get enabled or disabled applications
      *
@@ -648,7 +658,7 @@ class Tinebase_Application
     {
         $this->_backend = null;
     }
-    
+
     /**
      * 
      * @return Zend_Db_Adapter_Abstract

@@ -100,7 +100,29 @@ class Tinebase_ImageHelper
     {
         return array('image/png', 'image/jpeg', 'image/gif');
     }
-    
+
+    /**
+     * get mime of given file extension
+     *
+     * @param  string $fileExt
+     * @return string
+     */
+    public static function getMime($fileExt)
+    {
+        $ext = strtolower(str_replace('/^\./', '', $fileExt));
+        switch ($ext) {
+            case 'png':
+                return 'image/png';
+            case 'jpg':
+            case 'jpeg':
+                return 'image/jpeg';
+            case 'gif':
+                return 'image/gif';
+            default:
+                return '';
+        }
+    }
+
     /**
      * parses an image link
      * 

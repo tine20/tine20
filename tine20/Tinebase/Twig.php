@@ -70,6 +70,7 @@ class Tinebase_Twig
             $options['autoescape'] = $_options[self::TWIG_AUTOESCAPE];
         }
         $this->_twigEnvironment = new Twig_Environment($twigLoader, $options);
+        
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedParameterInspection */
         $this->_twigEnvironment->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
@@ -164,6 +165,13 @@ class Tinebase_Twig
             
             $translation = Tinebase_Translation::getTranslation($appName, $locale);
             return $keyFieldRecord ? $translation->translate($keyFieldRecord->value) : $key;
+        }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('renderTags', function ($tags) {
+            if (!($tags instanceof Tinebase_Record_RecordSet)) {
+                return '';   
+            }
+            
+            return implode(', ', $tags->getTitle());
         }));
     }
 

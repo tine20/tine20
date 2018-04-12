@@ -24,6 +24,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
     attachmentTypeStore: null,
     app: null,
 
+    clicksToEdit: 1,
     currentRecord: null,
 
     initComponent: function () {

@@ -52,7 +52,6 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.logo = 'images/tine_logo.png';
-Tine.favicon;
 Tine.title = 'Tine 2.0 \uD83C\uDF37';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
 Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
@@ -218,6 +217,8 @@ Tine.Tinebase.tineInit = {
      * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
+        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(favicon/16/png)');
+
         Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',
             border: false,
@@ -669,7 +670,7 @@ Tine.Tinebase.tineInit = {
         //DO we have a custom title for branding?
         Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
-        
+
         if (Tine.Tinebase.registry.get('installLogo')) {
             Tine.installLogo = Tine.Tinebase.registry.get('installLogo');
         } else if (Tine.Tinebase.registry.get('brandingLogo')) {
@@ -677,8 +678,6 @@ Tine.Tinebase.tineInit = {
         } else {
             Tine.installLogo = Tine.logo;
         }
-        
-        Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
 
         if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
             // restore session cookie

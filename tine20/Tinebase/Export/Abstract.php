@@ -336,7 +336,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
                 $sort = [];
                 foreach ($titleProp as $prop) {
-                    if ($mc->hasField($prop)) {
+                    if ($mc->hasField($prop) && !array_key_exists($prop, $mc->getVirtualFields())) {
                         $sort[] = $prop;
                     }
                 }
@@ -670,7 +670,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
                     array($this, '_getTwigSource'))))
         ];
-
+        
         $this->_twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
         foreach ($this->_twigExtensions as $extension) {
             $this->_twig->addExtension($extension);

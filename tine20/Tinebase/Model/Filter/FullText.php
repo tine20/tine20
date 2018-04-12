@@ -154,4 +154,12 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
 
         return $result;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isQueryFilterEnabled()
+    {
+        return Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER};
+    }
 }
