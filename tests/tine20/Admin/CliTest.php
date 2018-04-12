@@ -283,6 +283,7 @@ class Admin_CliTest extends TestCase
      * import users
      *
      * @param string $_config xml config
+     * @return string
      * 
      * @see 0008300: Import User via CLI don't import all fields
      */
@@ -320,14 +321,18 @@ class Admin_CliTest extends TestCase
      * check import result
      * 
      * @param string $out
+     * @param string $username
+     * @param boolean $assertFailed
      */
-    protected function _checkResult($out, $username = 'hmoster')
+    protected function _checkResult($out, $username = 'hmoster', $assertFailed = true)
     {
         // check output
         if ($username == 'hmoster') {
             $this->assertEquals("Imported 3 records.\n", $out);
-        } else {
+        } else if ($assertFailed) {
             $this->assertEquals("Imported 1 records.\nImport failed for 2 records.\n", $out);
+        } else {
+            $this->assertEquals("Imported 1 records.\n", $out);
         }
         
         // check if users (with their data) have been added to tine20
@@ -356,7 +361,7 @@ class Admin_CliTest extends TestCase
     public function testImportUsersWithEmailAndSemicolon()
     {
         $out = $this->_importUsers($this->objects['configSemicolon'], dirname(__FILE__) . '/files/tine_user3.csv', 'admin_user_import_csv_test_semicolon');
-        $this->_checkResult($out, 'irmeli');
+        $this->_checkResult($out, 'irmeli', false);
     }
     
     /**
