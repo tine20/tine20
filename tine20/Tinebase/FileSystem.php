@@ -2555,12 +2555,14 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function checkIndexing()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' starting to check indexing');
-
         if (false === $this->_indexingActive) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Indexing disabled');
             return true;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' starting to check indexing');
 
         $success = true;
         foreach($this->_fileObjectBackend->getNotIndexedObjectIds() as $objectId) {
