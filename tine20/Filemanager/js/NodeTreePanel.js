@@ -153,11 +153,13 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
                     me.getSelectionModel().suspendEvents();
                     rootNode.collapse(true);
-                    if (selectedNode) {
-                        me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
-                    } else {
-                        rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
-                    }
+                    // NOTE: the grid reload expands the tree as well!
+                    // not clear yet how to detect if a grid is on board as well
+                    // if (selectedNode) {
+                    //     me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
+                    // } else {
+                    //     rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
+                    // }
 
                 }
             })
