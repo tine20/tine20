@@ -98,8 +98,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (isset($_table->engine)) {
             $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
         } else {
-            $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
+            $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
         }
+
+        $statement .= " ROW_FORMAT=DYNAMIC";
 
         if (isset($_table->comment)) {
             $statement .= " COMMENT='" . $_table->comment . "'";

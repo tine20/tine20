@@ -128,10 +128,12 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
-        if (!$this->_binary && $this->_caseSensitive && Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $field = 'BINARY ' . $field;
-        } elseif ($this->_binary && !$this->_caseSensitive && Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $field .= ' COLLATE utf8_general_ci';
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            if (!$this->_binary && $this->_caseSensitive) {
+                $field = 'BINARY ' . $field;
+            } elseif ($this->_binary && !$this->_caseSensitive) {
+                $field .= ' COLLATE utf8mb4_general_ci';
+            }
         }
         
         if (! (isset($this->_opSqlMap[$this->_operator]) || array_key_exists($this->_operator, $this->_opSqlMap))) {

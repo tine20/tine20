@@ -1048,8 +1048,8 @@ class Tinebase_Core
                         throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
                     }
                 }
-                
-                // @todo set charset to utf8mb4 / @see 0008708: switch to mysql utf8mb4
+
+                $dbConfigArray['charset'] = 'utf8mb4';
                 
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(

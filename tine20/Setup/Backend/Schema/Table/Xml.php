@@ -17,6 +17,8 @@ class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
             if(!$_tableDefinition instanceof SimpleXMLElement) {
                 $_tableDefinition = new SimpleXMLElement($_tableDefinition);
             }
+
+            $this->charset = 'utf8mb4';
             
             $this->setName($_tableDefinition->name);
             $this->comment = (string) $_tableDefinition->comment;

@@ -15,6 +15,7 @@ class Setup_Backend_Schema_Table_Mysql extends Setup_Backend_Schema_Table_Abstra
     public function __construct($_tableDefinition)
     {
          $this->setName($_tableDefinition->TABLE_NAME);
+         $this->charset = 'utf8mb4';
     }
       
     public function setFields($_fieldDefinitions)

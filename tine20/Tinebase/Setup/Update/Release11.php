@@ -501,4 +501,64 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.24');
     }
+
+    /**
+     * update to 11.25
+     *
+     * make file objects unique
+     */
+    public function update_24()
+    {
+        $db = $this->getDb();
+        if (!$db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $this->setApplicationVersion('Tinebase', '11.25');
+            return;
+        }
+
+        if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
+            throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
+        }
+        if (($iff = $db->query('SELECT @@innodb_file_format')->fetchColumn()) !== 'Barracuda') {
+            throw new Tinebase_Exception_Backend_Database('innodb_file_format seems not to be Barracuda: ' . $iff);
+        }
+        if (($ift = $db->query('SELECT @@innodb_file_per_table')->fetchColumn()) !== '1') {
+            throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
+        }
+
+        try {
+            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($db->getConfig()['dbname']) .
+                ' CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
+        } catch (Zend_Db_Exception $zde) {
+            Tinebase_Exception::log($zde);
+        }
+
+        $tables = $db->listTables();
+
+        $db->query('SET foreign_key_checks = 0');
+        $db->query('SET unique_checks = 0');
+        foreach ($tables as $table) {
+            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
+                ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        }
+
+        $this->_backend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                    <collation>utf8mb4_bin</collation>
+                </field>'));
+        $this->setTableVersion('tree_nodes', 9);
+
+        $db->query('SET foreign_key_checks = 1');
+        $db->query('SET unique_checks = 1');
+
+        foreach ($tables as $table) {
+            $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
+            $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.25');
+    }
 }

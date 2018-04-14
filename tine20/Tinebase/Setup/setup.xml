@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.24</version>
+    <version>11.25</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3465,7 +3465,7 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
-                    <collation>utf8_bin</collation>
+                    <collation>utf8mb4_bin</collation>
                 </field>
                 <field>
                     <name>islink</name>
