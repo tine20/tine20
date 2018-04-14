@@ -198,7 +198,7 @@ Tine.Crm.LeadGridPanel.shortContactRenderer = function(data, type) {
         while (index < data.length && data[index].type != type) {
             index++;
         }
-        if (data[index]) {
+        if (data[index] && data[index].related_record) {
             var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
             return '<b>' + Ext.util.Format.htmlEncode(org) + '</b><br />' + Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
         }
