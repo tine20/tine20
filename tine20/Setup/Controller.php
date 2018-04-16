@@ -1488,6 +1488,10 @@ class Setup_Controller
         $config = Tinebase_Config_Abstract::factory($applicationName);
         
         if ($config) {
+            if (null === $config->getDefinition($key)) {
+                throw new Tinebase_Exception_InvalidArgument('config property ' . $key .
+                    ' does not exist in ' . get_class($config));
+            }
             $config->set($key, $value);
         }
     }
