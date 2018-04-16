@@ -84,25 +84,118 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
         /** @var Tinebase_Record_Abstract $model */
         $model = $this->model;
-        if (empty($mapping = $model::getSortExternalMapping())) {
-            return;
+        $mapping = $model::getSortExternalMapping();
+        if (null === ($mc = $model::getConfiguration())) {
+            if (empty($mapping)) {
+                return;
+            }
+            $virtualFields = [];
+            $recordFields = [];
+        } else {
+            $virtualFields = $mc->getVirtualFields();
+            $recordFields = $mc->recordsFields;
         }
-        $joined = array();
         $this->sort = (array)$this->sort;
+        $joinCount = 0;
+        $joined = [];
         foreach ($this->xprops('sort') as &$field) {
-            if (!isset($mapping[$field])) {
-                continue;
+            if (isset($mapping[$field])) {
+                $mappingDef = $mapping[$field];
+                if (isset($mappingDef['fieldCallback'])) {
+                    $field = call_user_func($mappingDef['fieldCallback'], $field);
+                }
+                if (isset($joined[$mappingDef['table']])) {
+                    continue;
+                }
+                $_select->joinLeft([$mappingDef['table'] => SQL_TABLE_PREFIX . $mappingDef['table']],
+                    $mappingDef['on'], []);
+                $joined[$mappingDef['table']] = true;
+
+            } elseif (isset($virtualFields[$field]) && isset($virtualFields[$field]['type']) &&
+                    $virtualFields[$field]['type'] === 'relation' && isset($virtualFields[$field]['config']) &&
+                    isset($virtualFields[$field]['config']['appName']) &&
+                    isset($virtualFields[$field]['config']['modelName']) &&
+                    isset($virtualFields[$field]['config']['type'])) {
+
+                ++$joinCount;
+                $db = $_select->getAdapter();
+                $relationName = 'relationPagi' . $joinCount;
+                /** @var Tinebase_Record_Abstract $relatedModel */
+                $relatedModel = $virtualFields[$field]['config']['appName'] . '_Model_' .
+                    $virtualFields[$field]['config']['modelName'];
+                if (null === ($relatedMC = $relatedModel::getConfiguration())) {
+                    $e = new Tinebase_Exception_InvalidArgument('related model not a modelconfig model in pagination: '
+                        . $relatedModel);
+                    Tinebase_Exception::log($e);
+                    continue;
+                }
+
+                $_select->joinLeft(
+                    [$relationName => SQL_TABLE_PREFIX . 'relations'],
+                    $db->quoteIdentifier([$relationName, 'own_id']) . ' = ' . $db->quoteIdentifier([
+                            $mc->getTableName(), $mc->getIdProperty()
+                        ]) . ' AND ' .
+                    $db->quoteIdentifier([$relationName, 'own_model']) . ' =  "' . $model . '" AND ' .
+                    $db->quoteIdentifier([$relationName, 'related_model']) . ' = "' . $relatedModel . '" AND ' .
+                    $db->quoteIdentifier([$relationName, 'type']) . $db->quoteInto(' = ?',
+                        $virtualFields[$field]['config']['type']),
+                    []
+                );
+
+                $relatedTableName = $relatedMC->getTableName() . '_relPagi' . $joinCount;
+                $_select->joinLeft(
+                    [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
+                    $db->quoteIdentifier([$relationName, 'related_id']) . ' = ' .
+                        $db->quoteIdentifier([$relatedTableName, $relatedMC->getIdProperty()]),
+                    []
+                );
+                if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
+                    $field = $relatedMC->defaultSortInfo['field'];
+                } else {
+                    if (is_array($relatedMC->titleProperty)) {
+                        $field = $relatedMC->titleProperty[1][0];
+                    } else {
+                        $field = $relatedMC->titleProperty;
+                    }
+                }
+                $field = $relatedTableName . '.' . $field;
+
+            } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['type']) &&
+                    $recordFields[$field]['type'] === 'record' && isset($recordFields[$field]['config']) &&
+                    isset($recordFields[$field]['config']['appName']) &&
+                    isset($recordFields[$field]['config']['modelName']) &&
+                    isset($recordFields[$field]['config']['type'])) {
+
+                ++$joinCount;
+                $db = $_select->getAdapter();
+                /** @var Tinebase_Record_Abstract $relatedModel */
+                $relatedModel = $recordFields[$field]['config']['appName'] . '_Model_' .
+                    $recordFields[$field]['config']['modelName'];
+                if (null === ($relatedMC = $relatedModel::getConfiguration())) {
+                    $e = new Tinebase_Exception_InvalidArgument('related model not a modelconfig model in pagination: '
+                        . $relatedModel);
+                    Tinebase_Exception::log($e);
+                    continue;
+                }
+
+                $relatedTableName = $relatedMC->getTableName() . '_recPagi' . $joinCount;
+                $_select->joinLeft(
+                    [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
+                    $db->quoteIdentifier([$mc->getTableName(), $field]) . ' = ' .
+                    $db->quoteIdentifier([$relatedTableName, $relatedMC->getIdProperty()]),
+                    []
+                );
+                if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
+                    $field = $relatedMC->defaultSortInfo['field'];
+                } else {
+                    if (is_array($relatedMC->titleProperty)) {
+                        $field = $relatedMC->titleProperty[1][0];
+                    } else {
+                        $field = $relatedMC->titleProperty;
+                    }
+                }
+                $field = $relatedTableName . '.' . $field;
             }
-            $mappingDef = $mapping[$field];
-            if (isset($mappingDef['fieldCallback'])) {
-                $field = call_user_func($mappingDef['fieldCallback'], $field);
-            }
-            if (isset($joined[$mappingDef['table']])) {
-                continue;
-            }
-            $_select->joinLeft(array($mappingDef['table'] => SQL_TABLE_PREFIX . $mappingDef['table']), $mappingDef['on'],
-                array());
-            $joined[$mappingDef['table']] = true;
         }
     }
 

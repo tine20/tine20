@@ -1002,7 +1002,7 @@ class Tinebase_ModelConfiguration {
                     'key'     => 'tag',
                     'filter'  => $this->_filterModelMapping['tag'],
                     'options' => array(
-                           'idProperty' => $this->_getTableName() . '.' . $this->_idProperty,
+                           'idProperty' => $this->getTableName() . '.' . $this->_idProperty,
                            'applicationName' => $this->_appName
                     )
                 )
@@ -1098,7 +1098,7 @@ class Tinebase_ModelConfiguration {
                         $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
                 }
             } elseif ($fieldDef['type'] == 'virtual') {
-                $fieldDef['config']['sortable'] = isset($virtualField['config']['sortable']) ? $virtualField['config']['sortable'] : false;
+                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : false;
                 $virtualField = $fieldDef['config'];
                 $virtualField['key'] = $fieldKey;
                 if ((isset($virtualField['default']))) {
@@ -1268,7 +1268,7 @@ class Tinebase_ModelConfiguration {
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _getTableName()
+    public function getTableName()
     {
         if (is_array($this->_table) && isset($this->_table['name'])) {
             $tableName = $this->_table['name'];
@@ -1440,7 +1440,7 @@ class Tinebase_ModelConfiguration {
                     $this->_filterModel['customfield'] = array(
                         'filter' => 'Tinebase_Model_Filter_CustomField', 
                         'options' => array(
-                            'idProperty' => $this->_getTableName() . '.' . $this->_idProperty
+                            'idProperty' => $this->getTableName() . '.' . $this->_idProperty
                         )
                     );
                 } catch (Exception $e) {

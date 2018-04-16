@@ -199,15 +199,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
+        $filter = $this->_decodeFilter($_filter, $_filterModel);
+
         $decodedPagination = $this->_prepareParameter($_paging);
         if (null !== $this->_paginationModel) {
             $decodedPagination['model'] = $this->_paginationModel;
         } else {
-            unset($decodedPagination['model']);
+            $decodedPagination['model'] = $filter->getModelName();
         }
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
-        $filter = $this->_decodeFilter($_filter, $_filterModel);
-        
+
         $records = $_controller->search($filter, $pagination, $_getRelations);
         
         $result = $this->_multipleRecordsToJson($records, $filter);
