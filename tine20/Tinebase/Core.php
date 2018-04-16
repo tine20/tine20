@@ -2117,7 +2117,9 @@ class Tinebase_Core
                 'php_version' => phpversion(),
             ),
         ];
-        $client = new Raven_Client($sentryServerUri, $config);
+        $client = new Tinebase_Sentry_Raven_Client($sentryServerUri, $config);
+        $serializer = new Tinebase_Sentry_Raven_Serializer();
+        $client->setSerializer($serializer);
         $error_handler = new Raven_ErrorHandler($client);
         $error_handler->registerExceptionHandler();
         $error_handler->registerErrorHandler();
