@@ -496,8 +496,8 @@ class Tinebase_Core
 
         $cacheFile = self::getCacheDir() . '/cachedTine20Container.php';
 
-        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile )) {
-            require_once $cacheFile;
+        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && true === include_once($cacheFile) &&
+                class_exists('Tine20Container')) {
             /** @noinspection PhpUndefinedClassInspection */
             $container = new Tine20Container();
         } else {
