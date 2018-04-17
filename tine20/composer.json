@@ -58,5 +58,14 @@
     "include-path": ["", "vendor/zendframework/zendframework1/library", "library"],
     "config": {
         "secure-http": false
+    },
+    "scripts": {
+        "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "build": "./vendor/bin/phing"
+    },
+    "support": {
+        "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
+        "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
     }
 }
