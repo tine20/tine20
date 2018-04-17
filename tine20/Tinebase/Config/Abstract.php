@@ -272,6 +272,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
+        if (is_object($_value) && $_value instanceof Tinebase_Record_Abstract) {
+            $_value = $_value->toArray(true);
+        }
+
         $configRecord = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
             "name"              => $_name,
