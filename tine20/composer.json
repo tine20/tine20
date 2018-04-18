@@ -73,5 +73,14 @@
         "platform": {
             "php": "5.6"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "build": "./vendor/bin/phing"
+    },
+    "support": {
+        "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
+        "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
     }
 }
