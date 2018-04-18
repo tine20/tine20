@@ -10,7 +10,7 @@
       "url": "https://git.tine20.org/git/composerapploader"
     }, {
         "type": "git",
-        "url": "https://git.tine20.org/git/zendframework1"
+        "url": "https://github.com/tine20/zendframework1.git"
     },{
         "type": "git",
         "url": "https://git.tine20.org/git/opendocument"
