@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "989593cb1723c5d7836a66ff18efb0d0",
+    "content-hash": "193511cb9c86e0a3b6f05623ce752ee6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -18,7 +18,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
                 "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
-                "shasum": "25184da38936332e6018bcca89e6f03755150232"
+                "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -86,7 +86,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "shasum": "113e4179be5a0e63d3352f06f2dfa89f4fe4e1b8"
+                "shasum": ""
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -156,7 +156,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": "1fc91d2b068164946a139474f624c1b4deec5891"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -222,7 +222,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/common/zipball/a579557bc689580c19fee4e27487a67fe60defc0",
                 "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
-                "shasum": "ee5ae6e3f73df4633537c380bba5e4479973adb6"
+                "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -366,7 +366,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": "8f23f8307581787e6a58fd30fe3e61f5e9403c03"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -433,7 +433,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": "b3b141d7ddda491e068e11c5324187e9b8eebb50"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -487,7 +487,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -617,7 +617,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
@@ -639,7 +639,8 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com"
+                    "homepage": "http://ezyang.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -655,7 +656,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -728,7 +729,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ivanlanin/pclzip/zipball/19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
                 "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
-                "shasum": "32c8b855dbc0715f6dabbe882c60c6f38cb21224"
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -765,7 +766,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/Common/zipball/c9be70c80637c28c728be78e66aad4878a34f8dd",
                 "reference": "c9be70c80637c28c728be78e66aad4878a34f8dd",
-                "shasum": "f6b4e3b21321f5d34cb69642b8540fde13392f3a"
+                "shasum": ""
             },
             "require": {
                 "pclzip/pclzip": "^2.8",
@@ -820,7 +821,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
                 "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
-                "shasum": "d98c9cebdb3faa6e798bdca7341d96db8a27617f"
+                "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
@@ -978,7 +979,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
+                "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
@@ -1053,7 +1054,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/vobject/zipball/129d80533a9ec0d9cacfb50b51180c34edb6874c",
                 "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c",
-                "shasum": "c5692defcb3616042c047fdf553105276abfc70e"
+                "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
@@ -1265,12 +1266,6 @@
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
                 "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "http://79.99.84.34/dist1/tine20-composerapploader-1.0.5-ca8596.zip",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686",
-                "shasum": "87260253a63a89f2283398344cc488e7f6b4ac9a"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1664,7 +1659,7 @@
             "version": "1.12.20pl25",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/zendframework1",
+                "url": "https://github.com/tine20/zendframework1.git",
                 "reference": "698ce1e876fc931c91519fbab6b142cba46748b0"
             },
             "require": {
