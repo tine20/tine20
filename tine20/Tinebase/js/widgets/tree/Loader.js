@@ -122,6 +122,10 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                     
                     // add shared or personal
                     reducedParts.push(node.path.split('/')[1]);
+                    if(node.path.match(/^\/personal/)) {
+                        // add accountId
+                        reducedParts.push(node.path.split('/')[2]);
+                    }
                     
                     // create a path for each virtual node, this path is actually invalid and won't be send to server!
                     for(var i = 0; i <= parts.indexOf(part); ++i) {
