@@ -307,7 +307,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
 
         this.wkField = new Ext.form.TextField({
             value: this.tb.dtStart.getWeekOfYear(),
-            width: 30,
+            width: 22,
             cls: "x-tbar-page-number",
             listeners: {
                 scope: this,
@@ -315,6 +315,12 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
                 blur: this.onSelect
             }
         });
+
+        this.yearField = new Ext.form.Label({
+            text: this.tb.dtStart.format('Y'),
+            style: 'padding-left: 3px'
+        });
+
 
         this.datepickerMenu = new Ext.menu.DateMenu({
             value: this.tb.dtStart,
@@ -324,18 +330,15 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
                 weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
             })],
             listeners: {
+                scope: this,
                 'select': function (picker, date) {
-                    var toolbar = arguments[arguments.length - 1];
+                    var oldPeriod = this.getPeriod();
+                    this.update(date);
 
-                    this.setValue(date.getWeekOfYear());
-
-                    var diff = this.getValue() - toolbar.dtStart.getWeekOfYear() - parseInt(toolbar.dtStart.getDay() < 1 ? 1 : 0, 10);
-
-                    if (diff !== 0) {
-                        toolbar.update(toolbar.dtStart.add(Date.DAY, diff * 7));
-                        toolbar.fireEvent('change', toolbar, 'week', toolbar.getPeriod());
+                    if (this.getPeriod().from.getElapsed(oldPeriod.from)) {
+                        this.fireEvent('change', this, 'week', this.getPeriod());
                     }
-                }.createDelegate(this.wkField, [this], true)
+                }
             }
         });
 
@@ -347,14 +350,6 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
             this.datepickerMenu.show(this.datepickerButton.el);
         }.createDelegate(this));
 
-        this.field = {
-            xtype: 'container',
-            cls: 'inline',
-            items: [
-                this.wkField,
-                this.datepickerButton
-            ]
-        }
     },
     onSelect: function(field, e) {
         if (e && e.getKey() == e.ENTER) {
@@ -380,19 +375,26 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
             var wkStart = dtStart.add(Date.DAY, dtStart.getDay() < 1 ? 1 : 0);
             
             this.wkField.setValue(parseInt(wkStart.getWeekOfYear(), 10));
+            this.yearField.setText(from.format('Y'));
         }
     },
     render: function() {
         this.tb.addField(this.label);
-        this.tb.addField(this.field);
+        this.tb.addField(this.wkField);
+        this.tb.addField(this.yearField);
+        this.tb.addField(this.datepickerButton);
     },
     hide: function() {
         this.label.hide();
-        this.field.hide();
+        this.wkField.hide();
+        this.yearField.hide();
+        this.datepickerButton.hide();
     },
     show: function() {
         this.label.show();
-        this.field.show();
+        this.wkField.show();
+        this.yearField.show();
+        this.datepickerButton.show();
     },
     next: function() {
         this.dtStart = this.dtStart.add(Date.DAY, 7);
