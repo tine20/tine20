@@ -306,7 +306,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         $periodFilters = [];
         foreach ($eventSet as $candidate) {
-            if ($candidate->transp != Calendar_Model_Event::TRANSP_TRANSP) {
+            if ($candidate->transp != Calendar_Model_Event::TRANSP_TRANSP && !$candidate->is_deleted) {
                 $periodFilters[] = $returnRawData ? [
                     'from' => $candidate->dtstart,
                     'until' => $candidate->dtend,
