@@ -834,7 +834,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $recentChanges = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         }
         
-        $diffIgnore = array('organizer', 'seq', 'last_modified_by', 'last_modified_time', 'dtstart', 'dtend');
+        $diffIgnore = array('organizer', 'seq', 'external_seq', 'last_modified_by', 'last_modified_time', 'dtstart', 'dtend');
         foreach ($diff->diff as $key => $newValue) {
             if ($key === 'attendee') {
                 if (in_array($key, $recentChanges->modified_attribute)) {
