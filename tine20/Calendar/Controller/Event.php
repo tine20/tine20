@@ -1134,7 +1134,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
-        $diffIgnore = array('organizer', 'seq', 'last_modified_by', 'last_modified_time', 'dtstart', 'dtend');
+        $diffIgnore = array('organizer', 'seq', 'external_seq', 'last_modified_by', 'last_modified_time', 'dtstart', 'dtend');
         foreach ($diff->diff as $key => $newValue) {
             if ($key === 'attendee') {
                 if (in_array($key, $changedAttributes)) {
@@ -2501,7 +2501,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         try {
             $event = $this->get($_event->getId());
             $oldEvent = clone $event;
-            
+
             if (! $event->attendee) {
                 throw new Tinebase_Exception_NotFound('Could not find any attendee of event.');
             }

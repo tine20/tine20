@@ -305,4 +305,18 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $event = $importEvents->getFirstRecord();
         self::assertEquals('Rich Sound Minis    4-8 Jahre', $event->summary);
     }
+
+    /**
+     * import event from joomla / jevents with special rrule (COUNT=9999)
+     */
+    public function testFloatingTime()
+    {
+        $importEvents = $this->_importHelper('floating_time.ics', 1, false, array(
+            'onlyBasicData' => true
+        ));
+        $event = $importEvents->getFirstRecord();
+        $dtstart = $event->dtstart;
+        $dtstart->setTimezone(Tinebase_Core::getUserTimezone());
+        self::assertEquals('20171006T150001', $dtstart->format('Ymd\THis'));
+    }
 }
