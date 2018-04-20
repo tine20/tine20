@@ -171,16 +171,20 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $values = array();
             foreach((array) $this->_value as $path) {
                 $containerData = array('path' => $path);
-                if (($containerId = Tinebase_Model_Container::pathIsContainer($path))) {
-                    $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId, TRUE)->toArray());
-                } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($path))) {
-                    // transform current user 
-                    $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $ownerId);
-                    $containerData['name']  = $owner->accountDisplayName;
-                    $containerData['path']  = "/personal/$ownerId";
-                    $containerData['owner'] = $owner->toArray();
+                try {
+                    if (($containerId = Tinebase_Model_Container::pathIsContainer($path))) {
+                        $containerData = array_merge($containerData, Tinebase_Container::getInstance()->getContainerById($containerId, TRUE)->toArray());
+                    } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($path))) {
+                        // transform current user
+                        $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $ownerId);
+                        $containerData['name'] = $owner->accountDisplayName;
+                        $containerData['path'] = "/personal/$ownerId";
+                        $containerData['owner'] = $owner->toArray();
+                    }
+                } catch(Tinebase_Exception_NotFound $e) {
+
                 }
-                
+
                 $values[] = $containerData;
             }
             $result['value'] = is_array($this->_value) ? $values : $values[0];
