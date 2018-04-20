@@ -959,14 +959,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
             
             $ownField = $this->__get($fieldName);
-
-            if ($ownField instanceof Tinebase_Model_Filter_FilterGroup) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
-                    . __LINE__ . ' why do we have an filter object in the diff?!?!? class: ' . get_class($ownField) . ' '
-                    . print_r($_record->toArray(), true));
-                continue;
-            }
-
             $recordField = $_record->$fieldName;
 
             if ($fieldName == 'customfields' && is_array($ownField) && is_array($recordField)) {
