@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.widgets.grid');
 
+require('./AttachmentRenderer');
+
 /**
  * central renderer manager
  * - get renderer for a given field
@@ -59,6 +61,8 @@ Tine.widgets.grid.RendererManager = function() {
                 // we should not come here!
             } else if (fieldName == 'container_id') {
                 renderer = Tine.Tinebase.common.containerRenderer;
+            } else if (fieldName == 'attachments') {
+                renderer = Tine.widgets.grid.attachmentRenderer;
             }
             
             return renderer;

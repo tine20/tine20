@@ -1011,7 +1011,7 @@ class Tinebase_ModelConfiguration {
 
         if ($this->_hasAttachments) {
             $this->_fields['attachments'] = array(
-                'label' => NULL,
+                'label' => 'Attachments',
                 'type'  => 'attachments',
                 'recursiveResolving' => true,
                 'filterDefinition'  => [
@@ -1020,7 +1020,10 @@ class Tinebase_ModelConfiguration {
                         'idProperty'    => $this->_idProperty,
                         'modelName'     => $this->_appName . '_Model_' . $this->_modelName
                     ]
-                ]
+                ],
+                'sortable' => false,
+                // node: this config is currently not used here (only in "records" fields)
+                'omitOnSearch' => false,
             );
         }
 

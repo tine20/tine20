@@ -548,6 +548,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * initializes the generic column model on auto bootstrap
      */
     initGenericColumnModel: function() {
+        var _ = window.lodash;
+
         if (this.modelConfig) {
             var columns = [],
                 appName = this.recordClass.getMeta('appName'),
@@ -568,6 +570,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             if (this.modelConfig.hasCustomFields) {
                 columns = columns.concat(this.getCustomfieldColumns());
+            }
+
+            if (_.find(columns, {dataIndex: 'attachments'})) {
+                var attachCol = _.find(columns, {dataIndex: 'attachments'});
+                _.remove(columns, attachCol);
+                columns.unshift(attachCol)
             }
             
             columns = columns.concat(this.getCustomColumns());
@@ -1959,6 +1967,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * 
      */
     onRowClick: function(grid, row, e) {
+        var _ = window.lodash,
+            sm = grid.getSelectionModel();
+
         /* TODO check if we need this in IE
         // hack to get percentage editor working
         var cell = Ext.get(grid.getView().getCell(row,1));
@@ -1974,15 +1985,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
         if (e.button === 0 && !e.shiftKey && !e.ctrlKey && ! Ext.isTouchDevice) {
-            var sm = grid.getSelectionModel();
-
             if (sm.getCount() == 1 && sm.isSelected(row)) {
-                return;
+                // return;
+            } else {
+                sm.clearSelections();
+                sm.selectRow(row, false);
+                grid.view.focusRow(row);
             }
+        }
 
-            sm.clearSelections();
-            sm.selectRow(row, false);
-            grid.view.focusRow(row);
+        if (e.getTarget('.action_attach')) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+                Tine.Filemanager.DocumentPreview.openWindow({
+                    record: this.getStore().getAt(row),
+                    initialApp: this.app,
+                    sm: sm
+                });
+            }
         }
     },
     

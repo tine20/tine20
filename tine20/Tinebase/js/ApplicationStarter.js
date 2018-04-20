@@ -207,6 +207,9 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'money':
                     gridRenderer = Ext.util.Format.money;
                     break;
+                case 'attachments':
+                    gridRenderer = Tine.widgets.grid.attachmentRenderer;
+                    break;
                 case 'relation':
                     var cc = config.config;
                     

@@ -159,6 +159,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties) && ! $firstRecord->tags instanceof Tinebase_Record_RecordSet) {
                 Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
             }
+
         }
     }
     protected function _get($_uid, Tinebase_Controller_Record_Interface $_controller)
