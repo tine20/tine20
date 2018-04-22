@@ -984,13 +984,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
                 $personalNameSpaceSuffix = $account->ns_personal . $account->delimiter;
             }
              
-            if ($account && $account->trash_folder === $folder->globalname)  {
+            if ($account->trash_folder === $folder->globalname)  {
                 return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
             }
-            if ($account && $account->sent_folder === $folder->globalname) {
+            if ($account->sent_folder === $folder->globalname) {
                 return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
             }
-            if ($account && $account->drafts_folder === $folder->globalname) {
+            if ($account->drafts_folder === $folder->globalname) {
                 return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
             }
         }
