@@ -543,7 +543,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
             // send files to client
             foreach ($filesToWatch as $file) {
-                readfile($file);
+                if (file_exists($file)) {
+                    readfile($file);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __CLASS__ . '::' . __METHOD__
+                        . ' (' . __LINE__ .') File ' . $file . ' does not exist');
+                }
             }
             if ($_fileType != 'lang') {
                 // adds new server version etag for client version check
@@ -555,9 +561,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * get map of asset files
      *
-     * @return array
+     * @param boolean $asJson
+     * @throws Exception
+     * @return string|array
      */
-    public static function getAssetsMap($asJson=false)
+    public static function getAssetsMap($asJson = false)
     {
         $jsonFile = 'Tinebase/js/webpack-assets-FAT.json';
 
