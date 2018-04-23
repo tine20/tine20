@@ -69,6 +69,13 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         $attachments = $this->testGetRecordAttachments($record);
         self::assertEquals(1, count($attachments));
 
+        $adbJson = new Addressbook_Frontend_Json();
+        $contactJson = $adbJson->getContact($record->getId());
+        static::assertTrue(isset($contactJson['attachments']) && isset($contactJson['attachments'][0]) &&
+            isset($contactJson['attachments'][0]['path']));
+        Tinebase_FileSystem::getInstance()->stat(Tinebase_FileSystem::getInstance()->
+            getApplicationBasePath('Addressbook') . '/folders' . $contactJson['attachments'][0]['path']);
+
         return $record;
     }
     
