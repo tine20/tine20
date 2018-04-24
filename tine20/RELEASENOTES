@@ -39,6 +39,16 @@ see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.p
 Access Log Entries are not removed if older than 7 days be default. You can use the config option
  'accessLogRotationDays' to define a custom rotation.
 
+* MySQL with UTF8 MB4 charset
+
+We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database are converted during
+ the Update. This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earlier versions are supported
+ with non default settings. MySQL 5.6+ and MariaDB 10.0+ need to set:
+    innodb_large_prefix = 1
+    innodb_file_format = 'Barracuda'
+    innodb_file_per_table = 'ON'
+The update script will test these settings and abort if prerequisites are not met.
+
 FILEMANAGER
 ---
 * PIN Protection / Data safe

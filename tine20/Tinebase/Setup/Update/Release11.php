@@ -537,9 +537,13 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $db->query('SET foreign_key_checks = 0');
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
-            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
-            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
-                ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+            try {
+                $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+                $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
+                    ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+            } catch (Zend_Db_Exception $zde) {
+                Tinebase_Exception::log($zde);
+            }
         }
 
         $this->_backend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
