@@ -243,6 +243,8 @@ Tine.Tinebase.ApplicationStarter = {
             case 'string':
             case 'text':
                 break;
+            case 'attachments':
+                filter.label = window.i18n._('Attachment');
             case 'fulltext':
                 filter.valueType = 'fulltext';
                 break;
