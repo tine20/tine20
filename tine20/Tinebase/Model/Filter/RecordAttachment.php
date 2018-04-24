@@ -25,6 +25,7 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
     protected $_operators = [
         //'has',
         'in',
+        'wordstartswith',
     ];
 
     /**
@@ -90,6 +91,12 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if ('wordstartswith' === $this->_operator) {
+            $value = [['field' => 'query', 'operator' => 'contains', 'value' => $this->_value]];
+        } else {
+            $value = $this->_value;
+        }
+
         list($app,) = explode('_', $this->_model, 2);
         $fs = Tinebase_FileSystem::getInstance();
         $basePath = $fs->getApplicationBasePath($app, Tinebase_FileSystem::FOLDER_TYPE_RECORDS) . '/' .
@@ -111,7 +118,7 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
             return;
         }
 
-        $subFilter = new Tinebase_Model_Tree_Node_Filter($this->_value,
+        $subFilter = new Tinebase_Model_Tree_Node_Filter($value,
             Tinebase_Model_Filter_FilterGroup::CONDITION_AND, ['ignoreAcl' => true]);
         $subFilter->addFilter($subFilter->createFilter([
             'field' => 'parent_id', 'operator' => 'in', 'value' => array_keys($recordNodes)
