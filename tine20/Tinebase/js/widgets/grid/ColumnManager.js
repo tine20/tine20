@@ -88,6 +88,12 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.header = window.i18n._('Attachments');
             }
 
+            if(fieldDefinition.type == 'image') {
+                config.width = 20;
+                config.resizable = false;
+                config.header = fieldDefinition.label == 'Image' ? window.i18n._('Image') : i18n._(fieldDefinition.label);
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;

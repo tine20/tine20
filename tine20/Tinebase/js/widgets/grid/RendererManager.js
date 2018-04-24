@@ -8,6 +8,7 @@
 Ext.ns('Tine.widgets.grid');
 
 require('./AttachmentRenderer');
+require('./ImageRenderer');
 
 /**
  * central renderer manager
@@ -93,7 +94,10 @@ Tine.widgets.grid.RendererManager = function() {
                     var keyFieldName = fieldDefinition.keyFieldConfigName;
                     renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, keyFieldName);
                     break;
-                default: 
+                case 'image':
+                    renderer = Tine.widgets.grid.imageRenderer;
+                    break;
+                default:
                     renderer = this.defaultRenderer;
                     break;
             }

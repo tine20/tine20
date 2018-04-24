@@ -575,9 +575,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
-                columns.unshift(attachCol)
+                columns.unshift(attachCol);
             }
-            
+
+            _.forEachRight(_.filter(this.modelConfig.fields, {type: 'image'}), function(field) {
+                var imgCol = _.find(columns, {dataIndex: field.key});
+                if (imgCol) {
+                    _.remove(columns, imgCol);
+                    columns.unshift(imgCol);
+                }
+            });
+
             columns = columns.concat(this.getCustomColumns());
             columns = this.customizeColumns(columns);
             

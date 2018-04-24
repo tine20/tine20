@@ -466,6 +466,16 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/attach.png) !important;
 }
 
+.action_image {
+    background-image:url(../../images/oxygen/16x16/mimetypes/image-x-generic.png) !important;
+}
+.x-btn-medium .action_image {
+    background-image:url(../../images/oxygen/22x22/mimetypes/image-x-generic.png) !important;
+}
+.x-btn-large .action_image {
+    background-image:url(../../images/oxygen/32x32/mimetypes/image-x-generic.png) !important;
+}
+
 .tinebase-action-debug-console {
     background-image:url(../../images/oxygen/16x16/apps/utilities-terminal.png) !important;
 }

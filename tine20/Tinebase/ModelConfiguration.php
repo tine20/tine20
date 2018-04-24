@@ -1120,6 +1120,8 @@ class Tinebase_ModelConfiguration {
 
             } elseif ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
+            }  elseif ($fieldDef['type'] == 'image') {
+                $fieldDef['label'] = 'Image'; // _('Image')
             }
 
             if (isset($fieldDef['copyOmit']) && $fieldDef['copyOmit']) {
