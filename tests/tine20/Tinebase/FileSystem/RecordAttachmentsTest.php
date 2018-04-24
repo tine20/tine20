@@ -78,6 +78,33 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
 
         return $record;
     }
+
+    public function testRecordAttachmentFilter()
+    {
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'less', 'value' => 100]
+            ]]
+        ]), null, true);
+        $oldCount = count($result);
+
+        $this->testAddRecordAttachments();
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'greater', 'value' => 100]
+            ]]
+        ]), null, true);
+
+        static::assertGreaterThan(0, count($result), 'no records with attachments size > 100 found');
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'less', 'value' => 100]
+            ]]
+        ]), null, true);
+        static::assertEquals($oldCount, count($result));
+    }
     
     /**
      * test getting record attachments

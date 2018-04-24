@@ -1014,6 +1014,13 @@ class Tinebase_ModelConfiguration {
                 'label' => NULL,
                 'type'  => 'attachments',
                 'recursiveResolving' => true,
+                'filterDefinition'  => [
+                    'filter'    => 'Tinebase_Model_Filter_RecordAttachment',
+                    'options'   => [
+                        'idProperty'    => $this->_idProperty,
+                        'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                    ]
+                ]
             );
         }
 
