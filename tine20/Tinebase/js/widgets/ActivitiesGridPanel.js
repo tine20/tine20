@@ -194,6 +194,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             evalGrants = editDialog.evalGrants,
             hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
 
+        this.store.purgeListeners();
         this.store.removeAll();
 
         if (notes && notes.length > 0) {
@@ -349,24 +350,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         this.typeComboBox.setValue(typeId || 1);
 
-        this.formPanel = new Ext.FormPanel({
-            labelAlign: 'top',
-            border: false,
-            frame: true,
-            items: [
-                this.typeComboBox,
-                {
-                    xtype: 'textarea',
-                    name: 'notification',
-                    fieldLabel: i18n._('Enter new note:'),
-                    labelSeparator: '',
-                    allowBlank: false,
-                    value: note || '',
-                    anchor: '100% 100%'
-                }
-            ]
-        });
-
         this.onClose = function () {
             this.window.close();
         };
@@ -399,13 +382,32 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             scope: this
         });
 
-        this.buttons = [];
+        var buttons = [];
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogactionsOrderStyle') === 'Windows') {
-            this.buttons.push(this.okAction, this.cancelAction);
+            buttons.push(this.okAction, this.cancelAction);
         }
         else {
-            this.buttons.push(this.cancelAction, this.okAction);
+            buttons.push(this.cancelAction, this.okAction);
         }
+
+        this.formPanel = new Ext.FormPanel({
+            labelAlign: 'top',
+            border: false,
+            frame: true,
+            buttons: buttons,
+            items: [
+                this.typeComboBox,
+                {
+                    xtype: 'textarea',
+                    name: 'notification',
+                    fieldLabel: i18n._('Enter new note:'),
+                    labelSeparator: '',
+                    allowBlank: false,
+                    value: note || '',
+                    anchor: '100% 100%'
+                }
+            ]
+        });
 
         this.window = Tine.WindowFactory.getWindow({
             title: i18n._('Add Note'),
@@ -414,7 +416,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             modal: true,
             actionAlign: 'right',
             border: false,
-            buttons: this.buttons,
             items: this.formPanel
         });
     },
