@@ -294,12 +294,15 @@ class Setup_Frontend_Cli
     {
         $setupBackend = Setup_Backend_Factory::factory();
         if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            echo ' DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5' . PHP_EOL;
             return;
         }
 
         $failures = array();
         $setupController = Setup_Controller::getInstance();
         $setupUpdate = new Setup_Update_Abstract($setupBackend);
+
+        echo 'starting upgrade ...' . PHP_EOL;
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
