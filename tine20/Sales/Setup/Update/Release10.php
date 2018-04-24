@@ -228,31 +228,4 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Sales', '11.0');
     }
-
-    /**
-     * update to 11.1
-     * 
-     *  - add customer shorthand for use in filename
-     * 
-     * @throws Setup_Exception_NotFound
-     */
-    public function update_11()
-    {
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>name_shorthand</name>
-                    <type>text</type>
-                    <notnull>false</notnull>
-                </field>
-        ');
-        
-        try {
-            $this->_backend->addCol('sales_customers', $declaration);   
-        } catch (Exception $e) {
-            // We already have it, it's O.K.
-        }
-        
-        $this->setTableVersion('sales_customers', 3);
-        $this->setApplicationVersion('Sales', '11.1');
-    }
 }
