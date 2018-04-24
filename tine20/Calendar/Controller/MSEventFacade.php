@@ -323,7 +323,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * NOTE: clients might send their original (creation) data w.o. our adoptions for update
      *       therefore we need reapply them
      *       
-     * @param   Calendar_Model_Event $_event
+     * @param   Tinebase_Record_Interface $_event
      * @param   bool                 $_checkBusyConflicts
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
@@ -334,6 +334,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
         }
+        if (! $_event->dtstart || ! $_event->dtend) {
+            throw new Tinebase_Exception_Record_Validation('dtstart or dtend missing from event!');
+        }
+
         $currentOriginEvent = $this->_eventController->get($_event->getId());
         $this->_fromiTIP($_event, $currentOriginEvent);
 
@@ -951,6 +955,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @param Tinebase_Record_RecordSet $_currentPersistentExceptions
      * @param Tinebase_Record_RecordSet $_newPersistentExceptions
      * @param DateInterval              $dtStartDiff
+     * @return array
      */
     protected function _getExceptionsMigration($_currentPersistentExceptions, $_newPersistentExceptions, $dtStartDiff)
     {

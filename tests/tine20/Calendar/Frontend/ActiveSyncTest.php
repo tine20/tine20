@@ -1114,14 +1114,8 @@ Zeile 3</AirSyncBase:Data>
     public function testAddAlarm()
     {
         $syncrotonFolder = $this->testCreateFolder();
-        
-        $event = ActiveSync_TestCase::getTestEvent();
-        $event->summary = 'testtermin';
-        $event->description = 'some text';
-        $event->dtstart = new Tinebase_DateTime('2013-10-22 16:00:00');
-        $event->dtend = new Tinebase_DateTime('2013-10-22 17:00:00');
-        $event = Calendar_Controller_Event::getInstance()->create($event);
-        
+        $event = $this->_createEvent();
+
         $xml = new SimpleXMLElement('
           <ApplicationData>
             <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -1155,7 +1149,17 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $this->assertEquals(1, count($updatedEvent->alarms));
         $this->assertEquals($event->description, $updatedEvent->description, 'description mismatch: ' . print_r($updatedEvent->toArray(), true));
     }
-    
+
+    protected function _createEvent()
+    {
+        $event = ActiveSync_TestCase::getTestEvent();
+        $event->summary = 'testtermin';
+        $event->description = 'some text';
+        $event->dtstart = new Tinebase_DateTime('2013-10-22 16:00:00');
+        $event->dtend = new Tinebase_DateTime('2013-10-22 17:00:00');
+        return Calendar_Controller_Event::getInstance()->create($event);
+    }
+
     public function testGetEntriesIPhone()
     {
         $syncrotonFolder = $this->testCreateFolder();
@@ -1300,6 +1304,40 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->attendees, 'groupmembers not resolved');
         $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->exceptions[0]->attendees, 'groupmembers not resolved');
+    }
 
+    public function testUpdateEventWithoutDtstartAndEnd()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        $event = $this->_createEvent();
+
+        $xml = new SimpleXMLElement('
+          <ApplicationData>
+            <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMAAAAAAAAAxP///w==</Timezone>
+            <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+            <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+            <DtStamp xmlns="uri:Calendar">20131021T142015Z</DtStamp>
+            <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+            <Subject xmlns="uri:Calendar">testtermin updated</Subject>
+            <UID xmlns="uri:Calendar">' . $event->uid . '</UID>
+            <MeetingStatus xmlns="uri:Calendar">1</MeetingStatus>
+            <Attendees xmlns="uri:Calendar">
+              <Attendee>
+                <Name>' . Tinebase_Core::getUser()->accountDisplayName . '</Name>
+                <Email>' . Tinebase_Core::getUser()->accountEmailAddress . '</Email>
+                <AttendeeType>1</AttendeeType>
+              </Attendee>
+            </Attendees>
+          </ApplicationData>
+        ');
+        $syncrotonEvent = new Syncroton_Model_Event($xml);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $event->creation_time);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $event->getId(), $syncrotonEvent);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+        self::assertEquals('testtermin updated', $updatedEvent->summary);
+        self::assertEquals('2013-10-22 16:00:00', $updatedEvent->dtstart->toString());
     }
 }

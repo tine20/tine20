@@ -745,7 +745,8 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     /**
      * convert contact from xml to Tinebase_Record_Interface
      *
-     * @param SimpleXMLElement $_data
+     * @param Syncroton_Model_IEntry $data
+     * @param Tinebase_Record_Interface $entry
      * @return Tinebase_Record_Interface
      */
     abstract public function toTineModel(Syncroton_Model_IEntry $data, $entry = null);
