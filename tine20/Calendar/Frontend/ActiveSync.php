@@ -525,8 +525,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     }
     
     /**
-     * (non-PHPdoc)
-     * @see ActiveSync_Frontend_Abstract::toTineModel()
+     * @param Syncroton_Model_IEntry $data
+     * @param Tinebase_Record_Interface $entry
+     * @return Tinebase_Record_Interface
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
@@ -548,22 +549,23 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
             if (! isset($data->$syncrotonProperty)) {
-                if ($tine20Property === 'description' && $this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE) {
-                    // @see #8230: added alarm to event on iOS 6.1 -> description removed
-                    // this should be removed when Tine 2.0 / Syncroton supports ghosted properties
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                        __METHOD__ . '::' . __LINE__ . ' Unsetting description');
-                    unset($event->$tine20Property);
-                } else {
-                    if ($tine20Property === 'attendee' && $entry &&
+                if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE) {
+                    if ($tine20Property === 'description') {
+                        // @see #8230: added alarm to event on iOS 6.1 -> description removed
+                        // keep description
+                    } else if ($tine20Property === 'dtstart' || $tine20Property === 'dtend') {
+                        // dtstart & dtend should not be nulled
+                    } else if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $this->_syncFolderId       != $this->_getDefaultContainerId()) {
-                            // keep attendees as the are / they were not sent to the device before
+                        $this->_syncFolderId != $this->_getDefaultContainerId()) {
+                        // keep attendees as the are / they were not sent to the device before
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                            __METHOD__ . '::' . __LINE__ . ' Removing ' . $tine20Property);
+                        // remove the value
                         $event->$tine20Property = null;
                     }
+                } else {
+                    // remove the value
+                    $event->$tine20Property = null;
                 }
                 continue;
             }
