@@ -67,7 +67,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         'enum' => array(
             'defaultType' => 'enum')
     );
- 
+
+    protected $_useUtf8mb4 = true;
+
+    public function __construct()
+    {
+        parent::__construct();
+        if ($this->_db->getConfig()['charset'] === 'utf8') {
+            $this->_useUtf8mb4 = false;
+        }
+    }
+
     /**
      * get create table statement
      * 
@@ -98,7 +108,11 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (isset($_table->engine)) {
             $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
         } else {
-            $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            if ($this->_useUtf8mb4) {
+                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            } else {
+                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            }
         }
 
         $statement .= " ROW_FORMAT=DYNAMIC";
