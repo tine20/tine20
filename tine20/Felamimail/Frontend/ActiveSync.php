@@ -980,7 +980,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         // first lookup folder type by account settings ...
         if ($account) { 
-            if (!empty($account->ns_personal) {
+            if (!empty($account->ns_personal)) {
                 $personalNameSpaceSuffix = $account->ns_personal . $account->delimiter;
             }
              
