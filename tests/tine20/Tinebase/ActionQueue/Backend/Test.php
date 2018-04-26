@@ -5,28 +5,29 @@
  * @package     Tinebase
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * the class does not queue the message but executes them immediately
- * 
+ * Action Queue Test Backend
+ *
  * @package     Tinebase
  * @subpackage  ActionQueue
  */
-class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backend_Interface
+class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_Interface
 {
-    protected $_options;
-    
+    public static $_hasAsyncBackend = true;
+    public static $_peekJobId = false;
+    public static $_queueSize = 0;
+
     /**
      * Constructor
      *
-     * @param  array  $options  An array having configuration data
+     * @param  array|Zend_Config $options An array having configuration data
      */
     public function __construct($options)
     {
-        $this->_options = $options;
     }
 
     /**
@@ -36,48 +37,7 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      */
     public function send($message)
     {
-        Tinebase_ActionQueue::getInstance()->executeAction($message);
-    }
-    
-    /**
-     * return queue length
-     * @return int the queue length
-     */
-    public function getQueueSize()
-    {
-        return 0;
-    }
-
-    /**
-     * wait for a new job in queue
-     * @return mixed false on timeout or job id
-     */
-    public function waitForJob()
-    {
-        return FALSE;
-    }
-
-    /**
-     * get one job from the queue
-     *
-     * @param  integer  $jobId  the id of the job
-     * @throws Tinebase_Exception_NotImplemented
-     * @return array           the job
-     */
-    public function receive($jobId)
-    {
-        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
-    }
-
-    /**
-     * Delete a job from the queue
-     *
-     * @param  string  $jobId  the id of the job
-     * @throws Tinebase_Exception_NotImplemented
-     */
-    public function delete($jobId)
-    {
-        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+        // TODO: Implement send() method.
     }
 
     /**
@@ -85,7 +45,49 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      */
     public function peekJobId()
     {
-        return false;
+        return static::$_peekJobId;
+    }
+
+    /**
+     * return queue length
+     *
+     * @return int the queue length
+     */
+    public function getQueueSize()
+    {
+        return static::$_queueSize;
+    }
+
+    /**
+     * wait for a new job in queue
+     *
+     * @return mixed false on timeout or job id
+     */
+    public function waitForJob()
+    {
+        // TODO: Implement waitForJob() method.
+    }
+
+    /**
+     * get one job from the queue
+     *
+     * @param  integer $jobId the id of the job
+     * @throws RuntimeException
+     * @return array           the job
+     */
+    public function receive($jobId)
+    {
+        // TODO: Implement receive() method.
+    }
+
+    /**
+     * Delete a job from the queue
+     *
+     * @param  string $jobId the id of the job
+     */
+    public function delete($jobId)
+    {
+        // TODO: Implement delete() method.
     }
 
     /**
@@ -95,6 +97,6 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      */
     public function hasAsyncBackend()
     {
-        return false;
+        return static::$_hasAsyncBackend;
     }
 }

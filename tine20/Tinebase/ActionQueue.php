@@ -23,6 +23,8 @@
  * @method array receive(integer $jobId)
  * @method void delete(integer $jobId)
  * @method void reschedule(string $jobId)
+ * @method boolean hasAsyncBackend()
+ * @method boolean|string peekJobId()
  *
  */
  class Tinebase_ActionQueue implements Tinebase_Controller_Interface
@@ -172,16 +174,6 @@
         }
         
         return call_user_func_array(array($controller, $actionName), $message['params']);
-    }
-    
-    /**
-     * check if the backend is async
-     *  
-     * @return boolean true if queue backend is async
-     */
-    public function hasAsyncBackend()
-    {
-        return ! $this->_queue instanceof Tinebase_ActionQueue_Backend_Direct;
     }
     
     /**

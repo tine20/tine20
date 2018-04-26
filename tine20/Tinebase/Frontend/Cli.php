@@ -981,14 +981,81 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $result = 0;
         $queueConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::ACTIONQUEUE);
-        if (! $queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+        if (! $queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE} ||
+                !($actionQueue = Tinebase_ActionQueue::getInstance())->hasAsyncBackend()) {
             $message = 'QUEUE INACTIVE';
         } else {
             try {
-                $queueSize = Tinebase_ActionQueue::getInstance()->getQueueSize();
-                $message = 'QUEUE OK | size=' . $queueSize . ';;;;';
+                if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
+                    throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION .
+                        ' not set');
+                }
+                if (null === ($lastDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE))) {
+                    throw new Tinebase_Exception('state ' .
+                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE . ' not set');
+                }
+                $lastDuration = floatval($lastDuration);
+                $lastDurationUpdate = intval($lastDurationUpdate);
+
+                $now = time();
+                $diff = 0;
+                $warn = null;
+                if (false !== ($currentJobId = $actionQueue->peekJobId())) {
+                    if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
+                            'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID))) {
+                        if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE))) {
+                            throw new Tinebase_Exception('state ' .
+                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE . ' not set');
+                        }
+                        if (($diff = $now - intval($lastChange)) > (15 * 60)) {
+                            throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
+                        }
+
+                    } else {
+                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, (string)$now);
+                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, $currentJobId);
+                    }
+                } else {
+                    Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
+                }
+
+                if ($lastDuration > 3600) {
+                    throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                }
+                if ($now - $lastDurationUpdate > 3600) {
+                    throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
+                }
+
+                if ($diff > 60 && null === $warn) {
+                    $warn = 'last job id change > 60 sec - ' . $diff;
+                }
+
+                if ($lastDuration > 60  && null === $warn) {
+                    $warn = 'last duration > 60 sec - ' . $lastDuration;
+                }
+
+                if ($now - $lastDurationUpdate > 60  && null === $warn) {
+                    $warn = 'last duration update > 60 sec - ' . ($now - $lastDurationUpdate);
+                }
+
+
+                if (null !== $warn) {
+                    $message = 'QUEUE WARN: ' . $warn;
+                    $result = 1;
+                } else {
+                    $message = 'QUEUE OK';
+                }
+                $queueSize = $actionQueue->getQueueSize();
+                $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
+                    ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
             } catch (Exception $e) {
-                $message = 'QUEUE FAIL';
+                $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
                 $result = 2;
             }
         }

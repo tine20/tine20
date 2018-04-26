@@ -691,9 +691,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         try {
             $applicationController->setApplicationState($tinebaseApplication,
-                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $applicationController->setApplicationState($tinebaseApplication,
-                Tinebase_Model_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1;
 
             $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();

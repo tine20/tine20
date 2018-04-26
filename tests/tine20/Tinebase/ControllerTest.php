@@ -301,4 +301,29 @@ class Tinebase_ControllerTest extends TestCase
         $response = Tinebase_Controller::getInstance()->getFavicon('svg');
         $this->assertEquals('image/svg+xml', $response->getHeader('Content-Type')[0]);
     }
+
+    public function testMeasureActionQueue()
+    {
+        $tbApp = Tinebase_Application::getInstance();
+
+        $microTime = microtime(true);
+        $now = time();
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION, 3601);
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE,
+            $now - 30);
+
+        $this->_instance->measureActionQueue($microTime);
+        static::assertEquals(3601, $tbApp->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION));
+        static::assertEquals($now - 30, $tbApp->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE));
+
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE,
+            $now - 60);
+        $this->_instance->measureActionQueue($microTime);
+        static::assertLessThan(10, $tbApp->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION));
+        static::assertLessThan(10, time() - (int)($tbApp->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE)));
+    }
 }

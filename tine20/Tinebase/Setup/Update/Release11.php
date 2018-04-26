@@ -511,4 +511,23 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tinebase', '11.25');
     }
+
+    /**
+     * update to 11.26
+     *
+     * add actionQueueMonitoringTask to scheduler
+     */
+    public function update_25()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $oldRightValue = $scheduler->doRightChecks(false);
+
+        try {
+            Tinebase_Scheduler_Task::addActionQueueMonitoringTask($scheduler);
+        } finally {
+            $scheduler->doRightChecks($oldRightValue);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.26');
+    }
 }

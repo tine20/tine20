@@ -1336,7 +1336,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
             //get replication state:
             $masterReplicationId = intval(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID));
+                Tinebase_Application::STATE_REPLICATION_MASTER_ID));
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -1424,7 +1424,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' Update replication master id to ' . $modification->instance_seq);
                 $applicationController->setApplicationState($tinebaseApplication,
-                    Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, $modification->instance_seq);
+                    Tinebase_Application::STATE_REPLICATION_MASTER_ID, $modification->instance_seq);
 
                 if (null !== $lock && !$lock->isLocked()) {
                     throw new Tinebase_Exception_Backend('lock of type ' . get_class($lock) . ' lost lock');
@@ -1511,7 +1511,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $tinebase = $applicationController->getApplicationByName('Tinebase');
 
         $applicationController->setApplicationState($tinebase,
-            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, intval($applicationController->getApplicationState(
-                $tinebase, Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID)) + intval($count));
+            Tinebase_Application::STATE_REPLICATION_MASTER_ID, intval($applicationController->getApplicationState(
+                $tinebase, Tinebase_Application::STATE_REPLICATION_MASTER_ID)) + intval($count));
     }
 }

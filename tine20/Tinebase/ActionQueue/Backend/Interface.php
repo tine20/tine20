@@ -6,7 +6,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -58,4 +58,16 @@ interface Tinebase_ActionQueue_Backend_Interface
      * @param  string  $jobId  the id of the job
      */
     public function delete($jobId);
+
+    /**
+     * @return boolean|string
+     */
+    public function peekJobId();
+
+    /**
+     * check if the backend is async
+     *
+     * @return boolean true if queue backend is async
+     */
+    public function hasAsyncBackend();
 }
