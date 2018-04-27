@@ -26,11 +26,13 @@ class Tinebase_Sentry_Raven_Client extends Raven_Client
      */
     public function sanitize(&$data)
     {
-        // Serializes the session items as a json string
-        foreach ($data['request']['data'] as $k => $v) {
-            if (is_array($v)) {
-                foreach ($v as $kk => $vv) {
-                    $data['request']['data'][$k][$kk] = json_encode($vv, JSON_PRETTY_PRINT, 7);
+        if (isset($data['request']) && isset($data['request']['data']) && is_array($data['request']['data'])) {
+            // Serializes the session items as a json string
+            foreach ($data['request']['data'] as $k => $v) {
+                if (is_array($v)) {
+                    foreach ($v as $kk => $vv) {
+                        $data['request']['data'][$k][$kk] = json_encode($vv, JSON_PRETTY_PRINT, 7);
+                    }
                 }
             }
         }
