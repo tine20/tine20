@@ -909,6 +909,7 @@ class Tinebase_ModelConfiguration {
      *
      * @var array $modelClassConfiguration
      * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception
      */
     public function __construct($modelClassConfiguration)
     {
@@ -1101,11 +1102,14 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
-                if (!isset($fieldDef['name']) || ! Tinebase_Config::getAppConfig(
-                        isset($fieldDef['config']['application']) ? $fieldDef['config']['application'] :
-                            $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
-                        $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                if (Tinebase_Application::getInstance()->isInstalled($this->_applicationName)) {
+                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig(
+                                isset($fieldDef['config']['application'])
+                                    ? $fieldDef['config']['application']
+                                    : $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
+                            $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                    }
                 }
             } elseif ($fieldDef['type'] == 'virtual') {
                 $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : false;

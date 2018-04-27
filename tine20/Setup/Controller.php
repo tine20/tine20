@@ -1776,6 +1776,7 @@ class Setup_Controller
      * @param  array|null $_options
      * @return void
      * @throws Tinebase_Exception_Backend_Database
+     * @throws Exception
      */
     protected function _installApplication(SimpleXMLElement $_xml, $_options = null)
     {
@@ -1788,7 +1789,8 @@ class Setup_Controller
         }
         
         try {
-            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
+            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
             $createdTables = array();
 

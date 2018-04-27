@@ -86,7 +86,9 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         /**
          * TODO move this code somewhere and make it optionally. Maybe even make it a new controller / frontend action and request the data async
          */
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW)) {
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook')
+            && Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW))
+        {
             $this->_additionalColumns['emails'] = new Zend_Db_Expr('(' .
                 $this->_db->select()
                     ->from($this->_tablePrefix . 'addressbook', array($this->_dbCommand->getAggregate('email')))
