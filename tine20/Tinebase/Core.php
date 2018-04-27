@@ -1937,7 +1937,15 @@ class Tinebase_Core
                 $session = null;
             }
 
-            $isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+            $isFileSystemAvailable = false;
+            if (!empty(Tinebase_Core::getConfig()->filesdir)) {
+                if (! is_writeable(Tinebase_Core::getConfig()->filesdir)) {
+                    // try to create it
+                    $isFileSystemAvailable = @mkdir(Tinebase_Core::getConfig()->filesdir);
+                } else {
+                    $isFileSystemAvailable = true;
+                }
+            }
 
             if ($session instanceof Zend_Session_Namespace) {
                 if (Tinebase_Session::isWritable()) {
