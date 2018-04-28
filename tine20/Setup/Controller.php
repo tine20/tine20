@@ -1665,14 +1665,17 @@ class Setup_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
-        // set the replication master id
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        Tinebase_Application::getInstance()->setApplicationState($tinebase,
-            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID,
-            Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq());
+        // save the master id
+        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
+        // do updates now, because maybe application state updates are not yet there
         $this->updateApplications();
 
+        // then set the replication master id
+        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        Tinebase_Application::getInstance()->setApplicationState($tinebase,
+            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
+        
         return true;
     }
 
