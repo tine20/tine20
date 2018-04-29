@@ -186,7 +186,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         $fileConfigArray = null;
         $dbConfigArray = null;
-        $dbAvailable = ('database' === $name || 'caching' === $name || 'logger' === $name) ? Tinebase_Core::hasDb() : true;
+        $dbAvailable = 'logger' === $name ? false :
+            (('database' === $name || 'caching' === $name) ? Tinebase_Core::hasDb() : true);
 
         // NOTE: we return here (or in the default handling) if db is not available. That is to prevent db lookup when db is not yet setup
         $configFileSection = $this->getConfigFileSection($name);
@@ -462,21 +463,27 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         closedir($dh);
 
+        $this->_mergedConfigCache = [];
         // reset logger as the new available config from conf.d mail contain different logger configuration
         Tinebase_Core::unsetLogger();
-        $this->_mergedConfigCache = [];
+        // magic to prevent ->logger recurion, see also clearCache() for a detailed explanation
+        Tinebase_Core::isLogLevel(Zend_Log::WARN);
 
         $ttl = 60;
+        $ttlErrorMsg = null;
         if (isset(self::$_configFileData['composeConfigTTL'])) {
             $ttl = (int) self::$_configFileData['composeConfigTTL'];
             if ($ttl < 1) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' composeConfigTTL needs to be an integer > 0, current value: "'
-                    . print_r(self::$_configFileData['composeConfigTTL'],true) . '"');
+                $ttlErrorMsg = ' composeConfigTTL needs to be an integer > 0, current value: "'
+                    . print_r(self::$_configFileData['composeConfigTTL'],true) . '"';
                 $ttl = 60;
             }
         }
         self::$_configFileData['ttlstamp'] = time() + $ttl;
+        if (null !== $ttlErrorMsg) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . $ttlErrorMsg);
+        }
         
         $filename = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
         $filenameTmp = $filename . uniqid('tine20', true);
@@ -684,6 +691,16 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         if (!$keepMemoryCache) {
             $this->_mergedConfigCache = array();
         }
+
+        // sadly we need to do some magic here:
+        // after clearCache a call to Tinebase_Core::getConfig()->logger would cause a __get('logger') recursion
+        // this is a PHP quirk (not an endless loop, just a simple one depth recursion, but PHP doesn't like __get
+        // recursions)
+        // see also _createCachedConfig, it's being done there too
+        // so: unset the logger
+        Tinebase_Core::unsetLogger();
+        // initialize the logger data again
+        Tinebase_Core::isLogLevel(Zend_Log::WARN);
     }
     
     /**
