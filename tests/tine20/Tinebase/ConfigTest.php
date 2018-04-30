@@ -180,9 +180,16 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_filenamesToDelete[] = $defaultConfigFile;
 
         ExampleApplication_Config::getInstance()->clearCache();
+        ExampleApplication_Config::destroyInstance();
 
         $exampleString = ExampleApplication_Config::getInstance()->get(ExampleApplication_Config::EXAMPLE_STRING);
         $this->assertEquals('something else', $exampleString);
+        $this->assertEquals(789, ExampleApplication_Config::getInstance()
+            ->{ExampleApplication_Config::EXAMPLE_MAILCONFIG}->{ExampleApplication_Config::SMTP}
+            ->{ExampleApplication_Config::PORT});
+        $this->assertEquals('localhost', ExampleApplication_Config::getInstance()
+            ->{ExampleApplication_Config::EXAMPLE_MAILCONFIG}->{ExampleApplication_Config::SMTP}
+            ->{ExampleApplication_Config::HOST});
     }
 
     protected function _getExampleApplicationCustomDefaultConfig()
@@ -270,8 +277,6 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testConfigStructure()
     {
-        $exampleConfig = ExampleApplication_Config::getInstance();
-
         $defaultConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
             . DIRECTORY_SEPARATOR . 'ExampleApplication' . DIRECTORY_SEPARATOR . 'config.inc.php';
 
@@ -280,6 +285,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configExampleAppTest.inc.php', $defaultConfigFile);
         $this->_filenamesToDelete[] = $defaultConfigFile;
 
+        ExampleApplication_Config::destroyInstance();
+        $exampleConfig = ExampleApplication_Config::getInstance();
         $exampleConfig->clearCache();
 
         $smtpStruct = $exampleConfig->{ExampleApplication_Config::EXAMPLE_MAILCONFIG}->{ExampleApplication_Config::SMTP};
@@ -287,7 +294,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($smtpStruct instanceof Tinebase_Config_Struct);
         $this->assertTrue(is_string($smtpStruct->{ExampleApplication_Config::HOST}) && $smtpStruct->{ExampleApplication_Config::HOST} === 'localhost');
-        $this->assertTrue(is_int($smtpStruct->{ExampleApplication_Config::PORT}) && $smtpStruct->{ExampleApplication_Config::PORT} === 123);
+        $this->assertTrue(is_int($smtpStruct->{ExampleApplication_Config::PORT}) && ($smtpStruct->{ExampleApplication_Config::PORT} === 123 ||
+                $smtpStruct->{ExampleApplication_Config::PORT} === 789));
         $this->assertTrue(is_bool($smtpStruct->{ExampleApplication_Config::SSL}) && $smtpStruct->{ExampleApplication_Config::SSL} === true);
 
         $this->assertTrue($imapStruct instanceof Tinebase_Config_Struct);
