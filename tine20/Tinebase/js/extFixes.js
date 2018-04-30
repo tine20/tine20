@@ -607,7 +607,7 @@ Ext.form.TriggerField.prototype.onDestroy = Ext.form.TriggerField.prototype.onDe
     Ext.form.TriggerField.prototype.cmpRegforFocusFix.remove(this);
 });
 
-Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(function(){
+Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(function() {
     Ext.each(Ext.form.TriggerField.prototype.cmpRegforFocusFix, function(cmp) {
         if (cmp.rendered && cmp.el.dom == document.activeElement) {
             if(cmp.el.dom.value == cmp.emptyText){
@@ -621,6 +621,37 @@ Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(funct
 });
 
 Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
+
+Ext.form.TriggerField.prototype.cmpRegForResize = [];
+
+
+Ext.form.TriggerField.prototype.initComponent = Ext.form.TriggerField.prototype.initComponent.createSequence(function() {
+    Ext.form.TriggerField.prototype.cmpRegForResize.push(this);
+});
+
+Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(function() {
+    Ext.each(Ext.form.TriggerField.prototype.cmpRegForResize, function(cmp) {
+        if (!cmp.rendered || !this.list) {
+            Ext.form.TriggerField.prototype.taskForResize.delay(300);
+            return;
+        }
+        
+        var visible = !!cmp.el.dom.offsetParent;
+        
+        if (visible !== cmp.wasVisible) {
+            cmp.setWidth(cmp.width);
+            if (cmp.wrap) {
+                cmp.wrap.setWidth(cmp.width);
+            }
+            cmp.syncSize();
+        }
+        
+        cmp.wasVisible = visible;
+    });
+    Ext.form.TriggerField.prototype.taskForResize.delay(300);
+});
+
+Ext.form.TriggerField.prototype.taskForResize.delay(300);
 
 Ext.override(Ext.form.TwinTriggerField, {
     getTriggerWidth: function(){
