@@ -88,6 +88,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
 
         this.label = this.label ? this.callingApp.i18n._(this.label) : this.containerName;
+        this.gender = this.app.i18n._hidden('GENDER_' + this.recordClass.getMeta('containerName'));
     },
     
     /**

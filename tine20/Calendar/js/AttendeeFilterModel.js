@@ -33,6 +33,7 @@ Tine.Calendar.AttendeeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         this.operators = ['in'/*, 'notin'*/];
         this.label = this.app.i18n._('Attendee');
+        this.gender = this.app.i18n._('GENDER_Attendee');
         
         this.defaultValue = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
             user_type: 'user',

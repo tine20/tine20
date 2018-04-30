@@ -368,10 +368,12 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {label: app.i18n._('Summary'), field: 'summary'},
         {label: app.i18n._('Location'), field: 'location'},
         {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+        // _('GENDER_Calendar')
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
         {filtertype: 'calendar.attendee'},
         {
             label: app.i18n._('Attendee Status'),
+            gender: app.i18n._('GENDER_Attendee Status'),
             field: 'attender_status',
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
@@ -381,6 +383,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         },
         {
             label: app.i18n._('Attendee Role'),
+            gender: app.i18n._('GENDER_Attendee Role'),
             field: 'attender_role',
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
@@ -390,6 +393,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app},
         {
             label: app.i18n._('Status'),
+            gender: app.i18n._('GENDER_Status'),
             field: 'status',
             filtertype: 'tine.widget.keyfield.filter',
             app: { name: 'Calendar' },
@@ -398,6 +402,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         },
         {
             label: app.i18n._('Blocking'),
+            gender: app.i18n._('GENDER_Blocking'),
             field: 'transp',
             filtertype: 'tine.widget.keyfield.filter',
             app: { name: 'Calendar' },
@@ -406,6 +411,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         },
         {
             label: app.i18n._('Classification'),
+            gender: app.i18n._('GENDER_Classification'),
             field: 'class',
             filtertype: 'tine.widget.keyfield.filter',
             app: { name: 'Calendar' },

@@ -2986,10 +2986,6 @@ msgstr "Bankverbindung"
 msgid "Private Information"
 msgstr "Private Informationen"
 
-#: ModelConfiguration.php:1116
-msgid "Image"
-msgstr "Bild"
-
 #: FileSystem.php:2790 Container.php:676
 #, python-format
 msgid "%s's personal container"
@@ -4336,3 +4332,19 @@ msgstr "Das Zweit-Passwort wird benötigt um diese Applikationen zu nutzen"
 
 msgid "Second Factor Required"
 msgstr "Zweit-Passwort benötigt"
+
+#: ModelConfiguration.php:1116
+msgid "Image"
+msgstr "Bild"
+
+msgid "setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+msgid "setting new language..."
+msgstr "neue Sprache wird eingestellt..."
+
+msgid "{gender, select, male {one of} female {one of} other {one of}}"
+msgstr "{gender, select, male {einer von} female {eine von} other {eines von}}"
+
+msgid "{gender, select, male {none of} female {none of} other {none of}}"
+msgstr "{gender, select, male {keiner von} female {keine von} other {keines von}}"
