@@ -30,9 +30,16 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param    string $filter JSON encoded string with lead ids for multi export
      * @param    string $options format or export definition id
      */
-    public function exportLead($filter, $options)
+    public function exportLeads($filter, $options)
     {
-        $filter = new Crm_Model_LeadFilter(Zend_Json::decode($filter));
-        parent::_export($filter, Zend_Json::decode($options), Crm_Controller_Lead::getInstance());
+        $decodedFilter = empty($filter) ? null : Zend_Json::decode($filter);
+        $decodedOptions = Zend_Json::decode($options);
+
+        if (! is_array($decodedFilter)) {
+            $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
+        }
+
+        $filter = new Crm_Model_LeadFilter($decodedFilter);
+        parent::_export($filter, $decodedOptions, Crm_Controller_Lead::getInstance());
     }    
 }
