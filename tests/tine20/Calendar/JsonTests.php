@@ -2438,4 +2438,37 @@ class Calendar_JsonTests extends Calendar_TestCase
         $searchResultData = $this->_uit->searchEvents($filter, array());
         self::assertEquals(1, $searchResultData['totalcount']);
     }
+
+    /**
+     * query filter should find description content
+     */
+    public function testSearchFulltextDescriptionInQuery()
+    {
+        $event = $this->_getEvent();
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $oldValue = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+            ->{Tinebase_Config::FULLTEXT_QUERY_FILTER};
+
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()
+                ->startTransaction(Tinebase_Core::getDb());
+            // activate fulltext query filter
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+            $filter = $this->_getEventFilterArray();
+            $filter[] =
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'healthy'];
+            $searchResultData = $this->_uit->searchEvents($filter, array());
+
+            $this->assertEquals(1, $searchResultData['totalcount'], 'event not found. filter: '
+                . print_r($searchResultData['filter'], true));
+            $resultEventData = $searchResultData['results'][0];
+            $this->assertEquals($createdEvent->getId(), $resultEventData['id']);
+        } finally {
+            Calendar_Controller_Event::getInstance()->delete([$createdEvent->getId()]);
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = $oldValue;
+        }
+    }
 }

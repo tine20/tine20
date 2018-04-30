@@ -18,7 +18,7 @@
  *    of the originators event (@see RFC2445)
  *  - as id is unique, each modified recurring event has its own id
  *  - rrule is stored in RCF2445 format
- *  - the rrule_until is redundat to the rrule until property for fast queries
+ *  - the rrule_until is redundant to the rrule until property for fast queries
  *  - we don't use rrule count, they are converted to an until
  *  - like always in tine, we save all dates in UTC, but to correctly compute
  *    recurring events, we also save the timezone of the organizer
