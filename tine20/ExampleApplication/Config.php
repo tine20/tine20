@@ -56,22 +56,22 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                             self::LABEL              => 'Example SMTP Host',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_STRING,
-                            self::DEFAULT            => 'localhost'
+                            self::DEFAULT_STR            => 'localhost'
                         ),
                         self::PORT              => array(
                             self::LABEL              => 'Example SMTP Port',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_INT,
-                            self::DEFAULT            => 123
+                            self::DEFAULT_STR            => 123
                         ),
                         self::SSL              => array(
                             self::LABEL              => 'Example SMTP SSL usage',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_BOOL,
-                            self::DEFAULT            => true
+                            self::DEFAULT_STR            => true
                         ),
                     ),
-                    self::DEFAULT => array(),
+                    self::DEFAULT_STR => array(),
                 ),
                 self::IMAP              => array(
                     self::LABEL              => 'Example IMAP Config',
@@ -83,25 +83,25 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                             self::LABEL              => 'Example IMAP Host',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_STRING,
-                            self::DEFAULT            => 'foreignhost'
+                            self::DEFAULT_STR            => 'foreignhost'
                         ),
                         self::PORT              => array(
                             self::LABEL              => 'Example IMAP Port',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_INT,
-                            self::DEFAULT            => 346
+                            self::DEFAULT_STR            => 346
                         ),
                         self::SSL              => array(
                             self::LABEL              => 'Example SMTP SSL usage',
                             self::DESCRIPTION        => 'explain some stuff here',
                             self::TYPE               => self::TYPE_BOOL,
-                            self::DEFAULT            => false
+                            self::DEFAULT_STR            => false
                         ),
                     ),
-                    self::DEFAULT => array(),
+                    self::DEFAULT_STR => array(),
                 )
             ),
-            self::DEFAULT => array(),
+            self::DEFAULT_STR => array(),
         ),
 
         self::EXAMPLE_STATUS => array(
@@ -114,13 +114,13 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT            => array(
+            self::DEFAULT_STR            => array(
                 'records' => array(
                     array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
                     array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
                     array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
                 ),
-                self::DEFAULT => 'IN-PROCESS'
+                self::DEFAULT_STR => 'IN-PROCESS'
             )
         ),
 
@@ -136,7 +136,7 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT            => array(
+            self::DEFAULT_STR            => array(
                 'records' => array(
                     array('id' => 'COMPLETED:CHANGE',           'value' => 'Change'), //_('Change')
                     array('id' => 'COMPLETED:DOCU',             'value' => 'Documentation'), //_('Documentation')
@@ -146,7 +146,7 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                     array('id' => 'IN-PROCESS:REVIEW',          'value' => 'Review'), //_('Review')
                     array('id' => 'IN-PROCESS:INTEGRATION',     'value' => 'Integration'), //_('Integration')
                 ),
-                self::DEFAULT => array('COMPLETED:CHANGE', 'CANCELLED:REQCHANGE', 'IN-PROCESS:IMPLEMENTATION'),
+                self::DEFAULT_STR => array('COMPLETED:CHANGE', 'CANCELLED:REQCHANGE', 'IN-PROCESS:IMPLEMENTATION'),
             )
         ),
 
@@ -163,10 +163,10 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                     self::LABEL      => 'Invoices Module', //_('Invoices Module')
                     self::DESCRIPTION=> 'Invoices Module',
                     self::TYPE       => 'boolean',
-                    self::DEFAULT    => true,
+                    self::DEFAULT_STR    => true,
                 ),
             ),
-            self::DEFAULT            => array(),
+            self::DEFAULT_STR            => array(),
         ),
 
         self::EXAMPLE_STRING => array(
@@ -175,7 +175,7 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
             //_('Just an example string for test purpose')
             self::DESCRIPTION        => 'Just an example string for test purpose',
             self::TYPE               => 'string',
-            self::DEFAULT            => self::EXAMPLE_STRING,
+            self::DEFAULT_STR            => self::EXAMPLE_STRING,
         )
     );
     
