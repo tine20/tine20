@@ -9,11 +9,5 @@
  */
 
 .EventsIconCls {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-upcoming-events.png) !important;
-}
-.x-btn-medium .EventsIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
-}
-.x-btn-large .EventsIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
+    background-image:url(../../images/icon-set/icon_event.svg) !important;
 }

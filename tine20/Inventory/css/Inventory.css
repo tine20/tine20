@@ -9,12 +9,26 @@
  */
 
 .InventoryIconCls {
-    /*background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;*/
-    background-image:url(../../images/oxygen/16x16/apps/klipper.png) !important;
+    background-image: url(../../images/icon-set/icon_inventor.svg) !important;
 }
-.x-btn-medium .InventoryIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/document-new.png) !important;
+
+
+.t-contenttype-inventoryitem .action_add {
+    background-image: url(../../images/icon-set/icon_inventar_plus.svg) !important;
 }
-.x-btn-large .InventoryIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/document-new.png) !important;
+
+.t-contenttype-inventoryitem .action_edit {
+    background-image: url(../../images/icon-set/icon_inventar_edit.svg) !important;
+}
+
+.t-contenttype-inventoryitem .action_delete {
+    background-image: url(../../images/icon-set/icon_inventar_clear.svg) !important;
+}
+
+.t-contenttype-inventoryitem .action_export {
+    background-image: url(../../images/icon-set/icon_inventar_export.svg) !important;
+}
+
+.t-contenttype-inventoryitem .action_import {
+    background-image: url(../../images/icon-set/icon_inventar_import.svg) !important;
 }

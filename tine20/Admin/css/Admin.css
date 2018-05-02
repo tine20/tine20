@@ -1,23 +1,3 @@
-.action_enable {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-apply.png) !important;
-}
-.x-btn-medium .action_enable {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-apply.png) !important;
-}
-.x-btn-large .action_enable {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-apply.png) !important;
-}
-
-.action_disable {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
-}
-.x-btn-medium .action_disable {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-cancel.png) !important;
-}
-.x-btn-large .action_disable {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-cancel.png) !important;
-}
-
 .action_settings {
     background-image:url(../../images/oxygen/16x16/actions/view-choose.png) !important;
 }
@@ -50,24 +30,13 @@
 }
 
 .action_password {
-    background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
-}
-.x-btn-medium .action_password {
-    background-image:url(../../images/oxygen/22x22/actions/password.png) !important;
-}
-.x-btn-large .action_password {
-    background-image:url(../../images/oxygen/32x32/actions/password.png) !important;
+    background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
 
 .AdminIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
+    background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
-.x-btn-medium .AdminIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/systemtray.png) !important;
-}
-.x-btn-large .AdminIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/systemtray.png) !important;
-}
+
 
 .admin-node-accesslog {
     background-image:url(../../images/oxygen/16x16/apps/utilities-log-viewer.png) !important;

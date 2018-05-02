@@ -46,6 +46,13 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         this.initLayout();
         this.initMessageBus();
+        
+        if (this.cls) {
+            this.cls = this.cls + ' ' + 't-app-' + this.app.appName.toLowerCase();
+        } else {
+            this.cls = 't-app-' + this.app.appName.toLowerCase();
+        }
+        
 
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
     },
@@ -215,6 +222,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                         app: this.app,
                         plugins: [this.getWestPanel().getFilterPlugin(contentType)]
                     });
+
+                if (this[contentType + suffix].cls) {
+                    this[contentType + suffix].cls = this[contentType + suffix].cls + ' t-contenttype-' + contentType.toLowerCase();
+                } else {
+                    this[contentType + suffix].cls = 't-contenttype-' + contentType.toLowerCase();
+                }
             } catch (e) {
                 Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
                 Tine.log.error(e.stack ? e.stack : e);
@@ -239,6 +252,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 var cp = this.getCenterPanel(contentType);
                 if (Ext.isFunction(cp.getActionToolbar)) {
                     this[contentType + 'ActionToolbar'] = cp.getActionToolbar();
+                    
+                    if (this[contentType + 'ActionToolbar'].cls) {
+                        this[contentType + 'ActionToolbar'].cls = this[contentType + 'ActionToolbar'].cls + ' t-contenttype-' + contentType.toLowerCase();
+                    } else {
+                        this[contentType + 'ActionToolbar'].cls = 't-contenttype-' + contentType.toLowerCase();
+                    }
                 }
             } catch (e) {
                 Tine.log.error('Could not create northPanel');

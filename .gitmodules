@@ -1,0 +1,3 @@
+[submodule "tine20/images/icon-set"]
+	path = tine20/images/icon-set
+	url = https://github.com/tine20/icon-set.git

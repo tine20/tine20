@@ -432,7 +432,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 enableFileDrop: false,
                 disable: true
             }],
-            iconCls: this.app.appName + 'IconCls',
+            iconCls: 'action_add',
             actionUpdater: function(action) {
                 var _ = window.lodash,
                     allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false),

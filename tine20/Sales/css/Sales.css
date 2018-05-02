@@ -6,9 +6,9 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * TODO use new icon-set
  */
- 
- 
+
 .SalesIconCls, .x-tree-node-icon.SalesContract, .SalesContract {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
 }

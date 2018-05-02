@@ -7,13 +7,6 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-
 .SimpleFAQIconCls {
-    background-image:url(../../images/oxygen/16x16/actions/help-contents.png) !important;
-}
-.x-btn-medium .SimpleFAQIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/help-contents.png) !important;
-}
-.x-btn-large .SimpleFAQIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/help-contents.png) !important;
+    background-image: url(../../images/icon-set/icon_faq.svg) !important;
 }

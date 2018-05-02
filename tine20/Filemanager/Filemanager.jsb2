@@ -105,6 +105,10 @@
         {
           "text": "Filemanager.css",
           "path": "css/"
+        },
+        {
+          "text": "Node.css",
+          "path": "css/"
         }
       ]
     }
