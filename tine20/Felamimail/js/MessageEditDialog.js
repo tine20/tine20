@@ -1343,46 +1343,47 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
         
         this.loadMask.show();
-    
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
-            this.validateSystemlinkRecipients().then(function(mails) {
-                me.onApplyChanges(closeWindow, emptySubject, passwordSet, mails)
-            });
-            return;
-        } else if (_.isArray(nonSystemAccountRecipients) && nonSystemAccountRecipients.length > 0) {
-            let records = _.filter(me.recipientGrid.getStore().data.items, function (rec) {
-                let match = false;
-                _.each(nonSystemAccountRecipients, function (mail) {
-                    if (null !== rec.get('address').match(new RegExp(mail))) {
-                        match = true;
-                    }
-                });
-                
-                return match;
-            }.bind({'nonSystemAccountRecipients': nonSystemAccountRecipients}));
-            
-            _.each(records, function (rec) {
-                var index = me.recipientGrid.getStore().indexOf(rec),
-                    row = me.recipientGrid.view.getRow(index);
 
-                row.classList.add('felamimail-is-external-recipient');
-            });
-            
-            Ext.MessageBox.confirm(
-                this.app.i18n._('Warning'),
-                this.app.i18n._('Some attachments are of type "systemlinks" whereas some of the recipients (marked yellow), couldn\'t be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments.'),
-                function (button) {
-                    if (button == 'yes') {
-                        me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
-                    } else {
-                        this.loadMask.hide();
-                    }
-                },
-                this
-            );
-            return;
-        }
-        
+        // FIXME: this is borke!
+        // if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
+        //     this.validateSystemlinkRecipients().then(function(mails) {
+        //         me.onApplyChanges(closeWindow, emptySubject, passwordSet, mails)
+        //     });
+        //     return;
+        // } else if (_.isArray(nonSystemAccountRecipients) && nonSystemAccountRecipients.length > 0) {
+        //     let records = _.filter(me.recipientGrid.getStore().data.items, function (rec) {
+        //         let match = false;
+        //         _.each(nonSystemAccountRecipients, function (mail) {
+        //             if (null !== rec.get('address').match(new RegExp(mail))) {
+        //                 match = true;
+        //             }
+        //         });
+        //
+        //         return match;
+        //     }.bind({'nonSystemAccountRecipients': nonSystemAccountRecipients}));
+        //
+        //     _.each(records, function (rec) {
+        //         var index = me.recipientGrid.getStore().indexOf(rec),
+        //             row = me.recipientGrid.view.getRow(index);
+        //
+        //         row.classList.add('felamimail-is-external-recipient');
+        //     });
+        //
+        //     Ext.MessageBox.confirm(
+        //         this.app.i18n._('Warning'),
+        //         this.app.i18n._('Some attachments are of type "systemlinks" whereas some of the recipients (marked yellow), couldn\'t be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments.'),
+        //         function (button) {
+        //             if (button == 'yes') {
+        //                 me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
+        //             } else {
+        //                 this.loadMask.hide();
+        //             }
+        //         },
+        //         this
+        //     );
+        //     return;
+        // }
+        //
         // If filemanager attachments are possible check if passwords are required to enter
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && passwordSet !== true) {
             var attachmentStore = this.attachmentGrid.getStore();
