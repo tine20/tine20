@@ -23,7 +23,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const CLASSNAME             = 'class';
     const CLIENTREGISTRYINCLUDE = 'clientRegistryInclude';
     const CONTENT               = 'content';
-    const DEFAULT               = 'default';
+    const DEFAULT_STR           = 'default';
     const DESCRIPTION           = 'description';
     const LABEL                 = 'label';
     const OPTIONS               = 'options';
@@ -815,7 +815,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             }
         } elseif (!isset($target[$key][self::TYPE]) || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
                 $target[$key][self::TYPE] !== self::TYPE_ARRAY)) {
-            $target[$key][self::DEFAULT] = $val;
+            $target[$key][self::DEFAULT_STR] = $val;
         }
     }
     
