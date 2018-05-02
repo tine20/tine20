@@ -57,7 +57,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      */
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
-        if (count($record->grants) > 0) {
+        if ($record->grants instanceof Tinebase_Record_RecordSet && count($record->grants) > 0) {
             $this->setGrants($updatedRecord, $record->grants);
         }
 
