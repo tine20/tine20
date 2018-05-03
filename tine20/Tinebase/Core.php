@@ -1515,6 +1515,8 @@ class Tinebase_Core
      */
     public static function unsetLogger()
     {
+        self::$logLevel = 0;
+        self::set(self::LOGLEVEL, 0);
         self::set(self::LOGGER, null);
     }
     
