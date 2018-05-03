@@ -52,7 +52,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.logo = 'images/tine_logo.png';
-Tine.title = 'Tine 2.0 \uD83C\uDF37';
+Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
 Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
