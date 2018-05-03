@@ -106,4 +106,14 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '11.5');
     }
+
+    /**
+     * force activesync calendar resync for iOS devices
+     */
+    public function update_5()
+    {
+        $release8 = new Calendar_Setup_Update_Release8($this->_backend);
+        $release8->update_11();
+        $this->setApplicationVersion('Calendar', '11.6');
+    }
 }

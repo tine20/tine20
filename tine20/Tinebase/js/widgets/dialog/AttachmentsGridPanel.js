@@ -152,7 +152,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         });
 
         // TODO: does user need rights for Filemanager?
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && Tine.Tinebase.configManager.get('filesystem').createPreviews) {
             this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
                 initialApp: this.app,
                 sm: this.getSelectionModel()

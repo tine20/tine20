@@ -27,6 +27,7 @@ class Tinebase_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
 
+        $suite->addTestSuite(Tinebase_CacheTest::class);
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);
         $suite->addTestSuite(Tinebase_AuthTest::class);

@@ -45,7 +45,7 @@ describe('UserEditDialog', () => {
     expect(uit.validateLoginName('Abcder_Adgef917')).to.be.true
   })
 
-  it('validates invalid username', () => {
+  it('does not validate invalid username', () => {
     expect(uit.validateLoginName('aöäüp.adgef917')).to.be.false
     expect(uit.validateLoginName('}[/adgef917')).to.be.false
   })

@@ -7,6 +7,9 @@
  */
 Ext.ns('Tine.widgets.grid');
 
+require('./AttachmentRenderer');
+require('./ImageRenderer');
+
 /**
  * central renderer manager
  * - get renderer for a given field
@@ -59,6 +62,8 @@ Tine.widgets.grid.RendererManager = function() {
                 // we should not come here!
             } else if (fieldName == 'container_id') {
                 renderer = Tine.Tinebase.common.containerRenderer;
+            } else if (fieldName == 'attachments') {
+                renderer = Tine.widgets.grid.attachmentRenderer;
             }
             
             return renderer;
@@ -89,7 +94,10 @@ Tine.widgets.grid.RendererManager = function() {
                     var keyFieldName = fieldDefinition.keyFieldConfigName;
                     renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, keyFieldName);
                     break;
-                default: 
+                case 'image':
+                    renderer = Tine.widgets.grid.imageRenderer;
+                    break;
+                default:
                     renderer = this.defaultRenderer;
                     break;
             }

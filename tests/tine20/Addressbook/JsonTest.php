@@ -421,15 +421,27 @@ class Addressbook_JsonTest extends TestCase
     /**
      * test customfield modlog
      */
-    public function testCustomfieldModlog()
+    public function testCustomfieldModlogAndSort()
     {
-        $cf = $this->_createCustomfield();
+        $cf = $this->_createCustomfield(Tinebase_Record_Abstract::generateUID());
+        $this->_addContact();
         $contact = $this->_addContact();
         $contact['customfields'][$cf->name] = 'changed value';
         $result = $this->_uit->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
         $this->_checkChangedNote($result['id'], ' ->  ' . $cf->name . ': changed value)');
+
+        // sort by customfield
+        $paging = $this->objects['paging'];
+        $paging['sort'] = $cf->name;
+        $paging['dir'] = 'DESC';
+
+        $searchResult = $this->_uit->searchContacts(
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->container->id] , $paging);
+        static::assertEquals('changed value', $searchResult['results'][0]['customfields'][$cf->name]);
+        static::assertTrue(!isset($searchResult['results'][1]['customfields']) ||
+            !isset($searchResult['results'][1]['customfields'][$cf->name]));
     }
 
     /**

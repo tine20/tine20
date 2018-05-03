@@ -909,6 +909,7 @@ class Tinebase_ModelConfiguration {
      *
      * @var array $modelClassConfiguration
      * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception
      */
     public function __construct($modelClassConfiguration)
     {
@@ -1002,7 +1003,7 @@ class Tinebase_ModelConfiguration {
                     'key'     => 'tag',
                     'filter'  => $this->_filterModelMapping['tag'],
                     'options' => array(
-                           'idProperty' => $this->_getTableName() . '.' . $this->_idProperty,
+                           'idProperty' => $this->getTableName() . '.' . $this->_idProperty,
                            'applicationName' => $this->_appName
                     )
                 )
@@ -1011,9 +1012,19 @@ class Tinebase_ModelConfiguration {
 
         if ($this->_hasAttachments) {
             $this->_fields['attachments'] = array(
-                'label' => NULL,
+                'label' => 'Attachments',
                 'type'  => 'attachments',
                 'recursiveResolving' => true,
+                'filterDefinition'  => [
+                    'filter'    => 'Tinebase_Model_Filter_RecordAttachment',
+                    'options'   => [
+                        'idProperty'    => $this->_idProperty,
+                        'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+                    ]
+                ],
+                'sortable' => false,
+                // node: this config is currently not used here (only in "records" fields)
+                'omitOnSearch' => false,
             );
         }
 
@@ -1091,14 +1102,17 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
-                if (!isset($fieldDef['name']) || ! Tinebase_Config::getAppConfig(
-                        isset($fieldDef['config']['application']) ? $fieldDef['config']['application'] :
-                            $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
-                        $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                if (Tinebase_Application::getInstance()->isInstalled($this->_applicationName)) {
+                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig(
+                                isset($fieldDef['config']['application'])
+                                    ? $fieldDef['config']['application']
+                                    : $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
+                            $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+                    }
                 }
             } elseif ($fieldDef['type'] == 'virtual') {
-                $fieldDef['config']['sortable'] = isset($virtualField['config']['sortable']) ? $virtualField['config']['sortable'] : false;
+                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : false;
                 $virtualField = $fieldDef['config'];
                 $virtualField['key'] = $fieldKey;
                 if ((isset($virtualField['default']))) {
@@ -1110,6 +1124,8 @@ class Tinebase_ModelConfiguration {
 
             } elseif ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
+            }  elseif ($fieldDef['type'] == 'image') {
+                $fieldDef['label'] = 'Image'; // _('Image')
             }
 
             if (isset($fieldDef['copyOmit']) && $fieldDef['copyOmit']) {
@@ -1268,7 +1284,7 @@ class Tinebase_ModelConfiguration {
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _getTableName()
+    public function getTableName()
     {
         if (is_array($this->_table) && isset($this->_table['name'])) {
             $tableName = $this->_table['name'];
@@ -1440,7 +1456,7 @@ class Tinebase_ModelConfiguration {
                     $this->_filterModel['customfield'] = array(
                         'filter' => 'Tinebase_Model_Filter_CustomField', 
                         'options' => array(
-                            'idProperty' => $this->_getTableName() . '.' . $this->_idProperty
+                            'idProperty' => $this->getTableName() . '.' . $this->_idProperty
                         )
                     );
                 } catch (Exception $e) {

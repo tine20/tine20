@@ -564,11 +564,32 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $select = $this->_getSelect($_cols, $getDeleted);
         $this->_addWhereIdIn($select, $ids);
+        if (null !== $_pagination) {
+            // clone pagination to prevent accidental change of original object
+            $pagination = clone($_pagination);
+        }
+        $pagination->appendModelConfig($select);
         $pagination->appendSort($select);
         
         $rows = $this->_fetch($select, self::FETCH_ALL);
         
         return $this->_rawDataToRecordSet($rows);
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getIgnoreSortColumns()
+    {
+        return [];
+    }
+
+    /**
+     * @param Tinebase_Model_Pagination $pagination
+     * @param Zend_Db_Select $select
+     */
+    protected function _appendForeignSort(Tinebase_Model_Pagination $pagination, Zend_Db_Select $select)
+    {
     }
 
     /**
@@ -656,9 +677,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         if ($_pagination instanceof Tinebase_Model_Pagination) {
-            foreach((array) $_pagination->sort as $sort) {
-                if (! (isset($colsToFetch[$sort]) || array_key_exists($sort, $colsToFetch))) {
-                    $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
+            $ignoreColumns = $this->_getIgnoreSortColumns();
+            foreach($_pagination->getSortColumns() as $sort) {
+                if (!in_array($sort, $ignoreColumns) && !isset($colsToFetch[$sort])) {
+                    $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' .
+                        $sort : $sort;
                 }
             }
         }
@@ -708,9 +731,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @todo allow generic foreign record/relation/keyfield sorting
      */
-    protected function _appendForeignSort(Tinebase_Model_Pagination $pagination, Zend_Db_Select $select)
+    /*protected function _appendForeignSort(Tinebase_Model_Pagination $pagination, Zend_Db_Select $select)
     {
-    }
+    }*/
     
     /**
      * adds 'id in (...)' where stmt

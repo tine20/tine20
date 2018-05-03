@@ -22,13 +22,24 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      */
     protected $_webdavTree;
 
+    protected $_oldLoginnameAsFoldername;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->_oldLoginnameAsFoldername = Tinebase_Config::getInstance()
+            ->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME};
+    }
+
     /**
      * tear down tests
      */
     protected function tearDown()
     {
         parent::tearDown();
-        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME,
+            $this->_oldLoginnameAsFoldername);
     }
 
     /**
@@ -78,6 +89,68 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager');
+    }
+
+    /**
+     * @param string $property
+     * @throws Timetracker_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    protected function _testGetNodeForPath_webdav_filemanagerWithOtherUsers($property)
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager');
+
+        static::assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
+        static::assertEquals('Filemanager', $node->getName());
+
+        /** @var Tinebase_Model_FullUser $sclever */
+        $sclever = $this->_personas['sclever'];
+        $fs = Tinebase_FileSystem::getInstance();
+        $scleverFolder = $fs->getApplicationBasePath('Filemanager', Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) . '/' .
+            $sclever->getId();
+        $scleverNode = $fs->stat($scleverFolder);
+        $personalFolder = $fs->getTreeNodeChildren($scleverNode)->getFirstRecord();
+        $personalFolder->grants = [[
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_grant' => Tinebase_Model_Grants::GRANT_READ,
+            ],[
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_grant' => Tinebase_Model_Grants::GRANT_SYNC,
+            ]];
+        $fs->setGrantsForNode($personalFolder, $personalFolder->grants);
+
+        $children = $node->getChildren();
+
+        static::assertGreaterThanOrEqual(3, count($children));
+        static::assertInstanceOf('Filemanager_Frontend_WebDAV', $children[0], 'wrong node class');
+        $names = [];
+        /** @var Filemanager_Frontend_WebDAV $child */
+        foreach ($children as $child) {
+            $names[] = $child->getName();
+        }
+        // we never use id as name, if it should be supported, go there and add it!
+        // \Filemanager_Frontend_WebDAV::_getOtherUsersChildren
+        static::assertEquals(1, count(array_intersect($names, [$sclever->{$property}])));
+    }
+
+    public function testGetNodeForPath_webdav_filemanagerWithOtherUsersLoginName()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        // we never use id as name, if it should be supported, go there and add it!
+        // \Filemanager_Frontend_WebDAV::_getOtherUsersChildren
+        $this->_testGetNodeForPath_webdav_filemanagerWithOtherUsers('accountLoginName');
+    }
+
+    public function testGetNodeForPath_webdav_filemanagerWithOtherUsersDisplayName()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+        // we never use id as name, if it should be supported, go there and add it!
+        // \Filemanager_Frontend_WebDAV::_getOtherUsersChildren
+        $this->_testGetNodeForPath_webdav_filemanagerWithOtherUsers('accountDisplayName');
     }
     
     /**

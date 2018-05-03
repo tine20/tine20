@@ -10,7 +10,7 @@
       "url": "https://git.tine20.org/git/composerapploader"
     }, {
         "type": "git",
-        "url": "https://git.tine20.org/git/zendframework1"
+        "url": "https://github.com/tine20/zendframework1.git"
     },{
         "type": "git",
         "url": "https://git.tine20.org/git/opendocument"
@@ -26,7 +26,7 @@
     }],
     "require": {
         "php": "^5.6 | ^7.0",
-        "zendframework/zendframework1": "1.12.20pl23 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl28 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "dev-master",
         "ezyang/htmlpurifier": "v4.6.0",
@@ -73,5 +73,14 @@
         "platform": {
             "php": "5.6"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+        "build": "./vendor/bin/phing"
+    },
+    "support": {
+        "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
+        "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
     }
 }

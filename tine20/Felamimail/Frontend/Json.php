@@ -612,4 +612,41 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
+
+    /**
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function doMailsBelongToAccount($mails)
+    {
+        $contactFilter = new Addressbook_Model_ContactFilter([
+            [
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
+            ],
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'field' => 'email',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ],
+                    [
+                        'field' => 'email_home',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ]
+                ]
+            ]
+        ]);
+        
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+        
+        
+        $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
+        
+        return array_diff($mails, $usermails);
+    }   
 }

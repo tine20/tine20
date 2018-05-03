@@ -210,7 +210,12 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     name: 'imap_ssl',
                     value: 'none',
                     store: [['none', this.app.i18n._('None')], ['tls',  this.app.i18n._('TLS')], ['ssl',  this.app.i18n._('SSL')]]
-                }, commonComboConfig), 
+                }, commonComboConfig), {
+                    name: 'imap_verifyPeer',
+                    fieldLabel: this.app.i18n._('Verify peer Certificate'),
+                    checked: true,
+                    xtype: 'checkbox'
+                },
                 Ext.applyIf({
                     name: 'imap_useSystemAccount',
                     fieldLabel: this.app.i18n._('Use system account'),
@@ -326,7 +331,12 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     name: 'smtp_ssl',
                     value: 'none',
                     store: [['none', this.app.i18n._('None')], ['tls', this.app.i18n._('TLS')], ['ssl', this.app.i18n._('SSL')]]
-                }, commonComboConfig), 
+                }, commonComboConfig), {
+                    name: 'smtp_verifyPeer',
+                    fieldLabel: this.app.i18n._('Verify peer Certificate'),
+                    checked: true,
+                    xtype: 'checkbox'
+                },
                 Ext.applyIf({
                     fieldLabel: this.app.i18n._('Authentication'),
                     name: 'smtp_auth',

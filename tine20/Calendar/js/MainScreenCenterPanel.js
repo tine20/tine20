@@ -1278,7 +1278,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         } else {
             this.omitCopyTitle = record.hasPoll();
-            record = Tine.Calendar.EventEditDialog.superclass.doCopyRecordToReturn.call(this, record);
+            record = Tine.Calendar.EventEditDialog.prototype.doCopyRecordToReturn(record);
 
             record.set('editGrant', true);
             record.set('id', '');

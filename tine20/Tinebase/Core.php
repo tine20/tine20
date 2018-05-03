@@ -496,8 +496,10 @@ class Tinebase_Core
 
         $cacheFile = self::getCacheDir() . '/cachedTine20Container.php';
 
-        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile )) {
-            require_once $cacheFile;
+        // be aware of race condition between is_file and include_once => somebody may have deleted the file
+        // yes it does get deleted! => check result of include_once
+        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile) && true === @include_once($cacheFile) &&
+                class_exists('Tine20Container')) {
             /** @noinspection PhpUndefinedClassInspection */
             $container = new Tine20Container();
         } else {
@@ -1048,8 +1050,19 @@ class Tinebase_Core
                         throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
                     }
                 }
-                
-                // @todo set charset to utf8mb4 / @see 0008708: switch to mysql utf8mb4
+
+                $cacheId = md5(__METHOD__ . '::useUtf8mb4');
+                if (!isset($dbConfigArray['useUtf8mb4'])) {
+                    if (false !== ($result = static::getCache()->load($cacheId))) {
+                        $dbConfigArray['useUtf8mb4'] = $result;
+                    }
+                }
+
+                if (isset($dbConfigArray['useUtf8mb4']) && !$dbConfigArray['useUtf8mb4']) {
+                    $dbConfigArray['charset'] = 'utf8';
+                } else {
+                    $dbConfigArray['charset'] = 'utf8mb4';
+                }
                 
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(
@@ -1061,6 +1074,21 @@ class Tinebase_Core
                     "SET SESSION group_concat_max_len = 4294967295"
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
+
+                if (!isset($dbConfigArray['useUtf8mb4'])) {
+                    // auto detect charset to be used
+                    // empty db => utf8mb4
+                    if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
+                            strpos($db->query('show create table ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1),
+                            'utf8mb4') === false) {
+                        $db->closeConnection();
+                        $dbConfigArray['charset'] = 'utf8';
+                        $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
+                        static::getCache()->save(0, $cacheId);
+                    } else {
+                        static::getCache()->save(1, $cacheId);
+                    }
+                }
                 break;
                 
             case self::PDO_OCI:
@@ -1909,7 +1937,15 @@ class Tinebase_Core
                 $session = null;
             }
 
-            $isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+            $isFileSystemAvailable = false;
+            if (!empty(Tinebase_Core::getConfig()->filesdir)) {
+                if (! is_writeable(Tinebase_Core::getConfig()->filesdir)) {
+                    // try to create it
+                    $isFileSystemAvailable = @mkdir(Tinebase_Core::getConfig()->filesdir);
+                } else {
+                    $isFileSystemAvailable = true;
+                }
+            }
 
             if ($session instanceof Zend_Session_Namespace) {
                 if (Tinebase_Session::isWritable()) {
@@ -2117,8 +2153,10 @@ class Tinebase_Core
                 'php_version' => phpversion(),
             ),
         ];
-        $client = new Raven_Client($sentryServerUri, $config);
-        $error_handler = new Raven_ErrorHandler($client);
+        $client = new Tinebase_Sentry_Raven_Client($sentryServerUri, $config);
+        $serializer = new Tinebase_Sentry_Raven_Serializer();
+        $client->setSerializer($serializer);
+        $error_handler = new Raven_ErrorHandler($client, false, E_ALL);
         $error_handler->registerExceptionHandler();
         $error_handler->registerErrorHandler();
         $error_handler->registerShutdownFunction();

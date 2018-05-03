@@ -20,6 +20,17 @@
  */
 abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 {
+    const CLASSNAME             = 'class';
+    const CLIENTREGISTRYINCLUDE = 'clientRegistryInclude';
+    const CONTENT               = 'content';
+    const DEFAULT_STR           = 'default';
+    const DESCRIPTION           = 'description';
+    const LABEL                 = 'label';
+    const OPTIONS               = 'options';
+    const SETBYADMINMODULE      = 'setByAdminModule';
+    const SETBYSETUPMODULE      = 'setBySetupModule';
+    const TYPE                  = 'type';
+
     /**
      * object config type
      * 
@@ -119,6 +130,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     protected $_cachedApplicationConfig = NULL;
 
     protected $_mergedConfigCache = array();
+
+    protected $_isAppDefaultConfigMerged = false;
 
     /**
      * server classes
@@ -237,11 +250,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         $default = null;
         $definition = self::getDefinition($name);
-        
-        $appDefaultConfig = $this->_getAppDefaultsConfigFileData();
-        if (isset($appDefaultConfig[$name])) {
-            $default = $appDefaultConfig[$name];
-        } else if (null !== $definition) {
+
+        if (null !== $definition) {
             if (isset($definition['default']) || array_key_exists('default', $definition)) {
                 $default = $definition['default'];
             } elseif (isset($definition['type']) && isset($definition['class']) && $definition['type'] === self::TYPE_OBJECT) {
@@ -270,6 +280,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         if (null === $_value) {
             $this->delete($_name);
             return;
+        }
+
+        if (is_object($_value) && $_value instanceof Tinebase_Record_Abstract) {
+            $_value = $_value->toArray(true);
         }
 
         $configRecord = new Tinebase_Model_Config(array(
@@ -454,6 +468,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         // reset logger as the new available config from conf.d mail contain different logger configuration
         Tinebase_Core::unsetLogger();
+        $this->_mergedConfigCache = [];
 
         $ttl = 60;
         if (isset(self::$_configFileData['composeConfigTTL'])) {
@@ -500,26 +515,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _getAppDefaultsConfigFileData()
     {
-        $cacheId = $this->_appName;
-        try {
-            $configData = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName .
+            DIRECTORY_SEPARATOR . 'config.inc.php';
 
-            $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName . DIRECTORY_SEPARATOR . 'config.inc.php';
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Looking for defaults config.inc.php at ' . $configFilename);
-            if (file_exists($configFilename)) {
-                /** @noinspection PhpIncludeInspection */
-                $configData = include($configFilename);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Found default config.inc.php for app ' . $this->_appName);
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ' . print_r($configData, true));
-            } else {
-                $configData = array();
-            }
-            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $configData);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Looking for defaults config.inc.php at ' . $configFilename);
+        if (file_exists($configFilename)) {
+            /** @noinspection PhpIncludeInspection */
+            $configData = include($configFilename);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Found default config.inc.php for app ' . $this->_appName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
+                . __LINE__ . ' ' . print_r($configData, true));
+        } else {
+            $configData = array();
         }
         
         return $configData;
@@ -787,9 +796,36 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     public function getDefinition($_name)
     {
+        if (!$this->_isAppDefaultConfigMerged) {
+            foreach ($this->_getAppDefaultsConfigFileData() as $key => $val) {
+                $this->_mergeAppDefaultsConfigData(static::$_properties, $key, $val);
+            }
+            $this->_isAppDefaultConfigMerged = true;
+        }
         $properties = static::getProperties();
         
         return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
+    }
+
+    protected function _mergeAppDefaultsConfigData(&$target, $key, $val)
+    {
+        if (!isset($target[$key])) {
+            return;
+        }
+        if (is_array($val)) {
+            if ($target[$key][self::TYPE] === self::TYPE_OBJECT && $target[$key][self::CLASSNAME] ===
+                    Tinebase_Config_Struct::class && isset($target[$key][self::CONTENT])) {
+                foreach ($val as $k => $v) {
+                    if (!isset($target[$key][self::CONTENT][$k])) {
+                        continue;
+                    }
+                    $this->_mergeAppDefaultsConfigData($target[$key][self::CONTENT], $k, $v);
+                }
+            }
+        } elseif (!isset($target[$key][self::TYPE]) || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
+                $target[$key][self::TYPE] !== self::TYPE_ARRAY)) {
+            $target[$key][self::DEFAULT_STR] = $val;
+        }
     }
     
     /**

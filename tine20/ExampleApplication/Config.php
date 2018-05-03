@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -41,102 +41,102 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::EXAMPLE_MAILCONFIG => array(
-            'label'                 => 'Example Mail Config',
-            'description'           => 'explain some stuff here',
-            'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
-            'class'                 => 'Tinebase_Config_Struct',
-            'content'               => array(
+            self::LABEL              => 'Example Mail Config',
+            self::DESCRIPTION        => 'explain some stuff here',
+            self::TYPE               => self::TYPE_OBJECT,
+            self::CLASSNAME          => Tinebase_Config_Struct::class,
+            self::CONTENT            => array(
                 self::SMTP              => array(
-                    'label'                 => 'Example SMTP Config',
-                    'description'           => 'explain some stuff here',
-                    'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
-                    'class'                 => 'Tinebase_Config_Struct',
-                    'content'               => array(
+                    self::LABEL              => 'Example SMTP Config',
+                    self::DESCRIPTION        => 'explain some stuff here',
+                    self::TYPE               => self::TYPE_OBJECT,
+                    self::CLASSNAME          => Tinebase_Config_Struct::class,
+                    self::CONTENT            => array(
                         self::HOST              => array(
-                            'label'                 => 'Example SMTP Host',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-                            'default'               => 'localhost'
+                            self::LABEL              => 'Example SMTP Host',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_STRING,
+                            self::DEFAULT_STR            => 'localhost'
                         ),
                         self::PORT              => array(
-                            'label'                 => 'Example SMTP Port',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-                            'default'               => 123
+                            self::LABEL              => 'Example SMTP Port',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_INT,
+                            self::DEFAULT_STR            => 123
                         ),
                         self::SSL              => array(
-                            'label'                 => 'Example SMTP SSL usage',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-                            'default'               => true
+                            self::LABEL              => 'Example SMTP SSL usage',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_BOOL,
+                            self::DEFAULT_STR            => true
                         ),
                     ),
-                    'default' => array(),
+                    self::DEFAULT_STR => array(),
                 ),
                 self::IMAP              => array(
-                    'label'                 => 'Example IMAP Config',
-                    'description'           => 'explain some stuff here',
-                    'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
-                    'class'                 => 'Tinebase_Config_Struct',
-                    'content'               => array(
+                    self::LABEL              => 'Example IMAP Config',
+                    self::DESCRIPTION        => 'explain some stuff here',
+                    self::TYPE               => self::TYPE_OBJECT,
+                    self::CLASSNAME          => Tinebase_Config_Struct::class,
+                    self::CONTENT            => array(
                         self::HOST              => array(
-                            'label'                 => 'Example IMAP Host',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-                            'default'               => 'foreignhost'
+                            self::LABEL              => 'Example IMAP Host',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_STRING,
+                            self::DEFAULT_STR            => 'foreignhost'
                         ),
                         self::PORT              => array(
-                            'label'                 => 'Example IMAP Port',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-                            'default'               => 346
+                            self::LABEL              => 'Example IMAP Port',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_INT,
+                            self::DEFAULT_STR            => 346
                         ),
                         self::SSL              => array(
-                            'label'                 => 'Example SMTP SSL usage',
-                            'description'           => 'explain some stuff here',
-                            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-                            'default'               => false
+                            self::LABEL              => 'Example SMTP SSL usage',
+                            self::DESCRIPTION        => 'explain some stuff here',
+                            self::TYPE               => self::TYPE_BOOL,
+                            self::DEFAULT_STR            => false
                         ),
                     ),
-                    'default' => array(),
+                    self::DEFAULT_STR => array(),
                 )
             ),
-            'default' => array(),
+            self::DEFAULT_STR => array(),
         ),
 
         self::EXAMPLE_STATUS => array(
                                    //_('Status Available')
-            'label'                 => 'Status Available',
+            self::LABEL              => 'Status Available',
                                    //_('Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.')
-            'description'           => 'Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'ExampleApplication_Model_Status'),
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'default'               => array(
+            self::DESCRIPTION        => 'Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => array('recordModel' => ExampleApplication_Model_Status::class),
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR            => array(
                 'records' => array(
                     array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
                     array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
                     array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
                 ),
-                'default' => 'IN-PROCESS'
+                self::DEFAULT_STR => 'IN-PROCESS'
             )
         ),
 
         self::EXAMPLE_REASON => array(
             //_('Reasons Available')
-            'label'                 => 'Reasons Available',
+            self::LABEL              => 'Reasons Available',
             //_('Possible status reasons.')
-            'description'           => 'Possible status reasons.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array(
+            self::DESCRIPTION        => 'Possible status reasons.',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => array(
                 'parentField'     => 'status'
             ),
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'default'               => array(
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR            => array(
                 'records' => array(
                     array('id' => 'COMPLETED:CHANGE',           'value' => 'Change'), //_('Change')
                     array('id' => 'COMPLETED:DOCU',             'value' => 'Documentation'), //_('Documentation')
@@ -146,36 +146,36 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                     array('id' => 'IN-PROCESS:REVIEW',          'value' => 'Review'), //_('Review')
                     array('id' => 'IN-PROCESS:INTEGRATION',     'value' => 'Integration'), //_('Integration')
                 ),
-                'default' => array('COMPLETED:CHANGE', 'CANCELLED:REQCHANGE', 'IN-PROCESS:IMPLEMENTATION'),
+                self::DEFAULT_STR => array('COMPLETED:CHANGE', 'CANCELLED:REQCHANGE', 'IN-PROCESS:IMPLEMENTATION'),
             )
         ),
 
         self::ENABLED_FEATURES => array(
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
+            self::LABEL              => 'Enabled Features',
             //_('Enabled Features in Sales Application.')
-            'description'           => 'Enabled Features in Example Application.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
+            self::DESCRIPTION        => 'Enabled Features in Example Application.',
+            self::TYPE               => 'object',
+            self::CLASSNAME          => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::CONTENT            => array(
                 self::EXAMPLE_FEATURE => array(
-                    'label'         => 'Invoices Module', //_('Invoices Module')
-                    'description'   => 'Invoices Module',
-                    'type'          => 'boolean',
-                    'default'       => true,
+                    self::LABEL      => 'Invoices Module', //_('Invoices Module')
+                    self::DESCRIPTION=> 'Invoices Module',
+                    self::TYPE       => 'boolean',
+                    self::DEFAULT_STR    => true,
                 ),
             ),
-            'default'               => array(),
+            self::DEFAULT_STR            => array(),
         ),
 
         self::EXAMPLE_STRING => array(
             //_('Example String')
-            'label'                 => 'Example String',
+            self::LABEL              => 'Example String',
             //_('Just an example string for test purpose')
-            'description'           => 'Just an example string for test purpose',
-            'type'                  => 'string',
-            'default'               => self::EXAMPLE_STRING,
+            self::DESCRIPTION        => 'Just an example string for test purpose',
+            self::TYPE               => 'string',
+            self::DEFAULT_STR            => self::EXAMPLE_STRING,
         )
     );
     
@@ -218,6 +218,11 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
     
     /**

@@ -1488,6 +1488,10 @@ class Setup_Controller
         $config = Tinebase_Config_Abstract::factory($applicationName);
         
         if ($config) {
+            if (null === $config->getDefinition($key)) {
+                throw new Tinebase_Exception_InvalidArgument('config property ' . $key .
+                    ' does not exist in ' . get_class($config));
+            }
             $config->set($key, $value);
         }
     }
@@ -1661,14 +1665,17 @@ class Setup_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        // save the master id
+        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        // do updates now, because maybe application state updates are not yet there
         $this->updateApplications();
 
-        // set the replication master id
+        // then set the replication master id
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         Tinebase_Application::getInstance()->setApplicationState($tinebase,
-            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID,
-            Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq());
-
+            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
+        
         return true;
     }
 
@@ -1772,6 +1779,7 @@ class Setup_Controller
      * @param  array|null $_options
      * @return void
      * @throws Tinebase_Exception_Backend_Database
+     * @throws Exception
      */
     protected function _installApplication(SimpleXMLElement $_xml, $_options = null)
     {
@@ -1784,7 +1792,8 @@ class Setup_Controller
         }
         
         try {
-            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
+            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
             $createdTables = array();
 

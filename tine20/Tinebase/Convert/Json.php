@@ -622,6 +622,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $modelConfiguration);
 
         self::resolveAttachmentImage($records);
+
+        if ($multiple) {
+            if ($records->getFirstRecord()->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
+                Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($records);
+            }
+        }
         
         self::resolveMultipleIdFields($records);
         

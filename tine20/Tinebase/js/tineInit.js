@@ -217,7 +217,7 @@ Tine.Tinebase.tineInit = {
      * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
-        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(favicon/16/png)');
+        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(favicon/30/png)');
 
         Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',

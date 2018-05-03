@@ -93,7 +93,25 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     },
 
     loadPreview: function () {
-        if ('0' === this.record.get('preview_count')) {
+        var _ = window.lodash,
+            me = this,
+            recordClass = this.record.constructor,
+            records = [];
+
+        // attachments preview
+        if (! recordClass.hasField('preview_count') && recordClass.hasField('attachments')) {
+            _.each(this.record.get('attachments'), function(attachmentData) {
+                records.push(new Tine.Tinebase.Model.Tree_Node(attachmentData));
+            });
+        } else if (this.record.get('preview_count')) {
+            records.push(this.record);
+        }
+
+        records = _.filter(records, function(record) {
+            return !!record.get('preview_count');
+        });
+
+        if (! records.length) {
             this.fireEvent('noPreviewAvailable');
             return;
         }
@@ -101,33 +119,32 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
         this.removeAll(true);
         
         this.afterIsRendered().then(function () {
-            var me = this,
-                _ = window.lodash;
-            
-            _.range(me.record.get('preview_count')).forEach(function (previewNumber) {
-                var path = me.record.get('path'),
-                    revision = me.record.get('revision');
+            _.each(records, function(record) {
+                _.range(record.get('preview_count')).forEach(function (previewNumber) {
+                    var path = record.get('path'),
+                        revision = record.get('revision');
 
-                var url = Ext.urlEncode({
-                    method: 'Tinebase.downloadPreview',
-                    frontend: 'http',
-                    _path: path,
-                    _appId: me.initialApp ? me.initialApp.id : me.app.id,
-                    _type: 'previews',
-                    _num: previewNumber,
-                    _revision: revision
-                }, Tine.Tinebase.tineInit.requestUrl + '?');
+                    var url = Ext.urlEncode({
+                        method: 'Tinebase.downloadPreview',
+                        frontend: 'http',
+                        _path: path,
+                        _appId: me.initialApp ? me.initialApp.id : me.app.id,
+                        _type: 'previews',
+                        _num: previewNumber,
+                        _revision: revision
+                    }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-                me.add({
-                    html: '<img style="width: 100%;" src="' + url + '" />',
-                    xtype: 'panel',
-                    frame: true,
-                    border: true
+                    me.add({
+                        html: '<img style="width: 100%;" src="' + url + '" />',
+                        xtype: 'panel',
+                        frame: true,
+                        border: true
+                    });
                 });
             });
             
             me.doLayout();
-        }.bind(this));
+        });
     },
 
     /**

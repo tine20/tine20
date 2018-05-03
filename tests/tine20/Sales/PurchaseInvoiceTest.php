@@ -42,7 +42,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
     protected function _getFilter()
     {
         return array(
-                array('field' => 'query', 'operator' => 'contains', 'value' => '12345'),
+                array('field' => 'query', 'operator' => 'contains', 'value' => '1234'),
         );
     }
     /**
@@ -68,12 +68,6 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $container = Tinebase_Container::getInstance()->getSharedContainer(
                 Tinebase_Core::getUser()->getId(),
                 'Addressbook_Model_Contact',
-                'WRITE'
-        );
-    
-        $containerContracts = Tinebase_Container::getInstance()->getSharedContainer(
-                Tinebase_Core::getUser()->getId(),
-                'Sales_Model_Contract',
                 'WRITE'
         );
     
@@ -173,12 +167,125 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testSearchPurchaseInvoice()
     {
+        // they sort by remark?!
+        $cc1 = $this->_json->saveCostCenter(
+            array('number' => '1', 'remark' => 'a')
+        );
+        $cc2 = $this->_json->saveCostCenter(
+            array('number' => '2', 'remark' => 'b')
+        );
+
         $purchase = $this->_createPurchaseInvoice();
+        $purchase['relations'][1] = [
+            'own_model' => 'Sales_Model_PurchaseInvoice',
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model' => 'Sales_Model_CostCenter',
+            'related_id' => $cc1['id'],
+            'related_backend' => 'Sql',
+            'type' => 'COST_CENTER'
+        ];
+        $purchase['relations'][2] = [
+            'own_model' => 'Sales_Model_PurchaseInvoice',
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model' => 'Addressbook_Model_Contact',
+            'related_id' => $purchase['relations'][0]['related_record']['cpintern_id'],
+            'related_backend' => 'Sql',
+            'type' => 'APPROVER'
+        ];
+        $this->_json->savePurchaseInvoice($purchase);
+
+        $customerData = array(
+            'name' => 'ZWorldwide Electronics International',
+            'cpextern_id' => $purchase['relations'][0]['related_record']['cpextern_id'],
+            'cpintern_id' => $purchase['relations'][0]['related_record']['cpintern_id'],
+            'number'      => 54322,
+
+            'iban'        => 'CN09234098324098234598',
+            'bic'         => '0239580429570923432444',
+            'url'         => 'http://wwei.cn',
+            'vatid'       => '239rc9mwqe9c2q',
+            'credit_term' => '30',
+            'currency'    => 'EUR',
+            'curreny_trans_rate' => 7.034,
+            'discount'    => 12.5,
+
+            'adr_prefix1' => 'no prefix 1',
+            'adr_prefix2' => 'no prefix 2',
+            'adr_street' => 'Mao st. 2000',
+            'adr_postalcode' => '1',
+            'adr_locality' => 'Shanghai',
+            'adr_region' => 'Shanghai',
+            'adr_countryname' => 'China',
+            'adr_pobox'   => '7777777'
+        );
+
+        $purchaseData = array(
+            'number' => 'R-12346',
+            'description' => 'testz',
+            'discount' => 0,
+            'due_in' => 10,
+            'date' => '2015-03-17 00:00:00',
+            'due_at' => '2015-03-27 00:00:00',
+            'price_net' => 10,
+            'sales_tax' => 19,
+            'price_tax' => 1.9,
+            'price_gross' => 11.9,
+            'price_gross2' => 2,
+            'price_total' => 13.9,
+            'relations' => [[
+                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model' => 'Sales_Model_Supplier',
+                'related_record' => $customerData,
+                'related_backend' => 'Sql',
+                'type' => 'SUPPLIER'
+            ],[
+                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model' => 'Sales_Model_CostCenter',
+                'related_id' => $cc2['id'],
+                'related_backend' => 'Sql',
+                'type' => 'COST_CENTER'
+            ],[
+                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model' => 'Addressbook_Model_Contact',
+                'related_id' => $purchase['relations'][0]['related_record']['cpextern_id'],
+                'related_backend' => 'Sql',
+                'type' => 'APPROVER'
+            ],]
+        );
+
+        $purchase2 = $this->_json->savePurchaseInvoice($purchaseData);
         
         // search & check
-        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $this->_getPaging());
+        $paging = $this->_getPaging();
+        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
         $this->assertEquals($purchase['number'], $search['results'][0]['number']);
-        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals(2, $search['totalcount']);
+
+        $paging['sort'] = 'costcenter';
+        $paging['dir'] = 'DESC';
+        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
+        $this->assertEquals($purchase2['number'], $search['results'][0]['number']);
+        $this->assertEquals($purchase['number'], $search['results'][1]['number']);
+        $this->assertEquals(2, $search['totalcount']);
+
+        $paging['sort'] = 'approver';
+        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
+        $this->assertEquals($purchase['number'], $search['results'][1]['number']);
+        $this->assertEquals(2, $search['totalcount']);
+
+        $paging['sort'] = 'supplier';
+        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
+        $this->assertEquals($purchase['number'], $search['results'][1]['number']);
+        $this->assertEquals(2, $search['totalcount']);
+
+        $paging['sort'] = ['supplier', 'approver', 'costcenter'];
+        $paging['dir'] = 'ASC';
+        $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
+        $this->assertEquals($purchase['number'], $search['results'][0]['number']);
+        $this->assertEquals(2, $search['totalcount']);
     }
     
     /**

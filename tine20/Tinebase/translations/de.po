@@ -2986,6 +2986,10 @@ msgstr "Bankverbindung"
 msgid "Private Information"
 msgstr "Private Informationen"
 
+#: ModelConfiguration.php:1116
+msgid "Image"
+msgstr "Bild"
+
 #: FileSystem.php:2790 Container.php:676
 #, python-format
 msgid "%s's personal container"

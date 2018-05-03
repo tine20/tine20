@@ -103,6 +103,8 @@ class Setup_Frontend_Cli
             $this->_setPassword($_opts);
         } elseif(isset($_opts->pgsqlMigration)) {
             $this->_pgsqlMigration($_opts);
+        } elseif(isset($_opts->upgradeMysql564)) {
+            $this->_upgradeMysql564();
         }
         
         if ($exitAfterHandle) {
@@ -218,7 +220,7 @@ class Setup_Frontend_Cli
         $newOpts = new Zend_Console_Getopt(['install' => []], [
             '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
         ]);
-//        $this->_install($newOpts);
+        $this->_install($newOpts);
 
         $blackListedTables = [];
         $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
@@ -239,7 +241,6 @@ class Setup_Frontend_Cli
         $mysqlDB->query('SET unique_checks = 0');
         $mysqlDB->query('SET autocommit = 0');
 
-        //$dataTypes = [];
         foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
             if (strpos($table, 'cache') !== false) {
                 continue;
@@ -250,7 +251,6 @@ class Setup_Frontend_Cli
             $primaries = [];
             $columns = [];
             foreach ($tableDscr as $col => $desc) {
-                //$dataTypes[$desc['DATA_TYPE']] = true;
                 if ($desc['PRIMARY']) {
                     $primaries[] = $col;
                 }
@@ -286,6 +286,77 @@ class Setup_Frontend_Cli
         $mysqlDB->query('COMMIT');
         $mysqlDB->query('SET foreign_key_checks = 1');
         $mysqlDB->query('SET unique_checks = 1');
+
+        $this->_upgradeMysql564();
+    }
+
+    protected function _upgradeMysql564()
+    {
+        $setupBackend = Setup_Backend_Factory::factory();
+        if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            echo ' DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5' . PHP_EOL;
+            return;
+        }
+
+        $failures = array();
+        $setupController = Setup_Controller::getInstance();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
+
+        echo 'starting upgrade ...' . PHP_EOL;
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setupController->getSetupXml($application->name);
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
+
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
+            }
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
+            }
+
+            if (!empty($xml->tables)) {
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
+                        continue;
+                    }
+
+                    // check for fulltext index
+                    foreach ($table->declaration->index as $index) {
+                        if (empty($index->fulltext)) {
+                            continue;
+                        }
+                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        try {
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                        } catch (Exception $e) {
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (count($failures) > 0) {
+            echo PHP_EOL . 'failures:' . PHP_EOL . join(PHP_EOL, $failures);
+        }
+
+        echo PHP_EOL . 'done' . PHP_EOL . PHP_EOL;
     }
 
     /**

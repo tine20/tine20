@@ -75,6 +75,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'pgsqlMigration'            => 'migrate from pgsql to mysql
                         Examples:
                             setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
+                'upgradeMysql564'         => 'update database to use features of MySQL 5.6.4+
+                        Examples:
+                            setup.php --upgrade_mysql_564',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -102,6 +105,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->compare) &&
             empty($opts->setpassword) &&
             empty($opts->getconfig) &&
+            empty($opts->upgradeMysql564) &&
             empty($opts->pgsqlMigration)))
         {
             echo $opts->getUsageMessage();

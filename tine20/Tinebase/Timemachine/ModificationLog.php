@@ -1335,12 +1335,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             unset($authResponse);
 
             //get replication state:
-            $state = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->state;
-            if (!is_array($state) || !isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
-                $masterReplicationId = 0;
-            } else {
-                $masterReplicationId = $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID];
-            }
+            $masterReplicationId = intval(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID));
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

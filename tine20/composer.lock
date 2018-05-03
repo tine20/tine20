@@ -49,7 +49,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
                 "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
-                "shasum": "25184da38936332e6018bcca89e6f03755150232"
+                "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -117,7 +117,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "shasum": "113e4179be5a0e63d3352f06f2dfa89f4fe4e1b8"
+                "shasum": ""
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -187,7 +187,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": "1fc91d2b068164946a139474f624c1b4deec5891"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -253,7 +253,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/common/zipball/a579557bc689580c19fee4e27487a67fe60defc0",
                 "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
-                "shasum": "ee5ae6e3f73df4633537c380bba5e4479973adb6"
+                "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -326,7 +326,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/dbal/zipball/9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
                 "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
-                "shasum": "19ce915d0a38b50507adb5a27231990031b23496"
+                "shasum": ""
             },
             "require": {
                 "doctrine/common": ">=2.4,<2.7-dev",
@@ -397,7 +397,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": "8f23f8307581787e6a58fd30fe3e61f5e9403c03"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -572,7 +572,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
                 "reference": "73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
-                "shasum": "067cef101786f33d291f888f647f618b94a92e43"
+                "shasum": ""
             },
             "require": {
                 "doctrine/cache": "~1.4",
@@ -1366,7 +1366,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
                 "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
-                "shasum": "e0a7a33f0f25a93574dcb75f9b17c963729a788b"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2049,7 +2049,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twigphp/Twig/zipball/dd6ca96227917e1e85b41c7c3cc6507b411e0927",
                 "reference": "dd6ca96227917e1e85b41c7c3cc6507b411e0927",
-                "shasum": "60f3f37de13b8e5a295d317962c20ec127115952"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2.7"
@@ -2621,11 +2621,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl23",
+            "version": "1.12.20pl28",
             "source": {
                 "type": "git",
-                "url": "https://git.tine20.org/git/zendframework1",
-                "reference": "578f8679769f0c7e9472458fc07e73633c12e46a"
+                "url": "https://github.com/tine20/zendframework1.git",
+                "reference": "98da30b05a09687c371e526cac2a515fc07d3967"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2642,7 +2642,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-04-11T14:28:45+00:00"
+            "time": "2018-04-26T14:06:34+00:00"
         }
     ],
     "packages-dev": [
@@ -3904,7 +3904,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch23",
+            "version": "1.12.20.0-patch28",
             "package": "zendframework/zendframework1"
         },
         {

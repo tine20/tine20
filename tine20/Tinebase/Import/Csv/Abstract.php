@@ -83,22 +83,27 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      * get raw data of a single record
      * 
      * @param  resource $_resource
-     * @return array
+     * @return array|null
      */
     protected function _getRawData(&$_resource)
     {
-        $delimiter = ((isset($this->_specialDelimiter[$this->_options['delimiter']]) || array_key_exists($this->_options['delimiter'], $this->_specialDelimiter))) ? $this->_specialDelimiter[$this->_options['delimiter']] : $this->_options['delimiter'];
+        $delimiter = ((isset($this->_specialDelimiter[$this->_options['delimiter']])
+            || array_key_exists($this->_options['delimiter'], $this->_specialDelimiter))
+        )
+            ? $this->_specialDelimiter[$this->_options['delimiter']]
+            : $this->_options['delimiter'];
         $lineData = fgetcsv(
             $_resource,
             $this->_options['maxLineLength'],
             $delimiter,
-            $this->_options['enclosure']
-            // escape param is only available in PHP >= 5.3.0
-            // $this->_options['escape']
+            $this->_options['enclosure'],
+            $this->_options['escape']
         );
         
         if (is_array($lineData) && count($lineData) == 1) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
+            return null;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

@@ -243,7 +243,11 @@ abstract class Tinebase_Convert_VCalendar_Abstract
         
         if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
-            $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
+
+            $isFloatingTime = !$dateTimeProperty['TZID'] && !preg_match('/Z$/i', $dateTimeProperty->getValue());
+            $isDate = (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE');
+
+            $tz = ($_useUserTZ || $isFloatingTime || $isDate) ?
                 (string) Tinebase_Core::getUserTimezone() : 
                 $dateTime->getTimezone();
             

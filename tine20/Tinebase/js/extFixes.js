@@ -995,3 +995,42 @@ Ext.override(Ext.grid.EditorGridPanel, {
         this.readOnly = readOnly;
     }
 });
+
+Ext.override(Ext.layout.ToolbarLayout, {
+    createMenuConfig : function(c, hideOnClick){
+        var cfg = Ext.apply({}, c.initialConfig),
+            group = c.toggleGroup;
+
+        Ext.apply(cfg, {
+            text: c.overflowText || c.text,
+            iconCls: c.iconCls,
+            icon: c.icon,
+            itemId: c.itemId,
+            disabled: c.disabled,
+            handler: c.handler,
+            scope: c.scope,
+            menu: c.menu,
+            hideOnClick: hideOnClick
+        });
+        if(group || c.enableToggle){
+            Ext.apply(cfg, {
+                iconCls: null,
+                icon: null,
+                toggle: function(pressed) {
+                    this.setChecked(pressed);
+                },
+                group: group,
+                checked: c.pressed,
+                listeners: {
+                    checkchange: function(item, checked){
+                        c.toggle(checked);
+                    }
+                }
+            });
+        }
+        delete cfg.ownerCt;
+        delete cfg.xtype;
+        delete cfg.id;
+        return cfg;
+    }
+});

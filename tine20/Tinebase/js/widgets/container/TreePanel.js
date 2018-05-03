@@ -485,6 +485,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 this.selectPath(root + defaultContainerPath);
                 this.getSelectionModel().resumeEvents();
             }).defer(100, this);
+        } else if (! this.hasPersonalContainer) {
+            this.expandPath('/shared');
         }
     },
 

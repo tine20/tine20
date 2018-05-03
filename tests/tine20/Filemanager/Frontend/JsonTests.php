@@ -613,6 +613,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $filepaths;
     }
 
+    /**
+     * @see 0013838: generic attachment renderer with previews
+     */
     public function testAddAttachementFromFilemanager()
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
@@ -623,16 +626,29 @@ class Filemanager_Frontend_JsonTests extends TestCase
             Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId], false);
 
         $adbJsonFE = new Addressbook_Frontend_Json();
-        $contact = $adbJsonFE->getContact($this->_personas['sclever']->contact_id);
-        static::assertTrue(!isset($contact['attachments']) || empty($contact['attachments']),
+        $sclever = $this->_personas['sclever'];
+        $contact = $adbJsonFE->getContact($sclever->contact_id);
+        self::assertTrue(!isset($contact['attachments']) || empty($contact['attachments']),
             'contact should have 0 attachments');
 
         $contact['attachments'] = $result;
         $savedContact = $adbJsonFE->saveContact($contact);
-        static::assertTrue(is_array($savedContact) && isset($savedContact['id']) && $savedContact['id'] ===
+        self::assertTrue(is_array($savedContact) && isset($savedContact['id']) && $savedContact['id'] ===
             $contact['id'], 'saving the contact with the attachment failed');
-        static::assertTrue(isset($savedContact['attachments']) && is_array($savedContact['attachments']) &&
+        self::assertTrue(isset($savedContact['attachments']) && is_array($savedContact['attachments']) &&
             count($savedContact['attachments']) === 1, 'saving the attachment failed');
+
+        // check resolving with search
+        $filter = [[
+            'field'    => 'id',
+            'operator' => 'equals',
+            'value'    =>  $savedContact['id']
+        ]];
+        $result = $adbJsonFE->searchContacts($filter, []);
+        self::assertEquals(1, $result['totalcount']);
+        $contact = $result['results'][0];
+        self::assertTrue(isset($contact['attachments']) && is_array($contact['attachments']) &&
+            count($contact['attachments']) === 1, 'attachments not resolved in search()');
     }
 
     public function testOverwriteFileNode()

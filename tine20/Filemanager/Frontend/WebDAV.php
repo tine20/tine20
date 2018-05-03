@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -32,4 +32,27 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
      * @var string
      */
     protected $_containerModel = 'Tinebase_Model_Tree_Node';
+
+    /**
+     * @return array
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    protected function _getOtherUsersChildren()
+    {
+        $children = array();
+        foreach (Tinebase_FileSystem::getInstance()->getOtherUsers(Tinebase_Core::getUser(),
+                $this->_getApplicationName(), [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC]) as
+                $node) {
+            $name = $node->name;
+            // we never use id as name!
+            if (!$this->_useLoginAsFolderName()) {
+                /** @var Tinebase_Model_FullUser $user */
+                $user = Tinebase_User::getInstance()->getUserByLoginName($name, 'Tinebase_Model_FullUser');
+                $name = $user->accountDisplayName;
+            }
+            $children[] = $this->getChild($name);
+        }
+
+        return $children;
+    }
 }

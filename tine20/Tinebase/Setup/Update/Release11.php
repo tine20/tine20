@@ -501,4 +501,14 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.24');
     }
+
+    /**
+     * update to 11.25
+     *
+     * was: upgrade to utf8mb4 for mysql
+     */
+    public function update_24()
+    {
+        $this->setApplicationVersion('Tinebase', '11.25');
+    }
 }

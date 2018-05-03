@@ -69,7 +69,47 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         $attachments = $this->testGetRecordAttachments($record);
         self::assertEquals(1, count($attachments));
 
+        $adbJson = new Addressbook_Frontend_Json();
+        $contactJson = $adbJson->getContact($record->getId());
+        static::assertTrue(isset($contactJson['attachments']) && isset($contactJson['attachments'][0]) &&
+            isset($contactJson['attachments'][0]['path']));
+        Tinebase_FileSystem::getInstance()->stat(Tinebase_FileSystem::getInstance()->
+            getApplicationBasePath('Addressbook') . '/folders' . $contactJson['attachments'][0]['path']);
+
         return $record;
+    }
+
+    public function testRecordAttachmentFilter()
+    {
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'less', 'value' => 100]
+            ]]
+        ]), null, true);
+        $oldCount = count($result);
+
+        $this->testAddRecordAttachments();
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'greater', 'value' => 100]
+            ]]
+        ]), null, true);
+
+        static::assertGreaterThan(0, count($result), 'no records with attachments size > 100 found');
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'wordstartswith', 'value' => 'Test.txt']
+        ]), null, true);
+
+        static::assertGreaterThan(0, count($result), 'no records with attachments query =>s Test.txt found');
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'attachments', 'operator' => 'in', 'value' => [
+                ['field' => 'size', 'operator' => 'less', 'value' => 100]
+            ]]
+        ]), null, true);
+        static::assertEquals($oldCount, count($result));
     }
     
     /**

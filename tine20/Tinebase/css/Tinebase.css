@@ -456,6 +456,26 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/gear.png) !important;
 }
 
+.action_attach {
+    background-image:url(../../images/oxygen/16x16/actions/attach.png) !important;
+}
+.x-btn-medium .action_attach {
+    background-image:url(../../images/oxygen/22x22/actions/attach.png) !important;
+}
+.x-btn-large .action_attach {
+    background-image:url(../../images/oxygen/32x32/actions/attach.png) !important;
+}
+
+.action_image {
+    background-image:url(../../images/oxygen/16x16/mimetypes/image-x-generic.png) !important;
+}
+.x-btn-medium .action_image {
+    background-image:url(../../images/oxygen/22x22/mimetypes/image-x-generic.png) !important;
+}
+.x-btn-large .action_image {
+    background-image:url(../../images/oxygen/32x32/mimetypes/image-x-generic.png) !important;
+}
+
 .tinebase-action-debug-console {
     background-image:url(../../images/oxygen/16x16/apps/utilities-terminal.png) !important;
 }
@@ -869,6 +889,13 @@ html, body {
 
 .tine-grid-row-nolongerinfilter td {
     color: #aaaaaa;
+}
+
+.tine-grid-row-action-icon {
+    width: 16px;
+    height: 16px;
+    zoom: 65%;
+    background-repeat: no-repeat;
 }
 
 /******* grid cell classes *********/

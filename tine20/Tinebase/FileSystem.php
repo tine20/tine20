@@ -2575,12 +2575,14 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function checkIndexing()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' starting to check indexing');
-
         if (false === $this->_indexingActive) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Indexing disabled');
             return true;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' starting to check indexing');
 
         $success = true;
         foreach($this->_fileObjectBackend->getNotIndexedObjectIds() as $objectId) {
@@ -3150,12 +3152,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function sanitizePreviews()
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' starting to sanitize previews');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize previews');
 
         if (false === $this->_previewActive) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' previews are disabled');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
             return true;
         }
 
@@ -3167,9 +3167,9 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $deleted = 0;
 
         foreach($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter(array(
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE)
-                ), '', array('ignoreAcl' => true))
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+                ], '', ['ignoreAcl' => true])
                 , null, true) as $id) {
 
             /** @var Tinebase_Model_Tree_Node $node */
@@ -3218,9 +3218,9 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         $parents = array();
         foreach($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter(array(
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW)
-                ), '', array('ignoreAcl' => true))
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW]
+                ], '', ['ignoreAcl' => true])
                 , null, true) as $id) {
             /** @var Tinebase_Model_Tree_Node $fileNode */
             $fileNode = $treeNodeBackend->get($id, true);
@@ -3259,6 +3259,25 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' created ' . $created . ' new previews, deleted ' . $deleted . ' previews.');
+
+        // check for empty preview folders and delete them
+        $baseNode = $previewController->getBasePathNode();
+        foreach($treeNodeBackend->search(
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+                    ['field' => 'parent_id', 'operator' => 'equals', 'value' => $baseNode->getId()],
+                ], '', ['ignoreAcl' => true])
+                , null, true) as $id) {
+            if (count($treeNodeBackend->search(
+                    new Tinebase_Model_Tree_Node_Filter([
+                        ['field' => 'parent_id', 'operator' => 'equals', 'value' => $id],
+                    ], '', ['ignoreAcl' => true])
+                    , null, true)) === 0) {
+                try {
+                    $this->rmdir($this->getPathOfNode($id, true));
+                } catch (Exception $e) {}
+            }
+        }
 
         return true;
     }

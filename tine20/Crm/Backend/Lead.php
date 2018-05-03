@@ -120,20 +120,33 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
             'leadsource_id' => Crm_Config::LEAD_SOURCES,
             'leadtype_id'   => Crm_Config::LEAD_TYPES,
         );
-        
-        $col = $pagination->sort;
-        if (isset($virtualSortColumns[$col])) {
-            $config = Crm_Config::getInstance()->get($virtualSortColumns[$col]);
 
-            // create cases (when => then) for sql switch (CASE) command
-            $cases = array();
-            foreach ($config['records'] as $settingRecord) {
-                $cases[$settingRecord['id']] = $settingRecord['value'];
+        $count = 0;
+        if (!empty($pagination->sort)) {
+            $pagination->sort = (array)$pagination->sort;
+            foreach ($pagination->xprops('sort') as &$col) {
+                if (isset($virtualSortColumns[$col])) {
+                    $config = Crm_Config::getInstance()->get($virtualSortColumns[$col]);
+
+                    // create cases (when => then) for sql switch (CASE) command
+                    $cases = array();
+                    foreach ($config['records'] as $settingRecord) {
+                        $cases[$settingRecord['id']] = $settingRecord['value'];
+                    }
+
+                    $foreignSortCase = $this->_dbCommand->getSwitch($col, $cases);
+                    $select->columns(array('foreignSortCol' . (++$count) => $foreignSortCase));
+                    $col = 'foreignSortCol' . $count;
+                }
             }
-            
-            $foreignSortCase = $this->_dbCommand->getSwitch($col, $cases);
-            $select->columns(array('foreignSortCol' => $foreignSortCase));
-            $pagination->sort = 'foreignSortCol';
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getIgnoreSortColumns()
+    {
+        return ['leadstate_id', 'leadsource_id', 'leadtype_id'];
     }
 }

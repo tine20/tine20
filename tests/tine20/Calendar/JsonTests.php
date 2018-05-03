@@ -499,14 +499,24 @@ class Calendar_JsonTests extends Calendar_TestCase
             'interval'   => 1,
             'byday'      => 'WE',
         );
+
+        $nonExistingPath = '/shared/bf69ccb52613742ee2b84ed2769d8568a1e57d74';
+        $virtualParts = '/shared/foo/' . $eventData['container_id']['id'];
+
         $eventData['rrule_constraints'] = array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => array($eventData['container_id'])),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array(
+                $eventData['container_id'],
+                $nonExistingPath,
+                $virtualParts
+            )),
         );
 
         $updatedEventData = $this->_uit->saveEvent($eventData);
 
         $this->assertTrue(is_array($updatedEventData['rrule_constraints']));
         $this->assertEquals('personal',$updatedEventData['rrule_constraints'][0]['value'][0]['type'], 'filter is not resolved');
+        $this->assertEquals($nonExistingPath, $updatedEventData['rrule_constraints'][0]['value'][1]['path'], 'no exception was thrown *yeah*');
+        $this->assertEquals('personal',$updatedEventData['rrule_constraints'][0]['value'][2]['type'], 'cannot cope with virtual segments');
         $this->assertEquals(1, count($updatedEventData['exdate']));
         $this->assertEquals('2009-03-25 06:00:00', $updatedEventData['exdate'][0]);
 
@@ -2427,5 +2437,38 @@ class Calendar_JsonTests extends Calendar_TestCase
         ];
         $searchResultData = $this->_uit->searchEvents($filter, array());
         self::assertEquals(1, $searchResultData['totalcount']);
+    }
+
+    /**
+     * query filter should find description content
+     */
+    public function testSearchFulltextDescriptionInQuery()
+    {
+        $event = $this->_getEvent();
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $oldValue = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+            ->{Tinebase_Config::FULLTEXT_QUERY_FILTER};
+
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()
+                ->startTransaction(Tinebase_Core::getDb());
+            // activate fulltext query filter
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+            $filter = $this->_getEventFilterArray();
+            $filter[] =
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'healthy'];
+            $searchResultData = $this->_uit->searchEvents($filter, array());
+
+            $this->assertEquals(1, $searchResultData['totalcount'], 'event not found. filter: '
+                . print_r($searchResultData['filter'], true));
+            $resultEventData = $searchResultData['results'][0];
+            $this->assertEquals($createdEvent->getId(), $resultEventData['id']);
+        } finally {
+            Calendar_Controller_Event::getInstance()->delete([$createdEvent->getId()]);
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = $oldValue;
+        }
     }
 }

@@ -124,6 +124,7 @@ class Tinebase_FileSystem_RecordAttachments
             // top folder for record attachments
             try {
                 $classPathNode = $this->_fsController->stat($classPathName);
+
             } catch (Tinebase_Exception_NotFound $tenf) {
                 continue;
             }
@@ -156,6 +157,8 @@ class Tinebase_FileSystem_RecordAttachments
             // add attachments to records
             foreach ($attachmentNodes as $attachmentNode) {
                 $record = $records->getById($recordNodeMapping[$attachmentNode->parent_id]);
+                $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($attachmentNode,true));
+                $attachmentNode->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $record->getApplication());
                 
                 $record->attachments->addRecord($attachmentNode);
             }

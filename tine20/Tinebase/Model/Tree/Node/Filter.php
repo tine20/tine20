@@ -101,7 +101,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
         ),
     // tree_filerevisions table
         'size'                  => array(
-            'filter' => 'Tinebase_Model_Filter_Int',
+            'filter' => Tinebase_Model_Filter_Int::class,
             'options' => array('tablename' => 'tree_filerevisions')
         ),
     // recursive search

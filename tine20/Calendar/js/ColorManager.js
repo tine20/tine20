@@ -81,7 +81,10 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
         "CCFFFF" : {color: '#CCFFFF', light: '#E5F9F9', text: '#000000', lightText: '#000000'},
         "99CCFF" : {color: '#99CCFF', light: '#D0E4F8', text: '#000000', lightText: '#000000'},
         "CC99FF" : {color: '#CC99FF', light: '#E5D1F9', text: '#000000', lightText: '#000000'},
-        "FFFFFF" : {color: '#DFDFDF', light: '#F8F8F8', text: '#000000', lightText: '#000000'}
+        "FFFFFF" : {color: '#DFDFDF', light: '#F8F8F8', text: '#000000', lightText: '#000000'},
+        "996633" : {color: '#996633', light: '#d9b38c', text: '#FFFFFF', lightText: '#FFFFFF'}, // brown
+        "604020" : {color: '#604020', light: '#996633', text: '#FFFFFF', lightText: '#FFFFFF'}, // more brown
+        "b37700" : {color: '#b37700', light: '#ffd480', text: '#FFFFFF', lightText: '#FFFFFF'}  // even more brown
     },
     
     getStrategy: function() {

@@ -298,7 +298,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 .cal-status-TENTATIVE,
 .cal-status-TENTATIVE .x-grid3-cell-inner {
-    font-style: italic;
+    font-style: italic !important;
 }
 
 .inline {

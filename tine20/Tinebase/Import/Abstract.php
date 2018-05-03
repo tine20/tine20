@@ -236,7 +236,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * do import: loop data -> convert to records -> import records
      * 
      * @param mixed $_resource
-     * @param array $_clientRecordData
+     * @param array $_clientRecordDatas
      */
     protected function _doImport($_resource = NULL, $_clientRecordDatas = array())
     {
@@ -246,9 +246,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Importing record ' . $recordIndex . ' ...');
-            $recordToImport = NULL;
+            $recordToImport = null;
             try {
                 // client record overwrites record in import data (only if set)
                 $clientRecordData = (isset($clientRecordDatas[$recordIndex]) || array_key_exists($recordIndex, $clientRecordDatas)) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
@@ -328,6 +328,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _processRawData($_data)
     {
         $result = array();
+        if (! $_data) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Got empty raw data - skipping.');
+            return $result;
+        }
         
         $mappedData = $this->_doMapping($_data);
         
@@ -353,8 +358,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Merged data: ' . print_r($result, true));
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Got empty record from mapping! Was: ' . print_r($_data, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Got empty record from mapping - skipping! Was: ' . print_r($_data, TRUE));
         }
         return $result;
     }

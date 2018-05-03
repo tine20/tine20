@@ -18,7 +18,8 @@ require('widgets/persistentfilter/PickerPanel');
 require('widgets/dialog/EditDialog');
 require('widgets/grid/GridPanel');
 require('data/Record');
-require('data/RecordProxy');
+require('widgets/grid/AttachmentRenderer');
+require('widgets/grid/ImageRenderer');
 
 /**
  * Tinebase Application Starter
@@ -207,6 +208,12 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'money':
                     gridRenderer = Ext.util.Format.money;
                     break;
+                case 'attachments':
+                    gridRenderer = Tine.widgets.grid.attachmentRenderer;
+                    break;
+                case 'image':
+                    gridRenderer = Tine.widgets.grid.imageRenderer;
+                    break;
                 case 'relation':
                     var cc = config.config;
                     
@@ -236,6 +243,8 @@ Tine.Tinebase.ApplicationStarter = {
             case 'string':
             case 'text':
                 break;
+            case 'attachments':
+                filter.label = window.i18n._('Attachment');
             case 'fulltext':
                 filter.valueType = 'fulltext';
                 break;

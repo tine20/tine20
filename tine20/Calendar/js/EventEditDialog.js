@@ -357,13 +357,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             saveRecord: this.saveEvent.createDelegate(this)
         });
 
-        this.tbarItems = [new Ext.Button(new Ext.Action({
+        this.action_freeTimeSearch = new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
             handler: this.onFreeTimeSearch,
             iconCls: 'action_fretimesearch',
             disabled: false,
             scope: this
-        })), new Ext.Button(new Ext.Action({
+        });
+
+        this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'notes_noteIcon',
@@ -419,7 +421,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
-        
+        this.attendeeStore.on('add', this.onAttendeeStoreChange, this);
+        this.attendeeStore.on('clear', this.onAttendeeStoreChange, this);
+        this.attendeeStore.on('load', this.onAttendeeStoreChange, this);
+        this.attendeeStore.on('datachanged', this.onAttendeeStoreChange, this);
+        this.attendeeStore.on('remove', this.onAttendeeStoreChange, this);
+
         // a combo with all attendee + origin/organizer
         this.perspectiveCombo = new Tine.Calendar.PerspectiveCombo({
             editDialog: this
@@ -593,6 +600,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.perspectiveCombo.updatePerspective();
     },
 
+    onAttendeeStoreChange: function() {
+        // NOTE: mind the add new attendee row!
+        this.action_freeTimeSearch.setDisabled(this.attendeeStore.getCount() < 2);
+    },
     setTabHeight: function() {
         var eventTab = this.items.first().items.first();
         var centerPanel = eventTab.items.first();
