@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -1339,5 +1339,74 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
         self::assertEquals('testtermin updated', $updatedEvent->summary);
         self::assertEquals('2013-10-22 16:00:00', $updatedEvent->dtstart->toString());
+    }
+
+    public function testPreserveDataOnCreateRecurException()
+    {
+        $cfCfg = $this->_createCustomField(Tinebase_Record_Abstract::generateUID(), Calendar_Model_Event::class);
+
+        // create event in default folder
+        $syncrotonFolder = $this->testCreateFolder();
+
+        $event = $this->_createEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=2';
+        $event->xprops('customfields')[$cfCfg->name] = __METHOD__;
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        static::assertTrue(isset($event->customfields[$cfCfg->name]), 'saving customfield didnt work');
+        static::assertEquals(__METHOD__, $event->customfields[$cfCfg->name], 'saving customfield didnt work');
+
+        $exception = clone $event;
+        $exception->dtstart->addDay(1)->addHour(1);
+        $exception->dtend->addDay(1)->addHour(1);
+        $exception->summary = 'exception';
+        $exception->setRecurId($event->getId());
+        $exception->setId('fakeid_lalalala');
+        $exception = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'copying customfield didnt work');
+        static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'copying customfield didnt work');
+
+        $event = Calendar_Controller_Event::getInstance()->get($event->getId());
+        static::assertEquals(1, count($event->exdate), 'no exception created');
+
+        $serverId = $event->getId();
+
+        // load event
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+
+        // update event in non default folder
+        $data = [];
+        foreach ($syncrotonEventtoUpdate->exceptions[0] as $key => $val) {
+            if (is_object($val)) {
+                $val = clone $val;
+            }
+            $data[$key] = $val;
+        }
+        $syncrotonEventtoUpdate->exceptions[1] = new Syncroton_Model_EventException($data);
+        $syncrotonEventtoUpdate->exceptions[1]->subject = 'exception1';
+        $syncrotonEventtoUpdate->exceptions[1]->endTime->addDay(1)->addHour(1);
+        $syncrotonEventtoUpdate->exceptions[1]->exceptionStartTime->addDay(1)->addHour(1);
+        $syncrotonEventtoUpdate->exceptions[1]->startTime->addDay(1)->addHour(1);
+
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
+
+        $event = Calendar_Controller_Event::getInstance()->get($event->getId());
+        static::assertEquals(2, count($event->exdate), 'no exception created');
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        static::assertEquals(2, count($exceptions), 'no exception created');
+
+        $exception = $exceptions->find('summary', 'exception1');
+        $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
+        static::assertNotNull($exception, 'no exception created');
+        static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'copying customfield didnt work');
+        static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'copying customfield didnt work');
+
+        $exception = $exceptions->find('summary', 'exception');
+        $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
+        static::assertNotNull($exception, 'we lost an exception');
+        static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'we lost a customfield');
+        static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'we lost a customfield');
     }
 }
