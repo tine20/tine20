@@ -284,7 +284,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     break;
                     
                 case 'attendee':
+                    // ios < 11 could could only cope with attendee in standard calendar
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $this->_device->getMajorVersion() < 1501 &&
                         // note: might comparing an integer with a string here (at least with pgsql)
                         $this->_syncFolderId       != $this->_getDefaultContainerId()) {
                         break;
@@ -557,7 +559,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         // dtstart & dtend should not be nulled
                     } else if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $this->_device->getMajorVersion() < 1501 &&
                         $this->_syncFolderId != $this->_getDefaultContainerId()) {
+                        // ios < 11 could could only cope with attendee in standard calendar
                         // keep attendees as the are / they were not sent to the device before
                     } else {
                         // remove the value
@@ -576,8 +580,10 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     break;
                     
                 case 'attendee':
+                    // ios < 11 could could only cope with attendee in standard calendar
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $this->_device->getMajorVersion() < 1501 &&
                         $this->_syncFolderId       != $this->_getDefaultContainerId()) {
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
