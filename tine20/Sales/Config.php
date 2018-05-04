@@ -6,7 +6,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -327,44 +327,54 @@ class Sales_Config extends Tinebase_Config_Abstract
                 )
             );
          */
-        self::ENABLED_FEATURES => array(
-                                   //_('Enabled Features')
-            'label'                 => 'Enabled Features',
-                                   //_('Enabled Features in Sales Application.')
-            'description'           => 'Enabled Features in Sales Application.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_INVOICES_MODULE => array(
-                    'label'         => 'Invoices Module', //_('Invoices Module')
-                    'description'   => 'Invoices Module',
-                ),
-                self::FEATURE_OFFERS_MODULE => array(
-                    'label'         => 'Offers Module', //_('Offers Module')
-                    'description'   => 'Offers Module',
-                ),
-                self::FEATURE_ORDERCONFIRMATIONS_MODULE => array(
-                    'label'         => 'Order Confirmations Module', //_('Order Confirmations Module')
-                    'description'   => 'Order Confirmations Module',
-                ),
-                self::FEATURE_SUPPLIERS_MODULE => array(
-                        'label'         => 'Suppliers Module', //_('Suppliers Module')
-                        'description'   => 'Suppliers Module',
-                ),
-                self::FEATURE_PURCHASE_INVOICES_MODULE => array(
-                        'label'         => 'Purchase Invoice Module', //_('Purchase Invoice Module')
-                        'description'   => 'Purchase Invoice Module',
-                ),
-            ),
-            'default'               => array(
-                self::FEATURE_INVOICES_MODULE           => true,
-                self::FEATURE_OFFERS_MODULE             => true,
-                self::FEATURE_ORDERCONFIRMATIONS_MODULE => true,
-                self::FEATURE_SUPPLIERS_MODULE          => true,
-                self::FEATURE_PURCHASE_INVOICES_MODULE  => true,
-            ),
-        ),
+        self::ENABLED_FEATURES => [
+            //_('Enabled Features')
+            self::LABEL                 => 'Enabled Features',
+            //_('Enabled Features in Sales Application.')
+            self::DESCRIPTION           => 'Enabled Features in Sales Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+
+                self::FEATURE_INVOICES_MODULE           => [
+                    self::LABEL                             => 'Invoices Module',
+                    //_('Invoices Module')
+                    self::DESCRIPTION                       => 'Invoices Module',
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => true,
+                ],
+                self::FEATURE_OFFERS_MODULE             => [
+                    self::LABEL                             => 'Offers Module',
+                    //_('Offers Module')
+                    self::DESCRIPTION                       => 'Offers Module',
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => true,
+                ],
+                self::FEATURE_ORDERCONFIRMATIONS_MODULE => [
+                    self::LABEL                             => 'Order Confirmations Module',
+                    //_('Order Confirmations Module')
+                    self::DESCRIPTION                       => 'Order Confirmations Module',
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => true,
+                ],
+                self::FEATURE_SUPPLIERS_MODULE          => [
+                    self::LABEL                             => 'Suppliers Module',
+                    //_('Suppliers Module')
+                    self::DESCRIPTION                       => 'Suppliers Module',
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => true,
+                ],
+                self::FEATURE_PURCHASE_INVOICES_MODULE  => [
+                    self::LABEL                             => 'Purchase Invoice Module',
+                    //_('Purchase Invoice Module')
+                    self::DESCRIPTION                       => 'Purchase Invoice Module',
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => true,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
     );
     
     /**
