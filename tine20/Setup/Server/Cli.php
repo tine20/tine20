@@ -34,8 +34,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                          Examples:
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
                            setup.php --setconfig -- configkey=sample2 configvalue=arrayKey1:Value1,arrayKey2:value2
+                           setup.php --setconfig -- configkey=calendarsample3 configvalue=value11 app=Calendar
                           ',
-                'getconfig'                 => 'Get Config value for a specify the key \' -- configkey="your_key"\'',
+                'getconfig'                 => 'Get Config value for a specify the key \' -- configkey="your_key" app=Calendar\'',
                 'check_requirements'        => 'Check if all requirements are met to install and run tine20',
                 'create_admin'              => 'Create new admin user (or reactivate if already exists)',
                 'install-s'                 => 'Install applications [all if nothing installed yet] or comma separated list (use "all" as parameter to install all available apps);'
