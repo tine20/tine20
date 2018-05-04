@@ -246,6 +246,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SENTRY_URI = 'sentryUri';
 
     /**
+     * PHP error log level constant, like E_ALL, E_ERROR etc. E_ERROR | E_WARNING (error und warning),
+     * E_ALL & ~E_NOTICE (E_ALL ohne E_NOTICE)
+     * 
+     * value is an int! not a string "E_ALL"
+     *
+     * @var string
+     */
+    const SENTRY_LOGLEVL = 'sentryLoglevel';
+
+    /**
      * configure hook class for user sync
      *
      * @var string
@@ -1258,6 +1268,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
         ),
+        self::SENTRY_LOGLEVL => [
+            //_('Sentry Loglevel Bitmask')
+            self::LABEL                 => 'Sentry Loglevel Bitmask',
+            //_('Sentry Loglevel Bitmask')
+            self::DESCRIPTION           => 'Sentry Loglevel Bitmask',
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => E_ALL,
+        ],
         self::STATUS_API_KEY => array(
             //_('API key to access status URI')
             'label'                 => 'API key to access status URI',
