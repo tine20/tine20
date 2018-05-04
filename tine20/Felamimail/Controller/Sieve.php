@@ -310,17 +310,17 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got capabilitites: ' . print_r($capabilities, TRUE));
         
-        if (! in_array('mime', $capabilities['SIEVE'])) {
+        if (! isset($capabilities['SIEVE']) || ! in_array('mime', $capabilities['SIEVE'])) {
             unset($_vacation->mime);
             $_vacation->reason = Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($_vacation->reason);
         }
         
-        if (preg_match('/cyrus/i', $capabilities['IMPLEMENTATION'])) {
+        if (isset($capabilities['IMPLEMENTATION']) && preg_match('/cyrus/i', $capabilities['IMPLEMENTATION'])) {
             // cyrus does not support :from
             unset($_vacation->from);
         }
         
-        if (in_array('date', $capabilities['SIEVE']) && in_array('relational', $capabilities['SIEVE'])) {
+        if (isset($capabilities['SIEVE']) && in_array('date', $capabilities['SIEVE']) && in_array('relational', $capabilities['SIEVE'])) {
             $_vacation->date_enabled = TRUE;
         }
     }
