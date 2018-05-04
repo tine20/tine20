@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -1025,48 +1025,54 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
             ),
         ),
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
-            'description'           => 'Enabled Features',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH => array(
-                    'label'         => 'Show Advanced Search', //_('Show Advanced Search')
-                    'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
+            self::LABEL                 => 'Enabled Features',
+            self::DESCRIPTION           => 'Enabled Features',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_SHOW_ADVANCED_SEARCH  => array(
+                    self::LABEL                         => 'Show Advanced Search', //_('Show Advanced Search')
+                    self::DESCRIPTION                   =>
+                        'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
                 self::FEATURE_CONTAINER_CUSTOM_SORT => array(
-                    'label'         => 'Container Custom Sort', //_('Container Custom Sort')
-                    'description'   => 'Allows to sort containers by setting the sort order in Admin/Container',
+                    self::LABEL                         => 'Container Custom Sort', //_('Container Custom Sort')
+                    self::DESCRIPTION                   =>
+                        'Allows to sort containers by setting the sort order in Admin/Container',
                     //_('Allows to sort containers by setting the sort order in Admin/Container')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_SHOW_ACCOUNT_EMAIL => array(
-                    'label'         => 'Show Account Email Address', //_('Show Account Email Address')
-                    'description'   => 'Show email address in account picker and attendee grids',
+                self::FEATURE_SHOW_ACCOUNT_EMAIL    => array(
+                    self::LABEL                         => 'Show Account Email Address',
+                    //_('Show Account Email Address')
+                    self::DESCRIPTION                   => 'Show email address in account picker and attendee grids',
                     //_('Show email address in account picker and attendee grids')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_REMEMBER_POPUP_SIZE => array(
-                    'label'         => 'Remeber Popup Size', //_('Remeber Popup Size')
-                    'description'   => 'Save edit dialog size in state',
+                self::FEATURE_REMEMBER_POPUP_SIZE   => array(
+                    self::LABEL                         => 'Remeber Popup Size', //_('Remeber Popup Size')
+                    self::DESCRIPTION                   => 'Save edit dialog size in state',
                     //_('Save edit dialog size in state')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_SEARCH_PATH => array(
-                    'label'         => 'Search Paths',
-                    'description'   => 'Search Paths'
+                self::FEATURE_SEARCH_PATH           => array(
+                    self::LABEL                         => 'Search Paths',
+                    self::DESCRIPTION                   => 'Search Paths',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-            ),
-            'default'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
-                self::FEATURE_CONTAINER_CUSTOM_SORT => true,
-                self::FEATURE_SHOW_ACCOUNT_EMAIL    => true,
-                self::FEATURE_REMEMBER_POPUP_SIZE   => true,
-                self::FEATURE_SEARCH_PATH           => true,
-
-            ),
-        ),
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::DEFAULT_ADMIN_ROLE_NAME => array(
             //_('Default Admin Role Name')
             'label'                 => 'Default Admin Role Name',

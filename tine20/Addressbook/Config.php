@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -98,43 +98,50 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label' => 'Enabled Features',
-            //_('Enabled Features in Calendar Application.')
-            'description' => 'Enabled Features in Addressbook Application.',
-            'type' => 'object',
-            'class' => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => true,
-            'content' => array(
-                self::FEATURE_CONTACT_EVENT_LIST => array(
-                    'label' => 'Addressbook Contact Event List',
+            self::LABEL                 => 'Enabled Features',
+            //_('Enabled Features in Addressbook Application.')
+            self::DESCRIPTION           => 'Enabled Features in Addressbook Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_CONTACT_EVENT_LIST => [
+                    self::LABEL                     => 'Addressbook Contact Event List',
                     //_('Addressbook Contact Event List')
-                    'description' => 'Shows contact events in edit dialog tab panel',
+                    self::DESCRIPTION               => 'Shows contact events in edit dialog tab panel',
                     //_('Shows contact events in edit dialog tab panel')
-                ),
-                self::FEATURE_LIST_VIEW => array(
-                    'label' => 'Addressbook List View',
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => true,
+                ],
+                self::FEATURE_LIST_VIEW          => [
+                    self::LABEL                     => 'Addressbook List View',
                     //_('Addressbook List View')
-                    'description' => 'Shows an additional view for lists inside the addressbook',
+                    self::DESCRIPTION               => 'Shows an additional view for lists inside the addressbook',
                     //_('Shows an additional view for lists inside the addressbook')
-                ),
-                self::FEATURE_INDUSTRY => array(
-                    'label' => 'Addressbook Industries', //_('Addressbook Industries')
-                    'description' => 'Add Industry field to Adressbook', //_('Add Industry field to Adressbook')
-                ),
-                self::FEATURE_RESOURCES => array(
-                    'label' => 'Manage resources in Addressbook', // _('Manage resources in Addressbook')
-                    'description' => 'Show the resources grid also inside the Addressbook' // _('Show the resources grid also inside the Addressbook')
-                )
-            ),
-            'default' => array(
-                self::FEATURE_CONTACT_EVENT_LIST => true,
-                self::FEATURE_LIST_VIEW => false,
-                self::FEATURE_INDUSTRY => true,
-                self::FEATURE_RESOURCES => false
-            ),
-        ),
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => false,
+                ],
+                self::FEATURE_INDUSTRY           => [
+                    self::LABEL                     => 'Addressbook Industries',
+                    //_('Addressbook Industries')
+                    self::DESCRIPTION               => 'Add Industry field to Adressbook',
+                    //_('Add Industry field to Adressbook')
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => true,
+                ],
+                self::FEATURE_RESOURCES          => [
+                    self::LABEL                     => 'Manage resources in Addressbook',
+                    // _('Manage resources in Addressbook')
+                    self::DESCRIPTION               => 'Show the resources grid also inside the Addressbook',
+                    // _('Show the resources grid also inside the Addressbook')
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => false,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')
             'label'                 => 'Contact duplicate check fields',

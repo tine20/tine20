@@ -149,24 +149,26 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
             'default'               => false,
         ),
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
-            //_('Enabled features in Felamimail application.')
-            'description'           => 'Enabled features in Felamimail application.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_TINE20_FLAG => array(
-                    'label'         => 'Tine 2.0 Flag', //_('Tine 2.0 Flag')
-                    'description'   => 'Add a Tine 2.0 flag to sent messages', //_('Add a Tine 2.0 flag to sent messages')
-                ),
-            ),
-            'default'               => array(
-                self::FEATURE_TINE20_FLAG => true,
-            ),
-        ),
+            self::LABEL                 => 'Enabled Features',
+            //_('Enabled Features in Felamimail Application.')
+            self::DESCRIPTION           => 'Enabled Features in Felamimail Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_TINE20_FLAG   => [
+                    self::LABEL                 => 'Tine 2.0 Flag',
+                    //_('Tine 2.0 Flag')
+                    self::DESCRIPTION           => 'Add a Tine 2.0 flag to sent messages',
+                    //_('Add a Tine 2.0 flag to sent messages')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::FILTER_EMAIL_URIS => array(
             //_('Filter E-Mail URIs')
             'label'                 => 'Filter E-Mail URIs',
