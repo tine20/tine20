@@ -46,7 +46,10 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $prefs = new Calendar_Preference();
         $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->objects['initialContainer']->getId());
-        
+
+        // rw cal agent
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
         $_SERVER['REQUEST_URI'] = 'lars';
     }
 
@@ -306,6 +309,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function testCreateRepeatingEventAndPutExdate()
     {
+        $cfCfg = $this->_createCustomField(Tinebase_Record_Abstract::generateUID(), Calendar_Model_Event::class);
+
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
         }
@@ -316,6 +321,10 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = '353de608-4b50-41e6-9f6c-35889584fe8d';
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
         $existingEvent = $event->getRecord();
+        $existingEvent->xprops('customfields')[$cfCfg->name] = __METHOD__;
+        $existingEvent = Calendar_Controller_Event::getInstance()->update($existingEvent);
+        static::assertTrue(isset($existingEvent->customfields[$cfCfg->name]), 'saving customfield did not work');
+        static::assertEquals(__METHOD__, $existingEvent->customfields[$cfCfg->name]);
         
         // put exception
         $vcalendarStreamException = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly_exception.ics');
@@ -323,7 +332,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event->put($vcalendarStreamException);
         
         $this->_checkExdate($event);
-        
+
+        // need to refetch it to resolve customfields, relations etc.
+        $recExEvent = Calendar_Controller_Event::getInstance()->get($event->getRecord()->exdate[0]->getId());
+        static::assertTrue(isset($recExEvent->customfields[$cfCfg->name]),
+            'recur exception should have customfield');
+        static::assertEquals(__METHOD__, $recExEvent->customfields[$cfCfg->name],
+            'recur exception should have customfield');
+
         return $event;
     }
     
