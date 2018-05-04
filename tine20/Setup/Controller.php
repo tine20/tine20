@@ -1674,7 +1674,7 @@ class Setup_Controller
         // then set the replication master id
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         Tinebase_Application::getInstance()->setApplicationState($tinebase,
-            Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
+            Tinebase_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
         
         return true;
     }
