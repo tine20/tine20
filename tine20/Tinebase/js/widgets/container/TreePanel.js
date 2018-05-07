@@ -652,6 +652,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
 
+        if ('shared' === attr.id && !this.hasPersonalContainer) {
+            attr.name = this.containersName;
+        }
+        
         Ext.applyIf(attr, {
             text: attr.name,
             qtip: attr.name,
