@@ -828,10 +828,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * validates that messageUid still exists on imap server 
      * @param $from
      * @param $to
+     * @return array
      */
     public function messageUidExists($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, true);
+        $result = (array)$this->_protocol->fetch('UID', $from, $to, true);
         
         return $result;
     }
