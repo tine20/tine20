@@ -121,6 +121,9 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 
     public static function clearTableDescriptionInCache($tableName)
     {
+        if (strpos($tableName, SQL_TABLE_PREFIX) !== 0) {
+            $tableName = SQL_TABLE_PREFIX . $tableName;
+        }
         $db = Tinebase_Core::getDb();
         $dbConfig = $db->getConfig();
         $cacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
