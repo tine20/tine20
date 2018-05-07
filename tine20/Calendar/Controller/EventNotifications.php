@@ -283,6 +283,11 @@
                     . " Skip notification for list " . $attendee->name);
                 return;
             }
+            if (!$attendee instanceof Tinebase_Record_Abstract) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . " Skip notification for unknown attende: " . print_r($attendee, true) . ' attender: ' . print_r($_attender, true));
+                return;
+            }
 
             $attendeeAccountId = $_attender->getUserAccountId();
             
