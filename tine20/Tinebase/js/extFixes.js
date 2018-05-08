@@ -636,7 +636,7 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             return;
         }
         
-        var visible = !!cmp.el.dom.offsetParent;
+        var visible = !!window.lodash.get(cmp, 'el.dom.offsetParent', false);
         
         if (visible !== cmp.wasVisible) {
             cmp.setWidth(cmp.width);
