@@ -12,6 +12,8 @@
  * script to migrate mysql to utf8mb4
  */
 
+$autoloader = require __DIR__ . '/../tine20/vendor/autoload.php';
+
 $config = require 'config.inc.php';
 $dbConfigArray = $config['database'];
 
@@ -82,9 +84,9 @@ foreach ($tables as $table) {
             ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 }
 
-$db->query('ALTER TABLE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'tree_nodes CHANGE COLUMN ' .
-        $db->quoteIdentifier('name') . $db->quoteIdentifier('name') .
-        ' VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COLLATE'));
+$db->query('ALTER TABLE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'tree_nodes') . ' CHANGE COLUMN ' .
+    $db->quoteIdentifier('name') . ' ' . $db->quoteIdentifier('name') .
+    ' VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL');
 
 $db->query('SET foreign_key_checks = 1');
 $db->query('SET unique_checks = 1');
