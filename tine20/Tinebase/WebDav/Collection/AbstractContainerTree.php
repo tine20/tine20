@@ -503,13 +503,13 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             case 1:
                 $children = $this->_getPersonalChildren();
                 break;
-            
+
             # path == /<applicationPrefix>/<contactid>|'shared'
             # list container
             case 2:
                 $children = $this->_getSharedChildren();
                 break;
-                
+
             default:
                 throw new Sabre\DAV\Exception\NotFound("Path $this->_path not found");
                 break;
@@ -619,7 +619,6 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         return $children;
     }
-
     /**
      * @return Tinebase_Record_RecordSet
      */
@@ -636,12 +635,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         return $containers;
     }
-    
     /**
      * checks if client supports delegations
-     * 
+     *
      * @return boolean
-     * 
+     *
      * @todo don't use $_SERVER to fetch user agent
      * @todo move user agent parsing to Tinebase
      */
@@ -649,11 +647,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-            $clientSupportsDelegations = ($backend === Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+            $clientSupportsDelegations = in_array($backend, array(
+                Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX,
+                Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID,
+            ));
         } else {
             $clientSupportsDelegations = false;
         }
-        
+
         return $clientSupportsDelegations;
     }
     
@@ -934,7 +935,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      * 
      * @todo allow to create personal folders only when in currents users own path
      * TODO split function (node + controller)
-     * 
+     *
      * @param  array  $properties  properties for new container
      * @throws \Sabre\DAV\Exception\Forbidden
      * @return Tinebase_Model_Container
