@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -500,55 +500,68 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => false
         ),
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
+            self::LABEL                 => 'Enabled Features',
             //_('Enabled Features in Calendar Application.')
-            'description'           => 'Enabled Features in Calendar Application.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_SPLIT_VIEW => array(
-                    'label'         => 'Calendar Split View', //_('Calendar Split View')
-                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
-                ),
-                self::FEATURE_YEAR_VIEW => array(
-                    'label'         => 'Calendar Year View', //_('Calendar Year View')
-                    'description'   => 'Adds year view to Calendar', //_('Adds year view to Calendar')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
-                ),
-                self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS => array(
-                    'label'         => 'Calendar Extended Context Menu Actions', //_('Calendar Extended Context Menu Actions')
-                    'description'   => 'Adds extended actions to event context menus', //_('Adds extended actions to event context menus')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
-                ),
-                self::FEATURE_COLOR_BY => array(
-                    'label'         => 'Color Events By', //_('Color Events By')
-                    'description'   => 'Choose event color by different criteria', //_('Choose event color by different criteria')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
-                ),
-                self::FEATURE_RECUR_EXCEPT => array(
-                    'label'         => 'Recur Events Except', //_('Recur Events Except')
-                    'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
-                ),
+            self::DESCRIPTION           => 'Enabled Features in Calendar Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+
+                self::FEATURE_SPLIT_VIEW => [
+                    self::LABEL             => 'Calendar Split View',
+                    //_('Calendar Split View')
+                    self::DESCRIPTION       => 'Split day and week views by attendee',
+                    //_('Split day and week views by attendee')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => true,
+                ],
+                self::FEATURE_YEAR_VIEW => [
+                    self::LABEL             => 'Calendar Year View',
+                    //_('Calendar Year View')
+                    self::DESCRIPTION       => 'Adds year view to Calendar',
+                    //_('Adds year view to Calendar')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => false,
+                ],
+                self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS => [
+                    self::LABEL             => 'Calendar Extended Context Menu Actions',
+                    //_('Calendar Extended Context Menu Actions')
+                    self::DESCRIPTION       => 'Adds extended actions to event context menus',
+                    //_('Adds extended actions to event context menus')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => true,
+                ],
+                self::FEATURE_COLOR_BY => [
+                    self::LABEL             => 'Color Events By',
+                    //_('Color Events By')
+                    self::DESCRIPTION       => 'Choose event color by different criteria',
+                    //_('Choose event color by different criteria')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => true,
+                ],
+                self::FEATURE_RECUR_EXCEPT => [
+                    self::LABEL             => 'Recur Events Except',
+                    //_('Recur Events Except')
+                    self::DESCRIPTION       => 'Recur Events except on certain dates',
+                    //_('Recur Events except on certain dates')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => false,
+                ],
                 self::FEATURE_POLLS => array(
-                    'label'         => 'Activate Poll for Events', //_('Activate Poll for Events')
-                    'description'   => 'Create alternative Events and let users as well as externals vote for the best option.', //_('Create alternative Events and let users as well as externals vote for the best option.')
-                    'type'          => Tinebase_Config_Abstract::TYPE_BOOL,
+                    self::LABEL             => 'Activate Poll for Events',
+                    //_('Activate Poll for Events')
+                    self::DESCRIPTION       =>
+                        'Create alternative Events and let users as well as externals vote for the best option.',
+                    //_('Create alternative Events and let users as well as externals vote for the best option.')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => false,
                 ),
-            ),
-            'default'               => array(
-                self::FEATURE_SPLIT_VIEW                        => true,
-                self::FEATURE_YEAR_VIEW                         => false,
-                self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
-                self::FEATURE_COLOR_BY                          => true,
-                self::FEATURE_RECUR_EXCEPT                      => false,
-                self::FEATURE_POLLS                             => false,
-            ),
-        ),
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::TENTATIVE_NOTIFICATIONS => array(
             'label'                 => 'Send Tentative Notifications', //_('Send Tentative Notifications')
             'description'           => 'Send notifications to event organiziers of events that are tentative certain days before event is due', //_('Send notifications to event organiziers of events that are tentative certain days before event is due')

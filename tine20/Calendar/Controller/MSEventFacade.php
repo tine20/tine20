@@ -318,6 +318,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             foreach ($exceptions as $exception) {
                 $exception->assertAttendee($this->getCalendarUser());
                 $this->_prepareException($savedEvent, $exception);
+                $this->_preserveMetaData($savedEvent, $exception, true);
                 $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
             }
         }
@@ -387,6 +388,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         foreach ($migration['toCreate'] as $exception) {
             $exception->assertAttendee($this->getCalendarUser());
             $this->_prepareException($updatedBaseEvent, $exception);
+            $this->_preserveMetaData($updatedBaseEvent, $exception, true);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
 
@@ -404,6 +406,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             
             $exception->assertAttendee($this->getCalendarUser());
             $this->_prepareException($updatedBaseEvent, $exception);
+            $this->_preserveMetaData($updatedBaseEvent, $exception, false);
             $this->_addStatusAuthkeyForOwnAttender($exception);
             
             // skip concurrency check here by setting the seq of the current record
@@ -890,12 +893,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     $this->_prepareException($_event, $exdate);
                 } catch (Exception $e){}
 
-                $currExdate = $currExdates instanceof Tinebase_Record_RecordSet ? $currExdates->filter('recurid', $exdate->recurid)->getFirstRecord() : NULL;
-                
+                $currExdate = $currExdates instanceof Tinebase_Record_RecordSet ?
+                    $currExdates->find('recurid', $exdate->recurid) : null;
+
+                $this->_preserveMetaData($_event, $exdate, null === $currExdate);
                 
                 if ($exdate->is_deleted) {
                     // reset implicit filter fallouts and mark as don't touch (seq = -1)
-                    $currClientExdate = $currClientExdates instanceof Tinebase_Record_RecordSet ? $currClientExdates->filter('recurid', $exdate->recurid)->getFirstRecord() : NULL;
+                    $currClientExdate = $currClientExdates instanceof Tinebase_Record_RecordSet ? $currClientExdates->find('recurid', $exdate->recurid) : NULL;
                     if ($currClientExdate && $currClientExdate->is_deleted) {
                         $_event->exdate[$idx] = $currExdate;
                         $currExdate->seq = -1;
@@ -1008,7 +1013,68 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
         return $migration;
     }
-    
+
+    /**
+     * copies customfields, tags, relations, notes from base event to exception
+     *
+     * @param Calendar_Model_Event $_baseEvent
+     * @param Calendar_Model_Event $_exception
+     * @param boolean $_create
+     */
+    protected function _preserveMetaData(Calendar_Model_Event $_baseEvent, Calendar_Model_Event $_exception, $_create)
+    {
+        if ($_create) {
+            $refEvent = $_baseEvent;
+        } else {
+            $refEvent = $this->_eventController->get($_exception->getId());
+        }
+
+        // initialize customfields from base event as clients don't support that and otherwise would lose them
+        if (isset($refEvent->customfields) && !empty($refEvent->customfields)) {
+            foreach ($refEvent->customfields as $name => $val) {
+                $_exception->xprops('customfields')[$name] = $val;
+            }
+        }
+
+        // initialize tags from base event as clients don't support that and otherwise would lose them
+        if (isset($refEvent->tags) && !empty($refEvent->tags)) {
+            $_exception->tags = $refEvent->tags;
+        }
+
+        // initialize relations from base event as clients don't support that and otherwise would lose them
+        if (isset($refEvent->relations) && !empty($refEvent->relations)) {
+            $relations = [];
+            foreach (is_array($refEvent->relations) ?: $refEvent->relations->toArray() as $relation) {
+                $relations[] = [
+                    'related_id' => $relation['related_id'],
+                    'related_model' => $relation['related_model'],
+                    'related_degree' => $relation['related_degree'],
+                    'related_backend' => $relation['related_backend'],
+                    'type' => isset($relation['type']) ? $relation['type'] : null,
+                ];
+            }
+            $_exception->relations = $relations;
+        }
+
+        // notes?!?
+        if (isset($refEvent->notes) && !empty($refEvent->notes)) {
+            if ($refEvent->notes instanceof Tinebase_Record_RecordSet) {
+                $notes = clone $refEvent->notes;
+                $notes->id = null;
+                $notes = $notes->toArray();
+            } else {
+                $notes = [];
+                foreach ($refEvent->notes as $note) {
+                    if (is_array($note) && isset($note['id'])) {
+                        unset($note['id']);
+                    }
+                    $notes[] = $note;
+                }
+            }
+            $_exception->notes = $notes;
+        }
+    }
+
     /**
      * prepares an exception instance for persistence
      * 

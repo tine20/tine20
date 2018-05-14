@@ -221,7 +221,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     },
     
     onDestroy: Ext.emptyFn,
-    
+
+    getItemGender: function() {
+        var me = this,
+            app = Tine.Tinebase.appMgr.get(me.app),
+            i18n = app ? app.i18n : window.i18n,
+            gender = this.gender || i18n._hidden('GENDER_' + me.label);
+
+        return String(gender).match(/^GENDER_/) ? 'other' : gender;
+    },
     /**
      * operator renderer
      * 
@@ -231,6 +239,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     operatorRenderer: function (filter, el) {
         var _ = window.lodash,
             me = this,
+            gender = me.getItemGender()
             operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [
@@ -243,8 +252,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 {operator: 'greater',       label: i18n._('is greater than')},
                 {operator: 'less',          label: i18n._('is less than')},
                 {operator: 'not',           label: i18n._('is not')},
-                {operator: 'in',            label: i18n._('one of')},
-                {operator: 'notin',         label: i18n._('none of')},
+                {operator: 'in',            label: formatMessage('{gender, select, male {one of} female {one of} other {one of}}', {gender: gender})},
+                {operator: 'notin',         label: formatMessage('{gender, select, male {none of} female {none of} other {none of}}', {gender: gender})},
                 {operator: 'before',        label: i18n._('is before')},
                 {operator: 'after',         label: i18n._('is after')},
                 {operator: 'within',        label: i18n._('is within')},

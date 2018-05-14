@@ -2,7 +2,6 @@ var fs = require('fs');
 var _ = require('lodash');
 var path = require('path');
 var webpack = require('webpack');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     path: 'Tinebase/js',

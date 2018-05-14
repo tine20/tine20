@@ -32,7 +32,16 @@ class Tinebase_Application
      *
      */
     const DISABLED = 'disabled';
-    
+
+    const STATE_ACTION_QUEUE_LAST_DURATION = 'actionQueueLastDuration';
+    const STATE_ACTION_QUEUE_LAST_DURATION_UPDATE = 'actionQueueLastDurationUpdate';
+    const STATE_ACTION_QUEUE_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
+    const STATE_ACTION_QUEUE_LAST_JOB_ID = 'actionQueueLastJobId';
+    const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
+    const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
+    const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
+
+
     /**
      * Table name
      *
@@ -531,15 +540,30 @@ class Tinebase_Application
         $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
         $db = $this->_getDb();
-        $db->delete(SQL_TABLE_PREFIX . 'application_states',
-            $db->quoteIdentifier('id') . $db->quoteInto(' = ? AND ', $id) .
-            $db->quoteIdentifier('name') . $db->quoteInto(' = ?', $_stateName));
+        $this->deleteApplicationState($id, $_stateName);
         $db->insert(SQL_TABLE_PREFIX . 'application_states',
             [
                 'id'    => $id,
                 'name'  => $_stateName,
                 'state' => $_state
             ]);
+    }
+
+    /**
+     * @param $_applicationId
+     * @param $_stateName
+     * @param $_state
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function deleteApplicationState($_applicationId, $_stateName)
+    {
+        $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        $db = $this->_getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'application_states',
+            $db->quoteIdentifier('id') . $db->quoteInto(' = ? AND ', $id) .
+            $db->quoteIdentifier('name') . $db->quoteInto(' = ?', $_stateName));
     }
 
     /**

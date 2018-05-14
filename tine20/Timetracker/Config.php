@@ -6,7 +6,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <M.Spahn@bitExpert.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -26,26 +26,29 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     /**
      * @var array
      */
-    protected static $_properties = array(
-        self::ENABLED_FEATURES => array(
+    protected static $_properties = [
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label' => 'Enabled Features',
+            self::LABEL                 => 'Enabled Features',
             //_('Enabled Features in Timetracker Application.')
-            'description' => 'Enabled Features in Timetracker Application.',
-            'type' => 'object',
-            'class' => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => true,
-            'content' => array(
-                self::FEATURE_TIMEACCOUNT_BOOKMARK => array(
-                    'label' => 'Timeaccount Bookmarks', //_('Timeaccount Bookmarks')
-                    'description' => 'Add timeaccounts as favorite to speedup timesheet creation.', //_('Add timeaccounts as favorite to speedup timesheet creation.)
-                ),
-            ),
-            'default' => array(
-                self::FEATURE_TIMEACCOUNT_BOOKMARK => true,
-            ),
-        )
-    );
+            self::DESCRIPTION           => 'Enabled Features in Timetracker Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_TIMEACCOUNT_BOOKMARK  => [
+                    self::LABEL                         => 'Timeaccount Bookmarks',
+                    //_('Timeaccount Bookmarks')
+                    self::DESCRIPTION                   =>
+                        'Add timeaccounts as favorite to speedup timesheet creation.',
+                    //_('Add timeaccounts as favorite to speedup timesheet creation.)
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
+    ];
     /**
      * holds the instance of the singleton
      *

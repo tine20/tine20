@@ -456,9 +456,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             }
         }
         
-        // keep old record for reference
-        $recordBeforeUpdate = clone $this->getRecord();
-        
         // concurrency management is based on etag in CalDAV
         $event = $this->_getConverter()->toTine20Model($vobject, $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,

@@ -240,4 +240,23 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         
         return $jobId;
     }
+
+    /**
+     * @return boolean|false
+     * @throws RedisException
+     */
+    public function peekJobId()
+    {
+        return $this->_redis->lGet($this->_queueStructName, 0);
+    }
+
+    /**
+     * check if the backend is async
+     *
+     * @return boolean true if queue backend is async
+     */
+    public function hasAsyncBackend()
+    {
+        return true;
+    }
 }

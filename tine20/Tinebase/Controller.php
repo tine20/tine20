@@ -1049,4 +1049,37 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return $response
             ->withAddedHeader('Content-Type', $mime);
     }
+
+    /**
+     * @return bool
+     */
+    public function actionQueueActiveMonitoring()
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
+                Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
+            Tinebase_ActionQueue::getInstance()->executeAction([
+                'action'    => 'Tinebase.measureActionQueue',
+                'params'    => [microtime(true)]
+            ]);
+        }
+        return true;
+    }
+
+    /**
+     * @param float $start
+     */
+    public function measureActionQueue($start)
+    {
+        $end = microtime(true);
+        $duration = ($end - $start) / 1000000;
+        $now = time();
+        $lastUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE);
+        if ($now - intval($lastUpdate) > 58) {
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION, sprintf('%.3f', $duration));
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE, $now);
+        }
+    }
 }

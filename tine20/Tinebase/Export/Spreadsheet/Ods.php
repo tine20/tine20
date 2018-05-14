@@ -293,7 +293,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
                 Tinebase_Core::getUser()->accountDisplayName,
-                $i18n->translate('Total: ') . $count
+                $i18n->translate('Total: ') . (is_array($count) ? $count[0] : $count)
             );
             
             foreach($this->_config->headers->header as $headerCell) {

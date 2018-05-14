@@ -62,6 +62,9 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         if (Ext.isObject(appName) && appName.hasOwnProperty('appName')) {
             appName = appName.appName;
         }
+        if (Ext.isObject(appName) && appName.hasOwnProperty('name')) {
+            appName = appName.name;
+        }
         if (! this.isEnabled(appName)) {
             return false;
         }

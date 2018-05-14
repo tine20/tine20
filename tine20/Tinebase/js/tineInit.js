@@ -52,7 +52,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.logo = 'images/tine_logo.png';
-Tine.title = 'Tine 2.0 \uD83C\uDF37';
+Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
 Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
@@ -692,6 +692,10 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.tineInit.initExtDirect();
 
+        formatMessage.setup({
+            locale: Tine.Tinebase.registry.get('locale').locale || 'en'
+        });
+
         Tine.Tinebase.tineInit.initState();
 
         if (Tine.Tinebase.registry.get('currentAccount')) {
@@ -925,6 +929,21 @@ Tine.Tinebase.tineInit = {
         };
 
         Tine.Tinebase.prototypeTranslation();
+
+        var formatMessage = require('format-message');
+
+        // NOTE: we use gettext tooling for template selection
+        //       as there is almost no tooling for icu-messages out there
+        formatMessage.setup({
+            missingTranslation: 'ignore'
+        });
+
+        // auto template selection with gettext
+        window.formatMessage = function(template) {
+            arguments[0] = window.i18n._hidden(template);
+            return formatMessage.apply(formatMessage, arguments);
+        };
+        window.lodash.assign(window.formatMessage, formatMessage);
     }
 };
 

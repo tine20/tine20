@@ -246,6 +246,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SENTRY_URI = 'sentryUri';
 
     /**
+     * PHP error log level constant, like E_ALL, E_ERROR etc. E_ERROR | E_WARNING (error und warning),
+     * E_ALL & ~E_NOTICE (E_ALL ohne E_NOTICE)
+     * 
+     * value is an int! not a string "E_ALL"
+     *
+     * @var string
+     */
+    const SENTRY_LOGLEVL = 'sentryLoglevel';
+
+    /**
      * configure hook class for user sync
      *
      * @var string
@@ -1069,48 +1079,54 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
             ),
         ),
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
-            'description'           => 'Enabled Features',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH => array(
-                    'label'         => 'Show Advanced Search', //_('Show Advanced Search')
-                    'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
+            self::LABEL                 => 'Enabled Features',
+            self::DESCRIPTION           => 'Enabled Features',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_SHOW_ADVANCED_SEARCH  => array(
+                    self::LABEL                         => 'Show Advanced Search', //_('Show Advanced Search')
+                    self::DESCRIPTION                   =>
+                        'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
                 self::FEATURE_CONTAINER_CUSTOM_SORT => array(
-                    'label'         => 'Container Custom Sort', //_('Container Custom Sort')
-                    'description'   => 'Allows to sort containers by setting the sort order in Admin/Container',
+                    self::LABEL                         => 'Container Custom Sort', //_('Container Custom Sort')
+                    self::DESCRIPTION                   =>
+                        'Allows to sort containers by setting the sort order in Admin/Container',
                     //_('Allows to sort containers by setting the sort order in Admin/Container')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_SHOW_ACCOUNT_EMAIL => array(
-                    'label'         => 'Show Account Email Address', //_('Show Account Email Address')
-                    'description'   => 'Show email address in account picker and attendee grids',
+                self::FEATURE_SHOW_ACCOUNT_EMAIL    => array(
+                    self::LABEL                         => 'Show Account Email Address',
+                    //_('Show Account Email Address')
+                    self::DESCRIPTION                   => 'Show email address in account picker and attendee grids',
                     //_('Show email address in account picker and attendee grids')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_REMEMBER_POPUP_SIZE => array(
-                    'label'         => 'Remeber Popup Size', //_('Remeber Popup Size')
-                    'description'   => 'Save edit dialog size in state',
+                self::FEATURE_REMEMBER_POPUP_SIZE   => array(
+                    self::LABEL                         => 'Remeber Popup Size', //_('Remeber Popup Size')
+                    self::DESCRIPTION                   => 'Save edit dialog size in state',
                     //_('Save edit dialog size in state')
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_SEARCH_PATH => array(
-                    'label'         => 'Search Paths',
-                    'description'   => 'Search Paths'
+                self::FEATURE_SEARCH_PATH           => array(
+                    self::LABEL                         => 'Search Paths',
+                    self::DESCRIPTION                   => 'Search Paths',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
                 ),
-            ),
-            'default'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
-                self::FEATURE_CONTAINER_CUSTOM_SORT => true,
-                self::FEATURE_SHOW_ACCOUNT_EMAIL    => true,
-                self::FEATURE_REMEMBER_POPUP_SIZE   => true,
-                self::FEATURE_SEARCH_PATH           => true,
-
-            ),
-        ),
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::DEFAULT_ADMIN_ROLE_NAME => array(
             //_('Default Admin Role Name')
             'label'                 => 'Default Admin Role Name',
@@ -1258,6 +1274,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
         ),
+        self::SENTRY_LOGLEVL => [
+            //_('Sentry Loglevel Bitmask')
+            self::LABEL                 => 'Sentry Loglevel Bitmask',
+            //_('Sentry Loglevel Bitmask')
+            self::DESCRIPTION           => 'Sentry Loglevel Bitmask',
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => E_ALL,
+        ],
         self::STATUS_API_KEY => array(
             //_('API key to access status URI')
             'label'                 => 'API key to access status URI',

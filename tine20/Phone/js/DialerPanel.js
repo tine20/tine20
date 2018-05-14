@@ -37,6 +37,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
     
     // private
     initComponent: function(){
+        var me = this;
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Phone');
@@ -94,7 +95,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             text: this.translation._('Cancel'),
             iconCls: 'action_cancel',
             handler : function(){
-                Ext.getCmp('dialerWindow').close();
+                me.ownerCt.ownerCt.close();
             }
         });
             
@@ -116,7 +117,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                             lineId: form.findField('lineId').getValue() 
                         },
                         success: function(_result, _request){
-                            Ext.getCmp('dialerWindow').close();
+                            me.ownerCt.ownerCt.close();
                         },
                         failure: function(response, request){
                             var responseText = Ext.util.JSON.decode(response.responseText);

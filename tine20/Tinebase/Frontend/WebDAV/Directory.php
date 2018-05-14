@@ -98,55 +98,72 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
 
-        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
-        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+            if (!Tinebase_FileSystem::getInstance()->checkPathACL(
                 $pathRecord,
                 'add',
                 true, false
             )) {
-            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
-        }
-        
-        // OwnCloud chunked file upload
-        if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
-            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
-            
-            if (! $completeFile instanceof Tinebase_Model_TempFile) {
-                return null;
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
             }
 
-            $name = $completeFile->name;
-            if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Tinebase_Exception_Backend('fopen on temp file path failed ' . $completeFile->path);
+            // OwnCloud chunked file upload
+            if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+                $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+
+                if (!$completeFile instanceof Tinebase_Model_TempFile) {
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                    $transactionId = null;
+                    return null;
+                }
+
+                $name = $completeFile->name;
+                if (false === ($data = fopen($completeFile->path, 'r'))) {
+                    throw new Tinebase_Exception_Backend('fopen on temp file path failed ' . $completeFile->path);
+                }
+            }
+
+            if ($this->childExists($name)) {
+                $result = $this->getChild($name)->put($data);
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                return $result;
+            }
+
+            $path = $this->_path . '/' . $name;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
+            }
+
+            if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x'))) {
+                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $path);
+            }
+
+            if (is_resource($data)) {
+                if (false === stream_copy_to_stream($data, $handle)) {
+                    throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
+                }
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
+            }
+
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
+                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $path);
+            }
+
+            $result = '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+            return $result;
+
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
-
-        if ($this->childExists($name)) {
-            return $this->getChild($name)->put($data);
-        }
-        
-        $path = $this->_path . '/' . $name;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
-
-        if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x'))) {
-            throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $path);
-        }
-        
-        if (is_resource($data)) {
-            if (false === stream_copy_to_stream($data, $handle)) {
-                throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
-            }
-        } else {
-            throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
-        }
-        
-        if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
-            throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $path);
-        }
-        
-        return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
     }
 
     /**

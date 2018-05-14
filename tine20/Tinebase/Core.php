@@ -1515,6 +1515,8 @@ class Tinebase_Core
      */
     public static function unsetLogger()
     {
+        self::$logLevel = 0;
+        self::set(self::LOGLEVEL, 0);
         self::set(self::LOGGER, null);
     }
     
@@ -2156,7 +2158,8 @@ class Tinebase_Core
         $client = new Tinebase_Sentry_Raven_Client($sentryServerUri, $config);
         $serializer = new Tinebase_Sentry_Raven_Serializer();
         $client->setSerializer($serializer);
-        $error_handler = new Raven_ErrorHandler($client, false, E_ALL);
+        $error_handler = new Raven_ErrorHandler($client, false,
+            Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL});
         $error_handler->registerExceptionHandler();
         $error_handler->registerErrorHandler();
         $error_handler->registerShutdownFunction();

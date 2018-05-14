@@ -263,7 +263,45 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
 
-        $this->assertEquals(true, Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME));
+        $this->assertEquals(true, Tinebase_Config::getInstance()->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME});
+    }
+
+    public function testConfDFolder()
+    {
+        $config = Tinebase_Core::getConfig();
+        // having the clearCache here is part of the test! Leave it here!
+        $config->clearCache();
+
+        $logger = $config->logger;
+        if (is_object($logger)) {
+            $logger = $logger->toArray();
+            if ($logger['priority'] < 8) {
+                $logger['priority'] = 8;
+            } else {
+                static::markTestSkipped('logger priorty required < 8');
+            }
+        } else {
+            static::markTestSkipped('logger config required');
+        }
+
+        try {
+            if (empty($confd = $config->{Tinebase_Config::CONFD_FOLDER}) || !is_dir($confd) ||
+                    !file_put_contents($confd . '/unittest.inc.php', '<?php return ["unittest" => "foobar", ' .
+                        '"logger" => ' . var_export($logger, true) . ' ];')) {
+                static::markTestSkipped('no conf.d folder setup');
+            }
+
+            $config->clearCache();
+            static::assertEquals('foobar', $config->unittest);
+            static::assertEquals(8, $config->logger->priority);
+            static::assertTrue(Tinebase_Core::isLogLevel(8));
+
+        } finally {
+            if (isset($confd) && !empty($confd) && is_file($confd . '/unittest.inc.php')) {
+                unlink($confd . '/unittest.inc.php');
+            }
+            $config->clearCache();
+        }
     }
 
     /**

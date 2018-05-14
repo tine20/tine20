@@ -771,7 +771,7 @@ msgstr "Drucke Seite"
 msgid "Grid"
 msgstr "Liste"
 
-#: js/MainScreenCenterPanel.js:205 js/MainScreenCenterPanel.js:220
+#: js/MainScreenCenterPanel.js:220 js/MainScreenCenterPanel.js:205
 #: js/Calendar-FAT-debug.js:6009 js/Calendar-FAT-debug.js:6054
 #: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:200
 #: js/MainScreenCenterPanel.js:245
@@ -2310,3 +2310,25 @@ msgstr "Keine Einladungen für alternative Termine in aktiven Terminumfragen"
 
 msgid "Poll Attendance Confirmation"
 msgstr "Terminumfrage Teilnahmebestätigung "
+
+msgid "GENDER_Calendar"
+msgstr "male"
+
+msgid "GENDER_Attendee"
+msgstr "male"
+
+msgid "GENDER_Attendee Status"
+msgstr "male"
+
+msgid "GENDER_Attendee Role"
+msgstr "female"
+
+msgid "GENDER_Status"
+msgstr "male"
+
+msgid "GENDER_Blocking"
+msgstr "other"
+
+msgid "GENDER_Classification"
+msgstr "female"
+

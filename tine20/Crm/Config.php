@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -133,24 +133,24 @@ class Crm_Config extends Tinebase_Config_Abstract
         /**
          * enabled Crm features
          */
-        self::ENABLED_FEATURES => array(
+        self::ENABLED_FEATURES => [
             //_('Enabled Features')
-            'label'                 => 'Enabled Features',
+            self::LABEL                 => 'Enabled Features',
             //_('Enabled Features in Crm Application.')
-            'description'           => 'Enabled Features in Crm Application.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'content'               => array(
-                self::FEATURE_LEAD_IMPORT => array(
-                    'label'         => 'Lead Import', //_('Lead Import')
-                    'description'   => 'Lead Import',
-                ),
-            ),
-            'default'               => array(
-                self::FEATURE_LEAD_IMPORT => true,
-            ),
-        ),
+            self::DESCRIPTION           => 'Enabled Features in Crm Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_LEAD_IMPORT   => [
+                    self::LABEL         => 'Lead Import', //_('Lead Import')
+                    self::DESCRIPTION   => 'Lead Import',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => true,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::LEAD_IMPORT_AUTOTASK => array(
             //_('Add new task on lead import')
             'label'                 => 'Add new task on lead import',

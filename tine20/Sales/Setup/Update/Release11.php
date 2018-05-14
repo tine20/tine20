@@ -36,4 +36,17 @@ class Sales_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setTableVersion('sales_customers', 3);
         $this->setApplicationVersion('Sales', '11.1');
     }
+
+    /**
+     * update to 11.2
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function update_1()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'), Tinebase_Core::isReplicationSlave());
+
+        $this->setApplicationVersion('Sales', '11.2');
+    }
 }

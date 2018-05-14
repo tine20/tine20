@@ -273,7 +273,18 @@ function generatePOTFiles($_verbose)
             }
         }
 
-        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -or -iname "*.twig" | grep -v node_modules | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -or -iname "*.twig" \
+        | grep -v node_modules | \
+        xgettext \
+          --force-po \
+          --omit-header \
+          --join-existing \
+          --output=translations/template.pot \
+          --language=Python \
+          --from-code=utf-8 \
+          --keyword=formatMessage \
+          --files-from=- \
+          2> /dev/null`;
 
         if (file_exists($tempExportExtractDir)) {
             `rm -rf "$tempExportExtractDir"`;

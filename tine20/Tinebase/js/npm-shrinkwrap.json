@@ -4780,6 +4780,36 @@
         "mime-types": "2.1.17"
       }
     },
+    "format-message": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/format-message/-/format-message-6.0.3.tgz",
+      "integrity": "sha512-NElLjGbJMpz2oY9YAbFf91OFyjEwUkKozMp3yMg2qgyU/DlerbyLRQ3kqoyLbelyqzManbsu7sUKqKL/8hOksg==",
+      "requires": {
+        "format-message-formats": "6.0.3",
+        "format-message-interpret": "6.0.3",
+        "format-message-parse": "6.0.3",
+        "lookup-closest-locale": "6.0.3"
+      }
+    },
+    "format-message-formats": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/format-message-formats/-/format-message-formats-6.0.3.tgz",
+      "integrity": "sha512-wRDBQ9rgDYJDxeHf8k55gZlTeg3gQ3EvZoB5dPVKB7wY93OE8xFebbYSkQLTzGYAmDD7wGAapqA9N0nfLqAgqQ=="
+    },
+    "format-message-interpret": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/format-message-interpret/-/format-message-interpret-6.0.3.tgz",
+      "integrity": "sha512-uEkfIFVwTG3vgOGC3XiQgvCvAqP9XrkeAUIWy0/SxWlFaShsX1Lkg9c0BDM5wfiiKcEEeLqPbdbJOUGMiVQjUw==",
+      "requires": {
+        "format-message-formats": "6.0.3",
+        "lookup-closest-locale": "6.0.3"
+      }
+    },
+    "format-message-parse": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/format-message-parse/-/format-message-parse-6.0.3.tgz",
+      "integrity": "sha512-5sIY58v4Jn8jUrMEwTwaR3hsiCRrs0yVp9if1uSntC2XOig7JA599x8+ul+GD48nFrUDKtR6E4PuxyBa4oQ8eA=="
+    },
     "formatio": {
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/formatio/-/formatio-1.2.0.tgz",
@@ -8124,6 +8154,11 @@
       "resolved": "https://registry.npmjs.org/longest/-/longest-1.0.1.tgz",
       "integrity": "sha1-MKCy2jj3N3DoKUoNIuZiXtd9AJc=",
       "dev": true
+    },
+    "lookup-closest-locale": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/lookup-closest-locale/-/lookup-closest-locale-6.0.3.tgz",
+      "integrity": "sha512-wyXMq71LeYB0/DPoCuGGaPMZokqvhQkhPmj4DDCIyaMFDSjI7ttv+vCS9B3TXTEwbAZdB5ufzfxhrn2BmYV+ng=="
     },
     "loose-envify": {
       "version": "1.3.1",

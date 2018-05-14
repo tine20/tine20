@@ -585,6 +585,26 @@ class Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_Controller::cleanAclTables in scheduler.');
     }
-    
 
+    /**
+     * add acl tables cleanup task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addActionQueueMonitoringTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_ActionQueueActiveMonitoring')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_ActionQueueActiveMonitoring', self::TASK_TYPE_MINUTELY, [[
+            self::CONTROLLER    => 'Tinebase_Controller',
+            self::METHOD_NAME   => 'actionQueueActiveMonitoring',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_Controller::actionQueueActiveMonitoring in scheduler.');
+    }
 }
