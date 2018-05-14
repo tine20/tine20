@@ -622,7 +622,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     protected function _getBodyPartIds(array $_structure)
     {
         $result = array();
-        
+
+        if (! isset($_structure['type'])) {
+            return $result;
+        }
+
         if ($_structure['type'] == 'text') {
             $result = array_merge($result, $this->_getTextPartId($_structure));
         } elseif($_structure['type'] == 'multipart') {
