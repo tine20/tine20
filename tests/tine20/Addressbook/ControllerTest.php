@@ -637,11 +637,13 @@ class Addressbook_ControllerTest extends TestCase
         // delete it
         $this->_instance->delete($contact->getId());
 
+        $oldSequence = $contact->seq;
         $contact->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Addressbook')->getId(), $contact, 10000);
 
         // undelete it
+        $oldContentSequence = Tinebase_Container::getInstance()->getContentSequence($contact->container_id);
         $mod = $modifications->getLastRecord();
         $modifications->removeRecord($mod);
         Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
@@ -653,6 +655,9 @@ class Addressbook_ControllerTest extends TestCase
         static::assertEquals(2, $undeletedContact->tags->count());
         static::assertEquals(2, $undeletedContact->attachments->count());
         static::assertEquals(2, count($undeletedContact->customfields));
+        static::assertGreaterThan($oldSequence, $undeletedContact->seq);
+        $undeletedContentSequence = Tinebase_Container::getInstance()->getContentSequence($contact->container_id);
+        static::assertGreaterThan($oldContentSequence, $undeletedContentSequence);
 
         // undo update
         $mod = $modifications->getLastRecord();
@@ -666,6 +671,22 @@ class Addressbook_ControllerTest extends TestCase
         static::assertEquals(1, $undidContact->tags->count());
         static::assertEquals(1, $undidContact->attachments->count());
         static::assertEquals(1, count($undidContact->customfields));
+        static::assertGreaterThan($undeletedContact->seq, $undidContact->seq);
+        $undidContentSequence = Tinebase_Container::getInstance()->getContentSequence($contact->container_id);
+        static::assertGreaterThan($undeletedContentSequence, $undidContentSequence);
+
+        // undo create
+        $mod = $modifications->getLastRecord();
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        try {
+            $this->_instance->get($contact->getId());
+            static::fail('undo create did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        $uncreateContentSequence = Tinebase_Container::getInstance()->getContentSequence($contact->container_id);
+        static::assertGreaterThan($undidContentSequence, $uncreateContentSequence);
     }
 
     public function testUpdateInternalContactHiddenListMembership()
