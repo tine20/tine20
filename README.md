@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM.svg?branch=master)](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM)
+
 # Tine 2.0 - Community Edition
 
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
