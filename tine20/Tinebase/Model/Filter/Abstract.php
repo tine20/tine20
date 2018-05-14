@@ -406,6 +406,11 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     protected function _replaceWildcardsSingleValue($value)
     {
+        if (!is_scalar($value)) {
+            Tinebase_Exception::log(new Tinebase_Exception(__METHOD__ . ': $value is not a scalar: ' .
+                print_r($value, true)));
+            return '';
+        }
         $action = $this->_opSqlMap[$this->_operator];
 
         // escape backslashes first
