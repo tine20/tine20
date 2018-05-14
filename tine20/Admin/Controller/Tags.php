@@ -154,12 +154,13 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_FullTag $_tag
      * @param string $_tagId
      * @param boolean $_purgeRights
-     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _setTagRights(Tinebase_Model_FullTag $_tag, $_tagId, $_purgeRights = FALSE)
     {
         if (count($_tag->rights) == 0 || count($_tag->rights->view_right) == 0 || $_tag->rights->view_right[0] !== TRUE) {
-            throw new Tinebase_Exception_InvalidArgument('Could not save tag without (view-)rights');
+            // _('Could not save tag without (view-)rights')
+            throw new Tinebase_Exception_SystemGeneric('Could not save tag without (view-)rights');
         }
         
         if ($_purgeRights) {
@@ -172,9 +173,9 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     /**
      * delete multiple tags
      *
-     * @param   array $_tagIds
-     * @void
-     * 
+     * @param array $_tagIds
+     * @return void
+     *
      * @todo replace this by parent::delete()
      */
     public function delete($_tagIds)

@@ -837,7 +837,7 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals($tagData['name'], $this->objects['tag']['name']);
         
         $this->objects['tag']['rights'] = array();
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
         $this->objects['tag'] = $this->_json->saveTag($this->objects['tag']);
     }
 
@@ -854,7 +854,7 @@ class Admin_JsonTest extends TestCase
             'view_right' => false,
             'use_right' => false
         ));
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
         $this->objects['tag'] = $this->_json->saveTag($tagData);
     }
     
