@@ -406,8 +406,8 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     protected function _replaceWildcardsSingleValue($value)
     {
-        if (!is_scalar($value)) {
-            Tinebase_Exception::log(new Tinebase_Exception(__METHOD__ . ': $value is not a scalar: ' .
+        if (is_array($value)) {
+            Tinebase_Exception::log(new Tinebase_Exception(__METHOD__ . ': $value is an array: ' .
                 print_r($value, true)));
             return '';
         }
