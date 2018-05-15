@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM.svg?branch=master)](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM)
+![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftine20%2FTine-2.0-Open-Source-Groupware-and-CRM.svg?type=shield)
 
 # Tine 2.0 - Community Edition
 
