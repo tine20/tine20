@@ -474,6 +474,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function resetPassword($account, $password, $mustChange)
     {
         if (is_array($account)) {
+            if (isset($account['accountPrimaryGroup']) && is_array($account['accountPrimaryGroup']) && isset($account['accountPrimaryGroup']['id'])) {
+                $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
+            }
             $account = new Tinebase_Model_FullUser($account);
         } else {
             $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
