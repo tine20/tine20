@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -82,6 +82,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     public function put($data)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_FileSystem::getInstance()->acquireWriteLock();
         try {
             $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
             if (! Tinebase_FileSystem::getInstance()->checkPathACL(

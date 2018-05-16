@@ -508,17 +508,18 @@ class Tinebase_Application
      * gets the current application state
      * we better do a select for update always
      *
-     * @param $_applicationId
-     * @param $_stateName
+     * @param mixed $_applicationId
+     * @param string $_stateName
+     * @param bool $_forUpdate
      * @return null|string
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getApplicationState($_applicationId, $_stateName)
+    public function getApplicationState($_applicationId, $_stateName, $_forUpdate = false)
     {
         $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
         $db = $this->_getDb();
-        $result = $db->select()->forUpdate(true)->from(SQL_TABLE_PREFIX . 'application_states', 'state')->where(
+        $result = $db->select()->forUpdate($_forUpdate)->from(SQL_TABLE_PREFIX . 'application_states', 'state')->where(
             $db->quoteIdentifier('id') . $db->quoteInto(' = ? AND ', $id) .
             $db->quoteIdentifier('name') . $db->quoteInto(' = ?', $_stateName))->query()
                 ->fetchColumn(0);
@@ -540,13 +541,18 @@ class Tinebase_Application
         $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
         $db = $this->_getDb();
-        $this->deleteApplicationState($id, $_stateName);
-        $db->insert(SQL_TABLE_PREFIX . 'application_states',
-            [
-                'id'    => $id,
-                'name'  => $_stateName,
-                'state' => $_state
-            ]);
+        if (null === $this->getApplicationState($id, $_stateName)) {
+            $db->insert(SQL_TABLE_PREFIX . 'application_states',
+                [
+                    'id' => $id,
+                    'name' => $_stateName,
+                    'state' => $_state
+                ]);
+        } else {
+            $db->update(SQL_TABLE_PREFIX . 'application_states', ['state' => $_state], $db->quoteIdentifier('id') .
+                $db->quoteInto(' = ?', $id) . ' AND ' . $db->quoteIdentifier('name') .
+                $db->quoteInto(' = ?', $_stateName));
+        }
     }
 
     /**

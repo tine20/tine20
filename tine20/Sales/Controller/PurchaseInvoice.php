@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -92,18 +92,30 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
         
         // attach invoice file (aka a pdf)
         $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, TRUE);
-        
-        $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
-        
-        if (!is_resource($handle)) {
-            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        try {
+            $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
+
+            if (!is_resource($handle)) {
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+            }
+
+            if (is_resource($data)) {
+                stream_copy_to_stream($data, $handle);
+            }
+
+            Tinebase_FileSystem::getInstance()->fclose($handle);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        if (is_resource($data)) {
-            stream_copy_to_stream($data, $handle);
-        }
-        
-        Tinebase_FileSystem::getInstance()->fclose($handle);
         
         return $this->get($purchaseInvoice);
     }
