@@ -156,6 +156,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
                 Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
                 continue;
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ .  ' Skip folder - there might be a temporary problem (' . $zmpe->getMessage() . ')');
             }
             
             if ($this->_cacheIsInvalid($folder) || $this->_messagesInCacheButNotOnIMAP($folder)) {
