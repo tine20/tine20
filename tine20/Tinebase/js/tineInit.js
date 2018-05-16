@@ -55,7 +55,7 @@ Tine.logo = 'images/tine_logo.png';
 Tine.favicon;
 Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
-Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
+Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
@@ -130,7 +130,7 @@ Tine.Tinebase.tineInit = {
 
     checkWebpack: function() {
         if (! window.postal) {
-            var wikiurl = 'https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack';
+            var wikiurl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki/EN:Development-Setup#install-webpack';
             Ext.Msg.alert('Webpack-dev-server missing?',
                 'You need to install and run webpack-dev-server! <a target="_blank" href="' + wikiurl + '">Installation instructions in the Wiki</a>.', function() {
                 Tine.Tinebase.common.reload();
