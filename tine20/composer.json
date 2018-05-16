@@ -19,7 +19,7 @@
         "url": "http://git.tine20.org/git/timezoneconvert"
     }, {
         "type": "git",
-        "url": "http://git.syncroton.org/Syncroton"
+        "url": "https://github.com/tine20/syncroton.git"
     }],
     "require": {
         "zendframework/zendframework1": "1.12.20pl28 as 1.12.20",

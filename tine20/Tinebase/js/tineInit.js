@@ -55,7 +55,7 @@ Tine.logo = 'images/tine_logo.png';
 Tine.favicon;
 Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
-Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
+Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
@@ -148,7 +148,7 @@ Tine.Tinebase.tineInit = {
         Ext.getBody().on('click', function(e) {
             var target = e.getTarget('a', 1, true),
                 href = target ? target.getAttribute('href') : '';
-            
+
             if (target && href && href != '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
@@ -864,7 +864,7 @@ Tine.Tinebase.tineInit = {
             'url'      : sam.target
         }));
     },
-    
+
     /**
      * initialise application manager
      */

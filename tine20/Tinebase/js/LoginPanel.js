@@ -255,7 +255,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     html: '<p>' + String.format(i18n._('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="http://wiki.tine20.org/Contributors/Howtos/Translations" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki/EN%3Atranslation-Howto" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
                         '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
