@@ -239,7 +239,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     operatorRenderer: function (filter, el) {
         var _ = window.lodash,
             me = this,
-            gender = me.getItemGender()
+            gender = me.getItemGender(),
             operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [

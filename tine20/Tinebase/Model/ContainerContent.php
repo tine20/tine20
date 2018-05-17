@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -36,6 +36,11 @@ class Tinebase_Model_ContainerContent extends Tinebase_Record_Abstract
      * delete action
      */
     const ACTION_DELETE = 'delete';
+
+    /**
+     * undelete action
+     */
+    const ACTION_UNDELETE = 'undelete';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -61,7 +66,8 @@ class Tinebase_Model_ContainerContent extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'              => array('allowEmpty' => true),
-        'action'          => array(array('InArray', array(self::ACTION_CREATE, self::ACTION_UPDATE, self::ACTION_DELETE))),
+        'action'          => [['InArray',
+            [self::ACTION_CREATE, self::ACTION_UPDATE, self::ACTION_DELETE, self::ACTION_UNDELETE]]],
         'time'            => array('allowEmpty' => true),
         'record_id'       => array('allowEmpty' => true),
         'container_id'    => array('allowEmpty' => true),

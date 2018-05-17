@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "b240bc9489a741ac0d41438d90b318e9",
@@ -464,7 +464,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": "b3b141d7ddda491e068e11c5324187e9b8eebb50"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -518,7 +518,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -648,7 +648,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
@@ -898,7 +898,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ivanlanin/pclzip/zipball/19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
                 "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
-                "shasum": "32c8b855dbc0715f6dabbe882c60c6f38cb21224"
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -935,7 +935,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/Common/zipball/c9be70c80637c28c728be78e66aad4878a34f8dd",
                 "reference": "c9be70c80637c28c728be78e66aad4878a34f8dd",
-                "shasum": "f6b4e3b21321f5d34cb69642b8540fde13392f3a"
+                "shasum": ""
             },
             "require": {
                 "pclzip/pclzip": "^2.8",
@@ -990,7 +990,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
                 "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
-                "shasum": "d98c9cebdb3faa6e798bdca7341d96db8a27617f"
+                "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
@@ -1414,7 +1414,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
+                "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
@@ -1489,7 +1489,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/vobject/zipball/129d80533a9ec0d9cacfb50b51180c34edb6874c",
                 "reference": "129d80533a9ec0d9cacfb50b51180c34edb6874c",
-                "shasum": "c5692defcb3616042c047fdf553105276abfc70e"
+                "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
@@ -1979,7 +1979,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "http://git.syncroton.org/Syncroton",
+                "url": "https://github.com/tine20/syncroton.git",
                 "reference": "e8880afdfd69fe23ae17918ee6a7e65d4bfd1d36"
             },
             "require": {
@@ -2013,12 +2013,6 @@
                 "type": "git",
                 "url": "https://git.tine20.org/git/composerapploader",
                 "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "http://79.99.84.34/dist1/tine20-composerapploader-1.0.5-ca8596.zip",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686",
-                "shasum": "87260253a63a89f2283398344cc488e7f6b4ac9a"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"

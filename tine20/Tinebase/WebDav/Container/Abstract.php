@@ -642,14 +642,50 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         if (null === $resultSet) {
             return null;
         }
+
+        $unSets = [
+            Tinebase_Model_ContainerContent::ACTION_CREATE => [],
+            Tinebase_Model_ContainerContent::ACTION_UPDATE => [],
+        ];
         foreach($resultSet as $contentModel) {
             switch($contentModel->action) {
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case Tinebase_Model_ContainerContent::ACTION_DELETE:
-                    unset($result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id]);
-                    unset($result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id]);
+                    if (isset($result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id])) {
+                        $unSets[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id] =
+                            $result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id];
+                        unset($result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id]);
+                    }
+                    if (isset($result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id])) {
+                        $unSets[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id] =
+                            $result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id];
+                        unset($result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id]);
+                    }
                 case Tinebase_Model_ContainerContent::ACTION_CREATE:
                 case Tinebase_Model_ContainerContent::ACTION_UPDATE:
                     $result[$contentModel->action][$contentModel->record_id] = $contentModel->record_id . $this->_suffix;
+                    break;
+
+                case Tinebase_Model_ContainerContent::ACTION_UNDELETE:
+                    if (isset($unSets[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id])) {
+                        $result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id] =
+                            $unSets[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id];
+                        unset($unSets[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id]);
+                    } elseif (!isset($result[Tinebase_Model_ContainerContent::ACTION_DELETE][$contentModel->record_id])) {
+                        $result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id] =
+                            $contentModel->record_id . $this->_suffix;
+                    }
+                    // do not else this, we want to unset delete, no matter if create is there or not
+                    unset($result[Tinebase_Model_ContainerContent::ACTION_DELETE][$contentModel->record_id]);
+
+                    if (isset($unSets[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id])) {
+                        $result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id] =
+                            $unSets[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id];
+                        unset($unSets[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id]);
+                    } else {
+                        $result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id] =
+                            $contentModel->record_id . $this->_suffix;
+                    }
                     break;
 
                 default:

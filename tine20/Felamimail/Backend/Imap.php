@@ -313,7 +313,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function search(array $params)
     {
-        $result = $this->_protocol->search($params, $this->_useUid);
+        if (!is_array($result = $this->_protocol->search($params, $this->_useUid))) {
+            throw new Tinebase_Exception_Backend('email backend failure');
+        }
         
         return $result;
     }

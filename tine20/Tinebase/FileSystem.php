@@ -839,12 +839,12 @@ class Tinebase_FileSystem implements
         $rootRevisionSize += $_revisionSizeDiff;
 
         if ($rootSize < 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' root size should not become smaller than 0: ' . $rootSize);
             $rootSize = 0;
         }
         if ($rootRevisionSize < 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' root revision size should not become smaller than 0: ' . $rootRevisionSize);
             $rootRevisionSize = 0;
         }
@@ -886,13 +886,13 @@ class Tinebase_FileSystem implements
             foreach($this->_fileObjectBackend->getMultiple($folderNodes->object_id) as $fileObject) {
                 $fileObject->size = (int)$fileObject->size + (int)$_sizeDiff;
                 if ($fileObject->size < 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
                     $fileObject->size = 0;
                 }
                 $fileObject->revision_size = (int)$fileObject->revision_size + (int)$_revisionSizeDiff;
                 if ($fileObject->revision_size < 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' revision_size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
                     $fileObject->revision_size = 0;
                 }
@@ -1031,6 +1031,12 @@ class Tinebase_FileSystem implements
             $subPath .= "/" . $node->name;
             $this->_addStatCache($subPath, $node);
         }
+    }
+
+    public function acquireWriteLock()
+    {
+        Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, true);
     }
     
     /**
@@ -2517,25 +2523,38 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function copyStream($in, $path)
     {
-        if (! $handle = $this->fopen($path, 'w')) {
-            throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
-        }
-        
-        if (! is_resource($in)) {
-            throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');
-        }
-        
-        if (is_resource($in) !== null) {
-            $metaData = stream_get_meta_data($in);
-            if (true === $metaData['seekable']) {
-                rewind($in);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+
+            $this->acquireWriteLock();
+            if (! $handle = $this->fopen($path, 'w')) {
+                throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
             }
-            stream_copy_to_stream($in, $handle);
-            
-            $this->clearStatCache($path);
+
+            if (! is_resource($in)) {
+                throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');
+            }
+
+            if (is_resource($in) !== null) {
+                $metaData = stream_get_meta_data($in);
+                if (true === $metaData['seekable']) {
+                    rewind($in);
+                }
+                stream_copy_to_stream($in, $handle);
+
+                $this->clearStatCache($path);
+            }
+
+            $this->fclose($handle);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        $this->fclose($handle);
     }
 
     /**

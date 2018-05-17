@@ -1828,7 +1828,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $this->_writeModLog($updateRecord, $originalRecord);
 
-            //$this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+            $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_UNDELETE);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
