@@ -98,42 +98,37 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
 
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(
+            $pathRecord,
+            'add',
+            true, false
+        )) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
+        }
+
+        // OwnCloud chunked file upload
+        if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+
+            if (!$completeFile instanceof Tinebase_Model_TempFile) {
+                return null;
+            }
+
+            $name = $completeFile->name;
+            if (false === ($data = fopen($completeFile->path, 'r'))) {
+                throw new Tinebase_Exception_Backend('fopen on temp file path failed ' . $completeFile->path);
+            }
+        }
+
+        if ($this->childExists($name)) {
+            $result = $this->getChild($name)->put($data);
+            return $result;
+        }
+
+        $path = $this->_path . '/' . $name;
+
         try {
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
-            if (!Tinebase_FileSystem::getInstance()->checkPathACL(
-                $pathRecord,
-                'add',
-                true, false
-            )) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
-            }
-
-            // OwnCloud chunked file upload
-            if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
-                $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
-
-                if (!$completeFile instanceof Tinebase_Model_TempFile) {
-                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                    $transactionId = null;
-                    return null;
-                }
-
-                $name = $completeFile->name;
-                if (false === ($data = fopen($completeFile->path, 'r'))) {
-                    throw new Tinebase_Exception_Backend('fopen on temp file path failed ' . $completeFile->path);
-                }
-            }
-
-            if ($this->childExists($name)) {
-                $result = $this->getChild($name)->put($data);
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                $transactionId = null;
-                return $result;
-            }
-
-            $path = $this->_path . '/' . $name;
 
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
@@ -155,16 +150,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
 
-            $result = '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-            return $result;
 
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
+        } catch (Exception $e) {
+            Tinebase_FileSystem::getInstance()->unlink($path);
+            throw $e;
         }
+
+        return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
     }
 
     /**

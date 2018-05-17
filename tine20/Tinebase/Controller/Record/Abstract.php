@@ -595,6 +595,12 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Create new ' . $this->_modelName);
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
+
+        if ($_record->has('attachments') && isset($_record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
+            // fill stat cache to avoid deadlocks. Needs to happen outside a transaction
+            $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentBasePath($_record);
+            Tinebase_FileSystem::getInstance()->fileExists($path);
+        }
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -1059,6 +1065,11 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Update ' . $this->_modelName);
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
+        if ($_record->has('attachments') && isset($_record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
+            // fill stat cache to avoid deadlocks. Needs to happen outside a transaction
+            $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($_record);
+            Tinebase_FileSystem::getInstance()->fileExists($path);
+        }
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);

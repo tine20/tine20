@@ -214,6 +214,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function create(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $skipEvent = false)
     {
+        if (Tinebase_Core::isFilesystemAvailable()) {
+            // fill stat cache to avoid deadlocks. Needs to happen outside a transaction
+            $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentBasePath($_record);
+            Tinebase_FileSystem::getInstance()->fileExists($path);
+        }
+
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -910,6 +916,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function update(Tinebase_Record_Interface $_record, $_checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS, $skipEvent = false)
     {
+        if (Tinebase_Core::isFilesystemAvailable()) {
+            // fill stat cache to avoid deadlocks. Needs to happen outside a transaction
+            $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($_record);
+            Tinebase_FileSystem::getInstance()->fileExists($path);
+        }
+
         /** @var Calendar_Model_Event $_record */
         try {
             $db = $this->_backend->getAdapter();

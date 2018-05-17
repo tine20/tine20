@@ -87,6 +87,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * @param   boolean $_duplicateCheck
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
+     *
+     * TODO transaction!? -> attachment? be careful!
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {

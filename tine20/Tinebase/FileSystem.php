@@ -585,11 +585,13 @@ class Tinebase_FileSystem implements
             case 'wb':
             case 'x':
             case 'xb':
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                try {
-                    $parentPath = dirname($options['tine20']['path']);
+                $parentPath = dirname($options['tine20']['path']);
 
-                    list ($hash, $hashFile) = $this->createFileBlob($handle);
+                list ($hash, $hashFile) = $this->createFileBlob($handle);
+
+                try {
+                    $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                    $this->acquireWriteLock();
 
                     $parentFolder = $this->stat($parentPath);
 
@@ -1401,6 +1403,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing directory ' . $path);
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        if (!$recursion) {
+            $this->acquireWriteLock();
+        }
+
         try {
             try {
                 $node = $this->stat($path);
@@ -1613,9 +1619,18 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     public function unlink($path, $recursion = false)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        if (!$recursion) {
+            $this->acquireWriteLock();
+        }
 
         try {
-            $node = $this->stat($path);
+            try {
+                $node = $this->stat($path);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+                return false;
+            }
             $this->deleteFileNode($node, false === $recursion);
 
             $this->clearStatCache($path);
@@ -1696,6 +1711,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
+            $this->acquireWriteLock();
 
             if (true === $updateDirectoryNodesHash) {
                 $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
@@ -2523,15 +2539,13 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function copyStream($in, $path)
     {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $deleteFile = !$this->fileExists($path);
         try {
-
-            $this->acquireWriteLock();
-            if (! $handle = $this->fopen($path, 'w')) {
+            if (!$handle = $this->fopen($path, 'w')) {
                 throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
             }
 
-            if (! is_resource($in)) {
+            if (!is_resource($in)) {
                 throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');
             }
 
@@ -2547,13 +2561,11 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $this->fclose($handle);
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
+        } catch (Exception $e) {
+            if ($deleteFile) {
+                $this->unlink($path);
             }
+            throw $e;
         }
     }
 

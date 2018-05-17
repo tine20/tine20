@@ -289,18 +289,38 @@ class Tinebase_FileSystem_RecordAttachments
      * @throws Tinebase_Exception_InvalidArgument
      * @return string
      */
-    public function getRecordAttachmentPath(Tinebase_Record_Abstract $record, $createDirIfNotExists = FALSE)
+    public function getRecordAttachmentPath(Tinebase_Record_Abstract $record, $createDirIfNotExists = false)
     {
         if (! $record->getId()) {
             throw new Tinebase_Exception_InvalidArgument('record needs an identifier');
         }
         
-        $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(), Tinebase_FileSystem::FOLDER_TYPE_RECORDS);
+        $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(),
+            Tinebase_FileSystem::FOLDER_TYPE_RECORDS);
         $recordPath = $parentPath . '/' . get_class($record) . '/' . $record->getId();
         if ($createDirIfNotExists && ! $this->_fsController->fileExists($recordPath)) {
             $this->_fsController->mkdir($recordPath);
         }
         
+        return $recordPath;
+    }
+
+    /**
+     * get base path for record attachments (without the record id)
+     *
+     * @param Tinebase_Record_Abstract $record
+     * @param boolean $createDirIfNotExists
+     * @return string
+     */
+    public function getRecordAttachmentBasePath(Tinebase_Record_Abstract $record, $createDirIfNotExists = false)
+    {
+        $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(),
+            Tinebase_FileSystem::FOLDER_TYPE_RECORDS);
+        $recordPath = $parentPath . '/' . get_class($record);
+        if ($createDirIfNotExists && ! $this->_fsController->fileExists($recordPath)) {
+            $this->_fsController->mkdir($recordPath);
+        }
+
         return $recordPath;
     }
 }

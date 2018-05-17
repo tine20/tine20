@@ -81,47 +81,35 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     
     public function put($data)
     {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        Tinebase_FileSystem::getInstance()->acquireWriteLock();
-        try {
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
-            if (! Tinebase_FileSystem::getInstance()->checkPathACL(
-                    $pathRecord->getParent(),
-                    'update',
-                    true, false
-                )) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
-            }
-
-            if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w'))) {
-                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $this->_path);
-            }
-
-            if (is_resource($data)) {
-                if (false === stream_copy_to_stream($data, $handle)) {
-                    throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
-                }
-            } else {
-                throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
-            }
-
-            // save file object
-            if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
-                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
-            }
-
-            // refetch data
-            $this->_node = Tinebase_FileSystem::getInstance()->stat($this->_path);
-
-            $result = $this->getETag();
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-            return $result;
-
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+        if (! Tinebase_FileSystem::getInstance()->checkPathACL(
+                $pathRecord->getParent(),
+                'update',
+                true, false
+            )) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
+
+        if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w'))) {
+            throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $this->_path);
+        }
+
+        if (is_resource($data)) {
+            if (false === stream_copy_to_stream($data, $handle)) {
+                throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
+            }
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
+        }
+
+        // save file object
+        if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
+            throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
+        }
+
+        // refetch data
+        $this->_node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+
+        return $this->getETag();
     }
 }
