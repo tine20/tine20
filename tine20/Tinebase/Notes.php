@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        delete notes completely or just set the is_deleted flag?
@@ -398,6 +398,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
         
         $data = $_note->toArray(FALSE, FALSE);
+
+        if (mb_strlen($data['note']) > 65535) {
+            $data['note'] = mb_substr($data['note'], 0, 65535);
+        }
         
         $this->_notesTable->insert($data);
     }
