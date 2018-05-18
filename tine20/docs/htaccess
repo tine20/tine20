@@ -45,6 +45,15 @@ DirectoryIndex index.php
     # Anonymous downloads
     RewriteRule ^download/get/(.*)           index.php?method=Download.downloadNode&path=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^download/show/(.*)          index.php?method=Download.displayNode&path=$1  [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+
+    # Routing
+    <Location />
+        RewriteCond %{REQUEST_FILENAME} -s [OR]
+        RewriteCond %{REQUEST_FILENAME} -l [OR]
+        RewriteCond %{REQUEST_FILENAME} -d
+        RewriteRule ^.*$ - [NC,L]
+        RewriteRule ^.*$ index.php?doRouting=1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+     </Location>
 </IfModule>
 
 <IfModule mod_expires.c>
