@@ -244,7 +244,8 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'note', header: i18n._('Note'), dataIndex: 'note' },
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
-        { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
+        { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
+        { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
     ];
 
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
