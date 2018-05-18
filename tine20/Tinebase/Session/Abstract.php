@@ -99,7 +99,9 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
      */
     public static function destroyAndRemoveCookie()
     {
-        Zend_Session::destroy(true, true);
+        if (self::sessionExists()) {
+            Zend_Session::destroy(true, true);
+        }
     }
     
     /**
