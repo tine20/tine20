@@ -93,8 +93,13 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
                         break;
                     case 'in':
                         $result['value'] = array();
-                        foreach ($this->_value as $userId) {
-                            $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                        if (! is_array($this->_value)) {
+                            // somehow the client sent us a scalar - put this into the value array
+                            $result['value'][] = $this->_value;
+                        } else {
+                            foreach ($this->_value as $userId) {
+                                $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                            }
                         }
                         break;
                     default:
