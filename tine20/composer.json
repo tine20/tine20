@@ -7,7 +7,7 @@
     "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
     "repositories": [{
       "type": "git",
-      "url": "http://git.tine20.org/git/composerapploader"
+      "url": "https://github.com/tine20/composerapploader.git"
     }, {
         "type": "git",
         "url": "https://github.com/tine20/zendframework1.git"

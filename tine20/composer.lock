@@ -1263,7 +1263,7 @@
             "version": "1.0.5",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/composerapploader",
+                "url": "https://github.com/tine20/composerapploader.git",
                 "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
