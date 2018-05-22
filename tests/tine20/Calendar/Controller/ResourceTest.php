@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -15,32 +15,11 @@
  */
 class Calendar_Controller_ResourceTest extends Calendar_TestCase
 {
-    /**
-     * Tinebase_Record_RecordSet
-     */
-    protected $_toCleanup;
-    
-    public function setUp()
-    {
-        parent::setUp();
-        $this->_toCleanup = new Tinebase_Record_RecordSet('Calendar_Model_Resource');
-    }
-    
-    public function tearDown()
-    {
-        if (! $this->_transactionId) {
-            Calendar_Controller_Resource::getInstance()->delete($this->_toCleanup->id);
-        }
-        
-        parent::tearDown();
-    }
-    
     public function testCreateResource()
     {
         $resource = $this->_getResource();
         
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
-        $this->_toCleanup->addRecord($persistentResource);
         
         $this->assertEquals($resource->name, $persistentResource->name);
         
@@ -206,7 +185,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $resource = $this->_getResource();
         $sclever = $this->_getPersona('sclever');
         $grants = array($this->_getAllCalendarGrants($sclever));
-        $grants[0][Tinebase_Model_Grants::GRANT_SYNC] = true;
+        $grants[0] = array_merge($grants[0], array_fill_keys(Calendar_Model_ResourceGrants::getAllGrants(), true));
         $resource->grants = $grants;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
 
@@ -414,7 +393,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
      */
     public function testResourceAclSearchAttenders()
     {
-        $this->_prepareTestResourceAcl();
+        $resource = $this->_prepareTestResourceAcl();
 
         $filter = array(array(
             'field' => 'type',
@@ -431,8 +410,24 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         // try with sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+
         $result = $json->searchAttenders($filter);
         self::assertEquals(1, $result['resource']['totalcount'], 'resource not found');
+
+        $filter[] = ['field' => 'resourceFilter', 'value' => [
+            ['field' => 'requireFreeBusyGrant', 'value' => 1],
+        ]];
+        $result = $json->searchAttenders($filter);
+        self::assertEquals(1, $result['resource']['totalcount'], 'resource not found');
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true);
+        $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_FREEBUSY} = false;
+        $grants->getFirstRecord()->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY} = false;
+        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants, true, false);
+
+        $result = $json->searchAttenders($filter);
+        self::assertEquals(0, $result['resource']['totalcount'], 'should not find resource');
     }
 
     /**
@@ -468,6 +463,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         // try with sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
         $containers = $json->searchContainers($filter, null);
 
         $this->assertTrue(is_array($containers) && isset($containers['results']) && is_array($containers['results']));
@@ -487,7 +483,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
      */
     public function testResourceAclGetTinebase()
     {
-        $this->_prepareTestResourceAcl();
+        $resource = $this->_prepareTestResourceAcl();
 
         $json = new Tinebase_Frontend_Json_Container();
         $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
@@ -501,6 +497,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         // try with sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
         $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
 
         $this->assertTrue(is_array($containers));
@@ -511,8 +508,15 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         foreach ($containers as $container) {
             if ('Meeting Room' === $container['name']) {
                 $found = true;
+                break;
             }
         }
         static::assertTrue($found, 'did not find resource in shared containers!');
+        static::assertTrue(isset($container['xprops']['Calendar']['Resource']['resource_id']) &&
+            $container['xprops']['Calendar']['Resource']['resource_id'] === $resource->getId(),
+            'xprops are not properly set on container: ' . print_r($container, true));
+        static::assertTrue(isset($container['xprops']['Tinebase']['Container']['GrantsModel']) &&
+            $container['xprops']['Tinebase']['Container']['GrantsModel'] === Calendar_Model_ResourceGrants::class,
+            'xprops are not properly set on container: ' . print_r($container, true));
     }
 }

@@ -31,7 +31,7 @@ class Tinebase_ScheduledImportTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_testCalendar = $this->_getTestContainer('Calendar');
+        $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         $this->_uit = Tinebase_Controller_ScheduledImport::getInstance();
     }
     

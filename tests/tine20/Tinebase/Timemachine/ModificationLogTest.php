@@ -442,14 +442,15 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'name' => 'unittest test container',
             'type' => Tinebase_Model_Container::TYPE_SHARED,
             'backend' => 'sql',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         ));
         $container = $containerController->addContainer($container);
 
         $container->color = '#FFFFFF';
         $containerController->update($container);
 
-        $grants = $containerController->getGrantsOfContainer($container->getId(), true);
+        $grants = $containerController->getGrantsOfContainer($container, true);
         static::assertEquals(2, $grants->count(), 'should find 2 grant records');
         /** @var Tinebase_Model_Grants $grant */
         $grant = $grants->filter('account_type', 'anyone')->getFirstRecord();
@@ -470,10 +471,11 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+        $containerController->resetClassCache();
         $notFound = false;
         try {
-            // avoid Cache, so use get, not getContainerById
-            $containerController->get($container->getId());
+            // don't avoid Cache, so use getContainerById, not get!
+            $containerController->getContainerById($container->getId());
         } catch (Tinebase_Exception_NotFound $tenf) {
             $notFound = true;
         }
@@ -514,7 +516,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $containerModifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
-        $grants = $containerController->getGrantsOfContainer($container->getId(), true);
+        $grants = $containerController->getGrantsOfContainer($container, true);
         static::assertEquals(2, $grants->count(), 'should find 2 grant records');
         $grant = $grants->filter('account_type', 'anyone')->getFirstRecord();
         static::assertNotNull($grant);

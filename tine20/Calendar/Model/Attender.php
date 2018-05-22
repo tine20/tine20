@@ -1020,7 +1020,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($resolveDisplayContainers) {
             $displaycontainerIds = array_diff($allAttendee->displaycontainer_id, array(''));
             if (! empty($displaycontainerIds)) {
-                Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendee, Tinebase_Core::getUser(), 'displaycontainer_id');
+                $allResources = $allAttendee->filter('user_type', self::USERTYPE_RESOURCE);
+                $tmpRS = $allAttendee->getClone(true);
+                $tmpRS->removeRecords($allResources);
+                Tinebase_Container::getInstance()->getGrantsOfRecords($tmpRS, Tinebase_Core::getUser(),
+                    'displaycontainer_id');
+                Tinebase_Container::getInstance()->getGrantsOfRecords($allResources, Tinebase_Core::getUser(),
+                    'displaycontainer_id', Calendar_Model_ResourceGrants::class);
             }
         }
 
@@ -1127,8 +1133,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
 
                 // keep authkey if attender is a resource and user has manage_resources
-                if ($attender->user_type === static::USERTYPE_RESOURCE &&
-                    Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                if ($attender->user_type === self::USERTYPE_RESOURCE &&
+                        (Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) || (
+                        isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id'])
+                        && isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT])
+                        && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT]))) {
                     continue;
                 }
                 

@@ -1040,9 +1040,47 @@ class Admin_JsonTest extends TestCase
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         );
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
-        $containerUpdated = $this->_json->saveContainer($container);
+        $this->_json->saveContainer($container);
     }
-    
+
+    /**
+     * test create container with bad xprops
+     */
+    public function testCreateContainerBadXprops()
+    {
+        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        $this->_json->saveContainer(array(
+            "type" => Tinebase_Model_Container::TYPE_SHARED,
+            "backend" => "Sql",
+            "name" => "asdfgsadfg",
+            "color" => "#008080",
+            "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            "model" => "",
+            "note" => "",
+            'xprops' => '{a":"b"}',
+        ));
+    }
+
+    /**
+     * test create container with bad xprops
+     */
+    public function testUpdateContainerBadXprops()
+    {
+        $container = $this->_json->saveContainer(array(
+            "type" => Tinebase_Model_Container::TYPE_SHARED,
+            "backend" => "Sql",
+            "name" => "asdfgsadfg",
+            "color" => "#008080",
+            "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            "model" => "",
+            "note" => "",
+        ));
+
+        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        $container['xprops'] = '{a":"b"}';
+        $this->_json->saveContainer($container);
+    }
+
     /**
      * test create container
      */
@@ -1055,10 +1093,12 @@ class Admin_JsonTest extends TestCase
             "color" => "#008080",
             "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             "model" => "",
-            "note" => ""
+            "note" => "",
+            'xprops' => '{"a":"b"}',
         ));
         // check if the model was set
-        $this->assertEquals($container['model'], 'Addressbook_Model_Contact');
+        static::assertEquals($container['model'], 'Addressbook_Model_Contact');
+        static::assertEquals($container['xprops'], ['a' => 'b']);
         $contact = new Addressbook_Model_Contact(array('n_given' => 'max', 'n_family' => 'musterman', 'container_id' => $container['id']));
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
         
@@ -1382,5 +1422,40 @@ class Admin_JsonTest extends TestCase
             static::assertEquals(1, $filterAppResult['totalcount']);
         }
         static::assertEquals('folders', $filterAppResult['results'][0]['name']);
+    }
+
+    public function testResourceContainerGet()
+    {
+        $resource = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource([
+            'name'                 => 'Meeting Room',
+            'description'          => 'Our main meeting room',
+            'email'                => 'room@example.com',
+            'is_location'          => TRUE,
+        ]));
+
+        $container = $this->_json->getContainer($resource->container_id);
+        static::assertTrue(isset($container['xprops']['Calendar']['Resource']['resource_id']) &&
+            $container['xprops']['Calendar']['Resource']['resource_id'] === $resource->getId(), 'xprops not set');
+        static::assertTrue(isset($container['xprops']['Tinebase']['Container']['GrantsModel']) &&
+            $container['xprops']['Tinebase']['Container']['GrantsModel'] === Calendar_Model_ResourceGrants::class,
+            'xprops not set');
+
+        return $container;
+    }
+
+    public function testResourceContainerUpdate()
+    {
+        $oldContainer = $this->testResourceContainerGet();
+        $oldAcl = Tinebase_Container::getInstance()->getGrantsOfContainer($oldContainer['id'], true);
+
+        $newContainer = $oldContainer;
+        $newContainer['name'] = 'newName';
+        $newContainer = $this->_json->saveContainer($newContainer);
+        static::assertEquals('newName', $newContainer['name']);
+
+        $newAcl = Tinebase_Container::getInstance()->getGrantsOfContainer($oldContainer['id'], true);
+        $diff = $newAcl->diff($oldAcl);
+
+        static::assertTrue($diff->isEmpty(), 'acl changed where they shouldn\'t: ' . print_r($diff->toArray(), true));
     }
 }

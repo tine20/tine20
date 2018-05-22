@@ -40,7 +40,8 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
             'name'           => __CLASS__ . Tinebase_Record_Abstract::generateUID(),
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'backend'        => 'Sql'
+            'backend'        => 'Sql',
+            'model'          => Calendar_Model_Event::class,
         )));
 
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
@@ -49,7 +50,8 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'       => $sclever->getId(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'backend'        => 'Sql'
+            'backend'        => 'Sql',
+            'model'          => Calendar_Model_Event::class,
         )));
         Tinebase_Container::getInstance()->addGrants($this->otherUsersContainer, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Core::getUser(), array(
             Tinebase_Model_Grants::GRANT_READ,

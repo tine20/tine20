@@ -26,14 +26,7 @@ class Tinebase_Model_RelationFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_Relation';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_RelationFilter';
+    protected $_modelName = Tinebase_Model_Relation::class;
     
     /**
      * @var array filter model fieldName => definition

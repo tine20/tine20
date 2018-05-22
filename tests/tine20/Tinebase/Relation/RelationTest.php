@@ -328,7 +328,8 @@ class Tinebase_Relation_RelationTest extends TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'backend'        => 'sql',
-            'name'           => 'testsdf'
+            'name'           => 'testsdf',
+            'model'          => Sales_Model_Contract::class,
         )));
         
         $contract = new Sales_Model_Contract(array('number' => '23547', 'title' => 'test', 'container_id' => $container->getId()));

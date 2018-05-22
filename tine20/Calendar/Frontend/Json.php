@@ -132,8 +132,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValue(Calendar_Preference::DEFAULTCALENDAR);
         try {
-            $defaultCalendarArray = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId)->toArray();
-            $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendarId)->toArray();
+            $defaultCalendar = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
+            $defaultCalendarArray = $defaultCalendar->toArray();
+            $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendar)->toArray();
             if ($defaultCalendarArray['type'] != Tinebase_Model_Container::TYPE_SHARED) {
                 $defaultCalendarArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($defaultCalendarArray['owner_id'])->toArray();
             }
@@ -161,11 +162,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getDefaultCalendar() 
    {
-        $defaultCalendar = Calendar_Controller_Event::getInstance()->getDefaultCalendar();
-        $defaultCalendarArray = $defaultCalendar->toArray();
-        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendar->getId())->toArray();
-        Tinebase_Core::getLogger()->notice(print_r($defaultCalendar, true));
-        return $defaultCalendarArray;
+       $defaultCalendar = Calendar_Controller_Event::getInstance()->getDefaultCalendar();
+
+       $defaultCalendarArray = $defaultCalendar->toArray();
+       $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendar)->toArray();
+
+       return $defaultCalendarArray;
     }
     
     /**
@@ -372,7 +374,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchResources($filter, $paging)
     {
-        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(), 'Calendar_Model_ResourceFilter', true);
+        return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(),
+            Calendar_Model_ResourceFilter::class, true);
     }
     
     /**
@@ -411,7 +414,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveResource($recordData)
     {
-        $recordData['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $recordData['grants']);
         if(array_key_exists ('max_number_of_people', $recordData) && $recordData['max_number_of_people'] == '') {
            $recordData['max_number_of_people'] = null;
         }
@@ -715,12 +717,39 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_RESOURCE, $filters['type'])) {
             $resourceFilter = array($filters['query']);
+            //decide whether only RESOURCE_INVITE or (RESOURCE_INVITE | RESOURCE_READ) & EVENTS_FREEBUSY
+            $extendedGrants = false;
             if (isset($filters['resourceFilter'])) {
-                $resourceFilter[] = $filters['resourceFilter'];
+                foreach ($filters['resourceFilter'] as $key => $filter) {
+                    if (isset($filter['field']) && 'requireFreeBusyGrant' === $filter['field'] && $filter['value']) {
+                        unset($filters['resourceFilter'][$key]);
+                        $extendedGrants = true;
+                    }
+                }
+                if (!empty($filters['resourceFilter'])) {
+                    $resourceFilter[] = $filters['resourceFilter'];
+                }
             }
             $resourcePaging = $paging;
             $resourcePaging['sort'] = 'name';
-            $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter, $resourcePaging);
+
+            $controller = Calendar_Controller_Resource::getInstance();
+            try {
+
+                if ($extendedGrants) {
+                    $controller->setRequiredFilterACLget([
+                        '(' . Calendar_Model_ResourceGrants::RESOURCE_INVITE,
+                        '|' . Calendar_Model_ResourceGrants::RESOURCE_READ . ')',
+                        '&' . Calendar_Model_ResourceGrants::EVENTS_FREEBUSY,
+                    ]);
+                } else {
+                    $controller->setRequiredFilterACLget([Calendar_Model_ResourceGrants::RESOURCE_INVITE]);
+                }
+                $result[Calendar_Model_Attender::USERTYPE_RESOURCE] = $this->searchResources($resourceFilter,
+                    $resourcePaging);
+            } finally {
+                Calendar_Controller_Resource::destroyInstance();
+            }
         }
 
         if (empty($events)) {

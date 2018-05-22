@@ -31,6 +31,7 @@ class Calendar_Frontend_AllTests
         $suite->addTestSuite(Calendar_Frontend_CalDAVTest::class);
         $suite->addTestSuite(Calendar_Frontend_iMIPTest::class);
         $suite->addTestSuite(Calendar_Frontend_Json_PollTest::class);
+        $suite->addTestSuite(Calendar_Frontend_Json_ResourceTest::class);
         $suite->addTestSuite(Calendar_Frontend_PollRoutingTest::class);
         $suite->addTestSuite(Calendar_Frontend_CliTest::class);
 

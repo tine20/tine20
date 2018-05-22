@@ -570,7 +570,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => $this->_backend->getType(),
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'          => Calendar_Model_Event::class,
         ), true));
         
         $this->_getTestCalendars()->addRecord($testCal);
@@ -1617,7 +1618,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testCompareCalendars()
     {
         $cal1 = $this->_testCalendar;
-        $cal2 = $this->_getTestContainer('Calendar');
+        $cal2 = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         
         $this->_buildCompareCalendarsFixture($cal1, $cal2);
         
@@ -1694,7 +1695,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ),
         ));
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        $cal3 = $this->_getTestContainer('Calendar');
+        $cal3 = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         $event7->container_id = $cal3->getId();
         $this->_controller->create($event7);
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);

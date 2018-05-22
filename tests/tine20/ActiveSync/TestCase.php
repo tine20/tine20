@@ -151,13 +151,21 @@ abstract class ActiveSync_TestCase extends TestCase
                 //Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );
             $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
-            
+
+            switch ($this->_applicationName) {
+                case 'Calendar':    $recordClass = 'Calendar_Model_Event'; break;
+                case 'Addressbook': $recordClass = 'Addressbook_Model_Contact'; break;
+                case 'Tasks':       $recordClass = 'Tasks_Model_Task'; break;
+                default: throw new Exception('handle this model!');
+            }
+
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
                 'name'              => 'ContainerWithoutSyncGrant-' . $this->_applicationName,
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+                'model'             => $recordClass,
             ));
             
             $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant);

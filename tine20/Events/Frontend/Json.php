@@ -103,15 +103,16 @@ class Events_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer(
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer(
             'Events_Model_Event',
             NULL,
             Events_Preference::DEFAULT_EVENTS_CONTAINER
-        )->toArray();
+        );
+        $defaultContainerArray = $defaultContainer->toArray();
 
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
             Tinebase_Core::getUser(),
-            $defaultContainerArray['id']
+            $defaultContainer
         )->toArray();
 
         $defaultEventsCalendar = Events_Controller_Event::getDefaultEventsCalendar();

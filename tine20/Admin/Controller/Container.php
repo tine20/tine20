@@ -81,7 +81,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $this->_checkRight('get');
         
         $container = $this->_backend->getContainerById($_id);
-        $container->account_grants = $this->_backend->getGrantsOfContainer($_id, TRUE);
+        $container->account_grants = $this->_backend->getGrantsOfContainer($container, TRUE);
         
         return $container;
     }
@@ -97,8 +97,11 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_checkRight('create');
-        
-        $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants);
+
+        $_record->isValid(TRUE);
+
+        /** @var Tinebase_Model_Container$_record */
+        $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants, $_record->getGrantClass());
         Tinebase_Container::getInstance()->checkContainerOwner($_record);
 
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
@@ -113,12 +116,13 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * convert grants to record set
      * 
      * @param Tinebase_Record_RecordSet|array $_grants
+     * @param string $_grantsModel
      * @return Tinebase_Record_RecordSet
      */
-    protected function _convertGrantsToRecordSet($_grants)
+    protected function _convertGrantsToRecordSet($_grants, $_grantsModel)
     {
         $result = (! $_grants instanceof Tinebase_Record_RecordSet && is_array($_grants)) 
-            ? new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_grants)
+            ? new Tinebase_Record_RecordSet($_grantsModel, $_grants)
             : $_grants;
         
         return $result;
@@ -158,8 +162,9 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         if ($_oldRecord->application_id !== $_record->application_id) {
             throw new Tinebase_Exception_Record_NotAllowed('It is not allowed to change the application of a container.');
         }
-        
-        $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants);
+
+        /** @var Tinebase_Model_Container $_record */
+        $_record->account_grants = $this->_convertGrantsToRecordSet($_record->account_grants, $_record->getGrantClass());
         
         Tinebase_Container::getInstance()->checkContainerOwner($_record);
         $this->_backend->setGrants($_record, $_record->account_grants, TRUE, FALSE);

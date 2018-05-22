@@ -5,7 +5,7 @@
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -21,16 +21,9 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Courses';
     
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Courses_Model_CourseFilter';
-    
-    /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Courses_Model_Course';
+    protected $_modelName = Courses_Model_Course::class;
     
     /**
      * @var array filter model fieldName => definition

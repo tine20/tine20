@@ -32,7 +32,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $child = $collection->getChild($this->_getTestContainer('Addressbook')->getId());
+        $child = $collection->getChild($this->_getTestContainer('Addressbook', Addressbook_Model_Contact::class)->getId());
         
         $this->assertTrue($child instanceof Addressbook_Frontend_WebDAV_Container);
     }

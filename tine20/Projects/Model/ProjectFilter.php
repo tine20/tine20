@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,13 +18,6 @@
 class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup 
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Projects_Model_ProjectFilter';
-    
-    /**
      * @var string application of this filter group
      */
     protected $_applicationName = 'Projects';
@@ -32,7 +25,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Projects_Model_Project';
+    protected $_modelName = Projects_Model_Project::class;
     
     /**
      * @var array filter model fieldName => definition

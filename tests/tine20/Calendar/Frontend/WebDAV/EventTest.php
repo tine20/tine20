@@ -36,12 +36,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         $this->objects['sharedContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         
         $prefs = new Calendar_Preference();
@@ -211,7 +213,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         // save event as sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar'), $existingEvent->getId())->getRecord();
+        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar', Calendar_Model_Event::class), $existingEvent->getId())->getRecord();
         $this->_testCalendars[] = Tinebase_Container::getInstance()->getContainerById($existingEventForSclever->container_id);
         
         $this->assertEquals($existingEvent->uid, $existingEventForSclever->uid);
@@ -916,6 +918,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         
         // move event (displaycontainer)

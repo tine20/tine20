@@ -424,7 +424,7 @@
              return true;
          }
          
-         // Set custom startus booked
+         // Set custom status booked
          if ($action == 'created') {
              $action = 'booked';
          }
@@ -462,9 +462,7 @@
          */
          
          $recipients = array_merge($recipients,
-             Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
-                 Calendar_Controller_Resource::getInstance()->get($attender->user_id)
-             )
+             Calendar_Controller_Resource::getInstance()->getNotificationRecipients($resource)
          );
      }
     

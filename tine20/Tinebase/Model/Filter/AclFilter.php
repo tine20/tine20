@@ -29,4 +29,10 @@ interface Tinebase_Model_Filter_AclFilter
      */
     public function setRequiredGrants(array $_grants);
 
+    /**
+     * add a callback that should be called once the required grants are set
+     *
+     * @param $_callback
+     *
+    public function addSetRequiredGrantsCallback($_callback);*/
 }

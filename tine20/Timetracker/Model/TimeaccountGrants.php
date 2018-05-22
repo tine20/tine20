@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -40,14 +40,6 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
      *
      */
     const MANAGE_BILLABLE = 'manageBillableGrant';
-
-    /**
-     * key in $_validators/$_properties array for the field which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

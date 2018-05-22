@@ -152,7 +152,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00'
+            'color'          => '#00FF00',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
@@ -504,7 +505,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -662,7 +664,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -832,7 +835,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -1221,7 +1225,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {

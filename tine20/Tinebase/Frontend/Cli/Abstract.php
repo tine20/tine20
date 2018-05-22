@@ -89,7 +89,7 @@ class Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
 
-        $data = $this->_parseArgs($_opts, array('name', 'type'), array('owner', 'color'));
+        $data = $this->_parseArgs($_opts, array('name', 'type', 'model'), array('owner', 'color'));
 
         if ($data['type'] !== 'shared') {
             die ('only shared containers supported');
@@ -100,6 +100,7 @@ class Tinebase_Frontend_Cli_Abstract
         $container = new Tinebase_Model_Container(array(
             'name'              => $data['name'],
             'type'              => $data['type'],
+            'model'             => $data['model'],
             'application_id'    => $app->getId(),
             'backend'           => 'Sql'
         ));

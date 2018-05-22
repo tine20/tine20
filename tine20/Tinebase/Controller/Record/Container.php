@@ -27,6 +27,8 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
 
     /**
      * @var string
+     *
+     * TODO can we remove this?
      */
     protected $_grantsModel = 'Tinebase_Model_Grants';
 
@@ -158,7 +160,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId)
     {
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_records, $_accountId, 'container_id', $this->_grantsModel);
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_records, $_accountId);
 
         foreach ($_records as $record) {
             if (isset($record->container_id['account_grants']) && is_array($record->container_id['account_grants'])) {
@@ -196,8 +198,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         if ($result === FALSE) {
             $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount(
                 $_accountId,
-                $record->container_id,
-                $this->_grantsModel
+                $container
             )->toArray();
 
             $account_grants = new $this->_grantsModel($containerGrantsArray);
@@ -264,17 +265,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         $result = $cache->load($cacheId);
 
         if ($result === FALSE) {
-            $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_record->container_id,
-                true, $this->_grantsModel);
-            $allGrants = new Tinebase_Record_RecordSet($this->_grantsModel);
-
-            foreach ($allContainerGrants as $index => $containerGrants) {
-                $grants = new $this->_grantsModel($containerGrants->toArray());
-                $allGrants->addRecord($grants);
-            }
-
-            $result = $allGrants;
-
+            $result = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
             $cache->save($result, $cacheId, array('container'));
         }
 
@@ -320,7 +311,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
             if (! $this->_hasManageRight()) {
                 if (! $this->hasGrant($_record, Tinebase_Model_Grants::GRANT_ADMIN)) {
                     throw new Tinebase_Exception_AccessDenied(
-                        "You nor have the RIGHT either the GRANT to get see all grants for this record"
+                        "You don't have the RIGHT nor the GRANT to set grants for this record"
                     );
                 }
             }

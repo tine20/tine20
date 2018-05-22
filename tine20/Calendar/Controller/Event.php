@@ -2327,7 +2327,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EXPORT);
                 break;
         }
-        
+
+        if (! $hasGrant && Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+            $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+            if (isset($container->xprops()['Calendar']['Resource']['resource_id'])) {
+                $hasGrant = true;
+            }
+        }
+
         if (! $hasGrant) {
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
@@ -2691,7 +2698,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
 
         } else if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
-            $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+            // we may have only invite grant, but no read grant...
+            $resourceController = Calendar_Controller_Resource::getInstance();
+            $oldResourceAclCheck = $resourceController->doContainerACLChecks(false);
+            try {
+                $resource = $resourceController->get($attender->user_id);
+                if (! Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $resource->container_id,
+                        Calendar_Model_ResourceGrants::RESOURCE_INVITE) && ! Tinebase_Core::getUser()->hasRight(
+                            'Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                    throw new Tinebase_Exception_AccessDenied('you do not have permission to invite this resource');
+                }
+            } finally {
+                $resourceController->doContainerACLChecks($oldResourceAclCheck);
+            }
             $attender->displaycontainer_id = $resource->container_id;
         }
         
@@ -2699,7 +2718,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // check if user is allowed to set status
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                            Tinebase_Model_Grants::GRANT_EDIT) &&
+                            Calendar_Model_ResourceGrants::EVENTS_EDIT) &&
                         ! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
                     //If resource has an default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
@@ -2807,7 +2826,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                        Tinebase_Model_Grants::GRANT_EDIT)
+                        Calendar_Model_ResourceGrants::EVENTS_EDIT)
                     && !Tinebase_Core::getUser()->hasRight('Calendar',
                         Calendar_Acl_Rights::MANAGE_RESOURCES)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
@@ -2832,7 +2851,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($isRescheduled && !$attender->isSame($this->getCalendarUser()) && !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 //If resource has a default status reset to this
-                $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+                // we may have only invite grant, but no read grant...
+                $resourceController = Calendar_Controller_Resource::getInstance();
+                $oldResourceAclCheck = $resourceController->doContainerACLChecks(false);
+                try {
+                    $resource = $resourceController->get($attender->user_id);
+                } finally {
+                    $resourceController->doContainerACLChecks($oldResourceAclCheck);
+                }
                 $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
             } else {
                 $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;

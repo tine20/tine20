@@ -23,14 +23,7 @@ class Voipmanager_Model_Snom_LineFilter extends Tinebase_Model_Filter_FilterGrou
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Voipmanager_Model_Snom_Line';
-    
-    /**
-     * @see Tinebase_Model_Filter_FilterGroup
-     * 
-     * @var string
-     */
-    protected $_className = 'Voipmanager_Model_Snom_LineFilter';
+    protected $_modelName = Voipmanager_Model_Snom_Line::class;
     
     /**
      * @var array filter model fieldName => definition

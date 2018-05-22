@@ -1598,7 +1598,8 @@ class Addressbook_JsonTest extends TestCase
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'        => 'Sql',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'          => Calendar_Model_Event::class,
         ), true));
 
         return new Calendar_Model_Event(array(

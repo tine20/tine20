@@ -102,7 +102,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
         $container = Tinebase_Container::getInstance()->addContainer($newContainer);
         
         $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container)->toArray();
         $result['path'] = $container->getPath();
         return $result;
     }
@@ -134,7 +134,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
         $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
         
         $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container)->toArray();
         $result['path'] = $container->getPath();
         return $result;
     }
@@ -156,7 +156,8 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
         }
         
         $result = $container->toArray();
-        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
+            $container)->toArray();
         $result['path'] = $container->getPath();
         return $result;
     }
@@ -169,6 +170,8 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      */
     public function getContainerGrants($containerId) 
     {
+        $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+
         $result = array(
             'results'     => array(),
             'totalcount'  => 0
@@ -241,8 +244,10 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
     public function setContainerGrants($containerId, $grants)
     {
         $grants = ($grants) ? $grants : array();
-        
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants);
+
+        $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+
+        $newGrants = new Tinebase_Record_RecordSet($container->getGrantClass(), $grants);
         
         Tinebase_Container::getInstance()->setGrants($containerId, $newGrants);
                
