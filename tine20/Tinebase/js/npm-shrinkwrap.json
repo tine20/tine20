@@ -16269,12 +16269,6 @@
       "resolved": "https://registry.npmjs.org/vue-functional-data-merge/-/vue-functional-data-merge-1.0.7.tgz",
       "integrity": "sha512-oqGTVEndYRlol4LaHYq/Gxij1esc14RAUS4q+oY0ctyt3qXVtlplafmUs0h5dPxUvVJpbd7fV6/OUBb+eaDsKg=="
     },
-    "vue-gettext": {
-      "version": "2.0.25",
-      "resolved": "https://registry.npmjs.org/vue-gettext/-/vue-gettext-2.0.25.tgz",
-      "integrity": "sha1-7j59OmCLwfDZUNJ97hUDRrR8mXg=",
-      "dev": true
-    },
     "vue-hot-reload-api": {
       "version": "2.2.4",
       "resolved": "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.2.4.tgz",

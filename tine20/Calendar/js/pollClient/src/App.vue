@@ -11,7 +11,7 @@
   <div id="root">
     <div class="container">
       <b-alert class="global-error" variant="danger" :show="globalError.length > 0">{{globalError}}</b-alert>
-      <p v-if="publicUrl.length > 0"><a :href="publicUrl">Per öffentlicher URL zur Umfrage</a></p>
+      <p v-if="publicUrl.length > 0"><a :href="publicUrl">{{formatMessage('Switch to public poll')}}</a></p>
       <template v-if="!transferingPoll && !askPassword && showPoll">
         <div class="row">
           <div class="col-md-8 col-sm-12">
@@ -27,14 +27,14 @@
         <div class="row greetings">
           <div class="col-md-6 col-sm-12 greetings-text">
             <p>
-              <span v-if="activeAttendee.id !== null">{{$gettext('Welcome,')}} {{activeAttendee.name}}</span>
-              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />Dies ist eine geschlossene Umfrage. Es können keine Teilnehmer hinzugefügt werden.</span>
-              <span v-if="poll.closed === '1'"><br />Diese Umfrage ist bereits beendet.</span>
+              <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
+              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This is a closed poll. No Attendee can be added.')}}</span>
+              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is closed already')}}</span>
             </p>
           </div>
           <div class="col-md-6 col-sm-12 text-right">
-            <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{$gettext('I am not')}} {{activeAttendee.name}}</b-btn>
-            <b-btn v-else @click="askTineLogin = true" variant="primary">Anmelden</b-btn>
+            <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
+            <b-btn v-else @click="askTineLogin = true" variant="primary">{{formatMessage('Login')}}</b-btn>
           </div>
         </div>
         <div class="row">
@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{date.dtstart | dateFormat}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart)})}}</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -52,7 +52,7 @@
                   <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus"
                     :class="[{'editable': datestatus.status_authkey !== null}, statusList[datestatus.status].cellclass]"
                     @click="nextStatus(datestatus, attendee.key)"
-                    :title="$gettext(datestatus.status)"
+                    :title="statusName(datestatus.status)"
                     data-toggle="tooltip"
                     data-placement="bottom"
                   >
@@ -61,25 +61,25 @@
                       class="calendar-symbol"
                       v-if="!poll.config.is_anonymous && activeAttendee.id !== null && activeAttendee.id === attendee.key"
                     >
-                      <img :src="getCalendarIcon(datestatus)" als="Kalender" />
+                      <img :src="getCalendarIcon(datestatus)" alt='formatMessage("Calendar")' />
                     </span>
-                    <img :src="getStatusIcon(datestatus.status)" :alt="$gettext(datestatus.status)" />
+                    <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
                   </td>
                 </tr>
                 <tr v-if="activeAttendee.id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
                   <td class="table-info name-field">
-                    <input type="text" v-model="activeAttendee.name" :placeholder="$gettext('First name, ĺast name')" class="form-control name-field" />
-                    <input type="text" v-model="activeAttendee.email" :placeholder="$gettext('Email address')" class="form-control email-field" />
+                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')" class="form-control name-field" />
+                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')" class="form-control email-field" />
                   </td>
                   <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
-                    :title="$gettext(activeAttendee[date.id].status)"
+                    :title="statusName(activeAttendee[date.id].status)"
                     data-toggle="tooltip"
                     data-placement="bottom"
                   >
-                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="$gettext(activeAttendee[date.id].status)" />
+                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="statusName(activeAttendee[date.id].status)" />
                   </td>
                 </tr>
                 <tr v-if="activeAttendee.id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
@@ -88,11 +88,11 @@
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
-                    :title="$gettext(activeAttendee[date.id].status)"
+                    :title="statusName(activeAttendee[date.id].status)"
                     data-toggle="tooltip"
                     data-placement="bottom"
                   >
-                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="$gettext(activeAttendee[date.id].status)" />
+                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="statusName(activeAttendee[date.id].status)" />
                   </td>
                 </tr>
               </tbody>
@@ -102,44 +102,43 @@
         <div class="row">
           <div class="col-md-12" v-if="showChangeButtons()">
             <b-button-group>
-              <b-btn @click="onCancelChanges" variant="secondary">Abbrechen</b-btn>
-              <b-btn @click="onApplyChanges" variant="primary">Speichern</b-btn>
+              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancle')}}</b-btn>
+              <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
             </b-button-group>
           </div>
         </div>
         <div class="row footer" v-if="!hidegtcmessage">
           <div class="col-md-12">
             <p>
-              {{$gettext('By using this service you agree to our')}}
-              <a href="#" @click.prevent="showGtc = true">{{ $gettext('terms and conditions') }}</a>.
+              <a href="#" @click.prevent="showGtc = true">{{formatMessage('By using this service you agree to our terms and conditions')}}</a>.
             </p>
           </div>
         </div>
       </template>
       <div>
         <b-modal ref="loadMask" :visible="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
-          <spinner size="medium" :message="$gettext('Please wait...')"></spinner>
+          <spinner size="medium" :message='formatMessage("Please wait...")'></spinner>
         </b-modal>
       </div>
       <div>
-        <b-modal ref="gtc" :visible="showGtc" hide-footer centered title="Allgemeine Geschäftsbedingungen" v-model="showGtc">
+        <b-modal ref="gtc" :visible="showGtc" hide-footer centered title="formatMessage('General terms and conditions')" v-model="showGtc">
           {{gtcText}}
         </b-modal>
       </div>
       <div>
-        <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="Bitte benutzen Sie Ihren persönlichen Link." v-model="usePersonalLink" @hide="usePersonalLink">
-          <p>Bitte benutzen Sie Ihren persönlichen Link.</p>
-          <p>Wir haben Ihn erneut an Ihre Emailadresse gesendet.</p>
-          <p>Falls Sie die Email nicht erhalten habe, wenden Sie sich bitte an den Organisator.</p>
+        <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
+          <p>{{formatMessage('Use your personal link please.')}}</p>
+          <p>{{formatMessage('We have send it to your E-Mail account again.')}}</p>
+          <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>
       <div>
         <b-modal ref="password" :visible="askPassword" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
-            <label for="password">{{$gettext('Password')}}<input id="password" type="password" class="form-control" v-model="password" /></label>
-            <b-btn variant="primary" @click.prevent="submitPassword" type="submit">{{$gettext('Submit')}}</b-btn>
+            <label for="password">{{formatMessage('Password')}}<input id="password" type="password" class="form-control" v-model="password" /></label>
+            <b-btn variant="primary" @click.prevent="submitPassword" type="submit">{{formatMessage('Submit')}}</b-btn>
             <b-alert variant="danger" :show="wrongPassword">
-              {{$gettext('Wrong password!')}}
+              {{formatMessage('Wrong password!')}}
             </b-alert>
           </form>
         </b-modal>
@@ -147,10 +146,10 @@
       <div>
         <b-modal ref="tine-login" :visible="askTineLogin" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
-            <h2>{{$gettext('Plase log in')}}</h2>
-            <label for="tine-username">{{$gettext('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
-            <label for="tine-password">{{$gettext('Password')}}<input id="tine-password" type="password" class="form-control" v-model="login.password" /></label>
-            <b-btn variant="primary" @click.prevent="submitTineLogin" type="submit">{{$gettext('Submit')}}</b-btn>
+            <h2>{{formatMessage('Plase log in')}}</h2>
+            <label for="tine-username">{{formatMessage('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
+            <label for="tine-password">{{formatMessage('Password')}}<input id="tine-password" type="password" class="form-control" v-model="login.password" /></label>
+            <b-btn variant="primary" @click.prevent="submitTineLogin" type="submit">{{formatMessage('Submit')}}</b-btn>
             <b-alert variant="danger" class="login-error" :show="wrongLogin">
               {{loginErrorMessage}}
             </b-alert>
@@ -158,7 +157,8 @@
         </b-modal>
       </div>
       <div>
-        <b-modal class="calendar-window" ref="calendarWindow" :visible="showCalendarModal" @hide="showCalendarModal = false" hide-footer centered size="lg" :title="'Kalender von ' + activeAttendee.name">
+        <!-- formatMessage('Calendar of {name}', {name: activeAttendee.name}) -->
+        <b-modal class="calendar-window" ref="calendarWindow" :visible="showCalendarModal" @hide="showCalendarModal = false" hide-footer centered size="lg" :title="formatMessage('Calendar of {name}', {name: activeAttendee.name})">
           <iframe v-if="showCalendarModal" :src="calendarUrl" class="calendar"></iframe>
         </b-modal>
       </div>
@@ -175,7 +175,6 @@ import bBtnGrp from 'bootstrap-vue/es/components/button-group/button-group'
 import bAlert from 'bootstrap-vue/es/components/alert/alert'
 import Spinner from 'vue-simple-spinner'
 import _ from 'lodash'
-import moment from 'moment'
 
 export default {
   data () {
@@ -240,7 +239,6 @@ export default {
 
   mounted () {
     this.loadPoll()
-    moment.locale(this.$language.current)
 
     let urlParams = window.location.href.substring(window.location.href.indexOf('poll/') + 5).split('/')
 
@@ -364,13 +362,15 @@ export default {
         }
       }).then(response => {
         if (typeof response.data === 'string') {
-          this.globalError = 'An unexpected error occurred.'
+          this.globalError = this.formatMessage('An unexpected error occurred.')
           this.transferingPoll = false
           this.showPoll = false
           return
         }
 
         this.poll = response.data
+
+        this.formatMessage.setup({locale: this.poll.config.locale || 'en'})
 
         if (this.poll.config.has_gtc === true) {
           this.hidegtcmessage = false
@@ -461,7 +461,7 @@ export default {
         if (error.response.status === 401) {
           if (error.response.data.indexOf('authkey mismatch') > -1) {
             this.askPassword = false
-            this.globalError = 'Bitte verwenden Sie Ihre persönliche URL.'
+            this.globalError = this.formatMessage('Use your personal link please.')
             this.publicUrl = window.location.pathname.replace(/\/$/, '').split('/').slice(0, 5).join('/')
             this.showPoll = false
             this.transferingPoll = false
@@ -479,6 +479,10 @@ export default {
     },
     getAttendeeId (attendee) {
       return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
+    },
+    statusName (status) {
+      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), {id: status}), 'value', status)
+      return this.fmHidden(statusName)
     },
     nextStatus (attendee, id) {
       if (attendee.status_authkey === null && id !== null) {
@@ -582,7 +586,7 @@ export default {
         }
       })
 
-      return this.baseUrl + 'images/view-calendar-day-' + moment(start).format('D') + '.png'
+      return this.baseUrl + 'images/view-calendar-day-' + new Date(start).getDate() + '.png'
     },
     showChangeButtons () {
       if (_.isEmpty(this.poll)) {
@@ -598,12 +602,6 @@ export default {
       }
 
       return true
-    }
-  },
-
-  filters: {
-    dateFormat (value) {
-      return moment(value).format('lll')
     }
   }
 }
