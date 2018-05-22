@@ -448,8 +448,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $messages = array();
         
         foreach ($summary as $id => $data) {
-            if (! isset($data['RFC822.HEADER'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (! isset($data['RFC822.HEADER']) || !isset($data['BODYSTRUCTURE']) || empty($data['BODYSTRUCTURE'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Message data invalid: ' . print_r($data, true) . print_r($summary, true)); 
                 continue;
             }
