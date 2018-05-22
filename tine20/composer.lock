@@ -654,7 +654,7 @@
             "version": "1.1",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/opendocument",
+                "url": "https://github.com/tine20/OpenDocument.git",
                 "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
