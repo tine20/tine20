@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75b04de78b2d5fbd8dd90c1c10bbb8a5",
+    "content-hash": "76588f444cdbc633a44818e6bc22d5e2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -686,7 +686,7 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "http://git.tine20.org/git/timezoneconvert",
+                "url": "https://github.com/tine20/timezoneconvert.git",
                 "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {

@@ -16,7 +16,7 @@
         "url": "http://git.tine20.org/git/opendocument"
     }, {
         "type": "git",
-        "url": "http://git.tine20.org/git/timezoneconvert"
+        "url": "https://github.com/tine20/timezoneconvert.git"
     }, {
         "type": "git",
         "url": "https://github.com/tine20/syncroton.git"
