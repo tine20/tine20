@@ -5,6 +5,9 @@
     <version>11.0</version>
     <order>60</order>
     <status>enabled</status>
+    <depends>
+        <application>Calendar</application>
+    </depends>
     <tables>
         <table>
             <name>events_event</name>
