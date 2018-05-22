@@ -253,18 +253,23 @@ class Setup_Controller
      */
     public function checkConfigCaching()
     {
-        $result = FALSE;
+        $result = false;
         
         $config = Setup_Core::get(Setup_Core::CONFIG);
         
         if (! isset($config->caching) || !$config->caching->active) {
-            $result = TRUE;
+            $result = true;
             
         } else if (! isset($config->caching->backend) || ucfirst($config->caching->backend) === 'File') {
-            $result = $this->checkDir('path', 'caching', FALSE);
+            $result = $this->checkDir('path', 'caching', false);
             
         } else if (ucfirst($config->caching->backend) === 'Redis') {
-            $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+            try {
+                $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+            } catch (RedisException $re) {
+                Tinebase_Exception::log($re);
+                $result = false;
+            }
             
         } else if (ucfirst($config->caching->backend) === 'Memcached') {
             $result = $this->_checkMemcacheConnect(isset($config->caching->memcached) ? $config->caching->memcached->toArray() : array());
