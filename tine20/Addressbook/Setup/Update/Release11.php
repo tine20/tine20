@@ -6,7 +6,7 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -164,5 +164,15 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
 
         $this->setApplicationVersion('Addressbook', '11.10');
+    }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_10()
+    {
+        $this->setApplicationVersion('Addressbook', '12.0');
     }
 }

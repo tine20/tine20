@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Inventory_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -19,5 +19,15 @@ class Inventory_Setup_Update_Release11 extends Setup_Update_Abstract
     {
         $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
         $this->setApplicationVersion('Inventory', '11.1');
+    }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Inventory', '12.0');
     }
 }
