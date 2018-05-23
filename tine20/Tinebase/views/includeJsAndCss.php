@@ -28,7 +28,7 @@ switch(TINE20_BUILDTYPE) {
         echo "\n    <script src='webpack-dev-server.js'></script>";
 
         echo "\n    <!-- translations -->";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all&version={$eTag}\"></script>";
         $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
         if (! empty($customJSFiles)) {
             echo "\n    <!-- HEADS UP! CUSTOMJS IN PLACE! -->";
@@ -39,7 +39,7 @@ switch(TINE20_BUILDTYPE) {
     case 'DEBUG':
     case 'RELEASE':
         echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&$eTag\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&{$eTag}{$locale}\"></script>";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&&locale={$locale}&app=all&version={$eTag}\"></script>";
         break;
 }
 

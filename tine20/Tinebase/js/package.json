@@ -88,7 +88,6 @@
     "uglifyjs-webpack-plugin": "^1.1.2",
     "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/suffixagainagain",
     "url-loader": "^0.6.2",
-    "vue-gettext": "^2.0.25",
     "vue-loader": "^13.5.0",
     "vue-simple-spinner": "^1.2.8",
     "vue-style-loader": "^3.0.3",

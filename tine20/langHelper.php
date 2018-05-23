@@ -261,19 +261,21 @@ function generatePOTFiles($_verbose)
             echo "Creating $appName template \n";
         }
         $appPath = "$translationPath/../";
-        $tempExportExtractDir = $appPath . 'tempExportExtract';
-        
+        $tempExtractDir = $appPath . 'tempExtract';
+
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
 
         chdir($appPath);
+        mkdir($tempExtractDir);
+
         if (file_exists($appPath . 'Export/templates')) {
-            if (!file_exists($tempExportExtractDir)) {
-                mkdir($tempExportExtractDir);
-                extractTemplates($appPath . 'Export/templates', $tempExportExtractDir . '/');
-            }
+            extractTemplates($appPath . 'Export/templates', $tempExtractDir . '/');
         }
 
-        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" -or -iname "*.twig" \
+        // https://github.com/Polyconseil/vue-gettext/issues/9
+        `find . -type f -iname "*.vue" -exec sed "s/\"formatMessage/formatMessage/g" {} \; > $tempExtractDir/vueStrings.js`;
+
+        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
         | grep -v node_modules | \
         xgettext \
           --force-po \
@@ -286,9 +288,7 @@ function generatePOTFiles($_verbose)
           --files-from=- \
           2> /dev/null`;
 
-        if (file_exists($tempExportExtractDir)) {
-            `rm -rf "$tempExportExtractDir"`;
-        }
+        `rm -rf "$tempExtractDir"`;
     }
 }
 

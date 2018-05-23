@@ -557,7 +557,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                         'Create alternative Events and let users as well as externals vote for the best option.',
                     //_('Create alternative Events and let users as well as externals vote for the best option.')
                     self::TYPE              => self::TYPE_BOOL,
-                    self::DEFAULT_STR       => false,
+                    self::DEFAULT_STR       => true,
                 ),
             ],
             self::DEFAULT_STR => [],

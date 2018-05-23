@@ -468,19 +468,22 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     
     /**
      * returns javascript of translations for the currently configured locale
-     * 
+     *
+     * @param  string $locale
+     * @param  string $app
      * @return string (javascript)
      */
-    public function getJsTranslations()
+    public function getJsTranslations($locale = null, $app = 'all')
     {
         if (! in_array(TINE20_BUILDTYPE, array('DEBUG', 'RELEASE'))) {
-            $locale = Tinebase_Core::get('locale');
-            $translations = Tinebase_Translation::getJsTranslations($locale);
+            $translations = Tinebase_Translation::getJsTranslations($locale, $app);
             header('Content-Type: application/javascript');
             die($translations);
         }
 
-        $this->_deliverChangedFiles('lang');
+        // production
+        $filesToWatch = $this->_getFilesToWatch('lang', array($app));
+        $this->_deliverChangedFiles('lang', $filesToWatch);
     }
     
     /**
@@ -604,11 +607,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
     /**
      * @param string $_fileType
+     * @param array  $apps
      * @return array
      * @throws Exception
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getFilesToWatch($_fileType)
+    protected function _getFilesToWatch($_fileType, $apps = array())
     {
         $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
         $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
@@ -617,6 +621,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $fileMap = $this->getAssetsMap();
 
         foreach ($orderedApplications as $application) {
+            if (! empty($apps) && ! $apps[0] == 'all' && ! in_array($application, $apps)) continue;
             switch($_fileType) {
                 case 'js':
                     if (isset($fileMap["{$application}/js/{$application}"])) {

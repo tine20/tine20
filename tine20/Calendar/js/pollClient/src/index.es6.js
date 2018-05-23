@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import _ from 'lodash'
 import Vue from 'vue'
 import Tine20 from './plugin/tine20-rpc'
 import App from './App.vue'
@@ -16,48 +17,36 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // import router from 'vue-router'
 
-import GetTextPlugin from 'vue-gettext'
+// import GetTextPlugin from 'vue-gettext'
 // import translations from './path/to/translations.json'
 
-Vue.config.productionTip = false
+// import FormatMessage from 'vue-format-message'
 
-let translations = {
-  'de_DE': {
-    'Loading Poll...': 'Umfrage wird geladen...',
-    'Please wait...': 'Bitte warten...',
-    'ACCEPTED': 'Zugesagt',
-    'DECLINED': 'Abgesagt',
-    'NEEDS-ACTION': 'Keine Antwort',
-    'TENTATIVE': 'Vorläufig',
-    'I am not': 'Ich bin nicht',
-    'By using this service you agree to our': 'Indem Sie diesen Service verwenden, akzeptieren Sie unsere',
-    'terms and conditions': 'AGB',
-    'Welcome,': 'Herzlich Willkommen,',
-    'Wrong password!': 'Falsches Passwort!',
-    'Password': 'Passwort',
-    'Submit': 'Absenden',
-    'Name': 'Name',
-    'Email address': 'Emailadresse',
-    'User name': 'Benutzername',
-    'Plase log in': 'Bitte melden Sie sich an',
-    'Could not log in!': 'Anmeldung fehlgeschlagen!',
-    'First name, ĺast name': 'Vorname Name'
-  }
-}
-Vue.use(GetTextPlugin, {
-  availableLanguages: {
-    de_DE: 'Deutsch'
-  },
-  defaultLanguage: 'de_DE',
-  languageVmMixin: {
-    computed: {
-      currentKebabCase: function () {
-        return this.current.toLowerCase().replace('_', '-')
-      }
-    }
-  },
-  translations: translations
+import FormatMessage from 'format-message'
+/* global Locale */
+/* eslint no-undef: "error" */
+require('Locale')
+require('Locale/Gettext')
+
+let gettext = new Locale.Gettext()
+gettext.textdomain('Calendar')
+
+// NOTE: we use gettext tooling for template selection
+//       as there is almost no tooling for icu-messages out there
+FormatMessage.setup({
+  missingTranslation: 'ignore'
 })
+
+// auto template selection with gettext
+Vue.prototype.formatMessage = function (template) {
+  arguments[0] = gettext._hidden(template)
+  return FormatMessage.apply(FormatMessage, arguments)
+}
+_.assign(Vue.prototype.formatMessage, FormatMessage)
+// to translate strings which should not go into po files
+Vue.prototype.fmHidden = Vue.prototype.formatMessage
+
+Vue.config.productionTip = false
 
 Vue.use(Tine20, {})
 

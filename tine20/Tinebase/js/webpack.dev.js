@@ -16,5 +16,13 @@ module.exports = merge(common, {
                 secure: false
             }
         ],
+        before: function(app, server) {
+            app.use(function(req, res, next) {
+                // check for langfile chunk requests
+                // build on demand
+                // extract-text
+                next();
+            });
+        }
     },
 });
