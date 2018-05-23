@@ -922,17 +922,20 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     isFile: function (file) {
-        return new Promise(function (resolve, reject) {
-            var fr = new FileReader();
-            fr.onload = function () {
-                if (fr.result === null) {
-                    reject();
-                } else {
-                    resolve();
-                }
-            };
-            fr.readAsText(file);
-        });
+        return Promise.resolve();
+        // NOTE: fileReader can't cope with files ~> 1GB
+        //       with html5-file-selector we can't have directories here
+        // return new Promise(function (resolve, reject) {
+        //     var fr = new FileReader();
+        //     fr.onload = function () {
+        //         if (fr.result === null) {
+        //             reject();
+        //         } else {
+        //             resolve();
+        //         }
+        //     };
+        //     fr.readAsText(file);
+        // });
     },
 
     /**
