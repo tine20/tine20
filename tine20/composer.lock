@@ -737,7 +737,7 @@
             "version": "1.1",
             "source": {
                 "type": "git",
-                "url": "https://git.tine20.org/git/opendocument",
+                "url": "https://github.com/tine20/OpenDocument.git",
                 "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
@@ -769,7 +769,7 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://git.tine20.org/git/timezoneconvert",
+                "url": "https://github.com/tine20/timezoneconvert.git",
                 "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
@@ -2011,7 +2011,7 @@
             "version": "1.0.5",
             "source": {
                 "type": "git",
-                "url": "https://git.tine20.org/git/composerapploader",
+                "url": "https://github.com/tine20/composerapploader.git",
                 "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
