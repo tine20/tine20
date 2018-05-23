@@ -117,9 +117,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
         e.preventDefault();
         this.component.el.applyStyles(' background-color: transparent');
         this.onBrowseButtonClick();
-        var dt = e.browserEvent.dataTransfer;
-        var files = dt.files;
-        this.onInputFileChange(e, files);
+        var me = this;
+
+        // easy cope with directories
+        var fs = require('html5-file-selector'),
+            dt = e.browserEvent.dataTransfer;
+            fs.getDataTransferFiles(dt).then(function(files) {
+                me.onInputFileChange(e, window.lodash.map(files, 'fileObject'));
+            });
     },
 
     onRender: function () {
