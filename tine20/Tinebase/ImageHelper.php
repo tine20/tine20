@@ -25,6 +25,10 @@ class Tinebase_ImageHelper
      */
     const RATIOMODE_PRESERVNOFILL = 1;
     /**
+     * max pixels allowed per edge for resize operations
+     */
+    const MAX_RESIZE_PX = 2000;
+    /**
      * scales given image to given size
      * 
      * @param  Tinebase_Model_Image $_image
@@ -35,7 +39,10 @@ class Tinebase_ImageHelper
      */
     public static function resize(Tinebase_Model_Image $_image, $_width, $_height, $_ratiomode)
     {
-        $_image->resize($_width, $_height, $_ratiomode);
+        $width = min($_width, self::MAX_RESIZE_PX);
+        $height = min($_height, self::MAX_RESIZE_PX);
+
+        $_image->resize($width, $height, $_ratiomode);
     }
 
     /**
