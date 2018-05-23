@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -282,7 +282,7 @@ class Tasks_JsonTest extends TestCase
     {
         // create task
         $task = $this->_getTask();
-        $task = Tasks_Controller_Task::getInstance()->create($task);
+        $task = $this->_backend->saveTask($task->toArray());
         
         // search tasks
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
@@ -292,7 +292,7 @@ class Tasks_JsonTest extends TestCase
         $this->assertGreaterThan(0, $count);
         
         // delete task
-        $this->_backend->deleteTasks(array($task->getId()));
+        $this->_backend->deleteTasks(array($task['id']));
 
         // search and check again
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());

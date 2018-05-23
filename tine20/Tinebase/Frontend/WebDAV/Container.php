@@ -121,8 +121,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
 
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        $deleteFile = !Tinebase_FileSystem::getInstance()->fileExists($path);
         try {
 
             if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {
@@ -135,13 +134,11 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
 
             Tinebase_FileSystem::getInstance()->fclose($handle);
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
+        } catch (Exception $e) {
+            if ($deleteFile) {
+                Tinebase_FileSystem::getInstance()->unlink($path);
             }
+            throw $e;
         }
         
         return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';

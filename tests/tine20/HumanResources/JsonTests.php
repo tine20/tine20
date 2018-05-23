@@ -794,7 +794,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $recordData['contracts'] = array($contract1->toArray());
             $recordData = $this->_json->saveEmployee($recordData);
 
-            $this->_createFeastDay(Tinebase_DateTime::now()->setDate(2014,1,6));
+            $this->_createFeastDay(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())
+                ->setDate(2014,1,6));
             
             $accountController = HumanResources_Controller_Account::getInstance();
             

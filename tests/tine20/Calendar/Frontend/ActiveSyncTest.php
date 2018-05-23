@@ -1398,12 +1398,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         static::assertEquals(2, count($exceptions), 'no exception created');
 
         $exception = $exceptions->find('summary', 'exception1');
+        static::assertNotNull($exception, 'no exception created');
         $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
         static::assertNotNull($exception, 'no exception created');
         static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'copying customfield didnt work');
         static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'copying customfield didnt work');
 
         $exception = $exceptions->find('summary', 'exception');
+        static::assertNotNull($exception, 'no exception created');
         $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
         static::assertNotNull($exception, 'we lost an exception');
         static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'we lost a customfield');

@@ -93,8 +93,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
         // attach invoice file (aka a pdf)
         $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, TRUE);
 
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        $deleteFile = !Tinebase_FileSystem::getInstance()->fileExists($attachmentPath . '/' . $name);
         try {
             $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
 
@@ -108,13 +107,11 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
 
             Tinebase_FileSystem::getInstance()->fclose($handle);
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
+        } catch (Exception $e) {
+            if ($deleteFile) {
+                Tinebase_FileSystem::getInstance()->unlink($attachmentPath . '/' . $name);
             }
+            throw $e;
         }
         
         return $this->get($purchaseInvoice);

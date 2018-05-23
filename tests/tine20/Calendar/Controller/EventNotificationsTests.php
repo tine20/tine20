@@ -618,7 +618,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             static::fail($e->getMessage());
         }
 
-        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('sclever', $assertString);
     }
     
@@ -654,7 +654,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('pwulf', $assertString);
 
         // check adjusted alarm time
@@ -706,7 +706,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check series
@@ -756,7 +756,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->addWeek(1)->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->addWeek(1)
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check adjusted alarm time
