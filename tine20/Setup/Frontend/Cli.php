@@ -279,6 +279,9 @@ class Setup_Frontend_Cli
                     $first = false;
                 }
 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . $query);
+
                 $mysqlDB->query($query . ')');
             }
         }
