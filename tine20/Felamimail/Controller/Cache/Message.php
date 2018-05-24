@@ -303,12 +303,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if ($_folder->is_selectable == false) {
             // nothing to be done
-            return FALSE;
+            return false;
         }
         
         if (Felamimail_Controller_Cache_Folder::getInstance()->updateAllowed($_folder, $_lockFolder) !== true) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " update of folder {$_folder->globalname} currently not allowed. do nothing!");
-            return FALSE;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .  " update of folder {$_folder->globalname} currently not allowed. do nothing!");
+            return false;
         }
     }
     
