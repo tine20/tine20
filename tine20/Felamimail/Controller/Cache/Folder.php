@@ -517,7 +517,13 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             return false;
         }
 
-        $result = ($_lockFolder) ? $this->_backend->lockFolder($_folder) : TRUE;
+        try {
+            $result = ($_lockFolder) ? $this->_backend->lockFolder($_folder) : TRUE;
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not lock folder: ' . $zdse->getMessage());
+            return false;
+        }
         
         return $result;
     }
