@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add alternating row styles again?
  */
@@ -293,7 +293,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
                 Tinebase_Core::getUser()->accountDisplayName,
-                $i18n->translate('Total: ') . (is_array($count) ? $count[0] : $count)
+                $i18n->translate('Total: ') . (is_array($count) ? $count['count'] : $count)
             );
             
             foreach($this->_config->headers->header as $headerCell) {
