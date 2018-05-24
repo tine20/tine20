@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -554,7 +554,18 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     // $cachedMessageUids can be empty if we fetch the last chunk
                     if (count($cachedMessageUids) > 0) {
                         $messageUidsOnImapServer = $_imap->messageUidExists($cachedMessageUids);
-                        
+
+                        if (!is_array($cachedMessageUids) || !is_array($messageUidsOnImapServer)) {
+                            $msg = '';
+                            if (!is_array($cachedMessageUids)) {
+                                $msg .= 'cachedMessageUids needs to be an array: ' . print_r($cachedMessageUids, true);
+                            }
+                            if (!is_array($messageUidsOnImapServer)) {
+                                $msg .= 'messageUidsOnImapServer needs to be an array: ' .
+                                    print_r($messageUidsOnImapServer, true);
+                            }
+                            throw new Tinebase_Exception_UnexpectedValue($msg);
+                        }
                         $difference = array_diff($cachedMessageUids, $messageUidsOnImapServer);
                         $removedMessages = $this->_deleteMessagesByIdAndUpdateCounters(array_keys($difference), $_folder);
                         $messagesToRemoveFromCache -= $removedMessages;
