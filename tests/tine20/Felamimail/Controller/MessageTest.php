@@ -599,9 +599,11 @@ class Felamimail_Controller_MessageTest extends TestCase
                     echo "\nchecking message: " . $fileName . "\n";
                     $cachedMessage = $this->messageTestHelper($fileName, $filename);
                     $message = $this->_controller->getCompleteMessage($cachedMessage);
+                    $plainMessage = $this->_controller->getCompleteMessage($message, null, Zend_Mime::TYPE_TEXT);
                     $this->assertTrue(! empty($message->body));
                     
                     echo "body: " . $message->body . "\n";
+                    echo "plain body: " . $plainMessage->body . "\n";
                     echo "attachements: ";
                     print_r($message->attachments);
 
@@ -1684,5 +1686,18 @@ Photographer', $message->body);
 
         self::assertEquals(1, count($message->attachments));
         self::assertTrue($message->has_attachment, 'attachments missing!');
+    }
+
+    /**
+     * @see decoding of plain/text mail parts fails #75
+     *      https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues/75
+     */
+    public function testBrokenPlainTextEncoding()
+    {
+        $cachedMessage = $this->messageTestHelper('branchenbuch2.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+
+        $this->assertContains('Sollten Sie zukünftig keine E-Mail Nachrichten empfangen wollen,'
+            . ' senden sie bitte eine E-Mail mit dem Subject "OUT-MAIL" an info@', $message->body);
     }
 }
