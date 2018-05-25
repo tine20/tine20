@@ -179,6 +179,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
             self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
             \Sabre\DAV\Server::$exposeVersion = false;
+            self::$_server->httpResponse = new Tinebase_WebDav_HTTP_LogResponse();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 self::$_server->debugExceptions = true;
@@ -257,23 +258,14 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
             }
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
-
-            $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-            $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && (stripos($contentType,
-                        'text') === 0 || stripos($contentType, '/xml') !== false);
-
-            if ($logOutput) {
-                ob_start();
-            }
+            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG));
 
             self::$_server->exec();
 
-            if ($logOutput) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
-                ob_end_flush();
-            } else {
-
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV response\n -- BINARY DATA --");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" .
+                    implode("\n", headers_list()) . "\n\n" .
+                    self::$_server->httpResponse->stopBodyLog());
             }
 
             Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
@@ -318,7 +310,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public static function getResponse()
     {
-        return self::$_server ? self::$_server->httpResponse : new Sabre\HTTP\Response();
+        return self::$_server ? self::$_server->httpResponse : new Tinebase_WebDav_HTTP_LogResponse();
     }
 
     /**
