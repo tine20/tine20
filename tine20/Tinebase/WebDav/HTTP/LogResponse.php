@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * Tine 2.0
+ *
+ * @package     Tinebase
+ * @subpackage  WebDav
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiß <c.weiss@metaways.de>
+ */
+
+/**
  * Class Tinebase_WebDav_HTTP_LogResponse
  *
  * NOTE: we can't decide logging before content-type header is set
