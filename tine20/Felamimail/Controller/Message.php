@@ -541,7 +541,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         unset($_rawContent);
         
-        $part = new Zend_Mime_Part($stream);
+        $part = new Zend_Mime_Part($stream, true);
         $part->type        = $_partStructure['contentType'];
         $part->encoding    = (isset($_partStructure['encoding']) || array_key_exists('encoding', $_partStructure)) ? $_partStructure['encoding'] : null;
         $part->id          = (isset($_partStructure['id']) || array_key_exists('id', $_partStructure)) ? $_partStructure['id'] : null;
