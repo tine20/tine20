@@ -8,7 +8,6 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 ## Official Community ressources
 * [Tine2.0 Contributors Guide](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/CONTRIBUTING.md)
 * [Documentation Wiki](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki)
-* [Mantis Issue tracker](https://forge.tine20.org/mantisbt/)
 * [Github Issue tracker / Questions](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues)
 * [Github Implementation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/1)
 * [Github Documentation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/2)
