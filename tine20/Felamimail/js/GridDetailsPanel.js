@@ -326,7 +326,7 @@ Ext.ns('Tine.Felamimail');
                             'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                             body + '</textarea>';
-                    } else if (messageData.body_content_type != 'text/html') {
+                    } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
                         // message content is text and account format non-text
                         body = Ext.util.Format.nl2br(body);
                     }
