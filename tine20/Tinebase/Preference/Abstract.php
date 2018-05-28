@@ -835,16 +835,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
         
         $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $appName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-        $sharedAddContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_ADD);
-        $sharedReadContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_READ);
+        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
 
         foreach ($myContainers as $container) {
             $result[] = array($container->getId(), $container->name);
         }
-        foreach($sharedAddContainers as $container) {
-            if ($sharedReadContainers->getById($container->getId())) {
-                $result[] = array($container->getId(), $container->name);
-            }
+        foreach($sharedContainers as $container) {
+            $result[] = array($container->getId(), $container->name);
         }
         return $result;
     }
