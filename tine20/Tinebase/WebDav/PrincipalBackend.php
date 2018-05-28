@@ -273,16 +273,12 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         }
                         
                         // collect all users which have access to any of the calendars of this user
-                        $sharedContainerSync = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, Tinebase_Model_Grants::GRANT_SYNC);
+                        $sharedContainerSync = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ], false, true);
                         
                         if ($sharedContainerSync->count() > 0) {
-                            $sharedContainerRead = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, Tinebase_Model_Grants::GRANT_READ);
-                            
-                            $sharedContainerIds = array_intersect($sharedContainerSync->getArrayOfIds(), $sharedContainerRead->getArrayOfIds());
-                            
                             $result = array_merge(
                                 $result,
-                                $this->_containerGrantsToPrincipals($sharedContainerSync->filter('id', $sharedContainerIds)));
+                                $this->_containerGrantsToPrincipals($sharedContainerSync));
                         }
                     } else {
                         $filter = $this->_getContactFilterForUserContact($id);
