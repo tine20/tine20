@@ -77,6 +77,8 @@ class Setup_Frontend_Cli
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->updateAllAccountsWithAccountEmail)) {
+            $this->_updateAllAccountsWithAccountEmail($_opts);
         } elseif(isset($_opts->sync_passwords_from_ldap)) {
             $this->_syncPasswords($_opts);
         } elseif(isset($_opts->egw14import)) {
@@ -724,7 +726,44 @@ class Setup_Frontend_Cli
 
         Tinebase_User::syncUsers($options);
     }
-    
+
+    /**
+     * create/update email users with current account
+     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    protected function _updateAllAccountsWithAccountEmail(Zend_Console_Getopt $_opts)
+    {
+        $data = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (isset($data['fromInstance'])) {
+            // fetch all accounts from fromInstance and write to configured instance
+            $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $imap->copyFromInstance($data['fromInstance']);
+        }
+
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
+        $userController = Tinebase_User::getInstance();
+        $emailUser = Tinebase_EmailUser::getInstance();
+        /** @var Tinebase_Model_FullUser $user */
+        foreach ($userController->getFullUsers() as $user) {
+            $emailUser->inspectGetUserByProperty($user);
+            if (! empty($user->accountEmailAddress)) {
+                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
+                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                    $user->accountEmailAddress = $newEmailAddress;
+                }
+                $userController->updateUser($user);
+            }
+        }
+
+        return 0;
+    }
+
     /**
      * sync ldap passwords
      * 
