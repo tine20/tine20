@@ -2182,7 +2182,8 @@ class Tinebase_Core
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getInstallLogo() {
+    public static function getInstallLogo()
+    {
         $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
         
         if (!$logo) {

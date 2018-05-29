@@ -1035,12 +1035,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $icon = $config[$nearest];
             }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using favicon ' . $icon);
+
             $blob = Tinebase_Helper::getFileOrUriContents($icon);
             $image = Tinebase_Model_Image::getImageFromBlob($blob);
             Tinebase_ImageHelper::resize($image, $size, $size, Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
             $imageBlob = $image->getBlob($mime);
             Tinebase_Core::getCache()->save($imageBlob, $cacheId);
-
         }
 
         $response = new \Zend\Diactoros\Response();
