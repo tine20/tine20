@@ -108,18 +108,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * update existing applications
      *
      * @param array $applicationNames application names to update
+     * @return array
+     *
+     * TODO remove $applicationNames param and adopt js client
      */
     public function updateApplications($applicationNames)
     {
-        $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
-        foreach ($applicationNames as $applicationName) {
-            $applications->addRecord(Tinebase_Application::getInstance()->getApplicationByName($applicationName));
-        }
-        
-        if(count($applications) > 0) {
-            $this->_controller->updateApplications($applications);
-        }
-        
+        // always update all update-able applications
+        $this->_controller->updateApplications();
+
         return array(
             'success'=> true,
             'setupRequired' => $this->_controller->setupRequired()
@@ -130,6 +127,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * uninstall applications
      *
      * @param array $applicationNames application names to uninstall
+     * @return array
      */
     public function uninstallApplications($applicationNames)
     {
