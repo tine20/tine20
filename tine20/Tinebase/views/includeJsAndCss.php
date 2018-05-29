@@ -39,7 +39,7 @@ switch(TINE20_BUILDTYPE) {
     case 'DEBUG':
     case 'RELEASE':
         echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&$eTag\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&&locale={$locale}&app=all&version={$eTag}\"></script>";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all&version={$eTag}\"></script>";
         break;
 }
 
