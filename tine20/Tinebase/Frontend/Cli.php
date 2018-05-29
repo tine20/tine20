@@ -1511,47 +1511,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
-    /**
-     * create/update email users with current account
-     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
-     *
-     * @param Zend_Console_Getopt $opts
-     * @return int
-     */
-    public function updateAllAccountsWithAccountEmail(Zend_Console_Getopt $opts)
-    {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
-
-        $data = $this->_parseArgs($opts);
-        if (isset($data['fromInstance'])) {
-            // fetch all accounts from fromInstance and write to configured instance
-            $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-            $imap->copyFromInstance($data['fromInstance']);
-        }
-
-        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
-        $userController = Tinebase_User::getInstance();
-        $emailUser = Tinebase_EmailUser::getInstance();
-        /** @var Tinebase_Model_FullUser $user */
-        foreach ($userController->getFullUsers() as $user) {
-            $emailUser->inspectGetUserByProperty($user);
-            if (! empty($user->accountEmailAddress)) {
-                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
-                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
-                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
-                    $user->accountEmailAddress = $newEmailAddress;
-                }
-                $userController->updateUser($user);
-            }
-        }
-
-        return 0;
-    }
-
     public function cleanFileObjects()
     {
         if (! $this->_checkAdminRight()) {
