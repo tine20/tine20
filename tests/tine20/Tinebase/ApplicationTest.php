@@ -305,21 +305,9 @@ class Tinebase_ApplicationTest extends TestCase
                 'Crm_Model_LeadState',
                 'Crm_Model_Lead',
             ),
-            'Events' => array(
-                'Events_Model_Status',
-                'Events_Model_Event',
-            ),
             'ExampleApplication' => array(
                 'ExampleApplication_Model_ExampleRecord',
                 'ExampleApplication_Model_Status',
-            ),
-            'Expressomail' => array(
-                'Expressomail_Model_Account',
-                'Expressomail_Model_Sieve_Vacation',
-                'Expressomail_Model_Sieve_Rule',
-                'Expressomail_Model_PreparedMessagePart',
-                'Expressomail_Model_Message',
-                'Expressomail_Model_Folder',
             ),
             'Felamimail' => array(
                 'Felamimail_Model_Account',
@@ -466,7 +454,7 @@ class Tinebase_ApplicationTest extends TestCase
         );
 
         // remove bogus apps
-        $remove = array('RequestTracker', 'Sipgate', 'Expressodriver', 'MailFiler');
+        $remove = array('MailFiler');
         foreach ($remove as $r)
         {
             if (($key = array_search($r, $appNames)) !== false) {
