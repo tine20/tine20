@@ -67,6 +67,9 @@ trait Calendar_Export_GenericTrait
     protected function _exportRecords()
     {
         if (!isset($this->_records)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Exporting calendar records with filter ' . print_r($this->_filter->toArray(), true));
+
             // to support rrule & sorting we can't do pagination in calendar exports
             $records = $this->_controller->search($this->_filter, null, $this->_getRelations, false, 'export');
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
