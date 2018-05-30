@@ -1931,9 +1931,10 @@ class Tinebase_Core
 
                 if (isset($session->filesystemAvailable)) {
                     $isFileSystemAvailable = $session->filesystemAvailable;
-
-                    self::set('FILESYSTEM', $isFileSystemAvailable);
-                    return $isFileSystemAvailable;
+                    if ($isFileSystemAvailable) {
+                        self::set('FILESYSTEM', $isFileSystemAvailable);
+                        return $isFileSystemAvailable;
+                    }
                 }
             } catch (Zend_Session_Exception $zse) {
                 $session = null;
