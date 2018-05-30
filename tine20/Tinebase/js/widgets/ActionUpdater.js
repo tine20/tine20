@@ -239,6 +239,11 @@
             for (var grant in grants) {
                 grants[grant] = _.get(grants, grant, false) && _.get(recordGrants, grant, false);
             }
+
+            // custom grants model
+            for (grant in recordGrants) {
+                grants[grant] = _.get(grants, grant, defaultGrant) && _.get(recordGrants, grant, false);
+            }
         }
         // if calculated admin right is true, overwrite all grants with true
         if(grants.adminGrant) {

@@ -23,7 +23,7 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr "Kalendari perosnal i %s"
 
-#: Controller.php:450 js/Model.js:1026
+#: Controller.php:450 js/Model.js:1012
 msgid "Resources"
 msgstr "Burime"
 
@@ -190,7 +190,7 @@ msgstr "Në të gjithë përditësimet e përgjigjeve të vijuesve"
 msgid "On attendee responses too"
 msgstr "Gjithashtu në përgjigje të vijuesve"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:74 js/Model.js:619
+#: js/ContactEventsGridPanel.js:50 js/Model.js:74 js/Model.js:605
 msgid "Events"
 msgstr "Ngjarje"
 
@@ -231,7 +231,7 @@ msgstr "E paqarte"
 
 #: js/EventDetailsPanel.js:199 js/GridView.js:249 js/EventEditDialog.js:144
 #: js/Printer/EventRecord.js:30 js/ResourcesGridPanel.js:83 js/Model.js:369
-#: js/ResourceEditDialog.js:125 Model/Event.php:402
+#: js/ResourceEditDialog.js:123 Model/Event.php:402
 msgid "Location"
 msgstr "Vëndi"
 
@@ -243,7 +243,7 @@ msgstr "Organizuesi"
 
 #: js/EventDetailsPanel.js:221 js/EventContextAttendeesItem.js:113
 #: js/Printer/EventRecord.js:44 js/AttendeeGridPanel.js:108 js/WestPanel.js:93
-#: js/Model.js:615 js/AttendeeFilterModel.js:35 Config.php:287
+#: js/Model.js:601 js/AttendeeFilterModel.js:35 Config.php:287
 msgid "Attendee"
 msgstr "Vijues"
 
@@ -259,7 +259,8 @@ msgstr "Rradhit Vijuesit"
 msgid "Check to filter for this attendee"
 msgstr "Kontrollo tek filtri për këtë vijues"
 
-#: js/GridView.js:192 js/EventEditDialog.js:234 Config.php:324
+#: js/GridView.js:192 js/EventEditDialog.js:234 js/Model/ResourceGrants.js:109
+#: Config.php:324
 msgid "Private"
 msgstr "Private"
 
@@ -273,7 +274,7 @@ msgid "whole day"
 msgstr "të gjithë ditën"
 
 #: js/GridView.js:262 js/EventEditDialog.js:278 js/Printer/EventRecord.js:21
-#: js/Model.js:370 js/Model.js:1061 js/ResourceEditDialog.js:140
+#: js/Model.js:370 js/Model.js:1046 js/ResourceEditDialog.js:138
 #: Model/Event.php:401
 msgid "Description"
 msgstr "Përshkrimi"
@@ -881,11 +882,12 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:574
+#: js/TreePanel.js:134 js/TreePanel.js:159 js/AttendeeGridPanel.js:574
+#: js/Model/ResourceGrants.js:84
 msgid "Edit Resource"
 msgstr ""
 
-#: js/TreePanel.js:136 js/AttendeeGridPanel.js:575
+#: js/TreePanel.js:160 js/AttendeeGridPanel.js:575
 msgid "View Resource"
 msgstr ""
 
@@ -913,21 +915,21 @@ msgstr "I Përmuajshëm"
 msgid "Yearly"
 msgstr "I Përvitshëm"
 
-#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:238 js/Model.js:1059
-#: js/ResourceEditDialog.js:91 Model/Poll.php:71
+#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:238 js/Model.js:1044
+#: js/ResourceEditDialog.js:89 Model/Poll.php:71
 msgid "Name"
 msgstr "Emri"
 
-#: js/ResourcesGridPanel.js:52 js/Model.js:1060 js/ResourceEditDialog.js:96
+#: js/ResourcesGridPanel.js:52 js/Model.js:1045 js/ResourceEditDialog.js:94
 msgid "Email"
 msgstr "E-Postë"
 
-#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:229 js/Model.js:1064
-#: js/ResourceEditDialog.js:103
+#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:229 js/Model.js:1049
+#: js/ResourceEditDialog.js:101
 msgid "Type"
 msgstr "Tipi"
 
-#: js/ResourcesGridPanel.js:65 js/Model.js:1062 js/ResourceEditDialog.js:119
+#: js/ResourcesGridPanel.js:65 js/Model.js:1047 js/ResourceEditDialog.js:117
 msgid "Maximum number of attendee"
 msgstr ""
 
@@ -935,7 +937,7 @@ msgstr ""
 msgid "Default Status"
 msgstr ""
 
-#: js/ResourcesGridPanel.js:79 js/Model.js:1078 js/ResourceEditDialog.js:115
+#: js/ResourcesGridPanel.js:79 js/Model.js:1063 js/ResourceEditDialog.js:113
 msgid "Busy Type"
 msgstr ""
 
@@ -986,7 +988,7 @@ msgstr "Përdorues"
 msgid "Group"
 msgstr "Grup"
 
-#: js/AttendeeGridPanel.js:163 js/Model.js:1026 Config.php:392
+#: js/AttendeeGridPanel.js:163 js/Model.js:1012 Config.php:392
 #, fuzzy
 msgid "Resource"
 msgid_plural "Resources"
@@ -1046,6 +1048,124 @@ msgstr "(si pjesëtar i grupit)"
 msgid "External Attendee"
 msgstr "Vijues i Jashtem"
 
+#: js/Model/ResourceGrants.js:35
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model/ResourceGrants.js:80
+msgid "Invite Resource"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:81
+msgid "The grant to invite the resource to an event"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:82
+msgid "Read Resource"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:83
+msgid "The grant to read the resource itself"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:85
+msgid "The grant to edit the resource itself"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:86
+msgid "Export Resource"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:87
+msgid "The grant to export the resource itself"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:88
+msgid "Sync Resource"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:89
+msgid "The grant to synchronise the resource itself"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:90
+msgid "Resource Admin"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:91
+msgid "The grant to administrate the resource itself"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:92
+msgid "Add Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:93
+msgid "The grant to directly add events into this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:94
+msgid "Read Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:95
+msgid "The grant to read events from this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:96
+msgid "Export Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:97
+msgid "The grant to export events from this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:98
+msgid "Sync Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:99
+msgid "The grant to synchronise events from this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:100
+msgid "Events Free Busy"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:101
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:102
+msgid "Edit Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:103
+msgid "The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:104
+msgid "Delete Events"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:105
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:107
+msgid "Free Busy"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:108
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+
+#: js/Model/ResourceGrants.js:110
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
 #: js/SearchCombo.js:76
 msgid "no events found"
 msgstr "nuk u gjendën ngjarje"
@@ -1054,7 +1174,7 @@ msgstr "nuk u gjendën ngjarje"
 msgid "Searching..."
 msgstr "Duke Kërkuar"
 
-#: js/SearchCombo.js:86 js/Model.js:74 js/Model.js:619
+#: js/SearchCombo.js:86 js/Model.js:74 js/Model.js:605
 #, fuzzy
 msgid "Event"
 msgid_plural "Events"
@@ -1183,7 +1303,7 @@ msgstr[1] "Kalendar"
 msgid "Calendars"
 msgstr "Kalendarë"
 
-#: js/Model.js:367 js/Model.js:1058
+#: js/Model.js:367 js/Model.js:1043
 msgid "Quick Search"
 msgstr "Kërkim i Shpejtë"
 
@@ -1232,42 +1352,42 @@ msgstr "Date e panjohur"
 msgid "{0} {1} o'clock"
 msgstr "Ora {0} {1} "
 
-#: js/Model.js:457
+#: js/Model.js:443
 msgid "Event (as attendee)"
 msgstr "Ngjarje (si vijues)"
 
-#: js/Model.js:464
+#: js/Model.js:450
 msgid "Event (as organizer)"
 msgstr "Ngjarje (si organizues)"
 
-#: js/Model.js:474
+#: js/Model.js:460
 msgid "Event attendee"
 msgstr "Vijues ngjarjeje"
 
-#: js/Model.js:615
+#: js/Model.js:601
 #, fuzzy
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Vijues"
 msgstr[1] "Vijues"
 
-#: js/Model.js:1042
+#: js/Model.js:1028
 msgid "Anyone"
 msgstr ""
 
-#: js/Model.js:1071 js/ResourceEditDialog.js:109
+#: js/Model.js:1056 js/ResourceEditDialog.js:107
 msgid "Default attendee status"
 msgstr ""
 
-#: js/ResourceEditDialog.js:135
+#: js/ResourceEditDialog.js:133
 msgid "Suppress notification"
 msgstr ""
 
-#: js/ResourceEditDialog.js:141
+#: js/ResourceEditDialog.js:139
 msgid "Enter description..."
 msgstr "Vendosni përshkrimin..."
 
-#: js/ResourceEditDialog.js:166
+#: js/ResourceEditDialog.js:164
 msgid "Grants"
 msgstr "Të Drejta"
 
@@ -1740,71 +1860,71 @@ msgstr ""
 msgid "GTCs for polls"
 msgstr ""
 
-#: Controller/Event.php:1350
+#: Controller/Event.php:1362
 msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
 msgstr ""
 
-#: Controller/EventNotifications.php:493
+#: Controller/EventNotifications.php:491
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarm për ngjarjen \"%1$s\" në %2$s"
 
-#: Controller/EventNotifications.php:496
+#: Controller/EventNotifications.php:494
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Ftesë për ngjarje  \"%1$s\" në %2$s"
 
-#: Controller/EventNotifications.php:505
+#: Controller/EventNotifications.php:503
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:513
+#: Controller/EventNotifications.php:511
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Ngjarja \"%1$s\" në %2$s është anulluar"
 
-#: Controller/EventNotifications.php:521
+#: Controller/EventNotifications.php:519
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Ngjarja \"%1$s\" është riplanifikuar nga %2$s në %3$s"
 
-#: Controller/EventNotifications.php:528
+#: Controller/EventNotifications.php:526
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Ngjarja \"%1$s\" në %2$s është përditësuar"
 
-#: Controller/EventNotifications.php:539
+#: Controller/EventNotifications.php:537
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s ngjarje e pranuar \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:543
+#: Controller/EventNotifications.php:541
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s ngjarje e refuzuar \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:547
+#: Controller/EventNotifications.php:545
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Përgjigje e pa qartë nga %1$s për ngjarjen \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:551
+#: Controller/EventNotifications.php:549
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Nuk ka përgjigje nga %1$s për ngjarjen \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:555
+#: Controller/EventNotifications.php:553
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Ndryshime në vijim për ngjarjen \"%1$s\" në %2$s"
 
-#: Controller/EventNotifications.php:567
+#: Controller/EventNotifications.php:565
 msgid "Tentative event notification for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:576
+#: Controller/EventNotifications.php:574
 msgid "Resource Management"
 msgstr ""
 
-#: Controller/Poll.php:735
+#: Controller/Poll.php:729
 msgid "This contact has been automatically added by the system as a poll attendee"
 msgstr ""
 
-#: Controller/Poll.php:900
+#: Controller/Poll.php:894
 msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr ""
 
-#: Controller/Poll.php:942
+#: Controller/Poll.php:936
 msgid "%1$s is scheduled for %2$s"
 msgstr ""
 

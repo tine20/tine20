@@ -488,7 +488,6 @@ Tine.widgets.tree.ContextMenu = {
             var window = Tine.widgets.container.PropertiesDialog.openWindow({
                 title: String.format(i18n._('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(ctxNodeName)),
                 containerName: this.nodeName,
-                // TODO fix this in Filemanager! sub-nodes do not have a container...
                 grantContainer: grantsContainer,
                 app: this.scope.app.appName
             });

@@ -19,6 +19,7 @@ Tine.Tinebase.data.Record = function(data, id) {
         this.id = ++Ext.data.Record.AUTO_ID;
     }
     this.data = data;
+    this.initData();
     this.ctime = new Date().getTime();
 };
 
@@ -87,7 +88,12 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
     defaultFilter: null,
     
     cfExp: /^#(.+)/,
-    
+
+    /**
+     * template fn called when record is instanciated
+     */
+    initData: Ext.emptyFn,
+
     /**
      * Get the value of the {@link Ext.data.Field#name named field}.
      * @param {String} name The {@link Ext.data.Field#name name of the field} to get the value of.

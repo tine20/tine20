@@ -435,20 +435,6 @@ Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
     return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
 };
 
-// register grants for calendar containers
-Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
-    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
-
-    if (container.type == 'personal') {
-        grants.push('freebusy');
-    }
-    if (container.type == 'personal' && container.capabilites_private) {
-        grants.push('private');
-    }
-
-    return grants;
-});
-
 // register calendar filters in addressbook
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
     foreignRecordClass: 'Calendar.Event',
@@ -1025,7 +1011,25 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     containerProperty: 'container_id',
     // ngettext('Resource', 'Resources', n); gettext('Resources');
     recordName: 'Resource',
-    recordsName: 'Resources'
+    recordsName: 'Resources',
+
+    initData: function() {
+        if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
+            var _ = window.lodash
+            account_grants = _.get(this, this.grantsPath, {});
+
+            _.assign(account_grants, {
+                'resourceInviteGrant': true,
+                'resourceReadGrant': true,
+                'resourceEditGrant': true,
+                'resourceExportGrant': true,
+                'resourceSyncGrant': true,
+                'resourceAdminGrant': true,
+
+            });
+            _.set(this, this.grantsPath, account_grants);
+        }
+    }
 });
 
 /**
@@ -1040,11 +1044,10 @@ Tine.Calendar.Model.Resource.getDefaultData = function() {
             account_id: "0",
             account_type: "anyone",
             account_name: i18n._('Anyone'),
-            exportGrant: true,
-            readGrant: true,
-            syncGrant: true
+            resourceInviteGrant: true,
+            eventsFreebusyGrant: true
         }
-            // don't add account/group/role with admin grants here as manage_resource right is enough
+            // don't add account/group/role with resourceAdminGrant grants here as manage_resource right is enough
         ]
     };
 

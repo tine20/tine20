@@ -30,6 +30,8 @@ class Calendar_Convert_Resource_Json extends Tinebase_Convert_Json
         // no ACL check here! we already have the resource, so get the container
         $jsonData['container_id'] = Tinebase_Container::getInstance()->getContainerById($_record->container_id)
             ->toArray();
+        $jsonData['container_id']['account_grants'] = Tinebase_Container::getInstance()
+            ->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
 
         $user = Tinebase_Core::getUser();
         if ($user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) ||

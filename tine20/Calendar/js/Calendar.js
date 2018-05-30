@@ -15,6 +15,7 @@ require('./AddressbookGridPanelHook');
 require('./ParallelEventsRegistry');
 require('./SearchCombo');
 require('./Model');
+require('./Model/ResourceGrants');
 require('./AdminPanel');
 require('./CalendarPanel');
 require('./AbstractView');

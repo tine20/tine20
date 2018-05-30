@@ -27,6 +27,12 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
     eventRecord: null,
 
     /**
+     * @cfg {Bool} requireFreeBusyGrantOnly
+     * freebusy grant is sufficient to find ressource (instead of inviteGrant)
+     */
+    requireFreeBusyGrantOnly: false,
+
+    /**
      * @property {Tine.Calendar.Model.AttenderProxy} recordProxy
      */
     recordProxy: null,
@@ -47,6 +53,24 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
         });
 
         Tine.Calendar.AttendeePickerCombo.superclass.initComponent.call(this);
+    },
+
+    /**
+     * prepare paging and sort
+     *
+     * @param {Ext.data.Store} store
+     * @param {Object} options
+     */
+    onBeforeLoad: function (store, options) {
+        Tine.Calendar.AttendeePickerCombo.superclass.onBeforeLoad.call(this, store, options);
+
+        if (this.requireFreeBusyGrantOnly) {
+            this.store.baseParams.filter.push({
+                field: 'resourceFilter', value: [
+                    {field: 'requireFreeBusyGrant', value: 1}
+                ]
+            });
+        }
     },
 
     /**

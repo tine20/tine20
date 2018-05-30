@@ -74,6 +74,13 @@ Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function
     return grants;
 });
 
+Ext.override(Tine.widgets.container.GrantsGrid, {
+    downloadGrantTitle: 'Download', // i18n._('Download')
+    downloadGrantDescription: 'The grant to download files', // i18n._('The grant to download files')
+    publishGrantTitle: 'Publish', // i18n._('Publish')
+    publishGrantDescription: 'The grant to create anonymous download links for files', // i18n._('The grant to create anonymous download links for files')
+});
+
 /**
  * create Node from File
  * 
