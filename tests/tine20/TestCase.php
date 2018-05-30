@@ -537,19 +537,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     /**
      * call handle cli function with params
+     *  example usage:
+     *      $result = $this->_cliHelper('getconfig', array('--getconfig','--','configkey=allowedJsonOrigins'));
      *
-     * @param array $_params
+     * @param string $command
+     * @param array $params
+     * @return string
      */
-    protected function _cliHelper($command, $_params)
+    protected function _cliHelper($command, $params)
     {
         $opts = new Zend_Console_Getopt(array($command => $command));
-        $opts->setArguments($_params);
+        $opts->setArguments($params);
         ob_start();
         $this->_cli->handle($opts, false);
         $out = ob_get_clean();
         return $out;
     }
-
 
     /**
      * add an attachment to a record
