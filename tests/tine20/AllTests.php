@@ -39,7 +39,6 @@ class AllTests
             'Projects',
             'HumanResources',
             'Inventory',
-            'Events',
             'ExampleApplication',
             'Sipgate',
             'SimpleFAQ',
