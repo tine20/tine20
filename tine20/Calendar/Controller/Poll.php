@@ -503,7 +503,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         $fileMap = Tinebase_Frontend_Http::getAssetsMap();
         $view->jsFiles = [$baseUrl . $fileMap['Calendar/js/pollClient/src/index.es6.js']['js']];
-        $view->jsFiles[] = $baseUrl . "index.php?method=Tinebase.getJsTranslations&&locale={$locale}&app=Calendar&version={$eTag}";
+        $view->jsFiles[] = $baseUrl . "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar&version={$eTag}";
 
         if (TINE20_BUILDTYPE != 'RELEASE') {
             if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
@@ -515,8 +515,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
-
-//        $this->Tinebase_Frontend_Http::_setMainscreenHeaders();
 
         $response = new \Zend\Diactoros\Response();
         $response->getBody()->write($view->render('pollClient.php'));
@@ -537,8 +535,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             'cceContainerACLChecks' => Calendar_Controller_Event::getInstance()->doContainerACLChecks(false),
             'cceRightChecks'        => Calendar_Controller_Event::getInstance()->doRightChecks(false),
             'cceSendNotifications'        => Calendar_Controller_Event::getInstance()->sendNotifications(false),
-//            'accContainerACLChecks'  => Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false),
-//            'accRightChecks'         => Addressbook_Controller_Contact::getInstance()->doRightChecks(false),
             'currentUser'           => $currentUser,
         ];
 
@@ -549,8 +545,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldvalues['cceContainerACLChecks']);
             Calendar_Controller_Event::getInstance()->doRightChecks($oldvalues['cceRightChecks']);
             Calendar_Controller_Event::getInstance()->sendNotifications($oldvalues['cceSendNotifications']);
-//            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldvalues['accContainerACLChecks']);
-//            Addressbook_Controller_Contact::getInstance()->doRightChecks($oldvalues['accRightChecks']);
             if ($oldvalues['currentUser']) {
                 Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
             }
