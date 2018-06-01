@@ -1445,6 +1445,48 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * testTextFilterWildcards
+     */
+    public function testTextFilterWildcards()
+    {
+        $contact = $this->_addContact('my * Corp');
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'equals', 'value' => strtolower('* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'contains', 'value' => strtolower('\* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'contains', 'value' => strtolower('not \* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(0, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+    }
+
+    /**
      * return event organizuer filter
      *
      * @return array
