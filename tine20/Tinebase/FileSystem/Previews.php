@@ -60,7 +60,7 @@ class Tinebase_FileSystem_Previews
     protected function __construct()
     {
         $this->_fsController = Tinebase_FileSystem::getInstance();
-        $this->_previewService = new Tinebase_FileSystem_Preview_Service();
+        $this->_previewService = Tinebase_Core::getPreviewService();
     }
 
     /**

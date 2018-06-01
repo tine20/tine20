@@ -1858,6 +1858,17 @@ class Tinebase_Core
     }
 
     /**
+     * get Preview Services client
+     *
+     * @return Tinebase_FileSystem_Preview_ServiceInterface
+     */
+    public static function getPreviewService()
+    {
+        $class = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_CLASS};
+        return new $class;
+    }
+
+    /**
      * returns the tinebase id
      *
      * @return string
