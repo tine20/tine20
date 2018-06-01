@@ -68,8 +68,10 @@ class Tinebase_ImageHelper
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uploaded ' . $imgInfo['mime'] . ' image had no channel information. Setting channels to 3.');
-            $imgInfo['channels'] = 3;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
+                    . ' had no channel information. Setting channels to 0.');
+            $imgInfo['channels'] = 0;
         }
         return array(
             'width'    => $imgInfo[0],
@@ -139,7 +141,8 @@ class Tinebase_ImageHelper
     public static function parseImageLink($link)
     {
         $params = array();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {

@@ -61,7 +61,7 @@
                 echo "\n    <script src='webpack-dev-server.js'></script>";
 
                 echo "\n    <!-- translations -->";
-                echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
+                echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all&" . time() . "\"></script>";
                 break;
         }?>
 </head>

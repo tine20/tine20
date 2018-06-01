@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
+class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
      * update to 11.1

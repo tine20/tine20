@@ -244,7 +244,7 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        $request = new \Zend\Http\PhpEnvironment\Request();
+        $request = new Tinebase_Http_Request();
         self::set(self::REQUEST, $request);
         
         // check transaction header
@@ -1931,9 +1931,10 @@ class Tinebase_Core
 
                 if (isset($session->filesystemAvailable)) {
                     $isFileSystemAvailable = $session->filesystemAvailable;
-
-                    self::set('FILESYSTEM', $isFileSystemAvailable);
-                    return $isFileSystemAvailable;
+                    if ($isFileSystemAvailable) {
+                        self::set('FILESYSTEM', $isFileSystemAvailable);
+                        return $isFileSystemAvailable;
+                    }
                 }
             } catch (Zend_Session_Exception $zse) {
                 $session = null;
@@ -2182,7 +2183,8 @@ class Tinebase_Core
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getInstallLogo() {
+    public static function getInstallLogo()
+    {
         $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
         
         if (!$logo) {

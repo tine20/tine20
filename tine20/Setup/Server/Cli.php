@@ -61,6 +61,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                           setup.php --egw14import /path/to/config.ini',
                 'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
                 'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications',
+                'updateAllAccountsWithAccountEmail' => 'create/update email users with current account
+                         Examples:
+                           setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com',
                 'backup'                    => 'backup config and data
                          Examples:
                            setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1',
@@ -99,7 +102,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->check_requirements) && 
             empty($opts->reset_demodata) &&
             empty($opts->updateAllImportExportDefinitions) &&
-            empty($opts->create_admin) && 
+            empty($opts->updateAllAccountsWithAccountEmail) &&
+            empty($opts->create_admin) &&
             empty($opts->setconfig) && 
             empty($opts->backup) &&
             empty($opts->restore) &&
