@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Filesystem
  */
-class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview_ServiceInterface
+class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Preview_ServiceInterface
 {
     protected $_url;
 

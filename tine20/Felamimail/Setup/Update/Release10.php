@@ -150,25 +150,29 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
             $this->setTableVersion('felamimail_account', 24);
         }
 
-        $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
-            'Felamimail',
-            Tinebase_FileSystem::FOLDER_TYPE_SHARED
-        );
-        $templatePath = $basepath . '/Email Notification Templates';
-        if (! Tinebase_FileSystem::getInstance()->fileExists($templatePath)) {
-            $node = Tinebase_FileSystem::getInstance()->createAclNode($templatePath);
+        if (! Tinebase_Core::isFilesystemAvailable()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Skipping creation of sieve notification template');
         } else {
-            $node = Tinebase_FileSystem::getInstance()->stat($templatePath);
-        }
-        Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            $templatePath = $basepath . '/Email Notification Templates';
+            if (!Tinebase_FileSystem::getInstance()->fileExists($templatePath)) {
+                $node = Tinebase_FileSystem::getInstance()->createAclNode($templatePath);
+            } else {
+                $node = Tinebase_FileSystem::getInstance()->stat($templatePath);
+            }
+            Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
 
-        if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not create defaultForwarding.sieve file');
-            throw new Tinebase_Exception('could not update email notification tempalte');
-        }
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                throw new Tinebase_Exception('could not update email notification tempalte');
+            }
 
-        fwrite($fh, <<<'sieveFile'
+            fwrite($fh, <<<'sieveFile'
 require ["enotify", "variables", "copy", "body"];
 
 if header :contains "Return-Path" "<>" {
@@ -189,12 +193,13 @@ if header :contains "Return-Path" "<>" {
               "mailto:USER_EXTERNAL_EMAIL";
 }
 sieveFile
-        );
+            );
 
-        if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not create defaultForwarding.sieve file');
-            throw new Tinebase_Exception('could not update email notification tempalte');
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                throw new Tinebase_Exception('could not update email notification tempalte');
+            }
         }
 
         $this->setApplicationVersion('Felamimail', '10.5');
