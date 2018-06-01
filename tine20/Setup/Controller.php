@@ -550,6 +550,7 @@ class Setup_Controller
      * @param   string    $_majorVersion
      * @return  array   messages
      * @throws  Setup_Exception if current app version is too high
+     * @throws  Exception
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
@@ -562,6 +563,8 @@ class Setup_Controller
                 
                 $messages[] = $message;
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+
+                $this->_assertApplicationStatesTable();
 
                 $version = $_application->getMajorAndMinorVersion();
                 $minor = $version['minor'];
@@ -639,6 +642,28 @@ class Setup_Controller
         return $messages;
     }
 
+    /**
+     * make sure that application_states table exists before the update
+     *
+     * @see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues/77
+     *
+     * TODO should be removed at some point
+     */
+    protected function _assertApplicationStatesTable()
+    {
+        if ($this->_backend->tableExists('application_states')) {
+            return;
+        }
+
+        $updater = new Tinebase_Setup_Update_Release11($this->_backend);
+        $oldVersion = Setup_Update_Abstract::getAppVersion('Tinebase');
+        $updater->update_23();
+        $updater->setApplicationVersion('Tinebase', $oldVersion);
+    }
+
+    /**
+     * TODO should be removed at some point
+     */
     protected function _fixTinebase10_33()
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
