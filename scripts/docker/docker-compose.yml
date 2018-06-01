@@ -1,0 +1,24 @@
+version: '2'
+services:
+  www:
+    image: tine20-server 
+    ports:
+    - 80:80
+    environment:
+    - TINE20_DB_HOST=tine20_data_1
+    - TINE20_DB_USER=root
+    - TINE20_DB_PASS=foobar
+    - TINE20_SETUP_PASS=foo 
+    volumes:
+    - tine20-data:/var/lib/tine20/files
+    depends_on:
+    - data
+  data:
+    image: mysql/mysql-server
+    environment:
+    - MYSQL_ROOT_PASSWORD=foobar
+    - MYSQL_DATABASE=tine20
+    - MYSQL_ROOT_HOST=% 
+volumes:
+  tine20-data:
+    driver: local
