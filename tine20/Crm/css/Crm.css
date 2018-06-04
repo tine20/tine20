@@ -1,13 +1,6 @@
 .CrmIconCls, .CrmLead {
-    background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
+    background-image:url(../../images/icon-set/icon_crm.svg) !important;
 }
-.x-btn-medium .CrmIconCls, .x-btn-medium .CrmLead {
-    background-image:url(../../images/oxygen/22x22/actions/datashowchart.png) !important;
-}
-.x-btn-large .CrmIconCls, .x-btn-large .CrmLead {
-    background-image:url(../../images/oxygen/32x32/actions/datashowchart.png) !important;
-}
-
 
 .actionAddTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
@@ -17,17 +10,6 @@
 }
 .x-btn-large .actionAddTask {
     background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
-}
-
-
-.actionEdit {
-    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
-}
-.x-btn-medium .actionEdit {
-    background-image:url(../../images/oxygen/22x22/actions/edit.png) !important;
-}
-.x-btn-large .actionEdit {
-    background-image:url(../../images/oxygen/32x32/actions/edit.png) !important;
 }
 
 

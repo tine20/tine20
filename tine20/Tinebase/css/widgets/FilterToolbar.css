@@ -1,22 +1,21 @@
 .action_delThisFilter {
-    /*background-image:url(../../../images/oxygen/16x16/actions/edit-clear-locationbar-rtl.png) !important;*/
-    background-image:url(../../../images/minus-gray.png) !important;
+    background-image:url(../../../images/icon-set/icon_action_minus.svg) !important;
 }
 
 .action_delAllFilter {
-    background-image:url(../../../images/x-gray.png) !important;
+    background-image:url(../../../images/icon-set/icon_action_minus.svg) !important;
 }
 
 .action_addFilter {
-    background-image:url(../../../images/plus-gray.png) !important;
+    background-image:url(../../../images/icon-set/icon_action_plus.svg) !important;
 }
 
 .action_saveFilter {
-    background-image:url(../../../images/oxygen/16x16/actions/document-save.png) !important;
+    background-image:url(../../../images/icon-set/icon_safe_neg.svg) !important;
 }
 
 .action_startFilter {
-    background-image:url(../../../images/oxygen/16x16/actions/edit-find.png) !important;
+    background-image:url(../../../images/icon-set/icon_search.svg) !important;
 }
 
 .x-panel-bwrap .tw-filtertoolbar  {

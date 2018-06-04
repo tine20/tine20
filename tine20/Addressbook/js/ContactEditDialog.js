@@ -234,50 +234,50 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             xtype: 'columnform',
                             items: [[{
                                 fieldLabel: this.app.i18n._('Phone'),
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                                labelIcon: 'images/icon-set/icon_phone.svg',
                                 name: 'tel_work',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile'),
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                                labelIcon: 'images/icon-set/icon_mobile.svg',
                                 name: 'tel_cell',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax'),
-                                labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                                labelIcon: 'images/icon-set/icon_print.svg',
                                 name: 'tel_fax',
                                 maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('Phone (private)'),
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                                labelIcon: 'images/icon-set/icon_phone.svg',
                                 name: 'tel_home',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile (private)'),
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                                labelIcon: 'images/icon-set/icon_mobile.svg',
                                 name: 'tel_cell_private',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax (private)'),
-                                labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                                labelIcon: 'images/icon-set/icon_print.svg',
                                 name: 'tel_fax_home',
                                 maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('E-Mail'),
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                                labelIcon: 'images/icon-set/icon_email.svg',
                                 name: 'email',
                                 vtype: 'email',
                                 maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('E-Mail (private)'),
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                                labelIcon: 'images/icon-set/icon_email.svg',
                                 name: 'email_home',
                                 vtype: 'email',
                                 maxLength: 64
                             }, {
                                 xtype: 'mirrortextfield',
                                 fieldLabel: this.app.i18n._('Web'),
-                                labelIcon: 'images/oxygen/16x16/actions/network.png',
+                                labelIcon: 'images/icon-set/icon_globe.svg',
                                 name: 'url',
                                 maxLength: 128,
                                 listeners: {

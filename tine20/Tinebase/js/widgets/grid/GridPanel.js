@@ -761,7 +761,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
-            iconCls: this.newRecordIcon,
+            iconCls: 'action_add',
             scope: this
         }) : null;
 

@@ -19,36 +19,12 @@
     background-image:url(../../images/oxygen/32x32/apps/system-file-manager.png) !important;
 }
 
-.action_edit_file {
-    background-image:url(../../images/oxygen/16x16/apps/kjournal.png) !important;
-}
-
-.x-btn-medium .action_edit_file {
-    background-image:url(../../images/oxygen/22x22/apps/kjournal.png) !important;
-}
-
-.x-btn-large .action_edit_file {
-    background-image:url(../../images/oxygen/32x32/apps/kjournal.png) !important;
-}
-
 .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/16x16/actions/go-up-search.png) !important;
-}
-.x-btn-medium .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/22x22/actions/go-up-search.png) !important;
-}
-.x-btn-large .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/32x32/actions/go-up-search.png) !important;
+    background-image:url(../../images/icon-set/icon_folder_up.svg) !important;
 }
 
 .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
-}
-.x-btn-medium .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
-}
-.x-btn-large .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+    background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 
 .action_create_folder {
@@ -65,17 +41,8 @@
     background-repeat: no-repeat;
 }
 
-.x-btn-medium .action_create_folder {
-    background-image:url(../../images/oxygen/22x22/actions/folder-new.png) !important;
-}
-.x-btn-large .action_create_folder {
-    background-image:url(../../images/oxygen/32x32/actions/folder-new.png) !important;
-}
-
-.x-tinebase-typefolder .x-grid3-cell-inner {
-    background-image:url(../../library/ExtJS/resources/images/default/tree/folder.gif);
-    background-repeat: no-repeat;
-    padding-left: 19px;
+.action_create_folder {
+    background-image:url(../../images/icon-set/icon_filemanager_plus.svg) !important;
 }
 
 .x-tinebase-typeoctet .x-grid3-cell-inner {
@@ -85,16 +52,8 @@
 }
 
 .action_publish {
-    background-image: url("../../images/oxygen/16x16/apps/package-network.png");
+    background-image: url("../../images/icon-set/icon_publish.svg") !important;
     background-repeat: no-repeat;
-}
-
-.x-btn-medium .action_publish {
-    background-image: url("../../images/oxygen/22x22/apps/package-network.png");
-} 
-
-.x-btn-large .action_publish {
-    background-image: url("../../images/oxygen/32x32/apps/package-network.png");
 }
 
 /* mail preview @todo make it more general and move to tinebase for use in felamimail */

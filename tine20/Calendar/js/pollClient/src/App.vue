@@ -586,7 +586,7 @@ export default {
         }
       })
 
-      return this.baseUrl + 'images/view-calendar-day-' + new Date(start).getDate() + '.png'
+      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start).getDate() + '.svg'
     },
     showChangeButtons () {
       if (_.isEmpty(this.poll)) {
