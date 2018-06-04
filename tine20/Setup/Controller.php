@@ -1608,6 +1608,8 @@ class Setup_Controller
             }
         }
 
+        $this->_clearCache();
+
         Tinebase_Event::reFireForNewApplications();
     }
 
