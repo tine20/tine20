@@ -786,7 +786,7 @@ Ext.util.CSS = function(){
                     // nested rules
                     if (ssRules[j].styleSheet) {
                         Ext.util.CSS.cacheStyleSheet(ssRules[j].styleSheet);
-                    } else {
+                    } else if (ssRules[j].selectorText) {
                         sel = ssRules[j].selectorText.toLowerCase();
                         rules[sel] = ssRules[j];
                         selParts = sel.split(', ');

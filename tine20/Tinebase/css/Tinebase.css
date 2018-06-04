@@ -604,6 +604,10 @@ html, body {
     background-size: 16px 16px;
 }
 
+.x-tab-strip .x-tab-with-icon span.x-tab-strip-text.tine-favicon {
+    background-position-y: 3px;
+}
+
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
     background-color:#EBF3FD;
     background-image: url(../../images/apptabs-bg.png);
