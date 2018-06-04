@@ -111,6 +111,16 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         
         return $testUser;
     }
+
+    /**
+     * testGetUserAliases
+     */
+    public function testGetUserAliases()
+    {
+        $testUser = $this->testAddUser();
+        $user = Tinebase_User::getInstance()->getFullUserByLoginName($testUser->accountLoginName);
+        self::assertEquals(2, count($user->emailUser->emailAliases));
+    }
     
     /**
      * try to update an email account
