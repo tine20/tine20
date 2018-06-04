@@ -224,6 +224,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             tooltip: this.app.i18n._('Encrypt email using Mailvelope')
         });
 
+        this.action_massMailing = new Ext.Action({
+            text: this.app.i18n._('Mass Mailing'),
+            handler: this.onToggleMassMailing,
+            iconCls: 'FelamimailIconCls',
+            disabled: false,
+            scope: this,
+            enableToggle: true
+        });
+        this.button_massMailing = Ext.apply(new Ext.Button(this.action_massMailing), {
+            tooltip: this.app.i18n._('Activate this toggle button to send the mail as separate mail to each recipient.')
+        });
+
+
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
@@ -245,7 +258,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.button_saveEmailNote,
                     this.action_saveAsTemplate,
                     this.button_toggleReadingConfirmation,
-                    this.button_toggleEncrypt
+                    this.button_toggleEncrypt,
+                    this.button_massMailing
                 ]
             }]
         });
@@ -815,6 +829,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onToggleSaveNote: function (button, e) {
         this.record.set('note', (! this.record.get('note')));
     },
+
+    /**
+     * toggle mass mailing
+     *
+     * @param {} button
+     * @param {} e
+     */
+    onToggleMassMailing: function (button, e) {
+        var active = ! this.record.get('massMailingFlag');
+
+        this.record.set('massMailingFlag', active);
+
+        if (active) {
+            this.infoText.show();
+            this.doLayout();
+        } else {
+            this.infoText.hide();
+            this.doLayout();
+        }
+    },
     
     /**
      * toggle Request Reading Confirmation
@@ -1223,7 +1257,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
                         hidden: true,
                         ref: '../../infoText',
-                        padding: '2px'
+                        padding: '2px',
+                        height: 20
                     },
                     this.accountCombo,
                     this.recipientGrid,
