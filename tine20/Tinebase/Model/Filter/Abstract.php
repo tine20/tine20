@@ -416,8 +416,14 @@ abstract class Tinebase_Model_Filter_Abstract
         // escape backslashes first
         $returnValue = addcslashes($value, '\\');
 
-        // replace wildcards from user ()
-        $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        // is * escaped?
+        if (!strpos($returnValue, '\\*')) {
+            // replace wildcards from user ()
+            $returnValue = str_replace(array('*', '_'), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        } else {
+            // remove escaping and just search for * (not as wildcard)
+            $returnValue = str_replace(array("\\"), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        }
 
         // add wildcard to value according to operator
         if (isset($action['wildcards'])) {
