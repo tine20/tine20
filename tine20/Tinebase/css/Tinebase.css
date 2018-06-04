@@ -537,6 +537,14 @@ html, body {
     background-image:url(../../images/icon-set/icon_group_full.svg) !important;
 }
 
+.action_mute_noteification {
+    background-image:url(../../images/icon-set/icon_mute_notification.svg) !important;
+}
+
+.action_noteification {
+    background-image:url(../../images/icon-set/icon_notification.svg) !important;
+}
+
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
    background-image:url(../../images/icon-set/icon_edit.svg) !important;
@@ -604,7 +612,7 @@ html, body {
     background-size: 16px 16px;
 }
 
-.x-tab-strip .x-tab-with-icon span.x-tab-strip-text.tine-favicon {
+.x-tab-strip-text.tine-favicon {
     background-position-y: 3px;
 }
 
