@@ -87,11 +87,16 @@ class Setup_Controller
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Setup_Controller;
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
 
     /**

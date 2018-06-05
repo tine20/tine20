@@ -168,7 +168,7 @@ class Setup_Frontend_Cli
         // TODO check action queue is empty
         // TODO check admin right
         // known issues:
-        // fulltext! path!
+        // path!
         // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
 
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
@@ -214,9 +214,18 @@ class Setup_Frontend_Cli
         Tinebase_Config::destroyInstance();
         Tinebase_Application::getInstance()->clearCache();
         Tinebase_Application::destroyInstance();
+        Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Container::destroyInstance();
+        Setup_Controller::destroyInstance();
+        Setup_Backend_Factory::clearCache();
+        Tinebase_User::destroyInstance();
+        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        Addressbook_Backend_Factory::clearCache();
+        Addressbook_Controller_Contact::destroyInstance();
         $dbConfig['driver'] = 'pdo_mysql';
         $dbConfig['user']   = $dbConfig['username'];
         Setup_SchemaTool::setDBParams($dbConfig);
+
         $newOpts = new Zend_Console_Getopt(['install' => []], [
             '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
         ]);
@@ -224,6 +233,8 @@ class Setup_Frontend_Cli
 
         $blackListedTables = [];
         $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        $pgsqlTables = $pgsqlDb->query('SELECT table_name FROM information_schema.tables WHERE table_schema = '
+            . '\'public\' AND table_type= \'BASE TABLE\'')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         // set foreign key checks off
         $mysqlDB->query('SET foreign_key_checks = 0');
@@ -245,20 +256,25 @@ class Setup_Frontend_Cli
             if (strpos($table, 'cache') !== false) {
                 continue;
             }
+            if (!in_array($table, $pgsqlTables)) {
+                continue;
+            }
             $start = 0;
             $limit = 50;
             $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
             $primaries = [];
             $columns = [];
+            $selectColumns = [];
             foreach ($tableDscr as $col => $desc) {
                 if ($desc['PRIMARY']) {
                     $primaries[] = $col;
                 }
                 $columns[] = $mysqlDB->quoteIdentifier($col);
+                $selectColumns[] = $col;
             }
             $insertQuery = 'INSERT INTO ' . $mysqlDB->quoteIdentifier($table) . ' (' . join(', ', $columns) .
                 ') VALUES ';
-            $select = $pgsqlDb->select()->from($table)->order($primaries);
+            $select = $pgsqlDb->select()->from($table, $selectColumns)->order($primaries);
 
             while (true) {
                 $select->limit($limit, $start);
@@ -289,8 +305,6 @@ class Setup_Frontend_Cli
         $mysqlDB->query('COMMIT');
         $mysqlDB->query('SET foreign_key_checks = 1');
         $mysqlDB->query('SET unique_checks = 1');
-
-        $this->_upgradeMysql564();
     }
 
     protected function _upgradeMysql564()

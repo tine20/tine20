@@ -76,4 +76,9 @@ class Addressbook_Backend_Factory
         }
         return $instance;
     }
+
+    static public function clearCache()
+    {
+        self::$_backends = [];
+    }
 }    
