@@ -241,13 +241,20 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     
     /**
      * get relations data as array
+     *
+     * @TODO: do not manupilate store data
      * 
      * @return {Array}
      */
     getData: function() {
-        var relations = [];
+        var _ = window.lodash,
+            relations = [];
+
         this.store.each(function(record) {
-            record.data.related_record = record.data.related_record.data;
+            var relatedRecordData = _.get(record, 'data.related_record.data', false);
+            if (relatedRecordData) {
+                record.data.related_record = relatedRecordData;
+            }
             relations.push(record.data);
         }, this);
         
