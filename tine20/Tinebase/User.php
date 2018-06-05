@@ -199,6 +199,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         return self::$_instance;
     }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+        self::$_backendConfiguration = null;
+        self::$_backendType = null;
+    }
         
     /**
      * return an instance of the current user backend
