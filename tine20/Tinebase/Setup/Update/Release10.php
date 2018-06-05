@@ -2444,4 +2444,24 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.55');
     }
+
+    /**
+     * update to 10.56
+     *
+     * make file objects unique
+     */
+    public function update_55()
+    {
+        if (!$this->_backend->columnExists('indexed_hash', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>indexed_hash</name>
+                            <type>text</type>
+                            <length>40</length>
+                        </field>');
+
+            $this->_backend->addCol('tree_nodes', $declaration);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.56');
+    }
 }
