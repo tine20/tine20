@@ -530,4 +530,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.26');
     }
+
+    /**
+     * update to 11.1
+     *
+     * change configuration column to xprops in accounts
+     */
+    public function update_26()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_55();
+        $this->setApplicationVersion('Tinebase', '11.27');
+    }
 }
