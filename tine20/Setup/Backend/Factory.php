@@ -61,4 +61,9 @@ class Setup_Backend_Factory
 
         return $instance;
     }
+
+    static public function clearCache()
+    {
+        static::$_instanceCache = [];
+    }
 }

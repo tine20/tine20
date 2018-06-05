@@ -536,7 +536,7 @@ class Tinebase_ApplicationTest extends TestCase
     public function testInstallApplicationWithId()
     {
         Setup_Core::set(Setup_Core::CHECKDB, true);
-        Setup_Controller::unsetInstance();
+        Setup_Controller::destroyInstance();
         Setup_Controller::getInstance()->uninstallApplications(['ExampleApplication']);
 
         $this->_testNeedsTransaction();
