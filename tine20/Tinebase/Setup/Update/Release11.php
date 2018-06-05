@@ -532,9 +532,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.1
+     * update to 11.27
      *
-     * change configuration column to xprops in accounts
+     * eventually add missing indexed_hash column to tree_nodes
      */
     public function update_26()
     {

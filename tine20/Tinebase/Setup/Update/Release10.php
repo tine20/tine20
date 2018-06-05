@@ -2449,7 +2449,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 10.56
      *
-     * make file objects unique
+     * eventually add missing indexed_hash column to tree_nodes
      */
     public function update_55()
     {
