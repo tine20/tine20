@@ -73,7 +73,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
                     $containerGrants->addRecord($anyoneGrant);
                 }
                 
-                $anyoneGrant->{Tinebase_Model_Grants::GRANT_FREEBUSY} = TRUE;
+                $anyoneGrant->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = TRUE;
                 
                 Tinebase_Container::getInstance()->setGrants($containerId, $containerGrants, TRUE, TRUE);
             }
@@ -389,7 +389,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
                 array(
                     'account_id'      => '0',
                     'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                    Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true
                 )
             )), TRUE, FALSE);
             

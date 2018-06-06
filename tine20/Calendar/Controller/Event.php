@@ -2265,7 +2265,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_action == 'get') {
             $_filter->setRequiredGrants(array(
-                Tinebase_Model_Grants::GRANT_FREEBUSY,
+                Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
                 Tinebase_Model_Grants::GRANT_READ,
                 Tinebase_Model_Grants::GRANT_ADMIN,
             ));

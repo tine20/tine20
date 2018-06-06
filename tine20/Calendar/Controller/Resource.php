@@ -137,7 +137,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                 $grant->{Tinebase_Model_Grants::GRANT_EXPORT} = true;
             }
             if ($grant->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY}) {
-                $grant->{Tinebase_Model_Grants::GRANT_FREEBUSY} = true;
+                $grant->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = true;
             }
             if ($grant->{Calendar_Model_ResourceGrants::EVENTS_READ}) {
                 $grant->{Tinebase_Model_Grants::GRANT_READ} = true;

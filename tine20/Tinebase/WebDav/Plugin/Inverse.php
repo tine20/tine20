@@ -195,21 +195,22 @@ class Tinebase_WebDav_Plugin_Inverse extends Sabre\DAV\ServerPlugin {
      */
     public function aclQueryPost(DOMDocument $dom, $uri)
     {
-        list($parent, $containerId) = Sabre\DAV\URLUtil::splitPath($uri);
+        list(/*$parent*/, $containerId) = Sabre\DAV\URLUtil::splitPath($uri);
         
         // handle add-user
         $adduser = $dom->getElementsByTagNameNS(self::NS_INVERSE, 'add-user');
         
         if ($adduser->length == 1) {
-            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($containerId);
+            $container = Tinebase_Container::getInstance()->get($containerId);
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container);
 
             $contact = $this->_resolveContactId($adduser->item(0)->getAttribute('user'));
             
-            $newGrant = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            $newGrant = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
                 array(
                     'account_id'                           => $contact->account_id,
                     'account_type'                         => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true
                 )
             ));
             
@@ -435,7 +436,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Sabre\DAV\ServerPlugin {
                         
                         break;
                         
-                    case Tinebase_Model_Grants::GRANT_PRIVATE:
+                    case Calendar_Model_EventPersonalGrants::GRANT_PRIVATE:
                         if ($value) {
                             $role->appendChild(new DOMElement('PrivateViewer'));
                         }

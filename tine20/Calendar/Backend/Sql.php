@@ -55,13 +55,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * list of record based grants
      */
     protected $_recordBasedGrants = array(
-        Tinebase_Model_Grants::GRANT_FREEBUSY,
+        Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
         Tinebase_Model_Grants::GRANT_READ, 
         Tinebase_Model_Grants::GRANT_SYNC, 
         Tinebase_Model_Grants::GRANT_EXPORT, 
         Tinebase_Model_Grants::GRANT_EDIT, 
-        Tinebase_Model_Grants::GRANT_DELETE, 
-        Tinebase_Model_Grants::GRANT_PRIVATE,
+        Tinebase_Model_Grants::GRANT_DELETE,
+        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
     );
     
     /**
@@ -254,11 +254,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $toRemove          = array();
         $inheritableGrants = array(
-            Tinebase_Model_Grants::GRANT_FREEBUSY,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
             Tinebase_Model_Grants::GRANT_READ,
             Tinebase_Model_Grants::GRANT_SYNC,
             Tinebase_Model_Grants::GRANT_EXPORT,
-            Tinebase_Model_Grants::GRANT_PRIVATE,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
         );
         
         if ($grantsFilter instanceof Calendar_Model_GrantFilter) {
@@ -580,7 +580,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
         
         // attendee get read, sync, export and private grants implicitly
-        if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_PRIVATE))) {
+        if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_EXPORT,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE
+        ))) {
             $readCond = $this->_db->quoteIdentifier('attendeeaccounts.id') . ' = ' . $this->_db->quote($accountId) . ' AND (' .
                 $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . ' OR ' .
                 $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_GROUPMEMBER) .
@@ -605,7 +607,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         // _AND_ attender(admin) of display calendar needs to have grant on phys calendar
         // @todo include implicit inherited grants
-        if (! in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_FREEBUSY))) {
+        if (! in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY
+        ))) {
             $userExpr = new Zend_Db_Expr($this->_db->quoteIdentifier('attendeeaccounts.id'));
             
             $attenderPhysGrantCond = $this->_getContainGrantCondition('physgrants', 'attendeegroupmemberships', 'attendeerolememberships', $_requiredGrant, $userExpr);

@@ -292,7 +292,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->create($_container);
-        $this->setGrants($container->getId(), $grants, TRUE, FALSE);
+        $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
             . __LINE__ . ' Created new ' . $_container->type . ' container for account id ' . $accountId);
@@ -2017,7 +2017,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         ));
 
         $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
-        $newContainer = Tinebase_Container::getInstance()->addContainer($newContainer, $grants, TRUE);
+        $newContainer = $this->addContainer($newContainer, $grants, TRUE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Created new system container ' . $name . ' for application ' . $application->name);
@@ -2125,7 +2125,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 if (isset($diff->diff['account_grants'])) {
-                    $this->setGrants($_modification->record_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $diff->diff['account_grants']['added']), true, false);
+                    $container = $this->getContainerById($_modification->record_id);
+                    $this->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), $diff->diff['account_grants']['added']), true, false);
                 } else {
                     $record = $this->get($_modification->record_id, true);
                     $record->applyDiff($diff);

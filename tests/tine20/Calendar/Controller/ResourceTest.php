@@ -422,7 +422,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         self::assertEquals(1, $result['resource']['totalcount'], 'resource not found');
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true);
-        $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_FREEBUSY} = false;
+        $grants->getFirstRecord()->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = false;
         $grants->getFirstRecord()->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY} = false;
         Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants, true, false);
 

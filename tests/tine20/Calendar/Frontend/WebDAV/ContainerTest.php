@@ -109,16 +109,17 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         static::assertEquals(6, count($result));
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer'], true);
-        $grants->addRecord(new Tinebase_Model_Grants(array(
+        $grantsClass = $grants->getRecordClassName();
+        $grants->addRecord(new $grantsClass(array(
             'account_id'    => Tinebase_Acl_Roles::getInstance()->getRoleByName('user role')->getId(),
             'account_type'  => 'role',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         )));
         Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], $grants, true);
 

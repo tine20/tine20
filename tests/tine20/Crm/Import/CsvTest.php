@@ -93,7 +93,7 @@ class Crm_Import_CsvTest extends ImportTestCase
     {
         Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_AUTOTASK, true);
         $defaultContainerOfSClever = Tinebase_Container::getInstance()->getDefaultContainer('Tasks_Model_Task', $this->_personas['sclever'], 'defaultTaskList');
-        $this->_setPersonaGrantsForTestContainer($defaultContainerOfSClever->getId(), 'sclever', true, false);
+        $this->_setPersonaGrantsForTestContainer($defaultContainerOfSClever, 'sclever', true, false);
 
         $result = $this->testImport(/* dry run = */ false);
         foreach ($result['results'] as $lead) {

@@ -256,7 +256,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $timetrackerApp = (Tinebase_Application::getInstance()->isInstalled('Timetracker')) 
             ? Tinebase_Application::getInstance()->getApplicationByName('Timetracker')
             : NULL;
-        
+
+        /** @var Tinebase_Model_Container $container */
         foreach($_containers as $container) {
             foreach ($accountIds as $accountId) {
                 if ($_overwrite) {
@@ -275,19 +276,11 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
             }
             
             if ($_overwrite) {
-                if ($timetrackerApp !== NULL && $container->application_id === $timetrackerApp->getId()) {
-                    // @todo allow to call app specific functions here
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Set grants for timeaccount "' . $container->name . '".');
-                    $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
-                    
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Set grants for container "' . $container->name . '".');
-                    $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
-                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Set grants for container "' . $container->name . '".');
+                $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), $grantsArray);
                 
-                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
+                Tinebase_Container::getInstance()->setGrants($container, $grants, TRUE, FALSE);
             }
         }        
     }

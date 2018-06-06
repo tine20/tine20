@@ -695,22 +695,24 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         
         // sclever has only READ grant
-        Tinebase_Container::getInstance()->setGrants($this->_getTestCalendar(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $testCalendar = $this->_getTestCalendar();
+        Tinebase_Container::getInstance()->setGrants($testCalendar, new Tinebase_Record_RecordSet(
+            $testCalendar->getGrantClass(), [[
             'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
-        ), array(
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+        ], [
             'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
-        ))), TRUE);
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+        ]]), true);
         
         $unittestUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
@@ -1164,20 +1166,20 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         // give fb grants from sclever
         $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_getPersonasDefaultCals('sclever'));
-        Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet($scleverCal->getGrantClass(), array(array(
             'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         ), array(
             'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
