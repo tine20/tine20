@@ -314,6 +314,10 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _getCurrentUsersCostCenter()
     {
         $employee = $this->_getCurrentUsersEmployee();
+        if (! $employee) {
+            throw new Tinebase_Exception_UnexpectedValue('current employee not found! did you delete any contacts?');
+        }
+
         $salesCC = HumanResources_Controller_CostCenter::getInstance()->getValidCostCenter($employee->getId(), NULL, TRUE);
         return $salesCC;
     }

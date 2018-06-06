@@ -470,6 +470,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
 
             // fetch the fields by the refIfField
+            if (! class_exists($config['controllerClassName'])) {
+                continue;
+            }
             /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
             /** @noinspection PhpUndefinedMethodInspection */
             $controller = $config['controllerClassName']::getInstance();

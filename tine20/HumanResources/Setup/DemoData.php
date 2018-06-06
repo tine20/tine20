@@ -204,6 +204,10 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // get pwulf as supervisor
         $pwulf = $employees->filter('n_family', 'Wulf')->getFirstRecord();
+
+        if (! $pwulf) {
+            throw new Tinebase_Exception_UnexpectedValue('employee pwulf not found! did you delete any contacts?');
+        }
         
         $sdate = new Tinebase_DateTime();
         $sdate->subMonth(6);
@@ -211,7 +215,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $defaultData = array(
             'supervisor_id' => $pwulf->getId(), 'countryname' => 'GB', 'region' => 'East Sussex', 'locality' => 'Brighton',
             'employment_begin' => $sdate
-            );
+        );
             
         foreach ($employees as $employee) {
             
