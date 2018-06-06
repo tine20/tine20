@@ -126,7 +126,8 @@ Ext.ux.TabPanelStripCompressorPlugin.prototype = {
                 return newWidth;
             });
 
-        if (used < by && _.sum(widths)) {
+        if (used < by && _.sum(widths) && used > 1) {
+            // console.warn('widths: ' + widths + ' by: ' + by + ' used: ' + used)
             return this.getCompressedWidth(widths, by-used);
         }
 
@@ -152,7 +153,8 @@ Ext.ux.TabPanelStripCompressorPlugin.prototype = {
                 return newWidth;
             });
 
-        if (used < by && _.sum(widths)) {
+        if (used < by && _.sum(widths) && used > 1) {
+            // console.warn('widths: ' + widths + ' by: ' + by + ' used: ' + used)
             return this.getExpandWidth(widths, by-used);
         }
 
