@@ -207,7 +207,19 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setApplicationVersion('Calendar', '10.9');
     }
 
+    /**
+     * update to 10.10
+     *
+     * redo release9->update_4, it may have been skipped if updating from 2015.11
+     */
     public function update_9()
+    {
+        $release9 = new Calendar_Setup_Update_Release9($this->_backend);
+        $release9->update_4();
+        $this->setApplicationVersion('Calendar', '10.10');
+    }
+
+    public function update_10()
     {
         $this->setApplicationVersion('Calendar', '11.0');
     }
