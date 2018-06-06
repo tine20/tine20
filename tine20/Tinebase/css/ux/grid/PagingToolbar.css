@@ -1,21 +1,21 @@
 .x-ux-pagingtb-main {
-    background-image: url(../../../../images/oxygen/16x16/actions/table.png) !important;
+    background-image: url(../../../../images/icon-set/icon_column_neg.svg) !important;
 }
 
 .x-ux-pagingtb-deselect {
-    background-image: url(../../../../images/oxygen/16x16/actions/edit-clear-list.png) !important;
+    background-image: url(../../../../images/icon-set/icon_list_unselect.svg) !important;
 }
 
 .x-ux-pagingtb-selectvisible {
-    background-image: url(../../../../images/oxygen/16x16/actions/edit-select-all.png) !important;
+    background-image: url(../../../../images/icon-set/icon_list_select_all.svg) !important;
 }
 
 .x-ux-pagingtb-selectall {
-    background-image: url(../../../../images/oxygen/16x16/actions/insert-table.png) !important;
+    background-image: url(../../../../images/icon-set/icon_list_select_all.svg) !important;
 }
 
 .x-ux-pagingtb-toggle {
-    background-image: url(../../../../images/oxygen/16x16/actions/system-switch-user.png) !important;
+    background-image: url(../../../../images/icon-set/icon_toggle_selection.svg) !important;
 }
 
 .x-ux-pagingtb-refresh-disabled .x-btn-text.x-tbar-loading {

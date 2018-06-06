@@ -57,6 +57,12 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
     getNorthPanel: function(contentType) {
         if (! this.actionToolbar) {
             this.actionToolbar = this.contentPanel.getActionToolbar();
+            
+            if (this.actionToolbar.cls) {
+                this.actionToolbar.cls = this.actionToolbar.cls + ' t-contenttype-event';
+            } else {
+                this.actionToolbar.cls = 't-contenttype-event';
+            }
         }
 
         return this.actionToolbar;

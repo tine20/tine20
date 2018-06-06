@@ -88,14 +88,14 @@ class Setup_Controller
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Setup_Controller;
         }
         
         return self::$_instance;
     }
 
-    public static function unsetInstance()
+    public static function destroyInstance()
     {
         self::$_instance = null;
     }
@@ -1632,6 +1632,8 @@ class Setup_Controller
                 $this->_installApplication($xml, $_options);
             }
         }
+
+        $this->_clearCache();
 
         Tinebase_Event::reFireForNewApplications();
     }

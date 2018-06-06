@@ -2,63 +2,27 @@
     top:0;
 }
 .CalendarIconCls, .CalendarEvent {
-    background-image:url(../../images/oxygen/16x16/apps/korganizer.png);
-}
-.x-btn-medium .CalendarIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/korganizer.png);
-}
-.x-btn-large .CalendarIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/korganizer.png);
+    background-image:url(../../images/icon-set/icon_calendar.svg);
 }
 
 .PreferencesTreePanel-CalendarIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/korganizer.png) !important;
-}
-.x-btn-medium .PreferencesTreePanel-CalendarIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/korganizer.png) !important;
-}
-.x-btn-large .PreferencesTreePanel-CalendarIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/korganizer.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar.svg) !important;
 }
 
 .cal-today-action {
-    background-image:url(../../images/oxygen/16x16/actions/go-jump-today.png) !important;
-}
-.x-btn-medium .cal-today-action {
-    background-image:url(../../images/oxygen/22x22/actions/go-jump-today.png) !important;
-}
-.x-btn-large .cal-today-action {
-    background-image:url(../../images/oxygen/32x32/actions/go-jump-today.png) !important;
+    background-image:url(../../images/icon-set/icon_calender_today_action.svg) !important;
 }
 
 .cal-sheet-view-type {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
-}
-.x-btn-medium .cal-sheet-view-type {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-week.png) !important;
-}
-.x-btn-large .cal-sheet-view-type {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-week.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_week.svg) !important;
 }
 
 .cal-grid-view-type {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
-}
-.x-btn-medium .cal-grid-view-type {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-list.png) !important;
-}
-.x-btn-large .cal-grid-view-type {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-list.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_list.svg) !important;
 }
 
 .cal-timeline-view-type {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-timeline.png) !important;
-}
-.x-btn-medium .cal-timeline-view-type {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-timeline.png) !important;
-}
-.x-btn-large .cal-timeline-view-type {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-timeline.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_strahl.svg) !important;
 }
 
 .cal-print-loose-leaf {
@@ -82,43 +46,19 @@
 }
 
 .cal-day-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-day.png) !important;
-}
-.x-btn-medium .cal-day-view {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-day.png) !important;
-}
-.x-btn-large .cal-day-view {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-day.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_day.svg) !important;
 }
 
 .cal-week-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
-}
-.x-btn-medium .cal-week-view {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-week.png) !important;
-}
-.x-btn-large .cal-week-view {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-week.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_week.svg) !important;
 }
 
 .cal-month-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
-}
-.x-btn-medium .cal-month-view {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-month.png) !important;
-}
-.x-btn-large .cal-month-view {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-month.png) !important;
+    background-image:url(../../images/icon-set/icon_calendar_month.svg) !important;
 }
 
 .cal-resource, .CalendarResource {
-    background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
-}
-.x-btn-medium .cal-resource {
-    background-image:url(../../images/oxygen/22x22/devices/video-projector.png) !important;
-}
-.x-btn-large .cal-resource {
-    background-image:url(../../images/oxygen/32x32/devices/video-projector.png) !important;
+    background-image:url(../../images/icon-set/icon_resource.svg) !important;
 }
 
 .cal-year-view {
@@ -131,14 +71,8 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-workweek.png) !important;
 }
 
-.action_fretimesearch {
-    background-image:url(../../images/oxygen/16x16/actions/system-search.png) !important;
-}
-.x-btn-medium .action_fretimesearch {
-    background-image:url(../../images/oxygen/22x22/actions/system-search.png) !important;
-}
-.x-btn-large .action_fretimesearch {
-    background-image:url(../../images/oxygen/32x32/actions/system-search.png) !important;
+.cal-action_fretimesearch {
+    background-image:url(../../images/icon-set/icon_calendar_search.svg) !important;
 }
 
 .cal-attendee-type-resource {
@@ -198,16 +132,17 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     cursor:pointer;
 }
 .tw-containerselect-trigger2 {position: relative;}
-.x-form-trigger-over .tw-containerselect-trigger2-bg {background-position: 0 -24px;}
-.x-form-trigger-over .tw-containerselect-trigger2 {background-position: -17px 0;}
 
-.x-form-trigger-click .tw-containerselect-trigger2-bg {background-position: 0 -48px;}
-.x-form-trigger-click .tw-containerselect-trigger2 {background-position: -34px 0;}
+/*.x-form-trigger-over .tw-containerselect-trigger2-bg {background-position: 0 -24px;}*/
+/*.x-form-trigger-over .tw-containerselect-trigger2 {background-position: -17px 0;}*/
 
-.x-form-field-wrap .x-form-arrow-trigger-rectangle {
-    background-image:url(../../images/trigger-rect.gif);
-    cursor:pointer;
-}
+/*.x-form-trigger-click .tw-containerselect-trigger2-bg {background-position: 0 -48px;}*/
+/*.x-form-trigger-click .tw-containerselect-trigger2 {background-position: -34px 0;}*/
+
+/*.x-form-field-wrap .x-form-arrow-trigger-rectangle {*/
+    /*background-image: url(../../images/trigger-rect.gif);*/
+    /*cursor:pointer;*/
+/*}*/
 
 .cal-calselectwdgt {
     position: relative;
@@ -326,19 +261,19 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-fbinfo-state-free {
-    background-image:url(../../images/oxygen/16x16/status/user-online.png) !important;
+    background-image: url(../../images/icon-set/icon_user_vacant.svg) !important;
 }
 
 .cal-fbinfo-state-tentative {
-    background-image:url(../../images/calendar-response-tentative.png) !important;
+    background-image: url(../../images/calendar-response-tentative.png) !important;
 }
 
 .cal-fbinfo-state-busy {
-    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
+    background-image: url(../../images/icon-set/icon_user_not_available.svg) !important;
 }
 
 .cal-fbinfo-state-unavailable {
-    background-image:url(../../images/oxygen/16x16/status/user-busy.png) !important;
+    background-image: url(../../images/icon-set/icon_user_not_available.svg) !important;
 }
 
 .x-grid3-cell .x-grid3-col-fbInfo {
@@ -349,4 +284,24 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 .cal-poll-event {
     opacity: 0.7;
+}
+
+.t-contenttype-event .action_add {
+    background-image:url(../../images/icon-set/icon_meeting_add.svg) !important;
+}
+
+.t-contenttype-event .action_edit {
+    background-image:url(../../images/icon-set/icon_meeting_edit.svg) !important;
+}
+
+.t-contenttype-event .action_delete {
+    background-image:url(../../images/icon-set/icon_meeting_clear.svg) !important;
+}
+
+.t-contenttype-event .action_export {
+    background-image:url(../../images/icon-set/icon_meeting_export.svg) !important;
+}
+
+.t-contenttype-event .action_import {
+    background-image:url(../../images/icon-set/icon_meeting_import.svg) !important;
 }

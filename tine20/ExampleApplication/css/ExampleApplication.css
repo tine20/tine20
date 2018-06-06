@@ -7,13 +7,7 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 .ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;
-}
-.x-btn-medium .ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/document-open-recent.png) !important;
-}
-.x-btn-large .ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/document-open-recent.png) !important;
+    background-image: url(../../images/icon-set/icon_debug.svg) !important;
 }

@@ -532,11 +532,23 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.27
+     *
+     * eventually add missing indexed_hash column to tree_nodes
+     */
+    public function update_26()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_55();
+        $this->setApplicationVersion('Tinebase', '11.27');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_26()
+    public function update_27()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

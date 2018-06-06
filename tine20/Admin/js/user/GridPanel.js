@@ -317,19 +317,19 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         switch(_value) {
             case 'blocked':
-                gridValue = "<img src='images/oxygen/16x16/status/security-medium.png' width='12' height='12'/>";
+                gridValue = "<img src='images/oxygen/16x16/status/security-medium.png' width='16' height='16'/>";
                 break;
 
             case 'enabled':
-                gridValue = "<img src='images/oxygen/16x16/actions/dialog-apply.png' width='12' height='12'/>";
+                gridValue = "<img src='images/icon-set/icon_ok.svg' width='16' height='16'/>";
                 break;
-              
+
             case 'disabled':
-                gridValue = "<img src='images/oxygen/16x16/actions/dialog-cancel.png' width='12' height='12'/>";
+                gridValue = "<img src='images/icon-set/icon_stop.svg' width='16' height='16'/>";
                 break;
-              
+
             case 'expired':
-                gridValue = "<img src='images/oxygen/16x16/status/user-away.png' width='12' height='12'/>";
+                gridValue = "<img src='images/oxygen/16x16/status/user-away.png' width='16' height='16'/>";
                 break;
 
             default:

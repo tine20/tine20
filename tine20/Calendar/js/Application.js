@@ -75,9 +75,8 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     updateIcon: function() {
-        var imageUrl = Tine.Tinebase.common.getUrl('full') + '/images/view-calendar-day-' + new Date().getDate() + '.png';
+        var imageUrl = Tine.Tinebase.common.getUrl('full') + '/images/icon-set/icon_cal_' + new Date().getDate() + '.svg';
         Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(' + imageUrl + ')');
-
     },
 
     routes: {

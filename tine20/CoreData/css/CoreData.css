@@ -9,11 +9,5 @@
  */
  
 .CoreDataIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/kexi.png) !important;
-}
-.x-btn-medium .CoreDataIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/kexi.png) !important;
-}
-.x-btn-large .CoreDataIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/kexi.png) !important;
+    background-image:url(../../images/icon-set/icon_coreData.svg) !important;
 }

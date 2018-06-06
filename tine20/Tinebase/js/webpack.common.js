@@ -99,12 +99,13 @@ module.exports = {
             {test: /\.js$/, include: [baseDir + '/library'], enforce: "pre", use: [{loader: "script-loader"}]},
             {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
-            {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/png"}}]},
-            {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/gif"}}]},
-            {test: /\.svg/, use: [{loader: "url-loader", options: {limit: 100000, minetype:"image/svg"}}]},
+            {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
+            {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},
+            {test: /\.svg/, use: [{loader: "svg-url-loader"}]},
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                use: [{loader: "url-loader", options: {limit: 100000}}]},
+                use: [{loader: "url-loader", options: {limit: 100000}}]
+            },
         ]
     },
     resolveLoader: {
