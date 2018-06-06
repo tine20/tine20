@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Calendar</name>
-    <!-- gettext('Calendar') -->   
-    <version>10.9</version>
+    <!-- gettext('Calendar') -->
+    <version>10.10</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
