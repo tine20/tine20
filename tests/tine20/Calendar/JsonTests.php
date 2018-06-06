@@ -241,6 +241,48 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
     }
+
+    /**
+     * testSearchEvents
+     */
+    public function testSearchEventsWithResourceAttender()
+    {
+        $eventData = $this->testCreateEvent(TRUE);
+
+        $resource = Calendar_Controller_Resource::getInstance()->create($this->_getResource());
+        $attendee = $eventData['attendee'][0];
+        $attendee['user_type'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+        $attendee['user_id'] = $resource->getId();
+        unset($attendee['id']);
+        $eventData['attendee'][] = $attendee;
+        $updatedEvent = $this->_uit->saveEvent($eventData);
+
+        $found = false;
+        foreach($updatedEvent['attendee'] as $attendee) {
+            if ($resource->getId() === $attendee['user_id']['id']) {
+                $found = true;
+            }
+        }
+        static::assertTrue($found, 'resource attender not created');
+
+        Calendar_Model_Attender::clearCache();
+        $filter = $this->_getEventFilterArray();
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+
+        $this->assertTrue(! empty($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+        $found = false;
+        foreach($resultEventData['attendee'] as $attendee) {
+            if ($resource->getId() === $attendee['user_id']['id']) {
+                $found = true;
+                static::assertTrue(isset($attendee['user_id']['container_id']['account_grants']) &&
+                    is_array($attendee['user_id']['container_id']['account_grants']) &&
+                    !empty($attendee['user_id']['container_id']['account_grants']),
+                    'resource attender account grants missing');
+            }
+        }
+        static::assertTrue($found, 'resource attender not in search result');
+    }
     
     /**
      * get filter array with container and period filter
