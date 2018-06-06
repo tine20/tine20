@@ -424,17 +424,19 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Getting structure for part ' . $_partId . ' / complete structure: ' . print_r($this->structure, TRUE));
-        
+
+        // make sure structure is fetched
+        $structure = $this->structure;
         if ($_partId == null) {
             // maybe we want no part at all => just return the whole structure
-            $result = $this->structure;
-        } else if ($this->structure['partId'] == $_partId) {
+            $result = $structure;
+        } else if (isset($structure['partId']) && $structure['partId'] == $_partId) {
             // maybe we want the first part => just return the whole structure
-            $result = $this->structure;
+            $result = $structure;
         } else {
             // iterate structure to find the correct part
             $iterator = new RecursiveIteratorIterator(
-                new RecursiveArrayIterator($this->structure),
+                new RecursiveArrayIterator($structure),
                 RecursiveIteratorIterator::SELF_FIRST
             );
             
