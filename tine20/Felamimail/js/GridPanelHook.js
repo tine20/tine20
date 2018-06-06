@@ -82,7 +82,20 @@ Tine.Felamimail.GridPanelHook = function(config) {
                   scope: this,
                   render: this.onRender
               }
-          })
+          }),
+            this.composeMailActionMass = new Ext.Action({
+                actionType: 'add',
+                text: this.app.i18n._('Mass Mailing'),
+                iconCls: this.app.getIconCls(),
+                disabled: true,
+                scope: this,
+                actionUpdater: this.updateAction,
+                handler: this.onComposeEmailMass,
+                listeners: {
+                    scope: this,
+                    render: this.onRender
+                }
+            })
         ]
       }
     });
@@ -114,26 +127,33 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     foreignAppName: null,
      
     /**
-     * @property composeMailAction
+     * @property composeMailActionTO
      * @type Tine.widgets.ActionUpdater
      * @private
      */
     composeMailActionTO: null,
     
     /**
-     * @property composeMailAction
+     * @property composeMailActionCC
      * @type Tine.widgets.ActionUpdater
      * @private
      */
     composeMailActionCC: null,
     
     /**
-     * @property composeMailAction
+     * @property composeMailActionBCC
      * @type Tine.widgets.ActionUpdater
      * @private
      */
     composeMailActionBCC: null,
-    
+
+    /**
+     * @property composeMailActionMass
+     * @type Tine.widgets.ActionUpdater
+     * @private
+     */
+    composeMailActionMass: null,
+
     /**
      * @property composeMailBtn
      * @type Ext.Button
@@ -263,6 +283,11 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         } else {
             record.set('to', mailAddresses);
         }
+
+        if (to == 'mass') {
+            record.set('massMailingFlag', true);
+        }
+
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
             selectionFilter: sm && sm.isFilterSelect ? Ext.encode({
                 to: to,
@@ -271,32 +296,41 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             record: record
         });
     },
-    
+
     /**
      * compose an email to selected contacts
-     * 
-     * @param {Button} btn 
+     *
+     * @param {Button} btn
      */
-    onComposeEmailTO: function(btn) {
-        this.onComposeEmail( btn, "TO" );
+    onComposeEmailTO: function (btn) {
+        this.onComposeEmail(btn, "TO");
     },
 
     /**
      * compose an email to selected contacts
-     * 
-     * @param {Button} btn 
+     *
+     * @param {Button} btn
      */
-    onComposeEmailCC: function(btn) {
-        this.onComposeEmail( btn, "CC" );
+    onComposeEmailCC: function (btn) {
+        this.onComposeEmail(btn, "CC");
     },
 
     /**
      * compose an email to selected contacts
-     * 
-     * @param {Button} btn 
+     *
+     * @param {Button} btn
      */
-    onComposeEmailBCC: function(btn) {
-        this.onComposeEmail( btn, "BCC" );
+    onComposeEmailBCC: function (btn) {
+        this.onComposeEmail(btn, "BCC");
+    },
+
+    /**
+     * compose mass maiiling to selected contacts
+     *
+     * @param {Button} btn
+     */
+    onComposeEmailMass: function (btn) {
+        this.onComposeEmail(btn, "mass");
     },
 
     /**
