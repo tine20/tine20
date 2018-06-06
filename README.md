@@ -59,6 +59,13 @@ years. Our [partners](https://www.tine20.com/partner/) offer a wide range of com
 ## Reporting security issues
 If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com). You can also create issues in our [forge](https://forge.tine20.org) and explain the issue there. Make sure you tick the privat flag there and write us your ticket number to the mail above! Once we resolved the issue, we can disable the privat state and announce it to the public.
 
+## Server Requirements
+* Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
+* [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5
+* [PHP](http://www.php.net/) 5.6 - 7.2, version 7.0 - 7.2 recommended.
+  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring
+  + Optional Extensions: Redis, LDAP, Memcache
+
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
 
