@@ -269,7 +269,7 @@ Tine.MailFiler.nodeActions.Download = {
 //    requiredGrant: 'readGrant',
 //    text: 'Preview', // _('Preview')
 //    disabled: true,
-//    iconCls: 'previewIcon',
+//    iconCls: 'action_preview',
 //    scope: this,
 //    handler: function () {
 //        var selections = this.initialConfig.selections;

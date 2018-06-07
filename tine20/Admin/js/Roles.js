@@ -107,7 +107,7 @@ Tine.Admin.Roles.Main = {
             text: this.translation.gettext('Add Role'),
             disabled: true,
             handler: this.handlers.addRole,
-            iconCls: 'action_permissions',
+            iconCls: 'action_add',
             scope: this
         });
         

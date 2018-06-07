@@ -140,7 +140,7 @@ Tine.Admin = function () {
         }, {
             text: translation.gettext('Server Information'),
             cls: "treemain",
-            iconCls: 'admin-node-computers',
+            iconCls: 'admin-node-server-info',
             allowDrag: false,
             allowDrop: true,
             id: "serverinfo",

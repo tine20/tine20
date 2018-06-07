@@ -10,50 +10,7 @@
  */
 
 .MailFilerIconCls, .tine-recordclass-gridicon.MailFilerNode {
-    background-image:url(../../images/oxygen/16x16/apps/system-file-manager.png) !important;
-}
-.x-btn-medium .MailFilerIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/system-file-manager.png) !important;
-}
-.x-btn-large .MailFilerIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/system-file-manager.png) !important;
-}
-
-.action_filemanager_folder_up {
-    background-image:url(../../images/icon-set/icon_folder_up.svg) !important;
-}
-
-.action_filemanager_save_all {
-    background-image:url(../../images/icon-set/icon_download.svg) !important;
-}
-
-.action_create_folder {
-    background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
-}
-
-.action_pause {
-    background-image: url("../../images/oxygen/16x16/actions/media-playback-pause.png");
-    background-repeat: no-repeat;
-}
-
-.action_resume {
-    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
-    background-repeat: no-repeat;
-}
-
-.action_create_folder {
-    background-image:url(../../images/icon-set/icon_filemanager_plus.svg) !important;
-}
-
-.x-tinebase-typeoctet .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.action_publish {
-    background-image: url("../../images/icon-set/icon_publish.svg") !important;
-    background-repeat: no-repeat;
+    background-image:url(../../images/icon-set/icon_fileManager_neg.svg) !important;
 }
 
 /* mail preview @todo make it more general and move to tinebase for use in felamimail */
