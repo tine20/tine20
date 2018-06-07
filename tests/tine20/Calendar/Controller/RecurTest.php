@@ -892,7 +892,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $until = $baseEvent->dtstart->getClone()->addDay(1);
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($baseEvent, $exceptions, $from, $until);
 
-        $recurSet->getFirstRecord()->container_id = $this->_getTestContainer('Calendar')->getId();
+        $recurSet->getFirstRecord()->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class)->getId();
         $newSeries = $this->_controller->createRecurException($recurSet->getFirstRecord(), false, true);
         $newExceptions = $this->_controller->getRecurExceptions($newSeries);
 
@@ -943,7 +943,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
 
         $this->setExpectedException('Calendar_Exception_ExdateContainer');
 
-        $recurSet[2]->container_id = $this->_getTestContainer('Calendar')->getId();
+        $recurSet[2]->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class)->getId();
         $this->_controller->createRecurException($recurSet[2]);
     }
 
@@ -965,7 +965,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
 
         $this->setExpectedException('Calendar_Exception_ExdateContainer');
 
-        $updatedPersistentEvent->container_id = $this->_getTestContainer('Calendar')->getId();
+        $updatedPersistentEvent->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class)->getId();
         $this->_controller->update($updatedPersistentEvent);
 
     }

@@ -25,13 +25,6 @@
 class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_ForeignId
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_Filter_ForeignRecords';
-
-    /**
      * @var null|Tinebase_Record_RecordSet
      */
     protected $_mappingRecords = null;

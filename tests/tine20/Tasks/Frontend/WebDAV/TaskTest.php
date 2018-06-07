@@ -36,12 +36,14 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => Tasks_Model_Task::class,
         )));
         $this->objects['sharedContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => Tasks_Model_Task::class,
         )));
         
         $prefs = new Tasks_Preference();

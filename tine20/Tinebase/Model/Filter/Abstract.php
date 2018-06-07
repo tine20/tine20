@@ -70,6 +70,11 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo move this to acl filter?
      */
     protected $_isImplicit = FALSE;
+
+    /**
+     * @var Tinebase_Model_Filter_FilterGroup|null parent reference
+     */
+    protected $_parent = null;
     
     /**
      * get a new single filter action
@@ -431,5 +436,13 @@ abstract class Tinebase_Model_Filter_Abstract
         }
 
         return (string) $returnValue;
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
+    {
+        $this->_parent = $_parent;
     }
 }

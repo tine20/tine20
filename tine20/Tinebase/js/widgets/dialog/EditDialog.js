@@ -727,7 +727,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                 containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                 appName: this.app.appName,
-                requiredGrant: this.evalGrants ? 'addGrant' : false,
+                // required grant to change container
+                requiredGrant: this.evalGrants ? 'deleteGrant' : false,
+                // required grants for the container to choose
+                requiredGrants: [this.evalGrants ? 'addGrant' : false],
                 disabled: this.isContainerSelectorDisabled(),
                 listeners: {
                     scope: this,

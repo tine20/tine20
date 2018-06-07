@@ -419,7 +419,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'name'           => 'containerTest' . Tinebase_Record_Abstract::generateUID(),
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'backend'        => 'Sql'
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
         )));
         
         $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', array(
@@ -506,6 +507,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         )));
         $initialContainer = $this->_instance->get($this->objects['initialContainer']);
         $contact = new Addressbook_Model_Contact(array(
@@ -550,7 +552,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($container !== null);
         $this->assertEquals($user->getId(), $container->owner_id);
         
-        $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container->id, TRUE);
+        $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, TRUE);
 
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         $newGrants->addRecord(
@@ -676,6 +678,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         ));
         
         $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(

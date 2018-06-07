@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_Json_ContainerTest extends TestCase
 {
     /**
      * @var Tinebase_Frontend_Json_Container
@@ -30,18 +30,6 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_Json_ContainerTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -49,27 +37,11 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_backend = new Tinebase_Frontend_Json_Container();
-        
-        try {
-            $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
-            Tinebase_Container::getInstance()->deleteContainer($container);
-        } catch (Exception $e) {
-            // do nothing
-        }
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    
-    }
-    
     /**
      * try to add an account
      *

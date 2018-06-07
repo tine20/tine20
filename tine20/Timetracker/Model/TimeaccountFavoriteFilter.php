@@ -18,17 +18,12 @@ class Timetracker_Model_TimeaccountFavoriteFilter extends Tinebase_Model_Filter_
     /**
      * @var string
      */
-    protected $_className = 'Timetracker_Model_TimeaccountFavoriteFilter';
-
-    /**
-     * @var string
-     */
     protected $_applicationName = 'Timetracker';
 
     /**
      * @var string
      */
-    protected $_modelName = 'TimeaccountFavorite';
+    protected $_modelName = TimeaccountFavorite::class;
 
     /**
      * @var array filter model fieldName => definition

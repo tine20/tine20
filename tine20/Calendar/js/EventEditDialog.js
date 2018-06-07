@@ -184,11 +184,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     //width: 300,
                                     //listWidth: 300,
                                     name: this.recordClass.getMeta('containerProperty'),
+                                    treePanelClass: Tine.Calendar.TreePanel,
                                     recordClass: this.recordClass,
                                     containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
                                     requiredGrant: 'readGrant',
+                                    requiredGrants: ['addGrant'],
                                     disabled: true
                                 }), Ext.apply(this.perspectiveCombo.getAttendeeContainerField(), {
                                     columnWidth: 1

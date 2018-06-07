@@ -53,6 +53,11 @@ class Tinebase_TransactionManager
     protected $_onRollbackCallbacks = array();
 
     /**
+     * @var bool allow unittest to skip a roll back
+     */
+    protected $_unitTestForceSkipRollBack = false;
+
+    /**
      * @var Tinebase_TransactionManager
      */
     private static $_instance = NULL;
@@ -207,6 +212,9 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
 
+        if ($this->_unitTestForceSkipRollBack) {
+            return;
+        }
         // if we are inside a precommit callback we need to break this as we are doing a rollback now
         // the rollbacks post callback may start new transactions, so we need to reset the flag
         static::$_insideCallBack = false;
@@ -279,5 +287,13 @@ class Tinebase_TransactionManager
     public function hasOpenTransactions()
     {
         return count($this->_openTransactions) > 0;
+    }
+
+    /**
+     * @param $bool
+     */
+    public function unitTestForceSkipRollBack($bool)
+    {
+        $this->_unitTestForceSkipRollBack = $bool;
     }
 }

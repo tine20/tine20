@@ -107,7 +107,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
 /**
  * Model of a grant
  */
-Tine.Tinebase.Model.Grant = Ext.data.Record.create([
+Tine.Tinebase.Model.Grant = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'record_id'},
     {name: 'account_id'},
@@ -124,7 +124,15 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'downloadGrant',type: 'boolean'},
     {name: 'publishGrant', type: 'boolean'},
     {name: 'adminGrant',   type: 'boolean'}
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Grant',
+    idProperty: 'id',
+    titleProperty: 'account_name',
+    // ngettext('Grant', 'Grants', n); gettext('Grant');
+    recordName: 'Grant',
+    recordsName: 'Grants'
+});
 
 /**
  * Model of a tag

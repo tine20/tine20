@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b0dd1f4f851298480c09700bdd29f77",
+    "content-hash": "ac496d9394c75fc63d04f71775b8dd3a",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -518,7 +518,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": ""
+                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -648,7 +648,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
+                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
             },
             "require": {
                 "php": ">=5.2"
@@ -670,8 +670,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -739,7 +738,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -771,7 +770,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1415,7 +1414,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": ""
+                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
             },
             "require": {
                 "ext-ctype": "*",
@@ -2013,7 +2012,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -2616,11 +2615,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl31",
+            "version": "1.12.20pl32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "937d90ee8bdff12b9c4bbba58bda39aca430231c"
+                "reference": "72e62c12cac3e6e57406011fa84eaa9823dd49ba"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2637,7 +2636,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-06-06T13:40:50+00:00"
+            "time": "2018-06-06T15:32:54+00:00"
         }
     ],
     "packages-dev": [
@@ -3003,7 +3002,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-10-06T15:47:00+00:00"
+            "time": "2014-09-02T10:13:14+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3050,7 +3049,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2017-11-27T13:52:08+00:00"
+            "time": "2015-06-21T13:08:43+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -3140,7 +3139,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2017-02-26T11:10:40+00:00"
+            "time": "2016-05-12T18:03:57+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3189,7 +3188,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-12-04T08:55:13+00:00"
+            "time": "2014-03-03T05:10:30+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -3261,7 +3260,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-06-03T05:03:30+00:00"
+            "time": "2014-10-17T09:04:17+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3899,7 +3898,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch31",
+            "version": "1.12.20.0-patch32",
             "package": "zendframework/zendframework1"
         },
         {

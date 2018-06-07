@@ -1039,7 +1039,11 @@ class Tinebase_ModelConfiguration {
             $this->_fields['xprops'] = array(
                 'label' => NULL,
                 'type'  => 'json',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+                'validators' => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => [],
+                    Tinebase_Record_Validator_Json::class,
+                ],
             );
         }
         
@@ -1542,8 +1546,6 @@ class Tinebase_ModelConfiguration {
             foreach ($this->_filterProperties as $prop) {
                 $this->_filterConfiguration[$prop] = $this->{$prop};
             }
-            // @todo: remove this as in the filtergroup
-            $this->_filterConfiguration['_className'] = $this->_appName . '_Model_' . $this->_modelName . 'Filter';
         }
         return $this->_filterConfiguration;
     }

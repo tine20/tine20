@@ -386,8 +386,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getDefaultAddressbook()
     {
         $defaultAddressbook = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+
+        $account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultAddressbook)->toArray();
         $defaultAddressbookArray = $defaultAddressbook->toArray();
-        $defaultAddressbookArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultAddressbook->getId())->toArray();
+        $defaultAddressbookArray['account_grants'] = $account_grants;
         
         return $defaultAddressbookArray;
     }

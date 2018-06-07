@@ -66,7 +66,17 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
     {
         return call_user_func_array(array($this->_select, $_name), $_arguments);
     }
-    
+
+    public function openBracket()
+    {
+        $this->_parts[Zend_Db_Select::WHERE][] = '(';
+    }
+
+    public function closeBracket()
+    {
+        $this->_parts[Zend_Db_Select::WHERE][] = ')';
+    }
+
     /**
      * Adds a WHERE condition to the query by AND.
      * 
@@ -113,7 +123,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
         }
         
         $cond = "";
-        if (! empty($this->_parts[Zend_Db_Select::WHERE])) {
+        if (! empty($this->_parts[Zend_Db_Select::WHERE]) && end($this->_parts[Zend_Db_Select::WHERE]) !== '(') {
             if ($bool === true) {
                 $cond = Zend_Db_Select::SQL_AND . ' ';
             } else {

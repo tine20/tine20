@@ -122,7 +122,8 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
             'model'              => array(
                 'label'             => 'Model', // _('Model')
                 'type'              => 'string',
-                'validators'        => array('allowEmpty' => true),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
             'uuid'               => array(
                 'label'             => 'UUID', // _('UUID')
@@ -346,5 +347,22 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public function isReplicable()
     {
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrantClass()
+    {
+        if (isset($this->xprops()['Tinebase']['Container']['GrantsModel'])) {
+            return $this->xprops()['Tinebase']['Container']['GrantsModel'];
+        }
+
+        $class = $this->model . 'Grants';
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return Tinebase_Model_Grants::class;
     }
 }

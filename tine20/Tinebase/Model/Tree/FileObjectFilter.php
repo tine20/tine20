@@ -29,13 +29,6 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
     protected $_modelName = Tinebase_Model_Tree_FileObject::class;
 
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = Tinebase_Model_Tree_FileObjectFilter::class;
-
-    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = [

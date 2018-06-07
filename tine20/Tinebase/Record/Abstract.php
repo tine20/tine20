@@ -725,6 +725,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else {
                 self::$_inputFilters[$keyName] = new Zend_Filter_Input($this->_filters, $this->_validators);
             }
+            self::$_inputFilters[$keyName]->addValidatorPrefixPath('', dirname(dirname(__DIR__)));
         }
         
         return self::$_inputFilters[$keyName];

@@ -195,7 +195,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00'
+            'color'          => '#00FF00',
+            'model'             => Calendar_Model_Event::class,
         ), TRUE));
         
         $controller->transferUserAccounts(FALSE, $this->_feastCalendar->getId(), NULL, 27, TRUE);

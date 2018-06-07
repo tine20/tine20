@@ -72,7 +72,7 @@ abstract class Calendar_TestCase extends TestCase
         }
         
         $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_originalTestUser->getId());
-        $this->_testCalendar = $this->_getTestContainer('Calendar');
+        $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         
         $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
         $this->_testCalendars->addRecord($this->_testCalendar);
@@ -226,9 +226,9 @@ abstract class Calendar_TestCase extends TestCase
     public function _getTestCalendar()
     {
         if ($this->_testCalendar === NULL) {
-            $this->_testCalendar = $this->_getTestContainer('Calendar');
+            $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
             
-            $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
+            $this->_testCalendars = new Tinebase_Record_RecordSet(Tinebase_Model_Container::class);
             $this->_testCalendars->addRecord($this->_testCalendar);
         }
         return $this->_testCalendar;

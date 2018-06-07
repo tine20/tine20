@@ -46,6 +46,7 @@ class Tinebase_Convert_Container_Json extends Tinebase_Convert_Json
     {
         $response = array();
         foreach ($_records as $container) {
+            $container->xprops();
             $containerArray = $container->toArray();
 
             if ($container instanceof Tinebase_Model_Container) {

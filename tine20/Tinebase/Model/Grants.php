@@ -453,4 +453,27 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 
         return $result;
     }
+
+    /**
+     * @return bool
+     */
+    public static function doSetGrantFailsafeCheck()
+    {
+        return true;
+    }
+
+    /**
+     * @param Zend_Db_Select $_select
+     * @param Tinebase_Model_Application $_application
+     * @param string $_accountId
+     * @param string|array $_grant
+     */
+    public static function addCustomGetSharedContainerSQL(Zend_Db_Select $_select,
+        Tinebase_Model_Application $_application, $_accountId, $_grant)
+    {
+    }
+
+    public function setSpecialGrantsByUser($_accountId)
+    {
+    }
 }

@@ -91,7 +91,8 @@ class HumanResources_TestCase extends TestCase
                 'owner_id'       => Tinebase_Core::getUser(),
                 'backend'        => 'SQL',
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00'
+                'color'          => '#00FF00',
+                'model'          => Calendar_Model_Event::class,
             ), true));
         }
         
@@ -102,7 +103,8 @@ class HumanResources_TestCase extends TestCase
                 'owner_id'       => Tinebase_Core::getUser(),
                 'backend'        => 'SQL',
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00'
+                'color'          => '#00FF00',
+                'model'          => Calendar_Model_Event::class,
             ), true));
         }
 

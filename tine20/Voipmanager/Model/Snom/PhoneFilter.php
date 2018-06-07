@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,13 +16,6 @@
 class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Voipmanager_Model_Snom_PhoneFilter';
-    
-    /**
      * application the record belongs to
      *
      * @var string
@@ -32,7 +25,7 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Voipmanager_Model_Snom_Phone';
+    protected $_modelName = Voipmanager_Model_Snom_Phone::class;
     
     /**
      * @var array filter model fieldName => definition

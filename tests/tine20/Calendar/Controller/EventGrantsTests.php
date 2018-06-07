@@ -62,7 +62,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testAddPersonalCalendarGrants()
     {
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_getTestCalendar()->getId(), TRUE);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_getTestCalendar(), TRUE);
         $anyoneIdx = array_search(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, $grants->account_type);
         $this->assertTrue($anyoneIdx !== false, 'anyone has no grant entry');
         $this->assertTrue($grants[$anyoneIdx]->{Tinebase_Model_Grants::GRANT_FREEBUSY}, 'anyone has not freebusy grant');
@@ -131,9 +131,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
 
-        $calendarId  = $this->_getPersonasDefaultCals('rwright')->getId();
+        $calendar  = $this->_getPersonasDefaultCals('rwright');
 
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($calendarId, true);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($calendar, true);
         $grants->addRecord(new Tinebase_Model_Grants(array(
                 'account_id'    => Tinebase_Acl_Roles::getInstance()->getRoleByName('user role')->getId(),
                 'account_type'  => 'role',
@@ -145,7 +145,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
                 Tinebase_Model_Grants::GRANT_ADMIN    => true,
                 Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         )));
-        Tinebase_Container::getInstance()->setGrants($calendarId, $grants, true);
+        Tinebase_Container::getInstance()->setGrants($calendar, $grants, true);
 
         $event = $this->_uit->get($persistentEvent->getId());
         $event->summary = 'role update';

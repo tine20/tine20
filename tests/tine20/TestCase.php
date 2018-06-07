@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -131,6 +131,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $this->_deleteGroups();
         }
         if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -324,7 +325,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $model
      * @return Tinebase_Model_Container
      */
-    protected function _getTestContainer($applicationName, $model = null)
+    protected function _getTestContainer($applicationName, $model)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit ' . $model .' container',

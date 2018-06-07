@@ -5,7 +5,7 @@
  * @package     MailFiler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -21,16 +21,9 @@ class MailFiler_Model_DownloadLinkFilter extends Tinebase_Model_Filter_FilterGro
     protected $_applicationName = 'MailFiler';
     
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'MailFiler_Model_DownloadLinkFilter';
-    
-    /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'MailFiler_Model_DownloadLink';
+    protected $_modelName = MailFiler_Model_DownloadLink::class;
     
     /**
      * @var array filter model fieldName => definition

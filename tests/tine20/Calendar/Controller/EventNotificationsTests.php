@@ -1363,16 +1363,22 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             }
         }
 
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true);
 
-        $newGrants = array(
+        $newGrants = [
                 'account_id' => $this->_personas['sclever']->getId(),
                 'account_type' => 'user',
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true
-            );
+                Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true,
+                Calendar_Model_ResourceGrants::RESOURCE_EDIT => true,
+                Calendar_Model_ResourceGrants::EVENTS_EDIT => true,
+        ];
 
-        Tinebase_Container::getInstance()->setGrants($resource->container_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array_merge(array($newGrants), $grants->toArray())), TRUE);
+        Tinebase_Container::getInstance()->setGrants($resource->container_id,
+            new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, array_merge([$newGrants],
+                $grants->toArray())), true, false);
 
         self::flushMailer();
 
@@ -1380,12 +1386,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         $messages = self::getMessages();
 
-        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants);
+        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants, true, false);
 
         if ($suppress_notification) {
             $this->assertEquals(1, count($messages), 'one mail should be send to current user (attender)');
         } else {
-            $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+            $this->assertEquals(3, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
             $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
             $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));

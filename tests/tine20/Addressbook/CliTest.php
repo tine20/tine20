@@ -36,7 +36,7 @@ class Addressbook_CliTest extends TestCase
         parent::setUp();
         
         $this->_cli = new Addressbook_Frontend_Cli();
-        $this->_container = $this->_getTestContainer('Addressbook');
+        $this->_container = $this->_getTestContainer('Addressbook', Addressbook_Model_Contact::class);
     }
     
     /**

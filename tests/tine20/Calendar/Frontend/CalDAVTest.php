@@ -398,6 +398,7 @@ END:VCALENDAR&#13;
             'type'              => $type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )), $grants);
         
         return $container;
@@ -415,6 +416,7 @@ END:VCALENDAR&#13;
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => Tasks_Model_Task::class,
         )));
         
         return $container;

@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        replace 'custom' filters with normal filter classes
  * @todo        should implement acl filter
@@ -19,13 +19,6 @@
 class MailFiler_Model_MessageFilter extends Felamimail_Model_MessageFilter 
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'MailFiler_Model_MessageFilter';
-    
-    /**
      * @var string application of this filter group
      */
     protected $_applicationName = 'MailFiler';
@@ -33,7 +26,7 @@ class MailFiler_Model_MessageFilter extends Felamimail_Model_MessageFilter
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'MailFiler_Model_Message';
+    protected $_modelName = MailFiler_Model_Message::class;
     
     /**
      * @var array filter model fieldName => definition

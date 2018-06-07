@@ -48,7 +48,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // load grants store if editing record
         if (this.record && this.record.id) {
-            this.grantsStore.loadData({
+            this.grantsGrid.getStore().loadData({
                 results:    this.record.get('account_grants'),
                 totalcount: this.record.get('account_grants').length
             });
@@ -64,7 +64,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // get grants from grants grid
         this.record.set('account_grants', '');
         var grants = [];
-        this.grantsStore.each(function(grant){
+        this.grantsGrid.getStore().each(function(grant){
             grants.push(grant.data);
         });
         this.record.set('account_grants', grants);
@@ -76,16 +76,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.container.GrantsGrid}
      */
     initGrantsGrid: function () {
-        this.grantsStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'account_id',
-            fields: Tine.Tinebase.Model.Grant
-        });
-       
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             flex: 1,
-            store: this.grantsStore,
             grantContainer: this.record.data,
             alwaysShowAdminGrant: true,
             showHidden: true

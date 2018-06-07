@@ -280,6 +280,10 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             var _ = window.lodash,
                 me = this;
 
+            if (! Ext.isArray(records)) {
+                records = [records];
+            }
+
             if (! options.suppressBusEvents) {
                 _.each(records, function (record) {
                     me.postMessage('delete', record.data);

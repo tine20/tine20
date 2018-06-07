@@ -201,6 +201,12 @@ abstract class Tinebase_Controller_Record_Abstract
     const ACTION_UPDATE = 'update';
     const ACTION_DELETE = 'delete';
 
+    protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
+    protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLupdate  = [Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLsync  = [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLexport  = [Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_ADMIN];
+
     /**
      * returns controller for records of given model
      *
@@ -542,7 +548,7 @@ abstract class Tinebase_Controller_Record_Abstract
            ? Tinebase_Container::getInstance()->getContainerByACL(
                Tinebase_Core::getUser(),
                $this->_applicationName,
-               Tinebase_Model_Grants::GRANT_READ,
+               $this->_getMultipleGrant,
                TRUE)
            : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
@@ -2124,7 +2130,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
             
-            $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $_filter->getApplicationName()));
+            $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
             $_filter->addFilter($containerFilter);
         }
 
@@ -2132,28 +2138,16 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Setting filter grants for action ' . $_action);
         switch ($_action) {
             case self::ACTION_GET:
-                $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Grants::GRANT_READ,
-                    Tinebase_Model_Grants::GRANT_ADMIN,
-                ));
+                $_filter->setRequiredGrants($this->_requiredFilterACLget);
                 break;
             case self::ACTION_UPDATE:
-                $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Grants::GRANT_EDIT,
-                    Tinebase_Model_Grants::GRANT_ADMIN,
-                ));
+                $_filter->setRequiredGrants($this->_requiredFilterACLupdate);
                 break;
             case 'export':
-                $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Grants::GRANT_EXPORT,
-                    Tinebase_Model_Grants::GRANT_ADMIN,
-                ));
+                $_filter->setRequiredGrants($this->_requiredFilterACLexport);
                 break;
             case 'sync':
-                $_filter->setRequiredGrants(array(
-                    Tinebase_Model_Grants::GRANT_SYNC,
-                    Tinebase_Model_Grants::GRANT_ADMIN,
-                ));
+                $_filter->setRequiredGrants($this->_requiredFilterACLsync);
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);

@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -24,14 +24,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Calendar_Model_Event';
-
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Calendar_Model_EventFilter';
+    protected $_modelName = Calendar_Model_Event::class;
 
     /**
      * @var array filter model fieldName => definition

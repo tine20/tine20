@@ -52,18 +52,14 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             text: this.app.i18n._("If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
-            downloadGrantTitle: 'Download', // i18n._('Download')
-            downloadGrantDescription: 'The grant to download files', // i18n._('The grant to download files')
-            publishGrantTitle: 'Publish', // i18n._('Publish')
-            publishGrantDescription: 'The grant to create anonymous download links for files', // i18n._('The grant to create anonymous download links for files')
-            grantContainer: 'Filemanager_Model_Node',
+            app: this.app,
             alwaysShowAdminGrant: true,
-            store: new Ext.data.JsonStore({
-                fields: Tine.Tinebase.Model.Grant,
-                root: 'grants'
-            }),
             readOnly: true,
-            flex: 1
+            flex: 1,
+            grantContainer: {
+                application_id: this.app.id,
+                model: 'Filemanager_Model_Node',
+            },
         });
 
         this.items = [{
@@ -106,7 +102,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
-        this.grantsGrid.getStore().loadData(record.data);
+        this.grantsGrid.getStore().loadData({results: record.data.grants});
 
         this.setReadOnly(!hasRequiredGrant);
         this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);

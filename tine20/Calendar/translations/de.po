@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-05-22 16:38+0200\n"
+"PO-Revision-Date: 2018-05-31 17:41+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr "%ss persönlicher Kalender"
 
-#: Controller.php:450 js/Model.js:1026
+#: Controller.php:450 js/Model.js:1012
 msgid "Resources"
 msgstr "Ressourcen"
 
@@ -199,7 +199,7 @@ msgstr "Bei allen Änderungen außer Teilnehmer-Anworten"
 msgid "On attendee responses too"
 msgstr "Auch bei Teilnehmer-Antworten"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:74 js/Model.js:619
+#: js/ContactEventsGridPanel.js:50 js/Model.js:74 js/Model.js:605
 msgid "Events"
 msgstr "Termine"
 
@@ -240,7 +240,7 @@ msgstr "Vorläufig"
 
 #: js/EventDetailsPanel.js:199 js/GridView.js:249 js/EventEditDialog.js:144
 #: js/Printer/EventRecord.js:30 js/ResourcesGridPanel.js:83 js/Model.js:369
-#: js/ResourceEditDialog.js:125 Model/Event.php:402
+#: js/ResourceEditDialog.js:123 Model/Event.php:402
 msgid "Location"
 msgstr "Ort"
 
@@ -252,7 +252,7 @@ msgstr "Organisator"
 
 #: js/EventDetailsPanel.js:221 js/EventContextAttendeesItem.js:113
 #: js/Printer/EventRecord.js:44 js/AttendeeGridPanel.js:108 js/WestPanel.js:93
-#: js/Model.js:615 js/AttendeeFilterModel.js:35 Config.php:287
+#: js/Model.js:601 js/AttendeeFilterModel.js:35 Config.php:287
 msgid "Attendee"
 msgstr "Teilnehmer"
 
@@ -268,7 +268,8 @@ msgstr "Teilnehmer sortieren"
 msgid "Check to filter for this attendee"
 msgstr "Häkchen setzen um nach Teilnehmer zu filtern"
 
-#: js/GridView.js:192 js/EventEditDialog.js:234 Config.php:324
+#: js/GridView.js:192 js/EventEditDialog.js:234 js/Model/ResourceGrants.js:109
+#: Config.php:324
 msgid "Private"
 msgstr "Privat"
 
@@ -282,7 +283,7 @@ msgid "whole day"
 msgstr "ganztägig"
 
 #: js/GridView.js:262 js/EventEditDialog.js:278 js/Printer/EventRecord.js:21
-#: js/Model.js:370 js/Model.js:1061 js/ResourceEditDialog.js:140
+#: js/Model.js:370 js/Model.js:1046 js/ResourceEditDialog.js:138
 #: Model/Event.php:401
 msgid "Description"
 msgstr "Beschreibung"
@@ -890,11 +891,12 @@ msgstr "Termin Finder Optionen"
 msgid "Unavailable"
 msgstr "Nicht Verfügbar"
 
-#: js/TreePanel.js:110 js/TreePanel.js:135 js/AttendeeGridPanel.js:574
+#: js/TreePanel.js:134 js/TreePanel.js:159 js/AttendeeGridPanel.js:574
+#: js/Model/ResourceGrants.js:84
 msgid "Edit Resource"
 msgstr "Ressource bearbeiten"
 
-#: js/TreePanel.js:136 js/AttendeeGridPanel.js:575
+#: js/TreePanel.js:160 js/AttendeeGridPanel.js:575
 msgid "View Resource"
 msgstr "Ressource ansehen"
 
@@ -922,21 +924,21 @@ msgstr "Monatlich"
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:238 js/Model.js:1059
-#: js/ResourceEditDialog.js:91 Model/Poll.php:71
+#: js/ResourcesGridPanel.js:46 js/AttendeeGridPanel.js:238 js/Model.js:1044
+#: js/ResourceEditDialog.js:89 Model/Poll.php:71
 msgid "Name"
 msgstr "Name"
 
-#: js/ResourcesGridPanel.js:52 js/Model.js:1060 js/ResourceEditDialog.js:96
+#: js/ResourcesGridPanel.js:52 js/Model.js:1045 js/ResourceEditDialog.js:94
 msgid "Email"
 msgstr "E-Mail"
 
-#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:229 js/Model.js:1064
-#: js/ResourceEditDialog.js:103
+#: js/ResourcesGridPanel.js:58 js/AttendeeGridPanel.js:229 js/Model.js:1049
+#: js/ResourceEditDialog.js:101
 msgid "Type"
 msgstr "Typ"
 
-#: js/ResourcesGridPanel.js:65 js/Model.js:1062 js/ResourceEditDialog.js:119
+#: js/ResourcesGridPanel.js:65 js/Model.js:1047 js/ResourceEditDialog.js:117
 msgid "Maximum number of attendee"
 msgstr "Maximale Teilnehmeranzahl"
 
@@ -944,7 +946,7 @@ msgstr "Maximale Teilnehmeranzahl"
 msgid "Default Status"
 msgstr "Standard Status"
 
-#: js/ResourcesGridPanel.js:79 js/Model.js:1078 js/ResourceEditDialog.js:115
+#: js/ResourcesGridPanel.js:79 js/Model.js:1063 js/ResourceEditDialog.js:113
 msgid "Busy Type"
 msgstr "Belegt Typ"
 
@@ -995,7 +997,7 @@ msgstr "Benutzer"
 msgid "Group"
 msgstr "Gruppe"
 
-#: js/AttendeeGridPanel.js:163 js/Model.js:1026 Config.php:392
+#: js/AttendeeGridPanel.js:163 js/Model.js:1012 Config.php:392
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ressource"
@@ -1054,6 +1056,124 @@ msgstr "(als Gruppenmitglied)"
 msgid "External Attendee"
 msgstr "Externer Teilnehmer"
 
+#: js/Model/ResourceGrants.js:35
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] "Ressourcen Recht"
+msgstr[1] "Ressourcen Rechte"
+
+#: js/Model/ResourceGrants.js:80
+msgid "Invite Resource"
+msgstr "Ressource einladen"
+
+#: js/Model/ResourceGrants.js:81
+msgid "The grant to invite the resource to an event"
+msgstr "Das Recht die Ressource zu einem Termin einzuladen"
+
+#: js/Model/ResourceGrants.js:82
+msgid "Read Resource"
+msgstr "Ressource lesen"
+
+#: js/Model/ResourceGrants.js:83
+msgid "The grant to read the resource itself"
+msgstr "Das Recht die Ressource als solche zu sehen"
+
+#: js/Model/ResourceGrants.js:85
+msgid "The grant to edit the resource itself"
+msgstr "Das Recht die Ressource als solche zu bearbeiten"
+
+#: js/Model/ResourceGrants.js:86
+msgid "Export Resource"
+msgstr "Ressource exportieren"
+
+#: js/Model/ResourceGrants.js:87
+msgid "The grant to export the resource itself"
+msgstr "Das Recht die Ressource als solche zu exportieren"
+
+#: js/Model/ResourceGrants.js:88
+msgid "Sync Resource"
+msgstr "Ressource synchronisieren"
+
+#: js/Model/ResourceGrants.js:89
+msgid "The grant to synchronise the resource itself"
+msgstr "Das Recht die Ressource als solche zu synchronisieren"
+
+#: js/Model/ResourceGrants.js:90
+msgid "Resource Admin"
+msgstr "Ressource Administrieren"
+
+#: js/Model/ResourceGrants.js:91
+msgid "The grant to administrate the resource itself"
+msgstr "Das Recht die Ressource als solche zu administrieren"
+
+#: js/Model/ResourceGrants.js:92
+msgid "Add Events"
+msgstr "Termine hinzufügen"
+
+#: js/Model/ResourceGrants.js:93
+msgid "The grant to directly add events into this resource calendar"
+msgstr "Das Recht Termine direkt im Ressourcen-Kalender anzulegen"
+
+#: js/Model/ResourceGrants.js:94
+msgid "Read Events"
+msgstr "Termine lesen"
+
+#: js/Model/ResourceGrants.js:95
+msgid "The grant to read events from this resource calendar"
+msgstr "Das Recht Termine aus Ressourcen-Kalender zu lesen"
+
+#: js/Model/ResourceGrants.js:96
+msgid "Export Events"
+msgstr "Termine exportieren"
+
+#: js/Model/ResourceGrants.js:97
+msgid "The grant to export events from this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
+
+#: js/Model/ResourceGrants.js:98
+msgid "Sync Events"
+msgstr "Termine synchronisieren"
+
+#: js/Model/ResourceGrants.js:99
+msgid "The grant to synchronise events from this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren"
+
+#: js/Model/ResourceGrants.js:100
+msgid "Events Free Busy"
+msgstr "Termine Frei/Belegt Informationen"
+
+#: js/Model/ResourceGrants.js:101
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr "Das Recht Frei/Belegt Informationen von Terminen aus dem Ressourcen-Kalender zu erhalten"
+
+#: js/Model/ResourceGrants.js:102
+msgid "Edit Events"
+msgstr "Termine bearbeiten"
+
+#: js/Model/ResourceGrants.js:103
+msgid "The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar"
+msgstr "Das Recht auf Termin-Einladungen dieser Ressource zu antworten und Termine aus dem Ressourcen-Kalender zu bearbeiten"
+
+#: js/Model/ResourceGrants.js:104
+msgid "Delete Events"
+msgstr "Termine löschen"
+
+#: js/Model/ResourceGrants.js:105
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu löschen"
+
+#: js/Model/ResourceGrants.js:107
+msgid "Free Busy"
+msgstr "Frei Belegt"
+
+#: js/Model/ResourceGrants.js:108
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr "Das Recht Frei/Belegt Informationen von Terminen diesem Kalender zu erhalten"
+
+#: js/Model/ResourceGrants.js:110
+msgid "The grant to access events marked as private in this calendar"
+msgstr "Das Recht Terminen aus diesem Kalender zu sehen die als privat markiert sind"
+
 #: js/SearchCombo.js:76
 msgid "no events found"
 msgstr "keine Termine gefunden"
@@ -1062,7 +1182,7 @@ msgstr "keine Termine gefunden"
 msgid "Searching..."
 msgstr "Suche ..."
 
-#: js/SearchCombo.js:86 js/Model.js:74 js/Model.js:619
+#: js/SearchCombo.js:86 js/Model.js:74 js/Model.js:605
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
@@ -1189,7 +1309,7 @@ msgstr[1] "Kalender"
 msgid "Calendars"
 msgstr "Kalender"
 
-#: js/Model.js:367 js/Model.js:1058
+#: js/Model.js:367 js/Model.js:1043
 msgid "Quick Search"
 msgstr "Schnellsuche"
 
@@ -1238,41 +1358,41 @@ msgstr "Unbekanntes Datum"
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} Uhr"
 
-#: js/Model.js:457
+#: js/Model.js:443
 msgid "Event (as attendee)"
 msgstr "Termin (als Teilnehmer)"
 
-#: js/Model.js:464
+#: js/Model.js:450
 msgid "Event (as organizer)"
 msgstr "Termin (als Organisator)"
 
-#: js/Model.js:474
+#: js/Model.js:460
 msgid "Event attendee"
 msgstr "Terminteilnehmer"
 
-#: js/Model.js:615
+#: js/Model.js:601
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Teilnehmer/in"
 msgstr[1] "Teilnehmer/in"
 
-#: js/Model.js:1042
+#: js/Model.js:1028
 msgid "Anyone"
 msgstr "Jeder"
 
-#: js/Model.js:1071 js/ResourceEditDialog.js:109
+#: js/Model.js:1056 js/ResourceEditDialog.js:107
 msgid "Default attendee status"
 msgstr "Standard Teilnehmer Status"
 
-#: js/ResourceEditDialog.js:135
+#: js/ResourceEditDialog.js:133
 msgid "Suppress notification"
 msgstr "Benachrichtigungen unterdrücken"
 
-#: js/ResourceEditDialog.js:141
+#: js/ResourceEditDialog.js:139
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung an."
 
-#: js/ResourceEditDialog.js:166
+#: js/ResourceEditDialog.js:164
 msgid "Grants"
 msgstr "Zugriffsrechte"
 
@@ -1745,71 +1865,71 @@ msgstr "Keine Einladungen für alternative Termine in Umfragen senden."
 msgid "GTCs for polls"
 msgstr "AGB’s für Umfragen"
 
-#: Controller/Event.php:1350
+#: Controller/Event.php:1362
 msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
 msgstr "Die neue Wiederholungsregel ist nicht erfüllbar. Bitte ändern sie die Regel."
 
-#: Controller/EventNotifications.php:493
+#: Controller/EventNotifications.php:491
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:496
+#: Controller/EventNotifications.php:494
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Einladung zum Termin  \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:505
+#: Controller/EventNotifications.php:503
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr "Ressource \"%1$s\" wurde für \"%2$s\" am %3$s gebucht"
 
-#: Controller/EventNotifications.php:513
+#: Controller/EventNotifications.php:511
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Termin \"%1$s\" am %2$s wurde abgesagt"
 
-#: Controller/EventNotifications.php:521
+#: Controller/EventNotifications.php:519
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Der Termin \"%1$s\" wurde von %2$s auf %3$s verlegt"
 
-#: Controller/EventNotifications.php:528
+#: Controller/EventNotifications.php:526
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Der Termin \"%1$s\" am %2$s wurde verändert"
 
-#: Controller/EventNotifications.php:539
+#: Controller/EventNotifications.php:537
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:543
+#: Controller/EventNotifications.php:541
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "Absage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:547
+#: Controller/EventNotifications.php:545
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:551
+#: Controller/EventNotifications.php:549
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:555
+#: Controller/EventNotifications.php:553
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:567
+#: Controller/EventNotifications.php:565
 msgid "Tentative event notification for event \"%1$s\" at %2$s"
 msgstr "Vorläufigkeits Benachrichtigung für den Termin \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:576
+#: Controller/EventNotifications.php:574
 msgid "Resource Management"
 msgstr "Ressourcen Verwaltung"
 
-#: Controller/Poll.php:735
+#: Controller/Poll.php:729
 msgid "This contact has been automatically added by the system as a poll attendee"
 msgstr "Dieser Kontakt ist Teilnehmer einer Termin-Umfrage und wurde vom System automatisch angelegt."
 
-#: Controller/Poll.php:900
+#: Controller/Poll.php:894
 msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr "Teilname Bestätigung für die Termin-Umfrage „%1$s“"
 
-#: Controller/Poll.php:942
+#: Controller/Poll.php:936
 msgid "%1$s is scheduled for %2$s"
 msgstr "%1$s ist auf %2$s gelegt"
 
@@ -2075,6 +2195,9 @@ msgstr "Ressourcen verwalten"
 msgid "All Rights to administrate resources"
 msgstr "Alle Rechte um Ressourcen zu Administrieren"
 
+#~ msgid "The grant to access records marked as private in this container"
+#~ msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
+
 #~ msgid "By using this service you agree to our"
 #~ msgstr "Mit der Nutzung dieses Services "
 
@@ -2083,9 +2206,6 @@ msgstr "Alle Rechte um Ressourcen zu Administrieren"
 
 #~ msgid "Errors"
 #~ msgstr "Fehler"
-
-#~ msgid "Export Events"
-#~ msgstr "Termine exportieren"
 
 #~ msgid "Export as ODS"
 #~ msgstr "Exportieren als ODS"

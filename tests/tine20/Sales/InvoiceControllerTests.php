@@ -803,7 +803,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         
         $fe = new Admin_Frontend_Json();
-        $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
+        $userRoles = $fe->getRoles('user', array(), 'ASC', 0, 1);
         $userRole = $fe->getRole($userRoles['results'][0]['id']);
         
         $roleRights = $fe->getRoleRights($userRole['id']);
