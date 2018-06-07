@@ -33,10 +33,9 @@ class Felamimail_Setup_Update_Release11 extends Setup_Update_Abstract
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                         . ' Could not open defaultForwarding.sieve file');
                 }
-                throw new Tinebase_Exception_Backend('Could not open defaultForwarding.sieve file');
-            }
+            } else {
 
-            fwrite($fh, <<<'sieveFile'
+                fwrite($fh, <<<'sieveFile'
 require ["enotify", "variables", "copy", "body"];
 
 if header :contains "Return-Path" "<>" {
@@ -59,14 +58,14 @@ if header :contains "Return-Path" "<>" {
               "mailto:USER_EXTERNAL_EMAIL?body=${message}";
 }
 sieveFile
-            );
+                );
 
-            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                        . ' Could not close defaultForwarding.sieve file');
+                if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                            . ' Could not close defaultForwarding.sieve file');
+                    }
                 }
-                throw new Tinebase_Exception_Backend('Could not close defaultForwarding.sieve file');
             }
         }
 
