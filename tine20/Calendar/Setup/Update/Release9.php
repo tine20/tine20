@@ -66,7 +66,7 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
      *
      * add rrule_constraints
      */
-    public function update_4()
+    public function update_4($tableVersion = 12)
     {
         if (!$this->_backend->columnExists('rrule_constraints', 'cal_events')) {
             $seqCol = '<field>
@@ -80,7 +80,7 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
         }
 
 
-        $this->setTableVersion('cal_events', '12');
+        $this->setTableVersion('cal_events', $tableVersion);
         $this->setApplicationVersion('Calendar', '9.5');
     }
 
@@ -225,11 +225,20 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * redo update_4, it may have been skipped if updating from 2015.11
+     */
+    public function update_10()
+    {
+        $this->update_4();
+        $this->setApplicationVersion('Calendar', '9.11');
+    }
+
+    /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_10()
+    public function update_11()
     {
         $this->setApplicationVersion('Calendar', '10.0');
     }

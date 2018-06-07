@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Mail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -461,16 +461,16 @@ class Tinebase_Mail extends Zend_Mail
      */
     protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $charset)
     {
-        if ($charset == 'utf8') {
+        if ('utf8' === $charset) {
             $charset = 'utf-8';
-        } else if ($charset == 'us-ascii') {
+        } elseif ('us-ascii' === $charset) {
             // us-ascii caused problems with iconv encoding to utf-8
             $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (strpos($charset, '.') !== false) {
+        } elseif (strpos($charset, '.') !== false) {
             // the stream filter does not like charsets with a dot in its name
             // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
             $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (iconv($charset, 'utf-8', '') === false) {
+        } elseif (@iconv($charset, 'utf-8', '') === false) {
             // check if charset is supported by iconv
             $charset = self::DEFAULT_FALLBACK_CHARSET;
         }

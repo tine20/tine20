@@ -21,7 +21,7 @@ html, body {
 }
 
 .action_disable {
-    background-image:url(../../images/icon-set/icon_stop_neg.svg) !important;
+    background-image:url(../../images/icon-set/icon_stop.svg) !important;
 }
 
 .action_cut {
@@ -112,10 +112,6 @@ html, body {
 
 .action_changecolor {
     background-image:url(../../images/icon-set/icon_color.svg) !important;
-}
-
-.action_toggleshared {
-    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
 }
 
 .action_delete, .actionDelete {
@@ -274,7 +270,7 @@ html, body {
 }
 
 .tinebase-action-export-doc {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-word.png) !important;
+    background-image:url(../../images/icon-set/icon_doc_file.svg) !important;
 }
 
 
@@ -283,13 +279,7 @@ html, body {
 }
 
 .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
-}
-.x-btn-medium .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/22x22/mimetypes/text-csv.png) !important;
-}
-.x-btn-large .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/32x32/mimetypes/text-csv.png) !important;
+    background-image:url(../../images/icon-set/icon_mime_csv.svg) !important;
 }
 
 .action_options {
@@ -297,13 +287,7 @@ html, body {
 }
 
 .action_attach {
-    background-image:url(../../images/oxygen/16x16/actions/attach.png) !important;
-}
-.x-btn-medium .action_attach {
-    background-image:url(../../images/oxygen/22x22/actions/attach.png) !important;
-}
-.x-btn-large .action_attach {
-    background-image:url(../../images/oxygen/32x32/actions/attach.png) !important;
+    background-image:url(../../images/icon-set/icon_paperclip.svg) !important;
 }
 
 .action_image {
@@ -318,10 +302,6 @@ html, body {
 
 .tinebase-action-debug-console {
     background-image:url(../../images/icon-set/icon_debug.svg) !important;
-}
-
-.action_report {
-    background-image:url(../../images/oxygen/22x22/actions/history-kdeprint.png) !important;
 }
 
 .tinebase-dd-drop-ok-copy  .x-dd-drop-icon {
@@ -350,11 +330,7 @@ html, body {
 }
 
 .action-tinebase-favorite {
-    background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
-}
-
-.action-clipboard {
-    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+    background-image:url(../../images/icon-set/icon_star_full.svg) !important;
 }
 
 /* ----- login dialog --------------------------------------------------------*/
@@ -433,7 +409,7 @@ html, body {
 }
 
 .tb-about-whatsnew p {
-    background: transparent url(../../images/oxygen/16x16/actions/dialog-information.png) left top no-repeat;
+    background: transparent url(../../images/icon-set/icon_info.svg) left top no-repeat;
     padding: 2px 0 2px 20px;
 }
 
@@ -469,13 +445,13 @@ html, body {
 }
 
 .renderer_accountUserIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
 
 .renderer_accountUserChangedIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
     background-color: red !important;
 }
 
@@ -492,13 +468,13 @@ html, body {
 }
 
 .renderer_accountRoleIcon {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
+    background-image:url(../../images/icon-set/icon_user_role.svg) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
 
 .renderer_accountContactIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
@@ -510,7 +486,7 @@ html, body {
 }
 
 .renderer_accountAnyoneIcon {
-    background-image: url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
@@ -524,13 +500,7 @@ html, body {
 }
 
 .tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
-}
-.x-btn-medium .tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/22x22/actions/view-process-users.png) !important;
-}
-.x-btn-large .tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/32x32/actions/view-process-users.png) !important;
+    background-image:url(../../images/icon-set/icon_user_role.svg) !important;
 }
 
 .tinebase-accounttype-addanyone {
@@ -543,6 +513,10 @@ html, body {
 
 .action_noteification {
     background-image:url(../../images/icon-set/icon_notification.svg) !important;
+}
+
+.action_preview {
+    background-image:url(../../images/icon-set/icon_preview.svg) !important;
 }
 
 /* ----- notes ------------------------------------------------------------*/
@@ -560,16 +534,6 @@ html, body {
 
 .descriptionIcon {
    background-image:url(../../images/icon-set/icon_note.svg) !important;
-}
-
-.previewIcon {
-    background-image:url(../../images/oxygen/16x16/actions/fileview-preview.png) !important;
-}
-.x-btn-medium .previewIcon {
-    background-image:url(../../images/oxygen/22x22/actions/fileview-preview.png) !important;
-}
-.x-btn-large .previewIcon {
-    background-image:url(../../images/oxygen/32x32/actions/fileview-preview.png) !important;
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
@@ -648,8 +612,8 @@ html, body {
 
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
-    background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
-    top: 6px;
+    background-image:url("../../images/icon-set/icon_arrow_full_down.svg");
+    top: 5px;
     right: 19px;
 }
 
