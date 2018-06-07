@@ -1,21 +1,9 @@
 .felamimail-action-encrypt {
-    background-image:url(../../images/oxygen/16x16/actions/document-encrypt.png) !important;
-}
-.x-btn-medium .felamimail-action-encrypt {
-    background-image:url(../../images/oxygen/22x22/actions/document-encrypt.png) !important;
-}
-.x-btn-large .felamimail-action-encrypt {
-    background-image:url(../../images/oxygen/32x32/actions/document-encrypt.png) !important;
+    background-image:url(../../images/icon-set/icon_lock.svg) !important;
 }
 
 .felamimail-action-decrypt {
-    background-image:url(../../images/oxygen/16x16/actions/document-decrypt.png) !important;
-}
-.x-btn-medium .felamimail-action-decrypt {
-    background-image:url(../../images/oxygen/22x22/actions/document-decrypt.png) !important;
-}
-.x-btn-large .felamimail-action-decrypt {
-    background-image:url(../../images/oxygen/32x32/actions/document-decrypt.png) !important;
+    background-image:url(../../images/icon-set/icon_lock_open.svg) !important;
 }
 
 .action_email_flag {
@@ -31,7 +19,7 @@
 }
 
 .action_email_forward {
-    background-image:url(../../images/icon-set/icon_email_weiter.svg) !important;
+    background-image:url(../../images/icon-set/icon_email_forward.svg) !important;
 }
 
 .action_update_cache {
@@ -39,7 +27,7 @@
 }
 
 .action_mark_read {
-    background-image:url(../../images/icon-set/icon_email_markieren.svg) !important;
+    background-image:url(../../images/icon-set/icon_email_mark.svg) !important;
 }
 
 
@@ -52,43 +40,19 @@
 }
 
 .action_folder_emptytrash {
-    background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
-}
-.x-btn-medium .action_folder_emptytrash {
-    background-image:url(../../images/oxygen/22x22/actions/emptytrash.png) !important;
-}
-.x-btn-large .action_folder_emptytrash {
-    background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
+    background-image:url(../../images/icon-set/icon_trash.svg) !important;
 }
 
 .x-btn .action_saveAsDraft {
-    background-image:url(../../images/oxygen/16x16/places/folder-txt.png);
-}
-.x-btn-medium .action_saveAsDraft {
-    background-image:url(../../images/oxygen/22x22/places/folder-txt.png);
-}
-.x-btn-large .action_saveAsDraft {
-    background-image:url(../../images/oxygen/32x32/places/folder-txt.png);
+    background-image:url(../../images/icon-set/icon_drafts.svg) !important;
 }
 
 .x-btn .action_saveAsTemplate {
-    background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
-}
-.x-btn-medium .action_saveAsTemplate {
-    background-image:url(../../images/oxygen/22x22/places/folder-tar.png);
-}
-.x-btn-large .action_saveAsTemplate {
-    background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
+    background-image:url(../../images/icon-set/icon_folder_template.svg) !important;
 }
 
 .x-btn .action_email_download {
-    background-image:url(../../images/oxygen/16x16/actions/document-save.png);
-}
-.x-btn-medium .action_email_download {
-    background-image:url(../../images/oxygen/22x22/actions/document-save.png);
-}
-.x-btn-large .action_email_download {
-    background-image:url(../../images/oxygen/32x32/actions/document-save.png);
+    background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 
 /* rule grid actions */
@@ -108,13 +72,7 @@
 /* other actions */
 
 .felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/16x16/actions/mail-mark-task.png) !important;
-}
-.x-btn-medium .felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/22x22/actions/mail-mark-task.png) !important;
-}
-.x-btn-large .felamimail-action-reading-confirmation {
-    background-image:url(../../images/oxygen/32x32/actions/mail-mark-task.png) !important;
+    background-image:url(../../images/icon-set/icon_tasks.svg) !important;
 }
 
 
@@ -237,37 +195,8 @@
     opacity: 0.5;
 }
 
-.felamimail-node-intelligent-marked img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/folder-important.png);
-}
-.x-btn-medium .felamimail-node-intelligent-marked img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/22x22/places/folder-important.png);
-}
-.x-btn-large .felamimail-node-intelligent-marked img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/32x32/places/folder-important.png);
-}
-
-.felamimail-node-intelligent-unread img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
-    /* background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png); */
-}
-.x-btn-medium .felamimail-node-intelligent-unread img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/22x22/places/folder-bookmarks.png);
-    /* background-image:url(../../images/oxygen/22x22/places/mail-folder-sent.png); */
-}
-.x-btn-large .felamimail-node-intelligent-unread img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/32x32/places/folder-bookmarks.png);
-    /* background-image:url(../../images/oxygen/32x32/places/mail-folder-sent.png); */
-}
-
 .felamimail-node-account img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/places/user-home.png);
-}
-.x-btn-medium .felamimail-node-account img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/22x22/places/user-home.png);
-}
-.x-btn-large .felamimail-node-account img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/32x32/places/user-home.png);
+    background-image: url(../../images/icon-set/icon_base.svg);
 }
 
 .felamimail-node-statusbox {
