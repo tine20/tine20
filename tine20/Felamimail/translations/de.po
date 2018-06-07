@@ -868,6 +868,12 @@ msgstr "Nachricht"
 msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
 msgstr "Beachte: Diese E-Mail wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
 
+msgid "Mass Mailing"
+msgstr "Massen-Mail"
+
+msgid "Activate this toggle button to send the mail as separate mail to each recipient."
+msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der E-Mail."
+
 #: js/MessageEditDialog.js:1317
 msgid "Empty subject"
 msgstr "Leerer Betreff"
