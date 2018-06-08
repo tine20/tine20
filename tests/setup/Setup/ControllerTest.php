@@ -378,11 +378,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBackupStructureOnlyTables()
     {
-        require_once __DIR__ . '/Controller_Mock.php';
-
-        $setupControllerMock = new Setup_Controller_Mock();
-
-        $tables = $setupControllerMock->getBackupStructureOnlyTables();
+        $tables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
         $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
     }

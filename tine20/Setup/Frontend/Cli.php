@@ -171,6 +171,8 @@ class Setup_Frontend_Cli
         // path!
         // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
 
+        $noBackupTables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
+
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         if (!isset($options['mysqlConfigFile'])) {
             echo 'option mysqlConfigFile is mandatory';
@@ -253,7 +255,7 @@ class Setup_Frontend_Cli
         $mysqlDB->query('SET autocommit = 0');
 
         foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
-            if (strpos($table, 'cache') !== false) {
+            if (in_array($table, $noBackupTables)) {
                 continue;
             }
             if (!in_array($table, $pgsqlTables)) {
