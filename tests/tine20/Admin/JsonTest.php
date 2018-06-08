@@ -271,8 +271,10 @@ class Admin_JsonTest extends TestCase
     public function testUpdateUserWithoutContainerACL()
     {
         $account = $this->testSaveAccount();
+        /** @var Tinebase_Model_Container $internalContainer */
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
-        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
+        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet(
+            $internalContainer->getGrantClass()), true, false);
         $account = $this->_json->getUser($account['accountId']);
 
         self::assertTrue(isset($account['groups']['results']), 'account got no groups: ' . print_r($account, true));
@@ -293,8 +295,10 @@ class Admin_JsonTest extends TestCase
     public function testUpdateUserRemoveGroup()
     {
         $account = $this->testSaveAccount();
+        /** @var Tinebase_Model_Container $internalContainer */
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
-        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
+        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet(
+            $internalContainer->getGrantClass()), true, false);
         
         $adminGroupId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
         $account['groups'] = array($account['accountPrimaryGroup'], $adminGroupId);

@@ -62,7 +62,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'model'             => 'Addressbook_Model_Contact'
         )));
 
-        $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->objects['grants'] = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass(), array(
             array(
                 'account_id'     => Tinebase_Core::getUser()->getId(),
                 'account_type'   => 'user',
@@ -292,7 +292,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
-        $this->assertEquals('Tinebase_Model_Grants', get_class($grants), 'wrong type');
+        $this->assertEquals($this->objects['initialContainer']->getGrantClass(), get_class($grants), 'wrong type');
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_READ});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_ADD});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_EDIT});
@@ -305,7 +305,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGrants()
     {
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -336,7 +336,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         );
         
         $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
-        $this->assertEquals('Tinebase_Record_RecordSet', get_class($grants), 'wrong type');
+        $this->assertEquals($this->objects['initialContainer']->getGrantClass(), $grants->getRecordClassName(),
+            'wrong type');
         $this->assertEquals(2, count($grants));
 
         $grants = $grants->toArray();
@@ -362,7 +363,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->testSetGrants();
         
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -439,7 +440,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSearchContainerWithoutReadButWithAdminGrant()
     {
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -554,9 +555,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, TRUE);
 
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $grantClass = $container->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(
+            new $grantClass(
                 array(
                     'account_id'    => $user->accountId,
                     'account_type'  => 'user',
@@ -569,7 +571,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(
+            new $grantClass(
                 array(
                     'account_id'    => Tinebase_Core::getUser()->getId(),
                     'account_type'  => 'user',
@@ -581,7 +583,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        Tinebase_Container::getInstance()->setGrants($container->id, $newGrants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $newGrants, TRUE);
 
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ
@@ -599,7 +601,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         // TODO move to tear down
         Tinebase_User::getInstance()->setStatus($user, 'enabled');
-        Tinebase_Container::getInstance()->setGrants($container->id, $oldGrants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $oldGrants, TRUE);
         
         $this->assertEquals(0, $otherUsers->filter('accountId', $user->accountId)->count(), 'should not find jsmiths container');
     }
@@ -681,7 +683,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'model'             => Addressbook_Model_Contact::class,
         ));
         
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'      => '0',
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -712,7 +714,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
         
         // have readGrant for sclever
-        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->_instance->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'    => Tinebase_Core::getUser()->getId(),
                 'account_type'  => 'user',
@@ -728,7 +730,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(TRUE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever _should have_ a read grant');
         
         // remove readGrant for sclever again
-        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->_instance->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'    => Tinebase_Core::getUser()->getId(),
                 'account_type'  => 'user',

@@ -988,10 +988,12 @@ Zeile 3</AirSyncBase:Data>
         $folderA = $this->testCreateFolder(); // personal of test user
         
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        /** @var Tinebase_Model_Container $folderB */
         $folderB = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $sclever->getId());
+        $folderBContainer = Tinebase_Container::getInstance()->getContainerById($folderB);
 
         // have syncGerant for sclever
-        Tinebase_Container::getInstance()->setGrants($folderB, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        Tinebase_Container::getInstance()->setGrants($folderBContainer, new Tinebase_Record_RecordSet($folderBContainer->getGrantClass(), array(
             array(
                 'account_id'    => $sclever->getId(),
                 'account_type'  => 'user',

@@ -126,7 +126,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
             case Calendar_Model_ResourceGrants::EVENTS_FREEBUSY:
                 $expectedGrants = [
                     Calendar_Model_ResourceGrants::EVENTS_FREEBUSY,
-                    Calendar_Model_ResourceGrants::GRANT_FREEBUSY,
+                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
                 ];
                 break;
             case Calendar_Model_ResourceGrants::EVENTS_READ:

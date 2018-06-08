@@ -155,13 +155,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         
         // grant helper fields
-        Tinebase_Model_Grants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_SYNC     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_EXPORT   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_EDIT     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_DELETE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_PRIVATE  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -192,7 +192,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_EXPORT,
         Tinebase_Model_Grants::GRANT_EDIT,
         Tinebase_Model_Grants::GRANT_DELETE,
-        Tinebase_Model_Grants::GRANT_PRIVATE,
+        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
         'external_seq'
     );
 
@@ -469,7 +469,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
             $hasGrant &= (
                 // private grant
-                $this->{Tinebase_Model_Grants::GRANT_PRIVATE} ||
+                $this->{Calendar_Model_EventPersonalGrants::GRANT_PRIVATE} ||
                 // I'm organizer
                 Tinebase_Core::getUser()->contact_id == ($this->organizer instanceof Addressbook_Model_Contact ? $this->organizer->getId() : $this->organizer) ||
                 // I'm attendee

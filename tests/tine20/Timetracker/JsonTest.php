@@ -1066,8 +1066,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
         
         $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
-        
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+
+        $container = new Tinebase_Model_Container(
+            array(
+                'name'           => 'shared',
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'       => $user,
+                'backend'        => 'SQL',
+                'application_id' => $app->getId(),
+                'model'          => 'Addressbook_Model_Contact',
+                'color'          => '#000000'
+            ));
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass());
         $grants->addRecord(new Tinebase_Model_Grants(array(
             'account_type' => 'user', 'account_id' => Tinebase_Core::getUser()->getId(),
             Tinebase_Model_Grants::GRANT_READ      => true,
@@ -1083,18 +1093,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             Tinebase_Model_Grants::GRANT_DELETE    => true,
         )));
         
-        $container = Tinebase_Container::getInstance()->addContainer(
-            new Tinebase_Model_Container(
-                array(
-                    'name'           => 'shared',
-                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'owner_id'       => $user,
-                    'backend'        => 'SQL',
-                    'application_id' => $app->getId(),
-                    'model'          => 'Addressbook_Model_Contact',
-                    'color'          => '#000000'
-                )), $grants, TRUE
-        );
+        $container = Tinebase_Container::getInstance()->addContainer($container, $grants, true);
         
         // create timeaccount
         $ta = $this->_json->saveTimeaccount($ta);

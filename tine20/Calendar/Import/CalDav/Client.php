@@ -308,7 +308,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
-            $grants = $this->getCalendarGrants($calUri);
+            $grants = $this->getCalendarGrants($calUri, $container->getGrantClass());
             $this->_assureAdminGrantForOwner($container, $grants);
             $this->_removeSyncGrantIfContainerEmpty($container, $grants);
             Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
@@ -774,9 +774,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
      * get grants for cal uri
      * 
      * @param string $calUri
+     * @param string $grantClass
      * @return Tinebase_Record_RecordSet
      */
-    public function getCalendarGrants($calUri)
+    public function getCalendarGrants($calUri, $grantClass)
     {
         $grants = array();
         $user = array();
@@ -850,7 +851,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' grants: ' . print_r($grants, true));
         
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants, TRUE);
+        return new Tinebase_Record_RecordSet($grantClass, $grants, TRUE);
     }
     
     protected function _getAllGrants()
@@ -863,15 +864,15 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             Tinebase_Model_Grants::GRANT_EXPORT=> true,
             Tinebase_Model_Grants::GRANT_SYNC=> true,
             Tinebase_Model_Grants::GRANT_ADMIN=> true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
-            Tinebase_Model_Grants::GRANT_PRIVATE=> true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
         );
     }
 
     protected function _getFreeBusyGrants()
     {
         return array(
-            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         );
     }
 
@@ -881,7 +882,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             Tinebase_Model_Grants::GRANT_READ=> true,
             Tinebase_Model_Grants::GRANT_EXPORT=> true,
             Tinebase_Model_Grants::GRANT_SYNC=> true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         );
     }
 

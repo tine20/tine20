@@ -107,7 +107,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
          2 => Tinebase_Model_Grants::GRANT_ADD,
          4 => Tinebase_Model_Grants::GRANT_EDIT,
          8 => Tinebase_Model_Grants::GRANT_DELETE,
-        16 => Tinebase_Model_Grants::GRANT_PRIVATE,
+        16 => Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
     );
     
     /**
@@ -472,7 +472,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
             $tineGrant->{Tinebase_Model_Grants::GRANT_EXPORT} = $tineGrant->{Tinebase_Model_Grants::GRANT_READ};
             $tineGrant->{Tinebase_Model_Grants::GRANT_SYNC} = $tineGrant->{Tinebase_Model_Grants::GRANT_READ};
-            $tineGrant->{Tinebase_Model_Grants::GRANT_FREEBUSY} = $this->getApplication()->name == 'Calendar';
+            $tineGrant->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = $this->getApplication()->name == 'Calendar';
             
             $tineGrants->addRecord($tineGrant);
         }

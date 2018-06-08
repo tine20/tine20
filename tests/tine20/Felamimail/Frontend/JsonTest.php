@@ -1423,7 +1423,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'Addressbook',
             'Internal Contacts',
             Tinebase_Model_Container::TYPE_SHARED);
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $grants = new Tinebase_Record_RecordSet($internalContacts->getGrantClass(), array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
@@ -1440,7 +1440,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => false,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         )));
-        Tinebase_Container::getInstance()->setGrants($internalContacts->getId(), $grants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($internalContacts, $grants, TRUE);
 
         $subject = 'test note';
         $messageData = $this->_getMessageData('', $subject);

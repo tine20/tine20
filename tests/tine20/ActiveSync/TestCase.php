@@ -139,39 +139,45 @@ abstract class ActiveSync_TestCase extends TestCase
             );
         } catch (Tinebase_Exception_NotFound $e) {
             $creatorGrants = array(
-                'account_id'     => $this->_testUser->getId(),
-                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ      => true,
-                Tinebase_Model_Grants::GRANT_ADD       => true,
-                Tinebase_Model_Grants::GRANT_EDIT      => true,
-                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                'account_id' => $this->_testUser->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
                 //Tinebase_Model_Grants::GRANT_EXPORT    => true,
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
                 // NOTE: Admin Grant implies all other grants
                 //Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );
-            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
 
             switch ($this->_applicationName) {
-                case 'Calendar':    $recordClass = 'Calendar_Model_Event'; break;
-                case 'Addressbook': $recordClass = 'Addressbook_Model_Contact'; break;
-                case 'Tasks':       $recordClass = 'Tasks_Model_Task'; break;
-                default: throw new Exception('handle this model!');
+                case 'Calendar':
+                    $recordClass = 'Calendar_Model_Event';
+                    break;
+                case 'Addressbook':
+                    $recordClass = 'Addressbook_Model_Contact';
+                    break;
+                case 'Tasks':
+                    $recordClass = 'Tasks_Model_Task';
+                    break;
+                default:
+                    throw new Exception('handle this model!');
             }
 
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
-                'name'              => 'ContainerWithoutSyncGrant-' . $this->_applicationName,
-                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'owner_id'          => Tinebase_Core::getUser(),
-                'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-                'model'             => $recordClass,
+                'name' => 'ContainerWithoutSyncGrant-' . $this->_applicationName,
+                'type' => Tinebase_Model_Container::TYPE_PERSONAL,
+                'owner_id' => Tinebase_Core::getUser(),
+                'backend' => 'Sql',
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+                'model' => $recordClass,
             ));
-            
+
             $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant);
-            Tinebase_Container::getInstance()->setGrants($containerWithSyncGrant, $grants, TRUE, FALSE);
+            Tinebase_Container::getInstance()->setGrants($containerWithSyncGrant, new Tinebase_Record_RecordSet(
+                $containerWithoutSyncGrant->getGrantClass(), [$creatorGrants]), true, false);
         }
-        
         $this->objects['container']['withoutSyncGrant'] = $containerWithoutSyncGrant;
         
         return $this->objects['container']['withoutSyncGrant'];

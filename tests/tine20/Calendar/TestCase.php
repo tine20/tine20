@@ -348,9 +348,9 @@ abstract class Calendar_TestCase extends TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
             // TODO add sync grant?
         );
     }

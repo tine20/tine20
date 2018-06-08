@@ -42,8 +42,8 @@ class Calendar_Frontend_CliTest extends TestCase
     {
         $calendar = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
         $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
-        $this->_setPersonaGrantsForTestContainer($calendar->getId(), 'sclever', false, true, [
-            new Tinebase_Model_Grants([
+        $this->_setPersonaGrantsForTestContainer($calendar, 'sclever', false, true, [
+            [
                 'account_id'    => $userGroup->getId(),
                 'account_type'  => 'group',
                 Tinebase_Model_Grants::GRANT_READ     => true,
@@ -51,7 +51,7 @@ class Calendar_Frontend_CliTest extends TestCase
                 Tinebase_Model_Grants::GRANT_EDIT     => true,
                 Tinebase_Model_Grants::GRANT_DELETE   => false,
                 Tinebase_Model_Grants::GRANT_ADMIN    => false,
-            ])
+            ]
         ]);
 
         $opts = new Zend_Console_Getopt('abp:');
