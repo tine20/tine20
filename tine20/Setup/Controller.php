@@ -2390,7 +2390,7 @@ class Setup_Controller
 
             $backupOptions = array(
                 'backupDir'         => $backupDir,
-                'structTables'      => $this->_getBackupStructureOnlyTables(),
+                'structTables'      => $this->getBackupStructureOnlyTables(),
             );
 
             $this->_backend->backup($backupOptions);
@@ -2412,7 +2412,7 @@ class Setup_Controller
      * @return array
      * @throws Setup_Exception_NotFound
      */
-    protected function _getBackupStructureOnlyTables()
+    public function getBackupStructureOnlyTables()
     {
         $tables = array();
 
