@@ -166,10 +166,9 @@ class Setup_Frontend_Cli
         // TODO ask for cleanup? make cleanup?
         // TODO check maintenance mode, its needs to be on!
         // TODO check action queue is empty
-        // TODO check admin right
         // known issues:
         // path!
-        // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
+        // [r?]trim unique keys, if there was something trimmed, remember, second+ time add _ or something
 
         $noBackupTables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
@@ -261,6 +260,10 @@ class Setup_Frontend_Cli
             if (!in_array($table, $pgsqlTables)) {
                 continue;
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Migrating table ' . $table . ' ...');
+
             $start = 0;
             $limit = 50;
             $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
@@ -278,6 +281,7 @@ class Setup_Frontend_Cli
                 ') VALUES ';
             $select = $pgsqlDb->select()->from($table, $selectColumns)->order($primaries);
 
+            $rowcount = 0;
             while (true) {
                 $select->limit($limit, $start);
                 if (empty($data = $select->query()->fetchAll(Zend_Db::FETCH_NUM))) {
@@ -295,13 +299,17 @@ class Setup_Frontend_Cli
                         $firstRow = false;
                     }
                     $first = false;
+                    $rowcount++;
                 }
 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' ' . $query);
 
                 $mysqlDB->query($query . ')');
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' ... done. Migrated ' . $rowcount . ' rows.');
         }
 
         $mysqlDB->query('COMMIT');
