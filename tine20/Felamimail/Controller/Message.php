@@ -982,14 +982,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 // if its not a winmail.dat, or the winmail.dat couldn't be expanded 
                 // properly because it has richtext embedded, return attachment as it is
-                if (empty($expanded)) {
+                if (empty($expanded) && isset($part['contentType']) && isset($part['partId'])) {
                 
                     $attachmentData = array(
                         'content-type' => $part['contentType'], 
                         'filename'     => $filename,
                         'partId'       => $part['partId'],
-                        'size'         => $part['size'],
-                        'description'  => $part['description'],
+                        'size'         => isset($part['size']) ? $part['size'] : 0,
+                        'description'  => isset($part['description']) ? $part['description'] : '',
                         'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
                     );
                     
