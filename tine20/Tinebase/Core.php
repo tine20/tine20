@@ -244,7 +244,7 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        $request = new Tinebase_Http_Request();
+        $request = new \Zend\Http\PhpEnvironment\Request();
         self::set(self::REQUEST, $request);
         
         // check transaction header
