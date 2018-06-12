@@ -193,3 +193,15 @@ Ext.XTemplate.prototype.encode = function(value) {
 Ext.XTemplate.prototype.doubleEncode = function(value) {
     return value ? Tine.Tinebase.common.doubleEncode(value) : '';
 };
+
+/**
+ * allow separate icons for small buttons - needed e.g. for animations
+ * @type {Ext.Template}
+ */
+Ext.Button.buttonTemplate = new Ext.Template(
+    '<table id="{4}" cellspacing="0" class="x-btn {3}"><tbody class="{1}">',
+    '<tr><td class="x-btn-tl"><i>&#160;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&#160;</i></td></tr>',
+    '<tr><td class="x-btn-ml"><i>&#160;</i></td><td class="x-btn-mc"><em class="{2}" unselectable="on"><button type="{0}"></button><div class="x-btn-image"></div></em></td><td class="x-btn-mr"><i>&#160;</i></td></tr>',
+    '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
+    '</tbody></table>');
+Ext.Button.buttonTemplate.compile();
