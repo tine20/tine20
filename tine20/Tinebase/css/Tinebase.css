@@ -807,46 +807,46 @@ span:hover.tinebase-showheaders-link {
 
 
 /* multiple edit dialog */
-    
-.tinebase-editmultipledialog-noneedit, 
-input.tinebase-editmultipledialog-noneedit, 
+
+.tinebase-editmultipledialog-noneedit,
+input.tinebase-editmultipledialog-noneedit,
 textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background-color: #f4f1d3;
     background-image:none!important;
     }
-    
+
 .tinebase-editmultipledialog-clearer {
     background: transparent url("../../library/ExtJS/resources/images/default/form/clear-trigger.gif") -16px top no-repeat;
-    border-bottom:1px solid #7eadd9; 
+    border-bottom:1px solid #7eadd9;
     height:18px;
     width:18px;
     display:block;
     position:absolute;
     z-index:9;
     }
-    
+
 .tinebase-editmultipledialog-clearer.hidden {
-    border-bottom:none; 
-    height:18px; 
+    border-bottom:none;
+    height:18px;
     background-image: url(../../library/ExtJS/resources/images/default/s.gif);
     }
-    
+
 .tinebase-editmultipledialog-clearer.undo {
     background: transparent url(../../images/oxygen/16x16/actions/edit-undo-grey.png) 0 3px no-repeat;
-    border-bottom: none;   
+    border-bottom: none;
     }
 
 .tinebase-editmultipledialog-clearer.undo.over {
     background: transparent url(../../images/oxygen/16x16/actions/edit-undo.png) 0 3px no-repeat;
     }
-    
+
 .tinebase-editmultipledialog-dirty {
     position:absolute;
     left:0;
     background-image: url(../../library/ExtJS/resources/images/default/grid/dirty.gif);
     background-repeat: no-repeat;
-}    
-    
+}
+
 .tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
 
 .tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
@@ -1020,23 +1020,6 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     left: 50%;
 }
 
-.x-item-disabled .x-tbar-loading {
-    background-image: url(../../images/icon-set/icon_reload.svg) !important;
-    animation-name: loading-animation;
-    animation-duration: 1000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(.17, .67, .52, .71);
-}
-
-@keyframes loading-animation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .x-tab-strip .x-tab-with-icon span.x-tab-strip-text {
     padding-left: 20px;
     background-position: 0 1px;
@@ -1062,4 +1045,79 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .x-cols-icon {
     background: url(../../images/icon-set/icon_column_neg.svg) !important;
+}
+
+
+/* only works for small btns as we don't have to align them*/
+.x-btn {
+    position: relative;
+}
+
+.x-btn-image {
+    top: 2px;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
+
+/* loading animations */
+@keyframes loading-animation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.x-mask-wait,
+.x-btn-wait + div,
+.x-item-disabled .x-tbar-loading + div,
+.x-item-disabled .x-tbar-loading {
+    animation-name: loading-animation;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.17, .67, .52, .71);
+}
+
+.x-item-disabled .x-tbar-loading,
+.x-btn-wait {
+    background-image: none !important;
+}
+
+.x-item-disabled .x-tbar-loading + div,
+.x-btn-wait + div {
+    width: 12px;
+    height: 12px;
+    top: 5px;
+    left: 5px;
+}
+
+.x-mask-wait,
+.x-item-disabled .x-tbar-loading + div,
+.x-btn-wait + div {
+    box-sizing: border-box;
+    border: 2px solid #ccc !important;
+    border-top: 2px solid #2196f3 !important;
+    border-radius: 100%;
+}
+
+.x-mask-loading {
+    background: none;
+    border: none;
+}
+
+.x-mask-loading div {
+    background-image: none !important;
+}
+
+.x-mask-wait {
+    left: 8px;
+    padding: 0px !important;
+    position: absolute;
+    top: 7px;
+    height: 16px;
+    width: 16px;
+    margin: 0px;
+    background-image: none !important;
 }
