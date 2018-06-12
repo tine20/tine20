@@ -6,12 +6,12 @@
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
 
 ## Official Community ressources
-* [Tine2.0 Contributors Guide](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/CONTRIBUTING.md)
-* [Documentation Wiki](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki)
-* [Github Issue tracker / Questions](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues)
-* [Github Implementation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/1)
-* [Github Documentation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/2)
-* [Package Downloads](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/releases)
+* [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
+* [Documentation Wiki](https://github.com/tine20/tine20/wiki)
+* [Github Issue tracker / Questions](https://github.com/tine20/tine20/issues)
+* [Github Implementation Project](https://github.com/tine20/tine20/projects/1)
+* [Github Documentation Project](https://github.com/tine20/tine20/projects/2)
+* [Package Downloads](https://github.com/tine20/tine20/releases)
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20:matrix.org](https://riot.im/app/#/room/#tine20:matrix.org)
 * [Gitter chat room](https://gitter.im/tine20/Lobby)
@@ -36,7 +36,7 @@ don't fix bugs or supply security updates for old versions.
 In general, users of the Community Edition are technically experienced and able to help themselves. The ability to read,
 understand and change the software as well as to share the new version with others really is the heart of free software.
 
-Moreover, in our [Issues and Questions Section](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues)
+Moreover, in our [Issues and Questions Section](https://github.com/tine20/tine20/issues)
 you can get support from other community members. As a rule of thumb: You can expect more support from others the more
 you contribute yourself. Don't expect others to contribute if you are not willing to contribute yourself. Remember: We
 are a community of free software enthusiasts and innovators. If you are out for a good Samaritan you need to look
@@ -76,4 +76,4 @@ all Tine 2.0 specific source code it's possible to offer it with different licen
 The name "Tine 2.0" is our registered trademark. This is for your and our safety. We can use the name and logo without
 legal fraught from other parties.
 
-see [Tine2.0 LICENSE file](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/LICENSE.md)
+see [Tine2.0 LICENSE file](https://github.com/tine20/tine20/blob/master/LICENSE.md)
