@@ -306,6 +306,30 @@ class Sales_JsonTest extends TestCase
     }
 
     /**
+     * testSearchActiveAndInactiveContracts
+     */
+    public function testSearchActiveAndInactiveContracts()
+    {
+        $contract = $this->_getContract('phpunit contract', 'blabla', [
+            // inactive contract
+            'end_date' => Tinebase_DateTime::now()->subDay(1)->toString()
+        ]);
+        $this->_instance->saveContract($contract->toArray());
+
+        // search & check
+        $filter = $this->_getFilter($contract->title);
+        $filter[] = array('field' => 'end_date', 'operator' => 'before', 'value' => Tinebase_Model_Filter_Date::DAY_THIS);
+        $search = $this->_instance->searchContracts($filter, $this->_getPaging());
+        $this->assertEquals(1, $search['totalcount'], 'inactive contract should be found');
+        $this->assertEquals($contract->title, $search['results'][0]['title']);
+
+        $filter = $this->_getFilter($contract->title);
+        $filter[] = array('field' => 'end_date', 'operator' => 'after', 'value' => Tinebase_Model_Filter_Date::DAY_LAST);
+        $search = $this->_instance->searchContracts($filter, $this->_getPaging());
+        $this->assertEquals(0, $search['totalcount'], 'inactive contract should not be found');
+    }
+
+    /**
      * assert products filter
      */
     public function testContractFilterModel()
@@ -509,14 +533,17 @@ class Sales_JsonTest extends TestCase
     /**
      * get contract
      *
+     * @param $title
+     * @param $desc
+     * @param $additionaldata
      * @return Sales_Model_Contract
      */
-    protected function _getContract($title = 'phpunit contract', $desc = 'blabla')
+    protected function _getContract($title = 'phpunit contract', $desc = 'blabla', $additionaldata = [])
     {
-        return new Sales_Model_Contract(array(
+        return new Sales_Model_Contract(array_merge([
             'title'         => $title,
             'description'   => $desc,
-        ), TRUE);
+        ], $additionaldata), TRUE);
     }
 
     /**

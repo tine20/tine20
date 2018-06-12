@@ -89,6 +89,8 @@ class Sales_Setup_Initialize extends Setup_Initialize
         Sales_Setup_Update_Release8::createDefaultFavoritesForSub22();
         
         Sales_Setup_Update_Release8::createDefaultFavoritesForSub24();
+
+        Sales_Setup_Update_Release12::createDefaultFavoritesForContracts();
     }
     
     /**

@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        add year to 'inweek' filter?
  */
 
 /**
@@ -52,7 +50,13 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         'before_or_equals'  => array('sqlop' => ' <= ?'),
         'after_or_equals'   => array('sqlop' => ' >= ?'),
     );
-    
+
+    const DAY_THIS = 'dayThis';
+    const DAY_LAST = 'dayLast';
+    const DAY_NEXT = 'dayNext';
+
+    // @todo add MONTH/YEAR constants
+
     /**
      * date format string
      *
@@ -101,7 +105,52 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             }
         }
     }
-    
+
+    /**
+     * convert string in user time to UTC
+     *
+     * @param string $_string
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _convertStringToUTC($_string)
+    {
+        if (preg_match('/^(day|week|month|year)/', $_string, $matches)) {
+            if ($matches[1] === 'day') {
+                $date = Tinebase_DateTime::now();
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+            switch ($this->getOperator()) {
+                case 'before':
+                case 'after_or_equals':
+                    $date->setTime(0, 0, 0);
+                    break;
+                case 'after':
+                case 'before_or_equals':
+                    $date->setTime(23, 59, 59);
+                    break;
+            }
+            switch ($_string) {
+                case Tinebase_Model_Filter_Date::DAY_THIS:
+                    $string = $date->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_LAST:
+                    $string = $date->subDay(1)->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_NEXT:
+                    $string = $date->addDay(1)->toString();
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+        } else {
+            $string = $_string;
+        }
+
+        return parent::_convertStringToUTC($string);
+    }
+
     /**
      * calculates the date filter values
      *
@@ -239,11 +288,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     );
                     break;
                 /******* day *********/
-                case 'dayNext':
+                case self::DAY_NEXT:
                     $date->add(2, Tinebase_DateTime::MODIFIER_DAY);
-                case 'dayLast':
+                case self::DAY_LAST:
                     $date->sub(1, Tinebase_DateTime::MODIFIER_DAY);
-                case 'dayThis':
+                case self::DAY_THIS:
                     $value = array(
                         $date->toString($this->_dateFormat), 
                         $date->toString($this->_dateFormat), 
