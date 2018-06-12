@@ -59,6 +59,9 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
         for (var index = 0; index < relations.length; index++) {
             var el = relations[index];
             if (el.type == this.type && el.related_model == this.relModel) {
+                if (!el.related_record) {
+                    return i18n._('No Access');
+                }
                 var record = new this.recordClass(el.related_record);
                 return Ext.util.Format.htmlEncode(record.getTitle());
             }
