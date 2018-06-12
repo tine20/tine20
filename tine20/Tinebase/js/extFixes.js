@@ -1065,3 +1065,15 @@ Ext.override(Ext.layout.ToolbarLayout, {
         return cfg;
     }
 });
+
+Ext.override(Ext.LoadMask, {
+    onBeforeLoad: function() {
+        if(!this.disabled){
+            this.el.mask(this.msg, this.msgCls);
+            Ext.fly(this.el.query('.ext-el-mask-msg')[0]).appendChild(Ext.DomHelper.createDom({tag: 'div', cls: 'x-mask-wait'}));
+        }
+    },
+    onLoad : function(){
+        this.el.unmask(this.removeMask);
+    },
+});
