@@ -195,10 +195,10 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_7()
     {
         $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter([
-            ['field' => 'application_id', 'operator' => 'equqls', 'value' => Tinebase_Application::getInstance()
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()
                 ->getApplicationByName('Calendar')->getId()],
-            ['field' => 'model', 'operator' => 'equqls', 'value' => Calendar_Model_Event::class],
-            ['field' => 'type', 'operator' => 'equqls', 'value' => Tinebase_Model_Container::TYPE_PERSONAL],
+            ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL],
         ]));
 
         /** @var Tinebase_Model_Container $container */
@@ -208,5 +208,16 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Calendar', '11.8');
+    }
+
+    /**
+     * update to 11.9
+     */
+    public function update_8()
+    {
+        $this->updateKeyFieldIcon(Calendar_Config::getInstance(), Calendar_Config::ATTENDEE_STATUS);
+        $this->updateKeyFieldIcon(Calendar_Config::getInstance(), Calendar_Config::EVENT_STATUS);
+
+        $this->setApplicationVersion('Calendar', '11.9');
     }
 }

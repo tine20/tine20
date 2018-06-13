@@ -7,6 +7,7 @@
  *
  */
 
+.action_edit_file,
 .t-contenttype-node .action_edit_file {
     background-image:url(../../images/icon-set/icon_filemanager_bearbeiten.svg) !important;
 }

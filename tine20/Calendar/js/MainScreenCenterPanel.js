@@ -163,7 +163,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             requiredGrant: 'deleteGrant',
             text: this.app.i18n._('Copy Event to clipboard'),
             handler: this.onCopyToEvent.createDelegate(this),
-            iconCls: 'action_editcopy'
+            iconCls: 'action_copy'
         });
         
         this.action_cancelPasting = new Ext.Action({

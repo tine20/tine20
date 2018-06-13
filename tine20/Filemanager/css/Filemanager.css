@@ -51,7 +51,12 @@
 
 .x-type-data-safe .x-tree-node-icon,
 .x-type-data-safe .x-tinebase-typefolder .x-grid3-cell-inner {
-    filter: invert(10%) saturate(500%) hue-rotate(345deg);
+    background-image:url(../../images/icon-set/icon_folder_red.svg) !important;
+
+}
+
+.x-type-data-safe.x-tree-node-expanded .x-tree-node-icon {
+    background-image:url(../../images/icon-set/icon_filemanager_red.svg) !important;
 }
 
 .x-tree-node .x-type-data-safe a span,

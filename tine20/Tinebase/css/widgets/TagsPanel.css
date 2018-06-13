@@ -1,5 +1,13 @@
 .x-widget-tag-action-detach {
-    background-image:url(../../../images/oxygen/16x16/actions/draw-eraser.png) !important;
+    background-image:url(../../../images/icon-set/icon_tag_detache.svg) !important;
+}
+
+.action_tag {
+    background-image:url(../../../images/icon-set/icon_tag.svg) !important;
+}
+
+.action_tag_delete {
+    background-image:url(../../../images/icon-set/icon_tag_delete.svg) !important;
 }
 
 .x-widget-tag-tagitem {
