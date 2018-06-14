@@ -516,9 +516,10 @@ class Setup_Update_Abstract
     }
 
     /**
-     * update to 11.28
+     * updateKeyFieldIcon
      *
-     * eventually add missing indexed_hash column to tree_nodes
+     * @param $configController
+     * @param $configName
      */
     public function updateKeyFieldIcon($configController, $configName)
     {
@@ -527,7 +528,7 @@ class Setup_Update_Abstract
         $dirty = false;
         foreach ($defintion['default']['records'] as $defaultData) {
             $existing = $config->records->getById($defaultData['id']);
-            if ($existing && $existing->icon != $defaultData['icon']) {
+            if ($existing && isset($defaultData['icon']) && $existing->icon != $defaultData['icon']) {
                 $existing->icon = $defaultData['icon'];
                 $dirty = true;
             }
@@ -538,5 +539,4 @@ class Setup_Update_Abstract
             // $configController->set($configName, $config);
         }
     }
-
 }
