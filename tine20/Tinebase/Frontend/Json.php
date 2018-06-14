@@ -824,10 +824,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
-            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
             'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
+            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
+            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
+            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
+            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
         );
 
