@@ -178,8 +178,8 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
             
             $linkedObjects[] = array($_translate->_('Contacts'), 'headline');
     
-            $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png", 
-                                "partner" => "/images/oxygen/32x32/actions/view-process-own.png", 
+            $types = array (    "customer" => "/images/oxygen/32x32/apps/system-users.png",
+                                "partner" => "/images/oxygen/32x32/actions/view-process-own.png",
                                 "responsible" => "/images/oxygen/32x32/apps/preferences-desktop-user.png",
                             );
             

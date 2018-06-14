@@ -66,6 +66,6 @@
         }?>
 </head>
 <body>
-    <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0 setup or use the CLI setup</a></noscript>
+    <noscript><p>You need to enable javascript to use <a target="_blank" href="<?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL); ?>" title="<?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION); ?>"><?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE); ?></a> or use the CLI setup</p></noscript>
 </body>
 </html>

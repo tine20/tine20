@@ -435,7 +435,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getImageLink($contactArray)
     {
-        $link = 'images/empty_photo_blank.png';
+        $link = 'images/icon-set/icon_undefined_contact.svg';
         if (! empty($contactArray['jpegphoto'])) {
             $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id'], '');
         } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {

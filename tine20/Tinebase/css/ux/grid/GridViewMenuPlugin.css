@@ -5,6 +5,7 @@
 .ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn {
     background-image:url(../../../../images/icon-set/icon_column.svg);
     width:16px;
+    background-color: #eeeeee;
 }
 
 a.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn:hover {

@@ -35,7 +35,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {String}
      */
-    defaultImage: 'images/empty_photo_blank.png',
+    defaultImage: 'images/icon-set/icon_undefined_contact.svg',
     
     
     defaultAutoCreate: {tag: 'div', cls: 'ux-imagefield-ct', cn: [

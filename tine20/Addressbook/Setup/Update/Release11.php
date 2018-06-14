@@ -167,11 +167,25 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.11
+     *
+     * @return void
+     * @throws \Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function update_10()
+    {
+        $this->updateKeyFieldIcon(Addressbook_Config::getInstance(), Addressbook_Config::CONTACT_SALUTATION);
+
+        $this->setApplicationVersion('Addressbook', '11.11');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_10()
+    public function update_11()
     {
         $this->setApplicationVersion('Addressbook', '12.0');
     }

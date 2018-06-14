@@ -303,9 +303,9 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'default'               => [
                 'records' => [
-                    ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true], //_('Confirmed')
-                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true], //_('Canceled')
-                    ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true], //_('Tentative')
+                    ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true], //_('Confirmed')
+                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',                        'system' => true], //_('Canceled')
+                    ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true], //_('Tentative')
                 ],
                 'default' => 'CONFIRMED'
             ]
@@ -354,10 +354,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
-                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Accepted')
-                    array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Declined')
-                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true), //_('Tentative')
+                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/icon-set/icon_invite.svg',                      'system' => true), //_('No response')
+                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true), //_('Accepted')
+                    array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true), //_('Declined')
+                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true), //_('Tentative')
                 ),
                 'default' => 'NEEDS-ACTION'
             )

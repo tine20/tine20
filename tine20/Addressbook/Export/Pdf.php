@@ -144,7 +144,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
         }
         $title = implode(' ', $titleArray);
         $subtitle = $_contact->org_name;
-        $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
+        $titleIcon = null; // no svg support yet
         
         // add data to array
         $record = array ();

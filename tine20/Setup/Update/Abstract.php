@@ -514,4 +514,29 @@ class Setup_Update_Abstract
 
         return true;
     }
+
+    /**
+     * updateKeyFieldIcon
+     *
+     * @param $configController
+     * @param $configName
+     */
+    public function updateKeyFieldIcon($configController, $configName)
+    {
+        $config = $configController->get($configName);
+        $defintion = $configController->getDefinition($configName);
+        $dirty = false;
+        foreach ($defintion['default']['records'] as $defaultData) {
+            $existing = $config->records->getById($defaultData['id']);
+            if ($existing && isset($defaultData['icon']) && $existing->icon != $defaultData['icon']) {
+                $existing->icon = $defaultData['icon'];
+                $dirty = true;
+            }
+        }
+
+        if ($dirty) {
+            // autosave - nothing to do
+            // $configController->set($configName, $config);
+        }
+    }
 }
