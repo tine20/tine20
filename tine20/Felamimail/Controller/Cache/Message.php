@@ -951,7 +951,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _saveMessageInTinebaseCache(Felamimail_Model_Message $_message, Felamimail_Model_Folder $_folder, $_messageData)
     {
-        if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
+        if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(1))) {
             return;
         }
         
@@ -959,7 +959,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' caching message ' . $_message->getId() . ' / memory usage: ' . $memory/1024/1024 . ' MBytes');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
-        
+
         $cacheId = 'getMessageHeaders' . $_message->getId();
         Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
     
