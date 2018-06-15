@@ -19,12 +19,16 @@ class TravisTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Travis Smoke Testing');
 
+        // addressbook
         $suite->addTestSuite(Addressbook_JsonTest::class);
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
         $suite->addTest(Addressbook_Convert_Contact_VCard_AllTests::suite());
 
+        // calendar
+        $suite->addTestSuite(Calendar_AllTests::suite());
+
+        // some more json tests
         $suite->addTestSuite(Timetracker_JsonTest::class);
-        $suite->addTestSuite(Calendar_JsonTests::class);
         $suite->addTestSuite(Admin_JsonTest::class);
         $suite->addTestSuite(Tinebase_Frontend_JsonTest::class);
         $suite->addTestSuite(CoreData_JsonTest::class);
