@@ -535,6 +535,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * fm specific delete handler
+     */
+    onDeleteRecords: function(btn, e) {
+        this.action_deleteRecord.execute();
+    },
+
+    /**
      * go up one folder
      *
      * @param {Ext.Component} button
