@@ -2878,12 +2878,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 } else {
                     // update thisandfuture for recurring events
                     $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $this->getRecurExceptions($event), Tinebase_DateTime::now());
-                    Calendar_Model_Attender::resolveGroupMembers($nextOccurrence->attendee);
-                    
-                    if ($nextOccurrence->dtstart != $event->dtstart) {
-                        $this->createRecurException($nextOccurrence, FALSE, TRUE);
-                    } else {
-                        $this->update($nextOccurrence);
+                    if ($nextOccurrence) {
+                        Calendar_Model_Attender::resolveGroupMembers($nextOccurrence->attendee);
+
+                        if ($nextOccurrence->dtstart != $event->dtstart) {
+                            $this->createRecurException($nextOccurrence, FALSE, TRUE);
+                        } else {
+                            $this->update($nextOccurrence);
+                        }
                     }
                 }
             } catch (Exception $e) {
@@ -2901,10 +2903,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      *
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
+     * @throws Exception
      * 
      * NOTE: the given alarm is raw and has not passed _inspectAlarmGet
-     *  
-     * @todo throw exception on error
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
     {
