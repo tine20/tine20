@@ -206,8 +206,16 @@ Tine.widgets.container.GrantsManager = function() {
          *
          * @return Array
          */
-        defaultGrants: function() {
-            return ['read', 'add', 'edit', 'delete', 'export', 'sync'];
+        defaultGrants: function(container) {
+            var _ = window.lodash,
+                modelName = container.model,
+                grantsModelName = modelName + 'Grants',
+                grantsModel = Tine.Tinebase.data.RecordMgr.get(grantsModelName);
+
+            return grantsModel ? _.reduce(grantsModel.getFieldNames(), function(grants, fieldName) {
+                var match = String(fieldName).match(/(.+)Grant$/);
+                return grants.concat(match ? match[1] : []);
+            }, []) : ['read', 'add', 'edit', 'delete', 'export', 'sync'];
         },
 
         /**
@@ -220,7 +228,7 @@ Tine.widgets.container.GrantsManager = function() {
             var modelName = container.model || container,
                 grants  = grantsForModels[modelName]
                     ? (Ext.isFunction(grantsForModels[modelName]) ? grantsForModels[modelName](container) : grantsForModels[modelName])
-                    : this.defaultGrants();
+                    : this.defaultGrants(container);
 
             return grants;
         },
