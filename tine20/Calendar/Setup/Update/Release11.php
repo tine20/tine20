@@ -178,7 +178,7 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
                         }
                     }
                 }
-                $resource->grants = $grants;
+                $resource->grants = $grants->toArray();
                 $resourceController->update($resource);
             }
         }
