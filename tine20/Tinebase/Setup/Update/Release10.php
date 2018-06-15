@@ -2114,9 +2114,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_41()
     {
-        $scheduler = Tinebase_Core::getScheduler();
+        /* schema update, also it will be done now in \Tinebase_Setup_Update_Release11::update_11
+         * $scheduler = Tinebase_Core::getScheduler();
         $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
-        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);*/
         $this->setApplicationVersion('Tinebase', '10.42');
     }
 
@@ -2264,10 +2265,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_46()
     {
+        /* schema update, will be done now in \Tinebase_Setup_Update_Release11::update_11
         $scheduler = Tinebase_Core::getScheduler();
         if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
-        }
+        }*/
         $this->setApplicationVersion('Tinebase', '10.47');
     }
 
@@ -2320,8 +2322,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_49()
     {
+        /* schema update, will be done now in \Tinebase_Setup_Update_Release11::update_11
         $scheduler = Tinebase_Core::getScheduler();
-        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler); */
         $this->setApplicationVersion('Tinebase', '10.50');
     }
 
