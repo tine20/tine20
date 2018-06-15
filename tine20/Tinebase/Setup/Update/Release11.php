@@ -168,6 +168,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
 
         $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
         // TODO create methods for fetching and creating all known application tasks (maybe with existence check)
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
