@@ -535,10 +535,16 @@ EOT;
         return false;
     }
 
+    /**
+     * @param array $_buffer
+     * @param Setup_Backend_Schema_Field_Abstract $_field
+     * @return array
+     */
     protected function _addDeclarationCollation(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
     {
         if (isset($_field->collation)) {
-            $_buffer[] = 'COLLATE ' . $_field->collation;
+            $collation = ($_field->collation == 'utf8mb4_bin' && ! $this->_useUtf8mb4) ? 'utf8_bin' : $_field->collation;
+            $_buffer[] = 'COLLATE ' . $collation;
         }
         return $_buffer;
     }

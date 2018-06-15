@@ -71,11 +71,14 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         $cacheId = md5(__METHOD__ . '::useUtf8mb4');
 
         // empty db => utf8mb4
-        if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
-            strpos($db->query('show create table ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1),
-                'utf8mb4') === false &&
-            false !== $db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(0) &&
-            $db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(1) !== 'ON'
+        if ((
+                false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
+                strpos($db->query('show create table ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1),
+                'utf8mb4') === false
+            ) || (
+                false !== $db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(0) &&
+                $db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(1) !== 'ON'
+            )
         ) {
             Tinebase_Core::getCache()->save(0, $cacheId);
             return false;
