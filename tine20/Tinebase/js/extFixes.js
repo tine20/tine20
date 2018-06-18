@@ -883,3 +883,15 @@ Ext.override(Ext.tree.TreePanel, {
         }
     }
 });
+
+Ext.override(Ext.menu.Menu, {
+    setActive: Ext.emptyFn,
+    setZIndex: Ext.emptyFn,
+    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function() {
+        Ext.WindowMgr.register(this);
+        Ext.WindowMgr.bringToFront(this);
+    }),
+    hide: Ext.menu.Menu.prototype.hide.createSequence(function() {
+        Ext.WindowMgr.unregister(this);
+    })
+});
