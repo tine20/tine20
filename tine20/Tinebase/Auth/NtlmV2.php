@@ -45,7 +45,7 @@ class Tinebase_Auth_NtlmV2
     {
         /** @var Zend_Session_Namespace $session */
         $session = Tinebase_Core::get(Tinebase_Core::SESSION);
-        if (!isset($session->ntlmv2ServerNounce)) {
+        if ($session && ! isset($session->ntlmv2ServerNounce)) {
             $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
         }
         $this->_serverNounce = $session->ntlmv2ServerNounce;
