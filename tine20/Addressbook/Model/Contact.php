@@ -578,7 +578,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ],
         ]];
 
-    
+
     /**
      * if foreign Id fields should be resolved on search and get from json
      * should have this format: 
