@@ -1053,6 +1053,9 @@ class Tinebase_Core
 
                 $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
 
+                if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Using MySQL charset: ' . $dbConfigArray['charset']);
+
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
@@ -1067,6 +1070,10 @@ class Tinebase_Core
                 if (! isset($dbConfigArray['useUtf8mb4'])) {
                     if (! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                         $db->closeConnection();
+
+                        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Falling back to utf-8 charset');
+
                         $dbConfigArray['charset'] = 'utf8';
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
                     }

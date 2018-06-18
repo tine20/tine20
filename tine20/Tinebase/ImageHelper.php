@@ -90,12 +90,17 @@ class Tinebase_ImageHelper
      */
     public static function isImageFile($_file)
     {
-        if(!$_file) {
+        if (! $_file || ! file_exists($_file)) {
             return false;
         }
-        $imgInfo = getimagesize($_file);
-        if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
-            return true;
+        try {
+            $imgInfo = getimagesize($_file);
+            if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+                return true;
+            }
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         return false;
     }
