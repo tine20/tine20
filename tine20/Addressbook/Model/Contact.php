@@ -360,6 +360,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 'type'                          => 'virtual',
                 'label'                         => 'Groups', // _('Groups')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'modlogOmit'                    => true,
             ],
             'industry'                      => [
                 'label'                         => 'Industry', // _('Industry')
@@ -578,7 +579,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ],
         ]];
 
-    
+
     /**
      * if foreign Id fields should be resolved on search and get from json
      * should have this format: 
