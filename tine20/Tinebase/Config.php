@@ -1819,7 +1819,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom url for help.')
             'description'           => 'Custom url for help.',
             'type'                  => 'string',
-            'default'               => 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki',
+            'default'               => 'https://github.com/tine20/tine20/wiki',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
