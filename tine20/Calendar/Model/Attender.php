@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,6 +16,7 @@
  * @property string user_id
  * @property string status
  * @property string status_authkey
+ * @property string user_type
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
