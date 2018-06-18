@@ -47,17 +47,6 @@ Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
 
 /**
- * title of app (gets set at build time)
- * 
- * @type String
- */
-Tine.logo = 'images/tine_logo.png';
-Tine.title = 'Tine 2.0 \u00ae';
-Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
-Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
-Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
-
-/**
  * quiet logging in release mode
  */
 Ext.LOGLEVEL = Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7;
@@ -217,8 +206,6 @@ Tine.Tinebase.tineInit = {
      * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
-        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(favicon/30/png)');
-
         Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',
             border: false,
@@ -662,22 +649,22 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
         }
 
-        Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
-        //Do we have a custom weburl for branding?
-        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl') ? Tine.Tinebase.registry.get('brandingWeburl') : Tine.weburl;
-        Tine.websiteUrl = Tine.Tinebase.registry.get('websiteUrl') ? Tine.Tinebase.registry.get('websiteUrl') : Tine.weburl;
-        
-        //DO we have a custom title for branding?
-        Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
-        Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
+        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(' + Tine.Tinebase.registry.get('brandingFaviconSvg') + ')');
 
-        if (Tine.Tinebase.registry.get('installLogo')) {
-            Tine.installLogo = Tine.Tinebase.registry.get('installLogo');
-        } else if (Tine.Tinebase.registry.get('brandingLogo')) {
-            Tine.installLogo = Tine.Tinebase.registry.get('brandingLogo');
-        } else {
-            Tine.installLogo = Tine.logo;
-        }
+        Tine.title = Tine.Tinebase.registry.get('brandingTitle');
+        Tine.descriptoion = Tine.Tinebase.registry.get('brandingTitle');
+        Tine.logo = Tine.Tinebase.registry.get('brandingLogo');
+        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl');
+        Tine.helpUrl = Tine.Tinebase.registry.get('brandingHelpUrl');
+        Tine.shop = Tine.Tinebase.registry.get('brandingShopUrl');
+        Tine.bugreportUrl = Tine.Tinebase.registry.get('brandingBugsUrl');
+
+        Tine.installLogo = Tine.Tinebase.registry.get('installLogo') ?
+            Tine.Tinebase.registry.get('installLogo') :
+            Tine.Tinebase.registry.get('brandingLogo');
+        Tine.websiteUrl = Tine.Tinebase.registry.get('websiteUrl') ?
+            Tine.Tinebase.registry.get('websiteUrl') :
+            Tine.Tinebase.registry.get('brandingWeburl');
 
         if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
             // restore session cookie
