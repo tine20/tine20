@@ -271,6 +271,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     */
     protected $_modlogOmitFields = array(
         'jpegphoto',
+        'groups',
     );
 
     /**
