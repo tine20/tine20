@@ -491,12 +491,8 @@ msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
 #: js/ImportDialog.js:269 js/Calendar-FAT-debug.js:12954 js/Calendar-FAT.js:6
-msgid ""
-"Container name / New or existing if it already exists you need permissions "
-"to add to."
-msgstr ""
-"Ein neuer Container Name oder ein bereits Vorhandener für den man über "
-"Schreibrechte verfügt."
+msgid "Calendar name (you need permissions to add events)"
+msgstr "Ein vorhandener Kalender, für den man über das Recht, neue Termine hinzuzufügen, verfügt"
 
 #: js/ImportDialog.js:288 js/Calendar-FAT-debug.js:12973 js/Calendar-FAT.js:6
 msgid "or"
