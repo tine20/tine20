@@ -508,12 +508,12 @@ html, body {
 
 .tine-favicon {
     /* NOTE: favicon is configured at runtime! */
-    background-image:url(../../library/ExtJS/resources/images/default/s.gif) !important;
     background-size: 16px 16px;
 }
 
-.x-tab-strip-text.tine-favicon {
-    background-position-y: 3px;
+span .x-tab-strip-text.tine-favicon {
+    background-position-y: 2px !important;
+    background-size: 15px 15px;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {

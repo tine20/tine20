@@ -543,6 +543,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
     const BRANDING_TITLE = 'branding_title';
     const BRANDING_WEBURL = 'branding_weburl';
+    const BRANDING_HELPURL = 'branding_helpUrl';
+    const BRANDING_SHOPURL = 'branding_shopUrl';
+    const BRANDING_BUGSURL = 'branding_bugreportUrl';
     const BRANDING_DESCRIPTION = 'branding_description';
 
     const CURRENCY_SYMBOL = 'currencySymbol';
@@ -1766,72 +1769,82 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
-        self::INSTALL_LOGO => array(
-            //_('Installation logo')
-            'label'                 => 'Installation logo',
-            //_('Path to custom installation logo.')
-            'description'           => 'Path to custom installation logo.',
+        self::BRANDING_TITLE => array(
+            //_('custom title')
+            'label'                 => 'custom title',
+            //_('Custom title for branding.')
+            'description'           => 'Custom title for branding.',
             'type'                  => 'string',
-            'default'               => false,
-            'clientRegistryInclude' => true,
+            'default'               => "Tine 2.0 ®",
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_LOGO => array(
+            //_('custom logo path')
+            'label'                 => 'custom logo path',
+            //_('Path to custom logo.')
+            'description'           => 'Path to custom logo.',
+            'type'                  => 'string',
+            'default'               => './images/tine_logo.png',
+            'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_DESCRIPTION => array(
-                //_('custom description')
-                'label'                 => 'custom description',
-                //_('Custom description for branding.')
-                'description'           => 'Custom description for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-        ),
-        self::BRANDING_WEBURL => array(
-                //_('custom weburl')
-                'label'                 => 'custom weburl',
-                //_('Custom weburl for branding.')
-                'description'           => 'Custom weburl for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE
-        ),
-        self::WEBSITE_URL => array(
-            //_('custom website url')
-            'label'                 => 'custom website url',
-            //_('Custom url used for logo on login page.')
-            'description'           => 'Custom url used for logo on login page.',
+            //_('custom description')
+            'label'                 => 'custom description',
+            //_('Custom description for branding.')
+            'description'           => 'Custom description for branding.',
             'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::BRANDING_TITLE => array(
-                //_('custom title')
-                'label'                 => 'custom title',
-                //_('Custom title for branding.')
-                'description'           => 'Custom ltitle for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+        self::BRANDING_WEBURL => array(
+            //_('custom weburl')
+            'label'                 => 'custom weburl',
+            //_('Custom weburl for branding.')
+            'description'           => 'Custom weburl for branding.',
+            'type'                  => 'string',
+            'default'               => 'https://github.com/tine20/tine20',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
         ),
-        self::BRANDING_LOGO => array(
-                //_('custom logo path')
-                'label'                 => 'custom logo path',
-                //_('Path to custom logo.')
-                'description'           => 'Path to custom logo.',
-                'type'                  => 'string',
-                'default'               => './images/tine_logo.png',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+        self::BRANDING_HELPURL => array(
+            //_('custom help url')
+            'label'                 => 'custom help url',
+            //_('Custom url for help.')
+            'description'           => 'Custom url for help.',
+            'type'                  => 'string',
+            'default'               => 'https://github.com/tine20/tine20/wiki',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
+        ),
+        self::BRANDING_SHOPURL => array(
+            //_('custom shop url')
+            'label'                 => 'custom shop url',
+            //_('Custom url for the shop.')
+            'description'           => 'Custom url for the shop.',
+            'type'                  => 'string',
+            'default'               => 'https://www.tine20.com/partner/',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
+        ),
+        self::BRANDING_BUGSURL => array(
+            //_('custom bugreport url')
+            'label'                 => 'custom bugreport url',
+            //_('Custom bugreport url.')
+            'description'           => 'Custom bugreport url.',
+            'type'                  => 'string',
+            'default'               => 'https://api.tine20.net/bugreport.php',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
         ),
         self::BRANDING_FAVICON => array(
             //_('custom favicon paths')
@@ -1866,6 +1879,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Background color of mask icon (safari pinned tab).',
             'type'                  => 'string',
             'default'               => '#9b7f14',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO => array(
+            //_('Installation logo')
+            'label'                 => 'Installation logo',
+            //_('Path to custom installation logo.')
+            'description'           => 'Path to custom installation logo.',
+            'type'                  => 'string',
+            'default'               => false,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::WEBSITE_URL => array(
+            //_('custom website url')
+            'label'                 => 'custom website url',
+            //_('Custom url used for logo on login page.')
+            'description'           => 'Custom url used for logo on login page.',
+            'type'                  => 'string',
+            'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
