@@ -45,10 +45,16 @@ class Tinebase_Auth_NtlmV2
     {
         /** @var Zend_Session_Namespace $session */
         $session = Tinebase_Core::get(Tinebase_Core::SESSION);
-        if ($session && ! isset($session->ntlmv2ServerNounce)) {
-            $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
+
+        if (!$session) {
+            // ok we have a session problem, auth wont work... but we better not die here... let's just loop a bit
+            $this->_serverNounce = static::ntlm_get_random_bytes(8);
+        } else {
+            if (!isset($session->ntlmv2ServerNounce)) {
+                $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
+            }
+            $this->_serverNounce = $session->ntlmv2ServerNounce;
         }
-        $this->_serverNounce = $session->ntlmv2ServerNounce;
     }
 
     /**
