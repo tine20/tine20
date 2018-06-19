@@ -545,4 +545,29 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '11.27');
     }
 
+    /**
+     * update to 11.28
+     *
+     * check for container without a model
+     */
+    public function update_27()
+    {
+        $models = [];
+        $containers = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container', ['id', 'application_id'])
+            ->where($this->_db->quoteIdentifier('model') . ' IS NULL OR ' . $this->_db->quoteIdentifier('model')
+                . ' = ' . $this->_db->quote(''))->query()->fetchAll(Zend_DB::FETCH_ASSOC);
+
+        foreach ($containers as $container) {
+            if (!isset($models[$container['application_id']])) {
+                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
+                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
+                    true)->getDefaultModel();
+            }
+
+            $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
+                $this->_db->quoteInto('id = ?', $container['id']));
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.28');
+    }
 }
