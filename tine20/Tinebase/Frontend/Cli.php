@@ -1063,6 +1063,49 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return $result;
     }
 
+    /**
+     * nagios monitoring for tine 2.0 cache
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringCheckCache()
+    {
+        $result = 0;
+        $cacheConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::CACHE);
+        $active = ($cacheConfig && $cacheConfig->active);
+        if (! $active) {
+            $message = 'CACHE INACTIVE';
+        } else {
+            try {
+                $cache = Tinebase_Core::getCache();
+
+                // TODO support size / see https://redis.io/commands/dbsize
+                //$cacheSize = $cache->getSize();
+                $cacheSize = 'unknown';
+                // TODO add cache access time?
+
+                // write, read and delete to test cache
+                $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
+                $cache->save(true, $cacheId);
+                $value = $cache->load($cacheId);
+                $cache->remove($cacheId);
+
+                if ($value) {
+                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                } else {
+                    $message = 'CACHE FAIL: loading value failed';
+                    $result = 1;
+                }
+            } catch (Exception $e) {
+                $message = 'CACHE FAIL: ' . $e->getMessage();
+                $result = 2;
+            }
+        }
+        echo $message . "\n";
+        return $result;
+    }
 
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
