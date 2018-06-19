@@ -196,7 +196,7 @@ class Tinebase_Auth_NtlmV2
      * @param string $msg
      * @param int $start
      * @param bool $decode_utf16
-     * @return bool|null|string
+     * @return null|string
      */
     protected function _ntlm_field_value($msg, $start, $decode_utf16 = true)
     {
@@ -212,7 +212,15 @@ class Tinebase_Auth_NtlmV2
         }
         $result = substr($msg, $off, $len);
         if ($decode_utf16) {
-            $result = iconv('UTF-16LE', 'UTF-8', $result);
+            try {
+                if (false === ($result = iconv('UTF-16LE', 'UTF-8', $result))) {
+                    $this->_error[] = 'could not decode UTF-16LE';
+                    return null;
+                }
+            } catch (ErrorException $e) {
+                $this->_error[] = 'could not decode UTF-16LE: ' . $e->getMessage();
+                $result = null;
+            }
         }
         return $result;
     }
