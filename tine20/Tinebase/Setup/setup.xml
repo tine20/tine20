@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.28</version>
+    <version>11.29</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -570,7 +570,7 @@
         </table>
         <table>
             <name>container</name>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -583,6 +583,11 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>hierarchy</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>type</name>

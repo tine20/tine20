@@ -220,4 +220,29 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '11.9');
     }
+
+    /**
+     * update to 11.10
+     *
+     * add hierarchy column to cal_resources (filling will be done in Tinebase)
+     */
+    public function update_9($updateCalenderVersion = true)
+    {
+        if (! $this->_backend->columnExists('hierarchy', 'cal_resources')) {
+            $this->_backend->addCol('cal_resources', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>hierarchy</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('cal_resources') == 6) {
+            $this->setTableVersion('cal_resources', 7);
+        }
+
+        if ($updateCalenderVersion) {
+            $this->setApplicationVersion('Calendar', '11.10');
+        }
+    }
 }

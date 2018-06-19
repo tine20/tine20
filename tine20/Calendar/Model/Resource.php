@@ -52,6 +52,7 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
         // resource specific fields
         'name'                 => array('allowEmpty' => true          ),
+        'hierarchy'            => array('allowEmpty' => true          ),
         'description'          => array('allowEmpty' => true          ),
         'email'                => array('allowEmpty' => true          ),
         'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
