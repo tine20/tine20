@@ -1,22 +1,22 @@
 language: php
 php:
-    - '7.1'
+  - '7.1'
 
 services:
   - mysql
 
 env:
-    - DB=mysql
+  - DB=mysql
 
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
+#addons:
+#  apt:
+#    sources:
+#      - mysql-5.7-trusty
+#    packages:
+#      - mysql-server
     
 before_script:
-  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" -uroot; fi
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20;" -uroot; fi
   - cd tine20
   - composer install
   - cp config.inc.travis.php config.inc.php
@@ -26,3 +26,10 @@ before_script:
 script:
   - cd ../tests/tine20
   - ../../tine20/vendor/bin/phpunit --color TravisTests.php
+
+notifications:
+  email:
+    recipients:
+      - tine20@metaways.de
+    on_success: change # default: change
+    on_failure: always # default: always
