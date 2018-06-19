@@ -329,8 +329,6 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testMonitoringCheckCache()
     {
-        static::markTestSkipped('FIX THIS, probably ansible setup issue?');
-        
         ob_start();
         $result = $this->_cli->monitoringCheckCache();
         $out = ob_get_clean();
