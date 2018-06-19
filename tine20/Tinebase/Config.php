@@ -70,6 +70,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * CACHE
+     *
+     * @var string
+     */
+    const CACHE = 'caching';
+
+    /**
      * DEFAULT_LOCALE
      *
      * @var string
