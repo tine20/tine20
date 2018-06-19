@@ -72,6 +72,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_TYPES = 'freebusyTypes';
 
     /**
+     * which information does the grant freebusy reveal
+     *
+     * @var string
+     */
+    const FREEBUSY_INFO_ALLOWED = 'freebusyInfoAllowed';
+
+    /**
      * Crop days view
      *
      * @var string
@@ -614,6 +621,26 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => '',
         ),
+        self::FREEBUSY_INFO_ALLOWED => [
+            //_('Freebusy Info')
+            self::LABEL             => 'Freebusy Info',
+            //_('What data the freebusy grant reveals')
+            self::DESCRIPTION       => 'What data the freebusy grant reveals',
+            self::TYPE              => self::TYPE_KEYFIELD,
+                self::OPTIONS           => [
+                    'records'               => [
+                        ['id' => 10,  'value' => 'only date & time'], //_('only date & time')
+                        ['id' => 20,  'value' => 'and calendar'], //_('and calendar')
+                        ['id' => 30,  'value' => 'and organizer'], //_('and organizer')
+                        ['id' => 40,  'value' => 'and resources'], //_('and resources')
+                        ['id' => 50,  'value' => 'and other attendees'], //_('and other attendees')
+                    ],
+                ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => 10,
+        ],
     );
     
     /**

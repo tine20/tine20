@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -206,6 +206,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     protected $_filters = [
         'organizer'     => array(array('Empty', null)),
     ];
+
+    protected static $_freebusyCleanUpKeys = null;
+    protected static $_freebusyCleanUpVisibilty = null;
     
     /**
      * sets record related properties
@@ -570,7 +573,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
         }
     }
-    
+
+    public static function resetFreeBusyCleanupCache()
+    {
+        static::$_freebusyCleanUpVisibilty = null;
+        static::$_freebusyCleanUpKeys = null;
+    }
+
     /**
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
@@ -582,31 +591,58 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
            return FALSE;
         }
+
+        $oldAttendee = $this->attendee;
+        if (!$oldAttendee instanceof Tinebase_Record_RecordSet) {
+            $oldAttendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class);
+        }
+
+        if (null === static::$_freebusyCleanUpKeys) {
+            static::$_freebusyCleanUpVisibilty =
+                intval(Calendar_Config::getInstance()->{Calendar_Config::FREEBUSY_INFO_ALLOWED});
+            $keys = [
+                'id',
+                'dtstart',
+                'dtend',
+                'transp',
+                'seq',
+                'uid',
+                'is_all_day_event',
+                'rrule',
+                'rrule_until',
+                'recurid',
+                'exdate',
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time',
+                'is_deleted',
+                'deleted_time',
+                'deleted_by',
+                'originator_tz', // why?
+            ];
+            if (static::$_freebusyCleanUpVisibilty > 10) {
+                $keys[] = 'container_id';
+            }
+            if (static::$_freebusyCleanUpVisibilty > 20) {
+                $keys[] = 'organizer';
+            }
+            if (static::$_freebusyCleanUpVisibilty > 30) {
+                $keys[] = 'attendee';
+            }
+            static::$_freebusyCleanUpKeys = array_flip($keys);
+        }
         
-        $this->_properties = array_intersect_key($this->_properties, array_flip(array(
-            'id', 
-            'dtstart', 
-            'dtend',
-            'transp',
-            'seq',
-            'uid',
-            'is_all_day_event',
-            'rrule',
-            'rrule_until',
-            'recurid',
-            'exdate',
-            'originator_tz',
-            'attendee', // if we remove this, we need to adopt attendee resolveing
-            'container_id',
-            'created_by',
-            'creation_time',
-            'last_modified_by',
-            'last_modified_time',
-            'is_deleted',
-            'deleted_time',
-            'deleted_by',
-        )));
-        
+        $this->_properties = array_intersect_key($this->_properties, static::$_freebusyCleanUpKeys);
+
+        if (40 === static::$_freebusyCleanUpVisibilty) {
+            /** @var Calendar_Model_Attender $attendee */
+            $oldAttendee = $oldAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
+        } elseif (static::$_freebusyCleanUpVisibilty < 40) {
+            $oldAttendee->removeAll();
+        }
+        $this->attendee = $oldAttendee;
+
         return TRUE;
     }
     

@@ -184,7 +184,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         $eventsData = $_records->toArray();
         
-        foreach ($eventsData as $idx => $eventData) {
+        /*foreach ($eventsData as $idx => $eventData) {
             if (! (isset($eventData[Tinebase_Model_Grants::GRANT_READ]) || array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData)) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
                 $eventsData[$idx] = array_intersect_key($eventsData[$idx], array_flip(array(
                     'id',
@@ -194,7 +194,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
                     'is_all_day_event',
                 )));
             }
-        }
+        }*/
 
         return $eventsData;
     }

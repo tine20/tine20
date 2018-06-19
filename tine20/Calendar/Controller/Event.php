@@ -2302,9 +2302,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             case 'get':
                 // NOTE: free/busy is not a read grant!
                 $hasGrant = $_record->hasGrant(Tinebase_Model_Grants::GRANT_READ);
-                if (! $hasGrant) {
-                    $_record->doFreeBusyCleanup();
-                }
                 break;
             case 'create':
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
@@ -2333,6 +2330,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (isset($container->xprops()['Calendar']['Resource']['resource_id'])) {
                 $hasGrant = true;
             }
+        }
+
+        if (! $hasGrant && 'get' === $_action) {
+            $_record->doFreeBusyCleanup();
         }
 
         if (! $hasGrant) {
