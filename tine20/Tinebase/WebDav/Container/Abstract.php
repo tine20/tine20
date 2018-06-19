@@ -486,12 +486,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new \Sabre\DAV\Exception\Forbidden('permission to update container denied');
         }
-        
+
         $result = array(
             200 => array(),
             403 => array()
         );
-        
+
+        if ($this->_container instanceof Tinebase_Model_Tree_Node) {
+            foreach ($mutations as $key => $value) {
+                $result[403][$key] = null;
+            }
+            return $result;
+        }
+
         foreach ($mutations as $key => $value) {
             switch ($key) {
                 case '{DAV:}displayname':
@@ -507,27 +514,27 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                     } else {
                         $this->_container->name = $value;
                     }
-                    $result['200'][$key] = null;
+                    $result[200][$key] = null;
                     break;
                     
                 case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
                 case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
                     // fake success
-                    $result['200'][$key] = null;
+                    $result[200][$key] = null;
                     break;
                     
                 case '{http://apple.com/ns/ical/}calendar-color':
                     $this->_container->color = substr($value, 0, 7);
-                    $result['200'][$key] = null;
+                    $result[200][$key] = null;
                     break;
 
                 case '{http://apple.com/ns/ical/}calendar-order':
                     $this->_container->order = (int) $value;
-                    $result['200'][$key] = null;
+                    $result[200][$key] = null;
                     break;
 
                 default:
-                    $result['403'][$key] = null;
+                    $result[403][$key] = null;
             }
         }
         
