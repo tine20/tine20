@@ -787,7 +787,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $html = '<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head>' . $html;
         }
         // use a hack to make sure html is loaded as utf-8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
+        // we ignore errors here as html messages aren't always valid xml
+        @$dom->loadHTML('<?xml encoding="UTF-8">' . $html);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' HTML (DOMDocument): ' . $dom->saveHTML());
         
