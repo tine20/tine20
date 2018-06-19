@@ -45,10 +45,16 @@ class Tinebase_Auth_NtlmV2
     {
         /** @var Zend_Session_Namespace $session */
         $session = Tinebase_Core::get(Tinebase_Core::SESSION);
-        if ($session && ! isset($session->ntlmv2ServerNounce)) {
-            $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
+
+        if (!$session) {
+            // ok we have a session problem, auth wont work... but we better not die here... let's just loop a bit
+            $this->_serverNounce = static::ntlm_get_random_bytes(8);
+        } else {
+            if (!isset($session->ntlmv2ServerNounce)) {
+                $session->ntlmv2ServerNounce = static::ntlm_get_random_bytes(8);
+            }
+            $this->_serverNounce = $session->ntlmv2ServerNounce;
         }
-        $this->_serverNounce = $session->ntlmv2ServerNounce;
     }
 
     /**
@@ -196,7 +202,7 @@ class Tinebase_Auth_NtlmV2
      * @param string $msg
      * @param int $start
      * @param bool $decode_utf16
-     * @return bool|null|string
+     * @return null|string
      */
     protected function _ntlm_field_value($msg, $start, $decode_utf16 = true)
     {
@@ -212,7 +218,15 @@ class Tinebase_Auth_NtlmV2
         }
         $result = substr($msg, $off, $len);
         if ($decode_utf16) {
-            $result = iconv('UTF-16LE', 'UTF-8', $result);
+            try {
+                if (false === ($result = iconv('UTF-16LE', 'UTF-8', $result))) {
+                    $this->_error[] = 'could not decode UTF-16LE';
+                    return null;
+                }
+            } catch (ErrorException $e) {
+                $this->_error[] = 'could not decode UTF-16LE: ' . $e->getMessage();
+                $result = null;
+            }
         }
         return $result;
     }
