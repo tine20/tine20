@@ -1034,6 +1034,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     $oldData[$fieldName] = $ownField;
                 }
                 continue;
+            } elseif ($ownField instanceof Tinebase_Model_Filter_FilterGroup || $recordField instanceof Tinebase_Model_Filter_FilterGroup) {
+                // TODO add diff() to Tinebase_Model_Filter_FilterGroup?
+                // TODO ignore order of filters - currently it matters! sadly, array_diff does not work with multidimensional arrays
+                if (! empty($ownField) && ! empty($recordField)) {
+                    $arrayDiff = json_encode($ownField->toArray()) !== json_encode($recordField->toArray());
+                    if (! $arrayDiff) {
+                        continue;
+                    }
+                }
             } elseif ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
                 // maybe we have the id of the record -> just compare the id
                 if ($recordField->getId() == $ownField) {
