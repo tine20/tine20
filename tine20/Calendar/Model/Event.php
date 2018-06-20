@@ -619,7 +619,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 'is_deleted',
                 'deleted_time',
                 'deleted_by',
-                'originator_tz', // why?
+                'originator_tz',
             ];
             if (static::$_freebusyCleanUpVisibilty > 10) {
                 $keys[] = 'container_id';
