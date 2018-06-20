@@ -60,13 +60,16 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
      * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
      * @param bool $_silentlySkipFails
-     * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function __construct($_className, $_records = array(), $_bypassFilters = false, $_convertDates = true, $_silentlySkipFails = false)
     {
         if (! class_exists($_className)) {
             throw new Tinebase_Exception_InvalidArgument('Class ' . $_className . ' does not exist');
+        }
+        // TODO switch to is_iterable() when we no longer support PHP < 7.0
+        if (! (is_array($_records) || $_records instanceof \Traversable)) {
+            throw new Tinebase_Exception_InvalidArgument('Given records need to be iterable');
         }
         $this->_recordClass = $_className;
 
