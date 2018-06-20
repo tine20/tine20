@@ -1694,7 +1694,7 @@ Photographer', $message->body);
      */
     public function testBrokenPlainTextEncoding()
     {
-        if (PHP_VERSION_ID < 50600) {
+        if (PHP_VERSION_ID < 70000) {
             self::markTestSkipped('broken in older php versions');
         }
 
