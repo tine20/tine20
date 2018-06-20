@@ -548,7 +548,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.28
      *
-     * check for container without a model
+     * check for container without a model and set app default model if NULL
      */
     public function update_27()
     {
@@ -564,8 +564,15 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                     true)->getDefaultModel();
             }
 
-            $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
-                $this->_db->quoteInto('id = ?', $container['id']));
+            if ($models[$container['application_id']]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
+                    $this->_db->quoteInto('id = ?', $container['id']));
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not find default model for app id ' . $container['application_id']);
+            }
         }
 
         $this->setApplicationVersion('Tinebase', '11.28');
