@@ -1438,6 +1438,46 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
 
     /**
+     * testNotificationForNonAttendeeOrganizer
+     */
+    public function testNotificationForNonAttendeeOrganizer()
+    {
+        $jmcblack =  $this->_getPersona('jmcblack');
+        $event = $this->_getEvent(/*now = */ true);
+        
+        // remove organizer attendee
+        foreach ($event->attendee as $idx => $attender) {
+            if ($attender->user_id === $event->organizer) {
+                $event->attendee->removeRecord($attender);
+            }
+        }
+       
+        // Switch organizer. The current user would not get the mail because he changes the status => own changes => no mail 
+        $event->organizer = $jmcblack->contact_id;
+
+        self::flushMailer();
+
+        $persistentEvent = $this->_eventController->create($event);
+
+        $messages = self::getMessages();
+
+        $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
+        $this->assertEquals(1, count($messages),
+            'one mail (Invitation) should be send to sclever. Event: '
+            . print_r($persistentEvent->toArray(), true) . ' Messages: '
+            . print_r($messages, true)
+        );
+
+        $persistentEvent->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
+
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        
+        // One mail is sent to organizer. Sclever will not get one because it is her status that changed => send level not reached
+        $this->_assertMail('jmcblack', 'decline');
+    }
+
+    /**
      * testResourceNotificationMuteForEditors
      *
      * @see 0011312: Make resource notification handling and default status configurable

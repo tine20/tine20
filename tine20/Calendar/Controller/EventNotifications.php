@@ -225,9 +225,18 @@
                 break;
                 
         }
+
+        $organizerIsAttender = false;
         
-        // SEND REPLY/COUNTER to external organizer
-        if ($_action == 'changed' && $_event->organizer && ! $_event->resolveOrganizer()->account_id) {
+        //Check if organizer is attender
+        foreach($_event->attendee as $attender) {
+            if ($attender->user_id  == $_event->resolveOrganizer()->id) {
+                $organizerIsAttender = true;
+            }
+        }
+        
+        // SEND REPLY/COUNTER to external organizer or organizer that is not attender
+        if ($_action == 'changed' && $_event->organizer && (! $_event->resolveOrganizer()->account_id || ! $organizerIsAttender)) {
             $updates = array('attendee' => array('toUpdate' => $_event->attendee));
             $organizer = new Calendar_Model_Attender(array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
