@@ -220,7 +220,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         
         $call = $backend->update($_call);
         // calculate duration and ringing time
-        if($call->connected instanceof DateTime) {
+        if ($call->connected instanceof DateTime) {
             
             // how long did we talk
             $connected = clone $call->connected;
@@ -256,5 +256,28 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         $call = $backend->get($_callId);
         
         return $call;
+    }
+
+    /**
+     * get last call for a mac address from the backend
+     *
+     * @param string $mac
+     * @return Phone_Model_Call
+     */
+    public function getLastCall($mac)
+    {
+        $phone = Phone_Controller_MyPhone::getInstance()->getByMacAddress($mac);
+        $filter = new Phone_Model_CallFilter([], '', ['ignoreAcl' => true]);
+        $filter->createFilter(
+            array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
+                array('field' => ':id', 'operator' => 'equals', 'value' => $phone->getId())
+            ))
+        );
+        $pagination = new Tinebase_Model_Pagination([
+            'limit' => 1,
+            'order' => 'start',
+            'dir'   => 'DESC'
+        ]);
+        return Phone_Controller_Call::getInstance()->search($filter, $pagination)->getFirstRecord();
     }
 }

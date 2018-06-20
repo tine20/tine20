@@ -380,14 +380,23 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         if ($pos !== false) {
             $remote = substr($remote, 0 , $pos);
         };
+
+        if (empty($local) && $event === 'disconnected') {
+            // local might be empty on disconnect (asterisk bug)
+            // fetch line_id via mac
+            $call = $controller->getLastCall($mac);
+            if (! $call) {
+                throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
+            }
+        } else {
+            $call = new Phone_Model_Call(array(
+                'id' => substr($callId, 0, 40),
+                'phone_id' => $phone->getId(),
+                'line_id' => $local
+            ));
+        }
         
-        $call = new Phone_Model_Call(array(
-            'id'            => substr($callId, 0, 40),
-            'phone_id'      => $phone->getId(),
-            'line_id'       => $local
-        ));
-        
-        switch($event) {
+        switch ($event) {
             case 'outgoing':
                 $call->source = $local;
                 $call->destination = $remote;
@@ -411,5 +420,4 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 break;
         }
     }
-    
 }
