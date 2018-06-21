@@ -15,8 +15,8 @@
         </rule>
         <rule>
             <field>adr_one_street</field>
-            <regex>/^([\w ]+\s+\d+)/um</regex>
-        </rule>
+            <regex>/^([[:alpha:]]+[\w ]+\d+[a-z]{0,1})/umi</regex>
+        </rule>2
         <rule>
             <field>org_name</field>
             <regex>/(^.*(?:GmbH|GbR|OHG|KG).*)/um</regex>
