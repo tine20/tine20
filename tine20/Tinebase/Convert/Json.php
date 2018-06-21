@@ -163,7 +163,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                         if ($value instanceof Tinebase_Record_Abstract) {
                             $foreignRecordsArray[$value->getId()] = $value;
                         } else {
-                            if ($value && !isset($foreignRecordsArray[$value])) {
+                            if ($value && is_scalar($value) && ! isset($foreignRecordsArray[$value])) {
                                 $foreignIds[$value] = $value;
                             }
                         }
