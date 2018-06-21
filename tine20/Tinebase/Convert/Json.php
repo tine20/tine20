@@ -308,8 +308,23 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $foreignIds = array();
         foreach ($fields as $field) {
-            $foreignIds = array_unique(array_merge($foreignIds, $records->{$field}));
+            $value = $records->{$field};
+            if (is_array($value)) {
+                if (isset($value['id'])) {
+                    $value = [$value['id']];
+                } else {
+                    $value = array_filter($value, function ($val) { return is_scalar($val); });
+                }
+            } elseif (is_scalar($value)) {
+                $value = [$value];
+            } elseif ($value instanceof Tinebase_Record_Abstract) {
+                $value = [$value->getId()];
+            } else {
+                $value = [];
+            }
+            $foreignIds = array_merge($foreignIds, $value);
         }
+        $foreignIds = array_unique($foreignIds);
         
         try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
