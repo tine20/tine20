@@ -27,7 +27,13 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * @cfg {String} defaultPassword prefilled password
      */
     defaultPassword: '',
-    
+
+    /**
+     * @cfg {String}
+     * translated heads up text
+     */
+    headsUpText: '',
+
     /**
      * @cfg {String} loginMethod server side login method
      */
@@ -50,7 +56,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     
     layout: 'fit',
     border: false,
-    
+
     /**
      * return loginPanel
      * 
@@ -73,7 +79,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     xtype: 'container',
                     cls: 'tb-login-lobobox',
                     border: false,
-                    html: '<a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
+                    html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
