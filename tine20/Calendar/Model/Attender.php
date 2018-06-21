@@ -121,19 +121,21 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * returns accountId of this attender if present
      * 
-     * @return string
+     * @return string|null
      */
     public function getUserAccountId()
     {
         if (! in_array($this->user_type, array(self::USERTYPE_USER, self::USERTYPE_GROUPMEMBER))) {
-            return NULL;
+            return null;
         }
-        
+
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $adbAcl = $adbController->doContainerACLChecks(false);
         try {
-            $contact = Addressbook_Controller_Contact::getInstance()->get($this->user_id, null, false);
-            return $contact->account_id ? $contact->account_id : NULL;
-        } catch (Exception $e) {
-            return NULL;
+            $contact = $adbController->get($this->user_id, null, false);
+            return $contact->account_id ? $contact->account_id : null;
+        } finally {
+            $adbController->doContainerACLChecks($adbAcl);
         }
     }
     
@@ -353,7 +355,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
             if ((isset($_data['user_id']['accountId']) || array_key_exists('accountId', $_data['user_id']))) {
                 // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
-                $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], TRUE)->getId();
+                $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], true)->getId();
             } elseif ((isset($_data['user_id']['group_id']) || array_key_exists('group_id', $_data['user_id']))) {
                 $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
             } else if ((isset($_data['user_id']['id']) || array_key_exists('id', $_data['user_id']))) {
@@ -584,22 +586,32 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $email = $_attenderData['email'];
-        
-        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-            array('condition' => 'OR', 'filters' => array(
-                array('field' => 'email',      'operator'  => 'equals', 'value' => $email),
-                array('field' => 'email_home', 'operator'  => 'equals', 'value' => $email)
-            )),
-        )), new Tinebase_Model_Pagination(array(
-            'sort'    => 'type', // prefer user over contact
-            'dir'     => 'DESC',
-            'limit'   => 1
-        )));
+
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $oldAdbAcl = $adbController->doContainerACLChecks(false);
+        try {
+            $contacts = $adbController->search(new Addressbook_Model_ContactFilter(array(
+                array(
+                    'condition' => 'OR',
+                    'filters' => array(
+                        array('field' => 'email', 'operator' => 'equals', 'value' => $email),
+                        array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
+                    )
+                ),
+            )), new Tinebase_Model_Pagination(array(
+                'sort' => 'type', // prefer user over contact
+                'dir' => 'DESC',
+                'limit' => 1
+            )));
+        } finally {
+            $adbController->doContainerACLChecks($oldAdbAcl);
+        }
         
         if (count($contacts) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . " Found # of contacts " . count($contacts));
             $result = $contacts->getFirstRecord();
+            $result->resolveAttenderCleanUp();
         
         } else if ($_implicitAddMissingContacts === TRUE) {
             $translation = Tinebase_Translation::getTranslation('Calendar');
@@ -618,7 +630,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Ádd new contact " . print_r($contactData, true));
             $contact = new Addressbook_Model_Contact($contactData);
-            $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
+            $result = Addressbook_Controller_Contact::getInstance()->create($contact, false);
         } else {
             $result = NULL;
         }
@@ -847,7 +859,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $typeMap[$userType][] = $userId;
             }
         }
-        
+
+        $adbController = Addressbook_Controller_Contact::getInstance();
         // get all missing user_id entries
         foreach ($typeMap as $type => $ids) {
             $ids = array_unique($ids);
@@ -859,11 +872,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             switch ($type) {
                 case self::USERTYPE_USER:
                 case self::USERTYPE_GROUPMEMBER:
-                    $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
-                    $contacts  = Addressbook_Controller_Contact::getInstance()->getMultiple($ids, TRUE);
-                    Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+                    $resolveCf = $adbController->resolveCustomfields(false);
+                    try {
+                        $contacts = $adbController->getMultiple($ids, true);
+                    } finally {
+                        $adbController->resolveCustomfields($resolveCf);
+                    }
                     
                     foreach ($contacts as $contact) {
+                        $contact->resolveAttenderCleanUp();
                         self::$_resolvedAttendeesCache[$type][$contact->getId()] = $contact;
                     }
                     
@@ -1040,9 +1057,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         $contactIds = array_merge($typeMap[self::USERTYPE_USER], $typeMap[self::USERTYPE_GROUPMEMBER], $organizerIds);
-        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
-        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds));
-        Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(false);
+        try {
+            $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds), true);
+            $contacts->resolveAttenderCleanUp();
+        } finally {
+            Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+        }
 
         // get all user_id entries
         foreach ($typeMap as $type => $ids) {
