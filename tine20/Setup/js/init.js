@@ -72,7 +72,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     if (Tine.Setup.registry.get('configExists') && !Tine.Setup.registry.get('currentAccount')) {
         Tine.loginPanel = new Tine.Tinebase.LoginPanel({
             loginMethod: 'Setup.login',
-            loginLogo: 'images/tine_logo_setup.png',
+            headsUpText: window.i18n._('Setup'),
             scope: this,
             onLogin: function (response) {
                 Tine.Tinebase.tineInit.initRegistry(true, function() {

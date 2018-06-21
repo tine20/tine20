@@ -279,6 +279,14 @@ html, body {
     height: 60px;
 }
 
+.tb-login-headsup-box {
+    color: gray;
+    text-align: left;
+    position: absolute;
+    font-size: 32px;
+    font-weight: bold;
+}
+
 .tb-login-lobobox img {
     max-width: 400px;
     max-height: 80px;
