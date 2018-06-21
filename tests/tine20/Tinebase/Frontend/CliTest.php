@@ -325,6 +325,19 @@ class Tinebase_Frontend_CliTest extends TestCase
     }
 
     /**
+     * testMonitoringCheckCache
+     */
+    public function testMonitoringCheckCache()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckCache();
+        $out = ob_get_clean();
+
+        self::assertContains('CACHE ', $out);
+        self::assertLessThanOrEqual(1, $result);
+    }
+
+    /**
      * test cleanNotes
      */
     public function testCleanNotes()

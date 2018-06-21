@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -182,20 +182,6 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
 
-        $eventsData = $_records->toArray();
-        
-        foreach ($eventsData as $idx => $eventData) {
-            if (! (isset($eventData[Tinebase_Model_Grants::GRANT_READ]) || array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData)) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
-                $eventsData[$idx] = array_intersect_key($eventsData[$idx], array_flip(array(
-                    'id',
-                    'dtstart',
-                    'dtend',
-                    'transp',
-                    'is_all_day_event',
-                )));
-            }
-        }
-
-        return $eventsData;
+        return $_records->toArray();
     }
 }

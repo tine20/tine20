@@ -28,6 +28,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      * @var Calendar_Controller_Event
      */
     protected $_eventController = null;
+
+    protected $_oldFreebusyInfoAllowed = null;
     
     /**
      * (non-PHPdoc)
@@ -41,8 +43,18 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_uit = new Calendar_Frontend_Json();
         $this->_eventController = Calendar_Controller_Event::getInstance();
+
+        $this->_oldFreebusyInfoAllowed = Calendar_Config::getInstance()->{Calendar_Config::FREEBUSY_INFO_ALLOWED};
     }
-    
+
+    public function tearDown()
+    {
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, $this->_oldFreebusyInfoAllowed);
+
+        parent::tearDown();
+    }
+
     /**
      * testGetRegistryData
      */
@@ -1162,8 +1174,16 @@ class Calendar_JsonTests extends Calendar_TestCase
      * 
      * @return array event data
      */
-    public function testFreeBusyCleanup()
+    public function testFreeBusyCleanup($doAllTesting = true)
     {
+        $resource = $this->_getResource();
+        $resource->grants = [[
+            'account_id'      => '0',
+            'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+            Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+        ]];
+        $resource = Calendar_Controller_Resource::getInstance()->create($resource);
         // give fb grants from sclever
         $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_getPersonasDefaultCals('sclever'));
         Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet($scleverCal->getGrantClass(), array(array(
@@ -1186,9 +1206,12 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData = $this->_getEvent()->toArray();
         unset($eventData['organizer']);
         $eventData['container_id'] = $scleverCal->getId();
-        $eventData['attendee'] = array(array(
+        $eventData['attendee'] = [[
             'user_id' => $this->_getPersonasContacts('sclever')->getId()
-        ));
+        ],[
+            'user_id' => $resource->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE
+        ]];
         $eventData['organizer'] = $this->_getPersonasContacts('sclever')->getId();
         $eventData = $this->_uit->saveEvent($eventData);
         $filter = $this->_getEventFilterArray($this->_getPersonasDefaultCals('sclever')->getId());
@@ -1196,22 +1219,94 @@ class Calendar_JsonTests extends Calendar_TestCase
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
-        
+
+        Calendar_Model_Attender::clearCache();
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 10);
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getTestUser());
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES, true);
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        
-        $this->assertFalse((isset($eventData['summary']) || array_key_exists('summary', $eventData)), 'summary not empty: ' . print_r($eventData, TRUE));
-        $this->assertFalse((isset($eventData['description']) || array_key_exists('description', $eventData)), 'description not empty');
-        $this->assertFalse((isset($eventData['tags']) || array_key_exists('tags', $eventData)), 'tags not empty');
-        $this->assertFalse((isset($eventData['notes']) || array_key_exists('notes', $eventData)), 'notes not empty');
-        $this->assertFalse((isset($eventData['attendee']) || array_key_exists('attendee', $eventData)), 'attendee not empty');
-        $this->assertFalse((isset($eventData['organizer']) || array_key_exists('organizer', $eventData)), 'organizer not empty');
-        $this->assertFalse((isset($eventData['alarms']) || array_key_exists('alarms', $eventData)), 'alarms not empty');
-        
-        return $eventData;
+        if (!$doAllTesting) {
+            return $eventData;
+        }
+        $this->_assertFreebusyData($eventData, 10);
+
+        Calendar_Model_Attender::clearCache();
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 20);
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
+        $eventData = $searchResultData['results'][0];
+        $this->_assertFreebusyData($eventData, 20);
+
+        Calendar_Model_Attender::clearCache();
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 30);
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
+        $eventData = $searchResultData['results'][0];
+        $this->_assertFreebusyData($eventData, 30);
+
+        Calendar_Model_Attender::clearCache();
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 40);
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
+        $eventData = $searchResultData['results'][0];
+        $this->_assertFreebusyData($eventData, 40);
+
+        Calendar_Model_Attender::clearCache();
+        Calendar_Model_Event::resetFreeBusyCleanupCache();
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 50);
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
+        $eventData = $searchResultData['results'][0];
+        $this->_assertFreebusyData($eventData, 50);
+
+        return null;
+    }
+
+    protected function _assertFreebusyData($eventData, $accessLevel)
+    {
+        static::assertFalse(isset($eventData['summary']), 'summary not empty: ' . print_r($eventData, TRUE));
+        static::assertFalse(isset($eventData['description']), 'description not empty');
+        static::assertTrue(empty($eventData['tags']), 'tags not empty');
+        static::assertTrue(empty($eventData['notes']), 'notes not empty');
+        static::assertTrue(empty($eventData['alarms']), 'alarms not empty');
+        if ($accessLevel < 20) {
+            static::assertFalse(isset($eventData['container_id']), 'container_id not empty');
+        } else {
+            static::assertTrue(isset($eventData['container_id']) && !empty($eventData['container_id']),
+                'container_id empty');
+        }
+        if ($accessLevel < 30) {
+            static::assertFalse(isset($eventData['organizer']), 'organizer not empty');
+        } else {
+            static::assertTrue(isset($eventData['organizer']) && !empty($eventData['organizer']), 'organizer empty');
+        }
+        if ($accessLevel < 40) {
+            static::assertTrue(empty($eventData['attendee']), 'attendee not empty');
+        } else {
+            static::assertFalse(empty($eventData['attendee']), 'attendee empty');
+        }
+
+        if ($accessLevel === 40) {
+            static::assertEquals(1, count($eventData['attendee']), 'number of attendees wrong');
+        }
+        if ($accessLevel === 50) {
+            static::assertEquals(2, count($eventData['attendee']), 'number of attendees wrong');
+        }
     }
 
     /**
@@ -1221,7 +1316,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testFreeBusyCleanupOfNotes()
     {
-        $eventData = $this->testFreeBusyCleanup();
+        $eventData = $this->testFreeBusyCleanup(false);
         
         $tinebaseJson = new Tinebase_Frontend_Json();
         $filter = array(array(
