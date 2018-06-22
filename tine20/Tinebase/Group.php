@@ -278,13 +278,6 @@ class Tinebase_Group
                 ' No syncable group backend found - skipping syncGroups.');
             return;
         }
-
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User
-            || Tinebase_Core::getUser()->getId() !== Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID))
-        {
-            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-        }
         
         if (!$groupBackend->isDisabledBackend()) {
             $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);
