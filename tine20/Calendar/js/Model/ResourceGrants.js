@@ -62,7 +62,7 @@ Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(c
         ];
 
     } else {
-        var grants = Tine.widgets.container.GrantsManager.defaultGrants();
+        var grants = Tine.widgets.container.GrantsManager.defaultGrants(container);
 
         // normal events container
         if (container.type == 'personal') {

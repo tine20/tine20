@@ -1062,13 +1062,17 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if ($this->_FEDataRecordResolving) {
                 /** @var Tinebase_Record_Abstract $recordsClass */
                 $recordsClass = $_records->getRecordClassName();
-                foreach ($recordsClass::getResolveForeignIdFields() as $key => $value) {
-                    if ($key === 'recursive') {
-                        $value = array_keys($value);
-                    }
-                    foreach ($value as $field) {
-                        $backupFields[$field] = $_records->{$field};
-                        $_records->{$field} = null;
+                $resolveForeignIdFields = $recordsClass::getResolveForeignIdFields();
+                // TODO switch to is_iterable() when we no longer support PHP < 7.0
+                if (is_array($resolveForeignIdFields) || $resolveForeignIdFields instanceof \Traversable) {
+                    foreach ($resolveForeignIdFields as $key => $value) {
+                        if ($key === 'recursive') {
+                            $value = array_keys($value);
+                        }
+                        foreach ($value as $field) {
+                            $backupFields[$field] = $_records->{$field};
+                            $_records->{$field} = null;
+                        }
                     }
                 }
             }
