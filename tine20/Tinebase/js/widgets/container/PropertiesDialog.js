@@ -138,6 +138,12 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     readOnly: true,
                     fieldLabel: i18n._('Name'),
                     value: this.grantContainer.name
+                },{
+                    xtype: 'textfield',
+                    anchor: '100%',
+                    readOnly: true,
+                    fieldLabel: i18n._('Hierarchy/Name'),
+                    value: this.grantContainer.hierarchy
                 }, {
                     xtype: 'colorfield',
                     width: 40,

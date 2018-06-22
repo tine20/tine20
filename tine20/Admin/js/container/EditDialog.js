@@ -86,10 +86,44 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return this.grantsGrid;
     },
 
+    getFormItems: function() {
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            defaults: {
+                hideMode: 'offsets'
+            },
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            items:[
+                {
+                    title: this.i18nRecordName,
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    defaults: { autoScroll: true },
+                    items: [{
+                        region: 'center',
+                        layout: 'fit',
+                        items: this.getContainerFormItems()
+                    }].concat(this.getEastPanel())
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: 'Tinebase_Model_Container'
+                })
+            ]
+        };
+    },
+
     /**
      * returns dialog
      */
-    getFormItems: function () {
+    getContainerFormItems: function () {
         var userApplications = Tine.Tinebase.registry.get('userApplications');
         this.appStore = new Ext.data.JsonStore({
             root: 'results',
@@ -186,6 +220,12 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 0.1,
                     fieldLabel: this.app.i18n._('Color'),
                     name: 'color'
+                }],[{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Container Hierarchy/Name'),
+                    allowBlank: false,
+                    columnWidth: 1,
+                    name: 'hierarchy'
                 }]]
             }, 
                 this.initGrantsGrid(), {
