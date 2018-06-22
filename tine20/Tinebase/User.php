@@ -446,7 +446,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
     /**
      * Getter for {@see $_backendConfigurationDefaults}
      * @param string|null $_backendType
-     * @throws Tinebase_Exception_InvalidArgument
      * @return array
      */
     public static function getBackendConfigurationDefaults($_backendType = null) {
@@ -479,7 +478,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
 
-        self::_setSetupUser();
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+        }
 
         /** @var Tinebase_User_Ldap $userBackend */
         $userBackend  = Tinebase_User::getInstance();
@@ -790,8 +792,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return true;
         }
-
-        self::_setSetupUser();
+        
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -817,16 +818,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
             . ' Finished synchronizing users.');
 
         return $result;
-    }
-
-    protected static function _setSetupUser()
-    {
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User
-            || Tinebase_Core::getUser()->getId() !== Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID))
-        {
-            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-        }
     }
 
     /**
