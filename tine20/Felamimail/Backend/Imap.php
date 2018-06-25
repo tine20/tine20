@@ -752,8 +752,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $parameters = array();
             for($i=0; $i<count($_structure[2]); $i++) {
                 $key   = strtolower($_structure[2][$i]);
-                $value = $_structure[2][++$i];
-                $parameters[$key] = $this->_mimeDecodeHeader($value);
+                if (isset($_structure[2][++$i])) {
+                    $value = $_structure[2][$i];
+                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+                }
             }
             $structure['parameters'] = $parameters;
         }
@@ -810,8 +812,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $parameters = array();
                 for ($i=0; $i<count($_structure[$index][1]); $i++) {
                     $key = strtolower($_structure[$index][1][$i]);
-                    $value = $_structure[$index][1][++$i];
-                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    if (isset($_structure[$index][1][++$i])) {
+                        $value = $_structure[$index][1][$i];
+                        $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    }
                 }
                 $structure['disposition']['parameters'] = $parameters;
             }
