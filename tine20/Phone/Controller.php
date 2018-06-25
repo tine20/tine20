@@ -181,25 +181,8 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             $_call->callerid = $_call->line_id;
         }
 
-        // resolve telephone number to contacts if possible
         $phoneController = Phone_Controller_Call::getInstance();
-        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry($phoneController->resolveInternalNumber($_call->destination));
-        if (null !== $telNumber) {
-            $filter = new Addressbook_Model_ContactFilter(array(
-                array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
-            ));
-
-            $controller = Addressbook_Controller_Contact::getInstance();
-            $oldAclChecks = $controller->doContainerACLChecks();
-
-            $controller->doContainerACLChecks(false);
-            $contacts = $controller->search($filter);
-            $controller->doContainerACLChecks($oldAclChecks);
-
-            if ($contacts->count() > 0) {
-                $_call->contact_id = $contacts->getFirstRecord()->getId();
-            }
-        }
+        $phoneController->resolveCallNumberToContact($_call);
 
         $call = $backend->create($_call);
 
