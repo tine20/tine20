@@ -1,9 +1,9 @@
 .x-ux-connectionstatus-online {
-    background-image: url(../../../images/oxygen/16x16/status/user-online.png) !important;;
+    background-image: url(../../../images/icon-set/icon_diconnect.svg) !important;;
 }
 
 .x-ux-connectionstatus-offline {
-    background-image: url(../../../images/oxygen/16x16/status/user-offline.png) !important;;
+    background-image: url(../../../images/icon-set/icon_diconnect.svg) !important;;
 }
 
 .x-ux-connectionstatus-unknown {

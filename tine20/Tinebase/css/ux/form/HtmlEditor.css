@@ -1,10 +1,71 @@
+.x-btn-icon .x-btn-small .x-btn-text {
+    background-position: -1px -1px !important;
+    background-size: 18px 18px !important;
+}
+
+.x-html-editor-tb .x-edit-bold, .x-menu-item img.x-edit-bold {
+    background: url(../../../../images/icon-set/icon_email_bold.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-italic, .x-menu-item img.x-edit-italic {
+    background: url(../../../../images/icon-set/icon_email_italic.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-underline, .x-menu-item img.x-edit-underline {
+    background: url(../../../../images/icon-set/icon_email_underline.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-increasefontsize, .x-menu-item img.x-edit-increasefontsize {
+    background: url(../../../../images/icon-set/icon_email_size_up.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-decreasefontsize, .x-menu-item img.x-edit-decreasefontsize {
+    background: url(../../../../images/icon-set/icon_email_size_down.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-forecolor, .x-menu-item img.x-edit-forecolor {
+    background: url(../../../../images/icon-set/icon_email_text_color_02.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-backcolor, .x-menu-item img.x-edit-backcolor {
+    background: url(../../../../images/icon-set/icon_email_bg_color.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-justifyleft, .x-menu-item img.x-edit-justifyleft {
+    background: url(../../../../images/icon-set/icon_email_text_left.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-justifycenter, .x-menu-item img.x-edit-justifycenter {
+    background: url(../../../../images/icon-set/icon_email_text_center.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-justifyright, .x-menu-item img.x-edit-justifyright {
+    background: url(../../../../images/icon-set/icon_email_text_right.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-createlink, .x-menu-item img.x-edit-createlink {
+    background: url(../../../../images/icon-set/icon_globe.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-insertorderedlist, .x-menu-item img.x-edit-insertorderedlist {
+    background: url(../../../../images/icon-set/icon_email_list_ordered.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-insertunorderedlist, .x-menu-item img.x-edit-insertunorderedlist {
+    background: url(../../../../images/icon-set/icon_email_list_unordered.svg) !important;
+}
+
+.x-html-editor-tb .x-edit-sourceedit, .x-menu-item img.x-edit-sourceedit {
+    background: url(../../../../images/icon-set/icon_email_edit_code.svg) !important;
+}
+
 /*
     html editor plugin button icons
 */
-.x-edit-indent {background: url(../../../../images/oxygen/16x16/actions/format-indent-more.png) 0 0 no-repeat !important;}
-.x-edit-outdent {background: url(../../../../images/oxygen/16x16/actions/format-indent-less.png) 0 0 no-repeat !important;}
-.x-edit-removeFormat {background: url(../../../../images/oxygen/16x16/actions/eraser.png) 0 0 no-repeat !important;}
-.x-edit-toggleFormat {background: url(../../../../images/oxygen/16x16/actions/draw-text.png) 0 0 no-repeat !important;}
+.x-edit-indent {background: url(../../../../images/icon-set/icon_email_text_jump_right.svg) 0 0 no-repeat !important;}
+.x-edit-outdent {background: url(../../../../images/icon-set/icon_email_text_jump_left.svg) 0 0 no-repeat !important;}
+.x-edit-removeFormat {background: url(../../../../images/icon-set/icon_email_eraser.svg) 0 0 no-repeat !important;}
+.x-edit-toggleFormat {background: url(../../../../images/icon-set/icon_email_t.svg) 0 0 no-repeat !important;}
 
 /*
     These are examples of styles for the button icons

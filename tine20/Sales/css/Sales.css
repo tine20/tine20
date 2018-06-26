@@ -70,7 +70,7 @@
 .preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
 
 .clipboard {
-    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+    background-image:url(../../images/icon-set/icon_copy_to_clipboard.svg) !important;
 }
 
 .preview-panel-invoice-default {

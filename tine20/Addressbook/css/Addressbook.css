@@ -1,11 +1,5 @@
 .action_addList {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .action_addList {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .action_addList {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+    background-image:url(../../images/icon-set/icon_address_group_plus.svg) !important;
 }
 
 .AddressbookIconCls, .AddressbookContact {
@@ -36,7 +30,7 @@
 }
 
 .renderer_typeGroupIcon, .AddressbookList{
-    background-image:url(../../images/icon-set/icon_address_group.svg) !important;
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
     background-repeat: no-repeat;
     /*background-position: 2px 2px;*/
     /*height: 16px;*/
