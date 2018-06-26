@@ -106,6 +106,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0") {
                 this.getForm().findField('is_billable').setValue(false);
             }
+
+            this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
         }
 
         this.getForm().findField('is_billable').setDisabled(notBillable);
@@ -307,7 +309,29 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            }, {
+                    title: this.app.i18n._('Timeaccount'),
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    items: [{
+                        region: 'center',
+                        layout: 'fit',
+                        height: 400,
+                        flex: 1,
+                        border: false,
+                        style: 'padding-bottom: 5px;',
+                        items: [{
+                            xtype: 'textarea',
+                            name: 'timeaccount_description',
+                            grow: false,
+                            preventScrollbars: false,
+                            fieldLabel: this.app.i18n._('Description'),
+                            readOnly: true
+                        }]
+                    }]
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
