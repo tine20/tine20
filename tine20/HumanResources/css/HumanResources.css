@@ -9,63 +9,19 @@
  */
  
 .HumanResourcesEmployee, .HumanResourcesIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
-}
-
-.x-btn-medium .HumanResourcesIconCls, .x-btn-medium .HumanResourcesEmployee {
-    background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
-}
-.x-btn-large .HumanResourcesIconCls, .x-btn-large .HumanResourcesEmployee {
-    background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
+    background-image:url(../../images/icon-set/icon_human_resources.svg) !important;
 }
 
 .HumanResourcesAccount {
-    background-image:url(../../images/oxygen/16x16/apps/ksudoku.png) !important;
-}
-
-.x-btn-medium .HumanResourcesAccount {
-    background-image:url(../../images/oxygen/22x22/apps/ksudoku.png) !important;
-}
-
-.x-btn-large .HumanResourcesAccount {
-    background-image:url(../../images/oxygen/32x32/apps/ksudoku.png) !important;
+    background-image:url(../../images/icon-set/icon_timeaccount.svg) !important;
 }
 
 .action_create_accounts {
-    background-image:url(../../images/oxygen/22x22/actions/games-solve.png) !important;
+    background-image:url(../../images/icon-set/icon_magic_wand.svg) !important;
 }
 
 .applyContactData {
-        height:14px!important;
-        width: 14px!important;
-        background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
-}
-
-.HumanResourcesWorkingTime {
-    background-image:url(../../images/oxygen/16x16/actions/media-playlist-refresh.png) !important;
-}
-
-.HumanResourcesWorkingTimeFormButton {
-    background-image:url(../../images/oxygen/16x16/actions/media-playlist-refresh.png) !important;
-    height:13px!important;
-    width: 16px!important;
-}
-.x-btn-medium .HumanResourcesWorkingTime {
-    background-image:url(../../images/oxygen/22x22/actions/media-playlist-refresh.png) !important;
-}
-
-.x-btn-large .HumanResourcesWorkingTime {
-    background-image:url(../../images/oxygen/32x32/actions/media-playlist-refresh.png) !important;
-}
-
-.HumanResourcesFreeTime {
-    background-image:url(../../images/oxygen/16x16/actions/book2.png) !important;
-}
-.x-btn-medium .HumanResourcesFreeTime {
-    background-image:url(../../images/oxygen/22x22/actions/book2.png) !important;
-}
-.x-btn-large .HumanResourcesFreeTime {
-    background-image:url(../../images/oxygen/32x32/actions/book2.png) !important;
+    background-image:url(../../images/icon-set/icon_magic_wand.svg) !important;
 }
 
 .HumanResources .x-date-picker {

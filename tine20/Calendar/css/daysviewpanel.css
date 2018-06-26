@@ -101,33 +101,10 @@
     overflow: hidden;
 }
 
-/*
-.cal-daysviewpanel-body-daycolumn-hint-above {
-    width: 16px;
-    height: 16px;
-    background-image: url(../../images/oxygen/16x16/actions/go-up.png);
-    position: absolute;
-    right: 5px;
-    z-index: 1000;
-    cursor: pointer;
-    display: none;
-}
-
-.cal-daysviewpanel-body-daycolumn-hint-below {
-    width: 16px;
-    height: 16px;
-    background-image: url(../../images/oxygen/16x16/actions/go-down.png);
-    position: absolute;
-    right: 5px;
-    z-index: 1000;
-    cursor: pointer;
-    display: none;
-}
-*/
 .cal-daysviewpanel-body-daycolumn-hint-above {
     width: 9px;
     height: 9px;
-    background-image: url(../../library/ExtJS/resources/images/default/grid/col-move-bottom.gif);
+    background-image: url(../../images/icon-set/icon_arrow_full_up.svg);
     position: absolute;
     right: 5px;
     z-index: 1000;
@@ -138,7 +115,7 @@
 .cal-daysviewpanel-body-daycolumn-hint-below {
     width: 9px;
     height: 9px;
-    background-image: url(../../library/ExtJS/resources/images/default/grid/col-move-top.gif);
+    background-image: url(../../images/icon-set/icon_arrow_full_down.svg);
     position: absolute;
     right: 5px;
     z-index: 1000;
