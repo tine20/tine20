@@ -175,6 +175,11 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             current = lodash.find(cm.config, findFn),
             config = lodash.find(this.configColumns, findFn);
 
+        // apparently config might be empty for shared folders
+        if (!config) {
+            return;
+        }
+
         if (use && ! current) {
             cm.setConfig(cm.config.push(config));
         } else if (! use && current) {
