@@ -97,7 +97,329 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             this.contactEventPanel = null;
         }
 
-        var tabs = [{
+        var contactNorthPanel = {
+            xtype: 'fieldset',
+            region: 'north',
+            autoHeight: true,
+            title: this.app.i18n._('Personal Information'),
+            items: [{
+                xtype: 'panel',
+                layout: 'hbox',
+                align: 'stretch',
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key: 'Tine.Addressbook.editDialog.northPanel'
+                }],
+                items: [{
+                    flex: 1,
+                    xtype: 'columnform',
+                    autoHeight: true,
+                    style: 'padding-right: 5px;',
+                    items: [
+                        [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            fieldLabel: this.app.i18n._('Salutation'),
+                            name: 'salutation',
+                            app: 'Addressbook',
+                            keyFieldName: 'contactSalutation',
+                            value: '',
+                            columnWidth: 0.35,
+                            listeners: {
+                                scope: this,
+                                'select': function (combo, record, index) {
+                                    var jpegphoto = this.getForm().findField('jpegphoto');
+                                    // set new empty photo depending on chosen salutation only if user doesn't have own image
+                                    jpegphoto.setDefaultImage(record.json.image || 'images/icon-set/icon_undefined_contact.svg');
+                                }
+                            }
+                        }), {
+                            columnWidth: 0.65,
+                            fieldLabel: this.app.i18n._('Title'),
+                            name: 'n_prefix',
+                            maxLength: 64
+                        }], [{
+                            columnWidth: 0.35,
+                            fieldLabel: this.app.i18n._('First Name'),
+                            name: 'n_given',
+                            maxLength: 64
+                        }, {
+                            columnWidth: 0.30,
+                            fieldLabel: this.app.i18n._('Middle Name'),
+                            name: 'n_middle',
+                            maxLength: 64
+                        }, {
+                            columnWidth: 0.35,
+                            fieldLabel: this.app.i18n._('Last Name'),
+                            name: 'n_family',
+                            maxLength: 255
+                        }], [{
+                            columnWidth: 0.65,
+                            xtype: 'mirrortextfield',
+                            fieldLabel: this.app.i18n._('Company'),
+                            name: 'org_name',
+                            maxLength: 255
+                        }, {
+                            columnWidth: 0.35,
+                            fieldLabel: this.app.i18n._('Unit'),
+                            name: 'org_unit',
+                            maxLength: 64
+                        }
+                        ]
+                    ]
+                },
+                    new Ext.ux.form.ImageField({
+                        name: 'jpegphoto',
+                        width: 90,
+                        height: 120
+                    })
+                ]
+            }, {
+                xtype: 'columnform',
+                items: [[
+                    !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
+                        {
+                            columnWidth: 0.64,
+                            xtype: 'combo',
+                            fieldLabel: this.app.i18n._('Display Name'),
+                            name: 'n_fn',
+                            disabled: true
+                        } :
+                        (
+                            new Tine.Addressbook.IndustrySearchCombo({
+                                fieldLabel: this.app.i18n._('Industry'),
+                                columnWidth: 0.64,
+                                name: 'industry'
+                            })
+                        ), {
+                        columnWidth: 0.36,
+                        fieldLabel: this.app.i18n._('Job Title'),
+                        name: 'title',
+                        maxLength: 64
+                    }, {
+                        width: 110,
+                        xtype: 'extuxclearabledatefield',
+                        fieldLabel: this.app.i18n._('Birthday'),
+                        name: 'bday'
+                    }
+                ]]
+            }]
+        };
+
+        var contactCenterPanel = {
+            xtype: 'fieldset',
+            region: 'center',
+            title: this.app.i18n._('Contact Information'),
+            autoScroll: true,
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine.Addressbook.editDialog.centerPanel'
+            }],
+            items: [{
+                xtype: 'columnform',
+                items: [[{
+                    fieldLabel: this.app.i18n._('Phone'),
+                    labelIcon: 'images/icon-set/icon_phone.svg',
+                    name: 'tel_work',
+                    maxLength: 40
+                }, {
+                    fieldLabel: this.app.i18n._('Mobile'),
+                    labelIcon: 'images/icon-set/icon_mobile.svg',
+                    name: 'tel_cell',
+                    maxLength: 40
+                }, {
+                    fieldLabel: this.app.i18n._('Fax'),
+                    labelIcon: 'images/icon-set/icon_print.svg',
+                    name: 'tel_fax',
+                    maxLength: 40
+                }], [{
+                    fieldLabel: this.app.i18n._('Phone (private)'),
+                    labelIcon: 'images/icon-set/icon_phone.svg',
+                    name: 'tel_home',
+                    maxLength: 40
+                }, {
+                    fieldLabel: this.app.i18n._('Mobile (private)'),
+                    labelIcon: 'images/icon-set/icon_mobile.svg',
+                    name: 'tel_cell_private',
+                    maxLength: 40
+                }, {
+                    fieldLabel: this.app.i18n._('Fax (private)'),
+                    labelIcon: 'images/icon-set/icon_print.svg',
+                    name: 'tel_fax_home',
+                    maxLength: 40
+                }], [{
+                    fieldLabel: this.app.i18n._('E-Mail'),
+                    labelIcon: 'images/icon-set/icon_email.svg',
+                    name: 'email',
+                    vtype: 'email',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('E-Mail (private)'),
+                    labelIcon: 'images/icon-set/icon_email.svg',
+                    name: 'email_home',
+                    vtype: 'email',
+                    maxLength: 64
+                }, {
+                    xtype: 'mirrortextfield',
+                    fieldLabel: this.app.i18n._('Web'),
+                    labelIcon: 'images/icon-set/icon_globe.svg',
+                    name: 'url',
+                    maxLength: 128,
+                    listeners: {
+                        scope: this,
+                        focus: function (field) {
+                            if (!field.getValue()) {
+                                field.setValue('http://www.');
+                                field.selectText.defer(100, field, [7, 11]);
+                            }
+                        },
+                        blur: function (field) {
+                            if (field.getValue() === 'http://www.') {
+                                field.setValue(null);
+                                field.validate();
+                            }
+                            if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
+                                field.setValue(field.getValue().substr(7));
+                                field.validate();
+                            }
+                            if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
+                                field.setValue(field.getValue().substr(11));
+                                field.validate();
+                            }
+                        }
+                    }
+                }]]
+            }]
+        };
+
+        var contactSouthPanel = {
+            xtype: 'tabpanel',
+            region: 'south',
+            border: false,
+            deferredRender: false,
+            height: 160,
+            split: true,
+            activeTab: 0,
+            defaults: {
+                frame: true
+            },
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine.Addressbook.editDialog.southPanel'
+            }],
+            items: [{
+                title: this.app.i18n._('Company Address'),
+                xtype: 'columnform',
+                items: [[{
+                    fieldLabel: this.app.i18n._('Street'),
+                    name: 'adr_one_street',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Street 2'),
+                    name: 'adr_one_street2',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Region'),
+                    name: 'adr_one_region',
+                    maxLength: 64
+                }], [{
+                    fieldLabel: this.app.i18n._('Postal Code'),
+                    name: 'adr_one_postalcode',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('City'),
+                    name: 'adr_one_locality',
+                    maxLength: 64
+                }, {
+                    xtype: 'widget-countrycombo',
+                    fieldLabel: this.app.i18n._('Country'),
+                    name: 'adr_one_countryname',
+                    maxLength: 64
+                }], [this.preferredAddressBusinessCheckbox]]
+            }, {
+                title: this.app.i18n._('Private Address'),
+                xtype: 'columnform',
+                items: [[{
+                    fieldLabel: this.app.i18n._('Street'),
+                    name: 'adr_two_street',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Street 2'),
+                    name: 'adr_two_street2',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Region'),
+                    name: 'adr_two_region',
+                    maxLength: 64
+                }], [{
+                    fieldLabel: this.app.i18n._('Postal Code'),
+                    name: 'adr_two_postalcode',
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('City'),
+                    name: 'adr_two_locality',
+                    maxLength: 64
+                }, {
+                    xtype: 'widget-countrycombo',
+                    fieldLabel: this.app.i18n._('Country'),
+                    name: 'adr_two_countryname',
+                    maxLength: 64
+                }], [this.preferredAddressPrivateCheckbox]]
+            }]
+        };
+
+        // activities and tags
+        var contactEastPanel = {
+            region: 'east',
+            layout: 'ux.multiaccordion',
+            animate: true,
+            width: 210,
+            split: true,
+            collapsible: true,
+            collapseMode: 'mini',
+            header: false,
+            margins: '0 5 0 5',
+            border: true,
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine.Addressbook.editDialog.eastPanel'
+            }],
+            items: [
+                new Ext.Panel({
+                    // @todo generalise!
+                    title: this.app.i18n._('Description'),
+                    iconCls: 'descriptionIcon',
+                    layout: 'form',
+                    labelAlign: 'top',
+                    border: false,
+                    items: [{
+                        style: 'margin-top: -4px; border 0px;',
+                        labelSeparator: '',
+                        xtype: 'textarea',
+                        name: 'note',
+                        hideLabel: true,
+                        grow: false,
+                        preventScrollbars: false,
+                        anchor: '100% 100%',
+                        emptyText: this.app.i18n._('Enter description'),
+                        requiredGrant: 'editGrant'
+                    }]
+                }), new Ext.Panel({
+                    title: this.app.i18n._('Groups'),
+                    iconCls: 'tinebase-accounttype-group',
+                    layout: 'fit',
+                    border: false,
+                    bodyStyle: 'border:1px solid #B5B8C8;',
+                    items: [
+                        this.groupsPanel
+                    ]
+                }), new Tine.widgets.tags.TagPanel({
+                    app: 'Addressbook',
+                    border: false,
+                    bodyStyle: 'border:1px solid #B5B8C8;'
+                })
+            ]
+        };
+
+        var contactTab = {
             title: this.app.i18n.n_('Contact', 'Contacts', 1),
             border: false,
             frame: true,
@@ -105,337 +427,20 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             items: [{
                 region: 'center',
                 layout: 'border',
-                items: [{
-                    xtype: 'fieldset',
-                    region: 'north',
-                    autoHeight: true,
-                    title: this.app.i18n._('Personal Information'),
-                    items: [{
-                        xtype: 'panel',
-                        layout: 'hbox',
-                        align: 'stretch',
-                        plugins: [{
-                            ptype: 'ux.itemregistry',
-                            key:   'Tine.Addressbook.editDialog.northPanel'
-                        }],
-                        items: [{
-                            flex: 1,
-                            xtype: 'columnform',
-                            autoHeight: true,
-                            style:'padding-right: 5px;',
-                            items: [[
-                                new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                    fieldLabel: this.app.i18n._('Salutation'),
-                                    name: 'salutation',
-                                    app: 'Addressbook',
-                                    keyFieldName: 'contactSalutation',
-                                    value: '',
-                                    columnWidth: 0.35,
-                                    listeners: {
-                                        scope: this,
-                                        'select': function (combo, record, index) {
-                                            var jpegphoto = this.getForm().findField('jpegphoto');
-                                            // set new empty photo depending on chosen salutation only if user doesn't have own image
-                                            jpegphoto.setDefaultImage(record.json.image || 'images/icon-set/icon_undefined_contact.svg');
-                                        }
-                                    }
-                                }), {
-                                    columnWidth: 0.65,
-                                    fieldLabel: this.app.i18n._('Title'),
-                                    name: 'n_prefix',
-                                    maxLength: 64
-                                }], [{
-                                columnWidth: 0.35,
-                                fieldLabel: this.app.i18n._('First Name'),
-                                name: 'n_given',
-                                maxLength: 64
-                            }, {
-                                columnWidth: 0.30,
-                                fieldLabel: this.app.i18n._('Middle Name'),
-                                name: 'n_middle',
-                                maxLength: 64
-                            }, {
-                                columnWidth: 0.35,
-                                fieldLabel: this.app.i18n._('Last Name'),
-                                name: 'n_family',
-                                maxLength: 255
-                            }], [{
-                                columnWidth: 0.65,
-                                xtype: 'mirrortextfield',
-                                fieldLabel: this.app.i18n._('Company'),
-                                name: 'org_name',
-                                maxLength: 255
-                            }, {
-                                columnWidth: 0.35,
-                                fieldLabel: this.app.i18n._('Unit'),
-                                name: 'org_unit',
-                                maxLength: 64
-                            }
-                            ]/* move to seperate tab, [{
-                                    columnWidth: .4,
-                                    fieldLabel: this.app.i18n._('Suffix'),
-                                    name:'n_suffix'
-                                }, {
-                                    columnWidth: .4,
-                                    fieldLabel: this.app.i18n._('Job Role'),
-                                    name:'role'
-                                }, {
-                                    columnWidth: .2,
-                                    fieldLabel: this.app.i18n._('Room'),
-                                    name:'room'
-                                }]*/
-                            ]},
-                            new Ext.ux.form.ImageField({
-                                name: 'jpegphoto',
-                                width: 90,
-                                height: 120
-                            })
-                        ]
-                    }, {
-                        xtype: 'columnform',
-                        items: [[
-                            !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
-                                {
-                                    columnWidth: 0.64,
-                                    xtype: 'combo',
-                                    fieldLabel: this.app.i18n._('Display Name'),
-                                    name: 'n_fn',
-                                    disabled: true
-                                } :
-                                (
-                                    new Tine.Addressbook.IndustrySearchCombo({
-                                        fieldLabel: this.app.i18n._('Industry'),
-                                        columnWidth: 0.64,
-                                        name: 'industry'
-                                    })
-                                ), {
-                                     columnWidth: 0.36,
-                                     fieldLabel: this.app.i18n._('Job Title'),
-                                     name: 'title',
-                                     maxLength: 64
-                                }, {
-                                     width: 110,
-                                     xtype: 'extuxclearabledatefield',
-                                     fieldLabel: this.app.i18n._('Birthday'),
-                                     name: 'bday'
-                                }
-                            ]]
-                        }]
-                    }, {
-                        xtype: 'fieldset',
-                        region: 'center',
-                        title: this.app.i18n._('Contact Information'),
-                        autoScroll: true,
-                        plugins: [{
-                            ptype: 'ux.itemregistry',
-                            key:   'Tine.Addressbook.editDialog.centerPanel'
-                        }],
-                        items: [{
-                            xtype: 'columnform',
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Phone'),
-                                labelIcon: 'images/icon-set/icon_phone.svg',
-                                name: 'tel_work',
-                                maxLength: 40
-                            }, {
-                                fieldLabel: this.app.i18n._('Mobile'),
-                                labelIcon: 'images/icon-set/icon_mobile.svg',
-                                name: 'tel_cell',
-                                maxLength: 40
-                            }, {
-                                fieldLabel: this.app.i18n._('Fax'),
-                                labelIcon: 'images/icon-set/icon_print.svg',
-                                name: 'tel_fax',
-                                maxLength: 40
-                            }], [{
-                                fieldLabel: this.app.i18n._('Phone (private)'),
-                                labelIcon: 'images/icon-set/icon_phone.svg',
-                                name: 'tel_home',
-                                maxLength: 40
-                            }, {
-                                fieldLabel: this.app.i18n._('Mobile (private)'),
-                                labelIcon: 'images/icon-set/icon_mobile.svg',
-                                name: 'tel_cell_private',
-                                maxLength: 40
-                            }, {
-                                fieldLabel: this.app.i18n._('Fax (private)'),
-                                labelIcon: 'images/icon-set/icon_print.svg',
-                                name: 'tel_fax_home',
-                                maxLength: 40
-                            }], [{
-                                fieldLabel: this.app.i18n._('E-Mail'),
-                                labelIcon: 'images/icon-set/icon_email.svg',
-                                name: 'email',
-                                vtype: 'email',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('E-Mail (private)'),
-                                labelIcon: 'images/icon-set/icon_email.svg',
-                                name: 'email_home',
-                                vtype: 'email',
-                                maxLength: 64
-                            }, {
-                                xtype: 'mirrortextfield',
-                                fieldLabel: this.app.i18n._('Web'),
-                                labelIcon: 'images/icon-set/icon_globe.svg',
-                                name: 'url',
-                                maxLength: 128,
-                                listeners: {
-                                    scope: this,
-                                    focus: function (field) {
-                                        if (! field.getValue()) {
-                                            field.setValue('http://www.');
-                                            field.selectText.defer(100, field, [7, 11]);
-                                        }
-                                    },
-                                    blur: function (field) {
-                                        if (field.getValue() === 'http://www.') {
-                                            field.setValue(null);
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
-                                            field.setValue(field.getValue().substr(7));
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
-                                            field.setValue(field.getValue().substr(11));
-                                            field.validate();
-                                        }
-                                    }
-                                }
-                            }]]
-                        }]
-                    }, {
-                        xtype: 'tabpanel',
-                        region: 'south',
-                        border: false,
-                        deferredRender: false,
-                        height: 160,
-                        split: true,
-                        activeTab: 0,
-                        defaults: {
-                            frame: true
-                        },
-                        plugins: [{
-                            ptype: 'ux.itemregistry',
-                            key:   'Tine.Addressbook.editDialog.southPanel'
-                        }],
-                        items: [{
-                            title: this.app.i18n._('Company Address'),
-                            xtype: 'columnform',
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Street'),
-                                name: 'adr_one_street',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('Street 2'),
-                                name: 'adr_one_street2',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('Region'),
-                                name: 'adr_one_region',
-                                maxLength: 64
-                            }], [{
-                                fieldLabel: this.app.i18n._('Postal Code'),
-                                name: 'adr_one_postalcode',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('City'),
-                                name: 'adr_one_locality',
-                                maxLength: 64
-                            }, {
-                                xtype: 'widget-countrycombo',
-                                fieldLabel: this.app.i18n._('Country'),
-                                name: 'adr_one_countryname',
-                                maxLength: 64
-                            }], [this.preferredAddressBusinessCheckbox]]
-                        }, {
-                            title: this.app.i18n._('Private Address'),
-                            xtype: 'columnform',
-                            items: [[{
-                                fieldLabel: this.app.i18n._('Street'),
-                                name: 'adr_two_street',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('Street 2'),
-                                name: 'adr_two_street2',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('Region'),
-                                name: 'adr_two_region',
-                                maxLength: 64
-                            }], [{
-                                fieldLabel: this.app.i18n._('Postal Code'),
-                                name: 'adr_two_postalcode',
-                                maxLength: 64
-                            }, {
-                                fieldLabel: this.app.i18n._('City'),
-                                name: 'adr_two_locality',
-                                maxLength: 64
-                            }, {
-                                xtype: 'widget-countrycombo',
-                                fieldLabel: this.app.i18n._('Country'),
-                                name: 'adr_two_countryname',
-                                maxLength: 64
-                            }], [this.preferredAddressPrivateCheckbox]]
-                        }]
-                    }]
-                }, {
-                    // activities and tags
-                    region: 'east',
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    plugins: [{
-                        ptype: 'ux.itemregistry',
-                        key:   'Tine.Addressbook.editDialog.eastPanel'
-                    }],
-                    items: [
-                        new Ext.Panel({
-                            // @todo generalise!
-                            title: this.app.i18n._('Description'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype: 'textarea',
-                                name: 'note',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'
-                            }]
-                        }), new Ext.Panel({
-                            title: this.app.i18n._('Groups'),
-                            iconCls: 'tinebase-accounttype-group',
-                            layout: 'fit',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;',
-                            items: [
-                                this.groupsPanel
-                            ]
-                        }), new Tine.widgets.tags.TagPanel({
-                            app: 'Addressbook',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
-                }]
-            }, this.mapPanel,
+                items: [
+                    contactNorthPanel,
+                    contactCenterPanel,
+                    contactSouthPanel
+                ]
+            }, contactEastPanel]
+        };
+
+        var tabs = [
+            contactTab,
+            this.mapPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
+                record_id: (this.record && !this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             }),
         ];
