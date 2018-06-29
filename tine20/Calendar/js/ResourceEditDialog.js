@@ -81,7 +81,13 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         keyFieldName: 'resourceTypes',
                         fieldLabel: this.app.i18n._('Type'),
                         name: 'type'
-                    })], [
+                    })], [{
+                        xtype: 'textfield',
+                        fieldLabel: this.app.i18n._('Calendar Hierarchy/Name'),
+                        allowBlank: true,
+                        columnWidth: 1,
+                        name: 'hierarchy'
+                    }], [
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Calendar',
                             keyFieldName: 'attendeeStatus',
@@ -185,7 +191,7 @@ Tine.Calendar.ResourceEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 1024,
-        height: 400,
+        height: 430,
         name: Tine.Calendar.ResourceEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Calendar.ResourceEditDialog',
         contentPanelConstructorConfig: config
