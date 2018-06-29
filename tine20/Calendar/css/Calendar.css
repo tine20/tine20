@@ -26,13 +26,7 @@
 }
 
 .cal-print-loose-leaf {
-    background-image:url(../../images/oxygen/16x16/actions/kontact-journal.png) !important;
-}
-.x-btn-medium .cal-print-loose-leaf {
-    background-image:url(../../images/oxygen/22x22/actions/kontact-journal.png) !important;
-}
-.x-btn-large .cal-print-loose-leaf {
-    background-image:url(../../images/oxygen/32x32/actions/kontact-journal.png) !important;
+    background-image:url(../../images/icon-set/icon_looseleaf.svg) !important;
 }
 
 .cal-day-view {
@@ -157,10 +151,10 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-event-icon {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
+    /*background-image:url(../../images/icon-set/icon_event.svg) !important;*/
     background-position: 8px;
     background-repeat:no-repeat;
-    padding: 2px 0px 2px 26px;
+    padding: 2px 0px 2px 6px;
 }
 
 /**** conflict window ****/
