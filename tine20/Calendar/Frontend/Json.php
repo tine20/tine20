@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -386,10 +386,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @param   bool    $checkBusyConflicts
-     * @param   string  $range
      * @return  array   created/updated event
      */
-    public function saveEvent($recordData, $checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
+    public function saveEvent($recordData, $checkBusyConflicts = FALSE)
     {
         $record = new Calendar_Model_Event([], true);
         $record->setFromJsonInUsersTimezone($recordData);
@@ -400,7 +399,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ((empty($record->id))) {
             $savedRecord = Calendar_Controller_Event::getInstance()->create($record, $checkBusyConflicts, false);
         } else {
-            $savedRecord = Calendar_Controller_Event::getInstance()->update($record, $checkBusyConflicts, $range, false);
+            $savedRecord = Calendar_Controller_Event::getInstance()->update($record, $checkBusyConflicts, false);
         }
 
         return $this->_recordToJson($savedRecord);
