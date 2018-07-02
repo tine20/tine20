@@ -62,18 +62,43 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->resolveCallNumberToContact($_record);
+    }
+
+    /**
+     * resolveCallNumberToContact (if possible)
+     *
+     * @param Phone_Model_Call $call
+     * @param bool $ignoreAcl
+     */
+    public function resolveCallNumberToContact(Phone_Model_Call $call, $ignoreAcl = false)
+    {
         // resolve telephone number to contacts if possible
-        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry($this->resolveInternalNumber($_record->destination));
-        if (null !== $telNumber) {
+        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry(
+            $this->resolveInternalNumber($call->destination));
+        if (null !== $telNumber && ! empty($telNumber)) {
             $filter = new Addressbook_Model_ContactFilter(array(
                 array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
             ));
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Searching contacts with filter: '
+                . print_r($filter->toArray(), true));
+
             $controller = Addressbook_Controller_Contact::getInstance();
+            if ($ignoreAcl) {
+                $oldAclChecks = $controller->doContainerACLChecks();
+                $controller->doContainerACLChecks(false);
+            }
+
             $contacts = $controller->search($filter);
 
+            if ($ignoreAcl) {
+                $controller->doContainerACLChecks($oldAclChecks);
+            }
+
             if ($contacts->count() > 0) {
-                $_record->contact_id = $contacts->getFirstRecord()->getId();
+                $call->contact_id = $contacts->getFirstRecord()->getId();
             }
         }
     }
