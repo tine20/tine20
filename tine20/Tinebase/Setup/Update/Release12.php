@@ -21,4 +21,16 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_27();
         $this->setApplicationVersion('Tinebase', '12.1');
     }
+
+    /**
+     * update to 12.2
+     *
+     * add hierarchy column to container
+     */
+    public function update_1()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_28();
+        $this->setApplicationVersion('Tinebase', '12.2');
+    }
 }

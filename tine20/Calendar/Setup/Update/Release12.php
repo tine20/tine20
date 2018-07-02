@@ -31,4 +31,14 @@ class Calendar_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_8();
         $this->setApplicationVersion('Calendar', '12.2');
     }
+
+    /**
+     * update to 12.3
+     */
+    public function update_2()
+    {
+        $release11 = new Calendar_Setup_Update_Release11($this->_backend);
+        $release11->update_9();
+        $this->setApplicationVersion('Calendar', '12.3');
+    }
 }

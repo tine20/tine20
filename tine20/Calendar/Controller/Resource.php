@@ -187,6 +187,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             // create a calendar for this resource
             $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'              => $_record->name,
+                'hierarchy'         => $_record->hierarchy,
                 'color'             => '#333399',
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => $this->_backend->getType(),
@@ -245,8 +246,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                     } catch(Tinebase_Exception_NotFound $tenf) {
                         return;
                     }
-                    if ($resource->name !== $_eventObject->observable->name) {
+                    if (!$_eventObject->observable->is_deleted && ($resource->name !== $_eventObject->observable->name
+                            || $resource->hierarchy !== $_eventObject->observable->hierarchy)) {
                         $resource->name = $_eventObject->observable->name;
+                        $resource->hierarchy = $_eventObject->observable->hierarchy;
                         $this->update($resource);
                     }
                     break;
@@ -292,8 +295,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
             $result = parent::update($_record);
 
-            if ($container->name !== $result->name) {
+            if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy) {
                 $container->name = $result->name;
+                $container->hierarchy = $result->hierarchy;
                 Tinebase_Container::getInstance()->update($container);
             }
 

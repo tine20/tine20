@@ -579,11 +579,49 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.29
+     *
+     * add hierarchy column to container
+     */
+    public function update_28()
+    {
+        // first we need to do the calendar structure update. When we touch the containers below we might trigger
+        // a resource update too, so the structure needs to be available by then, we can't wait for the Calendar
+        // to update later
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+            $calendarUpdate = new Calendar_Setup_Update_Release11($this->_backend);
+            $calendarUpdate->update_9(false);
+        }
+
+        if (! $this->_backend->columnExists('hierarchy', 'container')) {
+            $this->_backend->addCol('container', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>hierarchy</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+
+            $containerController = Tinebase_Container::getInstance();
+            /** @var Tinebase_Model_Container $container */
+            foreach ($containerController->getAll() as $container) {
+                $container->hierarchy = $container->name;
+                $containerController->update($container);
+            }
+        }
+
+        if ($this->getTableVersion('container') == 13) {
+            $this->setTableVersion('container', 14);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.29');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_28()
+    public function update_29()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }
