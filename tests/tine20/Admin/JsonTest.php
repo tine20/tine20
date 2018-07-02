@@ -953,18 +953,29 @@ class Admin_JsonTest extends TestCase
     public function testSaveUpdateDeleteContainer()
     {
         $container = $this->_saveContainer();
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
+        static::assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
         
         // update container
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
         $container['name'] = 'testcontainerupdated';
         $container['account_grants'] = $this->_getContainerGrants();
         
         $containerUpdated = $this->_json->saveContainer($container);
-        $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
-        $this->assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
+        static::assertEquals('testcontainerupdated', $containerUpdated['name']);
+        static::assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instance_seq);
+        static::assertEquals(2, $modifications->count(), 'modification count doesnt match');
+        $firstModification = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
+        static::assertTrue(isset($firstModification->diff['account_grants']), 'expect account_grants to be set');
+        static::assertEquals(1, count($firstModification->diff), 'expect only account_grants to be set');
+        $secondModification = new Tinebase_Record_Diff(json_decode($modifications->getLastRecord()->new_value,
+            true));
+        static::assertTrue(isset($secondModification->diff['name']), 'expect name to be set');
+        static::assertEquals(1, count($secondModification->diff), 'expect only name to be set');
         
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
-        $this->assertEquals('success', $deleteResult['status']);
+        static::assertEquals('success', $deleteResult['status']);
     }
     
     /**
