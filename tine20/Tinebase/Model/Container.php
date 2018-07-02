@@ -20,6 +20,7 @@
  * @property    string $owner_id
  * @property    string $id
  * @property    string $name
+ * @property    string $hierarchy
  * @property    string $backend
  * @property    string $order
  * @property    string $color
@@ -88,6 +89,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            'hierarchy'         => array(
+                'label'             => 'Hierarchy', //_('Hierarchy')
+                'type'              => 'string',
+                'queryFilter'       => true,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'type'              => array(
                 'label'             => 'Type', //_('Type')

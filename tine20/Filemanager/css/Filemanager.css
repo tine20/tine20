@@ -31,17 +31,13 @@
     background-image:url(../../images/icon-set/icon_lock_open.svg) !important;
 }
 
-.action_create_folder {
-    background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
-}
-
 .action_pause {
-    background-image: url("../../images/oxygen/16x16/actions/media-playback-pause.png");
+    background-image:url(../../images/icon-set/icon_pause.svg) !important;
     background-repeat: no-repeat;
 }
 
 .action_resume {
-    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-image:url(../../images/icon-set/icon_play.svg) !important;
     background-repeat: no-repeat;
 }
 
@@ -75,12 +71,6 @@ table.x-btn.x-type-data-safe {
 
 .x-tinebase-typefolder .x-grid3-cell-inner {
     background-image:url(../../images/icon-set/icon_folder.svg);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.x-tinebase-typeoctet .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
     background-repeat: no-repeat;
     padding-left: 19px;
 }

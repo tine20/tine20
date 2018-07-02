@@ -208,12 +208,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                     $record = new $model(null, true);
 
-                    $modelFilter = $model . 'Filter';
-                    $idFilter = new $modelFilter(array(), '', array('ignoreAcl' => true));
+                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [], '', ['ignoreAcl' => true]);
                     $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
                         'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
                     )));
-
 
                     $existingIds = $backend->search($idFilter, null, true);
 

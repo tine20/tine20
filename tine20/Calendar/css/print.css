@@ -247,3 +247,8 @@ div.page
     margin-top: 1px;
     border-radius: 5px;
 }
+
+.tine-keyfield-icon {
+    height: 20px;
+    vertical-align: middle;
+}

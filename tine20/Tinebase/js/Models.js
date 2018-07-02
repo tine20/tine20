@@ -81,6 +81,7 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
     {name: 'name'},
+    {name: 'hierarchy'},
     {name: 'type'},
     {name: 'backend'},
     {name: 'order'},

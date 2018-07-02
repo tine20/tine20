@@ -1,3 +1,9 @@
+.x-tinebase-typeoctet .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
 .standardFileClass_16x16 .x-grid3-cell-inner {
     background-image: url(../../images/icon-set/icon_mime_csv.svg);
     background-image: url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
