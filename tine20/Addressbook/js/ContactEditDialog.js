@@ -153,13 +153,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             maxLength: 255
                         }], [{
                             columnWidth: 0.65,
-                            xtype: 'mirrortextfield',
+                            xtype: 'tine.widget.field.AutoCompleteField',
+                            recordClass: this.recordClass,
                             fieldLabel: this.app.i18n._('Company'),
                             name: 'org_name',
                             maxLength: 255
                         }, {
                             columnWidth: 0.35,
                             fieldLabel: this.app.i18n._('Unit'),
+                            xtype: 'tine.widget.field.AutoCompleteField',
+                            recordClass: this.recordClass,
                             name: 'org_unit',
                             maxLength: 64
                         }
@@ -311,6 +314,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 items: [[{
                     fieldLabel: this.app.i18n._('Street'),
                     name: 'adr_one_street',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }, {
                     fieldLabel: this.app.i18n._('Street 2'),
@@ -319,6 +324,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 }, {
                     fieldLabel: this.app.i18n._('Region'),
                     name: 'adr_one_region',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }], [{
                     fieldLabel: this.app.i18n._('Postal Code'),
@@ -327,6 +334,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 }, {
                     fieldLabel: this.app.i18n._('City'),
                     name: 'adr_one_locality',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }, {
                     xtype: 'widget-countrycombo',
@@ -340,6 +349,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 items: [[{
                     fieldLabel: this.app.i18n._('Street'),
                     name: 'adr_two_street',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }, {
                     fieldLabel: this.app.i18n._('Street 2'),
@@ -348,6 +359,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 }, {
                     fieldLabel: this.app.i18n._('Region'),
                     name: 'adr_two_region',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }], [{
                     fieldLabel: this.app.i18n._('Postal Code'),
@@ -356,6 +369,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 }, {
                     fieldLabel: this.app.i18n._('City'),
                     name: 'adr_two_locality',
+                    xtype: 'tine.widget.field.AutoCompleteField',
+                    recordClass: this.recordClass,
                     maxLength: 64
                 }, {
                     xtype: 'widget-countrycombo',
