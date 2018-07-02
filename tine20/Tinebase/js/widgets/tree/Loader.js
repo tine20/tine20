@@ -93,7 +93,6 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
         // read every node
         Ext.each(response.responseData, function (node) {
             var containerName,
-                hierarchy = node.hierarchy,
                 parentNode = newResponse;
 
             if (!Ext.isString(node.name)) {
@@ -102,8 +101,8 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             }
 
             // Get folder name to final container
-            // NOTE: if hierarchy ends with an "/" name gets appended otherwise last part of hierarchy is the display name
-            var hierarchy = String(node.hierarchy).match(/\/$/) || !node.hierarchy ? node.hierarchy + node.name : node.hierarchy,
+            // NOTE: if hierarchy ends with a "/" name gets appended otherwise last part of hierarchy is the display name
+            var hierarchy = String(node.hierarchy).match(/\/$/) || !node.hierarchy ? node.hierarchy || '' + node.name : node.hierarchy,
                 parts = Ext.isString(hierarchy) ? hierarchy.split("/") : [''];
             containerName = parts[parts.length - 1];
 
