@@ -21,11 +21,11 @@
         supportsUserFocus = ! (isTouchDevice && !isWebApp);
 
     Ext.apply(Ext, {
-        isIE10 : isIE10,
-        isIE11 : isIE11,
+        isIE10: isIE10,
+        isIE11: isIE11,
+        isNewIE: isNewIE,
         isEdge: isEdge,
-        
-        isNewIE : isNewIE,
+
         isTouchDevice: isTouchDevice,
         isWebApp: isWebApp,
         supportsUserFocus: supportsUserFocus

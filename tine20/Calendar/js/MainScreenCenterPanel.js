@@ -205,7 +205,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     text: this.app.i18n._('Sheet'),
                     iconCls: 'cal-week-view',
                     handler: this.onPrint.createDelegate(this, ['sheet']),
-                    disabled: Ext.isIE || Ext.isNewIE
+                    disabled: Ext.isNewIE
                 }]
             }
         });

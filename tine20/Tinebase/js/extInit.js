@@ -41,14 +41,9 @@ Ext.SSL_SECURE_URL = "library/ExtJS/resources/images/default/s.gif";
 /**
  * use native json implementation because we had problems with utf8 linebreaks (\u2028 for example)
  * @see 0003356: Special characters in telephone numbers makes addressbook stop responding
- * @see 0009416: IE9: js error in (new) lead edit dialog
- * @note IE is principally capable to use native json, but for *some reason* it's not working properly
- *       so we don't use it for IE
- * @note and IE9 has some "circular references problem" with its native json ...
- * 
  * @type Boolean
  */
-Ext.USE_NATIVE_JSON = ! Ext.isIE && ! Ext.isIE9;
+Ext.USE_NATIVE_JSON = true;
 
 /**
  * init ext quick tips
