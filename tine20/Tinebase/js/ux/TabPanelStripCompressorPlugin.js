@@ -104,7 +104,7 @@ Ext.ux.TabPanelStripCompressorPlugin.prototype = {
     },
 
     // beginn with largest
-    getCompressedWidth(potential, by) {
+    getCompressedWidth: function(potential, by) {
         var _ = window.lodash,
             used = 0,
             map = _.groupBy(potential),
