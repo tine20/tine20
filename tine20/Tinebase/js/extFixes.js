@@ -7,6 +7,7 @@
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
         isNewIE = (Ext.isIE9 || isIE10 || isIE11),
+        isEdge = check(/edge/)
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
             'ontouchstart' in window        // works on most browsers
@@ -22,6 +23,7 @@
     Ext.apply(Ext, {
         isIE10 : isIE10,
         isIE11 : isIE11,
+        isEdge: isEdge,
         
         isNewIE : isNewIE,
         isTouchDevice: isTouchDevice,
