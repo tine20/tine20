@@ -118,11 +118,19 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         $secondIMIP = $this->testExternalInvitationRequestAutoProcess(false, false);
 
-        $this->assertNotEmpty($secondIMIP->existing_event, 'there should be an existing event');
-        //$this->assertEmpty($secondIMIP->preconditions, 'no preconditions should be raised');
-        $this->assertEquals(4, count($secondIMIP->event->attendee));
-        $this->assertEquals(5, count($secondIMIP->existing_event->attendee));
+        static::assertTrue($secondIMIP->preconditionsChecked, 'preconditions have not been checked');
+        static::assertNotEmpty($secondIMIP->existing_event, 'there should be an existing event');
+        static::assertEmpty($secondIMIP->preconditions, 'no preconditions should be raised');
+        static::assertEquals($secondIMIP->event->organizer->getId(), $secondIMIP->existing_event->organizer->getId(),
+            'organizer mismatch');
+        static::assertEquals(4, count($secondIMIP->event->attendee));
+        static::assertEquals(5, count($secondIMIP->existing_event->attendee));
+        static::assertEquals(2, $secondIMIP->existing_event->attendee->filter('status',
+            Calendar_Model_Attender::STATUS_ACCEPTED)->count(), 'organizer and vagrant should have accepted');
         $this->_iMIPFrontendMock->process($secondIMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $event = Calendar_Controller_Event::getInstance()->get($firstIMIP->event->getId());
+        static::assertEquals(3, $event->attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)->count(),
+            'organizer, vagrant and sclever should have accepted');
     }
 
     protected function _testExternalImap($icsFilename, $numAttendee, $summary, $_doAssertation = true,

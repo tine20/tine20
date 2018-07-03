@@ -941,4 +941,18 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             'n_family' => $lastName
         ];
     }
+
+    public function resolveAttenderCleanUp()
+    {
+        $this->_properties = array_intersect_key($this->_properties, [
+            'id'          => true,
+            'note'        => true,
+            'email'       => true,
+            'n_family'    => true,
+            'n_given'     => true,
+            'n_fileas'    => true,
+            'n_fn'        => true,
+            'account_id'  => true,
+        ]);
+    }
 }

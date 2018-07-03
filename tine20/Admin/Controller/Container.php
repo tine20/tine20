@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -26,8 +26,10 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName       = 'Admin';
         $this->_modelName             = 'Tinebase_Model_Container';
-        $this->_doContainerACLChecks  = FALSE;
-        $this->_purgeRecords          = FALSE;
+        $this->_doContainerACLChecks  = false;
+        $this->_purgeRecords          = false;
+        // modlog will be written by Tinebase_Container aka the backend, disable it in Tinebase_Controller_Record_Abstract
+        $this->_omitModLog            = true;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
         Tinebase_Container::destroyInstance();
