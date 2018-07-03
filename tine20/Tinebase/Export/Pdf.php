@@ -519,12 +519,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     protected function _drawIcon($_icon, $_xPos, $_yPos)
     {
         $iconFilename = dirname(dirname(dirname(__FILE__))).$_icon;
-        // add icon
-        if (is_file($iconFilename)) {
+        if (is_file($iconFilename) && strpos($iconFilename, '.svg') === false) {
             $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
             $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' icon file not found: ' . $iconFilename);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' icon file not found or unsupported format: ' . $iconFilename);
         }
     }
 }
