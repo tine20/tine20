@@ -31,7 +31,7 @@ _TODO add more info about good tests_
 
 Tine 2.0 uses [Conventional Commits](https://conventionalcommits.org/) style commit messages:
  
-    <type>[(optional scope)]: MESSAGE
+    <type>(<scope>): MESSAGE
     
     [optional body]
     
@@ -69,8 +69,9 @@ See also the [AngularJS commit guidelines](https://github.com/angular/angular/bl
 - test
 - config
 - script
+- text
 
-Some example scopes:
+Some example <scope>s:
 
 - APPNAME like Addressbook, Calendar, Tasks
 - Tests / Unittests
