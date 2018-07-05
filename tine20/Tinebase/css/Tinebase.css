@@ -383,15 +383,13 @@ html, body {
 
 /* ----- account renderer ------------------------------------------------------------*/
 .renderer {
-    width: 12px;
+    width: 16px;
     float: left;
     padding-left: 5px;
 }
 
 .renderer_accountUserIcon {
     background-image:url(../../images/icon-set/icon_profil.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
 }
 
 .renderer_accountUserChangedIcon {
@@ -399,40 +397,24 @@ html, body {
     background-color: red !important;
 }
 
+.renderer_accountAnyoneIcon {
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
+}
+
 .renderer_accountGroupIcon {
     background-image:url(../../images/icon-set/icon_group_full.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
 }
 
 .renderer_accountGroupmemberIcon {
-    background-image:url(../../images/groupmember.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_groupmember.svg) !important;
 }
 
 .renderer_accountRoleIcon {
     background-image:url(../../images/icon-set/icon_user_role.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
 }
 
 .renderer_accountContactIcon {
     background-image:url(../../images/icon-set/icon_profil.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-}
-
-/* TODO make this work */
-.x-tine-relation-degree-value {
-    color: black;
-    font-size: 11px;
-}
-
-.renderer_accountAnyoneIcon {
-    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
 }
 
 .tinebase-accounttype-user {
@@ -449,6 +431,12 @@ html, body {
 
 .tinebase-accounttype-addanyone {
     background-image:url(../../images/icon-set/icon_group_full.svg) !important;
+}
+
+/* TODO make this work */
+.x-tine-relation-degree-value {
+    color: black;
+    font-size: 11px;
 }
 
 .action_mute_noteification {
@@ -610,10 +598,9 @@ span .x-tab-strip-text.tine-favicon {
 }
 
 .tine-grid-row-action-icon {
-    width: 16px;
-    height: 16px;
-    zoom: 65%;
     background-repeat: no-repeat;
+    height: 16px;
+    margin: -2px;
 }
 
 /******* grid cell classes *********/

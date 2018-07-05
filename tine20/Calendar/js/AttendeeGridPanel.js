@@ -941,21 +941,21 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     renderAttenderType: function(type, metadata, attender) {
         metadata.css = 'tine-grid-cell-no-dirty';
-        var cssClass = '',
+        var cssClass = 'tine-grid-row-action-icon ',
             qtipText =  '',
             userId = attender.get('user_id'),
             hasAccount = userId && ((userId.get && userId.get('account_id')) || userId.account_id);
             
         switch (type) {
             case 'user':
-                cssClass = hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
+                cssClass += hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
                 qtipText = hasAccount || ! userId ? '' : Tine.Tinebase.appMgr.get('Calendar').i18n._('External Attendee');
                 break;
             case 'group':
-                cssClass = 'renderer_accountGroupIcon';
+                cssClass += 'renderer_accountGroupIcon';
                 break;
             default:
-                cssClass = 'cal-attendee-type-' + type;
+                cssClass += 'cal-attendee-type-' + type;
                 break;
         }
         

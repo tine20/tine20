@@ -17,36 +17,18 @@
 
 .renderer_typeAccountIcon {
     background-image:url(../../images/icon-set/icon_profil.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-    height: 16px;
 }
 
 .renderer_typeContactIcon {
     background-image:url(../../images/icon-set/icon_user.svg) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-    height: 16px;
 }
 
 .renderer_typeGroupIcon, .AddressbookList{
     background-image:url(../../images/icon-set/icon_group_full.svg) !important;
-    background-repeat: no-repeat;
-    /*background-position: 2px 2px;*/
-    /*height: 16px;*/
 }
 
 .renderer_typeListIcon {
-    background-image:url(../../images/list.png) !important;
-    background-repeat: no-repeat;
-    /*background-position: 2px 2px;*/
-    /*height: 16px;*/
-}
-
-.x-grid3-cell-inner .renderer_typeAccountIcon,
-.x-grid3-cell-inner .renderer_typeContactIcon {
-    margin-bottom: -2px;
-    margin-top: -2px;
+    background-image:url(../../images/icon-set/icon_address_group.svg) !important;
 }
 
 .renderer_displayNameRenderer_noName {
