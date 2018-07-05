@@ -109,12 +109,7 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
     
     // private
     onInit: function() {
-        if (Ext.isIE) {
-            Ext.EventManager.on(this.cmp.getDoc(), {
-                'keydown': this.endBlockquoteIE,
-                scope: this
-            });
-        } else if (Ext.isFunction(this.cmp.win.getSelection().modify)) {
+        if (Ext.isFunction(this.cmp.win.getSelection().modify)) {
             Ext.EventManager.on(this.cmp.getDoc(), {
                 'keyup': this.endBlockquoteHTML5,
                 scope: this

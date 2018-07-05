@@ -373,12 +373,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     /**
      * checks browser compatibility and show messages if unknown/incompatible
      * 
-     * ie6, gecko2 -> bad
+     * ie6-11, gecko2 -> bad
      * unknown browser -> may not work
      * 
      * @return {Ext.Container}
-     * 
-     * TODO find icons with the correct license
      */
     getBrowserIncompatiblePanel: function() {
         if (! this.browserIncompatiblePanel) {
@@ -391,10 +389,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             });
             
             var browserSupport = 'compatible';
-            if (Ext.isIE6 || Ext.isGecko2) {
+            if (Ext.isIE6 || Ext.isGecko2 || Ext.isIE || Ext.isNewIE) {
                 browserSupport = 'incompatible';
             } else if (
-                ! (Ext.isWebKit || Ext.isGecko || Ext.isIE || Ext.isNewIE)
+                ! (Ext.isWebKit || Ext.isGecko || Ext.isEdge)
             ) {
                 // yepp we also mean -> Ext.isOpera
                 browserSupport = 'unknown';
@@ -420,10 +418,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             if (browserSupport != 'compatible') {
                 this.browserIncompatiblePanel.add(items.concat([{
                     html: '<p>' + i18n._('You might try one of these browsers:') + '<br/>'
-                        + '<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a><br/>'
-                        + '<a href="http://www.mozilla.com/firefox/" target="_blank">Mozilla Firefox</a><br/>'
-                        + '<a href="http://www.apple.com/safari/download/" target="_blank">Apple Safari</a><br/>'    
-                        + '<a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank">Microsoft Internet Explorer</a>'
+                        + '<a href="https://www.google.com/chrome" target="_blank">Google Chrome</a><br/>'
+                        + '<a href="https://www.mozilla.com/firefox/" target="_blank">Mozilla Firefox</a><br/>'
+                        + '<a href="https://www.apple.com/safari/" target="_blank">Apple Safari</a><br/>'
+                        + '<a href="https://www.microsoft.com/en-us/windows/microsoft-edge" target="_blank">Microsoft Edge</a>'
                         + '<br/></p>'
                 }]));
                 this.browserIncompatiblePanel.doLayout();

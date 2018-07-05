@@ -642,7 +642,6 @@ Tine.Tinebase.tineInit = {
         if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
-            && ! Ext.isNewIE
         ) {
             Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
             Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
@@ -860,7 +859,7 @@ Tine.Tinebase.tineInit = {
      */
     initState: function () {
         if (Tine.Tinebase.tineInit.stateful === true) {
-            if (window.isMainWindow || Ext.isIE) {
+            if (window.isMainWindow) {
                 // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
                 Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
             } else {
@@ -887,7 +886,7 @@ Tine.Tinebase.tineInit = {
      * initialise application manager
      */
     initAppMgr: function () {
-        if (! Ext.isIE9 && ! Ext.isIE && ! window.isMainWindow) {
+        if (! window.isMainWindow) {
             // return app from main window for non-IE browsers
             Tine.Tinebase.appMgr = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr;
         } else {

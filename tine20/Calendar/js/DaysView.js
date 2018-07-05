@@ -670,10 +670,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
-            if (Ext.isIE) {
-                e.browserEvent = {type: 'mousedown'};
-            }
-            
             event.ui.resizeable[rzPos].onMouseDown.call(event.ui.resizeable[rzPos], e);
             //event.ui.resizeable.startSizing.defer(2000, event.ui.resizeable, [e, event.ui.resizeable[rzPos]]);
         } else {
