@@ -709,15 +709,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         return $part;
     }
 
+    /**
+     * @param $attachment
+     * @param $_message
+     * @return null|string
+     */
     protected function _getAttachmentType($attachment, $_message)
     {
-        // Determine if it's a tempfile attachment or a filenode attachment
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && $attachment['tempFile']) {
-            $attachment['attachment_type'] = 'tempfile';
-        }
-
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && !$attachment['tempFile']) {
-            $attachment['attachment_type'] = 'filenode';
+        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment') {
+            if (isset($attachment['tempFile']) && $attachment['tempFile']) {
+                return 'tempfile';
+            } else {
+                return 'filenode';
+            }
         }
 
         if (isset($attachment['attachment_type'])) {
