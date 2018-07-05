@@ -72,7 +72,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: Ext.util.Format.htmlEncode(String.format(i18n._('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName)),
             menu: this.getUserActions(),
             menuAlign: 'tr-br',
-            iconCls: Tine.Tinebase.registry.get('userAccountChanged') ? 'renderer_accountUserChangedIcon' : 'renderer_accountUserIcon'
+            iconCls: 'tine-grid-row-action-icon ' + (Tine.Tinebase.registry.get('userAccountChanged') ? 'renderer_accountUserChangedIcon' : 'renderer_accountUserIcon')
         },
         this.onlineStatus, 
         this.action_logout];
