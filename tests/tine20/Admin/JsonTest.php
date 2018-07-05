@@ -1446,6 +1446,11 @@ class Admin_JsonTest extends TestCase
             'description'          => 'Our main meeting room',
             'email'                => 'room@example.com',
             'is_location'          => TRUE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ]]
         ]));
 
         $container = $this->_json->getContainer($resource->container_id);

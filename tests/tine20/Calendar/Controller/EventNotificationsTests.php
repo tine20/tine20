@@ -1391,7 +1391,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         if ($suppress_notification) {
             $this->assertEquals(1, count($messages), 'one mail should be send to current user (attender)');
         } else {
-            $this->assertEquals(3, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+            $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
             $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
             $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));

@@ -463,8 +463,4 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         Tinebase_Model_Application $_application, $_accountId, $_grant)
     {
     }
-
-    public function setSpecialGrantsByUser($_accountId)
-    {
-    }
 }

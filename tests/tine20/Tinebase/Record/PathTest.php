@@ -84,7 +84,12 @@ class Tinebase_Record_PathTest extends TestCase
                     'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'type'              => 't'
                 ]
-            ]
+            ],
+            'grants'               => [[
+                    'account_id'      => Tinebase_Core::getUser()->getId(),
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+                ]]
         ]));
 
         $result = $this->_uit->getPathsForRecord($resource);

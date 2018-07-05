@@ -34,8 +34,7 @@ class Calendar_Convert_Resource_Json extends Tinebase_Convert_Json
             ->getGrantsOfAccount(Tinebase_Core::getUser(), $_record->container_id)->toArray();
 
         $user = Tinebase_Core::getUser();
-        if ($user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) ||
-                Tinebase_Container::getInstance()->hasGrant($user->getId(), $_record->container_id,
+        if (Tinebase_Container::getInstance()->hasGrant($user->getId(), $_record->container_id,
                     Calendar_Model_ResourceGrants::RESOURCE_READ)) {
             $jsonData['grants'] = Tinebase_Container::getInstance()->getGrantsOfContainer($_record->container_id, true)
                 ->toArray();
