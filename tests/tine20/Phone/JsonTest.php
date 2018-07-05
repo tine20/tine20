@@ -56,7 +56,8 @@ class Phone_JsonTest extends TestCase
         
         $this->_json = new Phone_Frontend_Json();
         $this->_adminUser = Tinebase_Core::getUser();
-        
+
+        // TODO move this to a common place
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
             'id'        => Tinebase_Record_Abstract::generateUID(),
             'name'      => 'phpunit test location',
