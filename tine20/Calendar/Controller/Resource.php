@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -48,7 +48,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Resource';
         
@@ -259,6 +260,22 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             Tinebase_Exception::log($tenf, false, $_record->toArray());
         }
         return parent::_deleteLinkedObjects($_record);
+    }
+
+    /**
+     * delete one record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        // event needs to be fired before the actual delete - otherwise for example the resource attender is no longer found ...
+        $event = new Calendar_Event_DeleteResource();
+        $event->resource = $_record;
+        Tinebase_Event::fireEvent($event);
+
+        parent::_deleteRecord($_record);
     }
 
     /**

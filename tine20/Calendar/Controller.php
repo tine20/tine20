@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -66,14 +66,23 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' '
+            . __LINE__ . ' handle event of type ' . get_class($_eventObject));
         
         switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 //$this->createPersonalFolder($_eventObject->account);
                 Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_eventObject->account->getId());
                 break;
-                
+
+            case 'Calendar_Event_DeleteResource':
+                /**
+                 * @var Calendar_Event_DeleteResource $_eventObject
+                 */
+                $this->_deleteEventAttenders($_eventObject);
+
+                break;
+
             case 'Tinebase_Event_User_DeleteAccount':
                 /**
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
@@ -121,16 +130,28 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         }
     }
 
-    protected function _deleteEventAttenders($_eventObject)
+    /**
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _deleteEventAttenders(Tinebase_Event_Abstract $_eventObject)
     {
-        $contactId = $_eventObject->account->contact_id;
+        if ($_eventObject instanceof Tinebase_Event_User_DeleteAccount) {
+            $attenderId = $_eventObject->account->contact_id;
+            $type = Calendar_Model_Attender::USERTYPE_USER;
+        } else if ($_eventObject instanceof Calendar_Event_DeleteResource) {
+            $attenderId = $_eventObject->resource->getId();
+            $type = Calendar_Model_Attender::USERTYPE_RESOURCE;
+        }
 
         $filter = new Calendar_Model_EventFilter(array(array(
             'field' => 'attender', 'operator' => 'in', 'value' => array(array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $contactId,
+                'user_type' => $type,
+                'user_id'   => $attenderId,
             ))
         )));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' '
+            . __LINE__ . ' Deleting Event Attender ' . $attenderId . ' (type: ' . $type . ')');
 
         $eventController = Calendar_Controller_Event::getInstance();
         $oldAcl = $eventController->doContainerACLChecks(false);
@@ -138,22 +159,23 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
 
         $events = $eventController->search($filter);
         /** @var Calendar_Model_Event $event */
-        foreach($events as $event)
-        {
+        foreach ($events as $event) {
             $toRemove = array();
             foreach ($event->attendee as $key => $attendee) {
                 $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Abstract
                     ? $attendee->user_id->getId()
                     : $attendee->user_id;
 
-                if ($attendeeUserId === $contactId && ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
-                                                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-                {
+                if ($attendeeUserId === $attenderId &&
+                    ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER ||
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE
+                    )) {
                     $toRemove[] = $key;
                 }
             }
             if (count($toRemove) > 0) {
-                foreach($toRemove as $index) {
+                foreach ($toRemove as $index) {
                     $event->attendee->offsetUnset($index);
                 }
 
