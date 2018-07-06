@@ -2160,4 +2160,62 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         return [];
     }
+
+    /**
+     * forces containers that support sync token to resync via WebDAV sync tokens
+     *
+     * this will DELETE the complete content history for the affected containers
+     * this will increate the sequence for all records in all affected containers
+     * this will increate the sequence of all affected containers
+     *
+     * this will cause 2 BadRequest responses to sync token requests
+     * the first one as soon as the client notices that something changed and sends a sync token request
+     * eventually the client receives a false sync token (as we increased content sequence, but we dont have a content history entry)
+     * eventually not (if something really changed in the calendar in the meantime)
+     *
+     * in case the client got a fake sync token, the clients next sync token request (once something really changed) will fail again
+     * after something really changed valid sync tokens will be handed out again
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function forceSyncTokenResync(Tinebase_Model_ContainerFilter $filter)
+    {
+        $contentBackend = $this->getContentBackend();
+        $db = Tinebase_Core::getDb();
+        $modelBackendCache = [];
+        $oldDoSearchAcl = $this->_doSearchAclFilter;
+        $this->_doSearchAclFilter = false;
+
+        try {
+            /** @var Tinebase_Model_Container $container */
+            foreach ($this->search($filter) as $container) {
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                if (!isset($modelBackendCache[$container->model])) {
+                    $recordsBackend = Tinebase_Core::getApplicationInstance($container->model)->getBackend();
+                    $modelBackendCache[$container->model] = $recordsBackend;
+                } else {
+                    $recordsBackend = $modelBackendCache[$container->model];
+                }
+
+                if (method_exists($recordsBackend, 'increaseSeqsForContainerId')) {
+                    // increase sequence for all records in this container
+                    $recordsBackend->increaseSeqsForContainerId($container->getId());
+
+                    // increase sequence on this container
+                    $this->increaseContentSequence($container->getId());
+
+                    // delete content history for this container
+                    $numDeletedContentHistory = $contentBackend->deleteByProperty($container->getId(), 'container_id');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                            __LINE__ . ' ' . $container->getId() . ' ' . $container->name .
+                            ' deleted content history entries: ' . $numDeletedContentHistory);
+                    }
+                }
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            }
+        } finally {
+            $this->_doSearchAclFilter = $oldDoSearchAcl;
+        }
+    }
 }
