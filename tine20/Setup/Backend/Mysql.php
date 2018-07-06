@@ -434,7 +434,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         $cmd = ($structDump!==false?'{ ':'')
-              ."mysqldump --defaults-extra-file=$mycnf "
+              ."mysqldump --max_allowed_packet=512M --defaults-extra-file=$mycnf "
               .$ignoreTables
               ."--single-transaction "
               ."--opt "
