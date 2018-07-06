@@ -18,7 +18,6 @@
  */
 abstract class Tinebase_Setup_DemoData_Abstract
 {
-
     /**
      * the models to create demodata for
      * @var array
