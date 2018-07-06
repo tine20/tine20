@@ -12,10 +12,11 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.imageRenderer = function(value, metadata, record) {
     var _ = window.lodash,
-        result = '';
+        result = '',
+        style = String(value).match(/icon-set/) ? ('background-image: url(' + value + ') !important;') : '';
 
     if (value) {
-        result = '<div class="action_image tine-grid-row-action-icon" ext:qtip="' +
+        result = '<div class="action_image tine-grid-row-action-icon" style="'+ style + '" ext:qtip="' +
             Ext.util.Format.htmlEncode('<div style="width:300px; height:300px;"><img src="' + String(value)
                 .replace(/width=\d+/, 'width=290')
                 .replace(/height=\d+/, 'height=300') +
