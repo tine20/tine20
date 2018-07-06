@@ -158,7 +158,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 Tine.Addressbook.ContactGridPanel.contactTypeRenderer = function(data, cell, record) {
     var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
         hasAccount = ((record.get && record.get('account_id')) || record.account_id),
-        cssClass = hasAccount ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon',
+        cssClass = 'tine-grid-row-action-icon ' + (hasAccount ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon'),
         qtipText = Tine.Tinebase.common.doubleEncode(hasAccount ? i18n._('Contact of a user account') : i18n._('Contact'));
     
     return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';

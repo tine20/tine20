@@ -142,7 +142,7 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 Tine.Addressbook.ListGridPanel.listTypeRenderer = function(data, cell, record) {
     var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
         type = ((record.get && record.get('type')) || record.type),
-        cssClass = type == 'group' ? 'renderer_typeGroupIcon' : 'renderer_typeListIcon',
+        cssClass = 'tine-grid-row-action-icon ' + (type == 'group' ? 'renderer_typeGroupIcon' : 'renderer_typeListIcon'),
         qtipText = Tine.Tinebase.common.doubleEncode(type == 'group' ? i18n._('System Group') : i18n._('Group'));
 
     return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';

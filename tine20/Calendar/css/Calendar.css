@@ -59,26 +59,13 @@
     background-image:url(../../images/icon-set/icon_calendar_search.svg) !important;
 }
 
-.cal-attendee-type-resource {
-    background-image:url(../../images/icon-set/icon_resource.svg) !important;
-    background-repeat:no-repeat;
-}
-
-.x-grid3-cell-inner .renderer_accountGroupIcon,
-.x-grid3-cell-inner .cal-attendee-type-memberOf,
-.x-grid3-cell-inner .cal-attendee-type-groupmember,
-.x-grid3-cell-inner .cal-attendee-type-resource {
-    margin-bottom: -2px;
-    margin-top: -2px;
-    height: 16px;
-}
-
-
 .cal-attendee-type-memberOf,
 .cal-attendee-type-groupmember {
     background-image:url(../../images/icon-set/icon_groupmember.svg) !important;
-    background-repeat: no-repeat;
-    /*background-position: 2px 2px;*/
+}
+
+.cal-attendee-type-resource {
+    background-image:url(../../images/icon-set/icon_resource.svg) !important;
 }
 
 .x-cal-add-attendee-row .x-grid3-col-checked {

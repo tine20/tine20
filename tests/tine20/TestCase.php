@@ -509,6 +509,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
             Tinebase_Acl_Roles::getInstance()->setRoleRights($roleId, $rights);
         }
+
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         return $roleRights;
     }

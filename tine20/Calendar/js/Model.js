@@ -719,14 +719,14 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
 
     getIconCls: function() {
         var type = this.get('user_type'),
-            cls = 'cal-attendee-type-';
+            cls = 'tine-grid-row-action-icon cal-attendee-type-';
 
         switch(type) {
             case 'user':
-                cls = 'renderer_typeAccountIcon';
+                cls = 'tine-grid-row-action-icon renderer_typeAccountIcon';
                 break;
             case 'group':
-                cls = 'renderer_accountGroupIcon';
+                cls = 'tine-grid-row-action-icon renderer_accountGroupIcon';
                 break;
             default:
                 cls += type;

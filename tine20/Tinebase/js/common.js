@@ -471,7 +471,7 @@ Tine.Tinebase.common = {
             type = 'group';
         }
         
-        iconCls = 'renderer renderer_account' + Ext.util.Format.capitalize(type) + 'Icon';
+        iconCls = 'tine-grid-row-action-icon renderer renderer_account' + Ext.util.Format.capitalize(type) + 'Icon';
         return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName || '');
     },
     
@@ -481,7 +481,7 @@ Tine.Tinebase.common = {
      * @return String
      */
     accountTypeRenderer: function (type) {
-        var iconCls = (type) === 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon';
+        var iconCls = 'tine-grid-row-action-icon ' + (type === 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon');
         
         return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>';
     },
