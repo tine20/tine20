@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -251,7 +251,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $this->containerType        = isset($this->containerType) && in_array($this->containerType, array(
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
             Tinebase_FileSystem::FOLDER_TYPE_SHARED,
-            Tinebase_FileSystem::FOLDER_TYPE_RECORDS
+            Tinebase_FileSystem::FOLDER_TYPE_RECORDS,
+            Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS,
         )) ? $this->containerType : $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
@@ -299,6 +300,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
             Tinebase_FileSystem::FOLDER_TYPE_SHARED,
             Tinebase_FileSystem::FOLDER_TYPE_RECORDS,
+            Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS,
             self::TYPE_ROOT
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
