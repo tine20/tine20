@@ -182,8 +182,16 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_grantsBackend->deleteByProperty($recordId, 'record_id');
-            
+
+            $uniqueGate = [];
+            /** @var Tinebase_Model_Grants $newGrant */
             foreach ($record->grants as $newGrant) {
+                $uniqueKey = $newGrant->account_type . $newGrant->account_id;
+                if (isset($uniqueGate[$uniqueKey])) {
+                    continue;
+                }
+                $uniqueGate[$uniqueKey] = true;
+                
                 foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
                     if ($newGrant->{$grant}) {
                         $newGrant->id = null;
