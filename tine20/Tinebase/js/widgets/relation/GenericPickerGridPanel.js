@@ -714,6 +714,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         var split = value.split('_Model_');
         if (Tine[split[0]].Model) {
+            var model = Tine[split[0]].Model[split[1]];
             return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
         } else {
             return String.format(i18n._("No access to {0}"), split[0]);
