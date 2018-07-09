@@ -44,7 +44,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'note' },
       { name: 'preparedParts' }, // contains invitation event record
       { name: 'reading_conf' },
-      { name: 'massMailingFlag', type: 'bool' }
+      { name: 'massMailingFlag', type: 'bool' },
+      { name: 'reply_to' }
     ], {
     appName: 'Felamimail',
     modelName: 'Message',
