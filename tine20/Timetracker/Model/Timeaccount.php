@@ -262,7 +262,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
             array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible Person', 'max' => '1:0'), // _('Responsible Person')
         )
+        ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Contract', 'config' => array(
+            array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '1:0'), // _('Time Account')
         )
+        ),
     );
     
     /**

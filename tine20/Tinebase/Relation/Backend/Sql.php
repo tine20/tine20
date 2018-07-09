@@ -49,7 +49,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'relations';
-    
+
     /**
      * constructor
      */
@@ -142,7 +142,18 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         return $this->getRelation($id, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
-            
+    }
+
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        return $this->updateRelation($_record);
     }
     
     /**

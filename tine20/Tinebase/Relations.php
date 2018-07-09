@@ -808,4 +808,12 @@ class Tinebase_Relations
 
         return $result;
     }
+
+    /**
+     * @return Tinebase_Relation_Backend_Sql
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
+    }
 }
