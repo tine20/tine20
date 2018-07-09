@@ -3,8 +3,8 @@
   "private": true,
   "main": "Tinebase.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack-dev-server --progress --config webpack.prod.js",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js",
+    "build": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --config webpack.prod.js",
     "test": "NODE_ENV=unittest karma start karma.unittest.conf.js --single-run",
     "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js",
     "test:watchnoreports": "NODE_ENV=unittest karma start karma.unittest.noreports.conf.js"
