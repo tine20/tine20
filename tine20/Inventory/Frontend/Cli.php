@@ -32,6 +32,15 @@ class Inventory_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_configFilename = 'importconfig.inc.php';
 
     /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Inventory_Model_InventoryItem' => 'inv_tine_import_csv'
+    ];
+
+    /**
      * help array with function names and param descriptions
      */
     protected $_help = array(
