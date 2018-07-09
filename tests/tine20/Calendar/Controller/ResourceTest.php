@@ -181,7 +181,32 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Tinebase_Container::getInstance()->getContainerById($resource->container_id);
     }
-    
+
+    /**
+     * testDeleteResourceAttendee
+     *
+     * @see https://github.com/tine20/tine20/issues/48
+     */
+    public function testDeleteResourceAttendee()
+    {
+        $resource = $this->testCreateResource();
+
+        // add resource to an event
+        $event = $this->_getEvent();
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->id
+        ]));
+        $newEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        Calendar_Controller_Resource::getInstance()->delete($resource->getId());
+
+        // check if resource attendee is removed
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($newEvent->getId());
+        self::assertEquals(2, count($updatedEvent->attendee), 'resource attender should be removed! '
+            . print_r($updatedEvent->toArray(), true));
+    }
+
     /**
      * testDeleteResourceWithmissingContainer
      * 
