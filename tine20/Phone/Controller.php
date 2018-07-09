@@ -182,7 +182,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         }
 
         $phoneController = Phone_Controller_Call::getInstance();
-        $phoneController->resolveCallNumberToContact($_call);
+        $phoneController->resolveCallNumberToContact($_call, true);
 
         $call = $backend->create($_call);
 
