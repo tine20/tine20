@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
 --
@@ -554,9 +554,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                             
                         case 'emailForwards':
                             $rawData[$property] = is_array($value) ? $value : array();
-                            
                             break;
-                            
+
+                        case 'emailForwardOnly':
+                            $rawData[$property] = (integer) $value;
+                            break;
+
                         default:
                             $rawData[$property] = $value;
                             break;
