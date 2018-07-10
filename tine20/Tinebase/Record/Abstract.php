@@ -277,6 +277,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * resetConfiguration
+     */
+    public static function resetConfiguration()
+    {
+        static::$_configurationObject = null;
+        Tinebase_ModelConfiguration::resetAvailableApps();
+    }
+
+    /**
      * returns the relation config
      * 
      * @deprecated
