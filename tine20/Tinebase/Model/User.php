@@ -401,7 +401,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     static public function convertUserIdToInt($_accountId)
     {
-        return self::convertId($_accountId, 'Tinebase_Model_User');
+        return (string) self::convertId($_accountId, 'Tinebase_Model_User');
     }
     
     /**
