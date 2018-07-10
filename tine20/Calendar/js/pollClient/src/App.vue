@@ -751,6 +751,11 @@ iframe.calendar {
     padding: 0;
   }
 
+  .icon-cell img {
+    width: 24px;
+    margin: -2px;
+  }
+
   button {
     cursor: pointer;
   }
