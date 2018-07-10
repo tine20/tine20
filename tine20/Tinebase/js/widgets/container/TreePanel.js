@@ -454,7 +454,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var attr = node.attributes,
             condition = false;
 
-        if(attr && attr.leaf) {
+        if (this.nodeAcceptsContents(attr)) {
             condition = true;
             Ext.each(grants, function(grant) {
                 condition = condition && attr.container.account_grants[grant];
@@ -462,6 +462,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 
         return condition;
+    },
+
+    /**
+     * returns true if node can accept contents
+     * - default: only accepts contents if container node is leaf ("virtual" nodes don't accept content)
+     *
+     * @param nodeAttributes
+     * @returns boolean
+     */
+    nodeAcceptsContents: function(nodeAttributes) {
+        return (nodeAttributes && nodeAttributes.leaf);
     },
 
     /**

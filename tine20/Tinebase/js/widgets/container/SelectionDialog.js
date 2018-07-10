@@ -121,7 +121,8 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
             allowMultiSelection: false,
             defaultContainer: this.defaultContainer || this.TriggerField ? this.TriggerField.defaultContainer : null,
             requiredGrants: this.requiredGrants,
-            hasContextMenu: false
+            hasContextMenu: false,
+            hasGrid: false
         });
 
         this.tree.on('click', this.onTreeNodeClick, this);
