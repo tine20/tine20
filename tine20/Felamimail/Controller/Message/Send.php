@@ -608,8 +608,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         // add reply-to
-        if (! empty($_account->reply_to)) {
-            $_mail->setReplyTo($_account->reply_to, $this->_getSenderName($_message, $_account));
+        $replyTo = $_message && ! empty($_message->reply_to)
+            ? $_message->reply_to
+            : (! empty($_account->reply_to) ? $_account->reply_to : null);
+        if ($replyTo && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $replyTo)) {
+            $_mail->setReplyTo($replyTo, $this->_getSenderName($_message, $_account));
         }
         
         // set message-id (we could use Zend_Mail::createMessageId() here)

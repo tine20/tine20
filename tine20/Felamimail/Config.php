@@ -38,6 +38,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_TINE20_FLAG = 'tine20Flag';
 
     /**
+     * show reply-to field in message compose dialog
+     *
+     * @var string
+     * @see https://github.com/tine20/tine20/issues/2172
+     */
+    const FEATURE_SHOW_REPLY_TO = 'showReplyTo';
+
+    /**
      * Tine 2.0 filter message uris (only allow <a> uris)
      *
      * @var string
@@ -163,6 +171,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     //_('Tine 2.0 Flag')
                     self::DESCRIPTION           => 'Add a Tine 2.0 flag to sent messages',
                     //_('Add a Tine 2.0 flag to sent messages')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_SHOW_REPLY_TO   => [
+                    self::LABEL                 => 'Show Reply-To',
+                    //_('Show Reply-To')
+                    self::DESCRIPTION           => 'Show Reply-To field in message compose dialog',
+                    //_('Show Reply-To field in message compose dialog')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
