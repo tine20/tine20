@@ -210,7 +210,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      */
     public function fault($exception = null, $code = null)
     {
-        if (isset($method)) {
+        if (isset($this->_functions[$this->_method])) {
             $function = $this->_functions[$this->_method];
         } else {
             $function = $this->_method;
