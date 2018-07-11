@@ -25,6 +25,7 @@ class Timetracker_Setup_Update_Release11 extends Setup_Update_Abstract
         ]);
         $relations = Tinebase_Relations::getInstance()->search($filter);
         $updated = 0;
+        Timetracker_Controller_Timeaccount::getInstance()->doGrantChecks(false);
         foreach ($relations as $relation) {
             $ta = Timetracker_Controller_Timeaccount::getInstance()->get($relation->own_id);
             if ($ta->relations->filter('type', 'TIME_ACCOUNT')->count() === 0) {
