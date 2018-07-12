@@ -99,12 +99,15 @@ class Events_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         try {
             $eventsCalendarId = Events_Config::getInstance()->get(Events_Config::DEFAULT_EVENTS_CALENDAR);
-            $eventsCalendar = Tinebase_Container::getInstance()->get($eventsCalendarId);
+            if (! empty($eventsCalendarId)) {
+                return Tinebase_Container::getInstance()->get($eventsCalendarId);
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $eventsCalendar = Tinebase_Container::getInstance()->createSystemContainer('Calendar', 'Events');
-            Events_Config::getInstance()->set(Events_Config::DEFAULT_EVENTS_CALENDAR, $eventsCalendar->getId());
         }
-    
+
+        $eventsCalendar = Tinebase_Container::getInstance()->createSystemContainer('Calendar', 'Events');
+        Events_Config::getInstance()->set(Events_Config::DEFAULT_EVENTS_CALENDAR, $eventsCalendar->getId());
+
         return $eventsCalendar;
     }
 }
