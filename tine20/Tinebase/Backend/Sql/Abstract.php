@@ -221,12 +221,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param string|Tinebase_Record_Interface $_id
      * @param boolean $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function get($_id, $_getDeleted = FALSE) 
     {
         if (empty($_id)) {
-            throw new Tinebase_Exception_NotFound('$_id can not be empty');
+            throw new Tinebase_Exception_InvalidArgument('$_id can not be empty');
         }
 
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
