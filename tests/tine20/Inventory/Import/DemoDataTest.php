@@ -36,7 +36,7 @@ class Inventory_Import_DemoDataTest extends TestCase
            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
         ]);
         $result = Inventory_Controller_InventoryItem::getInstance()->search($filter);
-        self::assertEquals(4, count($result));
+        self::assertEquals(18, count($result));
     }
 
     public function testImportDemoDataViaCli()
@@ -49,6 +49,6 @@ class Inventory_Import_DemoDataTest extends TestCase
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
         ]);
         $result = Inventory_Controller_InventoryItem::getInstance()->search($filter);
-        self::assertGreaterThanOrEqual(4, count($result));
+        self::assertGreaterThanOrEqual(18, count($result));
     }
 }

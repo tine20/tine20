@@ -30,6 +30,14 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_configFilename = 'importconfig.inc.php';
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Addressbook_Model_Contact' => 'adb_tine_import_csv'
+    ];
 
     /**
      * help array with function names and param descriptions
