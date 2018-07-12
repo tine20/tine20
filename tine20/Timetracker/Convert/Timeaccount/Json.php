@@ -52,4 +52,39 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
 
         return $recordArray;
     }
+
+    /**
+     * resolves child records before converting the record set to an array
+     *
+     * @param Tinebase_Record_RecordSet $records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     */
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+        $this->_resolveGrants($records);
+    }
+
+
+    protected function _resolveGrants(Tinebase_Record_RecordSet $_records)
+    {
+        // TODO do we need this?
+        // Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+
+        $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
+        foreach ($_records as $timeaccount) {
+            $timeaccountGrantsArray = $timeaccount->account_grants;
+            $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
+
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
+            $timeaccount->account_grants = $timeaccountGrantsArray;
+
+            // also move the grants into the container_id property, as the clients expects records to
+            // be contained in some kind of container where it searches the grants in
+            $timeaccount->container_id['account_grants'] = $timeaccountGrantsArray;
+        }
+    }
 }
