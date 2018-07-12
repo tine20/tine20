@@ -858,8 +858,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('4TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -885,8 +883,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('-1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -912,8 +908,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -939,8 +933,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('4TU', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -960,14 +952,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-03-24 12:00:00';
         $updatedEvent['dtend']   = '2009-03-24 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('-1TU', $newBaseEvent['rrule']['byday'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, false);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -993,8 +982,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -1014,14 +1001,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
         $updatedEvent['dtend']   = '2009-04-02 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -1041,15 +1025,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
         $updatedEvent['dtend']   = '2009-04-02 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
-        $this->assertEquals('3', $newBaseEvent['rrule']['bymonth'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -1076,8 +1056,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
         $this->assertEquals('4', $newBaseEvent['rrule']['bymonth'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
     
     
@@ -1790,48 +1768,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
         $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'one tentative');
     }
-
-    /**
-     * testExdateUpdateAllSummary
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateAllSummary()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['summary'] = 'new summary';
-        
-        $event = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertEquals('new summary', $event['summary']);
-        }
-    }
-
-    /**
-     * testExdateUpdateAllDtStart
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * 
-     * @todo finish
-     */
-    public function testExdateUpdateAllDtStart()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = '2009-04-01 08:00:00';
-        $exception['dtend'] = '2009-04-01 08:15:00';
-        
-        $event = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertContains('08:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-            $this->assertContains('08:15:00', $event['dtend']);
-        }
-    }
     
     /**
      * testExdateUpdateThis
@@ -1854,198 +1790,6 @@ class Calendar_JsonTests extends Calendar_TestCase
                 $this->assertEquals('exception', $event['summary'], 'summary not changed in exception: ' . print_r($event, TRUE));
             } else {
                 $this->assertEquals('Wakeup', $event['summary']);
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateThisAndFuture
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFuture()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['summary'] = 'new summary';
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertEquals('new summary', $event['summary'], 'summary not changed in event: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals('Wakeup', $event['summary']);
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateThisAndFutureWithRruleUntil
-     * 
-     * @see 0008244: "rrule until must not be before dtstart" when updating recur exception (THISANDFUTURE)
-     */
-    public function testExdateUpdateThisAndFutureWithRruleUntil()
-    {
-        $events = $this->testCreateRecurException();
-        
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = Tinebase_DateTime::now()->toString();
-        $exception['dtend'] = Tinebase_DateTime::now()->addHour(1)->toString();
-        
-        // move exception
-        $updatedEvent = $this->_uit->saveEvent($exception);
-        // try to update the whole series
-        $updatedEvent['summary'] = 'new summary';
-        $updatedEvent = $this->_uit->saveEvent($updatedEvent, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        
-        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in event: ' . print_r($updatedEvent, TRUE));
-    }
-    
-    /**
-     * testExdateUpdateThisAndFutureRemoveAttendee
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFutureRemoveAttendee()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        // remove susan from attendee
-        unset($exception['attendee'][0]);
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        $this->assertEquals(1, count($updatedEvent['attendee']), 'attender not removed from exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertEquals(1, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals(2, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateAllAddAttendee
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateAllAddAttendee()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        // add new attender
-        $exception['attendee'][] = $this->_getUserTypeAttender();
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        $this->assertEquals(3, count($updatedEvent['attendee']), 'attender not added to exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertEquals(3, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-        }
-    }
-    
-    /**
-     * testExdateUpdateThisAndFutureChangeDtstart
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFutureChangeDtstart()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = '2009-04-01 08:00:00';
-        $exception['dtend'] = '2009-04-01 08:15:00';
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertContains('08:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-                $this->assertContains('08:15:00', $event['dtend']);
-            } else {
-                $this->assertContains('06:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-                $this->assertContains('06:15:00', $event['dtend']);
-            }
-        }
-    }
-    
-    /**
-     * testExdateUpdateAllWithModlog
-     * - change base event, then update all
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * @see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*
-     */
-    public function testExdateUpdateAllWithModlog()
-    {
-        $this->markTestSkipped('this test is broken: see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*');
-        
-        $events = $this->testCreateRecurException();
-        $baseEvent = $events['results'][0];
-        $exception = $this->_getException($events, 1);
-        
-        $baseEvent['summary'] = 'Get up, lazyboy!';
-        $baseEvent = $this->_uit->saveEvent($baseEvent);
-        sleep(1);
-        
-        $exception['summary'] = 'new summary';
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] == $updatedEvent['dtstart']) {
-                $this->assertEquals('new summary', $event['summary'], 'Recur exception should have the new summary');
-            } else {
-                $this->assertEquals('Get up, lazyboy!', $event['summary'], 'Wrong summary in base/recur event: ' . print_r($event, TRUE));
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateAllWithModlogAddAttender
-     * - change base event, then update all
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * @see 0007826: add attendee changes to modlog
-     * @see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*
-     */
-    public function testExdateUpdateAllWithModlogAddAttender()
-    {
-        $this->markTestSkipped('0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlogAddAttender');
-        
-        $events = $this->testCreateRecurException();
-        $baseEvent = $events['results'][0];
-        $exception = $this->_getException($events, 1);
-        
-        // add new attender
-        $baseEvent['attendee'][] = $this->_getUserTypeAttender();
-        $baseEvent = $this->_uit->saveEvent($baseEvent);
-        $this->assertEquals(3, count($baseEvent['attendee']), 'Attendee count mismatch in baseEvent: ' . print_r($baseEvent, TRUE));
-        sleep(1);
-        
-        // check recent changes (needs to contain attendee change)
-        $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
-        $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
-        $this->assertGreaterThan(2, count($changedAttributes), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
-        $this->assertTrue(in_array('attendee', $changedAttributes), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
-        
-        $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] == $updatedEvent['dtstart']) {
-                $this->assertEquals(3, count($event['attendee']), 'Attendee count mismatch in exdate: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals(4, count($event['attendee']), 'Attendee count mismatch: ' . print_r($event, TRUE));
             }
         }
     }
