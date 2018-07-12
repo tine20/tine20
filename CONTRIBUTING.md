@@ -25,8 +25,6 @@ This can be done directly in the Pull Request, thanks to https://cla-assistant.i
 For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/tine20)
 For JavaScript code, write [karma](http://karma-runner.github.io) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/js)
 
-_TODO add more info about good tests_
-
 ### Commit Message Guidelines
 
 Tine 2.0 uses [Conventional Commits](https://conventionalcommits.org/) style commit messages:
@@ -129,7 +127,11 @@ For PHP Code, we use the [PSR-1](https://github.com/php-fig/fig-standards/blob/m
 
 ## Asking and Answering Questions
 
-_TODO add more_
+If you have a question, please open an issue. We will put the label "Question" on it. Feel
+free to answer questions of other users. You could also put your question on Stackoverflow (tag "tine20"):
+https://stackoverflow.com/questions/tagged/tine20
+
+Questions on GitHub can be asked in german or english.
 
 ## Additional Resources
 
