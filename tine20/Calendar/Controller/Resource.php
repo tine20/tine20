@@ -59,10 +59,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         ));
         $this->_backend->setModlogActive(TRUE);
 
-        if (Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-            $this->_doContainerACLChecks = false;
-        }
-
         $this->_getMultipleGrant = Calendar_Model_ResourceGrants::RESOURCE_READ;
         $this->_requiredFilterACLget = [Calendar_Model_ResourceGrants::RESOURCE_READ];
         $this->_requiredFilterACLupdate  = [Calendar_Model_ResourceGrants::RESOURCE_EDIT];
@@ -284,9 +280,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
             /** @var Tinebase_Model_Container $eventContainer */
 
-            if (is_array($_record->grants) &&
-                    (Tinebase_Core::getUser()->hasGrant($container, Calendar_Model_ResourceGrants::RESOURCE_ADMIN) ||
-                    Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES))) {
+            if (is_array($_record->grants) && Tinebase_Core::getUser()
+                    ->hasGrant($container, Calendar_Model_ResourceGrants::RESOURCE_ADMIN)) {
                 $grants = $this->convertToEventGrants(
                     new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants));
 
@@ -322,26 +317,23 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_AccessDenied('User object required to check grants');
         }
 
-        if ($user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) || ($_action !== self::ACTION_DELETE &&
-                $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN))) {
-            return true;
-        }
-
         $hasGrant = false;
 
         switch ($_action) {
             case self::ACTION_GET:
-                $hasGrant = $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_READ);
+                $hasGrant = $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_READ) ||
+                    $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN);
                 break;
-            /* there is no explicit create right, you need manage_resources for it
             case self::ACTION_CREATE:
-                break;*/
-            case self::ACTION_UPDATE:
-                $hasGrant = $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_EDIT);
+                $hasGrant = $user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
                 break;
-            /* there is no explicit delete right, you need manage_resources for it
+            case self::ACTION_UPDATE:
+                $hasGrant = $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_EDIT) ||
+                    $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN);
+                break;
             case self::ACTION_DELETE:
-                break;*/
+                $hasGrant = $user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+                break;
         }
 
         if (! $hasGrant) {
@@ -352,29 +344,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
 
         return $hasGrant;
-    }
-    
-    /**
-     * check if user has the right to manage resources
-     * 
-     * @param string $_action {get|create|update|delete}
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _checkRight($_action)
-    {
-        switch ($_action) {
-            // only create requires Calendar_Acl_Rights::MANAGE_RESOURCES, all other acl checks are handled in _checkGrant
-            case 'create':
-                if (! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-                    throw new Tinebase_Exception_AccessDenied("You don't have the right to manage resources");
-                }
-                break;
-            default;
-               break;
-        }
-
-        parent::_checkRight($_action);
     }
     
     /**

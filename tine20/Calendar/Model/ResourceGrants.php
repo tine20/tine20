@@ -80,65 +80,35 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
     public static function addCustomGetSharedContainerSQL(Zend_Db_Select $_select,
         Tinebase_Model_Application $_application, $_accountId, $_grant)
     {
-        if (Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-            $db = $_select->getAdapter();
-            $where = join(' ', $_select->getPart(Zend_Db_Select::WHERE));
-            $_select->reset(Zend_Db_Select::WHERE);
-            $_select->where($where);
-            $_select->orWhere(
-                $db->quoteInto($db->quoteIdentifier('container.application_id') .' = ?', $_application->getId()) . ' AND ' .
-                $db->quoteInto($db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
-                $db->quoteIdentifier('container.is_deleted') . ' = 0 AND ' .
-                $db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
-            );
-        } else {
-            $grants = is_array($_grant) ? $_grant : array($_grant);
-            if (count($grants) > 1 || $grants[0] !== Tinebase_Model_Grants::GRANT_READ) {
-                return;
-            }
-
-            $db = $_select->getAdapter();
-            $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
-            $roleMemberships    = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
-            // enforce string for pgsql
-            array_walk($roleMemberships, function(&$item) {$item = (string)$item;});
-            $quotedActId   = $db->quoteIdentifier('container_acl.account_id');
-            $quotedActType = $db->quoteIdentifier('container_acl.account_type');
-            $anyoneSelect = '';
-            if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
-                $anyoneSelect = ' OR ' . $quotedActType . $db->quoteInto(' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
-            }
-
-            $where = join(' ', $_select->getPart(Zend_Db_Select::WHERE));
-            $_select->reset(Zend_Db_Select::WHERE);
-            $_select->where($where);
-            $_select->orWhere(
-                $db->quoteInto($db->quoteIdentifier('container.application_id') .' = ?', $_application->getId()) . ' AND ' .
-                $db->quoteInto($db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
-                $db->quoteIdentifier('container.is_deleted') . ' = 0 AND ' .
-                $db->quoteIdentifier('container.xprops') . $db->quoteInto(' LIKE ?', '%"Resource":{"resource_id":"%') . ' AND ((' .
-                $db->quoteInto("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId) . ' ) OR (' .
-                $db->quoteInto("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships) . ' ) OR (' .
-                $db->quoteInto("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE), empty($roleMemberships) ? ' ' : $roleMemberships) . ' )' .
-                $anyoneSelect . ' ) AND ' . $db->quoteIdentifier('container_acl.account_grant') . $db->quoteInto(' LIKE ?', Calendar_Model_ResourceGrants::EVENTS_FREEBUSY)
-            );
+        $grants = is_array($_grant) ? $_grant : array($_grant);
+        if (count($grants) > 1 || $grants[0] !== Tinebase_Model_Grants::GRANT_READ) {
+            return;
         }
-    }
 
-    public function setSpecialGrantsByUser($_accountId)
-    {
-        if (Tinebase_User::getInstance()->getUserById($_accountId)->hasRight('Calendar',
-                Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-            $myGrants = static::getAllGrants();
-            $parentGrants = parent::getAllGrants();
-            foreach ($myGrants as $grant) {
-                if (!in_array($grant, $parentGrants)) {
-                    $this->{$grant} = true;
-                    if (strpos($grant, 'events') === 0) {
-                        $this->{strtolower($grant[6]) . substr($grant, 7)} = true;
-                    }
-                }
-            }
+        $db = $_select->getAdapter();
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
+        $roleMemberships    = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($_accountId);
+        // enforce string for pgsql
+        array_walk($roleMemberships, function(&$item) {$item = (string)$item;});
+        $quotedActId   = $db->quoteIdentifier('container_acl.account_id');
+        $quotedActType = $db->quoteIdentifier('container_acl.account_type');
+        $anyoneSelect = '';
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+            $anyoneSelect = ' OR ' . $quotedActType . $db->quoteInto(' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         }
+
+        $where = join(' ', $_select->getPart(Zend_Db_Select::WHERE));
+        $_select->reset(Zend_Db_Select::WHERE);
+        $_select->where($where);
+        $_select->orWhere(
+            $db->quoteInto($db->quoteIdentifier('container.application_id') .' = ?', $_application->getId()) . ' AND ' .
+            $db->quoteInto($db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
+            $db->quoteIdentifier('container.is_deleted') . ' = 0 AND ' .
+            $db->quoteIdentifier('container.xprops') . $db->quoteInto(' LIKE ?', '%"Resource":{"resource_id":"%') . ' AND ((' .
+            $db->quoteInto("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId) . ' ) OR (' .
+            $db->quoteInto("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships) . ' ) OR (' .
+            $db->quoteInto("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE), empty($roleMemberships) ? ' ' : $roleMemberships) . ' )' .
+            $anyoneSelect . ' ) AND ' . $db->quoteIdentifier('container_acl.account_grant') . $db->quoteInto(' LIKE ?', Calendar_Model_ResourceGrants::EVENTS_FREEBUSY)
+        );
     }
 }

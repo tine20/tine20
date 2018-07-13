@@ -492,16 +492,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         $this->addGrantsSql($select, $accountId, $grant);
-        if ($meta['appName'] === 'Calendar' && Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
-            $where = join(' ', $select->getPart(Zend_Db_Select::WHERE));
-            $select->reset(Zend_Db_Select::WHERE);
-            $select->where($where);
-            $select->orWhere(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('container.application_id') .' = ?', $applicationId) . ' AND ' .
-                $this->_db->quoteInto($this->_db->quoteIdentifier('container.type') . ' = ?', Tinebase_Model_Container::TYPE_SHARED) . ' AND ' .
-                $this->_db->quoteIdentifier('container.xprops') . ' LIKE ?','%"Resource":{"resource_id":"%'
-            );
-        }
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         
@@ -1821,7 +1811,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         /** @var Tinebase_Model_Grants $grants */
         $grants = new $_grantModel($grantsFields, TRUE);
-        $grants->setSpecialGrantsByUser($_accountId);
 
         return $grants;
     }
