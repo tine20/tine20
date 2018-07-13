@@ -72,7 +72,8 @@ class Tinebase_Setup_DemoData_Import
                 // create generic import definition if not found in options
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['$modelName']);
             }
-            $this->_importer = Inventory_Import_Csv::createFromDefinition($definition, $this->_options);
+            $importClass = $this->_application->name . '_Import_Csv';
+            $this->_importer = call_user_func_array([$importClass, 'createFromDefinition'], [$definition, $this->_options]);
 
             $result = $this->_importer->importFile($splFileInfo->getPath() . DIRECTORY_SEPARATOR . $filename);
             return $result;
