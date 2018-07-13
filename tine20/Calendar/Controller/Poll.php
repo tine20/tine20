@@ -238,14 +238,15 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
      * inspect event helper
      *
      * @param Calendar_Model_Event $event
-     * @throws Tasks_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _inspectEvent($event)
     {
         $poll = $event->poll_id;
         if ($poll instanceof Calendar_Model_Poll) {
             if ($event->rrule || $event->isRecurException()) {
-                throw new Tasks_Exception_UnexpectedValue('Polls for recurring events are not supported');
+                // _('Polls for recurring events are not supported')
+                throw new Tinebase_Exception_SystemGeneric('Polls for recurring events are not supported');
             }
             try {
                 $this->_inspectedPoll = $poll->getId();
