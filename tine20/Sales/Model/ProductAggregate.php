@@ -197,7 +197,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         $this->setTimezone(Tinebase_Core::getUserTimezone());
         
         while($from < $to) {
-            $this->_billables[$from->format('Y-m')] = array(clone $this);
+            $this->_billables[$from->format('Y-m')] = [$this];
             // 1 or interval?!? should show up every month as a position, so 1! NOT interval
             $from->addMonth(1);
         }
