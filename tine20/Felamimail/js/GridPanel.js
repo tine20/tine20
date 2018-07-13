@@ -333,7 +333,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             text: this.app.i18n._('Print Preview'),
             handler: this.onPrintPreview.createDelegate(this, []),
             disabled:true,
-            hidden: Ext.isTouchDevice, // no popups here
+            hidden: Ext.supportsPopupWindows,
             iconCls:'action_printPreview',
             scope:this
         });
