@@ -450,9 +450,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         }
 
         $cmd = ($structDump!==false?'{ ':'')
-              ."mysqldump --max_allowed_packet=512M --defaults-extra-file=$mycnf "
+              ."mysqldump --defaults-extra-file=$mycnf "
               .$ignoreTables
-              ."--single-transaction "
+              ."--single-transaction --max_allowed_packet=512M "
               ."--opt "
               . escapeshellarg($this->_config->database->dbname)
               . ($structDump!==false?'; ' . $structDump . '; }':'')
@@ -460,6 +460,22 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         exec($cmd);
         unlink($mycnf);
+
+        // validate all tables have been dumped
+        exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
+        array_walk($output, function (&$val) {
+            if (preg_match('/`(.*)`/', $val, $m)) {
+                $val = $m[1];
+            } else {
+                $val = null;
+            }
+        });
+        $output = array_filter($output);
+        $allTables = $this->_db->listTables();
+        $diff = array_diff($allTables, $output);
+        if (!empty($diff)) {
+            throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
+        }
     }
 
     /**
