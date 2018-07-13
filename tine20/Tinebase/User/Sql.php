@@ -257,6 +257,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // append data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
             try {
+                if ($plugin instanceof Tinebase_User_Plugin_LdapInterface) {
+                    throw new Tinebase_Exception_InvalidArgument('LDAP plugin ' . get_class($plugin)
+                        . ' should not be registered as sql plugin');
+                }
                 $plugin->inspectGetUserByProperty($user);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
