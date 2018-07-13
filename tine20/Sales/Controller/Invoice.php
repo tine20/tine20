@@ -1152,7 +1152,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         }
                     }
                 }
-                
+
+                /** @var Sales_Model_ProductAggregate $productAggregate */
                 foreach($paToUpdate as $paId => $productAggregate) {
                     $firstBill = (! $productAggregate->last_autobill);
                     
@@ -1185,7 +1186,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     
                     Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
-                    
+
+                    $productAggregate->runConvertToRecord();
                     $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
                 }
                 
