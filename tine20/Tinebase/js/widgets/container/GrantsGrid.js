@@ -175,7 +175,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             current = lodash.find(cm.config, findFn),
             config = lodash.find(this.configColumns, findFn);
 
-        if (use && ! current) {
+        if (use && ! current && config) {
             cm.setConfig(cm.config.push(config));
         } else if (! use && current) {
             cm.setConfig(lodash.filter(cm.config, lodash.negate(findFn)));
