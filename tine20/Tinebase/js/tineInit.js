@@ -853,16 +853,17 @@ Tine.Tinebase.tineInit = {
         }, this, {buffer: 150});
 
         // initialise window types
-        var windowType = 'Browser';
+        var windowType = '';
         Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
-            if (! windowType) {
-                windowType = 'Browser';
-            }
         }
-        windowType = Ext.isTouchDevice ? 'Ext' : windowType;
+
+        if (! windowType || windowType == 'autodetect') {
+            // var browserDetection = require('browser-detection');
+            windowType = Ext.supportsPopupWindows ? 'Browser' : 'Ext';
+        }
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
