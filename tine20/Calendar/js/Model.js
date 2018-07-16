@@ -56,6 +56,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
+    {name: 'addGrant'       , type: 'bool'},
     {name: 'readGrant'      , type: 'bool'},
     {name: 'editGrant'      , type: 'bool'},
     {name: 'deleteGrant'    , type: 'bool'},
