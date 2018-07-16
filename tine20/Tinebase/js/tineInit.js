@@ -696,7 +696,7 @@ Tine.Tinebase.tineInit = {
         // we might need to add a real config for this
         // it's not clear how to detect devices w.o. local storage or clients which place
         // downloads in a cloud :-(
-        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
+        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
         var AreaLocks = require('./AreaLocks.es6');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
