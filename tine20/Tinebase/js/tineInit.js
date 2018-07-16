@@ -696,7 +696,7 @@ Tine.Tinebase.tineInit = {
         // we might need to add a real config for this
         // it's not clear how to detect devices w.o. local storage or clients which place
         // downloads in a cloud :-(
-        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
+        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
         var AreaLocks = require('./AreaLocks.es6');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
@@ -839,16 +839,17 @@ Tine.Tinebase.tineInit = {
         }, this, {buffer: 150});
 
         // initialise window types
-        var windowType = 'Browser';
+        var windowType = '';
         Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
-            if (! windowType) {
-                windowType = 'Browser';
-            }
         }
-        windowType = Ext.isTouchDevice ? 'Ext' : windowType;
+
+        if (! windowType || windowType == 'autodetect') {
+            // var browserDetection = require('browser-detection');
+            windowType = Ext.supportsPopupWindows ? 'Browser' : 'Ext';
+        }
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
