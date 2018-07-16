@@ -641,9 +641,9 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             Ext.form.TriggerField.prototype.taskForResize.delay(300);
             return;
         }
-        
+
         var visible = !!window.lodash.get(cmp, 'el.dom.offsetParent', false);
-        
+
         if (visible !== cmp.wasVisible && cmp.el.dom) {
             cmp.setWidth(cmp.width);
             if (cmp.wrap && cmp.wrap.dom) {
@@ -651,7 +651,7 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             }
             cmp.syncSize();
         }
-        
+
         cmp.wasVisible = visible;
     });
     Ext.form.TriggerField.prototype.taskForResize.delay(300);
@@ -938,6 +938,18 @@ Ext.override(Ext.tree.TreePanel, {
     }
 });
 
+Ext.override(Ext.menu.Menu, {
+    setActive: Ext.emptyFn,
+    setZIndex: Ext.emptyFn,
+    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function() {
+        Ext.WindowMgr.register(this);
+        Ext.WindowMgr.bringToFront(this);
+    }),
+    hide: Ext.menu.Menu.prototype.hide.createSequence(function() {
+        Ext.WindowMgr.unregister(this);
+    })
+});
+
 Ext.override(Ext.Component, {
     /**
      * is this component rendered?
@@ -1021,7 +1033,7 @@ Ext.override(Ext.grid.EditorGridPanel, {
             this.on('celldblclick', this.onCellDblClick, this);
         }
     },
-    
+
     onBeforeEdit: function(o) {
         if (this.readOnly) {
             o.cancel = true;
