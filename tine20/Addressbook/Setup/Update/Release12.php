@@ -21,4 +21,15 @@ class Addressbook_Setup_Update_Release12 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '12.1');
     }
+
+    /**
+     * @return void
+     */
+    public function update_1()
+    {
+        $release11 = new Addressbook_Setup_Update_Release11($this->_backend);
+        $release11->update_11();
+
+        $this->setApplicationVersion('Addressbook', '12.2');
+    }
 }
