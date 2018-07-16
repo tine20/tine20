@@ -1020,6 +1020,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         return $pathParts;
     }
 
+    /**
+     * @param $_id
+     * @return Tinebase_Model_FullUser
+     */
     protected function _getUser($_id)
     {
         $classCacheId = ($this->_useIdAsName ? 'contact_id' : ($this->_useLoginAsFolderName() ? 'accountLoginName' : 'accountDisplayName')) . $_id;
@@ -1033,9 +1037,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');
         } else {
             if ($this->_useLoginAsFolderName()) {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $_id, 'Tinebase_Model_FullUser');
+                $nameProp = 'accountLoginName';
             } else {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountDisplayName', $_id, 'Tinebase_Model_FullUser');
+                $nameProp = 'accountDisplayName';
+            }
+            if (Tinebase_Core::getUser()->{$nameProp} === $_id) {
+                $user = Tinebase_Core::getUser();
+            } else {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend($nameProp, $_id, 'Tinebase_Model_FullUser');
             }
         }
 
