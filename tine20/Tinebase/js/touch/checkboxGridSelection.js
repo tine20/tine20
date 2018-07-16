@@ -26,7 +26,7 @@ if (Ext.isTouchDevice) {
             hasCheckboxSelModel = hasCheckboxSelModel || col.dataIndex == 'checked' || col.id == 'checked';
         });
 
-        if (!hasCheckboxSelModel) {
+        if (!hasCheckboxSelModel && !this.skipAutoCheckboxSelection) {
             cols.unshift(sm);
         }
     });
