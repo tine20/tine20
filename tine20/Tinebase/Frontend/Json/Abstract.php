@@ -200,7 +200,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
         $filter = $this->_decodeFilter($_filter, $_filterModel);
-
         $decodedPagination = $this->_prepareParameter($_paging);
         if (null !== $this->_paginationModel) {
             $decodedPagination['model'] = $this->_paginationModel;
@@ -208,18 +207,41 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $decodedPagination['model'] = $filter->getModelName();
         }
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
-
         $records = $_controller->search($filter, $pagination, $_getRelations);
-        
+
         $result = $this->_multipleRecordsToJson($records, $filter);
-        
-        return array(
+        $totalCountResult = $this->_getSearchTotalCount($filter, $pagination, $_controller, $_totalCountMethod, count($result));
+
+        return array_merge($totalCountResult, [
             'results'       => array_values($result),
-            'totalcount'    => $_totalCountMethod == self::TOTALCOUNT_CONTROLLER ?
-                $_controller->searchCount($filter) :
-                count($result),
-            'filter'        => $filter->toArray(TRUE),
-        );
+            'filter'        => $filter->toArray(true),
+        ]);
+    }
+
+    /**
+     * do search count request only when resultset is equal
+     * to $pagination->limit or we are not on the first page
+     *
+     * @param $filter
+     * @param $pagination
+     * @param Tinebase_Controller_SearchInterface $controller the record controller
+     * @param $totalCountMethod
+     * @param integer $resultCount
+     * @return array
+     */
+    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    {
+         if (   $totalCountMethod === self::TOTALCOUNT_CONTROLLER
+            && $pagination->limit
+            && ($pagination->start != 0 || $resultCount == $pagination->limit)
+         ) {
+             $totalCount = $controller->searchCount($filter);
+         } else {
+             $totalCount = $resultCount;
+         }
+         return [
+             'totalcount' => $totalCount
+         ];
     }
 
     /**
@@ -235,7 +257,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if ($_filter instanceof Tinebase_Model_Filter_FilterGroup) {
             return $_filter;
         }
-        
+
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
@@ -423,7 +445,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if (! is_object($importer)) {
             throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
         }
-        
+
         // extend execution time to 30 minutes
         $this->_longRunningRequest(1800);
 
