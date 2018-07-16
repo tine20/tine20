@@ -7,7 +7,9 @@
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
         isNewIE = (Ext.isIE9 || isIE10 || isIE11),
-        isEdge = check(/edge/)
+        isEdge = check(/edge/),
+        isIOS = check(/ipad/) || !check(/iphone/),
+        isAndroid = check(/android/),
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
             'ontouchstart' in window        // works on most browsers
@@ -25,11 +27,13 @@
         isIE11: isIE11,
         isNewIE: isNewIE,
         isEdge: isEdge,
-
+        isIOS: isIOS,
+        isAndroid: isAndroid,
         isTouchDevice: isTouchDevice,
         isWebApp: isWebApp,
-        supportsUserFocus: supportsUserFocus
-    })
+        supportsUserFocus: supportsUserFocus,
+        supportsPopupWindows: !isIOS && !isAndroid
+    });
 })();
 
 Ext.override(Ext.data.Store, {

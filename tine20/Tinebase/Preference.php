@@ -231,12 +231,20 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 'Addressbook';
                 break;
             case self::WINDOW_TYPE:
-                $preference->value      = 'Browser';
+                $preference->value      = 'autodetect';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
-                            <label>Browser windows</label>
+                            <label>Autodetect</label>
+                            <value>autodetect</value>
+                        </option>
+                        <option>
+                            <label>Native windows</label>
                             <value>Browser</value>
+                        </option>
+                        <option>
+                            <label>Overlay windows</label>
+                            <value>Ext</value>
                         </option>
                     </options>';
                 break;
