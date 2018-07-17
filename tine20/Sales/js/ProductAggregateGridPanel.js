@@ -434,7 +434,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
 
         if (accountable == 'WebAccounting_Model_ProxmoxVM') {
             // TODO get accountable keys from modelconfig / registry (Tine.WebAccounting.registry.get('models')[MODEL])
-            return ['vcpus', 'memory', 'storage'];
+            return ['vcpus', 'memory', 'storage', 'assignedAccountables'];
         } else {
             return [];
         }
