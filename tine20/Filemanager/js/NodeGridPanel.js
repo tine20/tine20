@@ -140,7 +140,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * after grid renderd
      */
     initDragDrop: function () {
-        if (Ext.isTouchDevice || !this.enableDD) {
+        if (!this.enableDD) {
             return;
         }
 
