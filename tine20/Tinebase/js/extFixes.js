@@ -941,13 +941,29 @@ Ext.override(Ext.tree.TreePanel, {
 Ext.override(Ext.menu.Menu, {
     setActive: Ext.emptyFn,
     setZIndex: Ext.emptyFn,
-    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function() {
+    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function () {
         Ext.WindowMgr.register(this);
         Ext.WindowMgr.bringToFront(this);
     }),
-    hide: Ext.menu.Menu.prototype.hide.createSequence(function() {
+    hide: Ext.menu.Menu.prototype.hide.createSequence(function () {
         Ext.WindowMgr.unregister(this);
     })
+});
+
+Ext.override(Ext.grid.GridDragZone, {
+    // fix: do not consume mousedown when row is already selected!
+    getDragData : function(e){
+        var t = Ext.lib.Event.getTarget(e);
+        var rowIndex = this.view.findRowIndex(t);
+        if(rowIndex !== false){
+            var sm = this.grid.selModel;
+            // if(!sm.isSelected(rowIndex) || e.hasModifier()){
+                sm.handleMouseDown(this.grid, rowIndex, e);
+            // }
+            return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
+        }
+        return false;
+    }
 });
 
 Ext.override(Ext.Component, {
