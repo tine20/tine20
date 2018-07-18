@@ -312,7 +312,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // PGP MIME Version 1
-        if ($_message->structure['contentType'] == 'multipart/encrypted'
+        if (isset($_message->structure['contentType']) && $_message->structure['contentType'] == 'multipart/encrypted'
          && isset($_message->structure['parts'][1]['subType'])
          && $_message->structure['parts'][1]['subType'] == 'pgp-encrypted') {
             $identification = $this->getMessagePart($_message, 1)->getContent();
