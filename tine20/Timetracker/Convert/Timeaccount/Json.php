@@ -84,7 +84,9 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
 
             // also move the grants into the container_id property, as the clients expects records to
             // be contained in some kind of container where it searches the grants in
-            $timeaccount->container_id['account_grants'] = $timeaccountGrantsArray;
+            if (is_array($timeaccount->container_id) || is_object($timeaccount->container_id)) {
+                $timeaccount->container_id['account_grants'] = $timeaccountGrantsArray;
+            }
         }
     }
 }
