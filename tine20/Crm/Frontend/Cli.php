@@ -22,4 +22,12 @@ class Crm_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Crm';
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Crm_Model_Lead' => 'crm_demo_import_csv'
+    ];
 }

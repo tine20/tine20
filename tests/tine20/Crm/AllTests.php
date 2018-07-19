@@ -19,6 +19,7 @@ class Crm_AllTests
         $suite->addTestSuite('Crm_JsonTest');
         $suite->addTestSuite('Crm_NotificationsTests');
         $suite->addTestSuite('Crm_Acl_RolesTest');
+        $suite->addTestSuite('Crm_Import_DemoDataTest');
         $suite->addTestSuite('Crm_Import_CsvTest');
         return $suite;
     }
