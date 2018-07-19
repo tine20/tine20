@@ -1734,7 +1734,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     {
         $this->validateTableVersion('sales_invoices', '3');
 
-        $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        try {
+            $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // table already exists -> rename existing table
+            $this->renameTable('sales_sales_invoices', 'sales_sales_invoices_bkp');
+            $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        }
 
         $this->setTableVersion('sales_sales_invoices', 4);
 
@@ -1893,6 +1899,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
+
+        try {
+            $this->renameTable('sales_purchase_invoices', 'sales_purchase_invoices_bkp');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+        }
 
         $this->createTable('sales_purchase_invoices', Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition), 'Sales');
 
