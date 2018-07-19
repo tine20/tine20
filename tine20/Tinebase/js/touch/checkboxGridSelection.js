@@ -34,6 +34,7 @@ if (Ext.isTouchDevice) {
     Ext.grid.RowSelectionModel.prototype.initEvents = Ext.grid.RowSelectionModel.prototype.initEvents.createSequence(function() {
         this.grid.on('render', function() {
             var view = this.grid.getView();
+            view.mainBody.on('mousedown', this.onMouseDown, this);
             Ext.fly(view.innerHd).on('mousedown', this.onHdMouseDown, this);
         }, this);
     });
@@ -42,14 +43,4 @@ if (Ext.isTouchDevice) {
         'fixed', 'dataIndex', 'id'], function(p) {
         Ext.grid.RowSelectionModel.prototype[p] = Ext.grid.CheckboxSelectionModel.prototype[p];
     });
-
-    // NOTE: when DD is enabled $%^!Ext.GridDragZone interferes with handleMouseDown -> see extFixes
-    Ext.grid.RowSelectionModel.prototype.origHandleMouseDown = Ext.grid.RowSelectionModel.prototype.handleMouseDown;
-    Ext.grid.RowSelectionModel.prototype.handleMouseDown = function(g, rowIndex, e) {
-        if (e.getTarget('.x-grid3-row-checker')) {
-            this.onMouseDown(e, Ext.lib.Event.getTarget(e));
-        } else {
-            this.origHandleMouseDown(g, rowIndex, e);
-        }
-    }
 }
