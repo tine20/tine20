@@ -1992,7 +1992,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         */
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
-        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && ! Ext.isTouchDevice) {
+        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker')) {
             if (sm.getCount() == 1 && sm.isSelected(row)) {
                 // return;
             } else {

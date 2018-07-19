@@ -951,15 +951,15 @@ Ext.override(Ext.menu.Menu, {
 });
 
 Ext.override(Ext.grid.GridDragZone, {
-    // fix: do not consume mousedown when row is already selected!
     getDragData : function(e){
         var t = Ext.lib.Event.getTarget(e);
         var rowIndex = this.view.findRowIndex(t);
         if(rowIndex !== false){
             var sm = this.grid.selModel;
-            // if(!sm.isSelected(rowIndex) || e.hasModifier()){
+            // fix: make DD & checkbox selection working together
+            if((!sm.isSelected(rowIndex) || e.hasModifier()) && !e.getTarget('.x-grid3-row-checker')) {
                 sm.handleMouseDown(this.grid, rowIndex, e);
-            // }
+            }
             return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
         }
         return false;
