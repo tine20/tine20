@@ -796,6 +796,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $_record->isValid(TRUE);
         
         if ($this->_options['dryrun']) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Doing Dry-Run ... (transaction will be rolled-back)');
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
