@@ -127,11 +127,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             remoteSort: false,
             recordClass: this.recordClass,
             autoSave: false,
-            getByDate: function(date) {
-                if (!Ext.isDate(date)) {
-                    date = Date.parseDate(date, Date.patterns.ISO8601Long);
-                }
-                var index = this.findBy(function(record) {
+            getByDate: function(timestamp) {
+                var date = !Ext.isDate(timestamp) ? new Date(timestamp) : timestamp,
+                    index = this.findBy(function(record) {
                     if(record.get(picker.dateProperty).toString() == date.toString()) {
                         return true;
                     }
@@ -204,6 +202,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {Number} year
      */
     onFeastDaysLoad: function(result, onInit, date, year) {
+        var _ = window.lodash;
+
         Tine.log.debug('Loaded feast and freedays for the year ' + year + ':');
         var rr = result.results;
         Tine.log.debug(rr);
@@ -274,7 +274,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             this.currentYear = parseInt(rr.firstDay.date.split('-')[0]);
         }
 
-        var focusDate = freetime.get('firstday_date');
+        // NOTE: firstday_date is not declared in model
+        var focusDate = Date.parseDate(_.get(freetime, 'json.firstday_date'), Date.patterns.ISO8601Long);
         if (date) {
             focusDate = date;
         } else if (this.disableYearChange) {
