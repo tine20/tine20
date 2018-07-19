@@ -87,7 +87,7 @@ class Tinebase_Setup_DemoData_Import
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($this->_options['definition']);
             } else {
                 // create generic import definition if not found in options
-                $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['$modelName']);
+                $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['modelName']);
             }
             $importClass = $definition->plugin;
             if(empty($importClass)) {

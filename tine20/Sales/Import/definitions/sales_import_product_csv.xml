@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>sales_import_product_csv</name>
+    <model>Sales_Model_Product</model>
+    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>gtin</source>
+            <destination>gtin</destination>
+        </field>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>manufacturer</source>
+            <destination>manufacturer</destination>
+        </field>
+        <field>
+            <source>category</source>
+            <destination>category</destination>
+        </field>
+        <field>
+            <source>purchaseprice</source>
+            <destination>purchaseprice</destination>
+        </field>
+        <field>
+            <source>salesprice</source>
+            <destination>salesprice</destination>
+        </field>
+        <field>
+            <source>accountable</source>
+            <destination>accountable</destination>
+        </field>
+        <field>
+            <source>lifespan_start</source>
+            <destination>lifespan_start</destination>
+        </field>
+        <field>
+            <source>lifespan_end</source>
+            <destination>lifespan_end</destination>
+        </field>
+    </mapping>
+</config>
+

@@ -1,0 +1,4 @@
+name,name_shorthand,contract_ex,contract_in,url,description,vatid,iban,bic,credit_term,currency,currency_trans_rate,discount,street,postfach,postnumber,ort
+Elbphilharmonie,Elbphi,"Tanja, Bar","Admin Account, Tine 2.0",,Das Konzerthaus Elbphilharmonie,3521467,DE05200505500123456789,HASPDEHHXXX,10,EUR,1,1,teststreet,234,20214,hh
+Schloss Schönbrun,Schönbrun,"Julia, Metzger","Admin Account, Tine 2.0",,Das Schloss in Wien,3521467,DE05200505500123456789,HASPDEHHXXX,10,EUR,1,1,teststreet,234,20214,hh
+Getränke,GT,"Julia, Metzger",,,Getränke,3521467,DE05200505500123456789,HASPDEHHXXX,10,EUR,1,1,teststreet,234,20214,hh

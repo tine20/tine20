@@ -1,0 +1,2 @@
+number,description,date,due_in,due_at,payed_at,payment_method,discount,discount_until,price_net,price_gross2,sales_tax,price_gross,price_tax,price_total,supplier,costcenter,contact
+1,DemoData Import,2018-08-02,4,2018-08-06,2018-08-05,BANK TRANSFER,5,2018-08-02,200,20,19,238,38,"245.10",Getränke,SE,"Admin Account, Tine 2.0"

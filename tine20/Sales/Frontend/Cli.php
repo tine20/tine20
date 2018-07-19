@@ -22,6 +22,24 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Sales';
+
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Sales_Model_Product' => 'sales_import_product_csv', 
+        'Sales_Model_Customer' => 'sales_import_customer_csv',
+        'Sales_Model_Contract' => 'sales_import_contract_csv',
+        'Sales_Model_Supplier' => 'sales_import_supplier_csv',
+        'Sales_Model_Invoice' => 'sales_import_invoice_csv',
+        'Sales_Model_PurchaseInvoice' => 'sales_import_purchaseinvoice_csv',
+        'Sales_Model_CostCenter' => 'sales_import_costcenter_csv',
+        'Sales_Model_Division' => 'sales_import_division_csv', 
+        'Sales_Model_Offer' => 'sales_import_offer_csv',
+        'Sales_Model_OrderConfirmation' => 'sales_import_orderconfirmation'
+    ];
     
     protected $_help = array(
         'create_auto_invoices' => array(
