@@ -67,6 +67,15 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
 
         Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
+
+        // register additional action for genericpickergridpanel
+        if (Tine.Tinebase.common.hasRight('run', 'WebAccounting')) {
+            // TODO define additional models / get from registry
+            this.setAccountableAction = this.getSetAccountableAction('WebAccounting_Model_ProxmoxVM');
+            Tine.log.info('Registering "Set Accountable" action in relation picker ctx menu ...');
+            // Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', this.setAccountableAction, 100);
+            Tine.widgets.relation.MenuItemManager.register('WebAccounting', 'ProxmoxVM', this.setAccountableAction);
+        }
     },
     
     /**
@@ -76,6 +85,113 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     isMultipleValid: function() {
         return true;
+    },
+
+    /**
+     * get action for setting relation accountables
+     *
+     * @param modelName
+     * @returns {{iconCls: string, requiredGrant: string, text, itemId: string, allowMultiple: boolean,
+      * scope: Tine.Sales.ContractEditDialog, handler: handler, actionUpdater: actionUpdater}}
+     *
+     * TODO move to separate file
+     * TODO add tests
+     */
+    getSetAccountableAction: function(modelName) {
+        return {
+            iconCls:'SalesInvoice',
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Set as accountable'),
+            itemId: 'setAccountableAction',
+            // TODO prevent selection of multiple records (no action updater?)
+            // TODO OR: allow multiple records to be selected!
+            // allowMultiple: false,
+            scope: this,
+
+            handler: function(action) {
+                var relation = action.grid.store.getAt(action.gridIndex),
+                    productCombo = Tine.widgets.form.RecordPickerManager.get('Sales', 'ProductAggregate', {
+                        name: 'product',
+                        additionalFilters: [
+                            {field: 'contract_id', operator: 'AND', value: [
+                                {field: ':id', operator: 'equals', value: this.record.id}
+                            ]}
+                        ],
+                        sortBy: 'start_date'
+                    }),
+                    dialog = new Tine.Tinebase.dialog.Dialog({
+                        windowTitle: this.app.i18n._('Choose product for accountable'),
+                        items: [productCombo],
+                        modelName: modelName,
+                        relation: relation,
+                        contractDialog: this,
+                        /**
+                         * Creates a new pop up dialog/window (acc. configuration)
+                         *
+                         * @returns {null}
+                         * TODO can we put this in the Tine.Tinebase.dialog.Dialog?
+                         */
+                        openWindow: function (config) {
+                            if (this.window) {
+                                return this.window;
+                            }
+
+                            config = config || {};
+
+                            this.window = Tine.WindowFactory.getWindow(Ext.apply({
+                                title: this.windowTitle,
+                                closeAction: 'close',
+                                modal: true,
+                                width: 300,
+                                height: 100,
+                                plain: true,
+                                layout: 'fit',
+                                items: [
+                                    this
+                                ]
+                            }, config));
+
+                            return this.window;
+                        },
+
+                        getEventData: function (event) {
+                            if (event === 'apply') {
+                                return [{
+                                    'model': this.modelName,
+                                    // product combo is first item
+                                    'id': this.items.get(0).getValue()
+                                }, this.contractDialog, this.relation];
+                            }
+                        }
+                    });
+
+                dialog.openWindow();
+                dialog.on('apply', (product, contractDialog, relation) => {
+                    // link into product agg json attributes like this:
+                    // 'accountables' -> [{"model":"WebAccounting_Model_ProxmoxVM","id":"12345abcde"}]
+                    Tine.log.debug(product);
+                    var productAgg = contractDialog.productGridPanel.getStore().getById(product.id);
+                    if (productAgg) {
+                        var attributes = productAgg.get('json_attributes'),
+                            accountables = attributes.assignedAccountables && attributes.assignedAccountables != ""
+                                ? JSON.parse(attributes.assignedAccountables)
+                                : [],
+                            accountable = {
+                                'model': product.model,
+                                'id': relation.get('related_id')
+                            };
+                        if (Ext.isArray(accountables)) {
+                            accountables.push(accountable);
+                        } else {
+                            accountables = [accountable];
+                        }
+                        attributes.assignedAccountables = JSON.stringify(accountables);
+                        productAgg.set(attributes);
+                        productAgg.commit();
+                    }
+                });
+            },
+        };
     },
     
     /**

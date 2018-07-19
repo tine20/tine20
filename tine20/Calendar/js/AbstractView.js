@@ -116,7 +116,7 @@ Tine.Calendar.AbstractView = Ext.extend(Ext.Container, {
     /**
      * @private
      */
-    onAdd : function(ds, records, index){
+    onAdd : function(ds, records, index) {
         for (var i=0; i<records.length; i++) {
             var event = records[i];
 

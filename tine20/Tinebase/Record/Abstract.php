@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -274,6 +274,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
     
         return static::$_configurationObject;
+    }
+
+    /**
+     * resetConfiguration
+     */
+    public static function resetConfiguration()
+    {
+        static::$_configurationObject = null;
+        Tinebase_ModelConfiguration::resetAvailableApps();
     }
 
     /**
@@ -1037,11 +1046,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif ($ownField instanceof Tinebase_Model_Filter_FilterGroup || $recordField instanceof Tinebase_Model_Filter_FilterGroup) {
                 // TODO add diff() to Tinebase_Model_Filter_FilterGroup?
                 // TODO ignore order of filters - currently it matters! sadly, array_diff does not work with multidimensional arrays
-                if (! empty($ownField) && ! empty($recordField)) {
-                    $arrayDiff = json_encode($ownField->toArray()) !== json_encode($recordField->toArray());
-                    if (! $arrayDiff) {
-                        continue;
-                    }
+                if (is_object($ownField)) {
+                    $ownData = json_encode($ownField->toArray());
+                } elseif (is_array($ownField)) {
+                    $ownData = json_encode($ownField);
+                } else {
+                    $ownData = $ownField;
+                }
+                if (is_object($recordField)) {
+                    $recordData = json_encode($recordField->toArray());
+                } elseif (is_array($recordField)) {
+                    $recordData = json_encode($recordField);
+                } else {
+                    $recordData = $recordField;
+                }
+                if ($ownData === $recordData) {
+                    continue;
                 }
             } elseif ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
                 // maybe we have the id of the record -> just compare the id

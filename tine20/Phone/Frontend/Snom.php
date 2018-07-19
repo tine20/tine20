@@ -351,8 +351,6 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @param string $callId the callid
      * @param string $local the username of the asterisk sip peer
      * @param string $remote the remote number
-     * 
-     * @todo add correct line_id
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
@@ -381,11 +379,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $remote = substr($remote, 0 , $pos);
         };
 
-        if (empty($local) && $event === 'disconnected') {
-            // local might be empty on disconnect (asterisk bug)
-            // fetch line_id via mac
+        if (empty($local)) {
+            // local/line_id might be empty (asterisk bug)
+            // fetch last call with line_id via mac
             $call = $controller->getLastCall($mac);
-            if (! $call) {
+            if (!$call) {
                 throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
             }
         } else {

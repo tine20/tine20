@@ -48,6 +48,7 @@ abstract class ActiveSync_TestCase extends TestCase
     const TYPE_ANDROID_5         = 'android5';
     const TYPE_ANDROID_6         = 'android6';
     const TYPE_ANDROID_7         = 'android7';
+    const TYPE_IOS_11            = 'iOS11';
 
     /**
      * (non-PHPdoc)
@@ -359,6 +360,20 @@ abstract class ActiveSync_TestCase extends TestCase
                     'remotewipe' => 0
                 ));
                 break;
+
+            case self::TYPE_IOS_11:
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => 'iphone9c1',
+                    'devicetype' => Syncroton_Model_Device::TYPE_IPHONE,
+                    'policykey'  => null,
+                    'policyId'   => null,
+                    'ownerId'    => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'Apple-iPhone9C1/1501.530400009',
+                    'acsversion' => '12.1',
+                    'remotewipe' => 0
+                ));
+                break;
+
                 
             case Syncroton_Model_Device::TYPE_IPHONE:
             default:

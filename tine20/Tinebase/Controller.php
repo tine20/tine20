@@ -18,6 +18,14 @@
  */
 class Tinebase_Controller extends Tinebase_Controller_Event
 {
+    const SYNC_CLASS_CONTACTS = 'Contacts';
+    const SYNC_CLASS_EVENTS = 'Events';
+    const SYNC_CLASS_TASKS = 'Tasks';
+    const SYNC_CLASS_EMAIL = 'Email';
+
+    const SYNC_API_ACTIVESYNC = 'ActiveSync';
+    const SYNC_API_DAV = 'DAV';
+
     /**
      * holds the instance of the singleton
      *
@@ -1082,6 +1090,118 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION, sprintf('%.3f', $duration));
             Tinebase_Application::getInstance()->setApplicationState('Tinebase',
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE, $now);
+        }
+    }
+
+    public function forceResync($contentClasses = [], $userIds = [], $apis = [])
+    {
+        $allowedContentClasses = [
+            self::SYNC_CLASS_CONTACTS,
+            self::SYNC_CLASS_EMAIL,
+            self::SYNC_CLASS_EVENTS,
+            self::SYNC_CLASS_TASKS,
+        ];
+        $allowedApis = [
+            self::SYNC_API_ACTIVESYNC,
+            self::SYNC_API_DAV,
+        ];
+
+        if (empty($apis)) {
+            $apis = $allowedApis;
+        } else {
+            $apis = array_intersect($allowedApis, $apis);
+        }
+
+        if (empty($contentClasses)) {
+            $contentClasses = $allowedContentClasses;
+        } else {
+            $contentClasses = array_intersect($allowedContentClasses, $contentClasses);
+        }
+
+        // resolve account login names to user ids
+        if (!empty($userIds)) {
+            $newUserIds = [];
+            foreach ($userIds as $userId) {
+                try {
+                    $user = Tinebase_User::getInstance()->getFullUserById($userId);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $userId);
+                }
+                $newUserIds[] = $user->getId();
+            }
+            $userIds = $newUserIds;
+        }
+
+        foreach ($apis as $api) {
+            $this->{'_forceResync' . $api}($contentClasses, $userIds);
+        }
+    }
+
+    protected function _forceResyncActiveSync($contentClasses, $userIds)
+    {
+        $allowedContentClasses = [
+            self::SYNC_CLASS_CONTACTS  => Syncroton_Data_Factory::CLASS_CONTACTS,
+            self::SYNC_CLASS_EVENTS    => Syncroton_Data_Factory::CLASS_CALENDAR,
+            self::SYNC_CLASS_TASKS     => Syncroton_Data_Factory::CLASS_TASKS,
+            self::SYNC_CLASS_EMAIL     => Syncroton_Data_Factory::CLASS_EMAIL,
+        ];
+        if (empty($contentClasses)) {
+            $classes = $allowedContentClasses;
+        } else {
+            $classes = [];
+            foreach ($contentClasses as $cc) {
+                if (isset($allowedContentClasses[$cc])) {
+                    $classes[] = $cc;
+                }
+            }
+            if (empty($classes)) {
+                return;
+            }
+        }
+        if (empty($userIds)) {
+            $userIds = Tinebase_User::getInstance()->getUsers();
+        }
+        $activeSync = ActiveSync_Controller::getInstance();
+        foreach ($userIds as $userId) {
+            foreach ($classes as $cc) {
+                $activeSync->resetSyncForUser($userId, $cc);
+            }
+        }
+    }
+
+    protected function _forceResyncDAV($contentClasses, $userIds)
+    {
+        foreach ($contentClasses as $cc) {
+            switch ($cc) {
+                case self::SYNC_CLASS_CONTACTS:
+                    $filter = [
+                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()],
+                        ['field' => 'model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class]
+                    ];
+                    break;
+                case self::SYNC_CLASS_EVENTS:
+                    $filter = [
+                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                            Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
+                        ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class]
+                    ];
+                    break;
+                case self::SYNC_CLASS_TASKS:
+                    $filter = [
+                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                            Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId()],
+                        ['field' => 'model', 'operator' => 'equals', 'value' => Tasks_Model_Task::class]
+                    ];
+                    break;
+                default:
+                    continue 2;
+            }
+            if (!empty($userIds)) {
+                $filter[] = ['field' => 'owner_id', 'operator' => 'in', 'value' => $userIds];
+            }
+
+            Tinebase_Container::getInstance()->forceSyncTokenResync(new Tinebase_Model_ContainerFilter($filter));
         }
     }
 }

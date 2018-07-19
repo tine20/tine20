@@ -17,8 +17,8 @@ $maskiconColor = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_M
 <head>
     <title><?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE); ?></title>
     
-    <style type="text/css"> @keyframes loading-animation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .tine-viewport-waitcycle { animation-name: loading-animation; animation-duration: 1000ms; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(.17, .67, .52, .71); position: absolute; top: 50%; left: 50%; width: 32px; height: 32px; box-sizing: border-box; border: 2px solid #ccc !important; border-top: 2px solid #2196f3 !important; border-radius: 100%; } .tine-viewport-poweredby { position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif; } </style>
-    
+    <style type="text/css"> @keyframes loading-animation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .tine-viewport-waitcycle { animation-name: loading-animation; animation-duration: 1000ms; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(.17, .67, .52, .71); position: absolute; top: 50%; left: 50%; margin-top: -16px; margin-left: -16px; width: 32px; height: 32px; box-sizing: border-box; border: 2px solid #ccc !important; border-top: 2px solid #2196f3 !important; border-radius: 100%; } .tine-viewport-poweredby { position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif; } </style>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-Tine20-Version" content="<?php echo TINE20_PACKAGESTRING ?>" />
 

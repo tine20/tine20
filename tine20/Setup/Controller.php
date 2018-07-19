@@ -1689,7 +1689,7 @@ class Setup_Controller
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
 
-        $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        $oldTinebaseId = $this->_replaceTinebaseidInDump($mysqlBackupFile);
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -1698,7 +1698,7 @@ class Setup_Controller
         }
 
         // save the master id
-        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq($oldTinebaseId);
 
         // do updates now, because maybe application state updates are not yet there
         $this->updateApplications();
@@ -1717,6 +1717,7 @@ class Setup_Controller
      * TODO: think about moving the Tinebase ID (and more info) to a metadata.json file in the backup zip
      *
      * @param $mysqlBackupFile
+     * @return string the old TinebaseId
      * @throws Setup_Exception
      */
     protected function _replaceTinebaseidInDump($mysqlBackupFile)
@@ -1740,6 +1741,8 @@ class Setup_Controller
         exec($cmd);
         copy($mysqlBackupFile . '.tmp', $mysqlBackupFile);
         unlink($mysqlBackupFile . '.tmp');
+
+        return $oldTinebaseId;
     }
 
     /**

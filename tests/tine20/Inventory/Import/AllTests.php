@@ -24,6 +24,7 @@ class Inventory_Import_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Inventory All Import Tests');
         $suite->addTestSuite('Inventory_Import_CsvTest');
+        $suite->addTestSuite('Inventory_Import_DemoDataTest');
         return $suite;
     }
 }

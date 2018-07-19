@@ -27,6 +27,7 @@
  * @property    array   $structure          the message structure
  * @property    array   $attachments        the attachments
  * @property    string  $messageuid         the message uid on the imap server
+ * @property    string  $reply_to           reply-to header
  * @property    array   $preparedParts      prepared parts
  * @property    integer $reading_conf       true if it must send a reading confirmation
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
@@ -141,6 +142,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'text_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'html_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'has_attachment'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'reply_to'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // this is: content_type_of_envelope
         'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),

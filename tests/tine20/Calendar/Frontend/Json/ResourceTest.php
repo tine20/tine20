@@ -34,8 +34,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
     {
         parent::setUp();
 
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         $this->jsonFE = new Calendar_Frontend_Json();
-        Calendar_Controller_Resource::destroyInstance();
         Tinebase_Container::getInstance()->resetClassCache();
     }
 
@@ -74,9 +74,21 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
             $grants[0]['account_id'] = $user->getId();
             $grants[0]['account_type'] = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
         }
+        $grants[1]['account_id'] = $this->_getPersona('pwulf')->getId();
+        $grants[1]['account_type'] = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        $grants[1][Calendar_Model_ResourceGrants::RESOURCE_ADMIN] = true;
+        $grants[1][Calendar_Model_ResourceGrants::EVENTS_ADD] = true;
+        $grants[1][Calendar_Model_ResourceGrants::EVENTS_EDIT] = true;
+        $grants[1][Calendar_Model_ResourceGrants::EVENTS_READ] = true;
         $resource->grants = $grants;
 
-        return $this->jsonFE->saveResource($resource->toArray(true));
+        $oldUser = Tinebase_Core::getUser();
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('pwulf'));
+            return $this->jsonFE->saveResource($resource->toArray(true));
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+        }
     }
 
     protected function _checkResourceGrants($_containerId, $_grant)
@@ -144,6 +156,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         }
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($_containerId, true);
+        $grants->removeRecord($grants->find('account_id', $this->_getPersona('pwulf')->getId()));
         static::assertEquals(1, $grants->count());
         /** @var Calendar_Model_ResourceGrants $currentUserGrants */
         $currentUserGrants = $grants->getFirstRecord();
@@ -365,7 +378,13 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
             Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true,
         ];
 
-        $this->jsonFE->saveResource($resource);
+        try {
+            $this->jsonFE->saveResource($resource);
+        } catch (Exception $e) {
+            if ($shouldSucceed) {
+                static::fail('we should have permission to update the resource ACLs: ' . $e->getMessage());
+            }
+        }
 
         $newGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource['container_id']['id'], true);
         $diff = $orgGrants->diff($newGrants);
@@ -391,6 +410,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         $this->selfReset['_testUserContact'] = $this->_testUserContact;
         $this->selfReset['_originalTestUser'] = $this->_originalTestUser;
         $this->selfReset['_testCalendar'] = $this->_testCalendar;
+        $this->_originalTestUser = $this->_getPersona('pwulf');
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container([
             'name'           => 'PHPUnit shared Calender container',
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
@@ -399,13 +420,37 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
             'model'          => Calendar_Model_Event::class,
         ]));
         $this->_testUserContact = null;
-        $this->_originalTestUser = $this->_getPersona('sclever');
+    }
+
+    protected function _preResetTestUser()
+    {
+        $this->_testCalendar = $this->selfReset['_testCalendar'];
+        $this->_testUserContact = $this->selfReset['_testUserContact'];
+        $this->_originalTestUser = $this->selfReset['_originalTestUser'];
+        Tinebase_Core::set(Tinebase_Core::USER, $this->selfReset['_originalTestUser']);
     }
 
     protected function _preRemoveACLsFromTestContainer()
     {
         Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet(
             Tinebase_Model_Grants::class), true, false);
+    }
+
+    protected function _preAddReadGrant($resource)
+    {
+        $oldUser = Tinebase_Core::getUser();
+        foreach ($resource['grants'] as &$grants) {
+            if ($grants['account_id'] === $oldUser->getId()) {
+                $grants[Calendar_Model_ResourceGrants::RESOURCE_READ] = true;
+                break;
+            }
+        }
+        try {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('pwulf'));
+            $this->jsonFE->saveResource($resource);
+        } finally {
+            Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
+        }
     }
 
     protected function _runGrantsTest($name, $result, $resource, $data = null)
@@ -460,7 +505,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
                 try {
                     if (isset($test['pre'])) {
                         foreach ($test['pre'] as $pre) {
-                            $this->{$pre}();
+                            $this->{$pre}($resource);
                         }
                     }
 
@@ -468,7 +513,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
 
                     if (isset($test['post'])) {
                         foreach ($test['post'] as $pre) {
-                            $this->{$pre}();
+                            $this->{$pre}($resource);
                         }
                     }
 
@@ -490,228 +535,233 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
     public function testResourceInviteGrant()
     {
         $this->_runGrantsTests([Calendar_Model_ResourceGrants::RESOURCE_INVITE => [
-            // manage resource rights -> _updateResource should work
-            ['name' => '_updateResource', 'result' => true],
+            // manage resource rights -> _updateResource must not work
+            ['name' => '_updateResource', 'result' => false],
 
-            // manage resource rights -> _deleteResource should work
-            ['name' => '_deleteResource', 'result' => true],
+            // manage resource rights -> _deleteResource still needs read grant -> failure
+            ['name' => '_deleteResource', 'result' => false],
 
-            // no manage resource rights -> _deleteResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_deleteResource', 'result' => false],
+            // manage resource rights -> _updateResourceAcl must not work
+            ['name' => '_updateResourceAcl', 'result' => false],
 
-            // manage resource rights -> _updateResourceAcl should not work
-            ['name' => '_updateResourceAcl', 'result' => true],
+            // resource_invite grant => searchResource must not work
+            ['name' => '_searchResource', 'result' => 0],
 
-            // manage resource rights (+ resource_invite grant) => searchResource should work
-            ['name' => '_searchResource', 'result' => 1],
+            // resource_invite grant -> searchAttender must work
+            ['name' => '_searchAttender', 'result' => 1],
 
-            // only resource_invite grant -> searchResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchResource', 'result' => 0],
-
-            // only resource_invite grant -> searchAttender should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchAttender', 'result' => 1],
-
-            // set user to sclever, create event in resource container (having manage_resources right)
-            // remove manage_resources right, get previously created event should fail
+            // set user to pwulf, create event in resource container (having event_add grant)
+            // set user back, get previously created event should fail
             ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventInResourceContainer', 'result' => true,
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
+                'post' => ['_preResetTestUser'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
 
-            // create event in resource container should fail without manage_resources right
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventInResourceContainer', 'result' => false],
+            // create event in resource container should fail with manage_resources right / resource_invite grant
+            ['name' => '_createEventInResourceContainer', 'result' => false],
 
-            // invite resource attender should succeed with manage_resources right (+ resource_invite grant)
-            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true]],
+            // invite resource attender should succeed with resource_invite grant, no authkey returned
+            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => false]],
 
-            // invite resource attender should succeed only with resource_invite grant (without manage_resources right)
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventWithResourceAttendee',
-                'result' => ['succeed' => true, 'authKey' => false]],
-
-            // no resource_edit grant -> _updateResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResource', 'result' => false],
+            // set user to pwulf, invite resource attender
+            // set user back, remove container grants, reading event should not work (event_read required)
+            ['pre' => ['_preSetTestUserEtc'],
+                'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
+                'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
+                'followUps' => [['name' => '_getLocalEvent', 'result' => false]]
+            ],
         ]]);
     }
 
     public function testResourceReadGrant()
     {
         $this->_runGrantsTests([Calendar_Model_ResourceGrants::RESOURCE_READ => [
+            // manage resource rights -> _updateResource must not work
+            ['name' => '_updateResource', 'result' => false],
+
+            // manage resource rights and read grant -> success
+            ['name' => '_deleteResource', 'result' => true],
+
             // no manage resource rights -> _deleteResource should not work
             ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_deleteResource', 'result' => false],
 
-            // manage resource rights => searchAttender should work
-            ['name' => '_searchAttender', 'result' => 1],
+            // manage resource rights -> _updateResourceAcl must not work
+            ['name' => '_updateResourceAcl', 'result' => false],
 
-            // resource_read grant -> searchResource should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchResource', 'result' => 1],
+            // resource_read grant => searchResource must work
+            ['name' => '_searchResource', 'result' => 1],
 
-            // no resource_invite grant -> searchAttender should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchAttender', 'result' => 0],
+            // resource_read grant -> searchAttender must not work
+            ['name' => '_searchAttender', 'result' => 0],
 
-            // set user to sclever, create event in resource container (having manage_resources right)
-            // remove manage_resources right, get previously created event should fail
+            // set user to pwulf, create event in resource container (having event_add grant)
+            // set user back, get previously created event should fail
             ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventInResourceContainer', 'result' => true,
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
+                'post' => ['_preResetTestUser'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
 
-            // create event in resource container should fail without manage_resources right
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventInResourceContainer', 'result' => false],
+            // create event in resource container should fail with manage_resources right / resource_read grant
+            ['name' => '_createEventInResourceContainer', 'result' => false],
 
-            // invite resource attender should succeed with manage_resources right
-            // then remove manage_resources right and try to reschedule (which should be possible)
-            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [
+            // invite resource attender should not succeed with resource_read grant
+            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => false]],
+
+            // invite resource attender with pwulf
+            // then switch back to vagrant user and try to reschedule (which should be possible)
+            ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventWithResourceAttendee',
+                'result' => ['succeed' => true, 'authKey' => true], 'post' => ['_preResetTestUser'], 'followUps' => [
                     ['name' => '_rescheduleEvent', 'result' => ['succeed' => true, 'authKey' => false]]
             ]],
 
-            // set user to sclever, invite resource attender should succeed with manage_resources right
-            // then remove manage_resources right, reading event should fail
+            // set user to pwulf, invite resource attender
+            // set user back, remove container grants, reading event should not work (event_read required)
             ['pre' => ['_preSetTestUserEtc'],
                 'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
-                'post' => ['_preRemoveACLsFromTestContainer', '_preRemoveManageResourcesAndFlush'],
+                'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
                 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]
             ],
-
-            // invite resource attender should not succeed
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventWithResourceAttendee',
-                'result' => ['succeed' => false]],
-
-            // no resource_edit grant -> _updateResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResource', 'result' => false],
         ]]);
     }
 
     public function testResourceEditGrant()
     {
         $this->_runGrantsTests([Calendar_Model_ResourceGrants::RESOURCE_EDIT => [
-            // no manage resource rights -> _deleteResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_deleteResource', 'result' => false],
+            // edit grant implies read grant -> works
+            ['name' => '_updateResource', 'result' => true],
 
-            // resource_read grant -> searchResource should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchResource', 'result' => 1],
+            // manage resource rights and implied read grant -> success
+            ['name' => '_deleteResource', 'result' => true],
 
-            // no resource_invite grant -> searchAttender should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchAttender', 'result' => 0],
+            // no manage resource rights -> fail
+            ['pre' => ['_preRemoveManageResourcesAndFlush'],'name' => '_deleteResource', 'result' => false],
 
-            // set user to sclever, create event in resource container (having manage_resources right)
-            // remove manage_resources right, get previously created event should fail
+            // manage resource rights -> _updateResourceAcl must not work
+            ['name' => '_updateResourceAcl', 'result' => false],
+
+            // implied read grant => searchResource must work
+            ['name' => '_searchResource', 'result' => 1],
+
+            // no resource_invite grant -> searchAttender must not work
+            ['name' => '_searchAttender', 'result' => 0],
+
+            // set user to pwulf, create event in resource container (having event_add grant)
+            // set user back, get previously created event should fail
             ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventInResourceContainer', 'result' => true,
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
+                'post' => ['_preResetTestUser'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
 
-            // create event in resource container should fail without manage_resources right
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventInResourceContainer', 'result' => false],
+            // create event in resource container should fail with manage_resources right / resource_edit grant
+            ['name' => '_createEventInResourceContainer', 'result' => false],
 
-            // invite resource attender should not succeed
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventWithResourceAttendee',
-                'result' => ['succeed' => false]],
+            // invite resource attender should not succeed with resource_edit grant
+            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => false]],
 
-            // resource_edit grant -> _updateResource should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResource', 'result' => true],
+            // invite resource attender with pwulf
+            // then switch back to vagrant user and try to reschedule (which should be possible)
+            ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventWithResourceAttendee',
+                'result' => ['succeed' => true, 'authKey' => true], 'post' => ['_preResetTestUser'], 'followUps' => [
+                ['name' => '_rescheduleEvent', 'result' => ['succeed' => true, 'authKey' => false]]
+            ]],
 
-            // no resource_admin grant -> _updateResourceAcl should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResourceAcl', 'result' => false],
+            // set user to pwulf, invite resource attender
+            // set user back, remove container grants, reading event should not work (event_read required)
+            ['pre' => ['_preSetTestUserEtc'],
+                'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
+                'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
+                'followUps' => [['name' => '_getLocalEvent', 'result' => false]]
+            ],
         ]]);
     }
 
     public function testResourceAdminGrant()
     {
         $this->_runGrantsTests([Calendar_Model_ResourceGrants::RESOURCE_ADMIN => [
-            // no manage resource rights -> _deleteResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_deleteResource', 'result' => false],
+            // admin grant -> works
+            ['name' => '_updateResource', 'result' => true],
 
-            // resource_read grant -> searchResource should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchResource', 'result' => 1],
+            // manage resource rights and admin grant -> works
+            ['name' => '_deleteResource', 'result' => true],
 
-            // resource_invite grant -> searchAttender should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchAttender', 'result' => 1],
+            // no manage resource rights -> fail
+            ['pre' => ['_preRemoveManageResourcesAndFlush'],'name' => '_deleteResource', 'result' => false],
 
-            // set user to sclever, create event in resource container (having manage_resources right)
-            // remove manage_resources right, get previously created event should fail
+            // admin grant -> works
+            ['name' => '_updateResourceAcl', 'result' => true],
+
+            // admin grant -> works
+            ['name' => '_searchResource', 'result' => 1],
+
+            // admin grant -> works
+            ['name' => '_searchAttender', 'result' => 1],
+
+            // set user to pwulf, create event in resource container (having event_add grant)
+            // set user back, get previously created event should fail
             ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventInResourceContainer', 'result' => true,
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
+                'post' => ['_preResetTestUser'], 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]],
 
-            // set user to sclever, invite resource attender should succeed with manage_resources right
-            // then remove manage_resources right, reading event should not work
+            // create event in resource container should fail with manage_resources right / resource_admin grant
+            ['name' => '_createEventInResourceContainer', 'result' => false],
+
+            // admin grant -> works
+            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => false]],
+
+            // set user to pwulf, invite resource attender
+            // set user back, remove container grants, reading event should not work (event_read required)
             ['pre' => ['_preSetTestUserEtc'],
                 'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
-                'post' => ['_preRemoveACLsFromTestContainer', '_preRemoveManageResourcesAndFlush'],
+                'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
                 'followUps' => [['name' => '_getLocalEvent', 'result' => false]]
             ],
-
-            // create event in resource container should fail without manage_resources right
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventInResourceContainer', 'result' => false],
-
-            // invite resource attender should succeed
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventWithResourceAttendee',
-                'result' => ['succeed' => true, 'authKey' => false]],
-
-            // resource_edit grant -> _updateResource should work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResource', 'result' => true],
-
-            // no resource_admin grant -> _updateResourceAcl should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResourceAcl', 'result' => true],
         ]]);
     }
 
     public function testEventsReadGrant()
     {
         $this->_runGrantsTests([Calendar_Model_ResourceGrants::EVENTS_READ => [
-            // no manage resource rights -> _deleteResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_deleteResource', 'result' => false],
+            ['name' => '_updateResource', 'result' => false],
 
-            // no resource_read grant -> searchResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchResource', 'result' => 0],
+            // manage resource rights -> _deleteResource still needs read grant -> failure
+            ['name' => '_deleteResource', 'result' => false],
 
-            // no resource_invite grant -> searchAttender should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_searchAttender', 'result' => 0],
+            ['name' => '_updateResourceAcl', 'result' => false],
 
-            // set user to sclever, create event in resource container (having manage_resources right)
-            // remove manage_resources right, get previously created event should work
+            ['name' => '_searchResource', 'result' => 0],
+
+            ['name' => '_searchAttender', 'result' => 0],
+
+            // set user to pwulf, create event in resource container (having event_add grant)
+            // set user back, get previously created event should succeed
             ['pre' => ['_preSetTestUserEtc'], 'name' => '_createEventInResourceContainer', 'result' => true,
-                'post' => ['_preRemoveManageResourcesAndFlush'], 'followUps' => [['name' => '_getLocalEvent', 'result' => true]]],
+                'post' => ['_preResetTestUser'], 'followUps' => [['name' => '_getLocalEvent', 'result' => true]]],
 
-            // set user to sclever, invite resource attender should succeed with manage_resources right
-            // then remove manage_resources right, reading event should work
+            // create event in resource container should fail with manage_resources right
+            ['name' => '_createEventInResourceContainer', 'result' => false],
+
+            ['name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => false]],
+
+            // set user to pwulf, invite resource attender
+            // set user back, remove container grants, reading event should work
             ['pre' => ['_preSetTestUserEtc'],
                 'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
-                'post' => ['_preRemoveACLsFromTestContainer', '_preRemoveManageResourcesAndFlush'],
+                'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
                 'followUps' => [['name' => '_getLocalEvent', 'result' => true]]
             ],
-
-            // create event in resource container should fail without manage_resources right
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventInResourceContainer', 'result' => false],
-
-            // invite resource attender should not succeed
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_createEventWithResourceAttendee',
-                'result' => ['succeed' => false]],
-
-            // no resource_edit grant -> _updateResource should not work
-            ['pre' => ['_preRemoveManageResourcesAndFlush'], 'name' => '_updateResource', 'result' => false],
         ]]);
-    }
-
-
-    public function testDefaultGrants()
-    {
-        $resource = $this->_prepareTestResourceAcl(null, []);
-
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource['container_id'], true);
-        static::assertEquals(0, $grants->count());
     }
 
     public function testUpdateGrants()
     {
-        $resource = $this->_prepareTestResourceAcl();
+        $resource = $this->_prepareTestResourceAcl(Tinebase_Core::getUser());
         $orgGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource['container_id'], true);
-        static::assertEquals(1, $orgGrants->count());
+        static::assertEquals(2, $orgGrants->count());
 
         $resource['grants'] = null;
         $resource['name'] = 'shoo';
         $resource = $this->jsonFE->saveResource($resource);
         $updateGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource['container_id'], true);
-        static::assertEquals(1, $updateGrants->count());
+        static::assertEquals(2, $updateGrants->count());
         static::assertTrue($updateGrants->diff($orgGrants)->isEmpty(), 'grants are not the same');
 
         $resource['grants'] = [];
-        $resource = $this->jsonFE->saveResource($resource);
-        $updateGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource['container_id'], true);
-        static::assertEquals(0, $updateGrants->count(), 'grants where not deleted');
+        try {
+            $this->jsonFE->saveResource($resource);
+            static::fail('empty grants are not allowed');
+        } catch (Tinebase_Exception_Backend $teb) {}
     }
 }

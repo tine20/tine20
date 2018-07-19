@@ -858,8 +858,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('4TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -885,8 +883,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('-1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -912,8 +908,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('1TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -939,8 +933,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('4TU', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -960,14 +952,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-03-24 12:00:00';
         $updatedEvent['dtend']   = '2009-03-24 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('-1TU', $newBaseEvent['rrule']['byday'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, false);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -993,8 +982,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
 
     /**
@@ -1014,14 +1001,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
         $updatedEvent['dtend']   = '2009-04-02 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -1041,15 +1025,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $updatedEvent['dtstart'] = '2009-04-02 12:00:00';
         $updatedEvent['dtend']   = '2009-04-02 13:00:00';
 
-        $oldBaseEvent = $this->_uit->getEvent($createdEvent->getId());
-
-        $newBaseEvent = $this->_uit->updateRecurSeries($updatedEvent, FALSE);
-
-        $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
-        $this->assertEquals('26', $newBaseEvent['rrule']['bymonthday'], 'Rrule should not have changed');
-        $this->assertEquals('3', $newBaseEvent['rrule']['bymonth'], 'Rrule should not have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
+        try {
+            // this will trigger a rollback -> don't expect the data to be there afterwards
+            $this->_uit->updateRecurSeries($updatedEvent, FALSE);
+            static::fail('Tinebase_Exception_SystemGeneric exception expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
     }
 
     /**
@@ -1076,8 +1056,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertNotEquals($oldBaseEvent['dtstart'], $newBaseEvent['dtstart'], 'dtstart of baseEvent should have changed');
         $this->assertEquals('2', $newBaseEvent['rrule']['bymonthday'], 'Rrule should have changed');
         $this->assertEquals('4', $newBaseEvent['rrule']['bymonth'], 'Rrule should have changed');
-
-        $this->_eventController->delete(array($createdEvent->getId()));
     }
     
     
@@ -1559,33 +1537,23 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
 
     /**
-     * test new grats for a resource that had no grants before
-    **/
+     * test creating a resource that had no grants
+     */
     public function testSaveResourcesWithoutRights()
     {
-        $resourceData = $this->testSaveResource(array());
-        $this->assertEmpty($resourceData['grants']);
-
-        $resourceData['grants'] = [[
-            Calendar_Model_ResourceGrants::RESOURCE_READ => true,
-            Calendar_Model_ResourceGrants::RESOURCE_EDIT => true,
-            Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
-            'account_id' => Tinebase_Core::getUser()->getId(),
-            'account_type' => 'user',
-        ]];
-
-        $savedResource = $this->_uit->saveResource($resourceData);
-        $this->assertEquals(1, count($savedResource['grants']), 'grants are not set!');
+        static::setExpectedException(Tinebase_Exception_AccessDenied::class, 'No Permission.');
+        $this->testSaveResource(array());
     }
 
 
     /**
-     * assert only resources with read grant are returned if the user has no manage right
+     * assert only resources with read grant are returned
      */
     public function testSearchResources()
     {
+        $nonReadableResoureData = $this->testSaveResource();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $readableResoureData = $this->testSaveResource();
-        $nonReadableResoureData = $this->testSaveResource(array());
         
         $filter = array(
             array('field' => 'name', 'operator' => 'in', 'value' => array(
@@ -1593,18 +1561,9 @@ class Calendar_JsonTests extends Calendar_TestCase
                 $nonReadableResoureData['name'],
             ))
         );
-        
-        $searchResultManager = $this->_uit->searchResources($filter, array());
-        $this->assertEquals(2, count($searchResultManager['results']), 'with manage grants all records should be found');
 
-        // remove manage_resource right
-        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        // reset class cache
-        Calendar_Controller_Resource::destroyInstance();
-        Tinebase_Container::getInstance()->resetClassCache();
-        
         $searchResult = $this->_uit->searchResources($filter, array());
-        $this->assertEquals(1, count($searchResult['results']), 'without manage grants only one record should be found');
+        $this->assertEquals(1, count($searchResult['results']), 'only one record should be found');
     }
 
     /**
@@ -1612,7 +1571,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testResourceAttendeeAddFail()
     {
-        $nonreadableResourceData = $this->testSaveResource(array());
+        $nonreadableResourceData = $this->testSaveResource();
 
         $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -1623,15 +1582,21 @@ class Calendar_JsonTests extends Calendar_TestCase
             )
         ));
 
-        // manage resource right can do everything:
         $persistentEventData = $this->_uit->saveEvent($event->toArray());
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
         static::assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'one accepted');
 
-        // remove manage_resource right
-        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        // reset class cache
-        Calendar_Controller_Resource::destroyInstance();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
+        $event = $this->_getEvent(TRUE);
+        $event->organizer = $this->_personas['pwulf']->contact_id;
+        $event->container_id = $this->_getPersonalContainer('Calendar', $this->_personas['pwulf'])->getId();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $nonreadableResourceData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            )
+        ));
 
         try {
             $this->_uit->saveEvent($event->toArray());
@@ -1639,47 +1604,31 @@ class Calendar_JsonTests extends Calendar_TestCase
         } catch (Tinebase_Exception_AccessDenied $tead) {}
     }
 
-    /**
-     * test that the Manage Resources right allows to add a "non readable" resource as attendee
-     * test that it is possible to change the attendee status of that "non readable" resource
-     * test that a status authkey will be produced for that "non readable" resource attendee
-     */
-    public function testResourceAttendeeNonReadAbleManageResources()
+    protected function _setResourceRights($resource, $grants, $user = null)
     {
-        $editableResoureData = $this->testSaveResource();
-        $nonreadableResourceData = $this->testSaveResource(array());
+        if (null === $user) {
+            $user = $this->_personas['pwulf'];
+        }
+        if (!empty($grants) && !isset($grants['account_id'])) {
+            $grants['account_id'] = Tinebase_Core::getUser()->getId();
+            $grants['account_type'] = 'user';
+        }
 
-        $event = $this->_getEvent(TRUE);
-        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array(
-                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
-                'user_id'    => $editableResoureData['id'],
-                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
-            ),
-            array(
-                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
-                'user_id'    => $nonreadableResourceData['id'],
-                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
-            )
-        ));
+        $newGrants = [
+            'account_id' => $user->getId(),
+            'account_type' => 'user',
+            Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+        ];
+        $resource['grants'][] = $newGrants;
 
-        $persistentEventData = $this->_uit->saveEvent($event->toArray());
-
-        $this->assertEquals(2, count($persistentEventData['attendee']), 'resource without read grant must not be missing in attendee: '
-            . print_r($persistentEventData['attendee'], true));
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
-        $this->assertEquals(2, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'two accepted');
-        $this->assertEquals(2, count($attendee->filter('status_authkey', '/[a-z0-9]+/', TRUE)), 'one has authkey');
-
-        // status update should work for non editable resource
-        $attendee->status = Calendar_Model_Attender::STATUS_TENTATIVE;
-        $persistentEventData['attendee'] = $attendee->toArray();
-        $updatedEventData = $this->_uit->saveEvent($persistentEventData);
-
-        $this->assertEquals(2, count($updatedEventData['attendee']), 'resource without read grant must not be missing in attendee: '
-            . print_r($updatedEventData['attendee'], true));
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
-        $this->assertEquals(2, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'two tentative');
+        Tinebase_Container::getInstance()->setGrants($resource['container_id'],
+            new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $resource['grants']), true, false);
+        $oldUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        Tinebase_Container::getInstance()->setGrants($resource['container_id'],
+            new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, array_merge([$newGrants],
+                empty($grants) ? [] : [$grants])), true, false);
+        Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
     }
 
     /**
@@ -1692,7 +1641,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testResourceAttendeeNonReadAble()
     {
         $editableResoureData = $this->testSaveResource();
-        $nonreadableResourceData = $this->testSaveResource(array());
+        $nonreadableResourceData = $this->testSaveResource();
+
 
         $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -1710,10 +1660,7 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $persistentEventData = $this->_uit->saveEvent($event->toArray());
 
-        // remove manage_resource right -> resource should still be there
-        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        // reset class cache
-        Calendar_Controller_Resource::destroyInstance();
+        $this->_setResourceRights($nonreadableResourceData, []);
 
         $persistentEventData = $this->_uit->getEvent($persistentEventData['id']);
         $this->assertEquals(2, count($persistentEventData['attendee']), 'resource without read grant must not be missing in attendee: '
@@ -1754,12 +1701,9 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testResourceAttendeeGrants()
     {
         $editableResoureData = $this->testSaveResource();
-        $nonEditableResoureData = $this->testSaveResource([Calendar_Model_ResourceGrants::RESOURCE_INVITE => true]);
+        $nonEditableResoureData = $this->testSaveResource();
 
-        // remove manage_resource right
-        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        // reset class cache
-        Calendar_Controller_Resource::destroyInstance();
+        $this->_setResourceRights($nonEditableResoureData, [Calendar_Model_ResourceGrants::RESOURCE_INVITE => true]);
         
         $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -1790,48 +1734,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
         $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'one tentative');
     }
-
-    /**
-     * testExdateUpdateAllSummary
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateAllSummary()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['summary'] = 'new summary';
-        
-        $event = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertEquals('new summary', $event['summary']);
-        }
-    }
-
-    /**
-     * testExdateUpdateAllDtStart
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * 
-     * @todo finish
-     */
-    public function testExdateUpdateAllDtStart()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = '2009-04-01 08:00:00';
-        $exception['dtend'] = '2009-04-01 08:15:00';
-        
-        $event = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertContains('08:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-            $this->assertContains('08:15:00', $event['dtend']);
-        }
-    }
     
     /**
      * testExdateUpdateThis
@@ -1854,198 +1756,6 @@ class Calendar_JsonTests extends Calendar_TestCase
                 $this->assertEquals('exception', $event['summary'], 'summary not changed in exception: ' . print_r($event, TRUE));
             } else {
                 $this->assertEquals('Wakeup', $event['summary']);
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateThisAndFuture
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFuture()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['summary'] = 'new summary';
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertEquals('new summary', $event['summary'], 'summary not changed in event: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals('Wakeup', $event['summary']);
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateThisAndFutureWithRruleUntil
-     * 
-     * @see 0008244: "rrule until must not be before dtstart" when updating recur exception (THISANDFUTURE)
-     */
-    public function testExdateUpdateThisAndFutureWithRruleUntil()
-    {
-        $events = $this->testCreateRecurException();
-        
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = Tinebase_DateTime::now()->toString();
-        $exception['dtend'] = Tinebase_DateTime::now()->addHour(1)->toString();
-        
-        // move exception
-        $updatedEvent = $this->_uit->saveEvent($exception);
-        // try to update the whole series
-        $updatedEvent['summary'] = 'new summary';
-        $updatedEvent = $this->_uit->saveEvent($updatedEvent, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        
-        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in event: ' . print_r($updatedEvent, TRUE));
-    }
-    
-    /**
-     * testExdateUpdateThisAndFutureRemoveAttendee
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFutureRemoveAttendee()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        // remove susan from attendee
-        unset($exception['attendee'][0]);
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        $this->assertEquals(1, count($updatedEvent['attendee']), 'attender not removed from exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertEquals(1, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals(2, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateAllAddAttendee
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateAllAddAttendee()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        // add new attender
-        $exception['attendee'][] = $this->_getUserTypeAttender();
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        $this->assertEquals(3, count($updatedEvent['attendee']), 'attender not added to exception: ' . print_r($updatedEvent, TRUE));
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            $this->assertEquals(3, count($event['attendee']), 'attendee count mismatch: ' . print_r($event, TRUE));
-        }
-    }
-    
-    /**
-     * testExdateUpdateThisAndFutureChangeDtstart
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     */
-    public function testExdateUpdateThisAndFutureChangeDtstart()
-    {
-        $events = $this->testCreateRecurException();
-        $exception = $this->_getException($events, 1);
-        $exception['dtstart'] = '2009-04-01 08:00:00';
-        $exception['dtend'] = '2009-04-01 08:15:00';
-        
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] >= $updatedEvent['dtstart']) {
-                $this->assertContains('08:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-                $this->assertContains('08:15:00', $event['dtend']);
-            } else {
-                $this->assertContains('06:00:00', $event['dtstart'], 'wrong dtstart: ' . print_r($event, TRUE));
-                $this->assertContains('06:15:00', $event['dtend']);
-            }
-        }
-    }
-    
-    /**
-     * testExdateUpdateAllWithModlog
-     * - change base event, then update all
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * @see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*
-     */
-    public function testExdateUpdateAllWithModlog()
-    {
-        $this->markTestSkipped('this test is broken: see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*');
-        
-        $events = $this->testCreateRecurException();
-        $baseEvent = $events['results'][0];
-        $exception = $this->_getException($events, 1);
-        
-        $baseEvent['summary'] = 'Get up, lazyboy!';
-        $baseEvent = $this->_uit->saveEvent($baseEvent);
-        sleep(1);
-        
-        $exception['summary'] = 'new summary';
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] == $updatedEvent['dtstart']) {
-                $this->assertEquals('new summary', $event['summary'], 'Recur exception should have the new summary');
-            } else {
-                $this->assertEquals('Get up, lazyboy!', $event['summary'], 'Wrong summary in base/recur event: ' . print_r($event, TRUE));
-            }
-        }
-    }
-
-    /**
-     * testExdateUpdateAllWithModlogAddAttender
-     * - change base event, then update all
-     * 
-     * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
-     * @see 0007826: add attendee changes to modlog
-     * @see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*
-     */
-    public function testExdateUpdateAllWithModlogAddAttender()
-    {
-        $this->markTestSkipped('0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlogAddAttender');
-        
-        $events = $this->testCreateRecurException();
-        $baseEvent = $events['results'][0];
-        $exception = $this->_getException($events, 1);
-        
-        // add new attender
-        $baseEvent['attendee'][] = $this->_getUserTypeAttender();
-        $baseEvent = $this->_uit->saveEvent($baseEvent);
-        $this->assertEquals(3, count($baseEvent['attendee']), 'Attendee count mismatch in baseEvent: ' . print_r($baseEvent, TRUE));
-        sleep(1);
-        
-        // check recent changes (needs to contain attendee change)
-        $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
-        $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
-        $this->assertGreaterThan(2, count($changedAttributes), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
-        $this->assertTrue(in_array('attendee', $changedAttributes), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
-        
-        $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
-        $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);
-        
-        $search = $this->_uit->searchEvents($events['filter'], NULL);
-        foreach ($search['results'] as $event) {
-            if ($event['dtstart'] == $updatedEvent['dtstart']) {
-                $this->assertEquals(3, count($event['attendee']), 'Attendee count mismatch in exdate: ' . print_r($event, TRUE));
-            } else {
-                $this->assertEquals(4, count($event['attendee']), 'Attendee count mismatch: ' . print_r($event, TRUE));
             }
         }
     }

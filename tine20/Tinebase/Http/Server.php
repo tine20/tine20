@@ -205,23 +205,17 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     /**
      * Implement Zend_Server_Interface::fault()
      *
-     * @param string $fault Message
+     * @param mixed $fault Message
      * @param int $code Error Code
      */
     public function fault($exception = null, $code = null)
     {
-        if (isset($method)) {
+        if (isset($this->_functions[$this->_method])) {
             $function = $this->_functions[$this->_method];
         } else {
             $function = $this->_method;
         }
-        
-        if ($function instanceof Zend_Server_Reflection_Method) {
-            $class = $function->getDeclaringClass()->getName();
-        } else {
-            $class = false;
-        }
-        
+
         if ($function instanceof Zend_Server_Reflection_Method) {
             $method = $function->getName();
         } else {
@@ -257,10 +251,8 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                 }
             }
         }
-        
-        echo "<pre>";
-        var_dump($error);
-        echo "</pre>";
+
+        echo $error['msg'] . "\n";
     }
     
     /**

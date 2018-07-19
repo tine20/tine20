@@ -2217,6 +2217,25 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     }
 
     /**
+     * @see https://github.com/tine20/tine20/issues/2172
+     */
+    public function testReplyToInMessage()
+    {
+        $this->_account->reply_to = 'noreply@tine20.org';
+        $this->_json->saveAccount($this->_account->toArray());
+
+        $this->_foldersToClear[] = 'INBOX';
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['reply_to'] = 'donotreply@tine20.org';
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($messageToSend['subject']);
+
+        $complete = $this->_json->getMessage($message['id']);
+        $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
+        $this->assertEquals('"Tine 2.0 Admin Account" <donotreply@tine20.org>', $complete['headers']['reply-to']);
+    }
+
+    /**
      * Its possible to choice the kind of attachment when adding it.
      *
      * type = tempfile: uploaded from harddisk, supposed to be a regular attachment

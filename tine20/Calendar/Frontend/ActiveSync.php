@@ -607,13 +607,20 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         // AttendeeStatus send only on repsonse
                         $parsedName = Addressbook_Model_Contact::splitName($attendee->name);
 
+                        $status = intval($attendee->attendeeStatus);
+                        if (isset($this->_attendeeStatusMapping[$status])) {
+                            $status = $this->_attendeeStatusMapping[$status];
+                        } else {
+                            $status = null;
+                        }
+
                         $newAttendees[] = array(
                             'userType'  => Calendar_Model_Attender::USERTYPE_USER,
                             'firstName' => $parsedName['n_given'],
                             'lastName'  => $parsedName['n_family'],
-                            #'partStat'  => $status,
                             'role'      => $role,
-                            'email'     => $attendee->email
+                            'partStat'  => $status,
+                            'email'     => $attendee->email,
                         );
                     }
                     
@@ -632,7 +639,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
                     
                     foreach ($data->$syncrotonProperty as $exception) {
-                        $eventException = $this->_getRecurException($oldExdates, $exception);
+                        $eventException = $this->_getRecurException($oldExdates, $exception, $entry);
 
                         if ($exception->deleted == 0) {
                             $eventException = $this->toTineModel($exception, $eventException);
@@ -833,7 +840,8 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      * @param  Syncroton_Model_EventException   $sevent
      * @return Calendar_Model_Event
      */
-    protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates, Syncroton_Model_EventException $sevent)
+    protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates, Syncroton_Model_EventException $sevent,
+        Calendar_Model_Event $baseEvent = null)
     {
         // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
         $originalDtStart = new Tinebase_DateTime($sevent->exceptionStartTime);
@@ -846,6 +854,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
 
         return new Calendar_Model_Event(array(
             'recurid'    => $originalDtStart,
+            'attendee'   => $baseEvent ? $baseEvent->attendee : null,
         ));
     }
 

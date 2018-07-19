@@ -291,7 +291,10 @@ msgstr "Ja"
 
 #: js/AccountEditDialog.js:369
 msgid "Reply-To Email"
-msgstr "Replay-To E-Mail"
+msgstr "Antwortadresse"
+
+msgid "Add email address here for reply-to"
+msgstr "Antwortadresse hier eintragen (reply-to)"
 
 #: js/RecipientGrid.js:234
 msgid "Click here to set To/CC/BCC."

@@ -182,6 +182,16 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             resizable: true
         },
         columns: additionalColumns.concat([{
+            id: 'attachments',
+            header: window.i18n._('Attachments'),
+            tooltip: window.i18n._('Attachments'),
+            dataIndex: 'attachments',
+            width: 20,
+            sortable: false,
+            resizable: false,
+            renderer: Tine.widgets.grid.attachmentRenderer,
+            hidden: false
+        }, {
             id: 'container_id',
             header: Tine.Calendar.Model.Event.getContainerName(),
             width: 150,

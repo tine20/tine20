@@ -422,23 +422,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if ($productAggregate->json_attributes && isset($productAggregate->json_attributes['assignedAccountables']) &&
                         is_array($productAggregate->json_attributes['assignedAccountables']) && count($productAggregate->json_attributes['assignedAccountables'])) {
 
-                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relationId) {
-                            $billedRelations[$relationId] = true;
-
-                            $relation = $this->_currentBillingContract->relations->getById($relationId);
-
-                            if (false === $relation || $product->accountable != $relation->related_model) {
-                                throw new Tinebase_Exception_UnexpectedValue('couldnt resolved assignedAccountables');
+                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relation) {
+                            $cRelation = $this->_currentBillingContract->relations
+                                ->filter('related_id', $relation['id'])->find('related_model', $relation['model']);
+                            if (null !== $cRelation) {
+                                $billedRelations[$cRelation->getId()] = true;
+                                $record = $cRelation->related_record;
+                            } else {
+                                $controller = Tinebase_Core::getApplicationInstance($relation['model']);
+                                $record = $controller->get($relation['id']);
                             }
 
                             $relations[] = array_merge(array(
-                                'related_model'  => $relation->related_model,
-                                'related_id'     => $relation->related_id,
-                                'related_record' => $relation->related_record->toArray(),
+                                'related_model'  => $relation['model'],
+                                'related_id'     => $relation['id'],
+                                'related_record' => $record->toArray(),
                             ), $this->_getRelationDefaults());
 
                             $billableAccountables[] = array(
-                                'ac' => $relation->related_record,
+                                'ac' => $record,
                                 'pa' => $productAggregate
                             );
                         }
@@ -1152,7 +1154,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         }
                     }
                 }
-                
+
+                /** @var Sales_Model_ProductAggregate $productAggregate */
                 foreach($paToUpdate as $paId => $productAggregate) {
                     $firstBill = (! $productAggregate->last_autobill);
                     
@@ -1185,7 +1188,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     
                     Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
-                    
+
+                    $productAggregate->runConvertToRecord();
                     $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
                 }
                 

@@ -100,7 +100,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     deferredRender: false,
     
     forceValidation: true,
-    
+
+    skipAutoCheckboxSelection: true,
     enableDrop: true,
     ddGroup: 'recipientDDGroup',
     

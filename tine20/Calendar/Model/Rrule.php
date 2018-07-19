@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,6 +19,12 @@
  * 
  * @package Calendar
  * @subpackage  Model
+ *
+ * @property string                 $freq
+ * @property string                 $bymonth
+ * @property string                 $byday
+ * @property string                 $bymonthday
+ * @property Tinebase_DateTime      $until
  */
 class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 {
@@ -751,6 +757,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                         }
                     }
                 }
+                $recurSet->sort('dtstart');
                 break;
                 
             case self::FREQ_MONTHLY:

@@ -15,9 +15,9 @@
  */
 class Calendar_Controller_ResourceTest extends Calendar_TestCase
 {
-    public function testCreateResource()
+    public function testCreateResource($grants = null)
     {
-        $resource = $this->_getResource();
+        $resource = $this->_getResource($grants);
         
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
         
@@ -85,23 +85,29 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         Calendar_Controller_Resource::getInstance()->get((string)$createResource->container_id);
     }
 
-    public function testManageResourceRight()
+    public function testManageResourceRightCreate()
     {
-        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
-        $roleRights = Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId());
-        $roleRights = array_filter($roleRights, function($right) {
-            return $right['right'] != Calendar_Acl_Rights::MANAGE_RESOURCES && $right['right'] != Calendar_Acl_Rights::ADMIN;
-        });
-        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $roleRights);
-        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
 
-        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'You don\'t have the right to manage resources');
-        $this->testRenameContainer();
+        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'No Permission.');
+        $this->testCreateResource();
+    }
+
+    public function testManageResourceRightDelete()
+    {
+        $resource = $this->testCreateResource();
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+
+        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'No Permission.');
+        Calendar_Controller_Resource::getInstance()->delete($resource);
     }
 
     public function testResourceConflict()
     {
-        $resource = $this->testCreateResource();
+        $resource = $this->testCreateResource([
+            Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            Calendar_Model_ResourceGrants::EVENTS_READ => true,
+        ]);
         
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -160,7 +166,32 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Tinebase_Container::getInstance()->getContainerById($resource->container_id);
     }
-    
+
+    /**
+     * testDeleteResourceAttendee
+     *
+     * @see https://github.com/tine20/tine20/issues/48
+     */
+    public function testDeleteResourceAttendee()
+    {
+        $resource = $this->testCreateResource();
+
+        // add resource to an event
+        $event = $this->_getEvent();
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->id
+        ]));
+        $newEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        Calendar_Controller_Resource::getInstance()->delete($resource->getId());
+
+        // check if resource attendee is removed
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($newEvent->getId());
+        self::assertEquals(2, count($updatedEvent->attendee), 'resource attender should be removed! '
+            . print_r($updatedEvent->toArray(), true));
+    }
+
     /**
      * testDeleteResourceWithmissingContainer
      * 
@@ -182,18 +213,17 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     protected function _prepareTestResourceAcl($_removeRoleRight = true)
     {
         // create resource with acl for sclever
-        $resource = $this->_getResource();
+        $resource = $this->_getResource([Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true]);
         $sclever = $this->_getPersona('sclever');
-        $grants = array($this->_getAllCalendarGrants($sclever));
-        $grants[0] = array_merge($grants[0], array_fill_keys(Calendar_Model_ResourceGrants::getAllGrants(), true));
+        $grants = $resource->grants;
+        $grants[1] = $this->_getAllCalendarGrants($sclever);
+        $grants[1] = array_merge($grants[1], array_fill_keys(Calendar_Model_ResourceGrants::getAllGrants(), true));
         $resource->grants = $grants;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
 
         if (true === $_removeRoleRight) {
             // remove manage_resource right
             $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-            // reset class cache
-            Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
         }
 
         return $persistentResource;
@@ -206,6 +236,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $persistentResource = $this->_prepareTestResourceAcl();
 
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         // we will get a AccessDenied when we try to update the containers name
         $persistentResource->name = 'try to overwrite name';
         try {
@@ -220,114 +251,11 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     /**
      * @see 0013348: improve resource permission handling
      */
-    public function testResourceAclWithManageResources()
-    {
-        $persistentResource = $this->_prepareTestResourceAcl(false);
-
-        // test WebDav
-        $calendarShared = \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/shared';
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $oldRequestUri = $_SERVER['REQUEST_URI'];
-        } else {
-            $oldRequestUri = null;
-        }
-        $_SERVER['REQUEST_URI'] = '/tine20/' . $calendarShared;
-        $collection = new Calendar_Frontend_WebDAV($calendarShared);
-        $children = $collection->getChildren();
-
-        $this->assertTrue(is_array($children));
-        $this->assertTrue(count($children) > 0);
-        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Container);
-
-        $found = false;
-        /** @var Calendar_Frontend_WebDAV $child */
-        foreach ($children as $child) {
-            if ($persistentResource->name === $child->getName()) {
-                $found = true;
-            }
-        }
-        static::assertTrue($found, 'did not find resource in WebDav');
-
-        if (null === $oldRequestUri) {
-            unset($_SERVER['REQUEST_URI']);
-        } else {
-            $_SERVER['REQUEST_URI'] = $oldRequestUri;
-        }
-
-        // test calendar json search
-        $filter = array(array(
-            'field' => 'type',
-            'operator' => 'equals',
-            'value' => array(Calendar_Model_Attender::USERTYPE_RESOURCE)
-        ), array(
-            'field' => 'query',
-            'operator' => 'contains',
-            'value' => 'Meeting'
-        ));
-        $json = new Calendar_Frontend_Json();
-        $result = $json->searchAttenders($filter);
-        self::assertEquals(1, $result['resource']['totalcount'], 'resource not found');
-
-        // test tinebase container search
-        $filter = array(array(
-            'field' => 'type',
-            'operator' => 'equals',
-            'value' => Tinebase_Model_Container::TYPE_SHARED,
-        ), array(
-            'field' => 'name',
-            'operator' => 'contains',
-            'value' => 'Meeting'
-        ), array(
-            'field' => 'application_id',
-            'operator' => 'equals',
-            'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-        ));
-        $json = new Tinebase_Frontend_Json_Container();
-
-        $containers = $json->searchContainers($filter, null);
-
-        $this->assertTrue(is_array($containers) && isset($containers['results']) && is_array($containers['results']));
-        $this->assertTrue(count($containers['results']) > 0, 'did not find resource in shared containers!');
-
-        $found = false;
-        foreach ($containers['results'] as $container) {
-            if ($persistentResource->name === $container['name']) {
-                $found = true;
-            }
-        }
-        static::assertTrue($found, 'did not find resource in shared containers!');
-
-        // test tinebase get container
-        $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
-
-        $this->assertTrue(is_array($containers));
-        $this->assertTrue(count($containers) > 0);
-
-        $found = false;
-        /** @var Tinebase_Model_Container $child */
-        foreach ($containers as $container) {
-            if ($persistentResource->name === $container['name']) {
-                $found = true;
-            }
-        }
-        static::assertTrue($found, 'did not find resource in shared containers!');
-
-        // test name change
-        $persistentResource->name = 'try to overwrite name';
-        $persistentResourceUpdated = Calendar_Controller_Resource::getInstance()->update($persistentResource);
-
-        static::assertEquals($persistentResource->name, $persistentResourceUpdated->name, 'update did not work');
-        static::assertEquals($persistentResource->name, Tinebase_Container::getInstance()->
-            get($persistentResourceUpdated->container_id)->name);
-    }
-
-    /**
-     * @see 0013348: improve resource permission handling
-     */
     public function testResourceAclUpdateDescription()
     {
         $persistentResource = $this->_prepareTestResourceAcl();
 
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         // now we will not update the container, but go into abstract update, which will do a get => Tinebase_Exception_AccessDenied
         $persistentResource->description = 'shalalala';
         try {
@@ -395,6 +323,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $resource = $this->_prepareTestResourceAcl();
 
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $filter = array(array(
             'field' => 'type',
             'operator' => 'equals',
@@ -437,6 +366,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $this->_prepareTestResourceAcl();
 
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $filter = array(array(
             'field' => 'type',
             'operator' => 'equals',
@@ -485,6 +415,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $resource = $this->_prepareTestResourceAcl();
 
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $json = new Tinebase_Frontend_Json_Container();
         $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
 

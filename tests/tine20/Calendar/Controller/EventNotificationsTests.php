@@ -1391,7 +1391,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         if ($suppress_notification) {
             $this->assertEquals(1, count($messages), 'one mail should be send to current user (attender)');
         } else {
-            $this->assertEquals(3, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+            $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
             $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
             $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
@@ -1454,6 +1454,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testResourceNotificationMuteForEditors()
     {
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
+        $this->testResourceNotification(/* $suppress_notification = */ true);
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
+    }
+
+    /**
+     * testResourceNotificationMute without editors config
+     *
+     */
+    public function testResourceNotificationMute()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, false);
         $this->testResourceNotification(/* $suppress_notification = */ true);
         $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
     }

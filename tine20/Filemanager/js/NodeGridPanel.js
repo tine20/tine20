@@ -140,7 +140,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * after grid renderd
      */
     initDragDrop: function () {
-        if (Ext.isTouchDevice || !this.enableDD) {
+        if (!this.enableDD) {
             return;
         }
 
@@ -734,6 +734,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     buttonAlign: 'left',
                     columns: 8,
                     defaults: {minWidth: 60},
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ActionToolbar-leftbtngrp'
+                    }],
                     items: items
                 }, this.getActionToolbarItems()]
             });

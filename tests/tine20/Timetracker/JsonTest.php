@@ -114,7 +114,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to get a Timeaccount
+     * try to get a Timeaccount - also checks if user and grants are resolved
      */
     public function testSearchTimeaccounts()
     {
@@ -130,14 +130,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // search & check
         $timeaccountFilter = $this->_getTimeaccountFilter();
         $search = $this->_json->searchTimeaccounts($timeaccountFilter, $this->_getPaging());
-        $this->assertEquals(0, $search['totalcount'], 'is_open filter not working');
+        self::assertEquals(0, $search['totalcount'], 'is_open filter not working');
 
         $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(TRUE), $this->_getPaging());
-        $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
+        self::assertEquals(1, $search['totalcount']);
+        $ta = $search['results'][0];
+        self::assertEquals($timeaccount->description, $ta['description']);
+        self::assertTrue(is_array($ta['created_by']), 'user is not resolved in ' . print_r($ta, true));
+        self::assertEquals(Tinebase_Core::getUser()->getId(), $ta['created_by']['accountId']);
+        self::assertGreaterThan(0, count($ta['account_grants']), 'account_grants not resolved in ' . print_r($ta, true));
 
-        // TODO enable this assertation and clean up the timetracker json converter to use abstract code!
-        //$this->assertEquals(Tinebase_Core::getUser()->getId(), $search['results'][0]['created_by']['accountId']);
+        // TODO do we need this?
+        //self::assertGreaterThan(0, count($ta['grants']), 'grants not resolved in ' . print_r($ta, true));
     }
 
     /**

@@ -118,7 +118,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $persistentEvent = $this->testCreatePoll();
         $persistentEvent['rrule'] = 'FREQ=DAILY;INTERVAL=1';
 
-        $this->setExpectedException(Tasks_Exception_UnexpectedValue::class);
+        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
         $this->_uit->saveEvent($persistentEvent);
     }
 

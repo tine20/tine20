@@ -1169,6 +1169,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var bodyContent = this.htmlEditor.getValue();
         bodyContent = bodyContent.replace(signatureRegexp, newSignature);
 
+        // update reply-to
+        var replyTo = record.get('reply_to');
+        if (replyTo && replyTo != '') {
+            this.replyToField.setValue(replyTo);
+        }
+
         this.htmlEditor.setValue(bodyContent);
     },
 
@@ -1261,8 +1267,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         scope: this
                     },
                     items: [
-                        // mass mailing info text
                         {
+                            // mass mailing info text
                             html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
                             hidden: true,
                             ref: '../../infoText',
@@ -1270,6 +1276,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             height: 20
                         },
                         this.accountCombo,
+                        {
+                            // extuxclearabletextfield would be better, but breaks the layout big tim
+                            // TODO fix layout (equal width of input boxes)!
+                            xtype: 'textfield',
+                            plugins: [Ext.ux.FieldLabeler],
+                            fieldLabel: this.app.i18n._('Reply-To Email'),
+                            name: 'reply_to',
+                            ref: '../../replyToField',
+                            hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('showReplyTo'),
+                            emptyText: this.app.i18n._('Add email address here for reply-to'),
+                            value: Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount().get('reply_to') // reply-to from account or email
+                        },
                         this.recipientGrid,
                         {
                             xtype: 'textfield',

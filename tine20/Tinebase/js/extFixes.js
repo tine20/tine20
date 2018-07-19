@@ -7,7 +7,9 @@
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
         isNewIE = (Ext.isIE9 || isIE10 || isIE11),
-        isEdge = check(/edge/)
+        isEdge = check(/edge/),
+        isIOS = check(/ipad/) || check(/iphone/),
+        isAndroid = check(/android/),
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
             'ontouchstart' in window        // works on most browsers
@@ -25,11 +27,13 @@
         isIE11: isIE11,
         isNewIE: isNewIE,
         isEdge: isEdge,
-
+        isIOS: isIOS,
+        isAndroid: isAndroid,
         isTouchDevice: isTouchDevice,
         isWebApp: isWebApp,
-        supportsUserFocus: supportsUserFocus
-    })
+        supportsUserFocus: supportsUserFocus,
+        supportsPopupWindows: !isIOS && !isAndroid
+    });
 })();
 
 Ext.override(Ext.data.Store, {
@@ -637,9 +641,9 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             Ext.form.TriggerField.prototype.taskForResize.delay(300);
             return;
         }
-        
+
         var visible = !!window.lodash.get(cmp, 'el.dom.offsetParent', false);
-        
+
         if (visible !== cmp.wasVisible && cmp.el.dom) {
             cmp.setWidth(cmp.width);
             if (cmp.wrap && cmp.wrap.dom) {
@@ -647,7 +651,7 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             }
             cmp.syncSize();
         }
-        
+
         cmp.wasVisible = visible;
     });
     Ext.form.TriggerField.prototype.taskForResize.delay(300);
@@ -934,6 +938,34 @@ Ext.override(Ext.tree.TreePanel, {
     }
 });
 
+Ext.override(Ext.menu.Menu, {
+    setActive: Ext.emptyFn,
+    setZIndex: Ext.emptyFn,
+    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function () {
+        Ext.WindowMgr.register(this);
+        Ext.WindowMgr.bringToFront(this);
+    }),
+    hide: Ext.menu.Menu.prototype.hide.createSequence(function () {
+        Ext.WindowMgr.unregister(this);
+    })
+});
+
+Ext.override(Ext.grid.GridDragZone, {
+    getDragData : function(e){
+        var t = Ext.lib.Event.getTarget(e);
+        var rowIndex = this.view.findRowIndex(t);
+        if(rowIndex !== false){
+            var sm = this.grid.selModel;
+            // fix: make DD & checkbox selection working together
+            if((!sm.isSelected(rowIndex) || e.hasModifier()) && !e.getTarget('.x-grid3-row-checker')) {
+                sm.handleMouseDown(this.grid, rowIndex, e);
+            }
+            return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
+        }
+        return false;
+    }
+});
+
 Ext.override(Ext.Component, {
     /**
      * is this component rendered?
@@ -1017,7 +1049,7 @@ Ext.override(Ext.grid.EditorGridPanel, {
             this.on('celldblclick', this.onCellDblClick, this);
         }
     },
-    
+
     onBeforeEdit: function(o) {
         if (this.readOnly) {
             o.cancel = true;

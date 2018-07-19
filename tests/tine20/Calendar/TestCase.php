@@ -87,8 +87,6 @@ abstract class Calendar_TestCase extends TestCase
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         
-        Tinebase_Acl_Roles::getInstance()->resetClassCache();
-        
         if (! $this->_transactionId) {
             if ($this->_backend != NULL) {
                 $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
@@ -320,16 +318,29 @@ abstract class Calendar_TestCase extends TestCase
     
     /**
      * get resource
-     * 
+     *
+     * @param array|null $grants
      * @return Calendar_Model_Resource
      */
-    protected function _getResource()
+    protected function _getResource($grants = null)
     {
         return new Calendar_Model_Resource(array(
             'name'                 => 'Meeting Room',
             'description'          => 'Our main meeting room',
             'email'                => 'room@example.com',
             'is_location'          => TRUE,
+            'grants'               => [
+                array_merge([
+                    'account_id'      => Tinebase_Core::getUser()->getId(),
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                ], $grants === null ? [
+                    Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+                    Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                    Calendar_Model_ResourceGrants::EVENTS_SYNC => true,
+                    Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true,
+                    Calendar_Model_ResourceGrants::EVENTS_EDIT => true,
+                ] : $grants),
+            ]
         ));
     }
 

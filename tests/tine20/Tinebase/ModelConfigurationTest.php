@@ -18,6 +18,15 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class Tinebase_ModelConfigurationTest extends TestCase
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        // reset mc config to prevent problems with following tests
+        $customer = new Timetracker_Model_Timeaccount([], true);
+        $customer->resetConfiguration();
+    }
+
     /**
      * tests if the modelconfiguration gets created for the traditional models
      */
@@ -58,6 +67,35 @@ class Tinebase_ModelConfigurationTest extends TestCase
             if ($field['type'] === 'virtual') {
                 self::assertTrue(isset($field['config']['sortable']), print_r($field, true));
                 self::assertFalse($field['config']['sortable'], 'field should not be sortable: ', print_r($field, true));
+            }
+        }
+    }
+
+    /**
+     * testModelConfigWithDisabledRelationApp
+     */
+    public function testModelConfigWithDisabledRelationApp()
+    {
+        $sales = Tinebase_Application::getInstance()->getApplicationByName('Sales');
+        Tinebase_Application::getInstance()->setApplicationStatus($sales->getId(),
+            Tinebase_Application::DISABLED);
+        $customer = new Timetracker_Model_Timeaccount([], true);
+        $cObj = $customer->getConfiguration();
+        $fields = $cObj->getFields();
+        $found = false;
+        foreach ($fields as $name => $field) {
+            if ($name === 'contract') {
+                self::assertTrue(! isset($field['label']) || $field['label'] === null,
+                    'contract field should have no label: ' . print_r($field, true));
+                $found = true;
+            }
+        }
+        self::assertTrue($found);
+        $filterModel = $cObj->getFilterModel();
+        self::assertGreaterThan(10, count($filterModel['_filterModel']));
+        foreach ($filterModel['_filterModel'] as $name => $filter) {
+            if ($name === 'contract') {
+                self::fail('filter model should not contain contract filter: ' . print_r($filter, true));
             }
         }
     }

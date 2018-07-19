@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -375,12 +375,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     /**
      * @return int
      */
-    public function getMaxInstanceSeq()
+    public function getMaxInstanceSeq($tinebaseId = null)
     {
         $db = $this->_table->getAdapter();
         $select = $db->select()
             ->from($this->_tablename, new Zend_Db_Expr('MAX(' . $db->quoteIdentifier('instance_seq') . ')'))
-            ->where($db->quoteInto($db->quoteIdentifier('instance_id') . ' = ?', Tinebase_Core::getTinebaseId()));
+            ->where($db->quoteInto($db->quoteIdentifier('instance_id') . ' = ?',
+                $tinebaseId ?: Tinebase_Core::getTinebaseId()));
 
         $stmt = $db->query($select);
         $resultArray = $stmt->fetchAll(Zend_Db::FETCH_NUM);

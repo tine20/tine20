@@ -218,14 +218,9 @@ class Tinebase_Auth_NtlmV2
         }
         $result = substr($msg, $off, $len);
         if ($decode_utf16) {
-            try {
-                if (false === ($result = iconv('UTF-16LE', 'UTF-8', $result))) {
-                    $this->_error[] = 'could not decode UTF-16LE';
-                    return null;
-                }
-            } catch (ErrorException $e) {
-                $this->_error[] = 'could not decode UTF-16LE: ' . $e->getMessage();
-                $result = null;
+            if (false === ($result = @iconv('UTF-16LE', 'UTF-8', $result))) {
+                $this->_error[] = 'could not decode UTF-16LE';
+                return null;
             }
         }
         return $result;

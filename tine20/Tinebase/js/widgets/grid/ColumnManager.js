@@ -86,12 +86,14 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = 20;
                 config.resizable = false;
                 config.header = window.i18n._('Attachments');
+                config.tooltip = config.header;
             }
 
             if(fieldDefinition.type == 'image') {
                 config.width = 20;
                 config.resizable = false;
                 config.header = fieldDefinition.label == 'Image' ? window.i18n._('Image') : i18n._(fieldDefinition.label);
+                config.tooltip = config.header;
             }
 
             // If no label exists, don't use in grid

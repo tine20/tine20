@@ -68,7 +68,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         $this->_operator = $_data['operator'];
 
         if (!empty($this->_value)) {
-            $queries = explode(' ', $this->_value);
+            $queries = is_array($this->_value) ? $this->_value : explode(' ', $this->_value);
 
             /** @var Tinebase_Model_Filter_FilterGroup $parentFilterGroup */
             $parentFilterGroup = $this->_options['parentFilter'];

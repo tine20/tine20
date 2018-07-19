@@ -569,13 +569,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * call handle cli function with params
+     * call handle cli function (Setup) with params
      *  example usage:
      *      $result = $this->_cliHelper('getconfig', array('--getconfig','--','configkey=allowedJsonOrigins'));
      *
      * @param string $command
      * @param array $params
      * @return string
+     * @todo should be renamed to _setupCliHelper
      */
     protected function _cliHelper($command, $params)
     {
@@ -584,6 +585,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ob_start();
         $this->_cli->handle($opts, false);
         $out = ob_get_clean();
+        return $out;
+    }
+
+    protected function _appCliHelper($appName, $command, $params)
+    {
+        $classname = $appName . '_Frontend_CLi';
+        if (! class_exists($classname)) {
+            throw new Tinebase_Exception_InvalidArgument('CLI class ' . $classname . ' not found');
+        }
+
+        $cli = new $classname();
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments($params);
+
+        ob_start();
+        call_user_func_array([$cli, $command], [$opts]);
+        $out = ob_get_clean();
+
         return $out;
     }
 

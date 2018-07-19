@@ -408,27 +408,14 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * converts a int, string or Tinebase_Model_User to an accountid
      *
      * @param int|string|Tinebase_Model_User $_accountId the accountid to convert
-     * @return int
-     * @throws Tinebase_Exception_NotFound
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      * 
-     * TODO replace with TRA::convertId
+     * TODO completely replace with TRA::convertId
      */
     static public function convertUserIdToInt($_accountId)
     {
-        if ($_accountId instanceof Tinebase_Model_User) {
-            if (empty($_accountId->accountId)) {
-                throw new Tinebase_Exception_NotFound('accountId can not be empty');
-            }
-            $accountId = (string) $_accountId->accountId;
-        } else {
-            $accountId = (string) $_accountId;
-        }
-        
-        if (empty($accountId)) {
-            throw new Tinebase_Exception_NotFound('accountId can not be empty');
-        }
-        
-        return $accountId;
+        return (string) self::convertId($_accountId, 'Tinebase_Model_User');
     }
     
     /**

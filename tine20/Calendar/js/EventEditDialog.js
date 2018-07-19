@@ -23,11 +23,7 @@ require('./PollPanel');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @cfg {Number} containerId initial container id
-     */
-    containerId: -1,
-    
+
     labelAlign: 'side',
     windowNamePrefix: 'CalEventEditWindow_',
     appName: 'Calendar',
@@ -544,15 +540,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO change attender status?
      */
     doCopyRecord: function() {
+        var _ = window.lodash;
+
+        // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
+        this.record.set('editGrant', true);
+
+        // BUT: add Grant is container based!
+        this.record.set('addGrant', _.get(this.record, 'data.container_id.account_grants.addGrant', false));
+
         Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
         
         // remove attender ids
         Ext.each(this.record.data.attendee, function(attender) {
             delete attender.id;
         }, this);
-        
-        // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
-        this.record.set('editGrant', true);
 
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);

@@ -417,6 +417,11 @@
     }
 
      /**
+      * Not a resource? = Don't do anything
+      * Suppress Notifications = Don't send anything. Neither to Users or Resource
+      * ResourceMailsForEditors = Send to Editors and Resource
+      * ! ResourceMailsForEditors = Send only to Resource
+      *
       * @param $attender
       * @param $_notificationLevel
       * @param $recipients
@@ -427,27 +432,31 @@
      protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
      {
          // Add additional recipients for resources
-         if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE
-         || ! Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)) {
-             
+         if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE) {
              return true;
          }
-         
-         // Set custom status booked
-         if ($action == 'created') {
-             $action = 'booked';
-         }
-         
+
          $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+         // Suppress all notifications?
          if ($resource->suppress_notification) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                     . " Do not send Notifications for this resource: ". $resource->name);
+                 . " Do not send Notifications for this resource: ". $resource->name);
              // $recipients will still contain the resource itself
              // Edit 13.12.2016 Remove resource as well and supress ALL notifications
              $recipients = array();
              return true;
          }
-         
+
+         // Send Mails to Editors?
+         if (! Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)) {
+             return true;
+         }
+
+         // Set custom status booked
+         if ($action == 'created') {
+             $action = 'booked';
+         }
+
          // The resource has no account there for the organizer preference (sendLevel) is used. We don't want that
          $sendLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
          //handle attendee status change
