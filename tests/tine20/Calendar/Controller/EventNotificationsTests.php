@@ -1451,6 +1451,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->testResourceNotification(/* $suppress_notification = */ true);
         $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
     }
+
+    /**
+     * testResourceNotificationMute without editors config
+     *
+     */
+    public function testResourceNotificationMute()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, false);
+        $this->testResourceNotification(/* $suppress_notification = */ true);
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
+    }
     
     /**
      * testGroupInvitation
