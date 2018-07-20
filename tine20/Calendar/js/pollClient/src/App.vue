@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full} {headerDate, time, short}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
                 </tr>
               </thead>
               <tbody>
