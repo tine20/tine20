@@ -61,7 +61,7 @@
                       class="calendar-symbol"
                       v-if="!poll.config.is_anonymous && activeAttendee.id !== null && activeAttendee.id === attendee.key"
                     >
-                      <img :src="getCalendarIcon(datestatus)" alt='formatMessage("Calendar")' />
+                      <img :src="getCalendarIcon(datestatus)" alt="formatMessage('Calendar')" />
                     </span>
                     <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
                   </td>
@@ -117,7 +117,7 @@
       </template>
       <div>
         <b-modal ref="loadMask" :visible="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
-          <spinner size="medium" :message='formatMessage("Please wait...")'></spinner>
+          <spinner size="medium" :message="formatMessage('Please wait...')"></spinner>
         </b-modal>
       </div>
       <div>
