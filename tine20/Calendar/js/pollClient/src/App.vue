@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart)})}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -586,7 +586,7 @@ export default {
         }
       })
 
-      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start).getDate() + '.svg'
+      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start.replace(' ', 'T')).getDate() + '.svg'
     },
     showChangeButtons () {
       if (_.isEmpty(this.poll)) {
