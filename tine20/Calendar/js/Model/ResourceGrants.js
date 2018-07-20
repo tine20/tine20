@@ -51,7 +51,7 @@ Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(c
             'resourceEdit',
             // 'resourceExport', // should be resource-admin?
             // 'resourceSync',   // no sync targets - let's save space
-            // 'resourceAdmin',  // not yet used? - let's save space
+            'resourceAdmin',  // not yet used? - let's save space
             'eventsAdd',
             'eventsRead',
             'eventsExport',
