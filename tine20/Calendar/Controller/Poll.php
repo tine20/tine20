@@ -495,31 +495,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
     public function publicApiMainScreen($pollId, $userKey = null, $authKey = null)
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Calendar/views');
-
-        $baseUrl = Tinebase_Core::getUrl() . '/';
         $locale = Tinebase_Core::getLocale();
-        $eTag = Tinebase_Frontend_Http::getAssetHash();
 
-        $fileMap = Tinebase_Frontend_Http::getAssetsMap();
-        $view->jsFiles = [$baseUrl . $fileMap['Calendar/js/pollClient/src/index.es6.js']['js']];
-        $view->jsFiles[] = $baseUrl . "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar&version={$eTag}";
+        $jsFiles = ['Calendar/js/pollClient/src/index.es6.js'];
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
 
-        if (TINE20_BUILDTYPE != 'RELEASE') {
-            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-                $view->jsFiles[] = $baseUrl . 'webpack-dev-server.js';
-            } else {
-                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
-            }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
-
-        $response = new \Zend\Diactoros\Response();
-        $response->getBody()->write($view->render('pollClient.php'));
-        return $response;
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
     }
 
     public function assertPublicUsage()

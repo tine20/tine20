@@ -10,6 +10,13 @@
 //      requires correct registry data
 
 import * as global from 'globalFakes'
+require('AppManager')
+require('widgets/MainScreen')
+require('widgets/tree/Loader')
+require('widgets/persistentfilter/PickerPanel')
+require('widgets/dialog/EditDialog')
+require('widgets/grid/GridPanel')
+require('data/Record')
 require('ApplicationStarter')
 
 describe('ApplicationStarter', () => {

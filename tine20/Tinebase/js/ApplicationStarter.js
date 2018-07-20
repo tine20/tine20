@@ -9,15 +9,6 @@
  */
 Ext.namespace('Tine.Tinebase');
 
-require('AppManager');
-require('Locale');
-require('Locale/Gettext');
-require('widgets/MainScreen');
-require('widgets/tree/Loader');
-require('widgets/persistentfilter/PickerPanel');
-require('widgets/dialog/EditDialog');
-require('widgets/grid/GridPanel');
-require('data/Record');
 require('widgets/grid/AttachmentRenderer');
 require('widgets/grid/ImageRenderer');
 

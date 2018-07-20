@@ -12,6 +12,8 @@
 
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
+import waitFor from 'util/waitFor.es6';
+
 /** ------------------------- Ext.ux Initialisation ------------------------ **/
 
 Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/print.css';
@@ -162,6 +164,8 @@ Tine.Tinebase.tineInit = {
                 }
             }
         }, this);
+
+        Tine.clientVersion.assetHash = window.assetHash;
     },
 
     initPostal: function () {
@@ -359,7 +363,12 @@ Tine.Tinebase.tineInit = {
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = jsonKey;
             options.headers['X-Tine20-TransactionId'] = Tine.Tinebase.data.Record.generateUID();
-            
+
+            // server might not accept outdated clients
+            if (Tine.clientVersion.assetHash) {
+                options.headers['X-Tine20-ClientAssetHash'] = Tine.clientVersion.assetHash;
+            }
+
             options.url = Ext.urlAppend((options.url ? options.url : Tine.Tinebase.tineInit.requestUrl),  'transactionid=' + options.headers['X-Tine20-TransactionId']);
             
             // convert non Ext.Direct request to jsonrpc
@@ -582,7 +591,14 @@ Tine.Tinebase.tineInit = {
                 params: {
                     method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },
-                failure: function () {
+                failure: function (exception) {
+                    if (exception.responseText.match(/"code":426/)) {
+                        return Tine.Tinebase.common.reload({
+                            keepRegistry: false,
+                            clearCache: true
+                        });
+                    }
+
                     // if registry could not be loaded, this is mostly due to missconfiguaration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
@@ -615,9 +631,10 @@ Tine.Tinebase.tineInit = {
                         }
                     }
 
-                    Tine.Tinebase.tineInit.onRegistryLoad();
-
-                    cb.call(scope);
+                    Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
+                        Ext.util.CSS.refreshCache();
+                        cb.call(scope);
+                    });
                 }
             });
         } else {
@@ -628,8 +645,10 @@ Tine.Tinebase.tineInit = {
                 Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
             }
 
-            Tine.Tinebase.tineInit.onRegistryLoad();
-            cb.call(scope);
+            Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
+                Ext.util.CSS.refreshCache();
+                cb.call(scope);
+            });
         }
 
 
@@ -700,16 +719,22 @@ Tine.Tinebase.tineInit = {
 
         var AreaLocks = require('./AreaLocks.es6');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
+
+        // load initial js of user enabled apps
+        // @TODO: move directly after login (login should return requested parts of registry)
+        var appLoader = require('./app-loader!app-loader.js');
+        return appLoader(Tine.Tinebase.registry.get('userApplications'));
     },
 
     /**
      * check client version and reload on demand
      */
     checkClientVersion: function() {
-        var serverHash = Tine.Tinebase.registry.get('version').filesHash,
-            clientHash = Tine.clientVersion.filesHash;
+        var serverHash = Tine.Tinebase.registry.get('version').assetHash,
+            buildType = Tine.Tinebase.registry.get('version').buildType,
+            clientHash = Tine.clientVersion.assetHash;
 
-        if (clientHash && clientHash != serverHash) {
+        if (clientHash && clientHash != serverHash && ['RELEASE', 'DEBUG'].indexOf(buildType) > -1) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
@@ -905,19 +930,9 @@ Tine.Tinebase.tineInit = {
     /**
      * config locales
      */
-    initLocale: function () {
-        //Locale.setlocale(Locale.LC_ALL, '');
-        window.i18n = new Locale.Gettext();
-        window.i18n.textdomain('Tinebase');
-
-        window._ = function (msgid) {
-            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
-            return window.i18n.dgettext('Tinebase', msgid);
-        };
-
-        Tine.Tinebase.prototypeTranslation();
-
-        var formatMessage = require('format-message');
+    initLocale: async function () {
+        var _ = window.lodash,
+            formatMessage = require('format-message');
 
         // NOTE: we use gettext tooling for template selection
         //       as there is almost no tooling for icu-messages out there
@@ -931,15 +946,43 @@ Tine.Tinebase.tineInit = {
             return formatMessage.apply(formatMessage, arguments);
         };
         window.lodash.assign(window.formatMessage, formatMessage);
+
+        require('Locale');
+        require('Locale/Gettext');
+
+        await waitFor( function() { return Tine.__translationData.__isLoaded; });
+
+        _.each(Tine.__translationData.msgs, function(msgs, category) {
+            Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs);
+        });
+
+        window.i18n = new Locale.Gettext();
+        window.i18n.textdomain('Tinebase');
+
+        window._ = function (msgid) {
+            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
+            return window.i18n.dgettext('Tinebase', msgid);
+        };
+
+
+        Locale.Gettext.prototype.translationsLoaded = function() {
+            return new Promise(function (fulfill) {
+                Tine.__translationData.__isLoaded
+            })
+        };
+        window.i18n.translationsLoaded().then(function() {
+            Tine.Tinebase.prototypeTranslation();
+            fulfill();
+        });
     }
 };
 
-Ext.onReady(function () {
+Ext.onReady(async function () {
     Tine.Tinebase.tineInit.initWindow();
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
-    Tine.Tinebase.tineInit.initLocale();
+    await Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {

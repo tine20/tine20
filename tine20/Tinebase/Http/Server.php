@@ -135,10 +135,10 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                         }
 
                         // the called function generates the needed output
-                        $method->invokeArgs($object, $calling_args);
+                        return $method->invokeArgs($object, $calling_args);
                     } else {
                         // the called function generates the needed output
-                        call_user_func_array($method->getName(), $calling_args);
+                        return call_user_func_array($method->getName(), $calling_args);
                     }
 
                 } else if ($method instanceof Zend_Server_Method_Definition) {
@@ -148,7 +148,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                     $calling_args = $this->_getCallingArgs($func_args, $request);
                     $callback = $method->getCallback();
                     $callbackMethod = $callback->getMethod();
-                    call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
+                    return call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
 
                 } else {
                     throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);

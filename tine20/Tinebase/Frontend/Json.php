@@ -787,11 +787,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         try {
-            $filesHash = Tinebase_Frontend_Http::getAssetHash();
+            $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
         } catch (Exception $e) {
-            $filesHash = Tinebase_Record_Abstract::generateUID(8);
+            // unittests
+            $assetHash = Tinebase_Record_Abstract::generateUID(8);
         }
-        
+
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
@@ -809,7 +810,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
-                'filesHash'     => $filesHash,
+                'assetHash'     => $assetHash,
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,

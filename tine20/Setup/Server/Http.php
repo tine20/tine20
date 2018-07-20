@@ -42,8 +42,12 @@ class Setup_Server_Http implements Tinebase_Server_Interface
         if (empty($_REQUEST['method'])) {
             $_REQUEST['method'] = 'Setup.mainScreen';
         }
-        
-        $server->handle($_REQUEST);
+
+        $response = $server->handle($_REQUEST);
+        if ($response instanceof \Zend\Diactoros\Response) {
+            $emitter = new Zend\Diactoros\Response\SapiEmitter();
+            $emitter->emit($response);
+        }
     }
     
     /**

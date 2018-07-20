@@ -68,9 +68,10 @@ class Tinebase_TranslationTest extends TestCase
         $locale = Zend_Registry::get('locale');
         $jsTranslations = Tinebase_Translation::getJsTranslations($locale);
         
-        $this->assertTrue((bool)preg_match("/Locale\.prototype\.TranslationLists/", $jsTranslations), 'generic translations are missing');
+        $this->assertTrue((bool)preg_match("/Tine\.__translationData/", $jsTranslations), 'generic translations are missing');
         $this->assertTrue((bool)preg_match("/Ext\.UpdateManager\.defaults\.indicatorText/", $jsTranslations), 'ext translations are missing');
-        $this->assertTrue((bool)preg_match("/Locale\.Gettext\.prototype\._msgs\['\.\/LC_MESSAGES\/Tinebase'\]/", $jsTranslations), 'tine translations are missing');
+        $this->assertTrue((bool)preg_match("/Tine\.__translationData\.msgs\['\.\/LC_MESSAGES\/Tinebase'\]/", $jsTranslations), 'tine translations are missing');
+        $this->assertTrue((bool)preg_match("/Tine\.__translationData\.__isLoaded/", $jsTranslations), 'loaded marker missing');
     }
     
     /**

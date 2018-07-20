@@ -41,25 +41,6 @@ Locale.Gettext.prototype._getkey = function(category, domain) {
     return this.dir + '/' + category + '/' + domain; // expect category is str
 };
 
-/*
-Locale.Gettext.prototype._url = function (category, domain) {
- try {
-    var req = new XMLHttpRequest;
-
-    req.open('POST', 'index.php', false);
-    req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    req.setRequestHeader('X-Tine20-Request-Type', 'JSON');
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.send('method=Tinebase.getTranslations&requestType=JSON&application=' + domain + '&jsonKey=' + Tine.Tinebase.registry.get('jsonKey'));
-    if (req.status == 200 || req.status == 304 || req.status == 0 || req.status == null) {
-      return Ext.util.JSON.decode(req.responseText);
-    }
-  } catch (e) {
-    return '';
-  }
-};
-*/
-
 Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
   var msg = this.getmsg(domain, category);
   
@@ -122,7 +103,6 @@ if (typeof Locale.Gettext.PO == 'undefined') {
   };
 }
 
-/*
 Locale.Gettext.PO.VERSION = '0.0.4';
 Locale.Gettext.PO.EXPORT_OK = [
   'po2object',
@@ -158,7 +138,6 @@ Locale.Gettext.PO.po2json = function (po) {
       }
     }) + (plural ? ']\n})' : '\n})');
 };
-*/
 
 Locale.Gettext.PO.prototype.get = function (msgid, msgid_plural) {
   // for msgid_plural == ""

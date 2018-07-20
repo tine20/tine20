@@ -8,7 +8,7 @@ html, body {
 }
 
 .ApplicationIconCls {
-    background-image:url(../../images/icon-set/icon_debug.svg) !important;
+    background-image:url(../../images/icon-set/icon_debug.svg);
 }
 
 /* ----- actions -------------------------------------------------------------*/

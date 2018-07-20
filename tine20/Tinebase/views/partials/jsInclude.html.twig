@@ -1,0 +1,9 @@
+    {%- for jsFile in jsFiles -%}
+        {{ jsInclude(jsFile) }}
+    {% endfor -%}
+
+    <script type="text/javascript">window.assetHash='{{ assetHash }}'</script>
+
+    {% if not noWebpackDevServer and constant('TINE20_BUILDTYPE') == 'DEVELOPMENT' -%}
+        {{ jsInclude('webpack-dev-server.js') }}
+    {% endif %}

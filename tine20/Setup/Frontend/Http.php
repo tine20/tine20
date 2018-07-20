@@ -46,18 +46,23 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         return $smdArray;
     }
-    
+
     /**
-     * renders the tine main screen 
+     * display Tine 2.0 main screen
      */
     public function mainScreen()
     {
-        $view = new Zend_View();
-        $baseDir = dirname(dirname(dirname(__FILE__)));
-        $view->setScriptPath("$baseDir/Setup/views");
+        $locale = Tinebase_Core::getLocale();
 
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('jsclient.php');
+        $jsFiles = ['Setup/js/fatClient.js'];
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+        $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
+        if (! empty($customJSFiles)) {
+            $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
+        }
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig');
     }
     
     /**

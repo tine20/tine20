@@ -360,7 +360,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $method = $request->getMethod();
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
-            
+
+            if ($method != 'Tinebase.login' && isset($_SERVER['HTTP_X_TINE20_CLIENTASSETHASH']) && $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] &&
+                $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] != Tinebase_Frontend_Http_SinglePageApplication::getAssetHash()) {
+                throw new Tinebase_Exception_ClientOutdated();
+            }
+
+
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             $this->_checkJsonKey($method, $jsonKey);
             

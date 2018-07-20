@@ -11,7 +11,7 @@ tine20/config.inc.php
 tests/tine20/phpunitconfig.inc.php
 tests/setup/phpunitconfig.inc.php
 tests/js/unit/artefacts/
-tine20/*/*/*FAT*
+tine20/*/*/*[F][A][T]*
 tine20/*/js/*-lang-*
 tine20/Tinebase/js/Locale/build/*.js
 scripts/packaging/tine20build/

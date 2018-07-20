@@ -9,17 +9,15 @@
 import * as global from 'globalFakes'
 
 // TODO generic bootstrap?
-require('Locale')
-require('Locale/Gettext')
 require('common')
 require('ux/Array')
 require('extInit')
-require('tineInit')
 require('data/Record')
 require('data/RecordProxy')
 
 describe('EditDialog', () => {
   global.log()
+  global.i18n()
 
   let uit
 

@@ -285,7 +285,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'buildType'     => TINE20_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,
                 'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releaseTime'   => TINE20SETUP_RELEASETIME
+                'releaseTime'   => TINE20SETUP_RELEASETIME,
+                // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
+                'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             ),
             'authenticationData'   => $this->loadAuthenticationData(),
         );
@@ -338,7 +340,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'buildType'     => TINE20_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,
                 'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releaseTime'   => TINE20SETUP_RELEASETIME
+                'releaseTime'   => TINE20SETUP_RELEASETIME,
+                // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
+                'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             ),
             'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
