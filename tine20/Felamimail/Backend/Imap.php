@@ -526,7 +526,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS'), $from, $to, $useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             $summary = array(
                 $from => $summary
             );
@@ -534,18 +534,20 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $messages = array();
         
-        foreach($summary as $id => $data) {
+        foreach ($summary as $id => $data) {
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
                 $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
             }
     
-            if($this->_useUid === true) {
+            if ($this->_useUid === true) {
+                if (! isset($data['UID'])) {
+                    continue;
+                }
                 $key = $data['UID'];
             } else {
                 $key = $id;
             }
-            
             
             $messages[$key] = array(
                 'flags'     => $flags,
@@ -553,7 +555,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             // only one message requested
             return $messages[$from];
         } else {
