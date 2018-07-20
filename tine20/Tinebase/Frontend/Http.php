@@ -621,7 +621,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $fileMap = $this->getAssetsMap();
 
         foreach ($orderedApplications as $application) {
-            if (! empty($apps) && ! $apps[0] == 'all' && ! in_array($application, $apps)) continue;
+            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) continue;
             switch($_fileType) {
                 case 'js':
                     if (isset($fileMap["{$application}/js/{$application}"])) {
