@@ -249,8 +249,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Admin.ContainerEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
-        height: 400,
+        width: 1024,
+        height: 500,
         name: Tine.Admin.ContainerEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.ContainerEditDialog',
         contentPanelConstructorConfig: config

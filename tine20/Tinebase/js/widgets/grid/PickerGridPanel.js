@@ -303,6 +303,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         // on rowcontextmenu handler
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
+
+        this.viewConfig = {
+            autoFill: true,
+            forceFit: true
+        };
     },
     
     /**
