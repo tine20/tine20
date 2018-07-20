@@ -981,8 +981,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $contactId = $_addedUser->contact_id;
         if (!empty($contactId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " addedUser does have contact_id set: " . $_addedUser->accountLoginName . ' updating existing contact now.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " Added user does have contact_id set: " . $_addedUser->accountLoginName . ' updating existing contact now.');
 
             $this->inspectUpdateUser($_addedUser, $_newUserProperties);
             return;
