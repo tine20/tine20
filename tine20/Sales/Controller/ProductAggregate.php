@@ -79,6 +79,8 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
                 $ac->_inspectBeforeCreateProductAggregate($_record);
             }
         }
+
+        $this->_checkJsonAttributeAssignedAccountable($_record);
     }
 
     /**
@@ -99,6 +101,32 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
             foreach($acs as $ac) {
                 $ac->_inspectBeforeUpdateProductAggregate($_record, $_oldRecord);
             }
+        }
+
+        $this->_checkJsonAttributeAssignedAccountable($_record);
+    }
+
+    /**
+     * make sure $pA->json_attributes['assignedAccountables'] contains only unique data
+     *
+     * @param Sales_Model_ProductAggregate $pA
+     */
+    protected function _checkJsonAttributeAssignedAccountable(Sales_Model_ProductAggregate $pA)
+    {
+        if ($pA->json_attributes && isset($pA->json_attributes['assignedAccountables'])) {
+            $pA->xprops('json_attributes')['assignedAccountables'] =
+                array_filter($pA->json_attributes['assignedAccountables'], function ($val) {
+                    static $gate;
+                    if (null === $gate) {
+                        $gate = [];
+                    }
+                    $id = $val['model'] . $val['id'];
+                    if (isset($gate[$id])) {
+                        return false;
+                    }
+                    $gate[$id] = true;
+                    return true;
+            });
         }
     }
 

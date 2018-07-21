@@ -617,11 +617,31 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.30
+     *
+     * create replication user
+     */
+    public function update_29()
+    {
+        $replicationUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+            Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+        if (null !== $replicationUser) {
+            $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+            if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                $password = Tinebase_Record_Abstract::generateUID(12);
+            }
+            Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.30');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_29()
+    public function update_30()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

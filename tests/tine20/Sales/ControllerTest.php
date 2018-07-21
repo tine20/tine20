@@ -203,6 +203,15 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
                 'quantity' => 1,
                 'interval' => 1,
                 'billing_point' => 1,
+                'json_attributes' => [
+                    'assignedAccountables' => [[
+                        'model' => 'a',
+                        'id'    => 1,
+                        ], [
+                            'model' => 'a',
+                            'id'    => 1,
+                        ]],
+                    ],
             ),
             array(
                 'product_id' => $productTwo->getId(),
@@ -226,6 +235,8 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         $this->assertEquals(2, count($productAggregates));
+        static::assertEquals(1, count($productAggregates->find('product_id', $productOne->getId())
+            ->json_attributes['assignedAccountables']));
 
         $contractData->products = array(
             array(
@@ -233,6 +244,15 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
                 'quantity' => 1,
                 'interval' => 1,
                 'billing_point' => 1,
+                'json_attributes' => [
+                    'assignedAccountables' => [[
+                        'model' => 'a',
+                        'id'    => 1,
+                    ], [
+                        'model' => 'a',
+                        'id'    => 1,
+                    ]],
+                ],
             ),
         );
         $this->_backend->update($contractData);
@@ -245,6 +265,8 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         $this->assertEquals(1, count($productAggregates));
+        static::assertEquals(1, count($productAggregates->find('product_id', $productOne->getId())
+            ->json_attributes['assignedAccountables']));
 
         // cleanup
         $this->_backend->delete($contract->getId());
