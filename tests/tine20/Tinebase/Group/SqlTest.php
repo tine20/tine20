@@ -200,6 +200,12 @@ class Tinebase_Group_SqlTest extends TestCase
         $this->_backend->deleteGroups(array($groupId1, $groupId2));
     }
 
+    /**
+     * note, this is in longrunning as the update from far far behind to most advance and then run all test
+     * would fail here. Guess that is ok. Though new, clean installations should not
+     *
+     * @group longrunning
+     */
     public function testCleanUpEmptyRun()
     {
         ob_start();
@@ -209,6 +215,10 @@ class Tinebase_Group_SqlTest extends TestCase
 
     public function testCleanUpDuplicateListReference()
     {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        ob_get_clean();
+
         $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
             'name'      => 'unittestgroup',
@@ -233,6 +243,10 @@ class Tinebase_Group_SqlTest extends TestCase
 
     public function testCleanUpDeletedGroups()
     {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        ob_get_clean();
+
         $groupController = Tinebase_Group::getInstance();
         $defaultGroup = $groupController->getDefaultGroup();
         $db = Tinebase_Core::getDb();
@@ -249,6 +263,10 @@ class Tinebase_Group_SqlTest extends TestCase
 
     public function testCleanUpDeletedLists()
     {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        ob_get_clean();
+
         $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple([$defaultGroup->list_id],
             ['is_deleted' => 1]);
@@ -263,6 +281,10 @@ class Tinebase_Group_SqlTest extends TestCase
 
     public function testCleanUpWrongListType()
     {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        ob_get_clean();
+
         $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         Addressbook_Controller_List::getInstance()->getBackend()->updateMultiple([$defaultGroup->list_id],
             ['type' => Addressbook_Model_List::LISTTYPE_LIST]);
@@ -279,6 +301,10 @@ class Tinebase_Group_SqlTest extends TestCase
 
     public function testCleanUpListWithoutGroup()
     {
+        ob_start();
+        Tinebase_Group::getInstance()->sanitizeGroupListSync(false);
+        ob_get_clean();
+
         $listController = Addressbook_Controller_List::getInstance();
         $list = $listController->create(new Addressbook_Model_List(['name' => 'unittestlist']));
         $listController->getBackend()->updateMultiple([$list->getId()],
