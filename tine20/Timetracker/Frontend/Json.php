@@ -286,16 +286,38 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchTimesheets($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter', true);
-        
-        $result['totalcountbillable'] = $result['totalcount']['sum_is_billable_combined'];
-        $result['totalsum']           = $result['totalcount']['sum_duration'];
-        $result['totalsumbillable']   = $result['totalcount']['sum_duration_billable'];
-        $result['totalcount']         = $result['totalcount']['count'];
-
-        return $result;
+        return $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter', true);
     }
 
+    /**
+     * do search count request only when resultset is equal
+     * to $pagination->limit or we are not on the first page
+     *
+     * @param $filter
+     * @param $pagination
+     * @param Tinebase_Controller_SearchInterface $controller the record controller
+     * @param $totalCountMethod
+     * @param integer $resultCount
+     * @return array
+     */
+    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    {
+        if ($controller instanceof Timetracker_Controller_Timesheet) {
+            $result = $controller->searchCount($filter);
+
+            $totalresult = [];
+
+            // add totalcounts of leadstates/leadsources/leadtypes
+            $totalresult['totalcountbillable'] = $result['sum_is_billable_combined'];
+            $totalresult['totalsum'] = $result['sum_duration'];
+            $totalresult['totalsumbillable'] = $result['sum_duration_billable'];
+            $totalresult['totalcount'] = $result['count'];
+
+            return $totalresult;
+        } else {
+            return parent:: _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount);
+        }
+    }
     /**
      * Return a single record
      *

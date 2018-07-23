@@ -72,7 +72,7 @@ class MailFiler_Frontend_JsonTests extends TestCase
             )
         ));
         $result = $this->_json->searchNodes($filter, array('sort' => 'sent'));
-        self::assertEquals(6, count($result['filter']));
+        self::assertEquals(5, count($result['filter']), 'got filter: ' . print_r($result['filter'], true));
         self::assertEquals(0, $result['totalcount']);
     }
 

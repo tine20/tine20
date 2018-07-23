@@ -9,12 +9,15 @@
  */
 
 /**
+ * Test helper
+ */
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
+/**
  * Test class for Addressbook_Import_Csv
  */
 class Addressbook_Import_CsvTest extends ImportTestCase
 {
-    protected $_deletePersonalContacts = false;
-
     protected $_importerClassName = 'Addressbook_Import_Csv';
     protected $_modelName = 'Addressbook_Model_Contact';
 
@@ -28,6 +31,9 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     {
         // always resolve customfields
         Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
+
+        // create test container
+        $this->_testContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
     }
 
     /**
@@ -38,12 +44,13 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     protected function tearDown()
     {
-        if ($this->_deletePersonalContacts) {
-            Addressbook_Controller_Contact::getInstance()->deleteByFilter(new Addressbook_Model_ContactFilter(array(array(
-                'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()
-            ))));
+        // cleanup
+        if (file_exists($this->_filename) && $this->_deleteImportFile) {
+            unlink($this->_filename);
         }
-        
+
+        parent::tearDown();
+
         Addressbook_Controller_Contact::getInstance()->duplicateCheckFields(Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS));
     }
     
@@ -127,8 +134,12 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     {
         $this->_filename = dirname(__FILE__) . '/files/google_contacts.csv';
         $this->_deleteImportFile = FALSE;
-        
-        $result = $this->_doImport(array('dryrun' => TRUE), 'adb_google_import_csv');
+
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+            'dryrun' => true,
+        );
+        $result = $this->_doImport($options, 'adb_google_import_csv');
         
         $this->assertEquals(5, $result['totalcount']);
         $this->assertEquals('Niedersachsen Ring 22', $result['results'][4]->adr_one_street);
@@ -150,13 +161,15 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         
         $this->_filename = dirname(__FILE__) . '/files/google_contacts.csv';
         $this->_deleteImportFile = FALSE;
-        
-        $result = $this->_doImport(array(), $definition);
-        $this->_deletePersonalContacts = TRUE;
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+        );
+
+        $result = $this->_doImport($options, $definition);
         $this->assertEquals(5, $result['totalcount']);
         
         $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testContainer->getId()),
             array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Ando'),
         )));
         $this->assertEquals(1, count($contacts));
@@ -177,14 +190,17 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $cfValue = array($customField->name => 'testing');
         $ownContact->customfields = $cfValue;
         Addressbook_Controller_Contact::getInstance()->update($ownContact);
-        
+
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+        );
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
         $definition->plugin_options = preg_replace('/<\/mapping>/',
             '<field>
                 <source>' . $customField->name . '</source>
                 <destination>'. $customField->name . '</destination>
             </field></mapping>', $definition->plugin_options);
-        $result = $this->_doImport(array(), $definition, new Addressbook_Model_ContactFilter(array(
+        $result = $this->_doImport($options, $definition, new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'equals', 'value' => $ownContact->getId()),
         )));
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
@@ -196,7 +212,54 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->assertEquals('testing', $exceptionArray[0]['exception']['clientRecord']['customfields'][$customField->name],
             'could not find cf value in client record: ' . print_r($exceptionArray[0]['exception']['clientRecord'], TRUE));
     }
-    
+
+    /**
+     * testExportAndImportWithBooleanCustomField 0 => 1
+     *
+     * @see 0011096: Can not import Custom Field "Boolean"
+     */
+    public function testExportAndImportWithBooleanCustomField1($from = 0, $to = 1)
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_family' => 'testcontact',
+            'container_id' => $this->_testContainer->getId(),
+        ]));
+        $cfName = 'booleanTester';
+        $customField = $this->_createCustomField($cfName, 'Addressbook_Model_Contact', 'boolean');
+        $cfValue = array($customField->name => $from);
+        $contact->customfields = $cfValue;
+        Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
+        $definition->plugin_options = preg_replace('/<\/mapping>/',
+            '<field>
+                <source>' . $cfName . '</source>
+                <destination>' . $cfName . '</destination>
+            </field></mapping>', $definition->plugin_options);
+
+        $csvReplacements = array('from' => ',"' . $from . '",', 'to' => ',"' . $to . '",');
+        $result = $this->_doImport(array(
+            'duplicateResolveStrategy' => 'mergeMine'
+        ), $definition, new Addressbook_Model_ContactFilter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact->getId()),
+        )), [], $csvReplacements);
+
+        $this->assertEquals(1, count($result['results']), 'should import/update contact: '
+            . print_r($result['results']->toArray(), true));
+        $importedRecord = $result['results']->getFirstRecord();
+        $this->assertEquals($to, $importedRecord->customfields[$cfName], print_r($importedRecord->toArray(), true));
+    }
+
+    /**
+     * testExportAndImportWithBooleanCustomField 1 => 0
+     *
+     * @see 0011096: Can not import Custom Field "Boolean"
+     */
+    public function testExportAndImportWithBooleanCustomField2()
+    {
+        $this->testExportAndImportWithBooleanCustomField1(/* from = */ 1, /* to = */ 0);
+    }
+
     /**
      * testImportWithUmlautsWin1252
      * 
@@ -204,14 +267,17 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     public function testImportWithUmlautsWin1252()
     {
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+        );
+
         $definition = $this->_getDefinitionFromFile('adb_import_csv_win1252.xml');
         
         $this->_filename = dirname(__FILE__) . '/files/importtest_win1252.csv';
         $this->_deleteImportFile = FALSE;
         
-        $result = $this->_doImport(array(), $definition);
-        $this->_deletePersonalContacts = TRUE;
-        
+        $result = $this->_doImport($options, $definition);
+
         $this->assertEquals(4, $result['totalcount']);
         $this->assertEquals('Üglü, ÖzdemirÖ', $result['results'][2]->n_fileas, 'Umlauts were not imported correctly: ' . print_r($result['results'][2]->toArray(), TRUE));
     }
@@ -241,19 +307,22 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     public function testImportDuplicateResolve($withCustomfields = false)
     {
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+        );
+
         $definition = $this->_getDefinitionFromFile('adb_import_csv_duplicate.xml');
         
         $this->_filename = dirname(__FILE__) . ($withCustomfields ? '/files/import_duplicate_1_cf.csv' : '/files/import_duplicate_1.csv');
         $this->_deleteImportFile = FALSE;
         
-        $this->_doImport(array(), $definition);
-        $this->_deletePersonalContacts = TRUE;
+        $this->_doImport($options, $definition);
 
         $this->_filename = dirname(__FILE__) .($withCustomfields ? '/files/import_duplicate_2_cf.csv' : '/files/import_duplicate_2.csv');
         
         $result = $this->_doImport(array(), $definition);
         
-        $this->assertEquals(1, $result['updatecount'], 'should have updated 1 contact');
+        $this->assertEquals(2, $result['updatecount'], 'should have updated 2 contacts');
         $this->assertEquals(0, $result['totalcount'], 'should have imported 0 records: ' . print_r($result['results']->toArray(), true));
         $this->assertEquals(0, $result['failcount']);
         $this->assertEquals('joerg@home.com', $result['results'][0]->email_home, 'duplicates resolving did not work: ' . print_r($result['results']->toArray(), true));
@@ -287,7 +356,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     public function testImportLxOffice()
     {
         $options = array(
-            'container_id'  => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId(),
+            'container_id'  => $this->_testContainer->getId(),
         );
         
         // add duplicate field "customernumber"
@@ -305,8 +374,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->_deleteImportFile = FALSE;
         
         $result = $this->_doImport($options, $definition);
-        $this->_deletePersonalContacts = TRUE;
-        
+
         $this->assertEquals(3, $result['totalcount'], print_r($result['results']->toArray(), true));
         
         $contacts = $result['results'];

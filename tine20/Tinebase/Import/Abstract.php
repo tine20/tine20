@@ -47,7 +47,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'encodingTo'        => 'UTF-8',
         'useStreamFilter'   => true,
         'postMappingHook'   => null,
-        // if this is set, always resolve duplicates
+        // if this is set, always resolve (one of:  mergeTheirs, mergeMine, keep
         'duplicateResolveStrategy' => null,
     );
     
@@ -1087,7 +1087,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if ($recordToUpdate !== null) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Merged record: ' . print_r($record->toArray(), TRUE));
-                    
+
+                    // skip concurrency check when merging records
+                    if ($recordToUpdate->has('seq')) {
+                        $recordToUpdate->seq = $record->seq;
+                    }
+
                     $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToUpdate, FALSE);
                     $this->_importResult['updatecount']++;
                 } else {
