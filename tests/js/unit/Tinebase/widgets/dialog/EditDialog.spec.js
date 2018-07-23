@@ -27,19 +27,20 @@ describe('EditDialog', () => {
     uit = Tine.widgets.dialog.EditDialog.prototype
   })
 
-  it('copies relations of contacts', () => {
-    require('../../../../../../tine20/Addressbook/js/Model')
-    var record = new Tine.Addressbook.Model.Contact({
-      n_fn: 'some contact',
+  it('copies relations of tasks', () => {
+    require('../../../../../../tine20/Tasks/js/Models')
+    var record = new Tine.Tasks.Model.Task({
+      summary: 'some task',
       relations: [{
         id: 'relationid'
       }]
     })
-    var copy = uit.getCopyRecordData(record, Tine.Addressbook.Model.Contact, false)
+    var copy = uit.getCopyRecordData(record, Tine.Tasks.Model.Task, false)
     expect(copy.relations).to.not.be.undefined
   })
 
   it('does not copy relations if in copyOmitFields', () => {
+    require('../../../../../../tine20/Addressbook/js/Model')
     var ContactModelWithCopyOmitRelation = Tine.Tinebase.data.Record.create(Tine.Addressbook.Model.ContactArray, {
       appName: 'Addressbook',
       modelName: 'Contact',
