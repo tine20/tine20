@@ -222,10 +222,17 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && (isset($_value['id']) || array_key_exists('id', $_value))) {
-            $_value = $_value['id'];
+        if (is_array($_value)) {
+            if (isset($_value['id'])) {
+                $_value = $_value['id'];
+            }
+            foreach ($_value as $idx => $value) {
+                if (is_array($value) && isset($value['id'])) {
+                    $_value[$idx] = $value['id'];
+                }
+            }
         }
-        
+
         //@todo validate value before setting it!
         $this->_value = $_value;
     }
