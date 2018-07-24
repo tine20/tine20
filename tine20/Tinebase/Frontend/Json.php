@@ -730,7 +730,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function logout()
     {
-        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        Tinebase_Controller::getInstance()->logout();
         
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
         

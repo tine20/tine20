@@ -73,7 +73,7 @@ class Tinebase_ControllerTest extends TestCase
             $this->_instance->login(
                 $loginName,
                 Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
-                new \Zend\Http\PhpEnvironment\Request()
+                new Tinebase_Http_Request()
             );
             $this->fail('expecting exception: Tinebase_Exception_MaintenanceMode');
         } catch (Tinebase_Exception_MaintenanceMode $temm) {

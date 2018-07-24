@@ -244,10 +244,7 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        $request = new Tinebase_Http_Request();
-        // NOTE: we put the request in the registry here - should be kept in mind when we implement more
-        //       middleware pattern / expressive functionality as each handler might create a new request / request is modified
-        self::set(self::REQUEST, $request);
+        $request = self::getRequest();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
@@ -534,7 +531,7 @@ class Tinebase_Core
             // Tinebase is not yet installed
             return $container;
         }
-        
+
         /** @var Tinebase_Model_Application $application */
         foreach ($applications->filter('status', Tinebase_Application::ENABLED) as $application) {
             /** @var Tinebase_Controller_Abstract $className */
@@ -1601,10 +1598,28 @@ class Tinebase_Core
         return self::get(self::USER);
     }
 
+    /**
+     * unset user in registry
+     */
     public static function unsetUser()
     {
         Zend_Registry::set(self::USER, null);
         Tinebase_Log_Formatter::resetUsername();
+    }
+
+    /**
+     * get the http request
+     *
+     * @return Tinebase_Http_Request
+     */
+    public static function getRequest()
+    {
+        if (! self::isRegistered(self::REQUEST)) {
+            $request = new Tinebase_Http_Request();
+            self::set(self::REQUEST, $request);
+        }
+
+        return self::get(self::REQUEST);
     }
 
     /**

@@ -99,7 +99,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP = 'imap';
-    
+
+    /**
+     * trusted proxy config
+     *
+     * @var string
+     */
+    const TRUSTED_PROXIES = 'trustedProxies';
+
     /**
      * smtp conf name
      * 
@@ -785,6 +792,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'System IMAP server configuration.',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::TRUSTED_PROXIES => array(
+            //_('Trusted Proxies')
+            'label'                 => 'Trusted Proxies',
+            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
+            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

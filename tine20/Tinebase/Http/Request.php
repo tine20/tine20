@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -18,8 +17,20 @@
  */
 class Tinebase_Http_Request extends Zend\Http\PhpEnvironment\Request
 {
+    /**
+     * @var resource
+     */
     protected $_inputStream;
 
+    /**
+     * @var string
+     */
+    protected $_remoteAddress;
+
+    /**
+     * @param bool $rewind
+     * @return bool|resource
+     */
     public function getContentStream($rewind = true)
     {
         if (! $this->_inputStream) {
@@ -58,5 +69,26 @@ class Tinebase_Http_Request extends Zend\Http\PhpEnvironment\Request
         return $this->content;
     }
 
+    /**
+     * @return mixed|\Zend\Stdlib\ParametersInterface
+     */
+    public function getRemoteAddress()
+    {
+        // get trusted proxies from config
+        if (! $this->_remoteAddress) {
+            $this->_remoteAddress = $this->getServer('REMOTE_ADDR');
+            $trustedProxies = Tinebase_Config::getInstance()->get(Tinebase_Config::TRUSTED_PROXIES);
+            if (is_array($trustedProxies) && in_array($this->getServer('REMOTE_ADDR'), $trustedProxies)) {
+                $forwardedFor = $this->getServer('HTTP_X_FORWARDED_FOR');
+                if ($forwardedFor) {
+                    // set forwarded-for as real remote address
+                    $this->_remoteAddress = $this->getServer('HTTP_X_FORWARDED_FOR');
+                    // TODO set PROXY_ADDR?
+                    // $_SERVER['PROXY_ADDR'] = $_SERVER['REMOTE_ADDR'];
+                }
+            }
+        }
 
+        return $this->_remoteAddress;
+    }
 }

@@ -20,24 +20,7 @@ class Tinebase_ControllerServerTest extends ServerTestCase
      */
     public function testValidLogin()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1
-Content-Type: application/json
-Content-Length: 122
-Host: 192.168.122.158
-Connection: keep-alive
-Origin: http://192.168.1\22.158
-X-Tine20-Request-Type: JSON
-X-Tine20-Jsonkey: undefined
-User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36
-X-Tine20-Transactionid: 9c7129898e9f8ab7e4621fddf7077a1eaa425aac
-X-Requested-With: XMLHttpRequest
-Accept: */*
-Referer: http://192.168.122.158/tine20dev/
-Accept-Encoding: gzip,deflate
-Accept-Language: de-DE,de;q=0.8,en-GB;q=0.6,en;q=0.4
-EOS
-        );
+        $request = $this->_getTestRequest();
         
         $credentials = $this->getTestCredentials();
         
@@ -45,13 +28,13 @@ EOS
         
         $this->assertTrue($result);
     }
-    
+
     /**
-     * @group ServerTests
+     * @return Tinebase_Http_Request
      */
-    public function testInvalidLogin()
+    protected function _getTestRequest()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        return Tinebase_Http_Request::fromString(<<<EOS
 POST /index.php HTTP/1.1
 Content-Type: application/json
 Content-Length: 122
@@ -69,7 +52,37 @@ Accept-Encoding: gzip,deflate
 Accept-Language: de-DE,de;q=0.8,en-GB;q=0.6,en;q=0.4
 EOS
         );
-        
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testLoginViaTrustedProxy()
+    {
+        $proxyIp = '192.168.122.1';
+        $realClientIp = '192.168.122.25';
+        $_SERVER['REMOTE_ADDR'] = $proxyIp;
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = $realClientIp;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::TRUSTED_PROXIES, [$proxyIp]);
+
+        $request = $this->_getTestRequest();
+
+        $credentials = $this->getTestCredentials();
+        $authResult = Tinebase_Auth::getInstance()->authenticate($credentials['username'], $credentials['password']);
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($credentials['username'], $authResult, $request,
+            'unittest');
+
+        self::assertEquals($realClientIp, $accessLog->ip, 'proxy ip in access log: ' . print_r($accessLog->toArray(), true));
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testInvalidLogin()
+    {
+        $request = $this->_getTestRequest();
+
+
         $credentials = $this->getTestCredentials();
         
         $result = Tinebase_Controller::getInstance()->login($credentials['username'], 'foobar', $request);
@@ -89,25 +102,8 @@ EOS
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = null;
 
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1
-Content-Type: application/json
-Content-Length: 122
-Host: 192.168.122.158
-Connection: keep-alive
-Origin: http://192.168.1\22.158
-X-Tine20-Request-Type: JSON
-X-Tine20-Jsonkey: undefined
-User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36
-X-Tine20-Transactionid: 9c7129898e9f8ab7e4621fddf7077a1eaa425aac
-X-Requested-With: XMLHttpRequest
-Accept: */*
-Referer: http://192.168.122.158/tine20dev/
-Accept-Encoding: gzip,deflate
-Accept-Language: de-DE,de;q=0.8,en-GB;q=0.6,en;q=0.4
-EOS
-        );
-        
+        $request = $this->_getTestRequest();
+
         $credentials = $this->getTestCredentials();
         
         for ($i=0; $i <= 3; $i++) {

@@ -284,7 +284,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     self::$_server->httpResponse->stopBodyLog());
             }
 
-            Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
+            Tinebase_Controller::getInstance()->logout();
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');

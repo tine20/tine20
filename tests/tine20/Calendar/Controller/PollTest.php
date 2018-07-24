@@ -46,7 +46,7 @@ class Calendar_Controller_PollTest extends TestCase
         parent::setUp();
 
         $this->_oldRequest = Tinebase_Core::get(Tinebase_Core::REQUEST);
-        Tinebase_Core::set(Tinebase_Core::REQUEST, new \Zend\Http\PhpEnvironment\Request());
+        Tinebase_Core::set(Tinebase_Core::REQUEST, new Tinebase_Http_Request());
 
         $this->jt = new Calendar_Frontend_Json_PollTest();
         $this->jt->setUp();

@@ -22,7 +22,7 @@ class ActiveSync_Server_HttpTests extends ServerTestCase
     {
         $this->markTestSkipped('FIXME unpack(): Type C: not enough input, need 1, have 0');
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /Microsoft-Server-ActiveSync?User=abc1234&DeviceId=Appl7R743U8YWH9&DeviceType=iPhone&Cmd=FolderSync HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "MS-ASProtocolVersion: 14.1\r\n".
