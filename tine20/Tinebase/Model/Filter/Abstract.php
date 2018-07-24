@@ -230,10 +230,11 @@ abstract class Tinebase_Model_Filter_Abstract
         if (is_array($_value)) {
             if (isset($_value['id'])) {
                 $_value = $_value['id'];
-            }
-            foreach ($_value as $idx => $value) {
-                if (is_array($value) && isset($value['id'])) {
-                    $_value[$idx] = $value['id'];
+            } else {
+                foreach ($_value as $idx => $value) {
+                    if (is_array($value) && isset($value['id'])) {
+                        $_value[$idx] = $value['id'];
+                    }
                 }
             }
         }
