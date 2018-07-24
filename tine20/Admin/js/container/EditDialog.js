@@ -225,7 +225,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Container Hierarchy/Name'),
                     allowBlank: false,
                     columnWidth: 1,
-                    name: 'hierarchy'
+                    name: 'hierarchy',
+                    allowBlank: true
                 }]]
             }, 
                 this.initGrantsGrid(), {
