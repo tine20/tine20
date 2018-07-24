@@ -308,7 +308,7 @@ class TestServer
         $config = $this->getConfig();
         $_SERVER['REMOTE_ADDR']     = $config->ip ? $config->ip : '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'Unit Test Client';
-        if (! $tinebaseController->login($credentials['username'], $credentials['password'], new \Zend\Http\PhpEnvironment\Request(), 'TineUnittest')){
+        if (! $tinebaseController->login($credentials['username'], $credentials['password'], Tinebase_Core::getRequest(), 'TineUnittest')){
             throw new Exception("Couldn't login, user session required for tests! \n");
         }
     }

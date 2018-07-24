@@ -22,7 +22,7 @@ class ActiveSync_Server_PluginTests extends TestCase
      */
     public function testServerGetParameter()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php?frontend=activesync HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "Depth: 0\r\n".

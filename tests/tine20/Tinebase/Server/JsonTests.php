@@ -154,7 +154,7 @@ class Tinebase_Server_JsonTests extends TestCase
         $coreSession->jsonKey = $jsonkey;
 
         $server = new Tinebase_Server_Json();
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
 'POST /index.php?requestType=JSON HTTP/1.1' . "\r\n"
 . 'Host: localhost' . "\r\n"
 . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"

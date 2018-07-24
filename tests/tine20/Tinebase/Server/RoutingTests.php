@@ -33,7 +33,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(\Zend\Http\PhpEnvironment\Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
             'GET /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
@@ -71,7 +71,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(\Zend\Http\PhpEnvironment\Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
             'GET /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"

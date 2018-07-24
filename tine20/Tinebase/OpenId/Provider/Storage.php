@@ -154,7 +154,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             return false;
         }
         
-        $authResult = Tinebase_Controller::getInstance()->authenticate($account->accountLoginName, $password, $_SERVER['REMOTE_ADDR'], 'OpenId');
+        $authResult = Tinebase_Controller::getInstance()->authenticate($account->accountLoginName, $password, 'OpenId');
         
         if ($authResult !== true) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id failed");

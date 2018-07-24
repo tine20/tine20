@@ -79,7 +79,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param   string                           $loginName
      * @param   string                           $password
-     * @param   Zend_Controller_Request_Abstract $request
+     * @param   \Zend\Http\PhpEnvironment\Request $request
      * @param   string                           $clientIdString
      *
      * @return  bool
@@ -88,7 +88,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * TODO what happened to the $securitycode parameter?
      *  ->  @param   string                           $securitycode   the security code(captcha)
      */
-    public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL)
+    public function login($loginName, $password, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
 
@@ -119,7 +119,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param string|null $clientIdString
      * @throws Tinebase_Exception_MaintenanceMode
      */
-    public function loginUser(Tinebase_Model_FullUser $user, \Zend\Http\Request $request, $clientIdString = null)
+    public function loginUser(Tinebase_Model_FullUser $user, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = null)
     {
         $loginName = $user->accountLoginName;
         $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $loginName);
@@ -435,11 +435,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param   string $loginName
      * @param   string $password
-     * @param   array  $remoteInfo
      * @param   string $clientIdString
      * @return  bool
      */
-    public function authenticate($loginName, $password, $remoteInfo, $clientIdString = NULL)
+    public function authenticate($loginName, $password, $clientIdString = NULL)
     {
         $result = $this->login($loginName, $password, Tinebase_Core::get(Tinebase_Core::REQUEST), $clientIdString);
         

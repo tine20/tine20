@@ -22,7 +22,7 @@ class Tinebase_Server_Plugin_WebDAVTests extends TestCase
      */
     public function testServerGetParameter()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php?frontend=webdav HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "Depth: 0\r\n".

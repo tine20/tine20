@@ -39,14 +39,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
-        
-        $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
 
         // only for debugging
         //Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " raw request: " . $request->__toString());
         
         // handle CORS requests
-        if ($request->getHeaders()->has('ORIGIN') && !$request->getHeaders()->has('X-FORWARDED-HOST')) {
+        if ($this->_request->getHeaders()->has('ORIGIN') && !$this->_request->getHeaders()->has('X-FORWARDED-HOST')) {
             /**
              * First the client sends a preflight request
              * 
@@ -76,7 +74,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
              * Access-Control-Allow-Credentials:true
              * Access-Control-Allow-Origin:http://other.site
              */
-            $origin = $request->getHeaders('ORIGIN')->getFieldValue();
+            $origin = $this->_request->getHeaders('ORIGIN')->getFieldValue();
             $uri    = \Zend\Uri\UriFactory::factory($origin);
             
             if (in_array($uri->getScheme(), array('http', 'https'))) {
@@ -92,8 +90,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
                 
                 // check for CORS preflight request
-                if ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS &&
-                    $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')
+                if ($this->_request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS &&
+                    $this->_request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')
                 ) {
                     $this->_methods = array('handleCors');
                     
@@ -136,7 +134,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
         
-        $json = $request->getContent();
+        $json = $this->_request->getContent();
         $json = Tinebase_Core::filterInputForDatabase($json);
 
         if (substr($json, 0, 1) == '[') {
@@ -155,12 +153,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $response = array();
         foreach ($requests as $requestOptions) {
             if ($requestOptions !== NULL) {
-                $request = new Zend_Json_Server_Request();
-                $request->setOptions($requestOptions);
+                $jsonRequest = new Zend_Json_Server_Request();
+                $jsonRequest->setOptions($requestOptions);
                 
                 $response[] = $exception ?
-                   $this->_handleException($request, $exception) :
-                   $this->_handle($request);
+                   $this->_handleException($jsonRequest, $exception) :
+                   $this->_handle($jsonRequest);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Got empty request options: skip request.');
@@ -197,7 +195,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $output = (string) $output;
             } catch (ErrorException $eee) {
                 $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg());
-                $output = $this->_handleException($request, $exception);
+                $output = $this->_handleException($this->_request, $exception);
             }
         }
 
@@ -501,14 +499,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
 
+            $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
-                    $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
+                    $request->getRemoteAddress() . '". (session timeout?)');
             } else {
                 Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                     ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
-                    ' request: ' . print_r($_REQUEST, true)
+                    ' request: ' . print_r($request->getServer()->toArray(), true)
                 );
             }
             
