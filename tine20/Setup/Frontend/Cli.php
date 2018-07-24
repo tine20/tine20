@@ -49,6 +49,8 @@ class Setup_Frontend_Cli
      */
     public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
+        $time_start = microtime(true);
+
         // always set real setup user if Tinebase is installed
         if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             try {
@@ -108,6 +110,8 @@ class Setup_Frontend_Cli
         } elseif(isset($_opts->upgradeMysql564)) {
             $this->_upgradeMysql564();
         }
+
+        Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
         
         if ($exitAfterHandle) {
             exit($result);
