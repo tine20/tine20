@@ -207,4 +207,32 @@ class Tinebase_Log extends Zend_Log
     {
         return($this->_tz);
     }
+
+    /**
+     * logUsageAndMethod
+     *
+     * @param string $file
+     * @param float $time_start
+     * @param string $method
+     * @param int $pid
+     *
+     * @todo we could make $time_start optional and use Tinebase_Core::STARTTIME if set
+     */
+    public static function logUsageAndMethod($file, $time_start, $method, $pid = null)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            // log profiling information
+            $time_end = microtime(true);
+            $time = $time_end - $time_start;
+            $pid = $pid === null ? getmypid() : $pid;
+
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' FILE: ' . $file
+                . ' METHOD: ' . $method
+                . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
+                . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+                . ' / PID: ' . $pid
+            );
+        }
+    }
 }
