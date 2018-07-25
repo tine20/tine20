@@ -245,6 +245,8 @@ class Tinebase_Core
     public static function dispatchRequest()
     {
         $request = new Tinebase_Http_Request();
+        // NOTE: we put the request in the registry here - should be kept in mind when we implement more
+        //       middleware pattern / expressive functionality as each handler might create a new request / request is modified
         self::set(self::REQUEST, $request);
         
         // check transaction header
