@@ -310,8 +310,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.productGridPanel = new Tine.Sales.ProductAggregateGridPanel({
             app: this.app,
             editDialog: this,
-            title: this.app.i18n._('Products'),
-            editDialogRecordProperty: 'products'
+            title: this.app.i18n._('Positions'),
+            editDialogRecordProperty: 'Positions'
         });
         
         var items = [[{
