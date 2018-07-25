@@ -24,6 +24,7 @@ class Tinebase_Setup_DemoData_Import
     {
         $extract = Tinebase_Application::extractAppAndModel($modelName);
         $this->_options['$modelName'] = $extract['modelName'];
+        $this->_options['dryrun'] = false;
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($extract['appName']);
         $this->_options = array_merge($this->_options, $options);
     }
@@ -55,6 +56,10 @@ class Tinebase_Setup_DemoData_Import
             . ' Imported ' . $importedDemoDataFiles . ' demo data files');
     }
 
+    /**
+     * @param SplFileInfo $splFileInfo
+     * @return null
+     */
     protected function _importDemoDataFile(SplFileInfo $splFileInfo)
     {
         // TODO allow xls

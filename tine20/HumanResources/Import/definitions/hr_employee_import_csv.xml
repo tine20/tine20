@@ -11,6 +11,10 @@
     <extension>csv</extension>
     <mapping>
         <field>
+        <source>account_id</source>
+        <destination>account_id</destination>
+        </field>
+        <field>
             <source>Mitarbeiternummer</source>
             <destination>number</destination>
             <typecast>integer</typecast>
