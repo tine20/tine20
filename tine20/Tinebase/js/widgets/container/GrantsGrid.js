@@ -137,10 +137,6 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                     grants.push(grant);
                 }
 
-                if (grant == 'admin' && me.recordClass.hasField('admin') && me.grantContainer && me.grantContainer.type == 'shared') {
-                    grants.push(grant);
-                }
-
                 return grants;
             }, []);
 
@@ -150,7 +146,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             grants = Tine.widgets.container.GrantsManager.getByContainer(this.grantContainer);
         }
 
-        if (this.alwaysShowAdminGrant && this.recordClass.hasField('admin')) {
+        if (this.recordClass.hasField('adminGrant') && (this.alwaysShowAdminGrant || (me.grantContainer && me.grantContainer.type == 'shared'))) {
             grants.push('admin');
         }
         
