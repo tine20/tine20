@@ -30,8 +30,6 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     newRecordIcon: 'cal-resource',
     
-    initFilterPanel: Ext.emptyFn,
-
     ownActionToolbar: true,
 
     initComponent: function() {
@@ -48,6 +46,12 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sortable: true,
             dataIndex: 'name'
         }, {
+            id: 'hierarchy',
+            header: this.app.i18n._("Calendar Hierarchy/Name"),
+            width: 150,
+            sortable: true,
+            dataIndex: 'hierarchy'
+        },{
             id: 'email',
             header: this.app.i18n._("Email"),
             width: 150,
