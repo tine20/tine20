@@ -212,7 +212,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 disabled: true,
                 fieldLabel: this.app.i18n._('Cleared In'),
                 name: 'billed_in'
-            }];
+            },
+        ];
         
         if (this.useInvoice) {
             lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
@@ -288,7 +289,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         xtype: 'textarea',
                         height: 150
-                    }], lastRow] 
+                    }], lastRow,
+                    [
+                        {
+                            columnWidth: .5,
+                            boxLabel: this.app.i18n._('Need for Clarification'),
+                            name: 'need_for_clarification',
+                            xtype: 'checkbox'
+                        }
+                    ]] 
                 }, {
                     // activities and tags
                     layout: 'ux.multiaccordion',

@@ -223,6 +223,12 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'queryFilter'           => true
             ),
+            'need_for_clarification'    => array(
+                'label'                 => 'Need for Clarification',
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'type'                  => 'boolean',
+                'default'               => 0
+            ),
             // TODO ?????
             /*
             'timeaccount_closed' => array(
