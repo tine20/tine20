@@ -29,6 +29,7 @@ class Calendar_Model_ResourceFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Calendar')),
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'  ),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'hierarchy'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'max_number_of_people'  => array('filter' => 'Tinebase_Model_Filter_Int'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),

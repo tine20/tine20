@@ -1074,6 +1074,7 @@ Tine.Calendar.Model.Resource.getFilterModel = function() {
     return [
         {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Name'), field: 'name'},
+        {label: app.i18n._('Calendar Hierarchy/Name'), field: 'hierarchy'},
         {label: app.i18n._('Email'), field: 'email'},
         {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
         {label: app.i18n._('Maximum number of attendee'), field: 'max_number_of_people'},
