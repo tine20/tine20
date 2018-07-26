@@ -25,6 +25,7 @@ class Addressbook_Import_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Import Tests');
         $suite->addTestSuite('Addressbook_Import_CsvTest');
         $suite->addTestSuite('Addressbook_Import_VCardTest');
+        $suite->addTestSuite('Addressbook_Import_DemoDataTest');
         return $suite;
     }
 }
