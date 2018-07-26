@@ -302,7 +302,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      */
     onBeforeTabChange: function(tp, newTab, currentTab) {
         if (this.id2appName(newTab) === 'menu') {
-            this.menu.show(this.menuTabEl, 'tl-bl');
+            this.menu.show.defer(10, this.menu, [this.menuTabEl, 'tl-bl']);
             return false;
         }
     },
