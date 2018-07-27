@@ -502,15 +502,26 @@ class Setup_Controller
      * load the setup.xml file and returns a simplexml object
      *
      * @param string $_applicationName name of the application
-     * @return SimpleXMLElement
+     * @param boolean $_disableAppIfNotFound
+     * @return SimpleXMLElement|null
+     * @throws Setup_Exception_NotFound
      */
-    public function getSetupXml($_applicationName)
+    public function getSetupXml($_applicationName, $_disableAppIfNotFound = false)
     {
         $setupXML = $this->_baseDir . ucfirst($_applicationName) . '/Setup/setup.xml';
 
-        if (!file_exists($setupXML)) {
-            throw new Setup_Exception_NotFound(ucfirst($_applicationName)
-                . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
+        if (! file_exists($setupXML)) {
+            if ($_disableAppIfNotFound) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                    . ' not found - disabling application "' . $_applicationName . '".');
+                $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+                Tinebase_Application::getInstance()->setApplicationStatus(
+                    array($application->getId()),
+                    Tinebase_Application::DISABLED);
+                return null;
+            } else {
+                throw new Setup_Exception_NotFound($setupXML . ' not found. If application got renamed or deleted, re-run setup.php.');
+            }
         }
         
         $xml = simplexml_load_file($setupXML);
@@ -526,8 +537,8 @@ class Setup_Controller
      */
     public function checkUpdate(Tinebase_Model_Application $_application)
     {
-        $xmlTables = $this->getSetupXml($_application->name);
-        if(isset($xmlTables->tables)) {
+        $xmlTables = $this->getSetupXml($_application->name, true);
+        if ($xmlTables && isset($xmlTables->tables)) {
             foreach ($xmlTables->tables[0] as $tableXML) {
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                 if (true == $this->_backend->tableExists($table->name)) {
@@ -796,14 +807,11 @@ class Setup_Controller
      */
     public function updateNeeded($_application)
     {
-        try {
-            $setupXml = $this->getSetupXml($_application->name);
-        } catch (Setup_Exception_NotFound $senf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $senf->getMessage() . ' Disabling application "' . $_application->name . '".');
-            Tinebase_Application::getInstance()->setApplicationStatus(array($_application->getId()), Tinebase_Application::DISABLED);
+        $setupXml = $this->getSetupXml($_application->name, true);
+        if (! $setupXml) {
             return false;
         }
-        
+
         $updateNeeded = version_compare($_application->version, $setupXml->version);
         
         if($updateNeeded === -1) {
@@ -812,7 +820,7 @@ class Setup_Controller
         
         return false;
     }
-    
+
     /**
      * search for installed and installable applications
      *
@@ -823,7 +831,6 @@ class Setup_Controller
         // get installable apps
         $installable = $this->getInstallableApplications(/* $getInstalled */ true);
         $applications = array();
-
         // get installed apps
         if (Setup_Core::get(Setup_Core::CHECKDB)) {
             try {
@@ -911,6 +918,8 @@ class Setup_Controller
     {
         $result = array();
         $success = TRUE;
+        
+        
 
         // check php environment
         $requiredIniSettings = array(
@@ -1707,7 +1716,7 @@ class Setup_Controller
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         Tinebase_Application::getInstance()->setApplicationState($tinebase,
             Tinebase_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
-        
+
         return true;
     }
 
@@ -2368,6 +2377,12 @@ class Setup_Controller
             throw new Exception('backupDir not configured');
         }
 
+        if (! isset($options['db']) && ! isset($options['files']) && ! isset($options['config'])) {
+            // files & db are default
+            $options['db'] = true;
+            $options['files'] = true;
+        }
+
         if (! isset($options['noTimestamp'])) {
             $backupDir .= '/' . date_create('now', new DateTimeZone('UTC'))->format('Y-m-d-H-i-s');
         }
@@ -2402,7 +2417,7 @@ class Setup_Controller
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
-        if ($options['files'] && $filesDir) {
+        if (isset($options['files']) && $options['files'] && $filesDir) {
             `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of files successful');
@@ -2426,7 +2441,10 @@ class Setup_Controller
          * @var $application Tinebase_Model_Application
          */
         foreach ($applications as $application) {
-            $tableDef = $this->getSetupXml($application->name);
+            $tableDef = $this->getSetupXml($application->name, true);
+            if (! $tableDef) {
+                continue;
+            }
             $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
 
             foreach ($structOnlys as $structOnly) {
