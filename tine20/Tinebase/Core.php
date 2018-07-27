@@ -2050,8 +2050,7 @@ class Tinebase_Core
      */
     public static function getPreviewService()
     {
-        $class = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_CLASS};
-        return new $class;
+        return Tinebase_FileSystem_Preview_ServiceFactory::getPreviewService();
     }
 
     /**
