@@ -267,19 +267,28 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         lazyInit: false
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
+                        columnWidth: 0.25,
                         name: 'duration',
                         selectOnFocus: true,
                         allowBlank: false,
                         xtype: 'tinedurationspinner'
                         }, {
                         fieldLabel: this.app.i18n._('Date'),
+                        columnWidth: 0.25,
                         name: 'start_date',
                         allowBlank: false,
                         xtype: 'datefield'
                         }, {
                         fieldLabel: this.app.i18n._('Start'),
+                        columnWidth: 0.25,
                         emptyText: this.app.i18n._('not set'),
                         name: 'start_time',
+                        xtype: 'timefield'
+                        }, {
+                        fieldLabel: this.app.i18n._('End'),
+                        columnWidth: 0.25,
+                        emptyText: this.app.i18n._('not set'),
+                        name: 'end_time',
                         xtype: 'timefield'
                     }], [{
                         columnWidth: 1,

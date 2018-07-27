@@ -210,6 +210,14 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 //                'shy'                   => true,
 //                'nullable'              => true,
 //            ),
+            'end_time'            => array(
+                'label'                 => 'End time', // _('End time')
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'nullable'              => true,
+                'type'                  => 'time',
+                'shy'                   => TRUE
+            ),
             'duration'              => array(
                 'label'                 => 'Duration', // _('Duration')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
