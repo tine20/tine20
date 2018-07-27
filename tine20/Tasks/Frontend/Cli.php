@@ -22,7 +22,14 @@ class Tasks_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Tasks';
-    
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Tasks_Model_Task' => 'tasks_import_demo_csv'
+    ];    
     /**
      * import calendars from a CalDav source
      *

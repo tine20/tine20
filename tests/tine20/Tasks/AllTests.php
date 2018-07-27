@@ -31,6 +31,7 @@ class Tasks_AllTests
         $suite->addTestSuite('Tasks_ControllerTest');
         $suite->addTestSuite('Tasks_Model_TaskFilterTest');
         $suite->addTestSuite('Tasks_JsonTest');
+        $suite->addTestSuite('Tasks_Import_DemoDataTest');
         
         return $suite;
     }

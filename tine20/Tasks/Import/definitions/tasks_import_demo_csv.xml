@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>tasks_import_demo_csv</name>
+    <model>Tasks_Model_Task</model>
+    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>Import CSV formated task from Tine 2.0 task</description>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>summary</source>
+            <destination>summary</destination>
+        </field>
+        <field>
+            <source>due</source>
+            <destination>due</destination>
+        </field>
+        <field>
+            <source>priority</source>
+            <destination>priority</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>percent</source>
+            <destination>percent</destination>
+        </field>
+        <field>
+            <source>status</source>
+            <!-- IN-PROCESS, COMPLETED -->
+            <destination>status</destination>
+        </field>
+        <field>
+            <source>completed</source>
+            <destination>completed</destination>
+        </field>
+    </mapping>
+</config>
+
