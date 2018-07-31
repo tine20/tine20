@@ -96,8 +96,9 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             $hasIdentity = false;
 
-            if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'],
-                        'Microsoft-WebDAV-MiniRedir') === 0)) {
+            if (isset($_SERVER['HTTP_USER_AGENT']) &&
+                    (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
+                        strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
                 try {
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
