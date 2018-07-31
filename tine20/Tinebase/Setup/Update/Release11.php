@@ -623,21 +623,26 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_29()
     {
-        $replicationUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
-            Tinebase_Group::getInstance()->getDefaultReplicationGroup());
-        if (null !== $replicationUser) {
-            $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
-            if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
-                $password = Tinebase_Record_Abstract::generateUID(12);
-            }
-            // TODO auto create pw that is matching the policy
-            $pwPolicyActive = Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE};
-            if ($pwPolicyActive) {
-                Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = false;
-            }
-            Tinebase_User::getInstance()->setPassword($replicationUser, $password);
-            if ($pwPolicyActive) {
-                Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = true;
+        try {
+            Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_REPLICATION);
+            // nothing to do
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $replicationUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+                Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+            if (null !== $replicationUser) {
+                $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+                if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                    $password = Tinebase_Record_Abstract::generateUID(12);
+                }
+                // TODO auto create pw that is matching the policy
+                $pwPolicyActive = Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE};
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = false;
+                }
+                Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = true;
+                }
             }
         }
 
