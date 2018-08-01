@@ -497,6 +497,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             throw new Tinebase_Exception_UnexpectedValue('not an attendee');
         }
         $attendeeFound->displaycontainer_id = $_attendee->displaycontainer_id;
+        $attendeeFound->xprops = $_attendee->xprops;
         Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_event, $attendeeFound, $attendeeFound->status_authkey);
         
         // update exceptions
@@ -513,6 +514,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 }
                 $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
+                $exceptionAttendee->xprops = $_attendee->xprops;
                 Calendar_Controller_Event::getInstance()->attenderStatusCreateRecurException($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
             } else {
                 /*if (! $exceptionAttendee) {
@@ -527,6 +529,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 }
                 $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
+                $exceptionAttendee->xprops = $_attendee->xprops;
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
             }
         }

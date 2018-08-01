@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test testOrganizerSendBy
@@ -559,15 +559,21 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->assertEquals(3, count($updatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+        $this->assertTrue(isset($updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]) &&
+            isset($updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]),
+            'xprops of attender not properly set: ' . print_r($updatedExternalAttendee->xprops(), true));
+        $this->assertEquals($iMIP->getEvent()->seq, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]);
+        $this->assertEquals($iMIP->getEvent()->last_modified_time, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]);
         
-        // TEST ACCEPTABLE NON RECENT REPLY
+        // TEST NORMAL REPLY
         $updatedExternalAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         Calendar_Controller_Event::getInstance()->attenderStatusUpdate($updatedEvent, $updatedExternalAttendee, $updatedExternalAttendee->status_authkey);
         try {
+            $iMIP->getEvent()->seq = $iMIP->getEvent()->seq + 1;
             $iMIP->preconditionsChecked = false;
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throws Exception: ' . $e);
+            $this->fail('TEST NORMAL REPLY autoProcess throws Exception: ' . $e);
         }
         unset($iMIP->existing_event);
         
@@ -576,13 +582,15 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->assertEquals(3, count($updatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+        $this->assertEquals($iMIP->getEvent()->seq, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]);
+        $this->assertEquals($iMIP->getEvent()->last_modified_time, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]);
         
         // check if attendee are resolved
         $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP);
         $this->assertTrue($iMIP->existing_event->attendee instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(3, count($iMIP->existing_event->attendee));
         
-        // TEST NON ACCEPTABLE NON RECENT REPLY
+        // TEST NON RECENT REPLY (seq is the same as before)
         $iMIP->preconditionsChecked = false;
         try {
             $this->_iMIPFrontend->autoProcess($iMIP);

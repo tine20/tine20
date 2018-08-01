@@ -218,4 +218,31 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_4();
         $this->setApplicationVersion('Calendar', '10.10');
     }
+
+    /**
+     * update to 10.11
+     *
+     * add xprops to cal_attendee
+     */
+    public function update_10()
+    {
+        if (!$this->_backend->columnExists('xprops', 'cal_attendee')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                <name>xprops</name>
+                <type>text</type>
+                <length>65535</length>
+                </field>');
+
+            $this->_backend->addCol('cal_attendee', $declaration);
+        }
+
+        if ($this->getTableVersion('cal_attendee') < 7) {
+            $this->setTableVersion('cal_attendee', 7);
+        }
+
+        $this->setApplicationVersion('Calendar', '10.11');
+    }
+
+
+
 }

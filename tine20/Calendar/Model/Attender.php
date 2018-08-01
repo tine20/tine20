@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -40,7 +40,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const STATUS_ACCEPTED      = 'ACCEPTED';
     const STATUS_DECLINED      = 'DECLINED';
     const STATUS_TENTATIVE     = 'TENTATIVE';
-    
+
+    const XPROP_REPLY_DTSTAMP  = 'replyDtstamp';
+    const XPROP_REPLY_SEQUENCE = 'replySequence';
+
     /**
      * cache for already resolved attendee
      * 
@@ -102,6 +105,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             'allowEmpty' => true,
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
         ),
+        'xprops'               => array('allowEmpty' => true          ),
     );
 
     /**
@@ -1146,6 +1150,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         foreach(self::$_resolvedAttendeesCache as $name => $entries) {
             self::$_resolvedAttendeesCache[$name] = array();
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
         }
     }
 }

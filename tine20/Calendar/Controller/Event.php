@@ -2497,6 +2497,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $updatedAttender->status              = $_attender->status;
             $updatedAttender->displaycontainer_id = isset($_attender->displaycontainer_id) ? $_attender->displaycontainer_id : $updatedAttender->displaycontainer_id;
             $updatedAttender->transp              = isset($_attender->transp) ? $_attender->transp : Calendar_Model_Event::TRANSP_OPAQUE;
+            $updatedAttender->xprops              = $_attender->xprops;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
