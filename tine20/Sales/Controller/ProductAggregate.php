@@ -114,19 +114,23 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
     protected function _checkJsonAttributeAssignedAccountable(Sales_Model_ProductAggregate $pA)
     {
         if ($pA->json_attributes && isset($pA->json_attributes['assignedAccountables'])) {
-            $pA->xprops('json_attributes')['assignedAccountables'] =
-                array_filter($pA->json_attributes['assignedAccountables'], function ($val) {
-                    static $gate;
-                    if (null === $gate) {
-                        $gate = [];
-                    }
-                    $id = $val['model'] . $val['id'];
-                    if (isset($gate[$id])) {
-                        return false;
-                    }
-                    $gate[$id] = true;
-                    return true;
-            });
+            if (is_array($pA->json_attributes['assignedAccountables'])) {
+                $pA->xprops('json_attributes')['assignedAccountables'] =
+                    array_filter($pA->json_attributes['assignedAccountables'], function ($val) {
+                        static $gate;
+                        if (null === $gate) {
+                            $gate = [];
+                        }
+                        $id = $val['model'] . $val['id'];
+                        if (isset($gate[$id])) {
+                            return false;
+                        }
+                        $gate[$id] = true;
+                        return true;
+                    });
+            } else {
+                unset($pA->xprops('json_attributes')['assignedAccountables']);
+            }
         }
     }
 
