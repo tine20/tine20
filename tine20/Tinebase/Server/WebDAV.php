@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -173,13 +173,19 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
-                }self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());} else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
-                }
+            $userA = null;
+            if (isset($_SERVER['HTTP_USER_AGENT'])) {
+                list($userA,) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             }
+            if (Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD !== $userA) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' SyncTokenSupport enabled');
+                self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' SyncTokenSupport disabled');
+        }
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
 
             $contentType = self::$_server->httpRequest->getHeader('Content-Type');
