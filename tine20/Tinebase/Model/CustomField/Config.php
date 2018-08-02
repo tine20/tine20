@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -41,15 +41,20 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                => array('allowEmpty' => true ),
-        'application_id'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'model'             => array('presence' => 'required', 'allowEmpty' => false ),
-        'name'              => array('presence' => 'required', 'allowEmpty' => false ),
-        'definition'        => array('presence' => 'required', 'allowEmpty' => false ),
-        'account_grants'    => array('allowEmpty' => true ),
-        'value'             => array('allowEmpty' => true ),
+        'id'                    => array('allowEmpty' => true ),
+        'application_id'        => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
+        'model'                 => array('presence' => 'required', 'allowEmpty' => false ),
+        'name'                  => array('presence' => 'required', 'allowEmpty' => false ),
+        'definition'            => array('presence' => 'required', 'allowEmpty' => false ),
+        'account_grants'        => array('allowEmpty' => true ),
+        'value'                 => array('allowEmpty' => true ),
         // Set label from definition if extended resolving is enabled
-        'label'             => array('allowEmpty' => true ),
+        'label'                 => array('allowEmpty' => true ),
+        // fake properties for modlog purpose only
+        'created_by'            => array('allowEmpty' => true ),
+        'creation_time'         => array('allowEmpty' => true ),
+        'last_modified_by'      => array('allowEmpty' => true ),
+        'last_modified_time'    => array('allowEmpty' => true ),
     );
     
     /**
@@ -103,5 +108,15 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         $this->_filters = array('name' => new Tinebase_Model_InputFilter_RemoveWhitespace());
 
         parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return true;
     }
 }
