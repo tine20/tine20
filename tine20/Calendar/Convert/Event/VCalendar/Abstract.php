@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -736,7 +736,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     break;
                     
                 case 'LAST-MODIFIED':
-                    $event->last_modified_time = new Tinebase_DateTime($property->getValue());
+                    $event->last_modified_time = $this->_convertToTinebaseDateTime($property);
                     break;
                 
                 case 'ATTENDEE':

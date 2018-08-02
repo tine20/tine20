@@ -41,4 +41,17 @@ class Calendar_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_9();
         $this->setApplicationVersion('Calendar', '12.3');
     }
+
+    /**
+     * update to 12.4
+     *
+     * add xprops to cal_attendee
+     */
+    public function update_3()
+    {
+        $update10 = new Calendar_Setup_Update_Release10($this->_backend);
+        $update10->update_10();
+
+        $this->setApplicationVersion('Calendar', '12.4');
+    }
 }
