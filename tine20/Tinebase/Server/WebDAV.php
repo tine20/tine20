@@ -259,10 +259,15 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
             self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+                $userA = null;
+                if (isset($_SERVER['HTTP_USER_AGENT'])) {
+                    list($userA,) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
                 }
-                self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+                if (Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD !== $userA) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                        __LINE__ . ' SyncTokenSupport enabled');
+                    self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
