@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>11.10</version>
+    <version>11.11</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -320,7 +320,7 @@
         <!-- attendee -->
         <table>
             <name>cal_attendee</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -422,6 +422,11 @@
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>
+                </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <index>
                     <name>id</name>
