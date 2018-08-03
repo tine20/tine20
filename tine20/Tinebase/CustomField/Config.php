@@ -38,6 +38,11 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
      */
     protected $_defaultCountCol = 'id';
 
+    public static function getInstance()
+    {
+        return new self();
+    }
+
     /**
      * get customfield config ids by grant
      * 
@@ -129,5 +134,38 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
             $data['definition'] = Zend_Json::encode($data['definition']);
         }
         return $data;
+    }
+
+    /**
+     * apply modification logs from a replication master locally
+     *
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @throws Tinebase_Exception
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+
+        switch ($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                $record = new $model($diff->diff);
+                Tinebase_CustomField::getInstance()->addCustomField($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $record = $this->get($_modification->record_id, true);
+                $record->applyDiff($diff);
+                Admin_Controller_Customfield::getInstance()->update($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                Tinebase_CustomField::getInstance()->deleteCustomField($_modification->record_id);
+                break;
+
+            default:
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+        }
     }
 }
