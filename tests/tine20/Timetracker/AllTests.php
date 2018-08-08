@@ -27,6 +27,7 @@ class Timetracker_AllTests
         $suite->addTestSuite('Timetracker_ControllerTest');
         $suite->addTestSuite('Timetracker_ExportTest');
         $suite->addTestSuite('Timetracker_FilterTest');
+        $suite->addTestSuite('Timetracker_Import_AllTest');
         return $suite;
     }
 }
