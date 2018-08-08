@@ -237,6 +237,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'type'                  => 'boolean',
                 'default'               => 0
             ),
+            'type' => [
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'nullable' => true,
+                'label' => 'Type', // _('Type')
+                'type' => 'keyfield',
+                'name' => 'type'
+            ],
             // TODO ?????
             /*
             'timeaccount_closed' => array(

@@ -55,6 +55,6 @@ class Timetracker_Setup_Update_Release12 extends Setup_Update_Abstract
     public function update_2()
     {
         $this->updateSchema('Timetracker', array('Timetracker_Model_Timesheet'));
-        $this->setApplicationVersion('Inventory', '12.3');
+        $this->setApplicationVersion('Timetracker', '12.3');
     }
 }

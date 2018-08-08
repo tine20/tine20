@@ -24,6 +24,13 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     const FEATURE_TIMEACCOUNT_BOOKMARK = 'featureTimeaccountBookmark';
 
     /**
+     * Type
+     *
+     * @var string
+     */
+    const TYPE = 'type';
+
+    /**
      * @var array
      */
     protected static $_properties = [
@@ -48,6 +55,22 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR => [],
         ],
+        self::TYPE => [
+            //_('Type')
+            'label' => 'Type',
+            //_('Type')
+            'description' => 'Possible types',
+            'type' => 'keyFieldConfig',
+            'clientRegistryInclude' => true,
+            'setByAdminModule' => true,
+            'setBySetupModule' => false,
+            'default' => [
+                'records' => [
+                    ['id' => 'AZ', 'value' => 'Working time', 'system' => true], //_('Working time')
+                    ['id' => 'PZ', 'value' => 'Project time', 'system' => true], //_('Project time')
+                ]
+            ]
+        ]
     ];
     /**
      * holds the instance of the singleton
