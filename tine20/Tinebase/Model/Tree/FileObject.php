@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -174,8 +174,9 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 
     public function runConvertToRecord()
     {
-        if(isset($this->_properties['available_revisions'])) {
-            $this->_properties['available_revisions'] = explode(',', ltrim(rtrim($this->_properties['available_revisions'], '}'), '{'));
+        if (isset($this->_properties['available_revisions']) && is_string($this->_properties['available_revisions'])) {
+            $this->_properties['available_revisions'] = explode(',',
+                ltrim(rtrim($this->_properties['available_revisions'], '}'), '{'));
         }
 
         parent::runConvertToRecord();
