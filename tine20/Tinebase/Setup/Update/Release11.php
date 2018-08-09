@@ -650,11 +650,23 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.31
+     *
+     * removing db prefix from application_tables if present
+     */
+    public function update_30()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_56();
+        $this->setApplicationVersion('Tinebase', '11.31');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_30()
+    public function update_31()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

@@ -2470,9 +2470,33 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.57
+     *
+     * removing db prefix from application_tables if present
      */
     public function update_56()
+    {
+        $command = Tinebase_Backend_Sql_Command::factory($this->_db);
+        foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'application_tables')->where(
+                $this->_db->quoteIdentifier('name') . ' ' . $command->getLike() . $this->_db->quoteInto(' ?',
+                    SQL_TABLE_PREFIX . '%'))->query()->fetchAll(Zend_DB::FETCH_ASSOC) as $row) {
+            $this->_db->delete(SQL_TABLE_PREFIX . 'application_tables', $this->_db->quoteIdentifier('application_id') .
+                $this->_db->quoteInto(' = ? AND ', $row['application_id']) . $this->_db->quoteIdentifier('name') .
+                $this->_db->quoteInto(' = ?', $row['name']));
+            $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables',[
+                'application_id'    => $row['application_id'],
+                'name'              => substr($row['name'], strlen(SQL_TABLE_PREFIX)),
+                'version'           => $row['version']
+            ]);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.57');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_57()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

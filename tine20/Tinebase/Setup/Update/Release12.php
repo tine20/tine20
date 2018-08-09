@@ -45,4 +45,16 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_29();
         $this->setApplicationVersion('Tinebase', '12.3');
     }
+
+    /**
+     * update to 12.4
+     *
+     * create replication user
+     */
+    public function update_3()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_30();
+        $this->setApplicationVersion('Tinebase', '12.4');
+    }
 }
