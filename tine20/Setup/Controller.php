@@ -449,6 +449,11 @@ class Setup_Controller
         
         //find smallest major version
         foreach ($applications as $application) {
+            if (! $this->updateNeeded($application)) {
+                $applications->removeRecord($application);
+                continue;
+            }
+            
             if ($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
                 $smallestMajorVersion = $application->getMajorVersion();
             }
