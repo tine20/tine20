@@ -540,73 +540,87 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $notesController = Tinebase_Notes::getInstance();
-        $notes = $notesController->getAllNotes();
+        $limit = 1000;
+        $offset = 0;
         $controllers = array();
         $models = array();
         $deleteIds = array();
 
-        /** @var Tinebase_Model_Note $note */
-        foreach ($notes as $note) {
-            if (!isset($controllers[$note->record_model])) {
-                if (strpos($note->record_model, 'Tinebase') === 0) {
-                    continue;
-                }
-                try {
-                    $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
-                } catch(Tinebase_Exception_AccessDenied $e) {
-                    // TODO log
-                    continue;
-                } catch(Tinebase_Exception_NotFound $tenf) {
-                    $deleteIds[] = $note->getId();
-                    continue;
-                }
-                $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
-                $models[$note->record_model] = array(
-                    0 => new $note->record_model(),
-                    1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
-                    2 => $note->record_model . 'Filter',
-                    3 => $oldACLCheckValue
-                );
-            }
-            $controller = $controllers[$note->record_model];
-            $model = $models[$note->record_model];
+        do {
+            $notes = $notesController->getAllNotes('id ASC', $limit, $offset);
+            $offset += $limit;
 
-            if ($model[1]) {
-                $filter = new $model[2](array(
-                    array('field' => $model[0]->getIdProperty(), 'operator' => 'equals', 'value' => $note->record_id)
-                ));
-                if ($model[0]->has('is_deleted')) {
-                    $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'is_deleted', 'operator' => 'notnull', 'value' => NULL)));
+            /** @var Tinebase_Model_Note $note */
+            foreach ($notes as $note) {
+                if (!isset($controllers[$note->record_model])) {
+                    if (strpos($note->record_model, 'Tinebase') === 0) {
+                        continue;
+                    }
+                    try {
+                        $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
+                    } catch (Tinebase_Exception_AccessDenied $e) {
+                        // TODO log
+                        continue;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
+                        continue;
+                    }
+                    $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
+                    $models[$note->record_model] = array(
+                        0 => new $note->record_model(),
+                        1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
+                        2 => $note->record_model . 'Filter',
+                        3 => $oldACLCheckValue
+                    );
                 }
-                $result = $controller->searchCount($filter);
+                $controller = $controllers[$note->record_model];
+                $model = $models[$note->record_model];
 
-                if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
-                    $result = (int)$result;
-                }
+                if ($model[1]) {
+                    $filter = new $model[2](array(
+                        array(
+                            'field' => $model[0]->getIdProperty(),
+                            'operator' => 'equals',
+                            'value' => $note->record_id
+                        )
+                    ));
+                    if ($model[0]->has('is_deleted')) {
+                        $filter->addFilter(new Tinebase_Model_Filter_Int(array(
+                            'field' => 'is_deleted',
+                            'operator' => 'notnull',
+                            'value' => null
+                        )));
+                    }
+                    $result = $controller->searchCount($filter);
 
-                if (!is_int($result)) {
-                    if (is_array($result) && isset($result['totalcount'])) {
-                        $result = (int)$result['totalcount'];
-                    } elseif(is_array($result) && isset($result['count'])) {
-                        $result = (int)$result['count'];
-                    } else {
-                        // todo log
-                        // dummy line, remove!
-                        $result = 1;
+                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
+                        $result = (int)$result;
+                    }
+
+                    if (!is_int($result)) {
+                        if (is_array($result) && isset($result['totalcount'])) {
+                            $result = (int)$result['totalcount'];
+                        } elseif (is_array($result) && isset($result['count'])) {
+                            $result = (int)$result['count'];
+                        } else {
+                            // todo log
+                            // dummy line, remove!
+                            $result = 1;
+                        }
+                    }
+
+                    if ($result === 0) {
+                        $deleteIds[] = $note->getId();
+                    }
+                } else {
+                    try {
+                        $controller->get($note->record_id, null, false, true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
                     }
                 }
-
-                if ($result === 0) {
-                    $deleteIds[] = $note->getId();
-                }
-            } else {
-                try {
-                    $controller->get($note->record_id, null, false, true);
-                } catch(Tinebase_Exception_NotFound $tenf) {
-                    $deleteIds[] = $note->getId();
-                }
             }
-        }
+        } while ($notes->count() === $limit);
 
         if (count($deleteIds) > 0) {
             $notesController->purgeNotes($deleteIds);
