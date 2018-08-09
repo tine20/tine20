@@ -914,10 +914,16 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @ param boolean $getDeleted
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function getAllNotes()
+    public function getAllNotes($orderBy = null, $limit = null, $offset = null)
     {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
+        if (null !== $orderBy) {
+            $select->order($orderBy);
+        }
+        if (null !== $limit) {
+            $select->limit($limit, $offset);
+        }
 
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
