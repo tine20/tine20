@@ -78,6 +78,9 @@ class Tinebase_Setup_DemoData_Import
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['$modelName']);
             }
             $importClass = $this->_application->name . '_Import_Csv';
+            if(!class_exists($importClass)){
+                $importClass = Tinebase_Import_Csv_Generic::class;
+            }
             $this->_importer = call_user_func_array([$importClass, 'createFromDefinition'], [$definition, $this->_options]);
 
             $result = $this->_importer->importFile($splFileInfo->getPath() . DIRECTORY_SEPARATOR . $filename);

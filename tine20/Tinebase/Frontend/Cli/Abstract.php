@@ -166,15 +166,31 @@ class Tinebase_Frontend_Cli_Abstract
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
+        try {
+            $data = $this->_parseArgs($_opts, array('demodata'));
+        }catch(Exception $e) {
+            $data['demodata'] = ""; 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        }
         // just admins can perform this action
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-
-        // TODO allow to control this via params: i.e. --data=all|import|php ("all" is currently the default)
-        $this->_createPhpDemoData($_opts, $checkDependencies);
-        $this->_createImportDemoData();
-
+        switch($data['demodata']){
+            case "php":
+                $this->_createPhpDemoData($_opts, $checkDependencies);
+                break;
+            case "csv":
+                $this->_createImportDemoData();
+                break;
+            case ("all" ):
+            case(""):
+                $this->_createPhpDemoData($_opts, $checkDependencies);
+                $this->_createImportDemoData();
+                break;
+            default:
+                echo $data['demodata'] . "test \n";
+        }
         return true;
     }
 

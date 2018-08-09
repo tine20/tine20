@@ -55,7 +55,7 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             xtype: 'tabpanel',
             border: false,
             plain: true,
-            activeTab: 1,
+            activeTab: 0,
             plugins: [{
                 ptype: 'ux.tabpanelkeyplugin'
             }],
@@ -68,8 +68,8 @@ Tine.Tinebase.FileSelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             this.okAction
         ];
 
-        this.initFilemanager();
         this.initFileupload();
+        this.initFilemanager();
 
         Tine.Tinebase.FileSelectionDialog.superclass.initComponent.call(this);
     },
