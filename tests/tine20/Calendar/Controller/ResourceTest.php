@@ -51,13 +51,21 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         
         $containerFrontend = new Tinebase_Frontend_Json_Container();
         $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, '');
-        
+
+        $found = false;
         foreach($result as $container) {
             if ($container['id'] != $createResource->container_id) {
                 continue;
             }
-            $this->assertEquals($container['name'], 'Other Room');
+            static::assertEquals($container['name'], 'Other Room');
+            $found = true;
+            $container = Tinebase_Container::getInstance()->get($container['id']);
+            static::assertTrue(is_array($container->xprops), 'xprops is not an array');
+            static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_id']),
+                'xprops Calendar Resource resource_id is missing');
+            break;
         }
+        static::assertTrue($found, 'did not find resources shared container');
     }
 
     public function testRenameContainer()
