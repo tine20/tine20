@@ -134,6 +134,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // ical scheduleable interface fields
         'dtstart'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'recurid'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'resources'            => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'date'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'duration'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'time'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'groups'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'base_event_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical scheduleable interface fields with multiple appearance
         'exdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's

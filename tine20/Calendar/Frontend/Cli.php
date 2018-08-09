@@ -22,7 +22,14 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Calendar';
-    
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Calendar_Model_Event' => 'cal_import_event_csv'
+    ];
     /**
      * help array with function names and param descriptions
      * 
