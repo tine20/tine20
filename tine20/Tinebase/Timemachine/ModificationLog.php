@@ -375,13 +375,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     /**
      * @return int
      */
-    public function getMaxInstanceSeq($tinebaseId = null)
+    public function getMaxInstanceSeq()
     {
         $db = $this->_table->getAdapter();
         $select = $db->select()
             ->from($this->_tablename, new Zend_Db_Expr('MAX(' . $db->quoteIdentifier('instance_seq') . ')'))
-            ->where($db->quoteInto($db->quoteIdentifier('instance_id') . ' = ?',
-                $tinebaseId ?: Tinebase_Core::getTinebaseId()));
+            ->where($db->quoteInto($db->quoteIdentifier('instance_id') . ' = ?', Tinebase_Core::getTinebaseId()));
 
         $stmt = $db->query($select);
         $resultArray = $stmt->fetchAll(Zend_Db::FETCH_NUM);
