@@ -321,8 +321,6 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
      */
     public function testResourceAclSearchAttenders()
     {
-        self::markTestSkipped('FIXME: this fails at random');
-
         $resource = $this->_prepareTestResourceAcl();
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
@@ -353,8 +351,10 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         self::assertEquals(1, $result['resource']['totalcount'], 'resource not found');
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true);
-        $grants->getFirstRecord()->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = false;
-        $grants->getFirstRecord()->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY} = false;
+        $grant = $grants->find('account_id', $this->_getPersona('sclever')->getId());
+        $grant->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = false;
+        $grant->{Calendar_Model_ResourceGrants::RESOURCE_INVITE} = false;
+        $grant->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY} = false;
         Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants, true, false);
 
         $result = $json->searchAttenders($filter);
