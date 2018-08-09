@@ -1698,7 +1698,7 @@ class Setup_Controller
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
 
-        $oldTinebaseId = $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        $this->_replaceTinebaseidInDump($mysqlBackupFile);
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -1706,8 +1706,10 @@ class Setup_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        // make sure we have the right instance id
+        Tinebase_Core::unsetTinebaseId();
         // save the master id
-        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq($oldTinebaseId);
+        $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         // do updates now, because maybe application state updates are not yet there
         $this->updateApplications();
