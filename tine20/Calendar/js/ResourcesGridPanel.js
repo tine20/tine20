@@ -115,6 +115,8 @@ Ext.reg('calendar.resourcegridpanel', Tine.Calendar.ResourceGridPanel);
  * @returns {*|String}
  */
 Tine.Calendar.ResourceGridPanel.locationRenderer = function(data, cell, record) {
+    var _ = window.lodash;
+
     if (Ext.isArray(data) && data.length > 0) {
         var index = 0;
 
@@ -122,8 +124,7 @@ Tine.Calendar.ResourceGridPanel.locationRenderer = function(data, cell, record) 
             index++;
         }
         if (data[index]) {
-            var org = (data[index].related_record.org_name !== null ) ? data[index].related_record.org_name : '';
-            return Ext.util.Format.htmlEncode(data[index].related_record.n_fileas);
+            return Ext.util.Format.htmlEncode(_.get(data[index], 'related_record.n_fileas', i18n._('No Access')));
         }
     }
 };
