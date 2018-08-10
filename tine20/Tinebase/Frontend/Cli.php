@@ -331,6 +331,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
 
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' maintenance mode prevents trigger async events.');
+            return false;
+        }
+
         $freeLock = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (! $freeLock) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

@@ -1820,7 +1820,18 @@ class Tinebase_Core
     public static function inMaintenanceMode()
     {
         $config = self::getConfig();
-        return !! $config->maintenanceMode;
+        return !empty($config->{Tinebase_Config::MAINTENANCE_MODE});
+    }
+
+    /**
+     * returns true if installation is in maintenance mode "ALL"
+     *
+     * @return bool
+     */
+    public static function inMaintenanceModeAll()
+    {
+        $config = self::getConfig();
+        return $config->{Tinebase_Config::MAINTENANCE_MODE} === Tinebase_Config::MAINTENANCE_MODE_ALL;
     }
 
     /**

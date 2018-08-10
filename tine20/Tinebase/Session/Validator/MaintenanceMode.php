@@ -35,6 +35,9 @@ class Tinebase_Session_Validator_MaintenanceMode extends Zend_Session_Validator_
     public function validate()
     {
         if (Tinebase_Core::inMaintenanceMode()) {
+            if (Tinebase_Core::inMaintenanceModeAll()) {
+                return false;
+            }
             $currentAccount = Tinebase_User::getInstance()->getFullUserById($this->getValidData());
             if (!$currentAccount->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
                 return false;

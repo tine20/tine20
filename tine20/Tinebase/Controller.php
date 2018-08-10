@@ -96,7 +96,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
 
         if (Tinebase_Core::inMaintenanceMode()) {
-            if (! $user->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
+            if (Tinebase_Core::inMaintenanceModeAll() ||
+                    ! $user->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
                 throw new Tinebase_Exception_MaintenanceMode();
             }
         }
