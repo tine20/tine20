@@ -1620,6 +1620,30 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         return null;
     }
 
+    /**
+     * returns the id of a record property
+     *
+     * @param string $_property
+     * @return string|null
+     */
+    public function getIdFromProperty($_property)
+    {
+        if (!isset($this->_properties[$_property])) {
+            return null;
+        }
+
+        $value = $this->_properties[$_property];
+        if (is_object($value) && $value instanceof Tinebase_Record_Abstract) {
+            return $value->getId();
+        } elseif (is_string($value) || is_integer($value)) {
+            return (string)$value;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+            ' ' . $_property . '\'s value is neither a record nor an id value: ' . print_r($value, true));
+        throw new Tinebase_Exception_UnexpectedValue($_property . '\'s value is neither a record nor an id value');
+    }
+
     public static function getSortExternalMapping()
     {
         return static::$_sortExternalMapping;
