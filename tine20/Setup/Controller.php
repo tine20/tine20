@@ -1652,6 +1652,32 @@ class Setup_Controller
         Tinebase_Event::reFireForNewApplications();
     }
 
+    public function setMaintenanceMode($options)
+    {
+        if (! isset($options['state'])) {
+            return false;
+        }
+        switch ($options['state']) {
+            case Tinebase_Config::MAINTENANCE_MODE_OFF:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} = '';
+                break;
+
+            case Tinebase_Config::MAINTENANCE_MODE_NORMAL:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
+                    Tinebase_Config::MAINTENANCE_MODE_NORMAL;
+                break;
+
+            case Tinebase_Config::MAINTENANCE_MODE_ALL:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
+                    Tinebase_Config::MAINTENANCE_MODE_ALL;
+                break;
+
+            default:
+                return false;
+        }
+        return true;
+    }
+
     /**
      * install tine from dump file
      *

@@ -669,6 +669,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     }
 
     /**
+     * clears the inMemory class cache
+     *
+     * @param string|null $key
+     */
+    public function clearMemoryCache($key = null)
+    {
+        if (null === $key) {
+            $this->_mergedConfigCache = [];
+        } else {
+            unset($this->_mergedConfigCache[$key]);
+        }
+    }
+
+    /**
      * clear the cache
      * @param   array $appFilter
      */
@@ -796,7 +810,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 if (is_object($_rawData) && $_rawData instanceof Tinebase_Config_KeyField) {
                     return $_rawData;
                 }
-                $options = (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array();
+                $options = isset($definition['options']) ? (array) $definition['options'] : array();
                 $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
 

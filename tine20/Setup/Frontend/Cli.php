@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -75,6 +75,8 @@ class Setup_Frontend_Cli
             $this->_uninstall($_opts);
         } elseif(isset($_opts->install_dump)) {
             $this->_installDump($_opts);
+        } elseif(isset($_opts->maintenance_mode)) {
+            $this->_maintenanceMode($_opts);
         } elseif(isset($_opts->list)) {
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
@@ -1082,6 +1084,30 @@ class Setup_Frontend_Cli
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->restore($options);
+    }
+
+    /**
+     * set maintenance mode to state X
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _maintenanceMode(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $modes = [
+            Tinebase_Config::MAINTENANCE_MODE_NORMAL,
+            Tinebase_Config::MAINTENANCE_MODE_ALL,
+            Tinebase_Config::MAINTENANCE_MODE_OFF,
+        ];
+        if (!isset($options['state']) || !in_array($options['state'], $modes)) {
+            echo PHP_EOL . 'parameter --state=[' . implode('|', $modes) . '] missing' . PHP_EOL;
+        } else {
+            if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
+                echo PHP_EOL . 'set maintenance mode to: ' . $options['state'] . PHP_EOL;
+            } else {
+                echo PHP_EOL . 'failed to set maintance mode to: ' . $options['state'] . PHP_EOL;
+            }
+        }
     }
 
     /**

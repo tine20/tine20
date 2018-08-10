@@ -54,19 +54,24 @@ class Tinebase_ControllerTest extends TestCase
 
     /**
      * testMaintenanceModeLoginFail
+     *
+     * @param $maintenanceModeSetting
      */
-    public function testMaintenanceModeLoginFail()
+    public function testMaintenanceModeLoginFail($maintenanceModeSetting = 1)
     {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend (full test suite run)');
         }
 
-        Tinebase_Config::getInstance()->maintenanceMode = 1;
+        Tinebase_Config::getInstance()->maintenanceMode = $maintenanceModeSetting;
+        $loginName = $maintenanceModeSetting === Tinebase_Config::MAINTENANCE_MODE_ALL
+            ? Tinebase_Core::getUser()->accountLoginName
+            : 'sclever';
 
         try {
             $this->_instance->login(
-                'sclever',
+                $loginName,
                 Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
                 new \Zend\Http\PhpEnvironment\Request()
             );
@@ -74,6 +79,16 @@ class Tinebase_ControllerTest extends TestCase
         } catch (Tinebase_Exception_MaintenanceMode $temm) {
             $this->assertEquals('Installation is in maintenance mode. Please try again later', $temm->getMessage());
         }
+    }
+
+    public function testMaintenanceModeLoginFailNormal()
+    {
+        $this->testMaintenanceModeLoginFail(Tinebase_Config::MAINTENANCE_MODE_NORMAL);
+    }
+
+    public function testMaintenanceModeLoginFailAll()
+    {
+        $this->testMaintenanceModeLoginFail(Tinebase_Config::MAINTENANCE_MODE_ALL);
     }
 
     /**
