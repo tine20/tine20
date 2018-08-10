@@ -492,7 +492,8 @@ class Tinebase_Mail extends Zend_Mail
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else {
-            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+            // //IGNORE works only as of PHP7.2 -> the code expects an error to occur, don't use //IGNORE
+            $filter = "convert.iconv.$_charset/utf-8";
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);

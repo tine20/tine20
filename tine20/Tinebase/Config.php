@@ -542,6 +542,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAINTENANCE_MODE = 'maintenanceMode';
+    const MAINTENANCE_MODE_OFF = 'off';
+    const MAINTENANCE_MODE_NORMAL = 'normal';
+    const MAINTENANCE_MODE_ALL = 'all';
 
     /**
      * @var string
@@ -1764,7 +1767,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Maintenance mode enabled',
             //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
             'description'           => 'Installation is in maintenance mode. With this only users having the maintenance right can login',
-            'type'                  => 'bool',
+            'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,

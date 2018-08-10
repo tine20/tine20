@@ -5,7 +5,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Züleyha Toptas <z.toptas@hotmail.de>
- * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -116,6 +116,14 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             // no job found
             if ($jobId === FALSE || $this->_stopped) {
                 continue;
+            }
+
+            // check for maintenance mode
+            Tinebase_Core::getConfig()->clearMemoryCache(Tinebase_Config::MAINTENANCE_MODE);
+            while (Tinebase_Core::inMaintenanceModeAll()) {
+                usleep(10000); // save some trees
+                pcntl_signal_dispatch();
+                Tinebase_Core::getConfig()->clearMemoryCache(Tinebase_Config::MAINTENANCE_MODE);
             }
             
             try {
