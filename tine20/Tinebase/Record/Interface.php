@@ -324,4 +324,12 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return null|boolean
      */
     public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue);
+
+    /**
+     * returns the id of a record property
+     *
+     * @param string $_property
+     * @return string|null
+     */
+    public function getIdFromProperty($_property);
 }
