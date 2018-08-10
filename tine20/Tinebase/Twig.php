@@ -50,7 +50,7 @@ class Tinebase_Twig
         if (isset($_options[self::TWIG_LOADER])) {
             $twigLoader = $_options[self::TWIG_LOADER];
         } else {
-            $twigLoader = new Twig_Loader_Filesystem(['/'], dirname(__DIR__));
+            $twigLoader = new Twig_Loader_Filesystem(['./'], dirname(__DIR__));
         }
 
         if (TINE20_BUILDTYPE === 'DEVELOPMENT' || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])) {
