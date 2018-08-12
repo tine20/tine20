@@ -47,10 +47,16 @@ class Tinebase_Mail extends Zend_Mail
      * @param  string             $_replyBody
      * @return Tinebase_Mail
      */
-    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null)
+    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null, $_signature = null)
     {
+        if (empty($_signature)) {
+           $content = $_zmm->getContent();
+        }
+        else {
+           $content = self::_getZMMContentWithSignature($_zmm, $_signature);
+        }
         $contentStream = fopen("php://temp", 'r+');
-        fputs($contentStream, $_zmm->getContent());
+        fputs($contentStream, $content);
         rewind($contentStream);
         
         $mp = new Zend_Mime_Part($contentStream);
@@ -85,6 +91,78 @@ class Tinebase_Mail extends Zend_Mail
         return $result;
     }
     
+    /**
+     * get content from Zend_Mail_Message with attached mail signature
+     * 
+     * @param  Zend_Mail_Message  $zmm
+     * @param  string             $signature
+     * @return string
+     */
+    protected static function _getZMMContentWithSignature(Zend_Mail_Message $zmm, $signature)
+    {
+        if (stripos($zmm->contentType, 'multipart/') === 0) {
+            // Multipart message
+            $zmm->rewind();
+            $boundary = $zmm->getHeaderField('content-type', 'boundary');
+            $rawHeaders = [];
+            foreach (Zend_Mime_Decode::splitMime($zmm->getContent(), $boundary) as $mimePart) {
+                $mimePart = str_replace("\r", '', $mimePart);
+                array_push($rawHeaders, substr($mimePart, 0, strpos($mimePart, "\n\n")));
+            }
+            $content = '';
+            for ($num = 1; $num <= $zmm->countParts(); $num++) {
+                $zmp = $zmm->getPart($num);
+                $content .= "\r\n--" . $boundary . "\r\n";
+                $content .= $rawHeaders[$num-1] . "\r\n\r\n";
+                $content .= self::_getPartContentWithSignature($zmp, $signature);
+            }
+            $content .= "\r\n--" . $boundary . "--\r\n";
+            return $content;
+        }
+        else {
+            $content = self::_getPartContentWithSignature($zmm, $signature);
+        }
+        return $content;
+    }
+    
+    /**
+     * get content from Zend_Mail_Part with attached mail signature
+     * 
+     * @param  Zend_Mail_Part  $zmp
+     * @param  string          $signature
+     * @return string
+     */
+    public static function _getPartContentWithSignature($zmp, $signature)
+    {
+        $contentType = $zmp->getHeaderField('content-type', 0);
+        if (($contentType != 'text/html') && ($contentType != 'text/plain')) {
+            // Modify text parts only
+            return $zmp->getContent();
+        }
+        if (($zmp->headerExists('Content-Disposition')) && (stripos($zmp->contentDisposition, 'attachment;') === 0)) {
+            // Do not modify attachment
+            return $zmp->getContent();
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Attaching signature to ' . $contentType . ' mime part');
+        $content = $zmp->getContent();
+        if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_BASE64) {
+            $content = base64_decode($content);
+        }
+        else if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_QUOTEDPRINTABLE) {
+            $content = quoted_printable_decode($content);
+        }
+        if ($contentType == "text/html") {
+            $signature = "<br />&minus;&minus;<br />" . $signature;
+        }
+        else {
+            $signature = Felamimail_Message::convertFromHTMLToText($signature, "\n");
+            $signature = "\n--\n" . $signature;
+        }
+        $content .= $signature;
+        return Zend_Mime::encode($content, $zmp->contentTransferEncoding);
+    }
+
     /**
      * get meta data (like contentype, charset, ...) from zmm and set it in zmp
      * 
