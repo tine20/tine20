@@ -94,4 +94,11 @@ interface Tinebase_Controller_Record_Interface
      * @return array
      */
     public function has(array $_ids, $_getDeleted = false);
+
+    /**
+     * returns the model name
+     *
+     * @return string
+     *
+    public function getDefaultModel();*/
 }

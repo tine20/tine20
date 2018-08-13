@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -44,103 +44,168 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
 
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var array
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_filters = array(
-        //'accountId'             => 'Digits',
-        'accountLoginName'      => array('StringTrim', 'StringToLower'),
-        //'accountPrimaryGroup'   => 'Digits',
-        'accountDisplayName'    => 'StringTrim',
-        'accountLastName'       => 'StringTrim',
-        'accountFirstName'      => 'StringTrim',
-        'accountFullName'       => 'StringTrim',
-        'accountEmailAddress'   => array('StringTrim', 'StringToLower'),
-        'openid'                => array(array('Empty', null))
-    ); // _/-\_
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     * @todo add valid values for status
-     */
-    protected $_validators;
+    protected static $_configurationObject = NULL;
 
     /**
-     * name of fields containing datetime or or an array of datetime
-     * information
+     * Holds the model configuration (must be assigned in the concrete class)
      *
-     * @var array list of datetime fields
+     * @var array
      */
-    protected $_datetimeFields = array(
-        'accountLastLogin',
-        'accountLastPasswordChange',
-        'accountExpires',
-        'lastLoginFailure',
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
-    
-    /**
-     * @see Tinebase_Record_Abstract
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators = array(
-            'accountId'             => array('allowEmpty' => true),
-            'accountLoginName'      => array('presence' => 'required'),
-            'accountLastLogin'      => array('allowEmpty' => true),
-            'accountLastLoginfrom'  => array('allowEmpty' => true),
-            'accountLastPasswordChange' => array('allowEmpty' => true),
-            'accountStatus'         => array(new Zend_Validate_InArray(array(
-                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
-                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-                Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED,
-                Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED)
-            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
-            'accountExpires'        => array('allowEmpty' => true),
-            'accountPrimaryGroup'   => array('presence' => 'required'),
-            'accountDisplayName'    => array('presence' => 'required'),
-            'accountLastName'       => array('presence' => 'required'),
-            'accountFirstName'      => array('allowEmpty' => true),
-            'accountFullName'       => array('presence' => 'required'),
-            'accountEmailAddress'   => array('allowEmpty' => true),
-            'accountHomeDirectory'  => array('allowEmpty' => true),
-            'accountLoginShell'     => array('allowEmpty' => true),
-            'lastLoginFailure'      => array('allowEmpty' => true),
-            'loginFailures'         => array('allowEmpty' => true),
-            'sambaSAM'              => array('allowEmpty' => true),
-            'openid'                => array('allowEmpty' => true),
-            'contact_id'            => array('allowEmpty' => true),
-            'container_id'          => array('allowEmpty' => true),
-            'emailUser'             => array('allowEmpty' => true),
-            'groups'                => array('allowEmpty' => true),
-            'imapUser'              => array('allowEmpty' => true),
-            'smtpUser'              => array('allowEmpty' => true),
-            'visibility'            => array(new Zend_Validate_InArray(array(
-                Tinebase_Model_User::VISIBILITY_HIDDEN, 
-                Tinebase_Model_User::VISIBILITY_DISPLAYED)
-            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
-            'xprops'                => array('allowEmpty' => true),
-            'created_by'            => array('allowEmpty' => true),
-            'creation_time'         => array('allowEmpty' => true),
-            'last_modified_by'      => array('allowEmpty' => true),
-            'last_modified_time'    => array('allowEmpty' => true),
-            'is_deleted'            => array('allowEmpty' => true),
-            'deleted_time'          => array('allowEmpty' => true),
-            'deleted_by'            => array('allowEmpty' => true),
-            'seq'                   => array('allowEmpty' => true),
-        );
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+    protected static $_modelConfiguration = [
+        'recordName'        => 'User',
+        'recordsName'       => 'Users', // ngettext('User', 'Users', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'containerProperty' => 'container_id',
+        // ????
+        'containerUsesFilter' => false,
+
+        'titleProperty'     => 'accountDisplayName',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'FullUser',
+        'idProperty'        => 'accountId',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'accountLoginName'              => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
+            ],
+            'accountDisplayName'            => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountLastName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountFirstName'              => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountEmailAddress'           => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
+            ],
+            'accountFullName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'contact_id'                    => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountLastLogin'              => [
+                'type'                          => 'datetime',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountLastLoginfrom'          => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountLastPasswordChange'     => [
+                'type'                          => 'datetime',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountStatus'                 => [
+                'type'                          => 'string',
+                'validators'                    => ['inArray' => [
+                    self::ACCOUNT_STATUS_ENABLED,
+                    self::ACCOUNT_STATUS_DISABLED,
+                    self::ACCOUNT_STATUS_BLOCKED,
+                    self::ACCOUNT_STATUS_EXPIRED
+                ], Zend_Filter_Input::DEFAULT_VALUE => self::ACCOUNT_STATUS_ENABLED],
+            ],
+            'accountExpires'                => [
+                'type'                          => 'datetime',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountPrimaryGroup'           => [
+                //'type'                          => 'record',
+                'validators'                    => ['presence' => 'required'],
+            ],
+            'accountHomeDirectory'          => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'accountLoginShell'             => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'lastLoginFailure'              => [
+                'type'                          => 'datetime',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'loginFailures'                 => [
+                'type'                          => 'integer',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'sambaSAM'                      => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'openid'                        => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [Zend_Filter_Empty::class => null],
+            ],
+            'emailUser'                     => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'groups'                        => [
+                // ??? array? 'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'imapUser'                      => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'smtpUser'                      => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // ???!?
+            'configuration'                 => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'visibility'                    => [
+                'type'                          => 'string',
+                'validators'                    => ['inArray' => [
+                    self::VISIBILITY_HIDDEN,
+                    self::VISIBILITY_DISPLAYED,
+                ], Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED],
+            ],
+        ],
+    ];
+
     
     /**
      * adds email and samba users, generates username + user password and 

@@ -96,21 +96,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @var integer
      */
     const SMALL_PHOTO_SIZE = 36000;
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Addressbook';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -430,7 +415,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'queryFilter'                   => true,
             ],
             'paths'                         => [
-                'type'                          => 'virtual',
+                'type'                          => 'records',
+                'noResolve'                     => true,
+                'config'                        => [
+                    'recordClassName'               => Tinebase_Model_Path::class,
+                    'controllerClassName'           => Tinebase_Record_Path::class,
+                    'filterClassName'               => Tinebase_Model_PathFilter::class,
+                ],
                 'label'                         => 'Paths', // _('Paths')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
@@ -654,7 +645,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         $this->_resolveAutoValues($_data);
         parent::setFromArray($_data);
     }
-    
+
+    public function hydrateFromBackend(array &$_data)
+    {
+        $this->_resolveAutoValues($_data);
+        parent::hydrateFromBackend($_data);
+    }
     /**
      * Resolves the auto values n_fn and n_fileas
      * @param array $_data
@@ -662,6 +658,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     protected function _resolveAutoValues(array &$_data)
     {
         if (! (isset($_data['org_name']) || array_key_exists('org_name', $_data))) {
+            // we might want to set it to null instead?
             $_data['org_name'] = '';
         }
 

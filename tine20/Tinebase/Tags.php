@@ -314,6 +314,14 @@ class Tinebase_Tags
         $_tag->occurrence = 0;
         $_tag->created_by = Tinebase_Core::getUser()->getId();
         $_tag->creation_time = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        if ($_tag->has('rights')) {
+            $oldRights = $_tag->rights;
+            unset($_tag->rights);
+        }
+        if ($_tag->has('contexts')) {
+            $oldContexts = $_tag->contexts;
+            unset($_tag->contexts);
+        }
 
         switch ($_tag->type) {
             case Tinebase_Model_Tag::TYPE_PERSONAL:
@@ -344,6 +352,12 @@ class Tinebase_Tags
             default:
                 throw new Tinebase_Exception_UnexpectedValue('No such tag type.');
                 break;
+        }
+        if ($_tag->has('rights')) {
+            $_tag->rights = $oldRights;
+        }
+        if ($_tag->has('contexts')) {
+            $_tag->contexts = $oldContexts;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -538,12 +552,16 @@ class Tinebase_Tags
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
 
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class);
         foreach ($_records as $record) {
-            $record->{$_tagsProperty} = new Tinebase_Record_RecordSet(
-                'Tinebase_Model_Tag', 
+            $data = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class,
                 (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
             );
+            $record->{$_tagsProperty} = $data;
+            $result->mergeById($data);
         }
+
+        return $result;
     }
 
     /**

@@ -865,7 +865,7 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_converterDefaultMapping = array(
-        'json'      => array('Tinebase_Model_Converter_Json'),
+        'json'      => [Tinebase_Model_Converter_Json::class],
     );
 
     /**
@@ -1407,6 +1407,28 @@ class Tinebase_ModelConfiguration {
         return $this->_modelName;
     }
 
+    public function getFieldModel($field)
+    {
+        if (isset($this->_fields[$field]) && isset($this->_fields[$field]['type'])) {
+            switch ($this->_fields[$field]['type']) {
+                case 'user':
+                    return Tinebase_Model_FullUser::class;
+                case 'relation':
+                    return Tinebase_Model_Relation::class;
+                case 'tag':
+                    return Tinebase_Model_Tag::class;
+                case 'attachments':
+                    return Tinebase_Model_Tree_Node::class;
+                case 'note':
+                    return Tinebase_Model_Note::class;
+                case 'container':
+                    return Tinebase_Model_Container::class;
+                case 'records':
+                    return $this->_recordsFields[$field]['config']['recordClassName'];
+            }
+        }
+        return null;
+    }
     /**
      * populate model config properties
      * 
@@ -1454,13 +1476,14 @@ class Tinebase_ModelConfiguration {
                 );
                 $this->_recordFields[$fieldKey] = $fieldDef;
                 break;
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'record':
                 $this->_filterModel[$fieldKey]['options']['controller']  = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
                 $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
             case 'records':
-                $fieldDef['config']['recordClassName']     = (isset($fieldDef['config']['recordClassName']) || array_key_exists('recordClassName', $fieldDef['config']))     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
-                $fieldDef['config']['controllerClassName'] = (isset($fieldDef['config']['controllerClassName']) || array_key_exists('controllerClassName', $fieldDef['config'])) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                $fieldDef['config']['filterClassName']     = (isset($fieldDef['config']['filterClassName']) || array_key_exists('filterClassName', $fieldDef['config']))     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                $fieldDef['config']['recordClassName']     = isset($fieldDef['config']['recordClassName'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
+                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($fieldDef['type'] == 'record') {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;

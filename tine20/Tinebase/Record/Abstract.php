@@ -537,6 +537,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         return $recordArray;
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->_properties;
+    }
     
     /**
      * checks if variable has toArray()
@@ -1682,5 +1690,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $oldValue = $this->convertDates;
         $this->convertDates = $_bool;
         return $oldValue;
+    }
+
+    public function hydrateFromBackend(array &$_data)
+    {
+        $this->setFromArray($_data);
+        $this->runConvertToRecord();
     }
 }

@@ -82,56 +82,106 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
-     * all valid fields
-     * 
-     * @todo add custom (Alnum + some chars like '-') validator for id fields
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_validators = array(
-        'id'                     => array('allowEmpty' => true),
-        'own_model'              => array('presence' => 'required', 'allowEmpty' => false),
-        'own_backend'            => array('presence' => 'required', 'allowEmpty' => false),
-        'own_id'                 => array('presence' => 'required', 'allowEmpty' => true),
-        // NOTE: we use tree structure terms here, but relations do not represent a real tree
-        // if this is set to PARENT, "own" record is child of "related" record
-        // if this is set to CHILD, "own" record is parent of "related" record
-        // if this is set to SIBLINGS, there is no parent/child relation
-        'related_degree'         => array('presence' => 'required', 'allowEmpty' => false, array('InArray', array(
-            self::DEGREE_PARENT,
-            self::DEGREE_CHILD,
-            self::DEGREE_SIBLING
-        ))),
-        'related_model'          => array('presence' => 'required', 'allowEmpty' => false),
-        'related_backend'        => array('presence' => 'required', 'allowEmpty' => false),
-        'related_id'             => array('presence' => 'required', 'allowEmpty' => false),
-        'type'                   => array('presence' => 'required', 'allowEmpty' => true),
-        'remark'                 => array('allowEmpty' => true          ), // freeform field for manual relations
-        // "virtual" column - gives the reason why the related_record is not set
-        'record_removed_reason'  => array('allowEmpty' => true, [ 'InArray', [
-            self::REMOVED_BY_AREA_LOCK,
-            self::REMOVED_BY_ACL,
-            self::REMOVED_BY_OTHER,
-        ]]),
-        'related_record'         => array('allowEmpty' => true          ), // property to store 'resolved' relation record
-        'created_by'             => array('allowEmpty' => true,         ),
-        'creation_time'          => array('allowEmpty' => true          ),
-        'last_modified_by'       => array('allowEmpty' => true,         ),
-        'last_modified_time'     => array('allowEmpty' => true          ),
-        'is_deleted'             => array('allowEmpty' => true          ),
-        'deleted_time'           => array('allowEmpty' => true          ),
-        'deleted_by'             => array('allowEmpty' => true,         ),
-        'seq'                    => array('allowEmpty' => true,         ),
-    );
-    
+    protected static $_configurationObject = NULL;
+
     /**
-     * fields containing datetime data
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
      */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
-    );
+    protected static $_modelConfiguration = [
+        'recordName'        => 'Relation',
+        'recordsName'       => 'Relations', // ngettext('Relation', 'Relations', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => false,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Relation',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'own_model'                     => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            ],
+            'own_backend'                   => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            ],
+            'own_id'                        => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // NOTE: we use tree structure terms here, but relations do not represent a real tree
+            // if this is set to PARENT, "own" record is child of "related" record
+            // if this is set to CHILD, "own" record is parent of "related" record
+            // if this is set to SIBLINGS, there is no parent/child relation
+            'related_degree'                => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    'presence' => 'required',
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    'inArray' => [
+                        self::DEGREE_PARENT,
+                        self::DEGREE_CHILD,
+                        self::DEGREE_SIBLING,
+                    ]
+                ],
+            ],
+            'related_model'                 => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            ],
+            'related_backend'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            ],
+            'related_id'                    => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            ],
+            'type'                          => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // freeform field for manual relations
+            'remark'                        => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // "virtual" column - gives the reason why the related_record is not set
+            'record_removed_reason'         => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'inArray' => [
+                        self::REMOVED_BY_AREA_LOCK,
+                        self::REMOVED_BY_ACL,
+                        self::REMOVED_BY_OTHER,
+                    ]
+                ],
+            ],
+            'related_record'                => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
     
     /**
      * convert remark to array if json encoded

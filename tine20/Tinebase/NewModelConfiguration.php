@@ -20,6 +20,17 @@
 class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
 {
     /**
+     * This maps field types to their default converter
+     *
+     * @var array
+     */
+    protected $_converterDefaultMapping = array(
+        'json'      => [Tinebase_Model_Converter_Json::class],
+        'date'      => [Tinebase_Model_Converter_Date::class],
+        'datetime'  => [Tinebase_Model_Converter_DateTime::class],
+    );
+
+    /**
      * the constructor (must be called in a singleton per model fashion, each model maintains its own singleton)
      *
      * @var array $modelClassConfiguration

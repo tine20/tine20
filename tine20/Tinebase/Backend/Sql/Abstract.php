@@ -324,9 +324,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_explodeForeignValues($_rawData);
 
         /** @var Tinebase_Record_Interface $result */
-        $result = new $this->_modelName($_rawData, true);
-
-        $result->runConvertToRecord();
+        $result = new $this->_modelName(null, true);
+        $result->hydrateFromBackend($_rawData);
 
         return $result;
     }
@@ -402,11 +401,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             }
         }
         $result = new Tinebase_Record_RecordSetFast($this->_modelName, $_rawDatas);
-
-        /** @var Tinebase_Record_Interface $record */
-        foreach ($result as $record) {
-            $record->runConvertToRecord();
-        }
 
         return $result;
     }

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -23,7 +23,7 @@ interface Tinebase_Controller_SearchInterface
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
-     * @param bool $_getRelations
+     * @param bool|array|Tinebase_Record_Expander $_getRelations
      * @param bool $_onlyIds
      * @param string $_action
      * @return Tinebase_Record_RecordSet

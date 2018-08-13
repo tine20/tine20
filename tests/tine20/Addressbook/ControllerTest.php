@@ -710,7 +710,6 @@ class Addressbook_ControllerTest extends TestCase
     {
         $container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
 
-        $data = [];
         $memory = memory_get_usage();
         $timeStarted = microtime(true);
         $recordData = array(
@@ -759,7 +758,7 @@ class Addressbook_ControllerTest extends TestCase
             $contact = new Addressbook_Model_Contact(null, true);
             $data = $recordData;
             unset($data['tel_work']);
-            $contact->setFromArray($data);
+            $contact->hydrateFromBackend($data);
         }
 
         $timeEnd = microtime(true);

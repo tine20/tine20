@@ -235,7 +235,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
-     * @param boolean|array $_getRelations
+     * @param boolean|array|Tinebase_Record_Expander $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
@@ -252,14 +252,21 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Got ' . count($result) . ' search results of ' . $this->_modelName);
         
         if (! $_onlyIds) {
-            if ($_getRelations && count($result) > 0 && $result->getFirstRecord()->has('relations')) {
-                // if getRelations is true, all relations should be fetched
-                if ($_getRelations === true) {
-                    $_getRelations = NULL;
+            if ($_getRelations instanceof Tinebase_Record_Expander) {
+                $_getRelations->expand($result);
+            } else {
+                if ($_getRelations && count($result) > 0 && $result->getFirstRecord()->has('relations')) {
+                    // if getRelations is true, all relations should be fetched
+                    if ($_getRelations === true) {
+                        $_getRelations = null;
+                    }
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    $result->setByIndices('relations',
+                        Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName,
+                            $this->_getBackendType(), $result->getId(), null, array(), false, $_getRelations));
                 }
-                /** @noinspection PhpUndefinedMethodInspection */
-                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId(), NULL, array(), FALSE, $_getRelations));
             }
+            // TODO eventually put this into the expander!
             if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
@@ -537,9 +544,10 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   array $_ids       array of record identifiers
      * @param   bool  $_ignoreACL don't check acl grants
+     * @param   Tinebase_Record_Expander $_expander
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE)
+    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
     {
         $this->_checkRight(self::ACTION_GET);
 
@@ -553,7 +561,9 @@ abstract class Tinebase_Controller_Record_Abstract
            : NULL;
         $records = $this->_backend->getMultiple($_ids, $containerIds);
 
-        if ($this->resolveCustomfields()) {
+        if ($_expander !== null) {
+            $_expander->expand($records);
+        } elseif ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 

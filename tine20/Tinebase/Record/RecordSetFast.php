@@ -30,9 +30,9 @@ class Tinebase_Record_RecordSetFast extends Tinebase_Record_RecordSet
         $this->_recordClass = $_className;
 
         foreach ($_data as &$data) {
-            /** @var Tinebase_Record_Abstract $toAdd */
+            /** @var Tinebase_Record_Interface $toAdd */
             $toAdd = new $this->_recordClass(null, true);
-            $toAdd->setFromArray($data);
+            $toAdd->hydrateFromBackend($data);
             $this->addRecord($toAdd);
         }
     }

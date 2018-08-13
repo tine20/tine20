@@ -17,10 +17,87 @@
  */
 class Tinebase_Model_FullTag extends Tinebase_Model_Tag
 {
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_validators['rights']   = array('allowEmpty' => true);
-        $this->_validators['contexts'] = array('allowEmpty' => true);
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        'recordName'        => 'Tag',
+        'recordsName'       => 'Tags', // ngettext('Tag', 'Tags', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => false,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Tag',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'type'                          => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    'inArray' => [
+                        self::TYPE_PERSONAL,
+                        self::TYPE_SHARED,
+                    ]
+                ],
+            ],
+            'owner'                         => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'name'                          => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'description'                   => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'color'                         => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    ['regex', '/^#[0-9a-fA-F]{6}$/'],
+                ],
+            ],
+            'occurrence'                    => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'selection_occurrence'          => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'account_grants'                => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'rights'                        => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'contexts'                      => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
 }

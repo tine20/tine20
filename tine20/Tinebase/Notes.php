@@ -281,12 +281,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  Tinebase_Record_RecordSet  $_records       the recordSet
      * @param  string                     $_notesProperty  the property in the record where the notes are in (defaults: 'notes')
      * @param  string                     $_backend   backend of record
-     * @return void
+     * @return Tinebase_Record_RecordSet|null
      */
     public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
     {
         if (count($_records) == 0) {
-            return;
+            return null;
         }
         
         $modelName = $_records->getRecordClassName();
@@ -302,6 +302,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
         }
+
+        return $notesOfRecords;
     }
     
     /************************** set / add / delete notes ************************/

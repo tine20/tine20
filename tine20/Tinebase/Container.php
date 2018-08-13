@@ -2202,4 +2202,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $this->_doSearchAclFilter = $oldDoSearchAcl;
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getDefaultModel()
+    {
+        return Tinebase_Model_Container::class;
+    }
 }

@@ -423,7 +423,7 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
             ->setData($this->_data);
 
         if ($inputFilter->isValid()) {
-            // set $this->_properties with the filtered values
+            // set $this->_data with the filtered values
             $this->_data  = $inputFilter->getUnescaped();
             $this->_isValidated = true;
 
@@ -506,7 +506,7 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
     public function __unset($_name)
     {
         if (!static::$_configurationObject->hasField($_name)) {
-            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of ' . static::class);
         }
 
         unset($this->_data[$_name]);
@@ -965,10 +965,10 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_properties[$key])) {
+            if (isset($this->_data[$key])) {
                 /** @var Tinebase_Model_Converter_Interface $converter */
                 foreach ($converters as $converter) {
-                    $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
+                    $this->_data[$key] = $converter::convertToRecord($this->_data[$key]);
                 }
             }
         }
@@ -981,10 +981,10 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_properties[$key])) {
+            if (isset($this->_data[$key])) {
                 foreach ($converters as $converter) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
-                    $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
+                    $this->_data[$key] = $converter::convertToData($this->_data[$key]);
                 }
             }
         }
@@ -1187,6 +1187,22 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
         return $result;
     }
 
+    public function hydrateFromBackend(array &$data)
+    {
+        /** @var Tinebase_Model_Converter_Interface $converter */
+        foreach (static::$_configurationObject->getConverters() as $key => $converters) {
+            if (isset($data[$key])) {
+                foreach ($converters as $converter) {
+                    $data[$key] = $converter::convertToRecord($data[$key]);
+                }
+            }
+        }
+
+        foreach ($data as $key => $value) {
+            $this->_data[$key] = $value;
+        }
+    }
+
     /**
      * extended properties getter
      *
@@ -1235,11 +1251,11 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
      */
     public function getIdFromProperty($_property)
     {
-        if (!isset($this->_properties[$_property])) {
+        if (!isset($this->_data[$_property])) {
             return null;
         }
 
-        $value = $this->_properties[$_property];
+        $value = $this->_data[$_property];
         if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
             return $value->getId();
         } elseif (is_string($value) || is_integer($value)) {

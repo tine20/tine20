@@ -95,7 +95,8 @@ class Tinebase_FileSystem_RecordAttachments
      * fetches attachments for multiple records at once
      * 
      * @param Tinebase_Record_RecordSet $records
-     * 
+     * @return Tinebase_Record_RecordSet
+     *
      * @todo maybe this should be improved
      */
     public function getMultipleAttachmentsOfRecords($records)
@@ -105,64 +106,68 @@ class Tinebase_FileSystem_RecordAttachments
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Fetching attachments for ' . count($records) . ' record(s)');
-        
-        $parentNodes       = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+            ' Fetching attachments for ' . $records->count() . ' record(s)');
+        if ($records->count() === 0) {
+            return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        }
+
         $recordNodeMapping = array();
-        $typeMap           = array();
+        $className = $records->getRecordClassName();
+        $recordIds = [];
         
         foreach ($records as $record) {
-            $typeMap[get_class($record)][] = $record->getId();
+            $recordIds[] = $record->getId();
             
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
         
-        foreach ($typeMap as $className => $recordIds) {
-            $classPathName = $this->_fsController->getApplicationBasePath($record->getApplication(), Tinebase_FileSystem::FOLDER_TYPE_RECORDS) 
-                          . '/' . $className;
-            
-            // top folder for record attachments
-            try {
-                $classPathNode = $this->_fsController->stat($classPathName);
 
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                continue;
-            }
-            
-            // subfolders for all records attachments
-            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-                array(
-                    'field'     => 'parent_id',
-                    'operator'  => 'equals',
-                    'value'     => $classPathNode->getId()
-                ),
-                array(
-                    'field'     => 'name',
-                    'operator'  => 'in',
-                    'value'     => $recordIds
-                )
-            ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
-            $recordNodes = $this->_fsController->searchNodes($searchFilter);
-            if ($recordNodes->count() === 0) {
-                // nothing to be done 
-                continue;
-            }
-            foreach ($recordNodes as $recordNode) {
-                $recordNodeMapping[$recordNode->getId()] = $recordNode->name;
-            }
-            
-            // get attachments
-            $attachmentNodes = $this->_fsController->getTreeNodeChildren($recordNodes);
-            
-            // add attachments to records
-            foreach ($attachmentNodes as $attachmentNode) {
-                $record = $records->getById($recordNodeMapping[$attachmentNode->parent_id]);
-                $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($attachmentNode,true));
-                $attachmentNode->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $record->getApplication());
-                
-                $record->attachments->addRecord($attachmentNode);
-            }
+        $classPathName = $this->_fsController->getApplicationBasePath($record->getApplication(),
+                Tinebase_FileSystem::FOLDER_TYPE_RECORDS) . '/' . $className;
+
+        // top folder for record attachments
+        try {
+            $classPathNode = $this->_fsController->stat($classPathName);
+
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
+
+        // subfolders for all records attachments
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'parent_id',
+                'operator'  => 'equals',
+                'value'     => $classPathNode->getId()
+            ),
+            array(
+                'field'     => 'name',
+                'operator'  => 'in',
+                'value'     => $recordIds
+            )
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        $recordNodes = $this->_fsController->searchNodes($searchFilter);
+        if ($recordNodes->count() === 0) {
+            // nothing to be done
+            return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        }
+        foreach ($recordNodes as $recordNode) {
+            $recordNodeMapping[$recordNode->getId()] = $recordNode->name;
+        }
+
+        // get attachments
+        $attachmentNodes = $this->_fsController->getTreeNodeChildren($recordNodes);
+
+        // add attachments to records
+        foreach ($attachmentNodes as $attachmentNode) {
+            $record = $records->getById($recordNodeMapping[$attachmentNode->parent_id]);
+            $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($attachmentNode,true));
+            $attachmentNode->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $record->getApplication());
+
+            $record->attachments->addRecord($attachmentNode);
+        }
+
+        return $attachmentNodes;
     }
     
     /**

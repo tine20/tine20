@@ -474,7 +474,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // iterate fields to resolve
         foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
-            
+
+            if (isset($c['noResolve']) && $c['noResolve']) {
+                continue;
+            }
+
             // resolve records, if omitOnSearch is definitively set to FALSE (by default they won't be resolved on search)
             if ($multiple && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
                 continue;
