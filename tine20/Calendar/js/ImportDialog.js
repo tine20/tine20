@@ -490,7 +490,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 return (
                     ((this.typeCombo && (this.typeCombo.getValue() == 'remote_ics' || this.typeCombo.getValue() == 'remote_caldav'))
                     && (this.remoteLocation && this.remoteLocation.getValue())
-                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0))))
+                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0)))
                     && credentialsCheck
                     || ((this.typeCombo && (this.typeCombo.getValue() == 'upload'))
                     && (this.definitionCombo && this.definitionCombo.getValue())
