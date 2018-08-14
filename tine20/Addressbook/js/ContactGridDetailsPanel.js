@@ -141,29 +141,73 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         }, {
                             flex: 1,
                             layout: 'ux.display',
-                            labelAlign: 'top',
-                            autoScroll: true,
+                            labelWidth: 60,
                             layoutConfig: {
-                                background: 'solid',
-                                declaration: this.app.i18n._('Private')
+                                background: 'solid'
                             },
-
-                            // @todo: this field doesn't actually require a certain field, there should be two methods for RenderManager:
-                            //  + get()
-                            //  + getBlock() // block actually doesn't specify a certain field and only an record, the field declaration should come from the modelconfig later
                             items: [{
-                                xtype: 'ux.displayfield',
-                                name: 'attendee',
-                                hideLabel: true,
-                                htmlEncode: false,
-                                renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'addressblock', 'displayPanel').createDelegate(me, {
-                                    'street': 'adr_two_street',
-                                    'street2': 'adr_two_street2',
-                                    'postalcode': 'adr_two_postalcode',
-                                    'locality': 'adr_two_locality',
-                                    'region': 'adr_two_region',
-                                    'country': 'adr_two_countryname'
-                                }, true)
+                                layout: 'hbox',
+                                border: false,
+                                anchor: '100% 100%',
+                                layoutConfig: {
+                                    align: 'stretch'
+                                },
+                                items: [{
+                                    layout: 'ux.display',
+                                    layoutConfig: {
+                                        background: 'inner',
+                                        labelLWidth: 100,
+                                        declaration: this.app.i18n._('Private')
+                                    },
+                                    labelAlign: 'top',
+                                    border: false,
+                                    flex: 1,
+
+                                    // @todo: this field doesn't actually require a certain field, there should be two methods for RenderManager:
+                                    //  + get()
+                                    //  + getBlock() // block actually doesn't specify a certain field and only an record, the field declaration should come from the modelconfig later
+                                    items: [{
+                                        xtype: 'ux.displayfield',
+                                        name: 'attendee',
+                                        hideLabel: true,
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'addressblock', 'displayPanel').createDelegate(me, {
+                                            'street': 'adr_two_street',
+                                            'street2': 'adr_two_street2',
+                                            'postalcode': 'adr_two_postalcode',
+                                            'locality': 'adr_two_locality',
+                                            'region': 'adr_two_region',
+                                            'country': 'adr_two_countryname'
+                                        }, true)
+                                    }]
+                                }, {
+                                    layout: 'ux.display',
+                                    layoutConfig: {
+                                        background: 'inner'
+                                    },
+                                    labelWidth: 50,
+                                    flex: 1,
+                                    border: false,
+                                    items: [{
+                                        xtype: 'ux.displayfield',
+                                        name: 'tel_home',
+                                        fieldLabel: this.app.i18n._('Phone')
+                                    }, {
+                                        xtype: 'ux.displayfield',
+                                        name: 'tel_cell_private',
+                                        fieldLabel: this.app.i18n._('Mobile')
+                                    }, {
+                                        xtype: 'ux.displayfield',
+                                        name: 'tel_fax_home',
+                                        fieldLabel: this.app.i18n._('Fax')
+                                    }, {
+                                        xtype: 'ux.displayfield',
+                                        name: 'email_home',
+                                        fieldLabel: this.app.i18n._('E-Mail'),
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'email', 'displayPanel').createDelegate(me)
+                                    }]
+                                }]
                             }]
                         }, {
                             flex: 1,
