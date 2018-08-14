@@ -14,6 +14,7 @@
  *
  * @package     Timetracker
  * @subpackage  Model
+ * @todo convert to MCV2
  */
 class Timetracker_Model_TimeaccountFavorite extends Tinebase_Record_Abstract
 {

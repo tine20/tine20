@@ -10,6 +10,7 @@
  */
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 
 /**
@@ -30,7 +31,8 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         'fulltext'      => 'text',
         'datetime'      => 'datetime',
         'date'          => 'datetime',
-        'time'          => 'datetime',
+        // TODO use datetime here?
+        'time'          => 'time',
         'integer'       => 'integer',
         'numberableInt' => 'integer',
         'numberableStr' => 'string',
@@ -43,7 +45,13 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         // NOTE 1: smallint is not working somehow ...
         // NOTE 2: we need int here because otherwise we need to typecast values for pgsql
         'boolean'       => 'integer',
-        'money'         => 'float'
+        'money'         => 'float',
+        // TODO replace that with a single type 'datetime_separated'?
+//        'datetime_separated' => 'date',
+        'datetime_separated_date' => 'date',
+        // not used yet:
+        'datetime_separated_time' => 'time',
+        'datetime_separated_tz' => 'string',
     );
 
     /**
@@ -51,8 +59,8 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      *
      * @param string        $className
      * @param ClassMetadata $metadata
-     *
      * @return void
+     * @throws MappingException
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
@@ -65,25 +73,54 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         $modelConfig = $className::getConfiguration();
 
         $table = $modelConfig->getTable();
+        if (! isset($table['name'])) {
+            throw new MappingException('Table name missing');
+        }
         $table['name'] = SQL_TABLE_PREFIX . $table['name'];
 
         // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
         if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ) {
-            if (isset($table['indexes'])) {
-                $toDelete = array();
-                foreach($table['indexes'] as $key => $index) {
-                    if (isset($index['flags']) && array_search('fulltext', $index['flags']) !== false) {
-                        $toDelete[] = $key;
-                    }
-                }
-
-                foreach($toDelete as $key) {
-                    unset($table['indexes'][$key]);
-                }
-            }
+            $this->__removeFullTextIndex($table);
         }
 
         $metadata->setPrimaryTable($table);
+
+        $this->_mapAssociations($modelConfig, $metadata);
+        $this->_mapFields($modelConfig, $metadata);
+    }
+
+    /**
+     * @param Tinebase_ModelConfiguration $modelConfig
+     * @param ClassMetadata $metadata
+     */
+    protected function _mapAssociations(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
+    {
+        foreach ($modelConfig->getAssociations() as $type => $associations) {
+            foreach ($associations as $name => $association) {
+                switch ($type) {
+                    case ClassMetadataInfo::ONE_TO_ONE:
+                        $metadata->mapOneToOne($association);
+                        break;
+                    case ClassMetadataInfo::MANY_TO_ONE:
+                        $metadata->mapManyToOne($association);
+                        break;
+                    case ClassMetadataInfo::ONE_TO_MANY:
+                        $metadata->mapOneToMany($association);
+                        break;
+                    case ClassMetadataInfo::MANY_TO_MANY:
+                        $metadata->mapManyToMany($association);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_ModelConfiguration $modelConfig
+     * @param ClassMetadata $metadata
+     */
+    protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
+    {
         $virtualFields = array_keys($modelConfig->getVirtualFields());
         foreach ($modelConfig->getFields() as $fieldName => $config) {
             if (in_array($fieldName, $virtualFields, true)) {
@@ -93,8 +130,38 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
             self::mapTypes($config);
 
             if (! $config['doctrineIgnore']) {
-                $metadata->mapField($config);
+                try {
+                    $metadata->mapField($config);
+                } catch (\Doctrine\ORM\Mapping\MappingException $dome) {
+                    // TODO ignore or fix exceptions like
+                    //  "Property "id" in "Timetracker_Model_Timeaccount" was already declared,
+                    //   but it must be declared only once"
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $dome->getMessage());
+
+                }
             }
+        }
+    }
+
+    /**
+     * @param $table
+     */
+    protected function _removeFullTextIndex(&$table)
+    {
+        if (! isset($table['indexes'])) {
+            return;
+        }
+
+        $toDelete = array();
+        foreach ($table['indexes'] as $key => $index) {
+            if (isset($index['flags']) && array_search('fulltext', $index['flags']) !== false) {
+                $toDelete[] = $key;
+            }
+        }
+
+        foreach ($toDelete as $key) {
+            unset($table['indexes'][$key]);
         }
     }
 
@@ -105,13 +172,16 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      */
     public static function mapTypes(&$config)
     {
+        // TODO associated foreign keys should be ignored by default
+        $defaultDoctrineIgnore = isset($config['doctrineIgnore']) ? $config['doctrineIgnore'] : false;
+
         $config['doctrineIgnore'] = true;
         if (isset(self::$_typeMap[$config['type']])) {
             if ($config['type'] === 'container') {
                 $config['length'] = 40;
             }
             $config['type'] = self::$_typeMap[$config['type']];
-            $config['doctrineIgnore'] = false;
+            $config['doctrineIgnore'] = $defaultDoctrineIgnore;
         }
     }
 

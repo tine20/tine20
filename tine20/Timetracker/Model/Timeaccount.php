@@ -6,10 +6,8 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        update validators (default values, mandatory fields)
- * @todo        add setFromJson with relation handling
  */
 
 /**
@@ -48,6 +46,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 13,
         'containerName'     => 'Timeaccount',
         'containersName'    => 'Timeaccounts',
         'recordName'        => 'Timeaccount',
@@ -71,6 +70,37 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         ),
         'appName'           => 'Timetracker',
         'modelName'         => 'Timeaccount',
+
+        // TODO add this when we convert container to MCV2
+//       'associations' => [\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_ONE => [
+//            'container' => [
+//                'targetEntity' => 'Tinebase_Model_Container',
+//                'fieldName' => 'container_id',
+//                'joinColumns' => [[
+//                    'name' => 'container_id',
+//                    'referencedColumnName'  => 'id'
+//                ]],
+//            ]
+//        ]],
+
+        'table'             => array(
+            'name'    => 'timetracker_timeaccount',
+            'indexes' => array(
+                'title' => array(
+                    'columns' => array('title')
+                ),
+                'number' => array(
+                    'columns' => array('number')
+                ),
+                'container_id' => array(
+                    'columns' => array('container_id')
+                ),
+                'description' => array(
+                    'columns' => array('description'),
+                    'flags' => array('fulltext')
+                ),
+            ),
+        ),
 
         'filterModel'       => array(
             'contract'          => array(
@@ -103,6 +133,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'account_grants'    => array(
                 'label'                 => NULL,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type'                  => 'virtual',
             ),
             'title'             => array(
                 'label'                 => 'Title', //_('Title')
@@ -117,18 +148,21 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'queryFilter'           => TRUE,
                 'showInDetailsPanel'    => TRUE,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
             ),
             'description'       => array(
                 'label'                 => 'Description', // _('Description')
                 'type'                  => 'fulltext',
                 'showInDetailsPanel'    => TRUE,
                 'queryFilter'           => true,
+                'nullable'              => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'budget'            => array(
                 'type'                  => 'float',
                 'inputFilters'          => array('Zend_Filter_Digits', 'Zend_Filter_Empty' => NULL),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
             ),
             'budget_unit'       => array(
                 'shy'                   => TRUE,
@@ -145,6 +179,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'price_unit'        => array(
                 'shy'                   => TRUE,
                 'default'               => 'hours',
+                'nullable'              => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             ),
             'is_open'           => array(
@@ -168,11 +203,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'label'                 => "Cleared in", // _("Cleared in"),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit'              => true,
+                'nullable'              => true,
             ),
             'invoice_id'        => array(
                 'label'                 => 'Invoice', // _('Invoice')
                 'type'                  => 'record',
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'nullable'              => true,
                 'config'                => array(
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
@@ -185,7 +222,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'copyOmit'              => true,
             ),
             'status'            => array(
+                // TODO make this a keyfield
                 // is_open = Status, status = Billed
+//                    _('not yet billed')
+//                    _('to bill')
+//                    _('billed')
                 'label'                 => 'Billed', //_('Billed')
                 'type'                  => 'string',
                 'filterDefinition'      => array(
@@ -198,16 +239,19 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                                                 array('InArray', array(self::STATUS_NOT_YET_BILLED, self::STATUS_TO_BILL, self::STATUS_BILLED)),
                                             ),
                 'copyOmit'              => true,
+                'default'               => 'not yet billed'
             ),
             'cleared_at'        => array(
                 'label'                 => "Cleared at", // _("Cleared at")
                 'type'                  => 'datetime',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
                 'copyOmit'              => true,
             ),
             'deadline'          => array(
                 'label'                 => 'Booking deadline', // _('Booking deadline')
                 'type'                  => 'string',
+                'nullable'              => true,
                 'validators'            => array(
                                             Zend_Filter_Input::ALLOW_EMPTY      => true,
                                             Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,

@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -22,28 +22,55 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 7,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
-        'hasRelations'      => TRUE,
-        'hasCustomFields'   => TRUE,
-        'hasNotes'          => TRUE,
-        'hasTags'           => TRUE,
-        'modlogActive'      => TRUE,
-        'hasAttachments'    => TRUE,
-        'createModule'      => TRUE,
-        'containerProperty' => NULL,
+        'hasRelations'      => true,
+        'hasCustomFields'   => true,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => true,
+        'createModule'      => true,
+        'containerProperty' => null,
 
         'titleProperty'     => 'title',
         'appName'           => 'Timetracker',
         'modelName'         => 'Timesheet',
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'timeaccount_id' => [
+                    'targetEntity' => 'Timetracker_Model_Timeaccount',
+                    'fieldName' => 'timeaccount_id',
+                    'joinColumns' => [[
+                        'name' => 'timeaccount_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ]
+            ],
+        ],
+
         'table'             => array(
-            'name'              => 'timetracker_timesheet',
+            'name'    => 'timetracker_timesheet',
+            'indexes' => array(
+                'start_date' => array(
+                    'columns' => array('start_date')
+                ),
+                'timeaccount_id' => array(
+                    'columns' => array('timeaccount_id'),
+                ),
+                'description' => array(
+                    'columns' => array('description'),
+                    'flags' => array('fulltext')
+                ),
+            ),
         ),
 
-        'multipleEdit'      => TRUE,
-        'splitButton'       => TRUE,
-
-        'defaultFilter' => 'start_date',
+        // frontend
+        'multipleEdit'      => true,
+        'splitButton'       => true,
+        'defaultFilter'     => 'start_date',
 
         'fields'            => array(
             'account_id'            => array(
@@ -56,12 +83,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             'timeaccount_id'        => array(
                 'label'                 => 'Time Account (Number - Title)', //_('Time Account (Number - Title)')
                 'type'                  => 'record',
+                'doctrineIgnore'        => true, // already defined as association
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'config'                => array(
                     'appName'               => 'Timetracker',
                     'modelName'             => 'Timeaccount',
                     'idProperty'            => 'id',
-                    'doNotCheckModuleRight'      => TRUE
+                    'doNotCheckModuleRight'      => true
                 ),
                 // TODO ?????
                 //'default'               => array('account_grants' => array('bookOwnGrant' => true)),
@@ -70,8 +98,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     'options'               => array(
                         'filtergroup'           => 'Timetracker_Model_TimeaccountFilter',
                         'controller'            => 'Timetracker_Controller_Timeaccount',
-                        'useTimesheetAcl'       => TRUE,
-                        'showClosed'            => TRUE,
+                        'useTimesheetAcl'       => true,
+                        'showClosed'            => true,
                         'appName'               => 'Timetracker',
                         'modelName'             => 'Timeaccount',
                     ),
@@ -79,37 +107,41 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
-                'label'                 => NULL,
+                'label'                 => null,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
-                'shy'                   => TRUE
+                'shy'                   => true
             ),
             'is_billable_combined'  => array(
                 'label'                 => 'Billable', // _('Billable')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'type'                  => 'boolean',
-                'filterDefinition'      => array(
+                'type'                  => 'virtual',
+                'config'                => [
+                    'type'                  => 'boolean',
+                ],
+                'filterDefinition'      => [
                     'filter'                => 'Tinebase_Model_Filter_Bool',
                     'title'                 => 'Billable', // _('Billable')
                     'options'               => array(
                         'leftOperand'           => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)',
                         'requiredCols'          => array('is_billable_combined')
                     ),
-                ),
+                ],
             ),
             'billed_in'             => array(
                 'label'                 => 'Cleared in', // _('Cleared in')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'copyOmit'              => TRUE,
-                'shy'                   => TRUE,
+                'shy'                   => true,
+                'nullable'              => true,
                 'copyOmit'              => true,
             ),
             'invoice_id'            => array(
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'                 => 'Invoice', // _('Invoice')
                 'type'                  => 'record',
-                'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'nullable'              => true,
+                'inputFilters'          => array('Zend_Filter_Empty' => null),
                 'config'                => array(
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
@@ -121,18 +153,20 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(
-                'label'                 => NULL,
+                'label'                 => null,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0,
-                'copyOmit'              => TRUE,
-                'shy'                   => TRUE,
+                'shy'                   => true,
                 'copyOmit'              => true,
             ),
             'is_cleared_combined'   => array(
                 'label'                 => 'Cleared', // _('Cleared')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'type'                  => 'boolean',
+                'type'                  => 'virtual',
+                'config'                => [
+                    'type'                  => 'boolean',
+                ],
                 'filterDefinition'      => array(
                     'filter'                => 'Tinebase_Model_Filter_Bool',
                     'options'               => array(
@@ -141,21 +175,41 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     ),
                 ),
             ),
+            // TODO combine those three fields like this?
+            // TODO create individual fields in MC and Doctrine Mapper? how to handle filter/validators/labels/...?
+//            'start'            => array(
+//                'label'                 => 'Date', // _('Date')
+//                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+//                'type'                  => 'datetime_separated',
+//                // strip time information from datetime string
+//                'inputFilters'          => array('Zend_Filter_PregReplace' => array('/(\d{4}-\d{2}-\d{2}).*/', '$1'))
+//            ),
             'start_date'            => array(
                 'label'                 => 'Date', // _('Date')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-                'type'                  => 'date',
-                'default'               => 'today',
+                //'type'                  => 'date',
+                'type'                  => 'datetime_separated_date',
                 // strip time information from datetime string
                 'inputFilters'          => array('Zend_Filter_PregReplace' => array('/(\d{4}-\d{2}-\d{2}).*/', '$1'))
             ),
             'start_time'            => array(
                 'label'                 => 'Start time', // _('Start time')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'inputFilters'          => array('Zend_Filter_Empty' => null),
                 'type'                  => 'time',
-                'shy'                   => TRUE
+                // 'type'                  => 'datetime_separated_time',
+                'nullable'              => true,
+                'shy'                   => true
             ),
+            // TODO make this work
+            // TODO set user / default tz for existing/new records?
+//            'start_tz'            => array(
+//                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+//                'inputFilters'          => array('Zend_Filter_Empty' => null),
+//                'type'                  => 'datetime_separated_tz',
+//                'shy'                   => true,
+//                'nullable'              => true,
+//            ),
             'duration'              => array(
                 'label'                 => 'Duration', // _('Duration')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
@@ -167,7 +221,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'label'                 => 'Description', // _('Description')
                 'type'                  => 'fulltext',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-                'queryFilter'           => TRUE
+                'queryFilter'           => true
             ),
             // TODO ?????
             /*

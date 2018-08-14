@@ -1874,6 +1874,9 @@ class Setup_Controller
 
             $createdTables = array();
 
+            // do modelconfig + doctrine
+            $createdTables = array_merge($createdTables, $this->_createModelConfigSchema($_xml->name));
+
             // traditional xml declaration
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
@@ -1883,25 +1886,6 @@ class Setup_Controller
                         continue;
                     }
                     $createdTables[] = $table;
-                }
-            }
-
-            // do modelconfig + doctrine
-            $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
-            $models = $application->getModels(true /* MCv2only */);
-
-            if (count($models) > 0) {
-                // create tables using doctrine 2
-                Setup_SchemaTool::createSchema($_xml->name, $models);
-
-                // adopt to old workflow
-                /** @var Tinebase_Record_Abstract $model */
-                foreach ($models as $model) {
-                    $modelConfiguration = $model::getConfiguration();
-                    $createdTables[] = (object)array(
-                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                        'version' => $modelConfiguration->getVersion(),
-                    );
                 }
             }
 
@@ -1940,6 +1924,36 @@ class Setup_Controller
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
+    }
+
+    /**
+     * @param $appName
+     * @return array
+     */
+    protected function _createModelConfigSchema($appName)
+    {
+        $application = Setup_Core::getApplicationInstance($appName, '', true);
+        $models = $application->getModels(true /* MCv2only */);
+        $createdTables = [];
+
+        if (count($models) > 0) {
+            // create tables using doctrine 2
+            // NOTE: we don't use createSchema here because some tables might already been created
+            // TODO or use createSchema, catch exception and fallback to updateSchema ?
+            Setup_SchemaTool::updateSchema($appName, $models);
+
+            // adopt to old workflow
+            /** @var Tinebase_Record_Abstract $model */
+            foreach ($models as $model) {
+                $modelConfiguration = $model::getConfiguration();
+                $createdTables[] = (object)array(
+                    'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                    'version' => $modelConfiguration->getVersion(),
+                );
+            }
+        }
+
+        return $createdTables;
     }
 
     protected function _createTable($table)

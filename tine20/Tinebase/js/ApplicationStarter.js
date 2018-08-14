@@ -35,6 +35,8 @@ Tine.Tinebase.ApplicationStarter = {
     types: {
         'date':     'date',
         'datetime': 'date',
+        'datetime_separated_date': 'date',
+        'datetime_separated_time': 'date',
         'time':     'date',
         'string':   'string',
         'text':     'string',
@@ -78,9 +80,8 @@ Tine.Tinebase.ApplicationStarter = {
             // add pre defined type
             field.type = this.types[fieldDefinition.type];
             switch (fieldDefinition.type) {
+                case 'datetime_separated_date':
                 case 'datetime':
-                    field.dateFormat = Date.patterns.ISO8601Long;
-                    break;
                 case 'date':
                     field.dateFormat = Date.patterns.ISO8601Long;
                     break;
@@ -178,6 +179,7 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'keyfield': 
                     gridRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, config.name);
                     break;
+                case 'datetime_separated_date':
                 case 'date':
                     gridRenderer = Tine.Tinebase.common.dateRenderer;
                     break;
@@ -284,9 +286,8 @@ Tine.Tinebase.ApplicationStarter = {
                 filter.keyfieldName = fieldconfig.name;
                 break;
             case 'date':
-                filter.valueType = 'date';
-                break;
             case 'datetime':
+            case 'datetime_separated_date':
                 filter.valueType = 'date';
                 break;
             case 'float':

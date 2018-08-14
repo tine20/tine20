@@ -121,6 +121,13 @@ class Tinebase_ModelConfiguration {
     protected $_table = array();
 
     /**
+     * association definitions (ONE_TO_ONE, MANY_TO_ONE, ...)
+     *
+     * @var array
+     */
+    protected $_associations = [];
+
+    /**
      * model version
      *
      * @var integer
@@ -804,6 +811,9 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_filterModelMapping = array(
+        'datetime_separated_date' => Tinebase_Model_Filter_Date::class,
+        'datetime_separated_time' => Tinebase_Model_Filter_Date::class,
+        'datetime_separated_tz' => Tinebase_Model_Filter_Text::class,
         'date'                  => Tinebase_Model_Filter_Date::class,
         'datetime'              => Tinebase_Model_Filter_DateTime::class,
         'time'                  => Tinebase_Model_Filter_Date::class,
@@ -917,7 +927,7 @@ class Tinebase_ModelConfiguration {
             throw new Tinebase_Exception('The model class configuration must be submitted!');
         }
 
-        // some cruid validating
+        // some crude validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
@@ -931,7 +941,7 @@ class Tinebase_ModelConfiguration {
             $this->_idProperty = 'id';
         }
         $this->_identifier = $this->_idProperty;
-        
+
         $this->_filters = array();
         $this->_fields[$this->_idProperty] = array(
             'id' => true,
@@ -1415,6 +1425,7 @@ class Tinebase_ModelConfiguration {
                 break;
             case 'container':
                 break;
+            case 'datetime_separated_date':
             case 'date':
                 // add to datetime fields
                 $this->_dateFields[] = $fieldKey;
@@ -1620,6 +1631,16 @@ class Tinebase_ModelConfiguration {
     public function getFields()
     {
         return $this->_fields;
+    }
+
+    /**
+     * returns the Associations of the model
+     *
+     * @return array
+     */
+    public function getAssociations()
+    {
+        return $this->_associations;
     }
 
     /**
