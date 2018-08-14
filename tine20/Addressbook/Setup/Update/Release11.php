@@ -198,7 +198,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
             array('field' => 'state_id', 'operator' => 'equals', 'value' => 'Addressbook-Contact-GridPanel-Grid'),
         )));
 
-        foreach($states as $state) {
+        foreach ($states as $state) {
             $decodedState = Tinebase_State::decode($state->data);
             $spliceAt = 0;
             if ($decodedState['columns'][1]['id'] == 'type') {

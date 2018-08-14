@@ -660,4 +660,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $release10->update_56();
         $this->setApplicationVersion('Tinebase', '11.31');
     }
+
+    /**
+     * delete some obsolete export definitions
+     */
+    public function update_31()
+    {
+        $obsoleteNames = ['adb_default_xls', 'adb_ods', 'lead_excel5_xls'];
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter([
+            ['field' => 'name', 'operator' => 'in', 'value' => $obsoleteNames]
+        ]);
+        Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
+        $this->setApplicationVersion('Tinebase', '11.32');
+    }
 }
