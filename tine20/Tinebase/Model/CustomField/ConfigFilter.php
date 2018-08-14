@@ -83,7 +83,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
         $this->_requiredGrants = $_grants;
         $this->_isResolved = FALSE;
     }
-    
+
     /**
      * appends sql to given select statement
      *

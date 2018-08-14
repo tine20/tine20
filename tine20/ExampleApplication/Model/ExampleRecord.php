@@ -40,6 +40,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'containersName'    => 'example record lists', // _('example record lists')
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
+        'hasSystemCustomFields' => true,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,

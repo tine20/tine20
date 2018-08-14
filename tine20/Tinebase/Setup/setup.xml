@@ -1,66 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.11</version>
+    <version>12.13</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
-        <table>
-            <name>applications</name>
-            <version>5</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>25</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>status</name>
-                    <type>text</type>
-                    <length>32</length>
-                    <default>enabled</default>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>order</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>version</name>
-                    <type>text</type>
-                    <length>20</length>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
-                    </field>
-                </index>
-                <index>
-                    <name>status</name>
-                    <field>
-                        <name>status</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-
         <table>
             <name>application_states</name>
             <version>1</version>
@@ -563,162 +506,6 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>groups</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-            </declaration>
-        </table>
-        <table>
-            <name>container</name>
-            <version>14</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>hierarchy</name>
-                    <type>text</type>
-                    <length>65535</length>
-                </field>
-                <field>
-                    <name>type</name>
-                    <type>text</type>
-                    <length>32</length>
-                    <default>personal</default>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>owner_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>color</name>
-                    <type>text</type>
-                    <length>7</length>
-                    <default>NULL</default>
-                </field>
-                <field>
-                    <name>order</name>
-                    <type>integer</type>
-                    <default>0</default>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>backend</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>application_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>content_seq</name>
-                    <type>integer</type>
-                    <length>64</length>
-                </field>
-                <field>
-                    <name>created_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
-                </field>
-                <field>
-                    <name>model</name>
-                    <type>text</type>
-                    <length>64</length>
-                </field>
-                <field>
-                    <name>uuid</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <default>NULL</default>
-                </field>
-                <field>
-                    <name>xprops</name>
-                    <type>text</type>
-                    <notnull>false</notnull>
-                    <default>NULL</default>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>type</name>
-                    <field>
-                        <name>type</name>
-                    </field>
-                </index>
-                <index>
-                    <name>application_id</name>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>owner_id</name>
-                    <field>
-                        <name>owner_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>container::application_id--applications::id</name>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>applications</table>
                         <field>id</field>
                     </reference>
                 </index>
@@ -2182,7 +1969,7 @@
         </table>
         <table>
             <name>customfield_config</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2207,6 +1994,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>is_system</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>true</default>
                 </field>
                 <field>
                     <name>definition</name>

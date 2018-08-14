@@ -550,4 +550,39 @@ class Tinebase_CustomFieldTest extends TestCase
         $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-bool is not set (Rainer Blütenrein)');
         $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
     }
+
+    public function testSystemCF()
+    {
+        $AdbApp = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
+        $systemCF = new Tinebase_Model_CustomField_Config([
+            'application_id'    => $AdbApp->getId(),
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => Addressbook_Model_Contact::class,
+            'definition'        => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    Tinebase_ModelConfiguration::TYPE       => Tinebase_ModelConfiguration::TYPE_INTEGER,
+                    Tinebase_ModelConfiguration::UNSIGNED   => true,
+                    Tinebase_ModelConfiguration::DEFAULT_VAL   => 0,
+                ],
+            ],
+            'is_system'         => 1,
+        ], true);
+
+        Tinebase_CustomField::getInstance()->addCustomField($systemCF);
+
+        $contact = new Addressbook_Model_Contact([], true);
+        static::assertTrue($contact->has($systemCF->name), 'record does not have the system cf property');
+
+        $setup = Setup_Backend_Factory::factory();
+        static::assertTrue($setup->columnExists($systemCF->name, Addressbook_Model_Contact::getConfiguration()
+            ->getTableName()), 'system cf column was not created');
+
+        // test calling it with an id, not a record
+        Tinebase_CustomField::getInstance()->deleteCustomField($systemCF->getId());
+        static::assertFalse($setup->columnExists($systemCF->name, Addressbook_Model_Contact::getConfiguration()
+            ->getTableName()), 'system cf column was not removed');
+
+        $contact = new Addressbook_Model_Contact([], true);
+        static::assertFalse($contact->has($systemCF->name), 'record still has the system cf property');
+    }
 }

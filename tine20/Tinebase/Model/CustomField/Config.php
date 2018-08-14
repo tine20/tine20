@@ -23,9 +23,12 @@
  * @property    string      account_grants
  * @property    string      value
  * @property    string      label
+ * @property    boolean     is_system
  */
-class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract 
+class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
 {
+    const DEF_FIELD = 'fieldDef';
+
     protected $_identifier = 'id';
     
     /**
@@ -46,6 +49,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         'model'                 => array('presence' => 'required', 'allowEmpty' => false ),
         'name'                  => array('presence' => 'required', 'allowEmpty' => false ),
         'definition'            => array('presence' => 'required', 'allowEmpty' => false ),
+        'is_system'             => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
         'account_grants'        => array('allowEmpty' => true ),
         'value'                 => array('allowEmpty' => true ),
         // Set label from definition if extended resolving is enabled
@@ -56,6 +60,17 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         'last_modified_by'      => array('allowEmpty' => true ),
         'last_modified_time'    => array('allowEmpty' => true ),
     );
+
+    /**
+     * list of zend inputfilter
+     *
+     * this filter get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
+    protected $_filters = [
+        'is_system'          => [Zend_Filter_Empty::class => 0],
+    ];
     
     /**
      * checks if customfield value is empty
@@ -65,7 +80,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      */
     public function valueIsEmpty($_value)
     {
-        if ($this->definition['type'] == 'bool') {
+        if ($this->definition['type'] === 'bool') {
             $result = empty($_value);
         } else {
             $result = ($_value === '' || $_value === NULL);
@@ -81,7 +96,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      */
     public function setFromArray(array &$_data)
     {
-        if ((isset($_data['definition']) || array_key_exists('definition', $_data))) {
+        if (isset($_data['definition'])) {
             if (is_string($_data['definition'])) {
                 $_data['definition'] = Zend_Json::decode($_data['definition']);
             }

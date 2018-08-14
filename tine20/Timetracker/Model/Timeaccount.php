@@ -18,6 +18,8 @@
  */
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
+    const TABLE_NAME = 'timetracker_timeaccount';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -84,7 +86,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 //        ]],
 
         'table'             => array(
-            'name'    => 'timetracker_timeaccount',
+            'name'    => self::TABLE_NAME,
             'indexes' => array(
                 'title' => array(
                     'columns' => array('title')

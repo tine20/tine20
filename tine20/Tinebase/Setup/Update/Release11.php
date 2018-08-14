@@ -764,9 +764,45 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_37()
     {
+        //$this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        //$this->setApplicationVersion('Tinebase', '11.38');
+    }
+
+    /**
+     * update to 11.39
+     *
+     * add is_system column to customfield_config
+     */
+    public function update_38()
+    {
+        if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
+            $this->_backend->addCol('customfield_config', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_system</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>true</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('customfield_config') < 6) {
+            $this->setTableVersion('customfield_config', 6);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.39');
+    }
+
+    /**
+     * update to 11.38
+     *
+     * update filterSyncToken table
+     */
+    public function update_39()
+    {
         $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
 
-        $this->setApplicationVersion('Tinebase', '11.38');
+        $this->setApplicationVersion('Tinebase', '11.40');
     }
 
     /**
@@ -774,7 +810,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      *
      * @return void
      */
-    public function update_38()
+    public function update_40()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
 

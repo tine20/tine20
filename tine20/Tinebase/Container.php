@@ -1663,11 +1663,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
                 new Tinebase_Model_Container(array('id' => $containerId), true)
             );
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
             $this->_setRecordMetaDataAndUpdate($containerId, 'update');
-            
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Exception::log($e);
