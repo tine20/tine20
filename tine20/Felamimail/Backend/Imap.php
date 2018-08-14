@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -878,7 +878,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     
     public function resolveMessageSequence($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, false);
+        $result = array_filter($this->_protocol->fetch('UID', $from, $to, false), function ($val) {
+            return is_scalar($val);
+        });
         
         return $result;
     }
