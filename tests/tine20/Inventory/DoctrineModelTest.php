@@ -52,7 +52,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
 
     public function testExplicitRename()
     {
-        $this->markTestSkipped('evauate concept for explicit field rename with doctrine2 schema tool');
+        $this->markTestSkipped('evaluate concept for explicit field rename with doctrine2 schema tool');
         $em = Setup_SchemaTool::getEntityManager('Inventory');
         $sm = $em->getConnection()->getSchemaManager();
 
