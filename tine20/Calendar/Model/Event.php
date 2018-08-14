@@ -672,7 +672,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['status'] = self::STATUS_CONFIRMED;
         }
         
-        if (isset($_data['container_id']) && is_array($_data['container_id'])) {
+        if (isset($_data['container_id']) && is_array($_data['container_id']) && isset($_data['container_id']['id'])) {
             $_data['container_id'] = $_data['container_id']['id'];
         }
         
