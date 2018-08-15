@@ -15,7 +15,8 @@ Ext.ns('Tine.Addressbook');
  * @singleton
  */
 Tine.Addressbook.countryRenderer = function (v) {
-    return Locale.getTranslationData('CountryList', v);
+    
+    return Tine.__translationData.TranslationLists['CountryList'][v];
 };
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'country', Tine.Addressbook.countryRenderer, 'displayPanel');
