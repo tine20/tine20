@@ -170,7 +170,7 @@ Tine.Addressbook.ContactGridPanel.displayNameRenderer = function(data) {
 };
 
 Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
-    data = Tine.__translationData.TranslationLists['CountryList'][data];
+    data = Locale.getTranslationData('CountryList', data);
     return Ext.util.Format.htmlEncode(data);
 };
 
