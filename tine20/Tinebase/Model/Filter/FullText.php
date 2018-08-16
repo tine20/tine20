@@ -107,10 +107,14 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         $values = array();
 
         foreach ((array)$_value as $value) {
-            //replace full text meta characters
-            //$value = str_replace(array('+', '-', '<', '>', '~', '*', '(', ')', '"'), ' ', $value);
-            // replace any non letter, non digit, non underscore with blank
-            $value = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $value);
+            // replace anything that is is not
+            //  * a letter
+            //  * a digit
+            //  * a mark character
+            //  * a punctuation character
+            //  * a symbol
+            // with space
+            $value = preg_replace('/[^\p{L}\p{N}\p{M}\p{P}\p{S}]+/u', ' ', $value);
             // replace multiple spaces with just one
             $value = preg_replace('# +#u', ' ', trim($value));
             $values = array_merge($values, explode(' ', $value));
