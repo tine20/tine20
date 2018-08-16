@@ -430,8 +430,13 @@ class Tinebase_Mail extends Zend_Mail
                     restore_error_handler();
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
                     $zmp->resetStream();
-                    $body = base64_decode(stream_get_contents($zmp->getRawStream()));
-                    $body = iconv($charset, 'utf-8', $body);
+                    $decodedBody = base64_decode(stream_get_contents($zmp->getRawStream()));
+                    $body = @iconv($charset, 'utf-8', $decodedBody);
+                    if (empty($body)) {
+                        // if iconv above still fails we do mb_convert and replace all special chars ...
+                        $body = Tinebase_Helper::mbConvertTo($decodedBody);
+                        $body = Tinebase_Helper::replaceSpecialChars($body, false);
+                    }
                 }
             }
         }
