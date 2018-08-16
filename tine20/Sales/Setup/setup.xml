@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>12.1</version>
+    <version>12.2</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -1340,7 +1340,7 @@
         </table>
         <table>
             <name>sales_invoice_positions</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1362,6 +1362,12 @@
                 </field>
                 <field>
                     <name>model</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
