@@ -882,7 +882,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     
     public function resolveMessageSequence($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, false);
+        $result = array_filter($this->_protocol->fetch('UID', $from, $to, false), function ($val) {
+            return is_scalar($val);
+        });
         
         return $result;
     }
