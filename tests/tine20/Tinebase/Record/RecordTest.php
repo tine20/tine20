@@ -138,15 +138,15 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public function testClone()
     {
-        $record = new Tinebase_Record_DummyRecord(array(
-            'string' => 'test',
-            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-        ), true);
+        $record = $this->objects['TestRecord'];
         
         $clone = clone $record;
         $clone->date_single->addDay(1);
+        $clone->date_multiple[0]->addDay(1);
         
         $this->assertFalse($record->date_single == $clone->date_single, 'date in record and clone is equal');
+        $this->assertFalse($record->date_multiple[0] == $clone->date_multiple[0],
+            'date_multiple in record and clone is equal');
     }
     
     /**
