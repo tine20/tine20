@@ -917,30 +917,25 @@ class Tinebase_ModelConfiguration {
             throw new Tinebase_Exception('The model class configuration must be submitted!');
         }
 
-        $this->_appName     = $this->_application = $this->_applicationName = $modelClassConfiguration['appName'];
-        
-        // add appName to available applications 
-        self::$_availableApplications[$this->_appName] = TRUE;
-        
-        $this->_modelName   = $modelClassConfiguration['modelName'];
-        $this->_idProperty  = $this->_identifier = isset($modelClassConfiguration['idProperty']) ? $modelClassConfiguration['idProperty'] : 'id';
-
-        $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
-        $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
-
-        // some crude validating
+        // some cruid validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
+
+        $this->_application = $this->_applicationName = $this->_appName;
+
+        // add appName to available applications
+        self::$_availableApplications[$this->_appName] = TRUE;
+
+        if (null === $this->_idProperty) {
+            $this->_idProperty = 'id';
+        }
+        $this->_identifier = $this->_idProperty;
         
         $this->_filters = array();
         $this->_fields[$this->_idProperty] = array(
             'id' => true,
-            // show id column in DEBUG + DEVELOP modes
-            // TODO add configuration option to configure this on model basis
-            'label' => defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG')
-                ? 'ID'
-                : null,
+            'label' => 'ID',
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'length' => 40,
             'shy' => true,
