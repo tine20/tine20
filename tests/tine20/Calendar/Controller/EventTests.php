@@ -1391,7 +1391,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->dtstart = Tinebase_DateTime::now()->addHour(1);
         $event->dtend = Tinebase_DateTime::now()->addHour(2);
         
-        $event->rrule = 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=1';
+        $event->rrule = 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;INTERVAL=1';
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
             new Tinebase_Model_Alarm(array(
                 'minutes_before' => 30
