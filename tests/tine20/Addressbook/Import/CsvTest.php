@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -34,6 +34,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         // create test container
         $this->_testContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
+        $this->_deleteImportFile = true;
     }
 
     /**
@@ -433,6 +434,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     {
         $definition = $this->_getDefinitionFromFile('../../../../../tine20/Addressbook/Import/definitions/adb_outlook_import_csv.xml');
 
+        $this->_deleteImportFile = false;
         $this->_filename = dirname(__FILE__) . '/files/importtest_outlook2013.csv';
 
         $result = $this->_doImport(array('dryrun' => true), $definition);
